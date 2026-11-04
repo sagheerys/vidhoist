@@ -1,0 +1,249 @@
+part of 'audio_handler.dart';
+
+/// **Recovery and continuity**: the policy for skipping a broken item, and
+/// saving the position and the session snapshot.
+///
+/// **A `part` file rather than its own library** (rule 4, the size limit):
+/// these functions work on the private queue (`_queue`,
+/// `_consecutiveErrors`), and an extension in another library cannot reach
+/// private members.
+extension MTAudioHandlerRecovery on MTAudioHandler {
+  /// The maximum number of consecutive skips before giving up. A systemic
+  /// fault, a dead network or blocked cleartext, fails every item, and
+  /// marching silently through a hundred of them is worse than stopping
+  /// plainly.
+  static const int maxConsecutiveSkips = 5;
+
+  /// The clip ended naturally, so the mode decides what happens next.
+  ///
+  /// **Lives here rather than in the class** for the size limit (rule 4):
+  /// deciding what follows an item is continuity, which is this file's
+  /// subject.
+  Future<void> onCompleted() async {
+    final url = _queue.current?.canonicalUrl;
+    if (url != null) await positions.clear(url);
+    if (_playMode == PlayMode.repeatOne) {
+      await player.seek(Duration.zero);
+      return player.play();
+    }
+    if (_playMode != PlayMode.stopAtEnd && _queue.moveNext(_playMode)) {
+      return _loadCurrent(autoPlay: true);
+    }
+    await player.pause();
+    await player.seek(Duration.zero);
+    _broadcast();
+  }
+
+  /// **A paused session stops itself after [pausedAutoStop].**
+  ///
+  /// Driven by the broadcast rather than by [MTAudioHandler.pause], on
+  /// purpose: a phone call pauses the player from **inside** the playback
+  /// package, without passing through the handler at all, and that is
+  /// precisely the case this has to cover. Called on every broadcast, so it
+  /// must stay idempotent — an already-running timer is never restarted, or
+  /// it would never fire.
+  void _syncPausedStop({required bool playing}) {
+    if (playing) _wasPlaying = true;
+    if (playing || _queue.isEmpty || !_wasPlaying) {
+      _pausedStopTimer?.cancel();
+      _pausedStopTimer = null;
+      return;
+    }
+    _pausedStopTimer ??= Timer(
+      pausedAutoStop,
+      () => unawaited(_stop(forgetSession: false)),
+    );
+  }
+
+  /// Is this worth waiting for rather than skipping past?
+  ///
+  /// **The source decides, not the error text.** A stream can fail for a
+  /// dropped network, a frozen process or a tunnel hiccup, all of which
+  /// come back; a local file that will not open is broken and waiting for
+  /// it is waiting forever. Re-resolving is cheap and synchronous, and it
+  /// answers for the item as it stands **now**: a local copy deleted from
+  /// under us already resolves to a stream.
+  bool _isRetryableSource() {
+    final item = _queue.current;
+    if (item == null) return false;
+    return resolver.resolve(item)?.origin == PlaybackOrigin.stream;
+  }
+
+  /// **Is this a fresh incident, or the same stream flapping?**
+  ///
+  /// The retry budget used to be returned by any successful load, which is
+  /// right for a hiccup and wrong for a stream that loads, plays for a
+  /// second and drops — **that pair repeats for ever**, each failure
+  /// answered by a retry and each retry refilling the budget. The phone
+  /// holds a wake lock and hammers the server until the battery ends it,
+  /// with nothing on screen to say so.
+  ///
+  /// The budget is returned by **progress**, not by a successful load: a
+  /// different item, or at least [retryBudgetProgress] of this one actually
+  /// played since the last failure. The player's own position measures
+  /// that, and needs no clock — which also makes it testable without one.
+  void _openRetryBudget() {
+    final key = _queue.current?.canonicalUrl;
+    final position = player.position;
+    final last = _lastRetryPosition;
+    if (key != _retryKey ||
+        last == null ||
+        (position - last).abs() >= MTAudioHandler.retryBudgetProgress) {
+      _networkRetries = 0;
+    }
+    _retryKey = key;
+    _lastRetryPosition = position;
+  }
+
+  /// Automatically skips a broken item, and stops if the fault repeats
+  /// rather than looping forever.
+  ///
+  /// **A stream is retried before it is given up on** (measured
+  /// 2026-09-19): a phone call left the process frozen with its network
+  /// cut, the next item failed with `SocketTimeoutException`, and the skip
+  /// path then walked the queue and stopped the session — a minute of
+  /// silence for a hiccup that had already passed. Now the same item is
+  /// loaded again after each of [networkRetryBackoff], and only a source
+  /// that fails every time is treated as broken.
+  ///
+  /// **[autoPlay] is inherited from the path that called us:** it
+  /// used to be hard-coded to `true`, so if the first item of a restored
+  /// session failed at startup, a deleted file or a server briefly
+  /// unreachable, **the next item started playing out loud with no tap at
+  /// all**, breaking the rule that restoration never autoplays.
+  Future<void> _onError({bool autoPlay = true}) async {
+    _openRetryBudget();
+    if (_networkRetries < networkRetryBackoff.length && _isRetryableSource()) {
+      final generation = _generation;
+      final wait = networkRetryBackoff[_networkRetries];
+      _networkRetries++;
+      await Future<void>.delayed(wait);
+      // A stop, or another item chosen while we waited, wins.
+      if (_isStale(generation)) return;
+      return _loadCurrent(autoPlay: autoPlay);
+    }
+    _networkRetries = 0;
+    _consecutiveErrors++;
+    if (_queue.isEmpty ||
+        _consecutiveErrors >= _queue.length ||
+        _consecutiveErrors >= maxConsecutiveSkips) {
+      return stop();
+    }
+    if (_queue.moveNext(PlayMode.repeatAll)) {
+      await _loadCurrent(autoPlay: autoPlay);
+    } else {
+      await stop();
+    }
+  }
+
+  void _publishQueue() =>
+      queue.add([for (final item in _queue.ordered) _toMedia(item)]);
+
+  MediaItem _toMedia(PlaylistItem item) {
+    final media = item.toMediaItem(playlistName: _playlistName);
+    final square = _squareArts[item.canonicalUrl];
+    return square == null ? media : media.copyWith(artUri: square);
+  }
+
+  /// **A square cover in the notification** (field report 2026-10-10: a
+  /// YouTube song showed as a strip there and on the lock screen). The item
+  /// is shown at once with its own cover, and the square one replaces it
+  /// when ready, if that item is still the one playing. Made once a clip.
+  Future<void> _prepareSquareArt(PlaylistItem item) async {
+    final make = squareArt;
+    if (make == null || _squareArts.containsKey(item.canonicalUrl)) return;
+    Uri? square;
+    try {
+      square = await make(item);
+    } on Object {
+      return;
+    }
+    if (square == null) return;
+    _squareArts[item.canonicalUrl] = square;
+    final shown = mediaItem.value;
+    if (shown?.id == item.canonicalUrl) {
+      mediaItem.add(shown!.copyWith(artUri: square));
+    }
+  }
+
+  Future<void> savePosition() async {
+    final item = _queue.current;
+    if (item == null) return;
+    await positions.save(
+      item.canonicalUrl,
+      player.position,
+      duration: player.duration,
+    );
+  }
+
+  /// Periodic saving: the position plus the session snapshot.
+  Future<void> persist() async {
+    if (_queue.isEmpty) return;
+    await savePosition();
+    await stateStore.write(
+      AudioSessionSnapshot(
+        items: _queue.items,
+        index: _queue.index,
+        position: player.position,
+        playlistId: _playlistId,
+        playlistName: _playlistName,
+      ),
+    );
+  }
+
+  Future<void> _loadCurrent({required bool autoPlay, Duration? startAt}) async {
+    final generation = ++_generation;
+    final item = _queue.current;
+    if (item == null) return stop();
+    final source = resolver.resolve(item);
+    if (source == null) return _onError(autoPlay: autoPlay);
+
+    mediaItem.add(_toMedia(item));
+    unawaited(_prepareSquareArt(item));
+    // A restored session ([startAt]) always continues exactly; a saved
+    // position only for something long (see [resumeMinimumLength]). When
+    // the length is not known yet, the position is taken and dropped
+    // after loading if the item turns out short.
+    final saved = startAt == null
+        ? await positions.positionOf(item.canonicalUrl)
+        : null;
+    final known = item.duration;
+    final keepSaved =
+        known == null || known >= MTAudioHandler.resumeMinimumLength;
+    final resume = startAt ?? (keepSaved ? saved : null) ?? Duration.zero;
+    if (_isStale(generation)) return;
+    try {
+      if (autoPlay) await _takeVideoFocus();
+      if (_isStale(generation)) return;
+      await player.setSource(source, initialPosition: resume);
+      if (_isStale(generation)) return;
+      _consecutiveErrors = 0;
+      // **The retry budget is deliberately not returned here.** A load that
+      // succeeds proves nothing about a stream that drops a second later;
+      // `_openRetryBudget` returns it for playing, not for loading.
+      final duration = player.duration;
+      if (duration != null) {
+        mediaItem.add(_toMedia(item).copyWith(duration: duration));
+      }
+      if (known == null &&
+          saved != null &&
+          startAt == null &&
+          duration != null &&
+          duration < MTAudioHandler.resumeMinimumLength) {
+        await player.seek(Duration.zero);
+        if (_isStale(generation)) return;
+      }
+      if (autoPlay) await player.play();
+      if (_isStale(generation)) return;
+      _broadcast();
+      await persist();
+    } on Object {
+      if (_isStale(generation)) return;
+      await _onError(autoPlay: autoPlay);
+    }
+  }
+
+  /// Has a newer load, or a stop, overtaken us? If so we touch no shared
+  /// state afterwards.
+  bool _isStale(int generation) => generation != _generation;
+}

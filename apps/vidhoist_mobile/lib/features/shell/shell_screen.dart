@@ -1,0 +1,397 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mt_core/mt_core.dart';
+import 'package:mt_media/mt_media.dart';
+import 'package:mt_ui/mt_ui.dart';
+
+import '../../di.dart';
+import '../downloads_library/cover_keeping.dart';
+import '../downloads_library/library_enricher.dart';
+import '../downloads_library/library_providers.dart';
+import '../downloads_library/pending_recovery.dart';
+import '../downloads_library/local_item.dart' show MediaTypeFilter;
+import '../home/add_flow.dart';
+import '../home/app_shortcuts.dart';
+import '../home/quick_download.dart';
+import '../home/download_watcher.dart';
+import '../home/network_gate.dart';
+import '../home/reception.dart';
+import '../player/playback_providers.dart';
+import '../settings/restore_prompt.dart';
+import '../settings/status_refresh.dart';
+import '../update/update_sheet.dart';
+import '../update/update_state.dart';
+import '../update/whats_new_prompt.dart';
+import 'share_landing.dart';
+
+/// The shell: three bottom destinations plus the floating layer holding
+/// the smart add button, which appears in the library and the playlists
+/// and hides in settings.
+class ShellScreen extends ConsumerStatefulWidget {
+  const ShellScreen({super.key, required this.navigationShell});
+
+  final StatefulNavigationShell navigationShell;
+
+  @override
+  ConsumerState<ShellScreen> createState() => _ShellScreenState();
+}
+
+class _ShellScreenState extends ConsumerState<ShellScreen>
+    with WidgetsBindingObserver {
+  ShareReceiver? _shareReceiver;
+
+  /// **It is never shown while anything is open above the shell**: the
+  /// share sheet or the restore dialog may be on screen the moment the
+  /// check finishes, and stacking a sheet over a sheet swallows the user's
+  /// touch and hides what they were doing.
+  ///
+  /// Once per run: the "updates" row in settings stays as a witness in the
+  /// accent colour for anyone who closed the sheet.
+  bool _updatePrompted = false;
+
+  /// "What's new" comes first, and an update offer waits for the next
+  /// resume rather than stacking on top of it.
+  bool _whatsNewDone = false;
+
+  Future<void> _maybeShowUpdate() async {
+    if (!_whatsNewDone) {
+      final outcome = await maybeShowWhatsNew(context, ref);
+      if (outcome != WhatsNewOutcome.later) _whatsNewDone = true;
+      if (outcome != WhatsNewOutcome.nothing || !mounted) return;
+    }
+    if (_updatePrompted) return;
+    await ref.read(updateControllerProvider.notifier).checkSilently();
+    if (!mounted || _updatePrompted) return;
+    if (ref.read(updateControllerProvider).phase != UpdatePhase.available) {
+      return;
+    }
+    if (MTRouteDepth.depth.value != 0) return;
+    _updatePrompted = true;
+    unawaited(ref.read(loggerProvider).log('update sheet shown', tag: 'ui'));
+    showUpdateSheet(context);
+  }
+
+  /// Probing migrated files for covers and dimensions, for the life of the
+  /// app. It is watched here rather than in the library screen so it does
+  /// not stop when that screen is left.
+  void _watchEnrichment() {
+    ref.watch(libraryEnrichmentProvider);
+    // Keeps the online covers on the phone, so a clip taken down at its
+    // source keeps its face.
+    ref.watch(coverKeepingProvider);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _shareReceiver = ShareReceiver(
+      onUrls: (urls) => unawaited(_onSharedUrls(urls)),
+      onLog: (message) =>
+          unawaited(ref.read(loggerProvider).log(message, tag: 'share')),
+    );
+    _shareReceiver!.start();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(clipboardRefresherProvider)();
+      // Revives the saved audio session, without autoplaying.
+      ref.read(audioHandlerProvider).restoreSession();
+      await initDownloadNotifications(ref);
+      // **What the last run promised and could not finish** (2026-09-19):
+      // the server keeps working after the app is killed, and without this
+      // the finished file is never pulled and never cleaned off the server.
+      if (mounted) unawaited(ref.read(pendingRecoveryProvider)());
+      if (mounted) await maybeOfferAutoRestore(context, ref);
+      if (mounted) await _handleShortcut();
+      if (mounted) unawaited(_maybeShowUpdate());
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      ref.read(clipboardRefresherProvider)();
+      // A shortcut arrives as a new intent on a running app, not as a fresh
+      // start.
+      ref.invalidate(localMediaProvider);
+      // A shortcut arrives as a new intent on a running app, not as a fresh
+      // start.
+      unawaited(_handleShortcut());
+      unawaited(_maybeShowUpdate());
+    }
+  }
+
+  /// Executing a launcher shortcut. **The clipboard is read now rather than
+  /// from saved state**: the user copied the link and pressed the icon
+  /// immediately, and the `clipboardUrlProvider` snapshot may predate the
+  /// copy by seconds.
+  Future<void> _handleShortcut() async {
+    final shortcut = await const AppShortcuts().consume();
+    if (shortcut == null || !mounted) return;
+    switch (shortcut) {
+      case AppShortcut.paste:
+        await ref.read(clipboardRefresherProvider)();
+        if (!mounted) return;
+        final url = ref.read(clipboardUrlProvider);
+        await landOnLibrary(widget.navigationShell);
+        if (!mounted) return;
+        if (url == null) {
+          openAddSheet(context, ref);
+        } else if (startQuickDownload(context, ref, url)) {
+          ref.read(clipboardUrlProvider.notifier).state = null;
+        } else {
+          openAddSheet(context, ref, initialUrl: url);
+        }
+      case AppShortcut.shorts:
+        widget.navigationShell.goBranch(0);
+        ref.read(libraryViewProvider.notifier).setType(MediaTypeFilter.shorts);
+      case AppShortcut.audio:
+        widget.navigationShell.goBranch(0);
+        ref.read(libraryViewProvider.notifier).setType(MediaTypeFilter.audio);
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _shareReceiver?.dispose();
+    super.dispose();
+  }
+
+  /// An external share opens `/` and starts rule 2 (several links are
+  /// submitted one after another).
+  Future<void> _onSharedUrls(List<String> shared) async {
+    if (!mounted || shared.isEmpty) return;
+    // Each step is logged, without the link: a share that showed nothing
+    // can then be traced to where it stopped.
+    final logger = ref.read(loggerProvider);
+    void note(String step) => unawaited(logger.log(step, tag: 'share'));
+    final started = DateTime.now();
+    // **The decision is made on the final URL, not the shared one** (field
+    // report 2026-09-08): SoundCloud's share button gives
+    // `on.soundcloud.com/…` with no `/sets/`, so an album counted as a
+    // single clip and the server expanded it into twenty with no selection
+    // screen. A link that is not short costs no wait.
+    final resolver = ref.read(shortLinkResolverProvider);
+    final urls = [
+      for (final url in shared) await resolver.resolveForRouting(url),
+    ];
+    note(
+      'share checked in ${DateTime.now().difference(started).inMilliseconds}ms',
+    );
+    if (!mounted) return note('share dropped: the screen is gone');
+    await landOnLibrary(widget.navigationShell);
+    if (!mounted) return note('share dropped: the screen is gone');
+    if (urls.length == 1) {
+      if (_isPurePlaylistLink(urls.first)) {
+        note('share to the playlist screen');
+        GoRouter.of(context).push('/batch', extra: urls.first);
+        return;
+      }
+      // "Quick download" makes the default quality an effective setting: a
+      // shared link downloads immediately with no sheet, and the snack bar
+      // offers an undo. The gate lives inside `startQuickDownload` itself,
+      // so it is not repeated here.
+      if (startQuickDownload(context, ref, urls.first)) {
+        return note('share downloaded at once');
+      }
+      note('share to the add sheet');
+      openAddSheet(context, ref, initialUrl: urls.first);
+      return;
+    }
+    final engine = ref.read(downloadEngineProvider);
+    if (engine == null) return note('share dropped: no server');
+    note('share of ${urls.length} links');
+    final quality = ref.read(settingsProvider).quality;
+    for (final url in urls) {
+      if (PlaylistDetector.isPlaylist(url)) {
+        GoRouter.of(context).push('/batch', extra: url);
+      } else {
+        engine.submit(url, quality, isBatchMember: true);
+      }
+    }
+    showMTSnack(
+      context,
+      context.mtl.downloadStarted,
+      type: MTSnackType.success,
+    );
+  }
+
+  /// A playlist **in its own right**, not a video inside a playlist.
+  static bool _isPurePlaylistLink(String url) =>
+      PlaylistDetector.isPlaylist(url) && UrlKit.youtubeVideoId(url) == null;
+
+  /// A link waiting in the clipboard is acted on directly when the button
+  /// is pressed.
+  void _onFabPressed() {
+    final clipboardUrl = ref.read(clipboardUrlProvider);
+    if (clipboardUrl != null) {
+      if (startQuickDownload(context, ref, clipboardUrl)) {
+        ref.read(clipboardUrlProvider.notifier).state = null;
+        return;
+      }
+      openAddSheet(context, ref, initialUrl: clipboardUrl);
+      return;
+    }
+    openAddSheet(context, ref);
+  }
+
+  /// The clipboard bar: **it folds away and does not return** for the same
+  /// link during this session.
+  String? _dismissedClipboardUrl;
+
+  /// The player panel folded away by hand, for this run. The mini player
+  /// stands in for it until it is unfolded.
+  bool _panelFolded = false;
+
+  void _dismissClipboard() =>
+      setState(() => _dismissedClipboardUrl = ref.read(clipboardUrlProvider));
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.mtl;
+    final branch = widget.navigationShell.currentIndex;
+    final clipboardUrl = ref.watch(clipboardUrlProvider);
+
+    // **The button is always mounted, never `null`** (field report
+    // 2026-09-05: "the appearing animation is strange"). Swapping the
+    // floating action button slot wakes `Scaffold`'s default animator,
+    // which
+    // rotates **on appearance only**, in the words of the Flutter source.
+    // `noAnimation` below silences it, and `visible` hides it with our own
+    // fade.
+    ref.watch(downloadWatcherProvider);
+    // **The button is always mounted, never `null`** (field report
+    // 2026-09-05: "the appearing animation is strange"). Swapping the
+    // floating action button slot wakes `Scaffold`'s default animator,
+    // which
+    // rotates **on appearance only**, in the words of the Flutter source.
+    // `noAnimation` below silences it, and `visible` hides it with our own
+    // fade.
+    ref.watch(autoRetryProvider);
+    ref.watch(batchDropWatcherProvider);
+    // Returning to the app asks the server again; the card is not truthful
+    // without this.
+    ref.watch(statusRefreshProvider);
+    _watchEnrichment();
+
+    final handler = ref.watch(audioHandlerProvider);
+    final roomForPanel = MTAdaptiveScaffold.hasEndPane(context);
+    return StreamBuilder(
+      stream: handler.mediaItem,
+      builder: (context, playing) {
+        // **The player panel** takes the mini player's place beside the
+        // content on a tablet held sideways; settings has neither.
+        final panel =
+            branch != 2 &&
+            playing.data != null &&
+            !_panelFolded &&
+            roomForPanel;
+        return MTAdaptiveScaffold(
+          endPane: panel
+              ? MTNowPlayingPanel(
+                  handler: handler,
+                  artwork: artworkBuilderFor(ref),
+                  cover: coverBuilderFor(ref),
+                  showSourceChip: false,
+                  onOpen: () => GoRouter.of(context).push('/audio'),
+                  onCollapse: () => setState(() => _panelFolded = true),
+                )
+              : null,
+          items: _navItems(l10n),
+          selectedIndex: branch,
+          onSelected: widget.navigationShell.goBranch,
+          body: widget.navigationShell,
+          floatingActionButtonAnimator:
+              FloatingActionButtonAnimator.noAnimation,
+          floatingActionButton: MTHiddenUnderRoutes(
+            // It hides under any sheet or dialog: it used to cover the "about
+            // this clip" link and crowd the bottom sheets' actions (field
+            // report 2026-09-02).
+            visible: branch != 2,
+            child: MTFab(
+              label: clipboardUrl == null
+                  ? l10n.addLinkFab
+                  : l10n.clipboardLinkReady,
+              highlighted: clipboardUrl != null,
+              onPressed: _onFabPressed,
+            ),
+          ),
+          // The mini player is a permanent bar **above** the bottom bar, inside
+          // the same slot so Scaffold accounts for its height and lifts the add
+          // button over it (log §4).
+          bottomAccessories: [
+            // **The clipboard bar**: changing the floating button's label
+            // alone was a faint signal, the link itself was never visible,
+            // and there was no way to open the options instead of downloading
+            // immediately. The bar shows the link and offers both actions.
+            if (branch != 2 &&
+                clipboardUrl != null &&
+                clipboardUrl != _dismissedClipboardUrl)
+              MTClipboardBanner(
+                url: clipboardUrl,
+                title: l10n.clipboardFound,
+                downloadLabel: l10n.downloadNow,
+                optionsLabel: l10n.chooseOptions,
+                onDownload: () {
+                  // An explicit button labelled "download now" with "choose
+                  // options" beside it; it does not pass through the
+                  // setting's gate.
+                  if (startQuickDownload(
+                    context,
+                    ref,
+                    clipboardUrl,
+                    explicit: true,
+                  )) {
+                    ref.read(clipboardUrlProvider.notifier).state = null;
+                  } else {
+                    openAddSheet(context, ref, initialUrl: clipboardUrl);
+                  }
+                },
+                onOptions: () =>
+                    openAddSheet(context, ref, initialUrl: clipboardUrl),
+                onDismiss: _dismissClipboard,
+              ),
+            MTMiniPlayer(
+              hidden: branch == 2 || panel,
+              handler: handler,
+              // A square thumbnail, so the wide YouTube picture: the
+              // letterboxed one shows its black bands.
+              artwork: coverBuilderFor(ref),
+              onOpen: () => GoRouter.of(context).push('/audio'),
+              onExpand: roomForPanel
+                  ? () => setState(() => _panelFolded = false)
+                  : null,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<MTNavItem> _navItems(MTLocalizations l10n) => [
+    MTNavItem(
+      icon: MTIcons.download,
+      selectedIcon: MTIcons.download,
+      label: l10n.navMyDownloads,
+    ),
+    MTNavItem(
+      icon: MTIcons.queue,
+      selectedIcon: MTIcons.queue,
+      label: l10n.navPlaylists,
+    ),
+    MTNavItem(
+      icon: MTIcons.settings,
+      selectedIcon: MTIcons.settings,
+      label: l10n.navSettings,
+    ),
+  ];
+}
+
+/// The clipboard check, callable from the shell.
+final clipboardRefresherProvider = Provider<Future<void> Function()>(
+  (ref) =>
+      () => refreshClipboardUrl(ref),
+);

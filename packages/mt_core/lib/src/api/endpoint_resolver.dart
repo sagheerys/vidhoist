@@ -1,0 +1,144 @@
+import 'dart:async';
+
+import '../constants/mt_constants.dart';
+import 'api_exceptions.dart';
+import 'vidhoist_api_client.dart';
+
+/// **The result of probing one endpoint.**
+///
+/// It used to be a `bool`, and "does not respond" versus "rejects your
+/// credentials" are entirely different things to a user: the first sends
+/// them hunting through their router, the second is fixed with two fields
+/// in settings. (Field report 2026-09-05: the server was put behind
+/// Cloudflare Access and every endpoint went red with no stated reason.)
+enum MTEndpointStatus {
+  /// A valid Vidhoist server that responds with the current credentials.
+  ok,
+
+  /// 401 or 403: the endpoint is alive, but the credentials are missing or
+  /// wrong.
+  unauthorized,
+
+  /// The address responds but is **not Vidhoist**: an HTML page, JSON without
+  /// `done`/`queue`, or a 404 on the path. Adopting it fails every
+  /// operation afterwards.
+  notVidhoist,
+
+  /// A drop, a timeout, DNS, or an address with no Vidhoist on it.
+  unreachable;
+
+  /// **Only `ok` may become the active endpoint**: one that answers 401
+  /// serves nothing, and adopting it leaves the app bleeding errors to no
+  /// purpose.
+  bool get isUsable => this == MTEndpointStatus.ok;
+}
+
+/// A reachability probe for a single endpoint.
+typedef ProbeFn = Future<MTEndpointStatus> Function(String baseUrl);
+
+/// Choosing the active endpoint: the local one is preferred, then the
+/// external ones in order. Probing runs **in parallel** with a short 4s
+/// timeout, so a network change never hangs.
+class EndpointResolver {
+  EndpointResolver({
+    required this._probe,
+    this.probeTimeout = MTConstants.probeTimeout,
+  });
+
+  /// The practical constructor: probes with a real Vidhoist client using the
+  /// same credentials for every endpoint.
+  factory EndpointResolver.withClientFactory(
+    VidhoistApiClient Function(String baseUrl) clientFactory,
+  ) {
+    return EndpointResolver(
+      probe: (baseUrl) async {
+        final client = clientFactory(baseUrl);
+        try {
+          await client.testConnection(timeout: MTConstants.probeTimeout);
+          return MTEndpointStatus.ok;
+        } on AuthFailureException {
+          return MTEndpointStatus.unauthorized;
+        } on NotVidhoistServerException {
+          return MTEndpointStatus.notVidhoist;
+        } on NoApiException {
+          // 404: a live HTTP server with no Vidhoist interface. An address
+          // mistake, not a network one.
+          return MTEndpointStatus.notVidhoist;
+        } on MTApiException {
+          return MTEndpointStatus.unreachable;
+        } finally {
+          client.close();
+        }
+      },
+    );
+  }
+
+  final ProbeFn _probe;
+  final Duration probeTimeout;
+
+  /// The same choice **together with the state of every candidate** from
+  /// the
+  /// same probing round, so the caller can say *why* it found nothing
+  /// without probing twice.
+  Future<String?> resolveActive({
+    String? localUrl,
+    List<String> externalUrls = const [],
+  }) async => (await resolveDetailed(
+    localUrl: localUrl,
+    externalUrls: externalUrls,
+  )).url;
+
+  /// The same choice **together with the state of every candidate** from
+  /// the same probing round, so the caller can say *why* it found nothing
+  /// without probing twice.
+  Future<({String? url, Map<String, MTEndpointStatus> statuses})>
+  ///
+  /// [fixed] is an address chosen by hand (the desktop app, which never
+  /// switches by itself): every candidate is still probed for its status,
+  /// but only [fixed] is ever chosen, and nothing when it does not answer.
+  /// Null, as on the phones, keeps the first usable one.
+  resolveDetailed({
+    String? localUrl,
+    List<String> externalUrls = const [],
+    String? fixed,
+  }) async {
+    final candidates = [
+      if (localUrl != null && localUrl.trim().isNotEmpty) localUrl,
+      ...externalUrls.where((u) => u.trim().isNotEmpty),
+      if (fixed != null && fixed != localUrl && !externalUrls.contains(fixed))
+        fixed,
+    ];
+    if (candidates.isEmpty) {
+      return (url: null, statuses: const <String, MTEndpointStatus>{});
+    }
+
+    final statuses = await probeAll(candidates);
+    if (fixed != null) {
+      final usable = statuses[fixed]?.isUsable ?? false;
+      return (url: usable ? fixed : null, statuses: statuses);
+    }
+    for (final url in candidates) {
+      if (statuses[url]?.isUsable ?? false) {
+        return (url: url, statuses: statuses);
+      }
+    }
+    return (url: null, statuses: statuses);
+  }
+
+  /// The state of every endpoint in one pass, for the live endpoint list in
+  /// the network screen.
+  Future<Map<String, MTEndpointStatus>> probeAll(List<String> urls) async {
+    final entries = await Future.wait(
+      urls.map((url) async {
+        // try/catch around the await rather than onTimeout/catchError, so a
+        // probe that throws cannot hand us a future typed `Future<Never>`.
+        try {
+          return MapEntry(url, await _probe(url).timeout(probeTimeout));
+        } catch (_) {
+          return MapEntry(url, MTEndpointStatus.unreachable);
+        }
+      }),
+    );
+    return Map.fromEntries(entries);
+  }
+}

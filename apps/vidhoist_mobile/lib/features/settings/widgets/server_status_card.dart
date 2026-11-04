@@ -1,0 +1,137 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mt_core/mt_core.dart';
+import 'package:mt_ui/mt_ui.dart';
+
+import '../../../di.dart';
+import '../../shared/error_report.dart';
+
+/// The active server's state. null means not configured. Otherwise a
+/// classified state: **"rejects your credentials" is not "could not
+/// reach"** — the first is fixed by the two fields beneath this card, and
+/// the second is not.
+final serverStatusProvider = FutureProvider<MTEndpointStatus?>((ref) async {
+  final api = ref.watch(apiClientProvider);
+  if (api == null) return null;
+  try {
+    await api.testConnection();
+    clearErrorSignature('server-status');
+    return MTEndpointStatus.ok;
+  } on MTApiException catch (e) {
+    unawaited(logErrorOnce(ref.read(loggerProvider), 'server-status', e));
+    return switch (e) {
+      AuthFailureException() => MTEndpointStatus.unauthorized,
+      // The address is alive but is not Vidhoist: an address mistake, not a
+      // network one.
+      NotVidhoistServerException() ||
+      NoApiException() => MTEndpointStatus.notVidhoist,
+      _ => MTEndpointStatus.unreachable,
+    };
+  }
+});
+
+/// The server status card, always charcoal-dark (log §4).
+class ServerStatusCard extends ConsumerWidget {
+  const ServerStatusCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.mtl;
+    final status = ref.watch(serverStatusProvider);
+    final settings = ref.watch(settingsProvider);
+    final p = MTThemeX.of(context).palette;
+
+    final (icon, tint, label) = switch (status) {
+      AsyncData(value: MTEndpointStatus.ok) => (
+        MTIcons.cloudCheck,
+        p.ok,
+        l10n.serverStatusConnected,
+      ),
+      // The card is **always dark** (log §4), and Lite's petrol accent is
+      // not legible on it, so the distinction is made with the icon and the
+      // text rather than with colour.
+      AsyncData(value: MTEndpointStatus.unauthorized) => (
+        MTIcons.lock,
+        MTPalette.serverCardInk,
+        l10n.signInRequired,
+      ),
+      // "Not Vidhoist" is not an outage: the address is alive and answering,
+      // and the cure is correcting the address rather than waiting for the
+      // network.
+      AsyncData(value: MTEndpointStatus.notVidhoist) => (
+        MTIcons.linkOff,
+        MTPalette.serverCardInk,
+        l10n.errNotVidhoist,
+      ),
+      AsyncData(value: MTEndpointStatus.unreachable) => (
+        MTIcons.cloudOff,
+        p.err,
+        l10n.serverStatusOffline,
+      ),
+      AsyncData(value: null) => (
+        MTIcons.cloud,
+        MTPalette.serverCardInk,
+        l10n.serverStatusUnconfigured,
+      ),
+      _ => (
+        MTIcons.cloudWait,
+        MTPalette.serverCardInk,
+        l10n.serverStatusChecking,
+      ),
+    };
+
+    return Container(
+      padding: const EdgeInsets.all(MTSpace.lg),
+      decoration: BoxDecoration(
+        color: MTPalette.serverCardBg,
+        borderRadius: BorderRadius.circular(MTRadius.cardLg),
+      ),
+      child: Row(
+        children: [
+          MTConnectionIcon(
+            icon: icon,
+            color: tint,
+            // A refresh keeps the last answer and sets `isLoading`; it
+            // never goes back to a bare loading state.
+            checking: status.isLoading,
+          ),
+          const SizedBox(width: MTSpace.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: MTPalette.serverCardInk,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                if (settings.isConfigured)
+                  Text(
+                    settings.serverUrl,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textDirection: TextDirection.ltr,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: MTPalette.serverCardInk.withValues(alpha: 0.6),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          IconButton(
+            tooltip: l10n.refresh,
+            onPressed: () => ref.invalidate(serverStatusProvider),
+            icon: MTIcon(
+              MTIcons.refresh,
+              color: MTPalette.serverCardInk.withValues(alpha: 0.8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

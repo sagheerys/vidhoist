@@ -1,0 +1,345 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mt_core/mt_core.dart';
+import 'package:mt_media/mt_media.dart';
+import 'package:mt_ui/mt_ui.dart';
+
+import '../../di.dart';
+import '../downloads_library/artwork_view.dart';
+import '../home/add_flow.dart' show platformKindOf;
+import '../player/playback_providers.dart';
+import 'playlist_dialogs.dart';
+import 'playlists_providers.dart';
+
+/// A saved playlist's details (rule 7, step 2): play all, shuffle, and the
+/// headphones button. Drag to reorder, delete an item **with an undo**, and
+/// an indicator for the current one.
+class PlaylistDetailsScreen extends ConsumerWidget {
+  const PlaylistDetailsScreen({super.key, required this.playlistId});
+
+  final String playlistId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.mtl;
+    final playlists = ref.watch(playlistsProvider).valueOrNull ?? const [];
+    final playlist = playlists.where((p) => p.id == playlistId).firstOrNull;
+    final itemsAsync = ref.watch(playlistViewProvider(playlistId));
+
+    if (playlist == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: MTEmptyState(
+          title: l10n.playlistDetails,
+          message: l10n.noPlaylistsMessage,
+        ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(playlist.name),
+        actions: [
+          IconButton(
+            tooltip: l10n.rename,
+            onPressed: () => showPlaylistActionsSheet(context, ref, playlist),
+            icon: const MTIcon(MTIcons.moreVert),
+          ),
+        ],
+      ),
+      body: MTReadableWidth(
+        child: itemsAsync.when(
+          // **A reload keeps the list on screen** (field report 2026-09-25:
+          // tapping a clip low in the list flashed and jumped to the top).
+          // Playing records "last played" and refreshes the playlists list,
+          // which this view reads so that adding and removing show at
+          // once; without this the reload swapped the list
+          // for a spinner and rebuilt it from the top.
+          skipLoadingOnReload: true,
+          loading: () => const Center(child: MTSpinner()),
+          error: (_, _) => MTEmptyState(
+            title: l10n.tryAgain,
+            message: l10n.emptyPlaylistMessage,
+          ),
+          data: (view) => view.items.isEmpty
+              ? MTEmptyState(
+                  title: l10n.emptyPlaylist,
+                  message: l10n.emptyPlaylistMessage,
+                )
+              : Column(
+                  children: [
+                    _Actions(playlist: playlist, view: view),
+                    Expanded(
+                      child: _ReorderableItems(
+                        playlistId: playlistId,
+                        view: view,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Actions extends ConsumerWidget {
+  const _Actions({required this.playlist, required this.view});
+
+  final SavedPlaylist playlist;
+  final PlaylistView view;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.mtl;
+    final p = MTThemeX.of(context).palette;
+
+    Future<void> start({bool shuffle = false, bool audioOnly = false}) async {
+      // **A missing item never enters the queue**: its source fails and the
+      // player jumps to the next one, so the tap looks as though it played
+      // something else (field report 2026-09-04).
+      final visual = await ref
+          .read(playlistPlayerProvider)
+          .play(
+            view.playable,
+            playlistId: playlist.id,
+            playlistName: playlist.name,
+            shuffle: shuffle,
+            audioOnly: audioOnly,
+          );
+      if (visual && context.mounted) context.push('/player');
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        MTSpace.pagePad,
+        MTSpace.sm,
+        MTSpace.pagePad,
+        MTSpace.md,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // How long the list is and when it last played, under its name.
+          Text(
+            [
+              l10n.queueItemsCount(view.items.length),
+              if (playlist.lastPlayedAt != null)
+                mtTimeAgo(context, playlist.lastPlayedAt!),
+            ].join(' · '),
+            style: Theme.of(context).textTheme.bodySmall!
+                .copyWith(color: p.ink3),
+          ),
+          const SizedBox(height: MTSpace.sm),
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: start,
+                  icon: const MTIcon(MTIcons.playFill, size: 18),
+                  label: Text(l10n.playAll),
+                ),
+              ),
+              const SizedBox(width: MTSpace.xs),
+              IconButton.outlined(
+                tooltip: l10n.shuffle,
+                onPressed: () => start(shuffle: true),
+                icon: const MTIcon(MTIcons.shuffle, size: 19),
+              ),
+              const SizedBox(width: MTSpace.xs),
+              // The headphones button: the whole playlist as background audio
+              // even when it contains video.
+              IconButton.outlined(
+                tooltip: l10n.listenInBackground,
+                onPressed: () => start(audioOnly: true),
+                // In ink: the filled button beside it is the one action in colour.
+                icon: const MTIcon(MTIcons.headphones, size: 19),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReorderableItems extends ConsumerWidget {
+  const _ReorderableItems({required this.playlistId, required this.view});
+
+  final String playlistId;
+  final PlaylistView view;
+
+  List<PlaylistItem> get items => view.items;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // **The indicator used to stick on the first clip** (screenshot
+    // 2026-09-02): `ref.watch(audioHandlerProvider)` watches a
+    // provider pinned by an override that **never emits**, and
+    // `currentItem` is a getter over mutable state, a one-off read
+    // disguised as a subscription. The correct source is in the package
+    // itself: the `handler.mediaItem` stream, whose id is the canonicalUrl.
+    // **Current is one thing and playing is another**: the equaliser danced
+    // over a paused clip because the screen knew only which item was
+    // current (field report 2026-09-04). The two streams together separate
+    // the states.
+    final handler = ref.read(audioHandlerProvider);
+    return StreamBuilder<String?>(
+      stream: handler.currentKey,
+      builder: (context, keySnapshot) => StreamBuilder<bool>(
+        stream: handler.playingStream,
+        initialData: true,
+        builder: (context, playingSnapshot) =>
+            _list(context, ref, keySnapshot.data, playingSnapshot.data ?? true),
+      ),
+    );
+  }
+
+  Widget _list(
+    BuildContext context,
+    WidgetRef ref,
+    String? playingKey,
+    bool isPlaying,
+  ) {
+    return ReorderableListView.builder(
+      padding: const EdgeInsets.fromLTRB(
+        MTSpace.pagePad,
+        0,
+        MTSpace.pagePad,
+        140,
+      ),
+      itemCount: items.length,
+      onReorderItem: (oldIndex, newIndex) async {
+        await ref
+            .read(playlistsStoreProvider)
+            .reorderItem(playlistId, oldIndex, newIndex);
+        ref.invalidate(playlistItemsProvider(playlistId));
+        ref.invalidate(playlistsProvider);
+      },
+      itemBuilder: (context, index) {
+        final item = items[index];
+        final missing = view.isMissing(item);
+        return Dismissible(
+          key: ValueKey(item.canonicalUrl),
+          direction: DismissDirection.endToStart,
+          onDismissed: (_) => _removeWithUndo(context, ref, item, index),
+          background: _DismissBackground(),
+          // A clip no longer available is faded as well as named, so the
+          // list reads what will play at a glance.
+          child: Opacity(
+            opacity: missing ? 0.5 : 1,
+            child: MTMediaCard(
+              key: ValueKey('card-${item.canonicalUrl}'),
+              title: item.title,
+              // A missing item says so itself rather than looking valid and
+              // then failing.
+              subtitle: missing ? context.mtl.itemUnavailable : item.uploader,
+              playing: !missing && item.canonicalUrl == playingKey,
+              paused: !isPlaying,
+              thumbnail: item.artworkUrl == null
+                  ? null
+                  : artworkFor(item.artworkUrl),
+              platform: platformKindOf(platformOfKey(item.canonicalUrl)),
+              compact: true,
+              onTap: () => missing
+                  ? showMTSnack(
+                      context,
+                      context.mtl.itemUnavailable,
+                      type: MTSnackType.error,
+                    )
+                  : _playFrom(context, ref, item),
+            ),
+          ),
+        );
+      },
+      footer: Padding(
+        padding: const EdgeInsets.only(top: MTSpace.md),
+        child: Text(
+          context.mtl.playlistEditHint,
+          style: Theme.of(context).textTheme.bodySmall!
+              .copyWith(color: MTThemeX.of(context).palette.ink3),
+        ),
+      ),
+    );
+  }
+
+  /// **The index is computed within the playable items, not within the
+  /// displayed ones**: a playlist with dead entries played the wrong item
+  /// because the two indexes diverged.
+  Future<void> _playFrom(
+    BuildContext context,
+    WidgetRef ref,
+    PlaylistItem item,
+  ) async {
+    final playlist =
+        (ref.read(playlistsProvider).valueOrNull ?? const <SavedPlaylist>[])
+            .where((p) => p.id == playlistId)
+            .firstOrNull;
+    final playable = view.playable;
+    final index = playable.indexWhere(
+      (i) => i.canonicalUrl == item.canonicalUrl,
+    );
+    if (index < 0) return;
+    final visual = await ref
+        .read(playlistPlayerProvider)
+        .play(
+          playable,
+          startIndex: index,
+          playlistId: playlistId,
+          playlistName: playlist?.name,
+        );
+    if (visual && context.mounted) context.push('/player');
+  }
+
+  /// Deleting an item **with an undo** (rule 7): the removal is restored
+  /// exactly where it was.
+  void _removeWithUndo(
+    BuildContext context,
+    WidgetRef ref,
+    PlaylistItem item,
+    int index,
+  ) {
+    final l10n = context.mtl;
+    final store = ref.read(playlistsStoreProvider);
+    final entry = PlaylistEntry(
+      canonicalUrl: item.canonicalUrl,
+      cachedTitle: item.title,
+      cachedThumb: item.artworkUrl,
+    );
+
+    Future<void> refresh() async {
+      ref.invalidate(playlistItemsProvider(playlistId));
+      ref.invalidate(playlistsProvider);
+    }
+
+    store.removeItem(playlistId, item.canonicalUrl).then((_) => refresh());
+    showMTSnack(
+      context,
+      l10n.removedFromPlaylist,
+      actionLabel: l10n.undo,
+      onAction: () async {
+        await store.addItems(playlistId, [entry]);
+        await store.reorderItem(
+          playlistId,
+          (await store.byId(playlistId))!.items.length - 1,
+          index,
+        );
+        await refresh();
+      },
+    );
+  }
+}
+
+class _DismissBackground extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    return Container(
+      alignment: AlignmentDirectional.centerEnd,
+      padding: const EdgeInsets.symmetric(horizontal: MTSpace.xl),
+      color: p.err.withValues(alpha: 0.12),
+      child: MTIcon(MTIcons.trash, color: p.err),
+    );
+  }
+}

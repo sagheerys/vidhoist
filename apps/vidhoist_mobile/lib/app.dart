@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mt_ui/mt_ui.dart';
+
+import 'di.dart';
+import 'router.dart';
+
+/// The Vidhoist Lite root: the Wahaj theme with the petrol bay accent, plus
+/// localisation and the router. The identity is one and the difference is
+/// functional only.
+class LiteApp extends ConsumerWidget {
+  const LiteApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(settingsProvider.select((s) => s.themeMode));
+    final localeCode = ref.watch(settingsProvider.select((s) => s.localeCode));
+
+    return MaterialApp.router(
+      title: 'Vidhoist Lite',
+      debugShowCheckedModeBanner: false,
+      theme: mtTheme(MTVariant.lite, Brightness.light),
+      darkTheme: mtTheme(MTVariant.lite, Brightness.dark),
+      themeMode: themeMode,
+      locale: localeCode == null ? null : Locale(localeCode),
+      localizationsDelegates: MTLocalizations.localizationsDelegates,
+      supportedLocales: MTLocalizations.supportedLocales,
+      localeListResolutionCallback: mtLocaleResolution,
+      routerConfig: router,
+      // **The system bars follow the theme**, without the contrast scrim
+      // Android imposes behind the three navigation buttons, which cuts
+      // across
+      // the colour of the bottom bar.
+      builder: (context, child) =>
+          MTSystemBars(child: child ?? const SizedBox.shrink()),
+    );
+  }
+}

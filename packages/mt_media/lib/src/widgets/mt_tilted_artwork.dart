@@ -1,0 +1,137 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:mt_ui/mt_ui.dart';
+
+import '../models/playlist_item.dart';
+import 'mt_up_next_list.dart';
+
+/// The audio screen cover: a plate tilted **-1.5°** inside a frame tilted
+/// **+1°**. An approved identity element in log §4 ("the audio player
+/// cover is tilted inside a frame").
+///
+/// **The plate is always square**, the shape of an album cover. A YouTube
+/// thumbnail is 16:9, and the plate used to take the image's own shape, a
+/// wide strip in a square frame, where a music app shows the square middle
+/// of the same picture. The picture now fills the plate from its centre.
+class MTTiltedArtwork extends StatelessWidget {
+  const MTTiltedArtwork({
+    super.key,
+    required this.item,
+    this.artwork,
+    this.size = 296,
+    this.shadow = true,
+  });
+
+  final PlaylistItem item;
+  final MTArtworkBuilder? artwork;
+  final double size;
+
+  /// The deep shadow under the plate. Off where a glow already moves behind
+  /// the cover (the computer's listening room): the two together read as
+  /// a light that glows and a plate that floats, where one is enough.
+  final bool shadow;
+
+  static const double _tilt = -1.5 * math.pi / 180;
+  static const double _frameTilt = 1 * math.pi / 180;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Transform.rotate(
+            angle: _tilt,
+            child: Container(
+              width: size,
+              height: size,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                color: p.cardAlt,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: shadow
+                    ? [
+                        BoxShadow(
+                          color: p.accentDeep.withValues(alpha: 0.4),
+                          blurRadius: 60,
+                          offset: const Offset(0, 30),
+                          spreadRadius: -18,
+                        ),
+                      ]
+                    : null,
+              ),
+              child:
+                  artwork?.call(context, item) ??
+                  Center(
+                    child: MTIcon(
+                      item.isAudio ? MTIcons.music : MTIcons.video,
+                      size: size * 0.22,
+                      color: p.ink3,
+                    ),
+                  ),
+            ),
+          ),
+          Positioned(
+            left: -9,
+            right: -9,
+            top: -9,
+            bottom: -9,
+            child: IgnorePointer(
+              child: Transform.rotate(
+                angle: _frameTilt,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: p.line2),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Where the sound comes from, "streaming from the server" or "playing
+/// from your device": the golden rule made visible, as a quiet grey line
+/// rather than a tinted pill over the title (mobile plan 2026-11-01).
+class MTSourceChip extends StatelessWidget {
+  const MTSourceChip({super.key, required this.local});
+
+  final bool local;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    final l10n = context.mtl;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        MTIcon(
+          local ? MTIcons.offline : MTIcons.subscriptions,
+          size: 13,
+          color: p.ink3,
+        ),
+        const SizedBox(width: MTSpace.xxs + 2),
+        // Cut short rather than run past the screen, on a narrow phone
+        // with large text.
+        Flexible(
+          child: Text(
+            local ? l10n.playingFromDevice : l10n.streamingFromServer,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelSmall!
+                .copyWith(color: p.ink3),
+          ),
+        ),
+      ],
+    );
+  }
+}

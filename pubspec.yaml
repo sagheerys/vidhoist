@@ -1,0 +1,25 @@
+# The workspace root of the monorepo. See docs/ARCHITECTURE.md.
+name: vidhoist_workspace
+publish_to: none
+environment:
+  sdk: ^3.13.0
+
+workspace:
+  - packages/mt_core
+  - packages/mt_transcripts
+  - packages/mt_media
+  - packages/mt_ui
+  - apps/vidhoist_mobile
+  - apps/vidhoist_desktop
+
+# audio_service 0.18.19 and windows_taskbar 1.1.2, each with fixes, kept in
+# third_party until upstream has them: see the PATCHES.md in each folder.
+dependency_overrides:
+  # image 4.11 calls ZLibDecoder.decodeLazy, which archive gained after the
+  # 4.0.9 its constraint still admits; without this the desktop tests and
+  # flutter_launcher_icons fail to compile (seen 2026-11-04).
+  archive: ^4.6.0
+  audio_service:
+    path: third_party/audio_service
+  windows_taskbar:
+    path: third_party/windows_taskbar

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launcher shortcut labels. **Not read from the arb files**: Android draws
+  this menu before the Flutter engine starts, so the text has to be a native
+  resource. The Arabic lives in `values-ar/strings.xml` and follows the
+  system language rather than the app's — a platform constraint.
+-->
+<resources>
+    <string name="shortcut_paste_short">Paste link</string>
+    <string name="shortcut_paste_long">Paste a link and download</string>
+    <string name="shortcut_shorts_short">Shorts</string>
+    <string name="shortcut_shorts_long">Open shorts</string>
+    <string name="shortcut_audio_short">Audio</string>
+    <string name="shortcut_audio_long">Open audio library</string>
+</resources>

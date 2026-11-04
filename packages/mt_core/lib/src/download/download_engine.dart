@@ -1,0 +1,486 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart' show CancelToken;
+
+import '../api/api_exceptions.dart';
+import '../api/vidhoist_api.dart';
+import '../constants/mt_constants.dart';
+import '../models/download_task.dart';
+import '../models/history_item.dart';
+import '../models/quality.dart';
+import '../urls/short_link_resolver.dart';
+import '../urls/url_kit.dart';
+import 'delete_policy.dart';
+import 'download_queue.dart';
+import 'download_poller.dart';
+import 'pending_downloads.dart';
+import 'history_matcher.dart';
+import 'pull_gate_parking.dart';
+import 'transfer.dart';
+
+part 'download_engine_emit.dart';
+part 'download_engine_pull.dart';
+
+/// Where the pulled file is saved. The app decides.
+typedef SavePathBuilder = String Function(
+  DownloadTask task,
+  String serverFilename,
+);
+
+/// The four-stage engine (§3): add, poll, pull, delete-by-policy.
+/// Concurrency of at most 1, server errors fail **immediately** (trap
+/// §6.4), and cancelling cleans the partial file and sweeps the orphan it
+/// left on the server. Every state change is broadcast through [updates].
+class DownloadEngine {
+  DownloadEngine({
+    required this.api,
+    required this.policy,
+    required this.savePathBuilder,
+    ShortLinkResolver? shortLinkResolver,
+    Transfer? transfer,
+    this.pollInterval = MTConstants.pollInterval,
+    this.maxPollAttempts = MTConstants.maxPollAttempts,
+    this.pollNetworkTolerance = 0,
+    this.pullToDevice = true,
+    this.onCompleted,
+    this.pullGate,
+    this.compatibleVideo,
+    this.beforeAdd,
+    this.onLog,
+    this.pending,
+  }) : _resolver = shortLinkResolver ?? ShortLinkResolver(),
+       _transfer = transfer ?? Transfer(api: api),
+       _matcher = HistoryMatcher(api);
+
+  final VidhoistApi api;
+  final DeletePolicy policy;
+  final SavePathBuilder savePathBuilder;
+  final Duration pollInterval;
+  final int maxPollAttempts;
+
+  /// See [DownloadPoller.networkTolerance]; the default 0 fails at once,
+  /// and both apps pass [MTConstants.pollNetworkTolerance].
+  final int pollNetworkTolerance;
+
+  /// Rule 2: Lite pulls to the device once an item completes; Super does
+  /// not, where pulling happens only through "make available offline".
+  final bool pullToDevice;
+
+  /// For indexing after completion (OfflineIndex, MediaStore).
+  final void Function(DownloadTask task)? onCompleted;
+
+  /// A diagnostic trace: mt_core does not know where the log file lives.
+  final void Function(String message)? onLog;
+
+  /// **Where a task is written down so it survives this process** — null
+  /// for an app that does not need it.
+  ///
+  /// Only Lite does. Its promise is that the server cleans itself, and the
+  /// four stages keep that promise **only while the process lives**: killed
+  /// from the recents list or stopped by the battery manager, the server
+  /// still finishes the file and nobody is left to pull it or delete it.
+  /// [PendingSweeper] finishes those at the next launch, from these
+  /// records. Super has nothing to reconcile: it leaves files on the server
+  /// on purpose.
+  ///
+  /// Writing is **best effort and never awaited into the pipeline**: a
+  /// failed record must not fail a download that is working.
+  final PendingDownloadsStore? pending;
+
+  /// **The pull gate** ("Wi-Fi only"), asked before fetching a file to the
+  /// device. `false` parks the task ([PullGateParking]) and the queue
+  /// continues. The gate sits before the pull rather than before the add on
+  /// purpose: the expensive part is the file. The app answers it, because
+  /// mt_core does not know `connectivity_plus` (rule 6).
+  final bool Function()? pullGate;
+
+  /// **Playback compatibility** (field report 2026-09-03): asked on every
+  /// add, requesting H.264/AAC instead of whatever the server picks (AV1 or
+  /// VP9). See [VidhoistApiClient.add]. Read **at add time** like [pullGate],
+  /// on purpose, so toggling the setting does not require rebuilding the
+  /// engine.
+  final bool Function()? compatibleVideo;
+
+  /// **Work to finish before the clip is added**, or null. Super fetches a
+  /// clip's transcript here: the server keys finished jobs by URL alone, so
+  /// subtitles asked for after the clip would replace it in the history.
+  ///
+  /// It runs inside the adding phase, so the task card shows at once. It
+  /// can only delay the add, never stop it: a failure is logged and the
+  /// add goes ahead.
+  final Future<void> Function(DownloadTask task)? beforeAdd;
+
+  final ShortLinkResolver _resolver;
+  final Transfer _transfer;
+  final HistoryMatcher _matcher;
+  final DownloadQueue _queue = DownloadQueue();
+  final Map<String, DownloadTask> _tasks = {};
+  final Map<String, CancelToken> _cancelTokens = {};
+  final Set<String> _cancelRequested = {};
+
+  /// A `/history` snapshot from before the add, which also identifies the
+  /// orphan left by a cancellation.
+  final Map<String, Set<String>> _snapshots = {};
+
+  /// The whole server as it was before the add, per task, so the poller can
+  /// name the item by the key Vidhoist filed it under. Null when the history
+  /// could not be read, which simply means matching stays as it was.
+  final Map<String, Map<String, String>?> _fingerprints = {};
+
+  /// The last **whole percentage** broadcast for each task, the filter used
+  /// by [_emitProgress].
+  final Map<String, int> _lastPercent = {};
+
+  /// What the network gate stopped, with its history item ready to pull.
+  late final PullGateParking _parked = PullGateParking(
+    pollInterval: pollInterval,
+    onWake: () => unawaited(_pump()),
+  );
+
+  final StreamController<DownloadTask> _updates =
+      StreamController<DownloadTask>.broadcast();
+  bool _working = false;
+
+  /// **The death flag:** without it, the polling and gate
+  /// loops keep running after disposal, against a closed Dio client,
+  /// emitting into a closed stream.
+  bool _disposed = false;
+
+  Stream<DownloadTask> get updates => _updates.stream;
+  List<DownloadTask> get tasks => List.unmodifiable(_tasks.values);
+  DownloadTask? taskById(String id) => _tasks[id];
+
+  /// Is any task still alive? Stops a server switch from wiping them out.
+  bool get hasActiveWork =>
+      _tasks.values.any((t) => !t.isFinished) || _parked.isNotEmpty;
+
+  /// Enqueues a task, taking the first URL out of the shared text.
+  DownloadTask submit(
+    String url,
+    Quality quality, {
+    bool isBatchMember = false,
+    String? folder,
+  }) {
+    final task = DownloadTask(
+      inputUrl: UrlKit.extractUrl(url),
+      quality: quality,
+      isBatchMember: isBatchMember,
+      folder: folder,
+    );
+    _tasks[task.id] = task;
+    _queue.enqueue(task.id, isBatchMember: isBatchMember);
+    _emit(task);
+    onLog?.call('submit ${task.quality.wire} ${task.inputUrl}');
+    // **No record yet.** The server has not been asked, so there is
+    // nothing to finish; and a record without fingerprints would let the
+    // sweep adopt an older row for the same link — on a shared server,
+    // somebody else's copy — and pull it and delete it.
+    unawaited(_pump());
+    return task;
+  }
+
+  /// Cancelling: a waiting task is marked at once, and a running one has
+  /// its pull cut and its partial files deleted.
+  void cancel(String taskId) {
+    _cancelRequested.add(taskId);
+    final task = _tasks[taskId];
+    // Removes a **finished** task from the snapshot, for a failed card that
+    // was resubmitted, so it does not linger beside the new attempt.
+    // Running
+    // tasks are untouched.
+    if (_queue.remove(taskId) || _parked.remove(taskId)) {
+      _forget(taskId);
+      if (task != null) _emit(task.copyWith(phase: TaskPhase.cancelled));
+      _cancelRequested.remove(taskId); // or it leaks forever
+      unawaited(_cleanupOrphan(taskId));
+      return;
+    }
+    _cancelTokens[taskId]?.cancel();
+  }
+
+  /// Removes a **finished** task from the snapshot, for a failed card that
+  /// was resubmitted, so it does not linger beside the new attempt. Running
+  /// tasks are untouched.
+  void forget(String taskId) {
+    final task = _tasks[taskId];
+    if (task == null || !task.isFinished) return;
+    _tasks.remove(taskId);
+    _snapshots.remove(taskId);
+    _fingerprints.remove(taskId);
+    if (!_updates.isClosed) _updates.add(task);
+  }
+
+  Future<void> dispose() async {
+    _disposed = true;
+    _parked.clear();
+    for (final token in _cancelTokens.values) {
+      token.cancel();
+    }
+    await _updates.close();
+  }
+
+  // The single worker (concurrency 1).
+
+  Future<void> _pump() async {
+    if (_working || _disposed) return;
+    _working = true;
+    try {
+      while (!_disposed) {
+        final resumed = _parked.takeIfOpen(() => pullGate?.call() ?? true);
+        if (resumed != null) {
+          final (id, item) = resumed;
+          await _guard(id, () => _pullPhase(id, item));
+          continue;
+        }
+        final next = _queue.takeNext();
+        if (next == null) break;
+        await _guard(next, () => _run(next));
+      }
+    } finally {
+      _working = false;
+    }
+  }
+
+  /// The unified handler. **The trailing `on Object` is the fix:** an
+  /// unclassified error, such as a `FileSystemException` from the
+  /// rename, escaped the pump, so the task froze and **the whole queue**
+  /// stopped with no message.
+  Future<void> _guard(String taskId, Future<void> Function() body) async {
+    try {
+      await body();
+    } on CancelledException {
+      // **Disposal is not a cancellation by the user.** The engine goes
+      // when the server settings change, and the orphan cleanup below
+      // refuses to run on a disposed engine; the record is then the only
+      // thing left that knows the server is still working.
+      if (!_disposed) _forget(taskId);
+      _emitPhase(taskId, TaskPhase.cancelled);
+      await _cleanupOrphan(taskId);
+    } on MTApiException catch (e) {
+      // The step it failed at: the same refusal means different things
+      // while adding, while the server works, and while pulling the file.
+      onLog?.call('task failed while ${_tasks[taskId]?.phase.name}: $e');
+      // **A broken road keeps the record; a refusal drops it.** A network
+      // failure or the polling ceiling is exactly the case the record was
+      // written for: the server carries on and finishes the file, and the
+      // next launch pulls it and cleans up. A server error is final.
+      if (!e.isRetryable) _forget(taskId);
+      final task = _tasks[taskId];
+      if (task != null) _emit(task.copyWith(phase: TaskPhase.failed, error: e));
+    } on Object catch (e) {
+      onLog?.call(
+        'task failed (local) while ${_tasks[taskId]?.phase.name}: $e',
+      );
+      _forget(taskId);
+      final task = _tasks[taskId];
+      if (task != null) {
+        _emit(
+          task.copyWith(
+            phase: TaskPhase.failed,
+            error: LocalFailureException('$e'),
+          ),
+        );
+      }
+    } finally {
+      _cancelTokens.remove(taskId);
+      _cancelRequested.remove(taskId);
+    }
+  }
+
+  Future<void> _run(String taskId) async {
+    var task = _tasks[taskId]!;
+    if (_cancelRequested.contains(taskId)) {
+      _emit(task.copyWith(phase: TaskPhase.cancelled));
+      return;
+    }
+    // 1) The add: resolve the short link, then call /add.
+    task = _emit(task.copyWith(phase: TaskPhase.adding));
+    final resolved = await _resolver.resolve(task.inputUrl);
+    task = _emit(task.copyWith(resolvedUrl: resolved));
+    _throwIfCancelRequested(taskId);
+    if (beforeAdd case final hook?) {
+      try {
+        await hook(task);
+      } on Object catch (e) {
+        onLog?.call('before add failed: $e');
+      }
+      _throwIfCancelRequested(taskId);
+    }
+    // Know what existed before us, so another operation is
+    // never attributed to this task. **One reading serves both jobs**: the
+    // fingerprints of this URL's items for the fallback match, and the whole
+    // server so the one thing our add changes can be identified by key.
+    final history = await _matcher.read();
+    _snapshots[taskId] = HistoryMatcher.signaturesFor(
+      history,
+      task.effectiveUrl,
+    );
+    _fingerprints[taskId] = history == null
+        ? null
+        : HistoryMatcher.fingerprints(history);
+    // **Before the add, not after**: the point of the record is to survive
+    // a death, and the most likely moment to die is while the server is
+    // working — which begins on the next line.
+    _remember(task, before: _snapshots[taskId]);
+    _throwIfCancelRequested(taskId);
+    await api.add(
+      resolved,
+      task.quality,
+      compatibleVideo: compatibleVideo?.call() ?? false,
+      folder: task.folder,
+    );
+
+    // 2) Poll until completion or an immediate error.
+    task = _emit(task.copyWith(phase: TaskPhase.polling));
+    final done = await _pollUntilDone(taskId, task);
+    task = _emit(
+      task.copyWith(
+        canonicalUrl: done.canonicalUrl,
+        serverFilename: done.serverPath,
+        title: done.title,
+        thumbnail: done.thumbnail,
+      ),
+    );
+    // The record learns what the server called it, so a sweep after a
+    // death from here on matches by the canonical URL it will delete by.
+    _remember(task, before: _snapshots[taskId]);
+
+    // Super: leaving the item on the server is the whole job. No pull, no
+    // delete.
+    if (!pullToDevice) {
+      _complete(taskId);
+      return;
+    }
+
+    // 3) A closed gate **parks the task and the queue continues**.
+    if (!(pullGate?.call() ?? true)) {
+      _parked.park(taskId, done);
+      _emitPhase(taskId, TaskPhase.waitingForNetwork);
+      return;
+    }
+    await _pullPhase(taskId, done);
+  }
+
+  /// Polls the item belonging to **this** task; the details live in
+  /// [DownloadPoller].
+  Future<HistoryItem> _pollUntilDone(String taskId, DownloadTask task) =>
+      DownloadPoller(
+        api: api,
+        pollInterval: pollInterval,
+        maxAttempts: maxPollAttempts,
+        networkTolerance: pollNetworkTolerance,
+      ).pollUntilDone(
+        url: task.effectiveUrl,
+        before: _snapshots[taskId] ?? const <String>{},
+        fingerprintsBefore: _fingerprints[taskId],
+        // **Written down the moment it is known, not at the end.** The key
+        // is what a delete, a cancellation and the next launch's sweep all
+        // need, and the likeliest moment to be killed is while the server
+        // is working.
+        onIdentified: (key) => _noteServerKey(taskId, key),
+        onSeen: (item) => _noteSeen(taskId, item),
+        checkAborted: () {
+          if (_disposed) throw const CancelledException();
+          _throwIfCancelRequested(taskId);
+        },
+        onProgress: (p) => _emitProgress(taskId, p),
+        live: api.liveUpdates(),
+      );
+
+  /// The task shows the title, the picture and the speed the server has
+  /// for it as soon as the server has them, not only once it is done:
+  /// until then the list showed a bare link and a blank where the cover
+  /// goes.
+  void _noteSeen(String taskId, HistoryItem item) {
+    final task = _tasks[taskId];
+    if (task == null) return;
+    final title = (item.title ?? '').isEmpty ? task.title : item.title;
+    final thumbnail = item.thumbnail ?? task.thumbnail;
+    final speed = item.rawStatus == 'downloading' ? item.speed : null;
+    if (title == task.title &&
+        thumbnail == task.thumbnail &&
+        speed == task.speed) {
+      return;
+    }
+    _emit(
+      task.copyWith(title: title, thumbnail: thumbnail, speed: () => speed),
+    );
+  }
+
+  /// The task learns the URL the server filed it under, and so does its
+  /// record.
+  void _noteServerKey(String taskId, String key) {
+    final task = _tasks[taskId];
+    if (task == null || task.canonicalUrl == key) return;
+    final updated = _emit(task.copyWith(canonicalUrl: key));
+    _remember(updated, before: _snapshots[taskId]);
+  }
+
+  /// What a cancelled task added is not left on the server.
+  Future<void> _cleanupOrphan(String taskId) async {
+    final task = _tasks[taskId];
+    final before = _snapshots.remove(taskId);
+    _fingerprints.remove(taskId);
+    if (task == null || before == null || _disposed) return;
+    // The pull completed, so nothing was left orphaned on the server.
+    if (task.localPath != null) return;
+    // **Knowing the key makes this exact.** The sweep by URL cannot find an
+    // item the server filed under a URL we never sent, which is how a
+    // cancelled Reddit or Vimeo download used to be left behind.
+    final key = task.canonicalUrl;
+    if (key != null && key.isNotEmpty) {
+      await _matcher.deleteByKey(key);
+      return;
+    }
+    await _matcher.deleteOrphan(task.effectiveUrl, before);
+  }
+
+  void _throwIfCancelRequested(String taskId) {
+    if (_cancelRequested.contains(taskId)) {
+      throw const CancelledException();
+    }
+  }
+
+  /// Writes the record, or updates it as the task learns more: the
+  /// fingerprints before the add, the server's names after the poll, the
+  /// local path after the pull.
+  ///
+  /// **Fire-and-forget on purpose.** A download must not wait on
+  /// SharedPreferences, and must not fail because a write did. The worst
+  /// case of a lost record is the behaviour we had before it existed.
+  void _remember(DownloadTask task, {Set<String>? before}) {
+    final store = pending;
+    if (store == null || task.isBatchMember) return;
+    unawaited(
+      store
+          .put(
+            PendingDownload(
+              id: task.id,
+              url: task.effectiveUrl,
+              quality: task.quality,
+              createdAt: task.createdAt,
+              before: before ?? const {},
+              canonicalUrl: task.canonicalUrl,
+              serverFilename: task.serverFilename,
+              localPath: task.localPath,
+            ),
+          )
+          .catchError((Object e) => onLog?.call('pending record failed: $e')),
+    );
+  }
+
+  /// Drops the record: the task reached an end that nothing needs to
+  /// finish — completed and cleaned, refused by the server, or given up
+  /// by the user (whose cancellation sweeps its own orphan). A record kept
+  /// after any of those would have the next launch pull something nobody
+  /// is waiting for.
+  void _forget(String taskId) {
+    unawaited(
+      pending
+          ?.remove(taskId)
+          .catchError(
+            (Object e) => onLog?.call('pending record removal failed: $e'),
+          ),
+    );
+  }
+}

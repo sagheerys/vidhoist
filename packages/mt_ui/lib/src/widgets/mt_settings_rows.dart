@@ -1,0 +1,164 @@
+import 'package:flutter/material.dart';
+
+import '../theme/mt_theme.dart';
+import '../theme/mt_theme_controls.dart';
+import '../tokens/tokens.dart';
+import 'mt_adaptive.dart';
+
+import '../icons/mt_icon.dart';
+import '../icons/mt_icon_data.dart';
+import '../icons/mt_icons.dart';
+
+/// One group of the settings home: **a card**, its small heading inside
+/// on top, then its rows (owner's choice, 2026-11-01, as drawn in the
+/// mobile mock-ups). The phone draws a hairline between rows; the tablet's
+/// narrow list leaves them out, since the lit row already marks its place.
+class MTSettingsGroup extends StatelessWidget {
+  const MTSettingsGroup({
+    super.key,
+    required this.title,
+    required this.rows,
+    this.divided = true,
+  });
+
+  final String title;
+  final List<Widget> rows;
+  final bool divided;
+
+  @override
+  Widget build(BuildContext context) {
+    final x = MTThemeX.of(context);
+    final p = x.palette;
+    final radius = BorderRadius.circular(MTRadius.card);
+    return Padding(
+      padding: const EdgeInsets.only(top: MTSpace.md),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: p.card,
+          borderRadius: radius,
+          border: Border.all(color: p.line, width: x.hairline),
+        ),
+        // The lit row fills the card's width, so its corners are the card's.
+        child: ClipRRect(
+          borderRadius: radius,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(
+                  MTSpace.md,
+                  MTSpace.md,
+                  MTSpace.md,
+                  MTSpace.xxs,
+                ),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.labelSmall!
+                      .copyWith(color: p.ink3),
+                ),
+              ),
+              for (var i = 0; i < rows.length; i++) ...[
+                if (divided && i > 0)
+                  Divider(height: 1, indent: MTSpace.md, color: p.line),
+                rows[i],
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// One section of the settings: its icon, its name, and **the setting as it
+/// stands** beneath, so the home page answers "how is this set?" without
+/// opening anything. On the tablet's list the open section is filled with
+/// the ink's veil and there is no chevron, since nothing is pushed. The icon
+/// stands bare, in the ink: a tinted square behind each of twelve icons
+/// was the loudest mark of a generated screen (log §4, 2026-10-31).
+class MTSettingsRow extends StatelessWidget {
+  const MTSettingsRow({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.onTap,
+    this.selected = false,
+    this.chevron = true,
+  });
+
+  final MTIconData icon;
+  final String title;
+  final String value;
+  final VoidCallback onTap;
+  final bool selected;
+  final bool chevron;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    // **Its own surface**: a tile's colour is painted on the nearest
+    // Material, and on the page's it stayed where the row used to be when
+    // the server card above grew a line after loading.
+    return Material(type: MaterialType.transparency, child: _tile(context, p));
+  }
+
+  Widget _tile(BuildContext context, MTPalette p) {
+    return ListTile(
+      selected: selected,
+      selectedTileColor: mtSelectedFill(p),
+      selectedColor: p.ink,
+      contentPadding: const EdgeInsetsDirectional.symmetric(
+        horizontal: MTSpace.md,
+      ),
+      leading: MTIcon(icon, size: 20, color: selected ? p.ink : p.ink2),
+      title: Text(
+        title,
+        style: selected ? const TextStyle(fontWeight: FontWeight.w700) : null,
+      ),
+      subtitle: Text(
+        value,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.bodySmall!.copyWith(color: p.ink3),
+      ),
+      trailing: chevron
+          ? MTIcon(MTIcons.forward, matchTextDirection: true, color: p.ink3)
+          : null,
+      onTap: onTap,
+    );
+  }
+}
+
+/// A section's own page: its title on top and its fields at a readable
+/// width, the same on a phone and in the tablet's open pane.
+class MTSettingsPage extends StatelessWidget {
+  const MTSettingsPage({
+    super.key,
+    required this.title,
+    required this.child,
+    this.actions = const [],
+  });
+
+  final String title;
+  final Widget child;
+  final List<Widget> actions;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: Text(title), actions: actions),
+    body: MTReadableWidth(
+      child: ListView(
+        // Room above the first field's floating label, which a page title
+        // sits right on top of, and below for the system bar.
+        padding: const EdgeInsets.fromLTRB(
+          MTSpace.pagePad,
+          MTSpace.md,
+          MTSpace.pagePad,
+          120,
+        ),
+        children: [child],
+      ),
+    ),
+  );
+}

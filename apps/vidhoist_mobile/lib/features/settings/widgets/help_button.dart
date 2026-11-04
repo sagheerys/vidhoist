@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:mt_ui/mt_ui.dart';
+
+/// A help button for a complex field, opening a dialog with an explanation
+/// from the arb files.
+class HelpButton extends StatelessWidget {
+  const HelpButton({super.key, required this.title, required this.body});
+
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      tooltip: context.mtl.helpAboutField,
+      icon: MTIcon(MTIcons.help, size: 18, color: p.ink3),
+      onPressed: () => showMTDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(
+            title,
+            style: Theme.of(dialogContext).textTheme.titleLarge,
+          ),
+          content: Text(
+            body,
+            style: Theme.of(dialogContext).textTheme.bodyMedium,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(
+                MaterialLocalizations.of(dialogContext).okButtonLabel,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// **A gap exactly as wide as the help button.** A field with no
+/// explanation stays aligned with its neighbours: without it the username
+/// field alone reached the edge between two indented fields (device check
+/// 2026-09-05).
+class HelpButtonGap extends StatelessWidget {
+  const HelpButtonGap({super.key});
+
+  @override
+  Widget build(BuildContext context) => const Visibility(
+    visible: false,
+    maintainSize: true,
+    maintainAnimation: true,
+    maintainState: true,
+    child: IconButton(
+      visualDensity: VisualDensity.compact,
+      onPressed: null,
+      icon: MTIcon(MTIcons.help, size: 18),
+    ),
+  );
+}

@@ -1,0 +1,312 @@
+import 'package:flutter/material.dart';
+import 'package:mt_core/mt_core.dart';
+import 'package:mt_ui/mt_ui.dart';
+
+import '../playlists_providers.dart';
+
+/// A smart playlist card: a small charcoal-dark card with a glow at the
+/// top. It builds itself with no maintenance, and its colour follows its
+/// meaning (favourites crimson, newest in the accent colour).
+class SmartPlaylistCard extends StatelessWidget {
+  const SmartPlaylistCard({
+    super.key,
+    required this.kind,
+    required this.count,
+    required this.onTap,
+  });
+
+  final SmartListKind kind;
+  final int count;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    final l10n = context.mtl;
+    final (icon, label, glow) = switch (kind) {
+      SmartListKind.favorites => (
+        MTIcons.favoriteOn,
+        l10n.favorites,
+        p.favorite,
+      ),
+      SmartListKind.latest => (MTIcons.clock, l10n.latestAdditions, p.accent),
+    };
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(MTRadius.card),
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(MTRadius.card),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [MTPalette.serverCardBg, MTPalette.serverCardBgLift],
+            ),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              // A soft glow at the top of the card: a radial gradient that
+              // fades out, not a hard disc.
+              PositionedDirectional(
+                top: -34,
+                end: -24,
+                child: Container(
+                  width: 110,
+                  height: 92,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        glow.withValues(alpha: 0.32),
+                        glow.withValues(alpha: 0),
+                      ],
+                      stops: const [0.25, 1],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: MTSpace.sm + 1,
+                  vertical: MTSpace.md - 1,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: MTPalette.serverCardInk.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(MTRadius.chip),
+                      ),
+                      child: MTIcon(icon, size: 15, color: glow),
+                    ),
+                    const SizedBox(height: MTSpace.xs + 2),
+                    Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: MTPalette.serverCardInk,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      '${l10n.queueItemsCount(count)} · ${l10n.autoBuilt}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        color: MTPalette.serverCardInk.withValues(alpha: 0.65),
+                        fontSize: 9.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A manual playlist card: a mosaic cover of up to four thumbnails, plus a
+/// play button and a pin badge.
+class PlaylistCard extends StatelessWidget {
+  const PlaylistCard({
+    super.key,
+    required this.playlist,
+    required this.onTap,
+    required this.onPlay,
+    required this.onLongPress,
+    this.thumbnails = const [],
+  });
+
+  final SavedPlaylist playlist;
+  final VoidCallback onTap;
+  final VoidCallback onPlay;
+  final VoidCallback onLongPress;
+
+  /// Up to four covers from the playlist's items; it may be empty.
+  final List<Widget> thumbnails;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    final text = Theme.of(context).textTheme;
+    final l10n = context.mtl;
+
+    return Material(
+      color: p.card,
+      borderRadius: BorderRadius.circular(MTRadius.cardLg),
+      child: InkWell(
+        onTap: onTap,
+        onLongPress: onLongPress,
+        borderRadius: BorderRadius.circular(MTRadius.cardLg),
+        child: Container(
+          padding: const EdgeInsets.all(MTSpace.xs + 2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(MTRadius.cardLg),
+            border: Border.all(
+              color: playlist.pinned ? p.accent.withValues(alpha: 0.4) : p.line,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // The cover fills whatever is left of the card, so no dead
+              // space remains.
+              Expanded(
+                child: _Cover(
+                  thumbnails: thumbnails,
+                  pinned: playlist.pinned,
+                  pinnedLabel: l10n.pinPlaylist,
+                  onPlay: onPlay,
+                ),
+              ),
+              const SizedBox(height: MTSpace.xs + 1),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3),
+                child: Text(
+                  playlist.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: text.titleMedium!.copyWith(fontSize: 12),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
+                child: Text(
+                  [
+                    l10n.queueItemsCount(playlist.items.length),
+                    if (playlist.lastPlayedAt != null)
+                      mtTimeAgo(context, playlist.lastPlayedAt!),
+                  ].join(' · '),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: text.labelSmall!.copyWith(color: p.ink3),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Cover extends StatelessWidget {
+  const _Cover({
+    required this.thumbnails,
+    required this.pinned,
+    required this.pinnedLabel,
+    required this.onPlay,
+  });
+
+  final List<Widget> thumbnails;
+  final bool pinned;
+  final String pinnedLabel;
+  final VoidCallback onPlay;
+
+  /// **A mosaic that adapts to the count** (requested 2026-09-08): it was
+  /// always two cells, so a playlist of twenty items was represented by two
+  /// covers. Now it goes up to four, and the progression is deliberate:
+  /// **three means one large and two small** rather than a grid with an
+  /// empty quarter, and one fills the whole cover instead of half of it
+  /// sitting dead.
+  ///
+  /// **And `stretch` is mandatory in every row and column** (device check
+  /// 2026-09-05): without it the cell receives no tight height, so the
+  /// image takes its natural height and centres itself, a thin strip in the
+  /// middle of an empty card. `BoxFit.cover` does not help, because nothing
+  /// is asking it to fill the height.
+  Widget _mosaic(BuildContext context, MTPalette p) {
+    Widget cell(Widget? child) => ColoredBox(
+      color: p.cardAlt,
+      child: child ?? MTIcon(MTIcons.queue, size: 18, color: p.ink3),
+    );
+    Widget stretchRow(List<Widget> children) => Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [for (final child in children) Expanded(child: child)],
+    );
+    Widget stretchColumn(List<Widget> children) => Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [for (final child in children) Expanded(child: child)],
+    );
+
+    final t = thumbnails;
+    return switch (t.length) {
+      0 => cell(null),
+      1 => cell(t[0]),
+      2 => stretchRow([cell(t[0]), cell(t[1])]),
+      3 => stretchRow([
+        cell(t[0]),
+        stretchColumn([cell(t[1]), cell(t[2])]),
+      ]),
+      _ => stretchColumn([
+        stretchRow([cell(t[0]), cell(t[1])]),
+        stretchRow([cell(t[2]), cell(t[3])]),
+      ]),
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(MTRadius.thumb),
+          child: _mosaic(context, p),
+        ),
+        if (pinned)
+          PositionedDirectional(
+            top: 6,
+            start: 6,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: MTSpace.xs,
+                vertical: 3,
+              ),
+              decoration: BoxDecoration(
+                color: p.ink.withValues(alpha: 0.85),
+                borderRadius: BorderRadius.circular(MTRadius.badge + 1),
+              ),
+              child: Text(
+                '📌 $pinnedLabel',
+                style: Theme.of(context).textTheme.labelSmall!
+                    .copyWith(color: p.bg, fontSize: 9),
+              ),
+            ),
+          ),
+        PositionedDirectional(
+          bottom: 6,
+          end: 6,
+          child: Material(
+            color: p.ink.withValues(alpha: 0.85),
+            borderRadius: BorderRadius.circular(MTRadius.chip),
+            child: InkWell(
+              onTap: onPlay,
+              borderRadius: BorderRadius.circular(MTRadius.chip),
+              child: SizedBox(
+                width: 28,
+                height: 28,
+                child: MTIcon(MTIcons.playFill, size: 16, color: p.bg),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

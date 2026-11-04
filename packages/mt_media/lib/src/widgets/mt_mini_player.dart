@@ -1,0 +1,320 @@
+import 'package:audio_service/audio_service.dart';
+import 'package:flutter/material.dart';
+import 'package:mt_ui/mt_ui.dart';
+
+import '../models/playlist_item.dart';
+import '../playback/audio_handler.dart';
+import 'mt_up_next_list.dart';
+
+/// The mini player: a permanent bar at the bottom of the main screens
+/// whenever something is playing. Cover, title, play and pause, next when
+/// a list plays, progress, drag to dismiss, and a tap that opens the audio
+/// screen.
+///
+/// **Trap §6.5:** visibility hangs on `mediaItem != null`, not on
+/// `processingState`, or a ghost survives the stop.
+class MTMiniPlayer extends StatelessWidget {
+  const MTMiniPlayer({
+    super.key,
+    required this.handler,
+    required this.onOpen,
+    this.artwork,
+    this.onExpand,
+    this.hidden = false,
+    this.margin = const EdgeInsets.fromLTRB(
+      MTSpace.md,
+      0,
+      MTSpace.md,
+      MTSpace.sm,
+    ),
+  });
+
+  final MTAudioHandler handler;
+  final VoidCallback onOpen;
+  final MTArtworkBuilder? artwork;
+
+  /// Brings back the tablet's player panel; null, as on a phone, hides it.
+  final VoidCallback? onExpand;
+
+  /// Out of the way on a screen that has no room for it (settings, or
+  /// beside the tablet's player panel): it leaves with motion, as it does
+  /// when playback stops, rather than vanishing.
+  final bool hidden;
+  final EdgeInsetsGeometry margin;
+
+  @override
+  Widget build(BuildContext context) => StreamBuilder<MediaItem?>(
+    stream: handler.mediaItem,
+    builder: (context, snapshot) {
+      final item = hidden ? null : snapshot.data;
+      // **It appears and disappears with motion rather than a jump**
+      // (polish 2026-09-04): it used to pop into place in one step.
+      return AnimatedSwitcher(
+        duration: mtMotionDuration(context, MTMotion.page),
+        reverseDuration: mtMotionDuration(context, MTMotion.fast),
+        switchInCurve: MTMotion.entrance,
+        switchOutCurve: MTMotion.exit,
+        transitionBuilder: (child, animation) => FadeTransition(
+          opacity: animation,
+          child: SizeTransition(
+            sizeFactor: animation,
+            alignment: Alignment.bottomCenter,
+            child: child,
+          ),
+        ),
+        child: item == null
+            ? const SizedBox.shrink(key: ValueKey('mt-mini-none'))
+            : Padding(
+                key: const ValueKey('mt-mini-bar'),
+                padding: margin,
+                child: _Bar(
+                  handler: handler,
+                  onOpen: onOpen,
+                  onExpand: onExpand,
+                  artwork: artwork,
+                  title: item.title,
+                  subtitle: item.artist,
+                  current: handler.currentItem,
+                ),
+              ),
+      );
+    },
+  );
+}
+
+class _Bar extends StatelessWidget {
+  const _Bar({
+    required this.handler,
+    required this.onOpen,
+    this.onExpand,
+    required this.title,
+    this.subtitle,
+    this.artwork,
+    this.current,
+  });
+
+  final MTAudioHandler handler;
+  final VoidCallback onOpen;
+  final VoidCallback? onExpand;
+  final String title;
+  final String? subtitle;
+  final MTArtworkBuilder? artwork;
+  final PlaylistItem? current;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    final text = Theme.of(context).textTheme;
+    final l10n = context.mtl;
+
+    return Dismissible(
+      key: const ValueKey('mt-mini-player'),
+      direction: DismissDirection.down,
+      onDismissed: (_) => handler.stop(),
+      // A light shrink while pressed, which prepares the audio screen
+      // rising out of its place.
+      child: MTPressable(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onOpen,
+            borderRadius: BorderRadius.circular(MTRadius.mini),
+            child: Container(
+              height: 62,
+              padding: const EdgeInsets.symmetric(horizontal: MTSpace.sm),
+              decoration: BoxDecoration(
+                color: p.miniBg,
+                borderRadius: BorderRadius.circular(MTRadius.mini),
+                boxShadow: MTShadow.mini(p),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 42,
+                        height: 42,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          color: p.miniInk.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(MTRadius.thumb),
+                        ),
+                        // The next clip's cover melts into this one's.
+                        child: MTAnimatedSwap(
+                          duration: MTMotion.page,
+                          child: SizedBox.expand(
+                            key: ValueKey(current?.canonicalUrl ?? title),
+                            child: current != null && artwork != null
+                                ? artwork!(context, current!)
+                                : MTIcon(
+                                    MTIcons.music,
+                                    size: 18,
+                                    color: p.miniInkMuted,
+                                  ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: MTSpace.sm),
+                      Expanded(
+                        // With the next clip, the title fades across
+                        // rather than jumping.
+                        child: MTAnimatedSwap(
+                          alignment: AlignmentDirectional.centerStart,
+                          blur: true,
+                          child: Column(
+                            key: ValueKey(title),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              MTForeignText(
+                                title,
+                                maxLines: 1,
+                                style: text.bodyMedium!.copyWith(
+                                  color: p.miniInk,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              if (subtitle != null && subtitle!.isNotEmpty)
+                                Text(
+                                  subtitle!,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: text.labelSmall!.copyWith(
+                                    color: p.miniInkMuted,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // **Play, then next, left to right in every
+                      // language**, like the full player's controls: in an
+                      // Arabic bar the pair was mirrored, and the next
+                      // arrow pointed back at play (field report
+                      // 2026-09-30).
+                      Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _PlayButton(
+                              handler: handler,
+                              palette: p,
+                              label: l10n.play,
+                            ),
+                            // The second thing people do from the bar while
+                            // a list plays (design review 2026-09-25).
+                            if (handler.items.length > 1)
+                              IconButton(
+                                onPressed: handler.skipToNext,
+                                tooltip: l10n.next,
+                                visualDensity: VisualDensity.compact,
+                                icon: MTIcon(
+                                  MTIcons.next,
+                                  size: 24,
+                                  color: p.miniInk,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      if (onExpand case final expand?)
+                        IconButton(
+                          onPressed: expand,
+                          tooltip: l10n.nowPlayingExpand,
+                          visualDensity: VisualDensity.compact,
+                          icon: MTIcon(
+                            MTIcons.fullscreen,
+                            size: 18,
+                            color: p.miniInk,
+                          ),
+                        ),
+                      IconButton(
+                        onPressed: handler.stop,
+                        tooltip: l10n.closePlayer,
+                        visualDensity: VisualDensity.compact,
+                        icon: MTIcon(
+                          MTIcons.close,
+                          size: 20,
+                          color: p.miniInkMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                  _Progress(handler: handler, palette: p),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PlayButton extends StatelessWidget {
+  const _PlayButton({
+    required this.handler,
+    required this.palette,
+    required this.label,
+  });
+
+  final MTAudioHandler handler;
+  final MTPalette palette;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => StreamBuilder<PlaybackState>(
+    stream: handler.playbackState,
+    builder: (context, snapshot) {
+      final playing = snapshot.data?.playing ?? false;
+      return IconButton(
+        onPressed: playing ? handler.pause : handler.play,
+        tooltip: label,
+        icon: MTIconSwap(
+          icon: playing ? MTIcons.pause : MTIcons.playFill,
+          size: 28,
+          color: palette.accent,
+        ),
+      );
+    },
+  );
+}
+
+class _Progress extends StatelessWidget {
+  const _Progress({required this.handler, required this.palette});
+
+  final MTAudioHandler handler;
+  final MTPalette palette;
+
+  @override
+  Widget build(BuildContext context) => StreamBuilder<Duration>(
+    stream: handler.positionStream,
+    builder: (context, snapshot) {
+      final total = handler.mediaItem.value?.duration;
+      final position = snapshot.data ?? Duration.zero;
+      final value = total == null || total.inMilliseconds <= 0
+          ? 0.0
+          : (position.inMilliseconds / total.inMilliseconds)
+                .clamp(0, 1)
+                .toDouble();
+      return Padding(
+        padding: const EdgeInsets.only(top: 2, bottom: 4),
+        // Left to right like every media timeline (see MTProgressSlider).
+        child: Directionality(
+          textDirection: TextDirection.ltr,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: LinearProgressIndicator(
+              value: value,
+              minHeight: 2.5,
+              backgroundColor: palette.miniInk.withValues(alpha: 0.18),
+              valueColor: AlwaysStoppedAnimation(palette.accent),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}

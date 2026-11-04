@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Long-press launcher shortcuts.
+
+  **Why a custom action with no `data`.** The first attempt encoded the
+  destination in a URI: `vidhoist://shortcut/shorts`. Tapping the shortcut
+  landed on "Page Not Found", because Flutter derives the initial route from
+  `intent.getData()` whenever the action is VIEW; go_router then saw the
+  location `/shorts`, had no route for it, and threw `GoException`. Any data
+  in the intent is hijacked this way, whatever its scheme.
+
+  The fix: **a custom action and no `data` at all**, so the initial route
+  stays `/` and MainActivity reads the destination from the action name.
+
+  `<extra>` support in static shortcuts is not guaranteed across versions,
+  which leaves the action as the only dependable channel.
+
+  Ordered by how often each is used — paste first, since that is the daily
+  one. Android shows only the first four in practice.
+-->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="paste"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_paste_short"
+        android:shortcutLongLabel="@string/shortcut_paste_long">
+        <intent
+            android:action="com.yasir.vidhoist.SHORTCUT_PASTE"
+            android:targetPackage="com.yasir.vidhoist"
+            android:targetClass="com.yasir.vidhoist.MainActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="shorts"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_shorts_short"
+        android:shortcutLongLabel="@string/shortcut_shorts_long">
+        <intent
+            android:action="com.yasir.vidhoist.SHORTCUT_SHORTS"
+            android:targetPackage="com.yasir.vidhoist"
+            android:targetClass="com.yasir.vidhoist.MainActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="audio"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/shortcut_audio_short"
+        android:shortcutLongLabel="@string/shortcut_audio_long">
+        <intent
+            android:action="com.yasir.vidhoist.SHORTCUT_AUDIO"
+            android:targetPackage="com.yasir.vidhoist"
+            android:targetClass="com.yasir.vidhoist.MainActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

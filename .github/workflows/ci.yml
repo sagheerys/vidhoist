@@ -1,0 +1,168 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.2
+          channel: stable
+          cache: true
+
+      # One resolve for the whole workspace; every package shares it.
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze --no-pub
+
+      # Comments are read by strangers: English, no private references, no
+      # untracked TODOs, no switched-off code. Python 3 is on the runner.
+      - name: Check comments
+        run: python3 tool/comment-lint.py
+
+      # mt_core and mt_transcripts are pure Dart, so they run under
+      # `dart test`; the rest need the Flutter test runner.
+      - name: Test mt_core
+        run: dart test
+        working-directory: packages/mt_core
+
+      - name: Test mt_transcripts
+        run: dart test
+        working-directory: packages/mt_transcripts
+
+      - name: Test mt_media
+        run: flutter test --no-pub
+        working-directory: packages/mt_media
+
+      - name: Test mt_ui
+        run: flutter test --no-pub
+        working-directory: packages/mt_ui
+
+      - name: Test vidhoist_mobile
+        run: flutter test --no-pub
+        working-directory: apps/vidhoist_mobile
+
+  # One runner per app, deliberately. Both builds in a single job filled the
+  # hosted runner's disk and the second one died with "No space left on
+  # device" (measured 2026-09-09) — an Android SDK, a Gradle cache and two
+  # sets of build output do not fit in the ~14GB a standard runner has.
+  build:
+    name: Build ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [vidhoist_mobile]
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.2
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      # Debug builds only: release signing needs a keystore that is not in
+      # this repository.
+      - name: Build ${{ matrix.app }}
+        run: flutter build apk --debug
+        working-directory: apps/${{ matrix.app }}
+
+  # The Windows app on a Windows runner: its tests read Windows paths and
+  # its build needs the Visual C++ tools and Rust (two plugins compile
+  # native code with it), all of which windows-latest carries. The Android
+  # jobs above stay as they were.
+  windows:
+    name: Windows app (Vidhoist)
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.2
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-pub
+        working-directory: apps/vidhoist_desktop
+
+      - name: Test vidhoist_desktop
+        run: flutter test --no-pub
+        working-directory: apps/vidhoist_desktop
+
+      - name: Build vidhoist_desktop
+        run: flutter build windows --release --no-pub
+        working-directory: apps/vidhoist_desktop
+
+      # The installer script is code too: packing proves it still compiles
+      # against the build. Inno Setup 6 is on the runner; the Visual C++
+      # runtime shipped beside the app comes from its Visual Studio.
+      - name: Pack the installer
+        working-directory: apps/vidhoist_desktop
+        run: |
+          $iscc = @(
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+          ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $iscc) { choco install innosetup --no-progress -y; $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath
+          $crt = Get-ChildItem "$vs\VC\Redist\MSVC" -Directory |
+            Sort-Object { try { [version]$_.Name } catch { [version]'0.0' } } -Descending |
+            ForEach-Object { Join-Path $_.FullName 'x64\Microsoft.VC143.CRT' } |
+            Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $crt) { throw 'Microsoft.VC143.CRT not found' }
+          $version = (Select-String -Path pubspec.yaml -Pattern '^version:\s*([^+\s]+)').Matches[0].Groups[1].Value
+          & $iscc /Q "/DAppVersion=$version" "/DCrtDir=$crt" windows\installer\vidhoist.iss
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed ($LASTEXITCODE)" }
+          Get-Item build\installer\*.exe | Format-Table Name, Length
+
+      # Unsigned and for checking only; a release is built on the owner's
+      # machine.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Vidhoist-installer
+          path: apps/vidhoist_desktop/build/installer/*.exe
+          retention-days: 7

@@ -1,0 +1,27 @@
+version: 2
+
+updates:
+  # One pub entry, at the workspace root. Dependabot refuses a per-package
+  # one here — "Only apply dependency_services to the root of the
+  # workspace" — which is what its first ten runs said on 2026-09-09.
+  - package-ecosystem: pub
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+
+  # The pinned actions in the CI workflow.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+
+  # Gradle plugins and the desugaring library.
+  - package-ecosystem: gradle
+    directory: /apps/vidhoist_mobile/android
+    schedule:
+      interval: monthly
+
+  - package-ecosystem: gradle
+    schedule:
+      interval: monthly

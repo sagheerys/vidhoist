@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The shared-storage root. Only the app's own files under
+     Download/Vidhoist are ever shared, and permission is granted for the one
+     file named in each call. -->
+<paths>
+    <external-path name="shared" path="." />
+    <!-- The downloaded update APK, handed to the package installer as a
+         content:// URI. The **internal** cache, not the external one: it needs
+         no storage permission and the system reclaims it when space runs low. -->
+    <cache-path name="update" path="." />
+</paths>
