@@ -74,7 +74,7 @@ void main() {
 
   test('home addresses are asked often, outside ones less', () {
     for (final near in [
-      'http://192.168.2.245:8086',
+      'http://192.168.1.10:8081',
       'http://10.0.0.5',
       'http://172.20.1.1',
       'http://nas:8081',

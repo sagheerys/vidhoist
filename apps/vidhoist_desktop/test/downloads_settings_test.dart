@@ -185,7 +185,12 @@ void main() {
     ) async {
       await open(tester, to: '/settings/folders');
       expect(find.byType(FoldersPane), findsOneWidget);
-      expect(find.text(r'C:\Users\me\Videos\Vidhoist\Offline'), findsOneWidget);
+      // **The guard** (owner's choice, 2026-11-05): the folders bear the
+      // app's own name, not Vidhoist's.
+      expect(
+        find.text(r'C:\Users\me\Videos\Vidhoist\Offline'),
+        findsOneWidget,
+      );
       expect(find.text(r'C:\Users\me\Downloads\Vidhoist'), findsOneWidget);
       await tester.tap(find.byType(MTSwitch).first);
       await tester.pumpAndSettle();

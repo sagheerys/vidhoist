@@ -10,6 +10,7 @@ import 'package:mt_ui/mt_ui.dart';
 import '../../data/channels_data.dart';
 import '../../data/choices_data.dart';
 import '../../data/downloads_data.dart';
+import '../../data/file_copy.dart';
 import '../../data/folders_data.dart';
 import '../../data/library_data.dart';
 import '../../data/local_copies.dart';
@@ -45,6 +46,13 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
     store: ref.read(keyValueStoreProvider),
     mutex: ref.read(prefsMutexProvider),
     key: 'ember_unfinished_sends',
+  );
+
+  /// What each subscription's checks queued: only those clips are news.
+  late final _checks = SubscriptionChecks(
+    store: ref.read(keyValueStoreProvider),
+    mutex: ref.read(prefsMutexProvider),
+    key: 'ember_subscription_checks',
   );
 
   @override
@@ -85,7 +93,10 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
     _copyPhases
       ..clear()
       ..addAll({for (final copy in copies) copy.id: copy.phase});
+    final forPaste = ref.read(pastePullsProvider);
     for (final copy in ended) {
+      // Its own "ready to paste" says what happened.
+      if (forPaste.contains(copy.id)) continue;
       unawaited(_show(_forCopy(copy)));
       // A file the user downloaded, not an offline copy the app keeps.
       if (copy.phase == CopyPhase.done &&
@@ -102,6 +113,10 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
     if (!_sendsRead) {
       _sendsRead = true;
       _mine.addAll(await _sends.all());
+      // Where counting starts for this run.
+      if (ref.read(notifyArrivalsProvider)) {
+        await _checks.observe(await _following());
+      }
     }
     // Checked even when the notice is off, so turning it on later does not
     // announce everything that came in the meantime.
@@ -113,14 +128,23 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
     if (arrived.isEmpty || !mounted || !ref.read(notifyArrivalsProvider)) {
       return;
     }
+    // **Read afresh**: each subscription's count and last check tell a clip
+    // it queued from one the phone or the web page sent, which is nobody's
+    // news here even from a followed channel (owner's report, 2026-11-05).
+    ref.invalidate(channelsProvider);
+    final following = await _following();
     final sorted = await sortArrivals<LibraryItem>(
       arrived,
       urlOf: (item) => item.canonicalUrl,
       uploaderOf: (item) => item.uploader,
-      following: await _following(),
+      following: following,
       author: ref.read(arrivalAuthorProvider),
     );
-    final worth = [...sorted.followed, ...sorted.unknown];
+    await _checks.observe(following);
+    final worth = await _checks.fromChecks([
+      ...sorted.followed,
+      ...sorted.unknown,
+    ], createdOf: (item) => item.timestamp);
     if (worth.isEmpty || !mounted) return;
     final l = context.mtl;
     // One notice for the batch, as on the phone.
@@ -128,9 +152,7 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
         item.title.trim().isEmpty ? item.canonicalUrl : item.title.trim();
     await _show(
       EmberNotice(
-        title: sorted.unknown.isEmpty
-            ? l.newFromSubscriptions(worth.length)
-            : l.newOnServer(worth.length),
+        title: l.newFromSubscriptions(worth.length),
         body: worth.take(3).map(name).join(' · '),
         onClick: () => unawaited(_open(worth.first.canonicalUrl)),
       ),

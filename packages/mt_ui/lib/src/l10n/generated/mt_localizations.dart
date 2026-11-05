@@ -1208,11 +1208,53 @@ abstract class MTLocalizations {
   /// **'Cancelled'**
   String get desktopCopyCancelled;
 
+  /// No description provided for @desktopCopyFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy file'**
+  String get desktopCopyFile;
+
+  /// No description provided for @desktopCopyFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The file could not be copied'**
+  String get desktopCopyFileFailed;
+
+  /// No description provided for @desktopCopyFileLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'A large file'**
+  String get desktopCopyFileLarge;
+
+  /// No description provided for @desktopCopyFileLargeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This clip is {size}. It is saved to your download folder first, then copied; many chat apps refuse a file this big.'**
+  String desktopCopyFileLargeMessage(String size);
+
+  /// No description provided for @desktopCopyFileNoSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough space on the drive: the file is {needed} and {free} is free'**
+  String desktopCopyFileNoSpace(String needed, String free);
+
+  /// No description provided for @desktopCopyFilePreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing the file to copy; its progress is in Downloads'**
+  String get desktopCopyFilePreparing;
+
   /// No description provided for @desktopCopyLink.
   ///
   /// In en, this message translates to:
   /// **'Copy link'**
   String get desktopCopyLink;
+
+  /// No description provided for @desktopCopyOneClip.
+  ///
+  /// In en, this message translates to:
+  /// **'Copying takes one clip at a time'**
+  String get desktopCopyOneClip;
 
   /// No description provided for @desktopCopyQueued.
   ///
@@ -1537,6 +1579,12 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Saved {name}'**
   String desktopExported(String name);
+
+  /// No description provided for @desktopFileReadyToPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to paste: {name} · {size}'**
+  String desktopFileReadyToPaste(String name, String size);
 
   /// No description provided for @desktopFolderUnavailable.
   ///
@@ -3566,12 +3614,6 @@ abstract class MTLocalizations {
   /// **'{count, plural, =1{1 new from a channel you follow} other{{count} new from the channels you follow}}'**
   String newFromSubscriptions(int count);
 
-  /// No description provided for @newOnServer.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 new clip on the server} other{{count} new clips on the server}}'**
-  String newOnServer(int count);
-
   /// No description provided for @newPlaylistAction.
   ///
   /// In en, this message translates to:
@@ -4001,19 +4043,25 @@ abstract class MTLocalizations {
   /// No description provided for @quality1080.
   ///
   /// In en, this message translates to:
-  /// **'1080p'**
+  /// **'Up to 1080p'**
   String get quality1080;
+
+  /// No description provided for @quality360.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 360p'**
+  String get quality360;
 
   /// No description provided for @quality480.
   ///
   /// In en, this message translates to:
-  /// **'480p'**
+  /// **'Up to 480p'**
   String get quality480;
 
   /// No description provided for @quality720.
   ///
   /// In en, this message translates to:
-  /// **'720p'**
+  /// **'Up to 720p'**
   String get quality720;
 
   /// No description provided for @qualityAudio.
@@ -4454,6 +4502,12 @@ abstract class MTLocalizations {
   /// **'{count, plural, =0{} =1{1 in the queue} other{{count} in the queue}}'**
   String serverQueueCount(int count);
 
+  /// No description provided for @serverSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks for Vidhoist on the Wi-Fi this phone is on, only when you tap.'**
+  String get serverSearchHint;
+
   /// No description provided for @serverStatusChecking.
   ///
   /// In en, this message translates to:
@@ -4687,6 +4741,12 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Share'**
   String get share;
+
+  /// No description provided for @shareGoesOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Still preparing in the background. The share menu opens when it is ready; its progress is in Downloads.'**
+  String get shareGoesOn;
 
   /// No description provided for @shareLargeBody.
   ///
@@ -5035,6 +5095,12 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Small'**
   String get subtitlesSizeSmall;
+
+  /// No description provided for @syncDeviceQuiet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing has come from it for over two days. If it was in use, a sync app is probably paused or asleep, there or here: phones put apps they think unused to sleep.'**
+  String get syncDeviceQuiet;
 
   /// No description provided for @syncPhoneCameBack.
   ///

@@ -33,7 +33,7 @@ Future<String> _phoneBackup() async {
     mutex: mutex,
     clock: () => DateTime.utc(2026, 10, 20),
   ).toggleTag(_a, MTConstants.favoritesSystemTag);
-  await store.setString('active_url', 'http://192.168.2.245:8086');
+  await store.setString('active_url', 'http://192.168.1.10:8081');
   return BackupService(
     store: store,
     secrets: MemorySecretStore(),
@@ -102,7 +102,7 @@ void main() {
         'mine',
         MTConstants.favoritesSystemTag,
       });
-      expect(c.read(setupHintProvider), ['http://192.168.2.245:8086']);
+      expect(c.read(setupHintProvider), ['http://192.168.1.10:8081']);
       expect(await store.getString('active_url'), isNull);
     });
 
@@ -182,7 +182,7 @@ void main() {
               adapters: () async => [
                 (
                   name: 'Ethernet',
-                  addresses: [InternetAddress('192.168.2.143')],
+                  addresses: [InternetAddress('192.168.1.20')],
                 ),
               ],
               connect: (host, port, _) async =>
@@ -251,7 +251,7 @@ void main() {
         tester,
         found: const [
           LanHit(
-            url: 'http://192.168.2.245:8086',
+            url: 'http://192.168.1.10:8081',
             status: MTEndpointStatus.ok,
             version: ServerVersion(version: '2026.10.09'),
           ),
@@ -272,7 +272,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester.widget<TextField>(field('Server URL (Vidhoist)')).controller!.text,
-        'http://192.168.2.245:8086',
+        'http://192.168.1.10:8081',
       );
     });
 
@@ -288,7 +288,7 @@ void main() {
       expect(find.textContaining('unencrypted'), findsOneWidget);
       await tester.enterText(
         field('Server URL (Vidhoist)'),
-        'http://192.168.2.245:8086',
+        'http://192.168.1.10:8081',
       );
       await tester.pump();
       expect(find.textContaining('unencrypted'), findsNothing);

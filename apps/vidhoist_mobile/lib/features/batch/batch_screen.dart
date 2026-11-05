@@ -170,7 +170,7 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
         if (kind != PlaylistKind.soundcloud)
           _QualityRow(
             quality: _quality ?? Quality.best,
-            youtubeOnly: kind == PlaylistKind.youtube,
+            heights: kind != PlaylistKind.soundcloud,
             onChanged: (q) => setState(() => _quality = q),
           ),
         Expanded(
@@ -303,20 +303,18 @@ class _Header extends StatelessWidget {
 class _QualityRow extends StatelessWidget {
   const _QualityRow({
     required this.quality,
-    required this.youtubeOnly,
+    required this.heights,
     required this.onChanged,
   });
 
   final Quality quality;
-  final bool youtubeOnly;
+  final bool heights;
   final ValueChanged<Quality> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    // Rule 2: numeric qualities are for YouTube only.
-    final options = youtubeOnly
-        ? Quality.values
-        : [Quality.best, Quality.audio];
+    // Rule 2: no heights for sound alone (a SoundCloud set).
+    final options = heights ? Quality.values : [Quality.best, Quality.audio];
     return SizedBox(
       height: 46,
       child: ListView(

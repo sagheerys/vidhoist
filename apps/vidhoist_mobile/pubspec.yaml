@@ -2,7 +2,7 @@ name: vidhoist_mobile
 description: "Vidhoist for Android: download video and audio with yt-dlp, straight to the phone."
 publish_to: none
 resolution: workspace
-version: 2.7.0+14
+version: 2.7.0+15
 
 environment:
   sdk: ^3.13.0

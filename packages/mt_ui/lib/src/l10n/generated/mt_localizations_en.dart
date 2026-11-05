@@ -673,7 +673,33 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopCopyCancelled => 'Cancelled';
 
   @override
+  String get desktopCopyFile => 'Copy file';
+
+  @override
+  String get desktopCopyFileFailed => 'The file could not be copied';
+
+  @override
+  String get desktopCopyFileLarge => 'A large file';
+
+  @override
+  String desktopCopyFileLargeMessage(String size) {
+    return 'This clip is $size. It is saved to your download folder first, then copied; many chat apps refuse a file this big.';
+  }
+
+  @override
+  String desktopCopyFileNoSpace(String needed, String free) {
+    return 'Not enough space on the drive: the file is $needed and $free is free';
+  }
+
+  @override
+  String get desktopCopyFilePreparing =>
+      'Preparing the file to copy; its progress is in Downloads';
+
+  @override
   String get desktopCopyLink => 'Copy link';
+
+  @override
+  String get desktopCopyOneClip => 'Copying takes one clip at a time';
 
   @override
   String get desktopCopyQueued => 'Waiting its turn';
@@ -869,6 +895,11 @@ class MTLocalizationsEn extends MTLocalizations {
   @override
   String desktopExported(String name) {
     return 'Saved $name';
+  }
+
+  @override
+  String desktopFileReadyToPaste(String name, String size) {
+    return 'Ready to paste: $name · $size';
   }
 
   @override
@@ -2079,17 +2110,6 @@ class MTLocalizationsEn extends MTLocalizations {
   }
 
   @override
-  String newOnServer(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count new clips on the server',
-      one: '1 new clip on the server',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get newPlaylistAction => 'New playlist';
 
   @override
@@ -2324,13 +2344,16 @@ class MTLocalizationsEn extends MTLocalizations {
   String get quality => 'Quality';
 
   @override
-  String get quality1080 => '1080p';
+  String get quality1080 => 'Up to 1080p';
 
   @override
-  String get quality480 => '480p';
+  String get quality360 => 'Up to 360p';
 
   @override
-  String get quality720 => '720p';
+  String get quality480 => 'Up to 480p';
+
+  @override
+  String get quality720 => 'Up to 720p';
 
   @override
   String get qualityAudio => 'Audio';
@@ -2635,6 +2658,10 @@ class MTLocalizationsEn extends MTLocalizations {
   }
 
   @override
+  String get serverSearchHint =>
+      'Looks for Vidhoist on the Wi-Fi this phone is on, only when you tap.';
+
+  @override
   String get serverStatusChecking => 'Checking connection…';
 
   @override
@@ -2765,6 +2792,10 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get share => 'Share';
+
+  @override
+  String get shareGoesOn =>
+      'Still preparing in the background. The share menu opens when it is ready; its progress is in Downloads.';
 
   @override
   String get shareLargeBody =>
@@ -2957,6 +2988,10 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get subtitlesSizeSmall => 'Small';
+
+  @override
+  String get syncDeviceQuiet =>
+      'Nothing has come from it for over two days. If it was in use, a sync app is probably paused or asleep, there or here: phones put apps they think unused to sleep.';
 
   @override
   String get syncPhoneCameBack =>

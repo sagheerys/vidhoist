@@ -10,6 +10,10 @@ void runLab(List<String> args) {
   runLabHover(labHoverFrom(args));
   runLabKeys(labKeysFrom(args));
   runLabTaps(labTapsFrom(args));
+  runLabTaps(
+    labTapsFrom(args, flag: '--lab-rtap='),
+    buttons: kSecondaryMouseButton,
+  );
   runLabScrolls(labScrollsFrom(args));
 }
 
@@ -20,12 +24,14 @@ typedef LabTap = (Offset, Duration);
 /// start: **debug builds only**, so a button with no key (theater) can be
 /// pressed in the real window without the user's own mouse. Empty outside
 /// a debug build.
-List<LabTap> labTapsFrom(List<String> args) {
+///
+/// `--lab-rtap=` is the same with the right button, for a context menu.
+List<LabTap> labTapsFrom(List<String> args, {String flag = '--lab-tap='}) {
   if (!kDebugMode) return const [];
   for (final a in args) {
-    if (!a.startsWith('--lab-tap=')) continue;
+    if (!a.startsWith(flag)) continue;
     return [
-      for (final tap in a.substring(10).split(';'))
+      for (final tap in a.substring(flag.length).split(';'))
         if (tap.split('@') case [final point, final at])
           if (point.split(',') case [final x, final y])
             if ((double.tryParse(x), double.tryParse(y), int.tryParse(at))
@@ -38,8 +44,8 @@ List<LabTap> labTapsFrom(List<String> args) {
 
 /// Clicks each of [taps] at its time with a pretend mouse of its own, so
 /// the real pointer stays where the user left it.
-void runLabTaps(List<LabTap> taps) {
-  const device = 9002;
+void runLabTaps(List<LabTap> taps, {int buttons = kPrimaryMouseButton}) {
+  final device = buttons == kPrimaryMouseButton ? 9002 : 9003;
   final binding = GestureBinding.instance;
   for (final (i, (point, at)) in taps.indexed) {
     Timer(at, () {
@@ -65,7 +71,7 @@ void runLabTaps(List<LabTap> taps) {
             kind: PointerDeviceKind.mouse,
             device: device,
             position: point,
-            buttons: kPrimaryMouseButton,
+            buttons: buttons,
           ),
         )
         ..handlePointerEvent(
@@ -79,12 +85,17 @@ void runLabTaps(List<LabTap> taps) {
   }
 }
 
-/// A key the lab presses, and when.
-typedef LabKey = (LogicalKeyboardKey, PhysicalKeyboardKey, Duration);
+/// A key the lab presses, and when, with the keys [held] down around it.
+typedef LabKey = (
+  LogicalKeyboardKey,
+  PhysicalKeyboardKey,
+  Duration, {
+  List<(LogicalKeyboardKey, PhysicalKeyboardKey)> held,
+});
 
 /// Keys to press, `--lab-keys=space@30;f11@31` (a key's name in
 /// [LogicalKeyboardKey]'s debug names, lower case, and the seconds after
-/// start): **debug builds only**, so what a key does (full screen, the
+/// start), `ctrl+shift+c@20` with keys held: **debug builds only**, so what a key does (full screen, the
 /// volume notice) can be checked in the real window without typing into
 /// the user's foreground window. Empty outside a debug build.
 List<LabKey> labKeysFrom(List<String> args) {
@@ -102,11 +113,12 @@ List<LabKey> labKeysFrom(List<String> args) {
     return [
       for (final press in a.substring(11).split(';'))
         if (press.split('@') case [final name, final at])
-          if ((keys[name], int.tryParse(at)) case (
+          if ((keys[name.split('+').last], int.tryParse(at)) case (
             (final logical, final physical)?,
             final s?,
           ))
-            (logical, physical, Duration(seconds: s)),
+            if (_heldIn(name) case final held?)
+              (logical, physical, Duration(seconds: s), held: held),
     ];
   }
   return const [];
@@ -115,28 +127,48 @@ List<LabKey> labKeysFrom(List<String> args) {
 /// Presses each of [keys] at its time, down then up, through the same
 /// keyboard state the real keys go through.
 void runLabKeys(List<LabKey> keys) {
-  for (final (logical, physical, at) in keys) {
+  for (final (logical, physical, at, :held) in keys) {
     Timer(at, () {
       final stamp = Duration(
         milliseconds: DateTime.now().millisecondsSinceEpoch,
       );
-      HardwareKeyboard.instance
-        ..handleKeyEvent(
-          KeyDownEvent(
-            physicalKey: physical,
-            logicalKey: logical,
-            timeStamp: stamp,
-          ),
-        )
-        ..handleKeyEvent(
-          KeyUpEvent(
-            physicalKey: physical,
-            logicalKey: logical,
-            timeStamp: stamp,
-          ),
-        );
+      final keyboard = HardwareKeyboard.instance;
+      void send((LogicalKeyboardKey, PhysicalKeyboardKey) key, bool down) =>
+          keyboard.handleKeyEvent(
+            down
+                ? KeyDownEvent(
+                    physicalKey: key.$2,
+                    logicalKey: key.$1,
+                    timeStamp: stamp,
+                  )
+                : KeyUpEvent(
+                    physicalKey: key.$2,
+                    logicalKey: key.$1,
+                    timeStamp: stamp,
+                  ),
+          );
+      for (final key in held) {
+        send(key, true);
+      }
+      send((logical, physical), true);
+      send((logical, physical), false);
+      for (final key in held.reversed) {
+        send(key, false);
+      }
     });
   }
+}
+
+/// The keys held under a lab press named `ctrl+shift+c`; null when one of
+/// them is not known.
+List<(LogicalKeyboardKey, PhysicalKeyboardKey)>? _heldIn(String name) {
+  const known = {
+    'ctrl': (LogicalKeyboardKey.controlLeft, PhysicalKeyboardKey.controlLeft),
+    'shift': (LogicalKeyboardKey.shiftLeft, PhysicalKeyboardKey.shiftLeft),
+  };
+  final parts = name.split('+');
+  final held = [for (final p in parts.take(parts.length - 1)) known[p]];
+  return held.contains(null) ? null : held.nonNulls.toList();
 }
 
 /// Points to rest a pointer on, `--lab-hover=720,610;480,600` in logical

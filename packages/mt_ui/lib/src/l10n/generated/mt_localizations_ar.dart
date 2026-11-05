@@ -703,7 +703,33 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopCopyCancelled => 'أُلغي';
 
   @override
+  String get desktopCopyFile => 'نسخ الملف';
+
+  @override
+  String get desktopCopyFileFailed => 'تعذّر نسخ الملف';
+
+  @override
+  String get desktopCopyFileLarge => 'ملف كبير';
+
+  @override
+  String desktopCopyFileLargeMessage(String size) {
+    return 'حجم هذا المقطع $size. يُحفظ أولاً في مجلد التنزيل ثم يُنسخ، وكثير من برامج المحادثة يرفض ملفاً بهذا الحجم.';
+  }
+
+  @override
+  String desktopCopyFileNoSpace(String needed, String free) {
+    return 'المساحة على القرص لا تكفي: الملف $needed والمتاح $free';
+  }
+
+  @override
+  String get desktopCopyFilePreparing =>
+      'يُجهَّز الملف للنسخ، وتقدّمه في التنزيلات';
+
+  @override
   String get desktopCopyLink => 'نسخ الرابط';
+
+  @override
+  String get desktopCopyOneClip => 'النسخ لمقطع واحد في كل مرة';
 
   @override
   String get desktopCopyQueued => 'ينتظر دوره';
@@ -901,6 +927,11 @@ class MTLocalizationsAr extends MTLocalizations {
   @override
   String desktopExported(String name) {
     return 'حُفظ $name';
+  }
+
+  @override
+  String desktopFileReadyToPaste(String name, String size) {
+    return 'جاهز للصق: $name · $size';
   }
 
   @override
@@ -2132,21 +2163,6 @@ class MTLocalizationsAr extends MTLocalizations {
   }
 
   @override
-  String newOnServer(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count مقطع جديد على السيرفر',
-      many: '$count مقطعاً جديداً على السيرفر',
-      few: '$count مقاطع جديدة على السيرفر',
-      two: 'مقطعان جديدان على السيرفر',
-      one: 'مقطع جديد على السيرفر',
-      zero: 'لا جديد',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get newPlaylistAction => 'قائمة جديدة';
 
   @override
@@ -2380,13 +2396,16 @@ class MTLocalizationsAr extends MTLocalizations {
   String get quality => 'الجودة';
 
   @override
-  String get quality1080 => '1080p';
+  String get quality1080 => 'حتى 1080p';
 
   @override
-  String get quality480 => '480p';
+  String get quality360 => 'حتى 360p';
 
   @override
-  String get quality720 => '720p';
+  String get quality480 => 'حتى 480p';
+
+  @override
+  String get quality720 => 'حتى 720p';
 
   @override
   String get qualityAudio => 'الصوت';
@@ -2711,6 +2730,10 @@ class MTLocalizationsAr extends MTLocalizations {
   }
 
   @override
+  String get serverSearchHint =>
+      'يبحث عن Vidhoist في شبكة Wi‑Fi التي يتصل بها هذا الجوال، حين تنقر فقط.';
+
+  @override
   String get serverStatusChecking => 'جارٍ فحص الاتصال…';
 
   @override
@@ -2844,6 +2867,10 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get share => 'مشاركة';
+
+  @override
+  String get shareGoesOn =>
+      'التجهيز مستمر في الخلفية، وتُفتح قائمة المشاركة حين يجهز. تقدّمه في التنزيلات.';
 
   @override
   String get shareLargeBody =>
@@ -3035,6 +3062,10 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get subtitlesSizeSmall => 'صغير';
+
+  @override
+  String get syncDeviceQuiet =>
+      'لم يصل منه شيء منذ أكثر من يومين. إن كان مستعملاً فالأرجح أن برنامج المزامنة متوقف أو نائم، عليه أو هنا، فالجوال يُنيم التطبيقات التي يظنها غير مستعملة.';
 
   @override
   String get syncPhoneCameBack =>

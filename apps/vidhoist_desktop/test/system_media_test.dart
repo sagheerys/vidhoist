@@ -55,7 +55,7 @@ void main() {
         isNotNull,
       );
       for (final private in [
-        'http://192.168.2.245:8086/thumbnails/a.jpg',
+        'http://192.168.1.10:8081/thumbnails/a.jpg',
         'https://vidhoist.example.com/download/a.jpg',
         'https://me:secret@i.ytimg.com/vi/abc/hq.jpg',
         'http://i.ytimg.com/vi/abc/hq.jpg',
@@ -156,7 +156,7 @@ void main() {
       final media = _Surface();
       final bridge = SystemMediaBridge(player, [media]);
       addTearDown(bridge.dispose);
-      const private = 'http://192.168.2.245:8086/thumbnails/b.jpg';
+      const private = 'http://192.168.1.10:8081/thumbnails/b.jpg';
       final asked = <String>[];
       bridge.coverFile = (url, art) async {
         asked.add('$url $art');

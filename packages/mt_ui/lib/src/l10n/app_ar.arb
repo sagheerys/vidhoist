@@ -94,13 +94,6 @@
       }
     }
   },
-  "@newOnServer": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "@queueItemsCount": {
     "placeholders": {
       "count": {
@@ -356,7 +349,14 @@
   "desktopCopiedLinkAdd": "إضافة…",
   "desktopCopiedLinkTitle": "أتضيف هذا الرابط إلى السيرفر؟",
   "desktopCopyCancelled": "أُلغي",
+  "desktopCopyFile": "نسخ الملف",
+  "desktopCopyFileFailed": "تعذّر نسخ الملف",
+  "desktopCopyFileLarge": "ملف كبير",
+  "desktopCopyFileLargeMessage": "حجم هذا المقطع {size}. يُحفظ أولاً في مجلد التنزيل ثم يُنسخ، وكثير من برامج المحادثة يرفض ملفاً بهذا الحجم.",
+  "desktopCopyFileNoSpace": "المساحة على القرص لا تكفي: الملف {needed} والمتاح {free}",
+  "desktopCopyFilePreparing": "يُجهَّز الملف للنسخ، وتقدّمه في التنزيلات",
   "desktopCopyLink": "نسخ الرابط",
+  "desktopCopyOneClip": "النسخ لمقطع واحد في كل مرة",
   "desktopCopyQueued": "ينتظر دوره",
   "desktopCopyQuote": "انسخ مع الوقت والرابط",
   "desktopDefaultQualityHint": "ما تبدأ به كل إضافة، ويبقى تغييره ممكناً لكل رابط.",
@@ -411,6 +411,7 @@
   "desktopExportPhone": "للجوال (ملف الاستيراد في Vidhoist)",
   "desktopExportSrt": "ترجمة (SRT)",
   "desktopExported": "حُفظ {name}",
+  "desktopFileReadyToPaste": "جاهز للصق: {name} · {size}",
   "desktopFolderUnavailable": "لا مجلد متاح",
   "desktopFolders": "المجلدات",
   "desktopForward": "تقدّم",
@@ -763,7 +764,6 @@
   "newFolder": "مجلد جديد…",
   "newFolderHint": "مثال: Ai/دروس",
   "newFromSubscriptions": "{count, plural, =0{لا جديد} =1{مقطع جديد من قناة تتابعها} =2{مقطعان جديدان من قنواتك} few{{count} مقاطع جديدة من قنواتك} many{{count} مقطعاً جديداً من قنواتك} other{{count} مقطع جديد من قنواتك}}",
-  "newOnServer": "{count, plural, =0{لا جديد} =1{مقطع جديد على السيرفر} =2{مقطعان جديدان على السيرفر} few{{count} مقاطع جديدة على السيرفر} many{{count} مقطعاً جديداً على السيرفر} other{{count} مقطع جديد على السيرفر}}",
   "newPlaylistAction": "قائمة جديدة",
   "newTagHint": "وسم جديد",
   "next": "التالي",
@@ -835,9 +835,10 @@
   "pullingToDevice": "جارٍ الحفظ في الجهاز…",
   "pullingToDeviceProgress": "جارٍ الحفظ في الجهاز · {percent}٪",
   "quality": "الجودة",
-  "quality1080": "1080p",
-  "quality480": "480p",
-  "quality720": "720p",
+  "quality1080": "حتى 1080p",
+  "quality360": "حتى 360p",
+  "quality480": "حتى 480p",
+  "quality720": "حتى 720p",
   "qualityAudio": "الصوت",
   "qualityBest": "الأفضل",
   "qualityHelper": "تُعتمد هذه الجودة في التحميل السريع، وفي تحميل القائمة كاملة، وفي «حمّل الآن» من شريط الحافظة، وتكون محددة مسبقاً في نافذة إضافة الرابط؛ لذا يسري أثرها سواء أكان التحميل السريع مفعّلاً أم لا.",
@@ -911,6 +912,7 @@
   "serverKeepsFilesBody": "يُحذف العنصر من السجل لكن ملفه يبقى على القرص، فتمتلئ مساحة السيرفر. اضبط DELETE_FILE_ON_TRASHCAN=true في حاوية Vidhoist.",
   "serverKeepsFilesTitle": "خادمك لا يحذف الملفات",
   "serverQueueCount": "{count, plural, =0{} =1{واحد في الانتظار} =2{اثنان في الانتظار} few{{count} في الانتظار} other{{count} في الانتظار}}",
+  "serverSearchHint": "يبحث عن Vidhoist في شبكة Wi‑Fi التي يتصل بها هذا الجوال، حين تنقر فقط.",
   "serverStatusChecking": "جارٍ فحص الاتصال…",
   "serverStatusConnected": "متصل بالسيرفر",
   "serverStatusOffline": "تعذّر الوصول للخادم",
@@ -950,6 +952,7 @@
   "settingsValueWifiOnly": "Wi‑Fi فقط",
   "setupServer": "إعداد السيرفر",
   "share": "مشاركة",
+  "shareGoesOn": "التجهيز مستمر في الخلفية، وتُفتح قائمة المشاركة حين يجهز. تقدّمه في التنزيلات.",
   "shareLargeBody": "يُنزَّل إلى هذا الجوال أولاً، ثم تُفتح قائمة المشاركة.",
   "shareLargeTitle": "تنزيل {size} للمشاركة؟",
   "shareLogs": "مشاركة السجلات",
@@ -1008,6 +1011,7 @@
   "subtitlesSizeLarge": "كبير",
   "subtitlesSizeMedium": "متوسط",
   "subtitlesSizeSmall": "صغير",
+  "syncDeviceQuiet": "لم يصل منه شيء منذ أكثر من يومين. إن كان مستعملاً فالأرجح أن برنامج المزامنة متوقف أو نائم، عليه أو هنا، فالجوال يُنيم التطبيقات التي يظنها غير مستعملة.",
   "syncPhoneCameBack": "غاب هذا الجوال أكثر من 90 يوماً، فأُخذت بيانات أجهزتك الأخرى أولاً.",
   "syncPhoneFailed": "تعذّرت قراءة مجلد المزامنة. اختره من جديد إن نُقل أو سُحب إذنه.",
   "syncPhoneForgetBody": "لن يُقرأ {device} بعد الآن، وتُنقل نصوصه إلى مجلد هذا الجوال أولاً فلا يضيع منها شيء. استعمله لجهاز ضاع أو بِيع.",

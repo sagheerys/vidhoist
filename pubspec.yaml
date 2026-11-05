@@ -12,8 +12,9 @@ workspace:
   - apps/vidhoist_mobile
   - apps/vidhoist_desktop
 
-# audio_service 0.18.19 and windows_taskbar 1.1.2, each with fixes, kept in
-# third_party until upstream has them: see the PATCHES.md in each folder.
+# audio_service 0.18.19, media_kit_video 2.0.1 and windows_taskbar 1.1.2,
+# each with fixes, kept in third_party until upstream has them: see the
+# PATCHES.md in each folder.
 dependency_overrides:
   # image 4.11 calls ZLibDecoder.decodeLazy, which archive gained after the
   # 4.0.9 its constraint still admits; without this the desktop tests and
@@ -21,5 +22,7 @@ dependency_overrides:
   archive: ^4.6.0
   audio_service:
     path: third_party/audio_service
+  media_kit_video:
+    path: third_party/media_kit_video
   windows_taskbar:
     path: third_party/windows_taskbar

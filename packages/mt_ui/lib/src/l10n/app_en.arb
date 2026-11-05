@@ -178,13 +178,6 @@
       }
     }
   },
-  "@newOnServer": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "@notEnoughSpace": {
     "placeholders": {
       "needed": {
@@ -642,7 +635,31 @@
   "desktopCopiedLinkAdd": "Add…",
   "desktopCopiedLinkTitle": "Add this link to the server?",
   "desktopCopyCancelled": "Cancelled",
+  "desktopCopyFile": "Copy file",
+  "desktopCopyFileFailed": "The file could not be copied",
+  "desktopCopyFileLarge": "A large file",
+  "desktopCopyFileLargeMessage": "This clip is {size}. It is saved to your download folder first, then copied; many chat apps refuse a file this big.",
+  "@desktopCopyFileLargeMessage": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopCopyFileNoSpace": "Not enough space on the drive: the file is {needed} and {free} is free",
+  "@desktopCopyFileNoSpace": {
+    "placeholders": {
+      "needed": {
+        "type": "String"
+      },
+      "free": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopCopyFilePreparing": "Preparing the file to copy; its progress is in Downloads",
   "desktopCopyLink": "Copy link",
+  "desktopCopyOneClip": "Copying takes one clip at a time",
   "desktopCopyQueued": "Waiting its turn",
   "desktopCopyQuote": "Copy with time and link",
   "desktopDefaultQualityHint": "What each add starts with; you can still change it for each link.",
@@ -700,6 +717,17 @@
   "desktopExportSrt": "Subtitles (SRT)",
   "desktopExported": "Saved {name}",
   "@desktopExported": {"placeholders": {"name": {"type": "String"}}},
+  "desktopFileReadyToPaste": "Ready to paste: {name} · {size}",
+  "@desktopFileReadyToPaste": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
   "desktopFolderUnavailable": "No folder available",
   "desktopFolders": "Folders",
   "desktopForward": "Forward",
@@ -1089,7 +1117,6 @@
   "newFolder": "New folder…",
   "newFolderHint": "e.g. Ai/Lessons",
   "newFromSubscriptions": "{count, plural, =1{1 new from a channel you follow} other{{count} new from the channels you follow}}",
-  "newOnServer": "{count, plural, =1{1 new clip on the server} other{{count} new clips on the server}}",
   "newPlaylistAction": "New playlist",
   "newTagHint": "New tag",
   "next": "Next",
@@ -1161,9 +1188,10 @@
   "pullingToDevice": "Saving to device…",
   "pullingToDeviceProgress": "Saving to device · {percent}%",
   "quality": "Quality",
-  "quality1080": "1080p",
-  "quality480": "480p",
-  "quality720": "720p",
+  "quality1080": "Up to 1080p",
+  "quality360": "Up to 360p",
+  "quality480": "Up to 480p",
+  "quality720": "Up to 720p",
   "qualityAudio": "Audio",
   "qualityBest": "Best",
   "qualityHelper": "Used by quick download, by whole-playlist downloads, and by \"Download now\" in the clipboard bar, and it is the preselected option in the add-link sheet. So it matters whether or not quick download is on.",
@@ -1245,6 +1273,7 @@
   "serverKeepsFilesBody": "The history entry is removed but the file stays on disk, so the server fills up. Set DELETE_FILE_ON_TRASHCAN=true on the Vidhoist container.",
   "serverKeepsFilesTitle": "Your server is not deleting the files",
   "serverQueueCount": "{count, plural, =0{} =1{1 in the queue} other{{count} in the queue}}",
+  "serverSearchHint": "Looks for Vidhoist on the Wi-Fi this phone is on, only when you tap.",
   "serverStatusChecking": "Checking connection…",
   "serverStatusConnected": "Connected to server",
   "serverStatusOffline": "Server unreachable",
@@ -1284,6 +1313,7 @@
   "settingsValueWifiOnly": "Wi‑Fi only",
   "setupServer": "Set up the server",
   "share": "Share",
+  "shareGoesOn": "Still preparing in the background. The share menu opens when it is ready; its progress is in Downloads.",
   "shareLargeBody": "It downloads to this phone first, then the share menu opens.",
   "shareLargeTitle": "Download {size} to share?",
   "shareLogs": "Share logs",
@@ -1342,6 +1372,7 @@
   "subtitlesSizeLarge": "Large",
   "subtitlesSizeMedium": "Medium",
   "subtitlesSizeSmall": "Small",
+  "syncDeviceQuiet": "Nothing has come from it for over two days. If it was in use, a sync app is probably paused or asleep, there or here: phones put apps they think unused to sleep.",
   "syncPhoneCameBack": "This phone was away for more than 90 days, so your other devices' data was taken first.",
   "syncPhoneFailed": "The sync folder could not be read. Choose it again if it moved or its permission was taken back.",
   "syncPhoneForgetBody": "{device} will no longer be read. Its transcripts move to this phone's folder first, so none is lost. Use this for a device that was lost or sold.",

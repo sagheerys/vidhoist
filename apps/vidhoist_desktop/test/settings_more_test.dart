@@ -130,7 +130,7 @@ void main() {
     testWidgets('**the guard**: saved and copied without the server '
         'address, whichever way it leaves', (tester) async {
       await tester.runAsync(
-        () => logger.log('history from http://192.168.2.245:8086/history'),
+        () => logger.log('history from http://192.168.1.10:8081/history'),
       );
       await open(tester, to: '/settings/logs');
       // The log is a real file, read off the test's fake clock.
@@ -138,7 +138,7 @@ void main() {
       // On screen the log is as written: only what leaves is cleaned.
       expect(
         find.byWidgetPredicate(
-          (w) => w is SelectableText && w.data!.contains('192.168.2.245'),
+          (w) => w is SelectableText && w.data!.contains('192.168.1.10'),
         ),
         findsOneWidget,
       );
@@ -147,11 +147,11 @@ void main() {
       await settle(tester);
       expect(dialogs.savedName, startsWith('vidhoist_logs_'));
       expect(dialogs.savedText, contains('history from'));
-      expect(dialogs.savedText, isNot(contains('192.168.2.245')));
+      expect(dialogs.savedText, isNot(contains('192.168.1.10')));
 
       await tester.tap(find.text('Copy'));
       await settle(tester);
-      expect(copied.single, isNot(contains('192.168.2.245')));
+      expect(copied.single, isNot(contains('192.168.1.10')));
     });
   });
 
