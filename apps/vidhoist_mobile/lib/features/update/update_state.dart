@@ -77,10 +77,10 @@ final updatePrefsProvider = Provider(
   ),
 );
 
-/// **The marker identifies this app's file** in a release carrying both
-/// apps' APKs.
+/// **The marker identifies this app's file** in a release that also carries
+/// the Windows installer; the extension keeps the phone to the APK.
 final updateCheckerProvider = Provider(
-  (ref) => UpdateChecker(fetch: ioHttpGetString, assetMarker: 'lite'),
+  (ref) => UpdateChecker(fetch: ioHttpGetString, assetMarker: 'vidhoist'),
 );
 
 final apkDownloaderProvider = Provider((ref) => ApkDownloader());

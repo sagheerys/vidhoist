@@ -18,12 +18,12 @@ final installedVersionProvider = FutureProvider<String>(
 /// a test of the shell never reaches GitHub.
 final offerWhatsNewProvider = Provider<bool>((ref) => false);
 
-/// The releases, read from the same repository the phones read. Windows
-/// files carry `Ember` in their names.
+/// The releases, read from the same repository the phone reads. Both apps'
+/// files carry `Vidhoist`; the extension tells them apart.
 final updateCheckerProvider = Provider(
   (ref) => UpdateChecker(
     fetch: ioHttpGetString,
-    assetMarker: 'ember',
+    assetMarker: 'vidhoist',
     assetExtension: '.exe',
   ),
 );
@@ -119,7 +119,7 @@ final updateProvider = NotifierProvider<UpdateNotifier, UpdateState>(
 /// the temporary folder that is written, run and deleted: anything but
 /// letters, digits and dots becomes `_`, so no tag climbs out of it.
 String installerNameFor(String version) =>
-    'Vidhoist-Ember-${version.replaceAll(RegExp('[^0-9A-Za-z.]'), '_')}'
+    'Vidhoist-${version.replaceAll(RegExp('[^0-9A-Za-z.]'), '_')}'
     '-windows-x64-setup.exe';
 
 class UpdateNotifier extends Notifier<UpdateState> {

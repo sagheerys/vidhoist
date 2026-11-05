@@ -59,12 +59,11 @@ void main() {
     expect(directive('DefaultDirName'), r'{autopf}\{#AppName}');
   });
 
-  test('the file names neither phone app, so neither phone takes it for '
-      'its update', () {
+  test('the file carries the app name and version; the phone keeps to '
+      'its APK by the extension (release_names_test)', () {
     final name = directive('OutputBaseFilename')!;
     expect(name, 'Vidhoist-{#AppVersion}-windows-x64-setup');
-    expect(name.toLowerCase(), isNot(contains('lite')));
-    expect(name.toLowerCase(), isNot(contains('super')));
+    expect(name.toLowerCase(), isNot(endsWith('.apk')));
   });
 
   test('vidhoist:// links open the app with the link as its argument', () {

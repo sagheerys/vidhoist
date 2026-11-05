@@ -66,14 +66,14 @@ void main() {
         installedVersionProvider.overrideWith((ref) async => (version, true)),
         updateCheckerProvider.overrideWithValue(
           UpdateChecker(
-            assetMarker: 'lite',
+            assetMarker: 'vidhoist',
             fetch: (uri) async => uri.path.endsWith('/latest')
                 ? json.encode({
                     'tag_name': 'v9.9.9',
                     'body': 'Newer notes',
                     'assets': [
                       {
-                        'name': 'Vidhoist-Lite-v9.9.9.apk',
+                        'name': 'Vidhoist-v9.9.9.apk',
                         'browser_download_url':
                             'https://github.com/x/y/releases/download/v1/a',
                       },

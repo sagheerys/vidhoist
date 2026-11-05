@@ -12,7 +12,7 @@ import 'setup_data.dart';
 import 'transcripts_data.dart';
 
 /// Where the dated backups of this computer are kept:
-/// `%APPDATA%\Vidhoist Ember\backup`. Overridden in main; null (tests) keeps
+/// `%APPDATA%\Vidhoist\backup`. Overridden in main; null (tests) keeps
 /// none.
 final backupFolderProvider = Provider<Directory?>((ref) => null);
 
@@ -113,7 +113,7 @@ class EmberBackups {
 
   /// Writes the two files a phone takes (this computer's tags, playlists
   /// and positions as a backup, and its transcripts) into
-  /// `Downloads\Vidhoist Ember\For the phone`, and returns that folder.
+  /// `Downloads\Vidhoist\For the phone`, and returns that folder.
   Future<String?> exportForPhone({DateTime? at}) async {
     final base = await _ref.read(downloadFolderProvider.future);
     if (base == null) return null;

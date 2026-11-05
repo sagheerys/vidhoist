@@ -119,10 +119,7 @@ void main() {
         await settled(c);
         final copy = c.read(localCopiesProvider).single;
         expect(copy.phase, CopyPhase.done);
-        expect(
-          copy.path,
-          '${root.path}\\Videos\\Vidhoist\\Offline\\clip.mp4',
-        );
+        expect(copy.path, '${root.path}\\Videos\\Vidhoist\\Offline\\clip.mp4');
         expect(File(copy.path!).readAsBytesSync(), [1, 2, 3]);
         final index = c.read(offlineIndexProvider);
         expect(

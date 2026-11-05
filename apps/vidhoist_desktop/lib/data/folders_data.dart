@@ -111,7 +111,7 @@ class FolderSettings {
   final bool askEachTime;
 
   /// A download goes into the same folder it has on the server
-  /// (`Downloads\Vidhoist Ember\Kids\clip.mp4`), so both are arranged alike.
+  /// (`Downloads\Vidhoist\Kids\clip.mp4`), so both are arranged alike.
   final bool serverFolders;
 
   FolderSettings copyWith({
@@ -186,8 +186,7 @@ class FolderSettingsNotifier extends Notifier<FolderSettings> {
 }
 
 /// The offline folder in use: the chosen one, or
-/// `Videos\Vidhoist Ember\Offline`: the app's own name, not
-/// Vidhoist's, whose maker has nothing to do with this app.
+/// `Videos\Vidhoist\Offline`, named after the app ([EmberIdentity]).
 final offlineFolderProvider = FutureProvider<String?>((ref) async {
   final chosen = ref.watch(folderSettingsProvider.select((s) => s.offline));
   if (chosen != null) return chosen;
@@ -198,7 +197,7 @@ final offlineFolderProvider = FutureProvider<String?>((ref) async {
 });
 
 /// The download folder in use: the chosen one, or
-/// `Downloads\Vidhoist Ember`.
+/// `Downloads\Vidhoist`.
 final downloadFolderProvider = FutureProvider<String?>((ref) async {
   final chosen = ref.watch(folderSettingsProvider.select((s) => s.download));
   if (chosen != null) return chosen;

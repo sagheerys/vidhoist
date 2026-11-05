@@ -229,7 +229,7 @@ void main() {
       overrides: [
         updateCheckerProvider.overrideWithValue(
           UpdateChecker(
-            assetMarker: 'ember',
+            assetMarker: 'vidhoist',
             assetExtension: '.exe',
             fetch: (_) async => _latest('0.2.0'),
           ),

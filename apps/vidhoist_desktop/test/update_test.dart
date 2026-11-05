@@ -19,7 +19,7 @@ String latest(String version, String setupUrl, {int size = 4000}) =>
       'html_url': 'https://github.com/x/y/releases/tag/v$version',
       'assets': [
         {
-          'name': 'Vidhoist-Super-v$version.apk',
+          'name': 'Vidhoist-v$version.apk',
           'browser_download_url':
               'https://github.com/x/y/releases/download/v1/super.apk',
           'size': 1,
@@ -71,7 +71,7 @@ void main() {
         installedVersionProvider.overrideWith((ref) async => running),
         updateCheckerProvider.overrideWithValue(
           UpdateChecker(
-            assetMarker: 'ember',
+            assetMarker: 'vidhoist',
             assetExtension: '.exe',
             fetch: (_) async => release,
             // The installer comes from this test's own server.
@@ -108,7 +108,7 @@ void main() {
     final c = ProviderContainer();
     addTearDown(c.dispose);
     final checker = c.read(updateCheckerProvider);
-    expect((checker.assetMarker, checker.assetExtension), ('ember', '.exe'));
+    expect((checker.assetMarker, checker.assetExtension), ('vidhoist', '.exe'));
     expect(c.read(installerDownloaderProvider).magic, ApkDownloader.exeMagic);
     // From GitHub over https only: a file from anywhere else is no update.
     expect(checker.trustedAsset(Uri.parse('http://127.0.0.1/x.exe')), isFalse);
@@ -130,10 +130,7 @@ void main() {
     expect(name, isNot(contains(r'\')));
     expect(name, isNot(contains('/')));
     expect(name, isNot(contains(' ')));
-    expect(
-      installerNameFor('2.7.0'),
-      'Vidhoist-Ember-2.7.0-windows-x64-setup.exe',
-    );
+    expect(installerNameFor('2.7.0'), 'Vidhoist-2.7.0-windows-x64-setup.exe');
   });
 
   test('what is not an installer is never started', () async {

@@ -104,7 +104,7 @@ void main() {
         offerWhatsNewProvider.overrideWithValue(atStart),
         updateCheckerProvider.overrideWithValue(
           UpdateChecker(
-            assetMarker: 'ember',
+            assetMarker: 'vidhoist',
             fetch: (uri) async {
               asked.add(uri);
               return _release(

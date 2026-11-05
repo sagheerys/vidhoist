@@ -28,6 +28,25 @@ All notable changes to Vidhoist. The format follows
   Vidhoist, in English and Arabic alike. Strings about the server are kept
   until the engine is replaced.
 
+- **Brought level with vidhoist-mobile v2.7.0 as released** (tag `v2.7.0`,
+  `32e12c5d`, 2026-11-05). The copy of 2026-11-03 was two days of work short
+  of the release: copying a clip's file with Ctrl+C on Windows, quiet rows for
+  the smart playlists on the phone, a 360p choice, video lists without the
+  shorts, Windows folders named after the app (`Downloads\Vidhoist`,
+  `Videos\Vidhoist\Offline`), a note when a synced device goes quiet, and
+  the parent's security hardening (links open only as web pages, folders stay
+  inside their own, updates only from GitHub over https). A patched
+  `media_kit_video` in `third_party/` stops Windows closing when a clip of
+  another size starts. Brought in with `tool/port_from_vidhoist.py`.
+- The sync subfolder is `Vidhoist Sync`, so Vidhoist and Vidhoist never share
+  one library when pointed at the same synced folder.
+
+### Fixed
+- Self-update would never have offered a Vidhoist release: the phone looked
+  for files named "lite" and Windows for "ember", and Windows saved the
+  installer as `Vidhoist-Ember-…`. Both now look for `Vidhoist` and tell the
+  APK from the installer by the extension.
+
 ### Known, deliberately
 - The download layer still speaks to a Vidhoist server. Replacing it is the
   next phase; see the blueprint.

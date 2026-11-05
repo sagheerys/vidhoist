@@ -28,7 +28,7 @@ String releaseJson({String tag = 'v9.9.9'}) => json.encode({
   'html_url': 'https://github.com/x/y/releases/tag/v1',
   'assets': [
     {
-      'name': 'Vidhoist-Lite-$tag.apk',
+      'name': 'Vidhoist-$tag.apk',
       'browser_download_url':
           'https://github.com/x/y/releases/download/v1/app.apk',
       'size': 12582912,
@@ -71,7 +71,7 @@ void main() {
           apkDownloaderProvider.overrideWithValue(downloader),
         updateCheckerProvider.overrideWithValue(
           UpdateChecker(
-            assetMarker: 'lite',
+            assetMarker: 'vidhoist',
             fetch: (_) async {
               if (failWith != null) throw failWith;
               return body ?? releaseJson();
@@ -117,7 +117,7 @@ void main() {
           prefsMutexProvider.overrideWithValue(PrefsMutex()),
           updateCheckerProvider.overrideWithValue(
             UpdateChecker(
-              assetMarker: 'lite',
+              assetMarker: 'vidhoist',
               fetch: (_) async {
                 calls++;
                 return releaseJson();
@@ -137,7 +137,7 @@ void main() {
           prefsMutexProvider.overrideWithValue(PrefsMutex()),
           updateCheckerProvider.overrideWithValue(
             UpdateChecker(
-              assetMarker: 'lite',
+              assetMarker: 'vidhoist',
               fetch: (_) async {
                 calls++;
                 return releaseJson();
