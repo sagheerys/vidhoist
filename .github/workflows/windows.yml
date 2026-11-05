@@ -6,7 +6,9 @@ name: Windows
 #
 # Its own workflow so it runs only when what it builds changed, or by hand:
 # while the repository is private a Windows minute costs two of the monthly
-# allowance, and a full run takes about 45.
+# allowance. Tests and build are two jobs side by side: on the private
+# runner the tests alone take about 51 minutes (2026-11-05), and one job
+# holding both ran out of its hour in the build.
 on:
   push:
     branches: [main]
@@ -35,10 +37,10 @@ permissions:
   contents: read
 
 jobs:
-  windows:
-    name: Windows app (Vidhoist)
+  test:
+    name: Windows tests (Vidhoist)
     runs-on: windows-latest
-    timeout-minutes: 60
+    timeout-minutes: 75
 
     defaults:
       run:
@@ -67,6 +69,27 @@ jobs:
       - name: Test vidhoist_desktop
         run: flutter test --no-pub -j 2
         working-directory: apps/vidhoist_desktop
+
+  build:
+    name: Windows build (Vidhoist)
+    runs-on: windows-latest
+    timeout-minutes: 40
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: 3.47.2
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
 
       - name: Build vidhoist_desktop
         run: flutter build windows --release --no-pub
