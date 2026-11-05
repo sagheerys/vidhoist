@@ -22,8 +22,3 @@ dependency_overrides:
     path: third_party/media_kit_video
   windows_taskbar:
     path: third_party/windows_taskbar
-  # Last, so the patched path overrides lead the block (audio_service_patch_test).
-  # image 4.11 calls ZLibDecoder.decodeLazy, which archive gained after the
-  # 4.0.9 its constraint still admits; without this the desktop tests and
-  # flutter_launcher_icons fail to compile (seen 2026-11-04).
-  archive: ^4.6.0
