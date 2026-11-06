@@ -30,7 +30,21 @@ All notable changes to Vidhoist. The format follows
   one retry at best when a height cannot be met, unfinished downloads queued
   again at the next launch), `LocalHistoryStore` (the library's records kept
   on the device, in the fields the server's history had) and `FakeBackend`
-  for tests. Not used by the apps yet.
+  for tests.
+- Both apps download with yt-dlp on the device; no Vidhoist server is needed.
+  - Android: yt-dlp through youtubedl-android, unpacked and updated on first
+    run from a welcome screen. Downloads go on with the app swiped away,
+    pause and resume from the card or the notification, Wi-Fi only pauses
+    and resumes with the connection, and subtitles are saved beside the clip
+    and shown by the player. An "Engine" section in Settings shows the
+    version, updates yt-dlp and turns IPv4 on or off. APKs are built per ABI
+    and self-update picks the one for the device.
+  - Windows: yt-dlp as a process with no console window; cancelling stops
+    yt-dlp, Deno and ffmpeg together. ffmpeg and Deno are fetched on first
+    need, each checked against a pinned SHA-256. A welcome dialog, an engine
+    line in the sidebar and a Settings › Engine pane replace the server
+    setup. Cookies come from local files or from a browser. The installer
+    ships yt-dlp (`tool/fetch-engine.ps1`).
 
 ### Changed
 - Package and application identifiers: `apps/vidhoist_mobile`
@@ -54,13 +68,17 @@ All notable changes to Vidhoist. The format follows
   another size starts. Brought in with `tool/port_from_vidhoist.py`.
 - The sync subfolder is `Vidhoist Sync`, so Vidhoist and Vidhoist never share
   one library when pointed at the same synced folder.
+- Windows hides Channels and Sync unless they are switched on in
+  Settings › Engine; they still need a server. The taskbar badge is blue.
 
 ### Fixed
 - Self-update would never have offered a Vidhoist release: the phone looked
   for files named "lite" and Windows for "ember", and Windows saved the
   installer as `Vidhoist-Ember-…`. Both now look for `Vidhoist` and tell the
   APK from the installer by the extension.
+- The phone still saved into `Download/Vidhoist_Lite`; it now uses
+  `Download/Vidhoist`, as the identity said.
 
 ### Known, deliberately
-- The download layer still speaks to a Vidhoist server. Replacing it is the
-  next phase; see the blueprint.
+- The server code is still in the tree, unused by the downloads; batch 6
+  removes it.
