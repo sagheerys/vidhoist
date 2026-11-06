@@ -116,6 +116,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(entered, 1);
     expect(await store.getBool(LiteSettings.welcomedKey), isTrue);
+    // A fresh install: the offer to restore a backup comes in this run, and
+    // only in this one (it used to come on every launch with no server).
+    final c = ProviderScope.containerOf(
+      tester.element(find.byType(WelcomeScreen)),
+    );
+    expect(c.read(welcomedThisRunProvider), isTrue);
   });
 
   testWidgets('a failed update still lets the person in, and says it will '

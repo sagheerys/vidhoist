@@ -12,4 +12,7 @@
     <string name="shortcut_shorts_long">Open shorts</string>
     <string name="shortcut_audio_short">Audio</string>
     <string name="shortcut_audio_long">Open audio library</string>
+    <!-- The download engine's foreground notification, in Android's list of
+         the app's notification kinds. -->
+    <string name="engine_channel">Downloads in progress</string>
 </resources>

@@ -4,6 +4,7 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import '../../di.dart';
+import '../engine/welcome_screen.dart';
 import '../downloads_library/library_providers.dart';
 import '../playlists/playlists_providers.dart';
 import 'auto_backup.dart';
@@ -17,10 +18,11 @@ import 'auto_backup.dart';
 Future<void> maybeOfferAutoRestore(BuildContext context, WidgetRef ref) async {
   final store = ref.read(keyValueStoreProvider);
   if (await store.getBool('auto_restore_offered') ?? false) return;
-  // A fresh install only: a configured server means this is not a clean
-  // start, and offering to restore a backup the app itself just wrote is
-  // noise with no benefit.
-  if (ref.read(settingsProvider).isConfigured) return;
+  // A fresh install only, the run that showed the welcome screen: on any
+  // later launch the backup on disk is one the app itself just wrote, and
+  // offering it is noise (with no server to configure, the old test of a
+  // fresh install, "no server yet", held on every launch).
+  if (!ref.read(welcomedThisRunProvider)) return;
 
   final backup = ref.read(autoBackupProvider);
   // **The newest copy from the rotation** (decision 2026-09-04): it used to

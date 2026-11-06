@@ -16,6 +16,10 @@ String? welcomeRedirect({required bool welcomed, required String location}) {
   return onWelcome ? '/' : null;
 }
 
+/// The welcome screen was completed in this run: the app is freshly
+/// installed, the one moment to offer restoring an earlier backup.
+final welcomedThisRunProvider = StateProvider<bool>((ref) => false);
+
 /// The first run, in place of the server setup: the engine is unpacked
 /// and yt-dlp updated in the background, each step shown, then the person
 /// goes in (`docs/ENGINE.md` findings 11 and 12). A failed update does not
@@ -46,6 +50,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   Future<void> _enter() async {
     await ref.read(settingsProvider.notifier).setWelcomed();
     if (!mounted) return;
+    ref.read(welcomedThisRunProvider.notifier).state = true;
     if (widget.onEntered case final entered?) {
       entered();
     } else {

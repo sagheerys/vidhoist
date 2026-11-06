@@ -88,6 +88,13 @@
             android:foregroundServiceType="dataSync"
             android:enabled="true"
             android:exported="false"/>
+        <!-- The download engine's own foreground service (EngineService.kt):
+             it outlives the Flutter engine, so a download goes on with the
+             app swiped away. -->
+        <service
+            android:name=".EngineService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false"/>
         <!-- The background audio service and the media-button receiver
              (audio_service). -->
         <service

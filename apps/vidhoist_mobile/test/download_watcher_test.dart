@@ -52,16 +52,19 @@ class _Notices extends DownloadNotifications {
 /// be swiped away, must still go.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  final background = <String>[];
+  final background = <bool>[];
 
   setUp(() {
     background.clear();
-    // The foreground service, answered so the watcher's chain moves on.
+    // The engine's own foreground service, answered so the watcher's chain
+    // moves on.
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(const MethodChannel('flutter_background'), (
+        .setMockMethodCallHandler(const MethodChannel('vidhoist/ytdlp'), (
           call,
         ) async {
-          background.add(call.method);
+          if (call.method == 'keepAlive') {
+            background.add((call.arguments as Map)['on'] as bool);
+          }
           return true;
         });
   });
@@ -117,10 +120,10 @@ void main() {
       final w = watch();
       w.tasks.add([at(TaskPhase.downloading)]);
       await pumpEventQueue();
-      expect(background, contains('enableBackgroundExecution'));
+      expect(background, [true]);
       w.tasks.add([at(TaskPhase.paused)]);
       await pumpEventQueue();
-      expect(background.last, 'disableBackgroundExecution');
+      expect(background.last, isFalse);
     },
   );
 

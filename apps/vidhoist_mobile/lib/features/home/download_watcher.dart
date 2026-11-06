@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_background/flutter_background.dart';
+import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
@@ -47,33 +47,22 @@ final downloadWatcherProvider = Provider<void>((ref) {
 
   int idOf(DownloadTask task) => task.id.hashCode & 0x7fffffff;
 
+  /// The engine's own foreground service (`EngineService.kt`), not
+  /// flutter_background's: swiping the app away disposes the Flutter
+  /// engine, and a service tied to it went too, taking the download with
+  /// it (measured on the phone, 2026-11-06). This one lives in the
+  /// process and also stays up while any yt-dlp run is going, whatever
+  /// happens to Dart.
   Future<void> syncBackground(bool anyActive) async {
     if (anyActive == backgroundOn) return;
     backgroundOn = anyActive;
     try {
-      if (anyActive) {
-        final texts = l10n();
-        final ready = await FlutterBackground.initialize(
-          androidConfig: FlutterBackgroundAndroidConfig(
-            notificationTitle: texts.downloadingTitle,
-            notificationText: texts.backgroundDownload,
-            notificationImportance: AndroidNotificationImportance.normal,
-            notificationIcon: const AndroidResource(
-              name: 'ic_stat_vidhoist',
-              defType: 'drawable',
-            ),
-            enableWifiLock: true,
-            // We do **not** request a battery-optimisation exemption: it is
-            // an intrusive system dialog for a family member, and the
-            // foreground service alone is enough for a short download
-            // session.
-            shouldRequestBatteryOptimizationsOff: false,
-          ),
-        );
-        if (ready) await FlutterBackground.enableBackgroundExecution();
-      } else if (FlutterBackground.isBackgroundExecutionEnabled) {
-        await FlutterBackground.disableBackgroundExecution();
-      }
+      final texts = l10n();
+      await const MethodChannel('vidhoist/ytdlp').invokeMethod('keepAlive', {
+        'on': anyActive,
+        'title': texts.downloadingTitle,
+        'text': texts.backgroundDownload,
+      });
     } catch (e) {
       // A refused permission or a device that does not support it:
       // downloading continues as long as the app is open.
