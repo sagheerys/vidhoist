@@ -69,14 +69,14 @@ class CoverEnricher {
 
   /// Looks for one clip's cover; true when one was found and kept.
   ///
-  /// An MP4 audio file (M4A, Vidhoist's usual) is read by ranges, the
-  /// cheapest way; any other audio (MP3, Opus, FLAC) and every video go
-  /// through [frameFor], whose engine shows an audio file's embedded cover
-  /// as its one frame.
+  /// Any MP4 file (an M4A, and since 2026-11-07 every downloaded video,
+  /// which carries its cover inside) is read by ranges first, the cheapest
+  /// way; other audio (MP3, Opus, FLAC), and an MP4 with no cover inside,
+  /// go through [frameFor], whose engine shows an audio file's embedded
+  /// cover as its one frame.
   Future<bool> enrich(LibraryItem item) async {
     // Nothing to read it with is not a clip without a cover.
-    final mp4Audio = item.isAudio && _isMp4(item);
-    if (frameFor == null && !(mp4Audio && readerFor(item) != null)) {
+    if (frameFor == null && !(_isMp4(item) && readerFor(item) != null)) {
       return false;
     }
     var picture = await pictureOf(item);
@@ -99,11 +99,11 @@ class CoverEnricher {
   }
 
   /// The picture in or of the clip's own file, without keeping it: the
-  /// embedded cover of an audio file or a video's frame; null when none
-  /// came. Also what stands in for an online cover gone at its source.
+  /// cover embedded in it, else a video's frame; null when none came. Also
+  /// what stands in for an online cover gone at its source.
   Future<Uint8List?> pictureOf(LibraryItem item) async {
     Uint8List? picture;
-    final read = item.isAudio && _isMp4(item) ? readerFor(item) : null;
+    final read = _isMp4(item) ? readerFor(item) : null;
     if (read != null) {
       try {
         picture = await Mp4Cover.find(read);

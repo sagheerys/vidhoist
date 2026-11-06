@@ -267,6 +267,30 @@ void main() {
         expect(asked, ['a']);
       });
 
+      test("**the guard**: a video's own embedded cover comes before a "
+          "frame", () async {
+        // Since 2026-11-07 every download carries its cover inside the MP4
+        // (yt-dlp's --embed-thumbnail, `covr` in `moov`, measured): the
+        // picture the site chose, kept when the site deletes it, rather than
+        // whatever frame the engine lands on.
+        final frame = Uint8List.fromList([..._jpeg, 9]);
+        final e = enricher({
+          'v': _file(moovFirst: true, cover: _jpeg),
+        }, frames: frames(frame));
+        expect(await e.enrich(clip('v', audio: false)), isTrue);
+        final path = await artwork.artworkOf(clip('v').canonicalUrl);
+        expect(File(path!).readAsBytesSync(), _jpeg);
+        expect(asked, isEmpty, reason: 'no frame was needed');
+      });
+
+      test('a video with no cover inside still gets its frame', () async {
+        final e = enricher({
+          'v': _file(moovFirst: true),
+        }, frames: frames(_jpeg));
+        expect(await e.enrich(clip('v', audio: false)), isTrue);
+        expect(asked, ['v']);
+      });
+
       test('one that gives no frame is left alone for a day', () async {
         final e = enricher({}, frames: frames(null));
         final video = clip('broken', audio: false);
