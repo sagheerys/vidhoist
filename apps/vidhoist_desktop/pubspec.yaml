@@ -86,6 +86,9 @@ dependencies:
   # The taskbar's window class, for win32; the version already in the resolution.
   ffi: 2.2.0
   pdf: 3.12.0
+  # Checks each engine file fetched (yt-dlp, ffmpeg, Deno) against its
+  # pinned SHA-256; the version already in the resolution.
+  crypto: 3.0.7
 
 dev_dependencies:
   flutter_test:
