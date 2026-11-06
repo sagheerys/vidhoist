@@ -98,6 +98,44 @@ void main() {
       expect(await fresh.getBool('library_compact_view'), isTrue);
     });
 
+    test('nor the on-device engine\'s unfinished downloads, nor what the '
+        'app names as its own device\'s', () async {
+      // The partial files are on this device; restored elsewhere the
+      // records would start every download again from nothing. When the
+      // engine was last updated is a fact about this install: restored on
+      // a new phone, it would skip the update its year-old yt-dlp needs.
+      final mine = BackupService(
+        store: store,
+        secrets: MemorySecretStore(),
+        mutex: PrefsMutex(),
+        variant: 'lite',
+        deviceOnlyKeys: const {'engine_updated_at'},
+      );
+      await store.setStringList(LocalPendingStore.key, ['{"id":"t1"}']);
+      await store.setInt('engine_updated_at', 1);
+      await store.setBool('library_compact_view', true);
+
+      final exported = await mine.exportToString();
+      expect(exported, isNot(contains(LocalPendingStore.key)));
+      expect(exported, isNot(contains('engine_updated_at')));
+      expect(exported, contains('library_compact_view'));
+
+      final planted = json.decode(exported) as Map<String, dynamic>;
+      (planted['prefs'] as Map<String, dynamic>)['engine_updated_at'] = {
+        't': 'i',
+        'v': 1,
+      };
+      final fresh = MemoryKeyValueStore();
+      await BackupService(
+        store: fresh,
+        secrets: MemorySecretStore(),
+        mutex: PrefsMutex(),
+        variant: 'lite',
+        deviceOnlyKeys: const {'engine_updated_at'},
+      ).importFromString(json.encode(planted));
+      expect(await fresh.getInt('engine_updated_at'), isNull);
+    });
+
     test('**the guard**: the covers kept as files stay on this phone, or a '
         'restore elsewhere shows those clips with no cover at all', () async {
       // Found while restoring a backup on a fresh install (2026-11-05):

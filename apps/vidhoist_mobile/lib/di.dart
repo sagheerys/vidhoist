@@ -308,6 +308,9 @@ final backupServiceProvider = Provider(
     secrets: ref.watch(secretStoreProvider),
     mutex: ref.watch(prefsMutexProvider),
     variant: 'lite',
+    // When this install last updated its engine: restored on a new phone
+    // it would skip the update the shipped yt-dlp needs.
+    deviceOnlyKeys: const {EnginePreparer.updatedAtKey},
   ),
 );
 

@@ -165,10 +165,7 @@ class _Step extends StatelessWidget {
         height: 8,
         decoration: BoxDecoration(color: p.line2, shape: BoxShape.circle),
       ),
-      _Mark.busy => SizedBox.square(
-        dimension: 18,
-        child: CircularProgressIndicator(strokeWidth: 2, color: p.accent),
-      ),
+      _Mark.busy => const MTSpinner(size: 18),
       _Mark.done => MTDrawnCheck(color: p.ok, size: 20),
       _Mark.warn => MTIcon(MTIcons.alert, size: 20, color: p.ink3),
       _Mark.failed => MTIcon(MTIcons.alert, size: 20, color: p.err),
