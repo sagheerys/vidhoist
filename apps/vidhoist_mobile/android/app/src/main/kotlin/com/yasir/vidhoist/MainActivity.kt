@@ -23,6 +23,7 @@ class MainActivity : AudioServiceActivity() {
         PictureInPicture.register(this, flutterEngine.dartExecutor.binaryMessenger)
         UpdateInstaller.register(this, flutterEngine)
         ShareInbox.register(flutterEngine.dartExecutor.binaryMessenger)
+        YtDlpBridge.register(applicationContext, flutterEngine.dartExecutor.binaryMessenger)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "vidhoist_mobile/media",

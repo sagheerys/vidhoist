@@ -71,7 +71,7 @@ final handledLinksProvider = Provider(
 /// Records every link [engine] is given, and folds the clipboard bar away
 /// when it is offering that link. Called by the provider that builds the
 /// engine, so it lives and dies with it.
-void noteSubmittedLinks(Ref ref, DownloadEngine engine) {
+void noteSubmittedLinks(Ref ref, LocalDownloadEngine engine) {
   final handled = ref.read(handledLinksProvider);
   final seen = <String>{};
   final subscription = engine.updates.listen((task) {

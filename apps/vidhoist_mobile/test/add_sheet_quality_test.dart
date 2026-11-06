@@ -88,7 +88,7 @@ void main() {
   });
 }
 
-List<Override> _overrides(DownloadEngine? engine) => [
+List<Override> _overrides(LocalDownloadEngine? engine) => [
   keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
   secretStoreProvider.overrideWithValue(MemorySecretStore()),
   prefsMutexProvider.overrideWithValue(PrefsMutex()),
@@ -144,7 +144,7 @@ class _OpensSheetState extends ConsumerState<_OpensSheet> {
   Widget build(BuildContext context) => const Scaffold();
 }
 
-class _Engine implements DownloadEngine {
+class _Engine implements LocalDownloadEngine {
   final qualities = <Quality>[];
 
   @override

@@ -45,8 +45,20 @@ android {
         }
     }
 
+    // youtubedl-android runs Python and ffmpeg from the native library
+    // folder, so the libraries must be extracted at install.
+    packaging {
+        jniLibs.useLegacyPackaging = true
+    }
+
     buildTypes {
         release {
+            // The engine's classes are reached by name from its own code;
+            // the shrinker must not rename or drop them.
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
             signingConfig = if (keystorePropertiesFile.exists())
                 signingConfigs.getByName("release")
             else
@@ -68,6 +80,9 @@ android {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+    // yt-dlp with its Python and QuickJS, and ffmpeg (docs/ENGINE.md).
+    implementation("io.github.junkfood02.youtubedl-android:library:0.18.1")
+    implementation("io.github.junkfood02.youtubedl-android:ffmpeg:0.18.1")
 }
 
 kotlin {

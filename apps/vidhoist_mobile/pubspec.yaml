@@ -16,6 +16,9 @@ dependencies:
     path: ../../packages/mt_media
   mt_ui:
     path: ../../packages/mt_ui
+  # The subtitles yt-dlp writes beside a download, read for the player.
+  mt_transcripts:
+    path: ../../packages/mt_transcripts
   audio_service: ^0.18.15
   cached_network_image: ^3.4.1
   # The "Wi-Fi only" gate before a pull, and retrying when the network comes
