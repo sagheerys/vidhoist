@@ -68,11 +68,14 @@ void main() {
   Finder titleOf(String t) => find.text(t);
   final server = ServerConfig(baseUrl: 'http://nas:8081');
 
-  testWidgets('no server and nothing local: it says so plainly', (
+  testWidgets('no server and nothing local: it asks for a link', (
     tester,
   ) async {
     await open(tester);
-    expect(find.text('No server configured'), findsOneWidget);
+    // Downloads run on this computer: a link is what fills it, not a
+    // server.
+    expect(find.text('No server configured'), findsNothing);
+    expect(find.textContaining('once it is downloaded'), findsOneWidget);
   });
 
   testWidgets('the library opens in the grid, newest first', (tester) async {

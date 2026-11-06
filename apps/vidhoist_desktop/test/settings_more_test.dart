@@ -33,11 +33,6 @@ class _Dialogs extends NoFolders {
   }
 }
 
-List<int> _cookies(String domain) => utf8.encode(
-  '# Netscape HTTP Cookie File\n'
-  '$domain\tTRUE\t/\tTRUE\t1893456000\tsid\tsecret-$domain\n',
-);
-
 /// A release page as GitHub would answer for one tag.
 String _release(String body) => jsonEncode({'body': body});
 
@@ -155,29 +150,8 @@ void main() {
     });
   });
 
-  group('cookies', () {
-    testWidgets('**the guard**: files chosen together go as one file, and '
-        'the notice names each site', (tester) async {
-      final h = await open(tester, to: '/settings/cookies');
-      expect(find.text('The server has no cookies'), findsOneWidget);
-      expect(find.text('Delete the cookies'), findsNothing);
-      dialogs.chosen = [
-        ('youtube.txt', _cookies('.youtube.com')),
-        ('instagram.txt', _cookies('.instagram.com')),
-      ];
-      await tester.tap(find.text('Choose cookies files'));
-      await tester.pumpAndSettle();
-      final (name, bytes) = h.api.cookieUploads.single;
-      expect(name, 'cookies.txt');
-      expect(
-        utf8.decode(bytes),
-        allOf(contains('youtube'), contains('instagram')),
-      );
-      expect(find.textContaining('youtube.com'), findsWidgets);
-      expect(find.text('The server has cookies'), findsOneWidget);
-      expect(find.text('Delete the cookies'), findsOneWidget);
-    });
-  });
+  // Cookies are kept on this computer now, not uploaded to a server:
+  // their guards are in cookies_local_test.dart.
 
   group("what's new", () {
     testWidgets('About shows the version and its notes on request', (

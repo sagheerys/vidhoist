@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -195,7 +196,9 @@ void main() {
       );
       await tester.pumpWidget(h.app());
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Connect'));
+      // Opened as Settings › Server opens it: the library no longer asks
+      // for a server now that downloads run on this computer.
+      unawaited(showSetupDialog(tester.element(find.byType(EmberSidebar))));
       await tester.pumpAndSettle();
       return h;
     }
