@@ -64,7 +64,6 @@ void main() {
 
   test('no server is needed: the engine is always there', () {
     final c = build(const LiteSettings());
-    expect(c.read(apiClientProvider), isNull);
     expect(c.read(downloadEngineProvider), isA<LocalDownloadEngine>());
   });
 

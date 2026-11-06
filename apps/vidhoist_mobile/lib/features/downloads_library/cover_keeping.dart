@@ -19,12 +19,11 @@ final keptCoverFolderProvider = FutureProvider<Directory?>(
       Directory('${(await getApplicationSupportDirectory()).path}/kept_covers'),
 );
 
-/// Fetches an online cover through the cards' own image cache, with the
-/// server's headers only for the server's own address.
-final coverFetcherProvider = Provider<CoverFetcher>((ref) {
-  final api = ref.watch(apiClientProvider);
-  return defaultCoverFetcher((url) => api?.imageHeadersFor(url) ?? const {});
-});
+/// Fetches an online cover through the cards' own image cache; covers are
+/// public links, so no request carries a credential.
+final coverFetcherProvider = Provider<CoverFetcher>(
+  (ref) => defaultCoverFetcher((_) => const {}),
+);
 
 /// A frame of the file at a path on the phone; null when none came.
 final localFrameProvider = Provider<Future<Uint8List?> Function(String path)>(

@@ -5,14 +5,10 @@ import 'package:mt_media/mt_media.dart' show MTPictureInPicture;
 
 import '../../di.dart';
 
-/// Lite's settings state: **one** server URL, with no automatic switching,
-/// which is a Super feature. Storage key names are fixed, and they are the same names the old Lite used, so its
-/// backup restores as it is.
+/// The phone's settings. Storage key names are fixed, and they are the same
+/// names the old Lite used, so its backup restores as it is.
 class LiteSettings {
   const LiteSettings({
-    this.serverUrl = '',
-    this.username,
-    this.password,
     this.quality = Quality.best,
     this.quickDownload = false,
     this.wifiOnly = false,
@@ -44,9 +40,6 @@ class LiteSettings {
   List<String> get subtitleLanguages =>
       subtitles ? const ['ar.*', 'en.*'] : const [];
 
-  final String serverUrl;
-  final String? username;
-  final String? password;
   final Quality quality;
 
   /// **Quick download**: a shared or pasted link downloads immediately at
@@ -59,11 +52,11 @@ class LiteSettings {
   final bool wifiOnly;
 
   /// Retries what failed because of the network once it returns, never what
-  /// the server refused.
+  /// the site refused.
   final bool autoRetry;
 
   /// **Best playback compatibility (H.264/AAC)**, from field report
-  /// 2026-09-03. Measured against a real server: `quality:best` alone
+  /// 2026-09-03. Measured on a real Vidhoist server: `quality:best` alone
   /// yields VP9 or AV1 in webm, and hardware AV1 decoding is missing from
   /// most phones, so the picture appears torn. On by default; turning it
   /// off allows the highest resolution at the cost of compatibility.
@@ -77,16 +70,7 @@ class LiteSettings {
   /// null means the system language (detected on first run).
   final String? localeCode;
 
-  bool get isConfigured => serverUrl.trim().isNotEmpty;
-
-  ServerConfig? get serverConfig => isConfigured
-      ? ServerConfig(baseUrl: serverUrl, username: username, password: password)
-      : null;
-
   LiteSettings copyWith({
-    String? serverUrl,
-    String? username,
-    String? password,
     Quality? quality,
     bool? quickDownload,
     bool? wifiOnly,
@@ -103,9 +87,6 @@ class LiteSettings {
     /// alone is not enough.
     bool clearLocale = false,
   }) => LiteSettings(
-    serverUrl: serverUrl ?? this.serverUrl,
-    username: username ?? this.username,
-    password: password ?? this.password,
     quality: quality ?? this.quality,
     quickDownload: quickDownload ?? this.quickDownload,
     wifiOnly: wifiOnly ?? this.wifiOnly,
@@ -120,15 +101,9 @@ class LiteSettings {
   );
 
   /// Loads the initial snapshot before runApp.
-  static Future<LiteSettings> load(
-    KeyValueStore store,
-    SecretStore secrets,
-  ) async {
+  static Future<LiteSettings> load(KeyValueStore store) async {
     final themeName = await store.getString('theme_mode');
     return LiteSettings(
-      serverUrl: await store.getString('server_url') ?? '',
-      username: await secrets.read(SecretKeys.username),
-      password: await secrets.read(SecretKeys.password),
       quality: Quality.fromWire(await store.getString('video_quality')),
       quickDownload: await store.getBool('quick_download_enabled') ?? false,
       wifiOnly: await store.getBool('wifi_only_downloads') ?? false,
@@ -156,50 +131,12 @@ class SettingsNotifier extends Notifier<LiteSettings> {
   }
 
   KeyValueStore get _store => ref.read(keyValueStoreProvider);
-  SecretStore get _secrets => ref.read(secretStoreProvider);
   PrefsMutex get _mutex => ref.read(prefsMutexProvider);
 
   /// Re-reads every setting from storage, after importing a backup (rule
   /// 8).
   Future<void> reloadFromStore() async =>
-      state = await LiteSettings.load(_store, _secrets);
-
-  /// Rule 1: test the connection, then save. **A broken setting is never
-  /// saved silently.** Throws a classified [MTApiException] for the UI to
-  /// display.
-  Future<void> saveServer({
-    required String url,
-    String? username,
-    String? password,
-  }) async {
-    final config = ServerConfig(
-      baseUrl: url,
-      username: username,
-      password: password,
-    );
-    final client = VidhoistApiClient(config: config);
-    try {
-      await client.testConnection();
-    } finally {
-      client.close();
-    }
-    await _mutex.run(() => _store.setString('server_url', config.baseUrl));
-    await _writeSecret(SecretKeys.username, username);
-    await _writeSecret(SecretKeys.password, password);
-    state = state.copyWith(
-      serverUrl: config.baseUrl,
-      username: username,
-      password: password,
-    );
-  }
-
-  Future<void> _writeSecret(String key, String? value) async {
-    if (value == null || value.isEmpty) {
-      await _secrets.delete(key);
-    } else {
-      await _secrets.write(key, value);
-    }
-  }
+      state = await LiteSettings.load(_store);
 
   Future<void> setQuality(Quality quality) async {
     await _mutex.run(() => _store.setString('video_quality', quality.wire));

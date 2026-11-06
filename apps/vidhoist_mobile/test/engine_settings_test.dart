@@ -18,7 +18,7 @@ class _NoSecrets implements SecretStore {
 void main() {
   test('IPv4 and subtitles are on until turned off, and stay as set', () async {
     final store = MemoryKeyValueStore();
-    final fresh = await LiteSettings.load(store, _NoSecrets());
+    final fresh = await LiteSettings.load(store);
     expect(fresh.forceIpv4, isTrue);
     expect(fresh.subtitles, isTrue);
 
@@ -34,7 +34,7 @@ void main() {
     await c.read(settingsProvider.notifier).setSubtitles(false);
     expect(c.read(settingsProvider).forceIpv4, isFalse);
 
-    final again = await LiteSettings.load(store, _NoSecrets());
+    final again = await LiteSettings.load(store);
     expect(again.forceIpv4, isFalse);
     expect(again.subtitles, isFalse);
   });

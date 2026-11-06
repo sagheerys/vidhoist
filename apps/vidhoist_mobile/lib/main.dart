@@ -31,7 +31,7 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final store = SharedPrefsKeyValueStore(prefs);
   const secrets = SecureSecretStore();
-  final initialSettings = await LiteSettings.load(store, secrets);
+  final initialSettings = await LiteSettings.load(store);
 
   // One lock for all storage (rule 3), passed to everyone rather than
   // created twice. It was created above, before the seeding.

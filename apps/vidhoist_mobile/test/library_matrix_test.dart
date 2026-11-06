@@ -49,9 +49,7 @@ void main() {
           keyValueStoreProvider.overrideWithValue(store),
           secretStoreProvider.overrideWithValue(MemorySecretStore()),
           prefsMutexProvider.overrideWithValue(PrefsMutex()),
-          initialSettingsProvider.overrideWithValue(
-            const LiteSettings(serverUrl: 'http://nas.local:8081'),
-          ),
+          initialSettingsProvider.overrideWithValue(const LiteSettings()),
           mediaAccessGateProvider.overrideWithValue(
             MediaAccessGate(
               probe: () async => true,

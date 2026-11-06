@@ -18,8 +18,8 @@ import 'error_text.dart';
 ///
 /// **The user's text is translated and the log's is technical**: a log is
 /// read a week later and from another device, so translating it costs its
-/// meaning (`AuthFailureException: HTTP 401` is more use than "the
-/// username or password is wrong").
+/// meaning (`NetworkException: Connection reset` is more use than "the
+/// network failed").
 void showErrorSnack(
   BuildContext context,
   WidgetRef ref,
