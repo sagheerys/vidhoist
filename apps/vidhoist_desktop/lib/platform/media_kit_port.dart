@@ -6,6 +6,7 @@ import 'package:mt_media/mt_media.dart';
 
 import 'one_player_guard.dart';
 import 'player_trace.dart';
+import 'mpv_options.dart';
 
 export 'one_player_guard.dart';
 
@@ -71,26 +72,10 @@ class MediaKitPort implements MediaPlayerPort {
     if (completed) _states.add(MediaPlaybackState.completed);
   }
 
-  /// What mpv is told before its first clip.
-  ///
-  /// - **Its own reconnection for a dropped stream**: off by default in
-  ///   ffmpeg, so a connection the network or a tunnel cut ended the clip
-  ///   where it was.
-  /// - **No subtitle file of its own**: yt-dlp writes `.ar.vtt` and
-  ///   `.en.vtt` beside every video, mpv loaded one by itself and drew it
-  ///   under the app's captions, over the seek bar (owner, 2026-11-07).
-  ///   The app draws the subtitles.
-  static const engineOptions = {
-    'stream-lavf-o':
-        'reconnect=1,reconnect_streamed=1,reconnect_on_network_error=1,'
-        'reconnect_delay_max=5',
-    'sub-auto': 'no',
-  };
-
   Future<void> _applyEngineOptions() async {
     final native = _player.platform;
     if (native is! NativePlayer) return;
-    for (final MapEntry(:key, :value) in engineOptions.entries) {
+    for (final MapEntry(:key, :value) in mpvEngineOptions.entries) {
       await native.setProperty(key, value);
     }
   }
