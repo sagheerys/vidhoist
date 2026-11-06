@@ -148,7 +148,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get autoRetryHelp =>
-      'إذا فشل تحميل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه السيرفر فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.';
+      'إذا فشل تحميل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه الموقع فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.';
 
   @override
   String get autoSwitchDisabledHint =>
@@ -355,7 +355,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get compatiblePlaybackHelp =>
-      'يطلب من السيرفر صيغة H.264/AAC التي تشغّلها كل الهواتف بعتادها مباشرة. وإن أطفأته أتاح لك أعلى دقة، لكن يوتيوب قد يرسل حينها صيغة AV1 فتظهر الصورة مشوّشة على أجهزة كثيرة.';
+      'يطلب صيغة H.264/AAC التي تشغّلها كل الهواتف بعتادها مباشرة. وإن أطفأته أتاح لك أعلى دقة، لكن يوتيوب قد يرسل حينها صيغة AV1 فتظهر الصورة مشوّشة على أجهزة كثيرة.';
 
   @override
   String get completed => 'مكتمل';
@@ -3564,7 +3564,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get wifiOnlyHelp =>
-      'لا تُسحب الملفات إلى جهازك عبر بيانات الجوّال، بل تنتظر المهام وتُستأنف تلقائياً عند الاتصال بشبكة Wi‑Fi.';
+      'لا يُنزَّل شيء عبر بيانات الجوّال. تنتظر التنزيلات شبكة Wi‑Fi، وما كان جارياً حين تنقطع يتوقف مؤقتاً ثم يُستأنف وحده عند عودتها.';
 
   @override
   String get yourChannels => 'قنواتك';

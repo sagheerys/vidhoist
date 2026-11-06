@@ -207,7 +207,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
       return;
     }
     final engine = ref.read(downloadEngineProvider);
-    if (engine == null) return note('share dropped: no server');
+    if (engine == null) return note('share dropped: no engine');
     note('share of ${urls.length} links');
     final quality = ref.read(settingsProvider).quality;
     for (final url in urls) {

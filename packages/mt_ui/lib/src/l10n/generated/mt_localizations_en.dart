@@ -136,7 +136,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get autoRetryHelp =>
-      'Anything that failed because the network dropped is retried on its own when it returns. Server refusals are not retried: repeating them unchanged just fails again.';
+      'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.';
 
   @override
   String get autoSwitchDisabledHint =>
@@ -329,7 +329,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get compatiblePlaybackHelp =>
-      'Asks the server for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.';
+      'Asks for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.';
 
   @override
   String get completed => 'Completed';
@@ -3481,7 +3481,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get wifiOnlyHelp =>
-      'Stops pulling files to your device over mobile data. Tasks wait and resume automatically on Wi-Fi.';
+      'Nothing downloads over mobile data. Downloads wait for Wi-Fi, and one under way when Wi-Fi drops is paused and goes on by itself when it returns.';
 
   @override
   String get yourChannels => 'Your channels';

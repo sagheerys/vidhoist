@@ -317,7 +317,7 @@ abstract class MTLocalizations {
   /// No description provided for @autoRetryHelp.
   ///
   /// In en, this message translates to:
-  /// **'Anything that failed because the network dropped is retried on its own when it returns. Server refusals are not retried: repeating them unchanged just fails again.'**
+  /// **'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.'**
   String get autoRetryHelp;
 
   /// No description provided for @autoSwitchDisabledHint.
@@ -635,7 +635,7 @@ abstract class MTLocalizations {
   /// No description provided for @compatiblePlaybackHelp.
   ///
   /// In en, this message translates to:
-  /// **'Asks the server for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.'**
+  /// **'Asks for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.'**
   String get compatiblePlaybackHelp;
 
   /// No description provided for @completed.
@@ -5903,7 +5903,7 @@ abstract class MTLocalizations {
   /// No description provided for @wifiOnlyHelp.
   ///
   /// In en, this message translates to:
-  /// **'Stops pulling files to your device over mobile data. Tasks wait and resume automatically on Wi-Fi.'**
+  /// **'Nothing downloads over mobile data. Downloads wait for Wi-Fi, and one under way when Wi-Fi drops is paused and goes on by itself when it returns.'**
   String get wifiOnlyHelp;
 
   /// No description provided for @yourChannels.
