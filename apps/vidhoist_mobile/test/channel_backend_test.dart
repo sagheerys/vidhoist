@@ -141,7 +141,7 @@ void main() {
       expect(
         argsOf(run),
         CommandBuilder.download(
-          request.toSpec(writeInfoJson: false, writeThumbnail: false),
+          request.toSpec(),
           const EngineSetup(platform: HostPlatform.android),
         ),
       );

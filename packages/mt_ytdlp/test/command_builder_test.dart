@@ -130,22 +130,33 @@ void main() {
       expect(args, containsAll(['--write-auto-subs', '--ignore-errors']));
     });
 
-    test('the info JSON and the thumbnail are kept unless turned off', () {
-      expect(
-        CommandBuilder.download(link, android),
-        containsAll(['--write-info-json', '--write-thumbnail']),
+    test('**the guard**: nothing lands beside the file but its subtitles; '
+        'the cover goes inside it', () {
+      // Owner, 2026-11-07: an info JSON of 1.7 MB (with links signed for
+      // this computer's address) and a loose JPG beside every video, read by
+      // nothing. The cover inside the file outlives the site deleting it.
+      final video = CommandBuilder.download(link, windows);
+      expect(video, isNot(contains('--write-info-json')));
+      expect(video, isNot(contains('--write-thumbnail')));
+      expect(video, contains('--embed-thumbnail'));
+      expect(valueOf(video, '--convert-thumbnails'), 'jpg');
+      // A single WebM refused the cover and failed the download (measured);
+      // remuxed to MP4 first, without re-encoding, it takes it.
+      expect(valueOf(video, '--remux-video'), 'mp4');
+
+      final audio = CommandBuilder.download(
+        const DownloadSpec(url: 'u', folder: 'f', choice: FormatChoice.audio),
+        windows,
       );
+      expect(audio, contains('--embed-thumbnail'));
+      expect(audio, isNot(contains('--remux-video')));
+
       final bare = CommandBuilder.download(
-        const DownloadSpec(
-          url: 'u',
-          folder: 'f',
-          writeInfoJson: false,
-          writeThumbnail: false,
-        ),
+        const DownloadSpec(url: 'u', folder: 'f', embedThumbnail: false),
         android,
       );
-      expect(bare, isNot(contains('--write-info-json')));
-      expect(bare, isNot(contains('--write-thumbnail')));
+      expect(bare, isNot(contains('--embed-thumbnail')));
+      expect(bare, isNot(contains('--convert-thumbnails')));
     });
 
     test('cookies and a speed limit', () {

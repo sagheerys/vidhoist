@@ -109,10 +109,7 @@ class ChannelYtDlpBackend implements DownloadBackend {
         _downloads.add(id);
         final end = await bridge.execute(
           id,
-          CommandBuilder.download(
-            run.toSpec(writeInfoJson: false, writeThumbnail: false),
-            _setup,
-          ),
+          CommandBuilder.download(run.toSpec(), _setup),
         );
         stopped = end.cancelled;
         return (exitCode: end.exitCode, stderr: end.stderr);

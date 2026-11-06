@@ -153,16 +153,10 @@ void main() {
       expect(probed.copyWith(quality: Quality.best).infoJsonPath, '/c/p.json');
     });
 
-    test('the files beside the download are written unless the app says '
-        'not to', () {
+    test('the cover goes inside the file unless the app says not to', () {
       const request = DownloadRequest(taskId: 't', url: 'u', folder: '/out');
-      expect(request.toSpec().writeInfoJson, isTrue);
-      expect(request.toSpec().writeThumbnail, isTrue);
-      // A phone's public folder: the info JSON holds links signed for the
-      // device's address, and a loose picture lands in the gallery.
-      final bare = request.toSpec(writeInfoJson: false, writeThumbnail: false);
-      expect(bare.writeInfoJson, isFalse);
-      expect(bare.writeThumbnail, isFalse);
+      expect(request.toSpec().embedThumbnail, isTrue);
+      expect(request.toSpec(embedThumbnail: false).embedThumbnail, isFalse);
     });
   });
 

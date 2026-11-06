@@ -49,8 +49,7 @@ class DownloadSpec {
     this.audioFormat = AudioFormat.m4a,
     this.nameTemplate = defaultNameTemplate,
     this.subtitleLanguages = const [],
-    this.writeInfoJson = true,
-    this.writeThumbnail = true,
+    this.embedThumbnail = true,
     this.playlistItems,
     this.rateLimit,
   }) : assert(
@@ -78,8 +77,11 @@ class DownloadSpec {
   /// Patterns for `--sub-langs`, such as `ar.*`; empty fetches none.
   final List<String> subtitleLanguages;
 
-  final bool writeInfoJson;
-  final bool writeThumbnail;
+  /// The cover inside the file, where it outlives the site deleting it
+  /// and travels with the file. Nothing else is written beside it but the
+  /// subtitles: no info JSON (links signed for this device's address) and
+  /// no loose picture.
+  final bool embedThumbnail;
 
   /// The 1-based items of a playlist to fetch; null keeps a link to one
   /// video from growing into its whole playlist or channel.
@@ -183,11 +185,14 @@ abstract final class CommandBuilder {
       compatible: spec.compatible,
       audioFormat: spec.audioFormat,
     ),
-    if (spec.writeInfoJson) '--write-info-json',
-    if (spec.writeThumbnail) ...[
-      '--write-thumbnail',
+    if (spec.embedThumbnail) ...[
+      '--embed-thumbnail',
       '--convert-thumbnails',
       'jpg',
+      // A single WebM refuses a cover and the refusal fails the download
+      // (measured 2026-11-07); remuxed to MP4 first, without re-encoding,
+      // it takes one. A merge is MP4 already.
+      if (spec.choice != FormatChoice.audio) ...['--remux-video', 'mp4'],
     ],
     if (spec.subtitleLanguages.isNotEmpty) ...[
       '--write-subs',
