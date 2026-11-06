@@ -68,6 +68,26 @@ void main() {
     expect(c.read(downloadEngineProvider), isA<LocalDownloadEngine>());
   });
 
+  test('a download that ends as the app closes records nothing more', () async {
+    // CI, 2026-11-06: the after-download steps went on reading providers
+    // once the container was gone, and failed after the test had passed.
+    final c = ProviderContainer(
+      overrides: [
+        keyValueStoreProvider.overrideWithValue(store),
+        initialSettingsProvider.overrideWithValue(const LiteSettings()),
+        loggerProvider.overrideWithValue(
+          MTLogger(filePath: '${Directory.systemTemp.path}/vh_wiring.log'),
+        ),
+        downloadBackendProvider.overrideWithValue(backend),
+      ],
+    );
+    final engine = c.read(downloadEngineProvider)!;
+    final task = engine.submit('https://youtu.be/a', Quality.best);
+    await until(() => engine.taskById(task.id)!.isFinished);
+    c.dispose();
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+  });
+
   test('the settings reach the download, into the media folder', () async {
     final c = build(const LiteSettings(compatiblePlayback: true));
     final engine = c.read(downloadEngineProvider)!;

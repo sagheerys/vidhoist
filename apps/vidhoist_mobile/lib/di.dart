@@ -237,14 +237,17 @@ final localPendingProvider = Provider(
 final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
   final logger = ref.watch(loggerProvider);
   final collector = ref.watch(batchCollectorProvider);
+  var alive = true;
   final engine = LocalDownloadEngine(
     backend: ref.watch(downloadBackendProvider),
     folderFor: (_) => liteMediaDir,
     history: ref.watch(localHistoryProvider),
     pending: ref.watch(localPendingProvider),
     onCompleted: (task) {
+      // A download can end as the app closes, after this provider has gone.
+      if (!alive) return;
       unawaited(collector.onFinished(task));
-      unawaited(onDownloadCompleted(ref, task));
+      unawaited(onDownloadCompleted(ref, task, alive: () => alive));
     },
     onLog: (message) => unawaited(logger.log(message, tag: 'download')),
     // "Wi-Fi only" holds the start; losing Wi-Fi mid-way pauses
@@ -258,7 +261,10 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
     compatibleVideo: () => ref.read(settingsProvider).compatiblePlayback,
     subtitleLanguages: () => ref.read(settingsProvider).subtitleLanguages,
   );
-  ref.onDispose(engine.dispose);
+  ref.onDispose(() {
+    alive = false;
+    engine.dispose();
+  });
   noteSubmittedLinks(ref, engine);
   return engine;
 });

@@ -17,7 +17,15 @@ final mediaStoreProvider = Provider((ref) => const MediaStoreScanner());
 /// Deletion from the server happened inside the engine under
 /// [DeletePolicy.autoDelete], using the canonicalUrl from `/history` (rule
 /// 2). None of that is here.
-Future<void> onDownloadCompleted(Ref ref, DownloadTask task) async {
+///
+/// [alive] turns false once the engine's provider is gone: a download can
+/// end as the app closes, and every step after an await asks it first.
+Future<void> onDownloadCompleted(
+  Ref ref,
+  DownloadTask task, {
+  bool Function()? alive,
+}) async {
+  bool gone() => !(alive?.call() ?? true);
   final path = task.localPath;
   if (path == null) return;
   final url = task.canonicalUrl;
@@ -39,6 +47,7 @@ Future<void> onDownloadCompleted(Ref ref, DownloadTask task) async {
     await ref.read(mediaStoreProvider).scanFile(path);
     await ref.read(loggerProvider).log('download completed', tag: 'download');
   } catch (e) {
+    if (gone()) return;
     // A failed indexing does not cancel a file that exists on disk; the
     // library scans the folder.
     await ref
@@ -46,8 +55,10 @@ Future<void> onDownloadCompleted(Ref ref, DownloadTask task) async {
         .error('post-download indexing failed', cause: e, tag: 'download');
   }
 
+  if (gone()) return;
   ref.invalidate(localMediaProvider);
   await ref.read(autoBackupProvider).requestBackup();
+  if (gone()) return;
 
   // **Did the server actually delete the file, or only its row?**
   // `DELETE_FILE_ON_TRASHCAN` is off by default in Vidhoist, and without it
@@ -65,6 +76,7 @@ Future<void> onDownloadCompleted(Ref ref, DownloadTask task) async {
     probe
         .check(task.serverFilename)
         .then((keeps) async {
+          if (gone()) return;
           // The settings notice reads a provider computed once; what the
           // probe just learned reaches it only if it is told.
           ref.invalidate(serverKeepsFilesProvider);
