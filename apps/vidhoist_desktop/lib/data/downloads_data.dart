@@ -68,6 +68,7 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
   final backend = ref.watch(downloadBackendProvider);
   if (backend == null) return null;
   final collector = ref.watch(batchCollectorProvider);
+  var alive = true;
   final engine = LocalDownloadEngine(
     backend: backend,
     folderFor: (task) => taskFolder(ref, task),
@@ -87,6 +88,8 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
           ]
         : const [],
     onCompleted: (task) {
+      // A download can end as the app closes, after this provider has gone.
+      if (!alive) return;
       unawaited(collector.onFinished(task));
       ref.invalidate(localLibraryProvider);
       unawaited(importSidecarTranscripts(ref, task));
@@ -100,6 +103,7 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
     }
   });
   ref.onDispose(() {
+    alive = false;
     dropped.cancel();
     engine.dispose();
   });

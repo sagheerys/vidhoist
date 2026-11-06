@@ -54,9 +54,10 @@ Future<List<Transcript>> readSidecarTranscripts({
 /// at once. Never throws: the clip is in the library whatever happens.
 Future<void> importSidecarTranscripts(Ref ref, DownloadTask task) async {
   final path = task.localPath;
-  final store = ref.read(transcriptStoreProvider);
-  if (path == null || store == null) return;
+  if (path == null) return;
   try {
+    final store = ref.read(transcriptStoreProvider);
+    if (store == null) return;
     for (final transcript in await readSidecarTranscripts(
       mediaPath: path,
       canonicalUrl: task.canonicalUrl ?? task.effectiveUrl,
