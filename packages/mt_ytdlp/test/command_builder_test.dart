@@ -155,6 +155,22 @@ void main() {
       expect(valueOf(args, '-r'), '2M');
     });
 
+    test("cookies from a browser's own store, on probes too", () {
+      const setup = EngineSetup(
+        platform: HostPlatform.windows,
+        cookiesFromBrowser: 'firefox',
+      );
+      final download = CommandBuilder.download(
+        const DownloadSpec(url: 'u', folder: 'f'),
+        setup,
+      );
+      expect(valueOf(download, '--cookies-from-browser'), 'firefox');
+      expect(download, isNot(contains('--cookies')));
+      final probe = CommandBuilder.probe('u', setup);
+      expect(valueOf(probe, '--cookies-from-browser'), 'firefox');
+      expect(probe.last, 'u');
+    });
+
     test("from a probe's info JSON there is no link at all", () {
       final args = CommandBuilder.download(
         const DownloadSpec(infoJsonPath: 'probe.json', folder: 'f'),

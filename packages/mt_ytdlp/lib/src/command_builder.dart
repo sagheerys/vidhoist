@@ -12,6 +12,7 @@ class EngineSetup {
     this.jsRuntime,
     this.forceIpv4 = true,
     this.cookiesFile,
+    this.cookiesFromBrowser,
   });
 
   final HostPlatform platform;
@@ -31,6 +32,10 @@ class EngineSetup {
 
   /// A Netscape cookies file, for sites that need a signed-in session.
   final String? cookiesFile;
+
+  /// A browser whose own cookie store yt-dlp reads, such as `firefox`, for
+  /// someone already signed in there; used instead of [cookiesFile].
+  final String? cookiesFromBrowser;
 }
 
 /// One download, from a link or from an info JSON a probe already wrote.
@@ -132,7 +137,13 @@ abstract final class CommandBuilder {
     if (setup.forceIpv4) '-4',
     if (setup.ffmpegDir case final dir?) ...['--ffmpeg-location', dir],
     if (setup.jsRuntime case final runtime?) ...['--js-runtimes', runtime],
-    if (setup.cookiesFile case final cookies?) ...['--cookies', cookies],
+    if (setup.cookiesFromBrowser case final browser?) ...[
+      '--cookies-from-browser',
+      browser,
+    ] else if (setup.cookiesFile case final cookies?) ...[
+      '--cookies',
+      cookies,
+    ],
   ];
 
   /// Downloads [spec]. Progress comes as [progressTag] and
