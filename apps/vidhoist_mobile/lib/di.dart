@@ -6,6 +6,9 @@ import 'package:mt_media/mt_media.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'features/downloads_library/download_wiring.dart';
+import 'features/engine/channel_backend.dart';
+import 'features/engine/engine_preparer.dart';
+import 'features/engine/ytdlp_bridge.dart';
 import 'features/downloads_library/local_item.dart';
 import 'features/home/handled_links.dart';
 import 'features/home/network_gate.dart';
@@ -37,14 +40,10 @@ final settingsProvider = NotifierProvider<SettingsNotifier, LiteSettings>(
   SettingsNotifier.new,
 );
 
-/// The one Dio. It is rebuilt only when the server settings change.
-final apiClientProvider = Provider<VidhoistApiClient?>((ref) {
-  final config = ref.watch(settingsProvider.select((s) => s.serverConfig));
-  if (config == null) return null;
-  final client = VidhoistApiClient(config: config);
-  ref.onDispose(client.close);
-  return client;
-});
+/// The server's client, **never built any more**: downloads run on the
+/// phone. It stays until the server layer is deleted (phase 1, batch 6) so
+/// what still names it compiles, and with it null every server path is off.
+final apiClientProvider = Provider<VidhoistApiClient?>((ref) => null);
 
 // The indexes (§5.5: all of them keyed by the unified item key).
 
@@ -144,12 +143,8 @@ final playlistsRevisionProvider = StateProvider<int>((ref) => 0);
 /// immediately).
 final shortLinkResolverProvider = Provider((ref) => ShortLinkResolver());
 
-/// Lite's engine: the whole four-stage pipeline. It pulls to the device and
-/// then **deletes from the server automatically**, so the family's server
-/// stays clean.
-/// **Where a task is written down so it survives this process** (audit
-/// 2026-09-19). Lite alone needs it: Super leaves files on the server by
-/// design and has nothing to reconcile.
+/// The server engine's records of unfinished pulls; unused since the
+/// engine runs on the phone, kept until the server layer goes (batch 6).
 final pendingDownloadsProvider = Provider(
   (ref) => PendingDownloadsStore(
     store: ref.watch(keyValueStoreProvider),
@@ -174,35 +169,94 @@ final serverKeepsFilesProvider = FutureProvider<bool>((ref) async {
   return await probe?.serverKeepsFiles ?? false;
 });
 
-final downloadEngineProvider = Provider<DownloadEngine?>((ref) {
-  final api = ref.watch(apiClientProvider);
-  if (api == null) return null;
+/// youtubedl-android, through `YtDlpBridge.kt`.
+final ytDlpBridgeProvider = Provider<YtDlpBridge>(
+  (ref) => MethodChannelYtDlpBridge(),
+);
+
+/// Unpacks the engine and keeps yt-dlp current; the welcome screen and the
+/// engine settings show its state.
+final enginePreparerProvider = Provider((ref) {
+  final preparer = EnginePreparer(
+    bridge: ref.watch(ytDlpBridgeProvider),
+    store: ref.watch(keyValueStoreProvider),
+    mutex: ref.watch(prefsMutexProvider),
+    // Read, not watched: a new preparer would forget the engine is ready.
+    onLog: (message) =>
+        unawaited(ref.read(loggerProvider).log(message, tag: 'engine')),
+  );
+  ref.onDispose(preparer.dispose);
+  return preparer;
+});
+
+/// Listening starts here, at once: a generator would subscribe only after
+/// its first value was taken, and a step finished in between was lost.
+final engineStatusProvider = StreamProvider<EngineStatus>((ref) {
+  final preparer = ref.watch(enginePreparerProvider);
+  final statuses = StreamController<EngineStatus>()..add(preparer.status);
+  final heard = preparer.statuses.listen(statuses.add);
+  ref.onDispose(() {
+    unawaited(heard.cancel());
+    unawaited(statuses.close());
+  });
+  return statuses.stream;
+});
+
+final downloadBackendProvider = Provider<DownloadBackend>(
+  (ref) => ChannelYtDlpBackend(
+    bridge: ref.watch(ytDlpBridgeProvider),
+    // The app's private cache: a probe's JSON holds links signed for this
+    // phone's address.
+    cacheDir: () async => (await getTemporaryDirectory()).path,
+    forceIpv4: () => ref.read(settingsProvider).forceIpv4,
+    ready: ref.watch(enginePreparerProvider).ensure,
+  ),
+);
+
+/// Every download finished on this phone, with the fields the server's
+/// history had.
+final localHistoryProvider = Provider(
+  (ref) => LocalHistoryStore(
+    ref.watch(keyValueStoreProvider),
+    mutex: ref.watch(prefsMutexProvider),
+  ),
+);
+
+/// The downloads not finished yet, queued again at the next launch.
+final localPendingProvider = Provider(
+  (ref) => LocalPendingStore(
+    ref.watch(keyValueStoreProvider),
+    mutex: ref.watch(prefsMutexProvider),
+  ),
+);
+
+/// yt-dlp on the phone, one download at a time: each runs Python and
+/// often ffmpeg, which is all a phone should carry at once.
+///
+/// Never null in the app; null stays in the type for the screens that ask.
+final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
   final logger = ref.watch(loggerProvider);
   final collector = ref.watch(batchCollectorProvider);
-  final engine = DownloadEngine(
-    api: api,
-    policy: DeletePolicy.autoDelete,
-    pending: ref.watch(pendingDownloadsProvider),
-    // **Not zero any more** (audit 2026-09-19): a foreground service keeps
-    // the process awake, not the network, and one dropped request used to
-    // fail a task while the server carried on and finished the file.
-    pollNetworkTolerance: MTConstants.pollNetworkTolerance,
-    savePathBuilder: (task, filename) =>
-        '$liteMediaDir/${buildLocalFilename(task.title, serverFilename: filename)}',
+  final engine = LocalDownloadEngine(
+    backend: ref.watch(downloadBackendProvider),
+    folderFor: (_) => liteMediaDir,
+    history: ref.watch(localHistoryProvider),
+    pending: ref.watch(localPendingProvider),
     onCompleted: (task) {
       unawaited(collector.onFinished(task));
       unawaited(onDownloadCompleted(ref, task));
     },
     onLog: (message) => unawaited(logger.log(message, tag: 'download')),
-    // Field report 2026-09-03: YouTube at "best" gives AV1 or VP9 and the
-    // clip looks torn on phones. This asks for H.264/AAC instead.
-    pullGate: () {
+    // "Wi-Fi only" holds the start; losing Wi-Fi mid-way pauses
+    // (`wifiPauseProvider`).
+    startGate: () {
       if (!ref.read(settingsProvider).wifiOnly) return true;
       return ref.read(networkGateProvider).onWifi;
     },
     // Field report 2026-09-03: YouTube at "best" gives AV1 or VP9 and the
     // clip looks torn on phones. This asks for H.264/AAC instead.
     compatibleVideo: () => ref.read(settingsProvider).compatiblePlayback,
+    subtitleLanguages: () => ref.read(settingsProvider).subtitleLanguages,
   );
   ref.onDispose(engine.dispose);
   noteSubmittedLinks(ref, engine);
@@ -254,6 +308,9 @@ final backupServiceProvider = Provider(
     secrets: ref.watch(secretStoreProvider),
     mutex: ref.watch(prefsMutexProvider),
     variant: 'lite',
+    // When this install last updated its engine: restored on a new phone
+    // it would skip the update the shipped yt-dlp needs.
+    deviceOnlyKeys: const {EnginePreparer.updatedAtKey},
   ),
 );
 

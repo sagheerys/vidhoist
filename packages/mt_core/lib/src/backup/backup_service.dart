@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../constants/mt_constants.dart';
+import '../download/local_pending.dart';
 import '../download/pending_downloads.dart';
 import '../download/trashcan_probe.dart';
 import '../storage/artwork_index.dart';
@@ -31,7 +32,15 @@ class BackupService {
     required this.secrets,
     required this.mutex,
     required this.variant,
+    this.deviceOnlyKeys = const {},
   });
+
+  /// The app's own keys that are about this device, not the person, kept
+  /// out of every backup as [_deviceOnlyKeys] are.
+  final Set<String> deviceOnlyKeys;
+
+  bool _deviceOnly(String key) =>
+      _deviceOnlyKeys.contains(key) || deviceOnlyKeys.contains(key);
 
   final KeyValueStore store;
   final SecretStore secrets;
@@ -55,6 +64,9 @@ class BackupService {
   static const _deviceOnlyKeys = {
     KeptCoverIndex.keptKey,
     PendingDownloadsStore.prefsKey,
+    // The on-device engine's unfinished downloads: their partial files are
+    // here, and elsewhere each would start again from nothing.
+    LocalPendingStore.key,
     TrashcanProbe.prefsKey,
     UpdatePrefs.lastSeenVersionKey,
     UpdatePrefs.notesKey,
@@ -125,7 +137,7 @@ class BackupService {
   Future<String> exportToString() => mutex.run(() async {
     final prefsMap = <String, dynamic>{};
     for (final key in await store.keys()) {
-      if (_deviceOnlyKeys.contains(key)) continue;
+      if (_deviceOnly(key)) continue;
       final cell = _encodeCell(_sanitize(await store.get(key)));
       if (cell != null) prefsMap[key] = cell;
     }
@@ -207,7 +219,7 @@ class BackupService {
         for (final entry in prefs.entries) {
           // A file written by this version carries none; one edited by
           // hand, or by a build between two releases, might.
-          if (_deviceOnlyKeys.contains(entry.key.toString())) continue;
+          if (_deviceOnly(entry.key.toString())) continue;
           if (await _applyCell(entry.key.toString(), entry.value)) restored++;
         }
         if (format == BackupFormat.legacyLite ||

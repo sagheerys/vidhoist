@@ -6,4 +6,5 @@
     <string name="shortcut_shorts_long">فتح المقاطع القصيرة</string>
     <string name="shortcut_audio_short">الصوتيات</string>
     <string name="shortcut_audio_long">فتح مكتبة الصوتيات</string>
+    <string name="engine_channel">تنزيلات جارية</string>
 </resources>

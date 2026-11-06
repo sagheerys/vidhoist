@@ -33,8 +33,10 @@ class SettingsNavTile extends StatelessWidget {
   );
 }
 
-class _SwitchTile extends StatelessWidget {
-  const _SwitchTile({
+/// A setting turned on or off, with what it does under its name.
+class SettingsSwitchTile extends StatelessWidget {
+  const SettingsSwitchTile({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.value,
@@ -113,23 +115,29 @@ class DownloadFields extends ConsumerWidget {
         // filled in the add sheet and the user re-chose it every time. With
         // "quick download" it becomes the actual decision, and the sheet is
         // skipped entirely.
-        _SwitchTile(
+        SettingsSwitchTile(
           title: l10n.quickDownload,
           subtitle: l10n.quickDownloadHelp,
           value: settings.quickDownload,
           onChanged: notifier.setQuickDownload,
         ),
-        _SwitchTile(
+        SettingsSwitchTile(
           title: l10n.wifiOnly,
           subtitle: l10n.wifiOnlyHelp,
           value: settings.wifiOnly,
           onChanged: notifier.setWifiOnly,
         ),
-        _SwitchTile(
+        SettingsSwitchTile(
           title: l10n.autoRetry,
           subtitle: l10n.autoRetryHelp,
           value: settings.autoRetry,
           onChanged: notifier.setAutoRetry,
+        ),
+        SettingsSwitchTile(
+          title: l10n.mobileSubtitles,
+          subtitle: l10n.mobileSubtitlesHelp,
+          value: settings.subtitles,
+          onChanged: notifier.setSubtitles,
         ),
       ],
     );
@@ -146,13 +154,13 @@ class PlaybackFields extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
     return Column(
       children: [
-        _SwitchTile(
+        SettingsSwitchTile(
           title: l10n.compatiblePlayback,
           subtitle: l10n.compatiblePlaybackHelp,
           value: settings.compatiblePlayback,
           onChanged: ref.read(settingsProvider.notifier).setCompatiblePlayback,
         ),
-        _SwitchTile(
+        SettingsSwitchTile(
           title: l10n.pictureInPicture,
           subtitle: l10n.pictureInPictureHelp,
           value: settings.pictureInPicture,

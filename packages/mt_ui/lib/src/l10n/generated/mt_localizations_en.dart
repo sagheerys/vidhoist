@@ -136,7 +136,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get autoRetryHelp =>
-      'Anything that failed because the network dropped is retried on its own when it returns. Server refusals are not retried: repeating them unchanged just fails again.';
+      'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.';
 
   @override
   String get autoSwitchDisabledHint =>
@@ -329,7 +329,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get compatiblePlaybackHelp =>
-      'Asks the server for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.';
+      'Asks for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.';
 
   @override
   String get completed => 'Completed';
@@ -2239,6 +2239,75 @@ class MTLocalizationsEn extends MTLocalizations {
   String get vidhoistCredit => 'The self-hosted server this app is a client for';
 
   @override
+  String get mobileEngineIpv4 => 'Connect over IPv4';
+
+  @override
+  String get mobileEngineIpv4Help =>
+      'Avoids a long stall on networks whose IPv6 route is broken. Turn it off only if your network has IPv6 alone.';
+
+  @override
+  String mobileEngineLastUpdate(String when) {
+    return 'Last updated $when';
+  }
+
+  @override
+  String get mobileEngineNotReady => 'Getting ready…';
+
+  @override
+  String get mobileEngineUpToDate => 'yt-dlp is up to date';
+
+  @override
+  String get mobileEngineUpdate => 'Update yt-dlp';
+
+  @override
+  String get mobileEngineUpdateFailed =>
+      'Couldn\'t update yt-dlp. Check the connection and try again.';
+
+  @override
+  String get mobileEngineUpdating => 'Updating…';
+
+  @override
+  String get mobileEngineVersionUnknown =>
+      'Its version shows after the first update';
+
+  @override
+  String get mobileSettingsEngine => 'Download engine';
+
+  @override
+  String get mobileSettingsGroupEngine => 'Engine';
+
+  @override
+  String get mobileSubtitles => 'Download subtitles';
+
+  @override
+  String get mobileSubtitlesHelp =>
+      'Arabic and English subtitles, when the video has them, saved beside it and shown in the player.';
+
+  @override
+  String get mobileWelcomeBody =>
+      'Videos and audio from the sites you use, saved straight to this phone. The download engine is getting ready; this happens only once.';
+
+  @override
+  String get mobileWelcomeFailed =>
+      'The engine couldn\'t start. Try again; if it keeps failing, reinstall the app.';
+
+  @override
+  String get mobileWelcomeStart => 'Start';
+
+  @override
+  String get mobileWelcomeTitle => 'Welcome to Vidhoist';
+
+  @override
+  String get mobileWelcomeUnpacking => 'Preparing the download engine';
+
+  @override
+  String get mobileWelcomeUpdateFailed =>
+      'Couldn\'t update now. Vidhoist tries again before your first download.';
+
+  @override
+  String get mobileWelcomeUpdating => 'Updating yt-dlp to its latest version';
+
+  @override
   String get modeAutoNext => 'Auto';
 
   @override
@@ -3554,7 +3623,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get wifiOnlyHelp =>
-      'Stops pulling files to your device over mobile data. Tasks wait and resume automatically on Wi-Fi.';
+      'Nothing downloads over mobile data. Downloads wait for Wi-Fi, and one under way when Wi-Fi drops is paused and goes on by itself when it returns.';
 
   @override
   String get yourChannels => 'Your channels';

@@ -15,6 +15,7 @@ import 'features/downloads_library/local_item.dart';
 import 'features/settings/settings_state.dart';
 import 'features/shared/error_report.dart';
 import 'features/shared/stores.dart';
+import 'features/update/update_state.dart';
 import 'features/player/square_art.dart';
 
 /// Bootstrap only: storage, the settings snapshot, the background audio
@@ -54,7 +55,7 @@ Future<void> main() async {
     ),
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'com.yasir.vidhoistlite.audio',
-      androidNotificationChannelName: 'Vidhoist Lite',
+      androidNotificationChannelName: 'Vidhoist',
       // **`false` is forced by the package**, whose own assertion says an
       // ongoing flag "will make no effect with androidStopForegroundOnPause
       // set to false": a live foreground service already makes its
@@ -85,19 +86,17 @@ Future<void> main() async {
   handler.squareArt = squareArtFor;
   await handler.loadPreferences();
 
-  // **Sweeping orphaned partials:** killing the app mid-way
-  // through a large pull leaves a `.part` nobody cleans, and the library
-  // scan ignores it on purpose, so the space is lost unseen. We do not
-  // await it: startup never waits on a cleanup.
-  unawaited(logger.log('app started (lite)', tag: 'app'));
+  unawaited(logger.log('app started', tag: 'app'));
+  final abis = await readDeviceAbis();
 
-  // **Sweeping orphaned partials:** killing the app mid-way
-  // through a large pull leaves a `.part` nobody cleans, and the library
-  // scan ignores it on purpose, so the space is lost unseen. We do not
-  // await it: startup never waits on a cleanup.
+  // **Sweeping orphaned partials:** a download nobody will resume leaves
+  // its pieces, and the library scan ignores them on purpose, so the space
+  // is lost unseen. Three days, not hours: a paused download goes on from
+  // its partial file. Startup never waits on a cleanup.
   unawaited(
     sweepPartialFiles(
       liteMediaDir,
+      olderThan: const Duration(days: 3),
     ).then((count) => count == 0 ? null : logger.log('swept $count partials')),
   );
 
@@ -111,6 +110,7 @@ Future<void> main() async {
         playbackResolverProvider.overrideWithValue(resolver),
         audioHandlerProvider.overrideWithValue(handler),
         loggerProvider.overrideWithValue(logger),
+        deviceAbisProvider.overrideWithValue(abis),
       ],
       child: const LiteApp(),
     ),

@@ -62,6 +62,7 @@ class UpdateRelease {
     required String assetMarker,
     String extension = '.apk',
     bool Function(Uri link) trusted = fromGitHub,
+    List<String> abis = const [],
   }) {
     Object? decoded;
     try {
@@ -85,6 +86,7 @@ class UpdateRelease {
     if (assets is! List) return null;
     final marker = assetMarker.toLowerCase();
     final ending = extension.toLowerCase();
+    final matching = <_Asset>[];
     for (final asset in assets) {
       if (asset is! Map<String, dynamic>) continue;
       final name = asset['name'];
@@ -101,21 +103,56 @@ class UpdateRelease {
       // the Windows installer that shares the release, or Windows an APK.
       if (!lower.endsWith(ending) || !lower.contains(marker)) continue;
       final size = asset['size'];
-      return UpdateRelease(
-        version: version,
-        tag: tag,
-        apkUrl: url,
-        apkSize: size is int ? size : 0,
-        notes: decoded['body'] is String ? decoded['body'] as String : '',
-        pageUrl: switch (UrlKit.webUri(decoded['html_url']?.toString())) {
-          final page? when fromGitHub(page) => page.toString(),
-          _ => '',
-        },
-        publishedAt: decoded['published_at'] is String
-            ? DateTime.tryParse(decoded['published_at'] as String)
-            : null,
-      );
+      matching.add((name: lower, url: url, size: size is int ? size : 0));
+    }
+    final chosen = abis.isEmpty
+        ? matching.firstOrNull
+        : _forAbis(matching, abis);
+    if (chosen == null) return null;
+    return UpdateRelease(
+      version: version,
+      tag: tag,
+      apkUrl: chosen.url,
+      apkSize: chosen.size,
+      notes: decoded['body'] is String ? decoded['body'] as String : '',
+      pageUrl: switch (UrlKit.webUri(decoded['html_url']?.toString())) {
+        final page? when fromGitHub(page) => page.toString(),
+        _ => '',
+      },
+      publishedAt: decoded['published_at'] is String
+          ? DateTime.tryParse(decoded['published_at'] as String)
+          : null,
+    );
+  }
+
+  /// Android's processor families, as `Build.SUPPORTED_ABIS` names them.
+  static const knownAbis = [
+    'arm64-v8a',
+    'armeabi-v7a',
+    'armeabi',
+    'x86_64',
+    'x86',
+  ];
+
+  /// An ABI as a whole word of a file name: `armeabi` is not found inside
+  /// `armeabi-v7a`, nor `x86` inside `x86_64`.
+  static bool _names(String name, String abi) =>
+      RegExp('(^|[^a-z0-9])${RegExp.escape(abi.toLowerCase())}(?![a-z0-9_-])')
+          .hasMatch(name);
+
+  /// The file built for the phone's first ABI that has one, else a single
+  /// file for every phone; never one built for a processor the phone lacks.
+  static _Asset? _forAbis(List<_Asset> matching, List<String> abis) {
+    for (final abi in abis) {
+      for (final asset in matching) {
+        if (_names(asset.name, abi)) return asset;
+      }
+    }
+    for (final asset in matching) {
+      if (!knownAbis.any((abi) => _names(asset.name, abi))) return asset;
     }
     return null;
   }
 }
+
+typedef _Asset = ({String name, String url, int size});

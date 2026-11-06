@@ -1,7 +1,10 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mt_ui/mt_ui.dart' show MTPalette;
 
-/// Download notifications: progress while pulling, completion whose tap
+/// A button on a download's notification: its id comes back to the app.
+typedef NoticeAction = ({String id, String label});
+
+/// Download notifications: progress while downloading, completion whose tap
 /// opens the app and highlights the item, and errors. A silent channel for
 /// progress and another for the result, so the phone does not ring at every
 /// percentage.
@@ -14,9 +17,16 @@ class DownloadNotifications {
 
   final FlutterLocalNotificationsPlugin _plugin;
 
+  /// What a progress notification carries, so its buttons know their task.
+  static const _taskPrefix = 'task:';
+
   /// Called once at startup. [onOpenItem] carries the completed item's key
-  /// for the app to highlight.
-  Future<void> init({void Function(String itemKey)? onOpenItem}) async {
+  /// for the app to highlight; [onTaskAction] a button pressed on a
+  /// download's notification, with its task.
+  Future<void> init({
+    void Function(String itemKey)? onOpenItem,
+    void Function(String action, String taskId)? onTaskAction,
+  }) async {
     await _plugin.initialize(
       settings: const InitializationSettings(
         // The status bar draws this icon from its alpha alone: a white
@@ -26,7 +36,15 @@ class DownloadNotifications {
       ),
       onDidReceiveNotificationResponse: (response) {
         final payload = response.payload;
-        if (payload != null && payload.isNotEmpty) onOpenItem?.call(payload);
+        if (payload == null || payload.isEmpty) return;
+        if (payload.startsWith(_taskPrefix)) {
+          final action = response.actionId;
+          if (action != null) {
+            onTaskAction?.call(action, payload.substring(_taskPrefix.length));
+          }
+          return;
+        }
+        onOpenItem?.call(payload);
       },
     );
   }
@@ -51,10 +69,13 @@ class DownloadNotifications {
     required String channelName,
     required int? percent,
     String? body,
+    String? taskId,
+    List<NoticeAction> buttons = const [],
   }) => _plugin.show(
     id: id,
     title: title,
     body: body,
+    payload: taskId == null ? null : '$_taskPrefix$taskId',
     notificationDetails: NotificationDetails(
       android: AndroidNotificationDetails(
         progressChannelId,
@@ -68,6 +89,12 @@ class DownloadNotifications {
         progress: (percent ?? 0).clamp(0, 100),
         ongoing: true,
         playSound: false,
+        // Pause and resume without opening the app: the engine lives in
+        // the same process while the foreground service holds it.
+        actions: [
+          for (final b in buttons)
+            AndroidNotificationAction(b.id, b.label, cancelNotification: false),
+        ],
       ),
     ),
   );

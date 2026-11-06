@@ -1,10 +1,13 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mt_ui/mt_ui.dart';
 
+import 'di.dart';
 import 'features/audio/audio_screen.dart';
 import 'features/batch/batch_screen.dart';
 import 'features/settings/language_screen.dart';
 import 'features/downloads_library/library_screen.dart';
+import 'features/engine/welcome_screen.dart';
 import 'features/player/player_screen.dart';
 import 'features/player/reels_screen.dart';
 import 'features/playlists/playlist_details_screen.dart';
@@ -22,7 +25,16 @@ final router = GoRouter(
   // add button, which used to be drawn over every bottom sheet and dialog,
   // covering their content (field report).
   observers: [MTRouteDepth.instance],
+  // A first run readies the engine before anything else opens.
+  redirect: (context, state) => welcomeRedirect(
+    welcomed: ProviderScope.containerOf(
+      context,
+      listen: false,
+    ).read(settingsProvider).welcomed,
+    location: state.matchedLocation,
+  ),
   routes: [
+    GoRoute(path: '/welcome', builder: (_, _) => const WelcomeScreen()),
     StatefulShellRoute(
       builder: (context, state, navigationShell) =>
           ShellScreen(navigationShell: navigationShell),

@@ -8,14 +8,6 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/home/handled_links.dart';
 import 'package:vidhoist_mobile/features/home/reception.dart';
 
-/// A server that is never reached: the engine's `beforeAdd` below holds
-/// every task before its first request.
-class _NoServer implements VidhoistApi {
-  @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnimplementedError('${invocation.memberName}');
-}
-
 /// Field report 2026-10-20: the clipboard bar kept offering a link that
 /// had already been downloaded, on every return to the app and after a
 /// restart, and an older clipboard read could overwrite a newer one.
@@ -122,17 +114,14 @@ void main() {
 
   group('a link given to the download engine', () {
     late ProviderContainer container;
-    late DownloadEngine engine;
+    late LocalDownloadEngine engine;
 
     setUp(() {
       container = build();
-      final hold = Completer<void>();
-      engine = DownloadEngine(
-        api: _NoServer(),
-        policy: DeletePolicy.keepOnServer,
-        pullToDevice: false,
-        savePathBuilder: (_, _) => throw StateError('no pull'),
-        beforeAdd: (_) => hold.future,
+      // Held at its first event: nothing here is about finishing.
+      engine = LocalDownloadEngine(
+        backend: FakeBackend(hold: true),
+        folderFor: (_) => '/downloads',
       );
       final wiring = Provider((ref) => noteSubmittedLinks(ref, engine));
       container.read(wiring);

@@ -10,7 +10,7 @@ import 'package:vidhoist_mobile/features/settings/settings_page.dart';
 import 'package:vidhoist_mobile/features/settings/settings_screen.dart';
 import 'package:vidhoist_mobile/features/settings/settings_sections.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:vidhoist_mobile/features/settings/widgets/server_fields.dart';
+import 'package:vidhoist_mobile/features/settings/widgets/engine_fields.dart';
 import 'package:vidhoist_mobile/features/settings/widgets/settings_fields.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
@@ -81,7 +81,7 @@ void main() {
   ) async {
     await at(tester, const Size(411, 914));
     expect(find.byType(SettingsHub), findsNothing);
-    expect(find.byType(ServerFields), findsNothing);
+    expect(find.byType(EngineFields), findsNothing);
     expect(find.byType(MTSettingsRow), findsWidgets);
   });
 
@@ -98,7 +98,7 @@ void main() {
     await at(tester, const Size(411, 2000));
     final l10n = l10nOf(tester);
     final titles = {
-      SettingsPane.server: l10n.serverConfiguration,
+      SettingsPane.engine: l10n.mobileSettingsEngine,
       SettingsPane.downloads: l10n.settingsDownloads,
       SettingsPane.playback: l10n.settingsPlayback,
       SettingsPane.appearance: l10n.appearanceAndLanguage,
@@ -138,8 +138,6 @@ void main() {
       tester,
       const Size(411, 2000),
       settings: const LiteSettings(
-        serverUrl: 'http://nas.local:8081',
-        username: 'alice',
         quality: Quality.q720,
         wifiOnly: true,
         themeMode: ThemeMode.dark,
@@ -147,7 +145,6 @@ void main() {
       ),
     );
     final l10n = l10nOf(tester);
-    expect(find.text(mtMetaLine(['nas.local:8081', 'alice'])), findsOneWidget);
     expect(
       find.text(mtMetaLine([l10n.quality720, l10n.settingsValueWifiOnly])),
       findsOneWidget,
@@ -156,24 +153,30 @@ void main() {
     expect(find.text(mtMetaLine([l10n.themeDark, 'English'])), findsOneWidget);
   });
 
-  testWidgets('a server not set up yet says so on its row', (tester) async {
+  testWidgets('no server row any more: the engine is on the phone', (
+    tester,
+  ) async {
     await at(tester, const Size(411, 914));
-    expect(find.text(l10nOf(tester).settingsValueNotSet), findsOneWidget);
+    final l10n = l10nOf(tester);
+    expect(find.text(l10n.serverConfiguration), findsNothing);
+    expect(find.text(l10n.mobileSettingsEngine), findsOneWidget);
+    // Before its first update the library cannot tell its version.
+    expect(find.text(l10n.mobileEngineVersionUnknown), findsOneWidget);
   });
 
-  testWidgets('a tablet on its side opens the server pane beside the list', (
+  testWidgets('a tablet on its side opens the engine pane beside the list', (
     tester,
   ) async {
     await at(tester, const Size(1280, 800));
     expect(find.byType(SettingsHub), findsOneWidget);
-    expect(find.byType(ServerFields), findsOneWidget);
+    expect(find.byType(EngineFields), findsOneWidget);
     expect(find.byType(DownloadFields), findsNothing);
     final l10n = l10nOf(tester);
 
     await tester.tap(find.text(l10n.settingsDownloads));
     await tester.pumpAndSettle();
     expect(find.byType(DownloadFields), findsOneWidget);
-    expect(find.byType(ServerFields), findsNothing);
+    expect(find.byType(EngineFields), findsNothing);
 
     await tester.tap(find.text(l10n.settingsPlayback));
     await tester.pumpAndSettle();
@@ -192,7 +195,7 @@ void main() {
     tester,
   ) async {
     for (final pane in const [
-      SettingsPane.server,
+      SettingsPane.engine,
       SettingsPane.downloads,
       SettingsPane.playback,
       SettingsPane.appearance,

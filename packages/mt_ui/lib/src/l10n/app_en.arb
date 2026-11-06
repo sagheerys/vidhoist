@@ -213,6 +213,13 @@
       }
     }
   },
+  "@mobileEngineLastUpdate": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "@newFromSubscriptions": {
     "placeholders": {
       "count": {
@@ -506,7 +513,7 @@
   "autoCheckUpdatesHelp": "Looks for a new version in the background about twice a day.",
   "autoRestoreSuccess": "Data restored from the backup.",
   "autoRetry": "Retry when the network returns",
-  "autoRetryHelp": "Anything that failed because the network dropped is retried on its own when it returns. Server refusals are not retried: repeating them unchanged just fails again.",
+  "autoRetryHelp": "Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.",
   "autoSwitchDisabledHint": "Auto-switching is off, so the app uses the single Server URL from Settings.",
   "autoUrlSwitching": "Automatic URL switching",
   "autoUrlSwitchingDesc": "Connect through the local URL when it is reachable, and use external connections elsewhere",
@@ -580,7 +587,7 @@
   "columnLength": "Length",
   "compactView": "Compact view",
   "compatiblePlayback": "Best playback compatibility",
-  "compatiblePlaybackHelp": "Asks the server for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.",
+  "compatiblePlaybackHelp": "Asks for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.",
   "completed": "Completed",
   "connectionFailed": "Connection failed",
   "connectionSuccessful": "Connected. Settings saved.",
@@ -1188,6 +1195,26 @@
   "mediaAccessOpenSettings": "Open settings",
   "mediaAccessTitle": "Allow access to your media",
   "vidhoistCredit": "The self-hosted server this app is a client for",
+  "mobileEngineIpv4": "Connect over IPv4",
+  "mobileEngineIpv4Help": "Avoids a long stall on networks whose IPv6 route is broken. Turn it off only if your network has IPv6 alone.",
+  "mobileEngineLastUpdate": "Last updated {when}",
+  "mobileEngineNotReady": "Getting ready…",
+  "mobileEngineUpToDate": "yt-dlp is up to date",
+  "mobileEngineUpdate": "Update yt-dlp",
+  "mobileEngineUpdateFailed": "Couldn't update yt-dlp. Check the connection and try again.",
+  "mobileEngineUpdating": "Updating…",
+  "mobileEngineVersionUnknown": "Its version shows after the first update",
+  "mobileSettingsEngine": "Download engine",
+  "mobileSettingsGroupEngine": "Engine",
+  "mobileSubtitles": "Download subtitles",
+  "mobileSubtitlesHelp": "Arabic and English subtitles, when the video has them, saved beside it and shown in the player.",
+  "mobileWelcomeBody": "Videos and audio from the sites you use, saved straight to this phone. The download engine is getting ready; this happens only once.",
+  "mobileWelcomeFailed": "The engine couldn't start. Try again; if it keeps failing, reinstall the app.",
+  "mobileWelcomeStart": "Start",
+  "mobileWelcomeTitle": "Welcome to Vidhoist",
+  "mobileWelcomeUnpacking": "Preparing the download engine",
+  "mobileWelcomeUpdateFailed": "Couldn't update now. Vidhoist tries again before your first download.",
+  "mobileWelcomeUpdating": "Updating yt-dlp to its latest version",
   "modeAutoNext": "Auto",
   "modeRepeatAll": "Repeat all",
   "modeRepeatOne": "Repeat one",
@@ -1583,7 +1610,7 @@
   },
   "whatsNewUnavailable": "What changed in this version is on the release page.",
   "wifiOnly": "Download over Wi-Fi only",
-  "wifiOnlyHelp": "Stops pulling files to your device over mobile data. Tasks wait and resume automatically on Wi-Fi.",
+  "wifiOnlyHelp": "Nothing downloads over mobile data. Downloads wait for Wi-Fi, and one under way when Wi-Fi drops is paused and goes on by itself when it returns.",
   "yourChannels": "Your channels",
   "yourChannelsHint": "Followed in Settings or the player",
   "yourLibrary": "Your library",

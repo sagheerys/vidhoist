@@ -6,6 +6,7 @@ import 'mt_done_motion.dart';
 import 'mt_polish.dart';
 
 import '../icons/mt_icon.dart';
+import '../icons/mt_icon_data.dart';
 import '../icons/mt_icons.dart';
 import '../wahaj/mt_progress.dart';
 
@@ -24,7 +25,11 @@ class MTDownloadProgressCard extends StatelessWidget {
     this.detail,
     this.waiting = false,
     this.done = false,
+    this.action,
   });
+
+  /// A second button before the cancel, such as pause or resume.
+  final MTDownloadCardAction? action;
 
   final String title;
   final String statusText;
@@ -179,21 +184,18 @@ class MTDownloadProgressCard extends StatelessWidget {
               dimension: 32,
               child: Center(child: MTDrawnCheck(color: p.ok)),
             ),
-          ] else if (onCancel != null) ...[
-            const SizedBox(width: MTSpace.sm),
-            InkWell(
-              onTap: onCancel,
-              borderRadius: BorderRadius.circular(MTRadius.chip),
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: p.card.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(MTRadius.chip),
-                ),
-                child: MTIcon(MTIcons.close, size: 16, color: p.ink3),
+          ] else ...[
+            if (action case final a?) ...[
+              const SizedBox(width: MTSpace.sm),
+              Tooltip(
+                message: a.tooltip,
+                child: _CardButton(icon: a.icon, onTap: a.onTap),
               ),
-            ),
+            ],
+            if (onCancel != null) ...[
+              const SizedBox(width: MTSpace.sm),
+              _CardButton(icon: MTIcons.close, onTap: onCancel!),
+            ],
           ],
         ],
       ),
@@ -202,6 +204,46 @@ class MTDownloadProgressCard extends StatelessWidget {
 }
 
 /// The still line of a task waiting its turn.
+/// A button the app adds to a download card: what it shows, what a long
+/// press or a screen reader says, and what it does.
+class MTDownloadCardAction {
+  const MTDownloadCardAction({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  final MTIconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+}
+
+/// The card's small square buttons, cancel and the app's own.
+class _CardButton extends StatelessWidget {
+  const _CardButton({required this.icon, required this.onTap});
+
+  final MTIconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = MTThemeX.of(context).palette;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(MTRadius.chip),
+      child: Container(
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: p.card.withValues(alpha: 0.7),
+          borderRadius: BorderRadius.circular(MTRadius.chip),
+        ),
+        child: MTIcon(icon, size: 16, color: p.ink3),
+      ),
+    );
+  }
+}
+
 class _DashedLine extends StatelessWidget {
   const _DashedLine({required this.color});
 

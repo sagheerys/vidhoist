@@ -5,14 +5,15 @@ import 'package:mt_ui/mt_ui.dart';
 
 import '../../di.dart';
 import '../update/update_state.dart';
+import 'widgets/engine_fields.dart';
 import '../update/whats_new_prompt.dart';
 import 'auto_backup.dart';
 import 'settings_state.dart';
 
-/// The settings sections, in the order both shapes list them. Lite has no
-/// server addresses, subscriptions, cookies or transcripts.
+/// The settings sections, in the order both shapes list them. The download
+/// engine comes first, where the server used to be.
 enum SettingsPane {
-  server,
+  engine,
   downloads,
   playback,
   appearance,
@@ -48,13 +49,13 @@ List<(String, List<SettingsEntry>)> settingsGroups(
   final v = _Values(context, ref);
   return [
     (
-      l10n.settingsGroupServer,
+      l10n.mobileSettingsGroupEngine,
       [
         SettingsEntry(
-          SettingsPane.server,
-          MTIcons.cloud,
-          l10n.serverConfiguration,
-          v.server(),
+          SettingsPane.engine,
+          MTIcons.bolt,
+          l10n.mobileSettingsEngine,
+          v.engine(),
         ),
       ],
     ),
@@ -126,14 +127,11 @@ class _Values {
   final MTLocalizations l10n;
   final LiteSettings s;
 
-  String server() {
-    if (!s.isConfigured) return l10n.settingsValueNotSet;
-    final user = s.username?.trim() ?? '';
-    return mtMetaLine([
-      Uri.tryParse(s.serverUrl)?.authority ?? s.serverUrl,
-      user.isEmpty ? l10n.settingsValueNoPassword : user,
-    ]);
-  }
+  String engine() => engineSummary(
+    l10n,
+    ref.watch(engineStatusProvider).valueOrNull ??
+        ref.read(enginePreparerProvider).status,
+  );
 
   String downloads() => mtMetaLine([
     switch (s.quality) {

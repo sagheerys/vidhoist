@@ -127,8 +127,10 @@ yt-dlp --no-config -4 --newline --progress --no-colors
     1080p download at 40 s and left no file behind.
 16. **What the engine adds per ABI** (arm64-v8a, compressed in the APK):
     ffmpeg 33.8 MB, Python 13.4 MB, yt-dlp 3 MB, QuickJS 0.4 MB, about
-    51 MB in all. A release APK per ABI should land around 70 MB; measured
-    in batch 4. The library needs `extractNativeLibs="true"` and
+    51 MB in all. Measured in batch 4 (`flutter build apk --release
+    --split-per-abi`, shrinking on): arm64-v8a 63.5 MB, armeabi-v7a 56.9 MB,
+    x86_64 66.6 MB; the arm64 release build unpacked, updated and downloaded
+    on the phone. The library needs `extractNativeLibs="true"` and
     `jniLibs.useLegacyPackaging = true`, and its `*.zip.so` files make
     `llvm-strip` print harmless "not a valid object file" errors.
 17. The library asks for Android 7.0 (API 24) at least, the same floor as
@@ -138,8 +140,12 @@ yt-dlp --no-config -4 --newline --progress --no-colors
     upload needs an account; the stream came instead), one TikTok post
     9.2 s. The same TikTok post as on Windows is blocked for a Saudi IP and
     TikTok warns that no impersonation target is available; the X test
-    link is dead upstream. A download that goes on with the app swiped
-    away needs the foreground service of batch 4 and is measured there.
+    link is dead upstream. **With the app swiped away** (batch 4): the
+    Flutter engine is disposed (audio_service lets it go when nothing
+    plays), so a foreground service tied to it stops and yt-dlp dies
+    mid-file. A service of the process's own (`EngineService.kt`), held
+    while any run is going, kept a 1080p download through its merge to the
+    end; the next launch recorded the file, yt-dlp finding it done.
 19. **The fix is in the flow, not the engine: probe once, download from the
     probe.** `--skip-download --write-info-json` (57 s, the challenge
     solved once), then `--load-info-json <file> -f <selector>` started the

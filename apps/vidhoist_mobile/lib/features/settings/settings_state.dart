@@ -21,7 +21,28 @@ class LiteSettings {
     this.pictureInPicture = false,
     this.themeMode = ThemeMode.system,
     this.localeCode,
+    this.forceIpv4 = true,
+    this.subtitles = true,
+    this.welcomed = false,
   });
+
+  /// yt-dlp's `-4`: a broken IPv6 route stalls every download (ENGINE.md,
+  /// findings 7 and 20). Off only for a network with IPv6 alone.
+  final bool forceIpv4;
+
+  /// Subtitles fetched with the download itself, saved beside the file.
+  final bool subtitles;
+
+  /// The welcome screen has readied the engine once; a fresh install shows
+  /// it first.
+  final bool welcomed;
+
+  /// Never renamed: a renamed key shows the welcome screen again.
+  static const welcomedKey = 'engine_welcome_done';
+
+  /// What `--sub-langs` asks for: the app's two languages.
+  List<String> get subtitleLanguages =>
+      subtitles ? const ['ar.*', 'en.*'] : const [];
 
   final String serverUrl;
   final String? username;
@@ -74,6 +95,9 @@ class LiteSettings {
     bool? pictureInPicture,
     ThemeMode? themeMode,
     String? localeCode,
+    bool? forceIpv4,
+    bool? subtitles,
+    bool? welcomed,
 
     /// Distinguishes "clear the language" from "do not change it": `null`
     /// alone is not enough.
@@ -90,6 +114,9 @@ class LiteSettings {
     pictureInPicture: pictureInPicture ?? this.pictureInPicture,
     themeMode: themeMode ?? this.themeMode,
     localeCode: clearLocale ? null : (localeCode ?? this.localeCode),
+    forceIpv4: forceIpv4 ?? this.forceIpv4,
+    subtitles: subtitles ?? this.subtitles,
+    welcomed: welcomed ?? this.welcomed,
   );
 
   /// Loads the initial snapshot before runApp.
@@ -113,6 +140,9 @@ class LiteSettings {
         orElse: () => ThemeMode.system,
       ),
       localeCode: await store.getString('app_locale'),
+      forceIpv4: await store.getBool('engine_force_ipv4') ?? true,
+      subtitles: await store.getBool('download_subtitles') ?? true,
+      welcomed: await store.getBool(welcomedKey) ?? false,
     );
   }
 }
@@ -200,6 +230,21 @@ class SettingsNotifier extends Notifier<LiteSettings> {
     await _mutex.run(() => _store.setBool('picture_in_picture', enabled));
     MTPictureInPicture.instance.enabled.value = enabled;
     state = state.copyWith(pictureInPicture: enabled);
+  }
+
+  Future<void> setForceIpv4(bool enabled) async {
+    await _mutex.run(() => _store.setBool('engine_force_ipv4', enabled));
+    state = state.copyWith(forceIpv4: enabled);
+  }
+
+  Future<void> setWelcomed() async {
+    await _mutex.run(() => _store.setBool(LiteSettings.welcomedKey, true));
+    state = state.copyWith(welcomed: true);
+  }
+
+  Future<void> setSubtitles(bool enabled) async {
+    await _mutex.run(() => _store.setBool('download_subtitles', enabled));
+    state = state.copyWith(subtitles: enabled);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {

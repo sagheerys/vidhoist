@@ -22,7 +22,13 @@ class UpdateChecker {
     this.assetExtension = '.apk',
     this.repo = MTConstants.updateRepo,
     this.trustedAsset = UpdateRelease.fromGitHub,
+    this.abis = const [],
   });
+
+  /// The phone's ABIs, most preferred first (`Build.SUPPORTED_ABIS`), so a
+  /// release split per ABI hands it the file built for it; empty takes the
+  /// first file that matches.
+  final List<String> abis;
 
   /// Where this app's file may be downloaded from: GitHub over https.
   /// Tests serve a file of their own.
@@ -107,6 +113,7 @@ class UpdateChecker {
       assetMarker: assetMarker,
       extension: assetExtension,
       trusted: trustedAsset,
+      abis: abis,
     );
     if (release == null) return null;
     if (release.version <= current) return null;

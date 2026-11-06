@@ -148,7 +148,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get autoRetryHelp =>
-      'إذا فشل تحميل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه السيرفر فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.';
+      'إذا فشل تحميل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه الموقع فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.';
 
   @override
   String get autoSwitchDisabledHint =>
@@ -355,7 +355,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get compatiblePlaybackHelp =>
-      'يطلب من السيرفر صيغة H.264/AAC التي تشغّلها كل الهواتف بعتادها مباشرة. وإن أطفأته أتاح لك أعلى دقة، لكن يوتيوب قد يرسل حينها صيغة AV1 فتظهر الصورة مشوّشة على أجهزة كثيرة.';
+      'يطلب صيغة H.264/AAC التي تشغّلها كل الهواتف بعتادها مباشرة. وإن أطفأته أتاح لك أعلى دقة، لكن يوتيوب قد يرسل حينها صيغة AV1 فتظهر الصورة مشوّشة على أجهزة كثيرة.';
 
   @override
   String get completed => 'مكتمل';
@@ -2282,6 +2282,74 @@ class MTLocalizationsAr extends MTLocalizations {
   String get vidhoistCredit => 'السيرفر ذاتي الاستضافة الذي يتصل به التطبيق';
 
   @override
+  String get mobileEngineIpv4 => 'الاتصال عبر IPv4';
+
+  @override
+  String get mobileEngineIpv4Help =>
+      'يتجنّب توقّفاً طويلاً في الشبكات التي يتعطّل فيها مسار IPv6. لا توقفه إلا إن كانت شبكتك تعمل بـIPv6 وحده.';
+
+  @override
+  String mobileEngineLastUpdate(String when) {
+    return 'آخر تحديث $when';
+  }
+
+  @override
+  String get mobileEngineNotReady => 'قيد التجهيز…';
+
+  @override
+  String get mobileEngineUpToDate => 'yt-dlp بآخر إصدار';
+
+  @override
+  String get mobileEngineUpdate => 'تحديث yt-dlp';
+
+  @override
+  String get mobileEngineUpdateFailed =>
+      'تعذّر تحديث yt-dlp. تحقّق من الاتصال وأعد المحاولة.';
+
+  @override
+  String get mobileEngineUpdating => 'جارٍ التحديث…';
+
+  @override
+  String get mobileEngineVersionUnknown => 'يظهر إصداره بعد أول تحديث';
+
+  @override
+  String get mobileSettingsEngine => 'محرّك التنزيل';
+
+  @override
+  String get mobileSettingsGroupEngine => 'المحرّك';
+
+  @override
+  String get mobileSubtitles => 'تنزيل الترجمات';
+
+  @override
+  String get mobileSubtitlesHelp =>
+      'الترجمة العربية والإنجليزية إن وُجدت، تُحفظ بجانب المقطع وتظهر في المشغّل.';
+
+  @override
+  String get mobileWelcomeBody =>
+      'الفيديو والصوت من المواقع التي تستعملها، يُحفظان في هذا الجوال مباشرة. محرّك التنزيل يتجهّز الآن، ولا يحدث هذا إلا مرة واحدة.';
+
+  @override
+  String get mobileWelcomeFailed =>
+      'تعذّر تشغيل المحرّك. أعد المحاولة، وإن تكرّر الفشل فأعد تثبيت التطبيق.';
+
+  @override
+  String get mobileWelcomeStart => 'ابدأ';
+
+  @override
+  String get mobileWelcomeTitle => 'أهلاً بك في Vidhoist';
+
+  @override
+  String get mobileWelcomeUnpacking => 'تجهيز محرّك التنزيل';
+
+  @override
+  String get mobileWelcomeUpdateFailed =>
+      'تعذّر التحديث الآن، وسيحاول Vidhoist مجدداً قبل أول تنزيل.';
+
+  @override
+  String get mobileWelcomeUpdating => 'تحديث yt-dlp إلى آخر إصدار';
+
+  @override
   String get modeAutoNext => 'تلقائي';
 
   @override
@@ -3634,7 +3702,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get wifiOnlyHelp =>
-      'لا تُسحب الملفات إلى جهازك عبر بيانات الجوّال، بل تنتظر المهام وتُستأنف تلقائياً عند الاتصال بشبكة Wi‑Fi.';
+      'لا يُنزَّل شيء عبر بيانات الجوّال. تنتظر التنزيلات شبكة Wi‑Fi، وما كان جارياً حين تنقطع يتوقف مؤقتاً ثم يُستأنف وحده عند عودتها.';
 
   @override
   String get yourChannels => 'قنواتك';

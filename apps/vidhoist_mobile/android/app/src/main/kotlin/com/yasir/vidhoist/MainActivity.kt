@@ -23,6 +23,7 @@ class MainActivity : AudioServiceActivity() {
         PictureInPicture.register(this, flutterEngine.dartExecutor.binaryMessenger)
         UpdateInstaller.register(this, flutterEngine)
         ShareInbox.register(flutterEngine.dartExecutor.binaryMessenger)
+        YtDlpBridge.register(applicationContext, flutterEngine)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "vidhoist_mobile/media",
@@ -99,6 +100,10 @@ class MainActivity : AudioServiceActivity() {
                         }
                     }
                 }
+                // The processor families this phone runs, most preferred
+                // first: a release carries one APK per ABI, since the
+                // engine's Python and ffmpeg are compiled for each.
+                "supportedAbis" -> result.success(android.os.Build.SUPPORTED_ABIS.toList())
                 // The launcher shortcut's destination, **consumed once**.
                 // Keeping it would re-run the shortcut on every return to the
                 // app.

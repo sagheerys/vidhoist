@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
-import 'package:vidhoist_mobile/features/settings/settings_screen.dart';
+import 'package:vidhoist_mobile/features/settings/widgets/server_keeps_files_notice.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
@@ -37,7 +37,11 @@ void main() {
         localizationsDelegates: MTLocalizations.localizationsDelegates,
         supportedLocales: MTLocalizations.supportedLocales,
         theme: mtTheme(MTVariant.lite, Brightness.light),
-        home: const SettingsScreen(),
+        // Off the settings since the engine moved to the phone; tested on
+        // its own until the server layer goes in batch 6.
+        home: const Scaffold(
+          body: SingleChildScrollView(child: ServerKeepsFilesNotice()),
+        ),
       ),
     );
   }
@@ -47,9 +51,7 @@ void main() {
   ) async {
     await tester.pumpWidget(host(keeps: true));
     await tester.pumpAndSettle();
-    final l10n = MTLocalizations.of(
-      tester.element(find.byType(SettingsScreen)),
-    );
+    final l10n = MTLocalizations.of(tester.element(find.byType(Scaffold)));
     expect(find.text(l10n.serverKeepsFilesTitle), findsOneWidget);
 
     await tester.pumpWidget(host(keeps: false));

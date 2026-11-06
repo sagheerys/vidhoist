@@ -317,7 +317,7 @@ abstract class MTLocalizations {
   /// No description provided for @autoRetryHelp.
   ///
   /// In en, this message translates to:
-  /// **'Anything that failed because the network dropped is retried on its own when it returns. Server refusals are not retried: repeating them unchanged just fails again.'**
+  /// **'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.'**
   String get autoRetryHelp;
 
   /// No description provided for @autoSwitchDisabledHint.
@@ -635,7 +635,7 @@ abstract class MTLocalizations {
   /// No description provided for @compatiblePlaybackHelp.
   ///
   /// In en, this message translates to:
-  /// **'Asks the server for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.'**
+  /// **'Asks for H.264/AAC, which every phone decodes in hardware. Without it YouTube may deliver AV1, which many devices render as a garbled picture. Turning it off allows the highest resolution at the cost of compatibility.'**
   String get compatiblePlaybackHelp;
 
   /// No description provided for @completed.
@@ -3830,6 +3830,126 @@ abstract class MTLocalizations {
   /// **'The self-hosted server this app is a client for'**
   String get vidhoistCredit;
 
+  /// No description provided for @mobileEngineIpv4.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect over IPv4'**
+  String get mobileEngineIpv4;
+
+  /// No description provided for @mobileEngineIpv4Help.
+  ///
+  /// In en, this message translates to:
+  /// **'Avoids a long stall on networks whose IPv6 route is broken. Turn it off only if your network has IPv6 alone.'**
+  String get mobileEngineIpv4Help;
+
+  /// No description provided for @mobileEngineLastUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated {when}'**
+  String mobileEngineLastUpdate(String when);
+
+  /// No description provided for @mobileEngineNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting ready…'**
+  String get mobileEngineNotReady;
+
+  /// No description provided for @mobileEngineUpToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'yt-dlp is up to date'**
+  String get mobileEngineUpToDate;
+
+  /// No description provided for @mobileEngineUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update yt-dlp'**
+  String get mobileEngineUpdate;
+
+  /// No description provided for @mobileEngineUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update yt-dlp. Check the connection and try again.'**
+  String get mobileEngineUpdateFailed;
+
+  /// No description provided for @mobileEngineUpdating.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating…'**
+  String get mobileEngineUpdating;
+
+  /// No description provided for @mobileEngineVersionUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Its version shows after the first update'**
+  String get mobileEngineVersionUnknown;
+
+  /// No description provided for @mobileSettingsEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Download engine'**
+  String get mobileSettingsEngine;
+
+  /// No description provided for @mobileSettingsGroupEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine'**
+  String get mobileSettingsGroupEngine;
+
+  /// No description provided for @mobileSubtitles.
+  ///
+  /// In en, this message translates to:
+  /// **'Download subtitles'**
+  String get mobileSubtitles;
+
+  /// No description provided for @mobileSubtitlesHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic and English subtitles, when the video has them, saved beside it and shown in the player.'**
+  String get mobileSubtitlesHelp;
+
+  /// No description provided for @mobileWelcomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Videos and audio from the sites you use, saved straight to this phone. The download engine is getting ready; this happens only once.'**
+  String get mobileWelcomeBody;
+
+  /// No description provided for @mobileWelcomeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The engine couldn\'t start. Try again; if it keeps failing, reinstall the app.'**
+  String get mobileWelcomeFailed;
+
+  /// No description provided for @mobileWelcomeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get mobileWelcomeStart;
+
+  /// No description provided for @mobileWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Vidhoist'**
+  String get mobileWelcomeTitle;
+
+  /// No description provided for @mobileWelcomeUnpacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing the download engine'**
+  String get mobileWelcomeUnpacking;
+
+  /// No description provided for @mobileWelcomeUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update now. Vidhoist tries again before your first download.'**
+  String get mobileWelcomeUpdateFailed;
+
+  /// No description provided for @mobileWelcomeUpdating.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating yt-dlp to its latest version'**
+  String get mobileWelcomeUpdating;
+
   /// No description provided for @modeAutoNext.
   ///
   /// In en, this message translates to:
@@ -6017,7 +6137,7 @@ abstract class MTLocalizations {
   /// No description provided for @wifiOnlyHelp.
   ///
   /// In en, this message translates to:
-  /// **'Stops pulling files to your device over mobile data. Tasks wait and resume automatically on Wi-Fi.'**
+  /// **'Nothing downloads over mobile data. Downloads wait for Wi-Fi, and one under way when Wi-Fi drops is paused and goes on by itself when it returns.'**
   String get wifiOnlyHelp;
 
   /// No description provided for @yourChannels.
