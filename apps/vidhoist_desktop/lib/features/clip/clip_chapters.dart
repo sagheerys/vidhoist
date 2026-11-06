@@ -66,12 +66,7 @@ class _ClipChaptersState extends ConsumerState<ClipChapters> {
   Widget build(BuildContext context) {
     final item = widget.item;
     final transcript = ref
-        .watch(
-          transcriptForProvider((
-            canonicalUrl: item.canonicalUrl,
-            serverFilename: item.serverFilename,
-          )),
-        )
+        .watch(transcriptForProvider(item.canonicalUrl))
         .valueOrNull;
     if (transcript != _from) {
       _from = transcript;

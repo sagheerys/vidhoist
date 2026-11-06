@@ -46,9 +46,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get activeNow => 'نشط الآن';
 
   @override
-  String get addEndpoint => 'أضف عنواناً';
-
-  @override
   String get addLinkFab => 'إضافة رابط';
 
   @override
@@ -65,7 +62,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String addedNToServer(int count) {
-    return 'أُضيف $count إلى السيرفر';
+    return 'أُضيف $count إلى التنزيلات';
   }
 
   @override
@@ -75,9 +72,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String addedToPlaylistCount(int count) {
     return 'أُضيف $count إلى القائمة';
   }
-
-  @override
-  String get addingToServer => 'جارٍ الإرسال إلى السيرفر…';
 
   @override
   String get allDownloadsFinished => 'اكتملت جميع التحميلات';
@@ -124,9 +118,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get audioStereo => 'ستيريو';
 
   @override
-  String get authHelper => 'اتركه فارغاً إن كان السيرفر بلا كلمة مرور';
-
-  @override
   String get authentication => 'تسجيل الدخول (اختياري)';
 
   @override
@@ -151,27 +142,10 @@ class MTLocalizationsAr extends MTLocalizations {
       'إذا فشل تحميل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه الموقع فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.';
 
   @override
-  String get autoSwitchDisabledHint =>
-      'التبديل التلقائي مُعطّل، لذا يستخدم التطبيق عنوان السيرفر المحدد في الإعدادات.';
-
-  @override
-  String get autoUrlSwitching => 'التبديل التلقائي للعنوان';
-
-  @override
-  String get autoUrlSwitchingDesc =>
-      'يتصل بالعنوان المحلي متى أمكن الوصول إليه، وبالعنوان الخارجي فيما عدا ذلك';
-
-  @override
   String get availability => 'التوفّر';
 
   @override
   String get availabilityOffline => 'بلا اتصال (نسخة محلية)';
-
-  @override
-  String get availabilityServer => 'السيرفر (بث)';
-
-  @override
-  String get availableOfflineNow => 'صار متاحاً دون اتصال';
 
   @override
   String get backgroundDownload => 'جارٍ تحميل الملفات في الخلفية…';
@@ -216,9 +190,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get batchNothingSelected => 'اختر عنصراً واحداً على الأقل';
 
   @override
-  String get batchSaveToDevice => 'احفظ نسخة على الجهاز';
-
-  @override
   String batchSelectedOf(int selected, int total) {
     return 'حُدِّد $selected من $total';
   }
@@ -244,9 +215,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get cancel => 'إلغاء';
-
-  @override
-  String get cancelSaveToDevice => 'إيقاف الحفظ في الجوال';
 
   @override
   String get changeQuality => 'تغيير الجودة';
@@ -321,9 +289,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get chooseOptions => 'خيارات';
 
   @override
-  String get cleaningServer => 'جارٍ تنظيف السيرفر...';
-
-  @override
   String get clear => 'مسح';
 
   @override
@@ -361,12 +326,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get completed => 'مكتمل';
 
   @override
-  String get connectionFailed => 'فشل الاتصال';
-
-  @override
-  String get connectionSuccessful => 'نجح الاتصال وحُفظت الإعدادات';
-
-  @override
   String get continueAsAudio => 'متابعة بالصوت فقط';
 
   @override
@@ -383,19 +342,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get cookies => 'الكوكيز';
 
   @override
-  String get cookiesAbsent => 'السيرفر بلا كوكيز';
-
-  @override
-  String get cookiesDelete => 'احذف الكوكيز';
-
-  @override
-  String get cookiesDeleteBody =>
-      'سيتوقف السيرفر عن استعمالها، وستعود المنصات التي تشترط تسجيل الدخول إلى رفض التحميل.';
-
-  @override
-  String get cookiesDeleted => 'حُذفت الكوكيز من السيرفر';
-
-  @override
   String get cookiesHelp =>
       'ثبّت في متصفحك إضافة تصدّر الكوكيز بصيغة Netscape، وصدّر ملفاً لكل منصة، ثم اختر الملفات هنا. سيستعملها السيرفر بعد ذلك في كل تحميل، ويقرر yt-dlp متى يحتاج إليها. وللكوكيز مدة صلاحية، فإذا عاد التحميل إلى الفشل فغالباً حان وقت تصديرها من جديد.';
 
@@ -404,40 +350,7 @@ class MTLocalizationsAr extends MTLocalizations {
       'لا يحوي أيٌّ من هذه الملفات كوكيز بصيغة Netscape';
 
   @override
-  String get cookiesPresent => 'على السيرفر كوكيز';
-
-  @override
-  String get cookiesPrivacy =>
-      'يُرسَل الملف إلى سيرفرك مباشرة ولا يُحفظ على هذا الجوال أبداً. ولأنه بمثابة مفتاح لحساباتك، فلا ترفعه إلا إلى سيرفر تملكه.';
-
-  @override
-  String get cookiesReplace => 'استبدل ملفات الكوكيز';
-
-  @override
-  String get cookiesReplaceNote =>
-      'كل رفع جديد يحلّ محل ملف الكوكيز على السيرفر بالكامل، فإن أردت الإبقاء على عدة منصات فاختر ملفاتها كلها معاً في كل مرة، ومنها ما رفعته من قبل. ولاختيار أكثر من ملف، اضغط مطولاً على أول ملف.';
-
-  @override
-  String cookiesSentFor(String sites) {
-    return 'أُرسلت كوكيز المنصات: $sites';
-  }
-
-  @override
   String get cookiesSubtitle => 'للمنصات التي ترفض التحميل بلا تسجيل دخول';
-
-  @override
-  String get cookiesTooLarge =>
-      'حجم هذا الملف يتجاوز 1 ميغابايت، وهو الحد الأقصى الذي يقبله السيرفر.';
-
-  @override
-  String get cookiesUnknown =>
-      'إصدار Vidhoist على سيرفرك لا يتيح معرفة وجود الكوكيز من عدمه';
-
-  @override
-  String get cookiesUpload => 'اختر ملفات الكوكيز';
-
-  @override
-  String get cookiesUploaded => 'أُرسلت الكوكيز إلى السيرفر';
 
   @override
   String get cookiesWhat =>
@@ -445,21 +358,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get copiedToClipboard => 'نُسِخ إلى الحافظة';
-
-  @override
-  String copyingToPhone(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count مقطع إلى الجوال',
-      many: '$count مقطعاً إلى الجوال',
-      few: '$count مقاطع إلى الجوال',
-      two: 'مقطعان إلى الجوال',
-      one: 'مقطع واحد إلى الجوال',
-      zero: 'لا مقاطع',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get copyright => '© 2026 ياسر صغير';
@@ -482,12 +380,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get delete => 'حذف';
-
-  @override
-  String get deleteFromServer => 'حذف من السيرفر';
-
-  @override
-  String get deleteFromServerConfirm => 'إزالة هذا العنصر من السيرفر؟';
 
   @override
   String deleteMultipleConfirm(int count) {
@@ -524,9 +416,6 @@ class MTLocalizationsAr extends MTLocalizations {
   }
 
   @override
-  String get deletedFromServer => 'حُذف من السيرفر';
-
-  @override
   String deletedTitle(Object title) {
     return 'تم الحذف: $title';
   }
@@ -548,49 +437,6 @@ class MTLocalizationsAr extends MTLocalizations {
     );
     return '$_temp0';
   }
-
-  @override
-  String get desktopAddressAdd => 'أضف';
-
-  @override
-  String get desktopAddressInUse => 'قيد الاستعمال';
-
-  @override
-  String get desktopAddressInvalid => 'ليس عنواناً صالحاً، أو أنه في القائمة';
-
-  @override
-  String get desktopAddressNew => 'عنوان جديد، مثل https://vidhoist.example.com';
-
-  @override
-  String get desktopAddressStatusNotVidhoist => 'ليس سيرفر Vidhoist';
-
-  @override
-  String get desktopAddressStatusOk => 'يستجيب';
-
-  @override
-  String get desktopAddressStatusRefused => 'يرفض كلمة المرور';
-
-  @override
-  String get desktopAddressStatusUnreachable => 'لا يمكن الوصول إليه';
-
-  @override
-  String get desktopAddressTest => 'اختبار';
-
-  @override
-  String get desktopAddressUse => 'استعمل';
-
-  @override
-  String get desktopAddresses => 'العناوين';
-
-  @override
-  String get desktopAddressesHint =>
-      'يستعمل التطبيق العنوان الذي تختاره، ولا يبدّله من تلقاء نفسه.';
-
-  @override
-  String get desktopAskEachTime => 'اسألني كل مرة';
-
-  @override
-  String get desktopAskEachTimeHint => 'يسألك Windows عن المجلد عند كل تنزيل.';
 
   @override
   String get desktopBack => 'رجوع';
@@ -668,6 +514,13 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopChannelsInLibrary => 'قنوات في مكتبتك';
 
   @override
+  String get desktopChannelsLater => 'ليست في هذا الإصدار';
+
+  @override
+  String get desktopChannelsLaterBody =>
+      'متابعة القنوات تحتاج مُجدولاً على هذا الكمبيوتر، ويأتي في إصدار لاحق. ما تنزّله من مقاطع يبقى في المكتبة.';
+
+  @override
   String get desktopChapters => 'الفصول';
 
   @override
@@ -678,9 +531,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get desktopClearFilters => 'إلغاء التصفية';
-
-  @override
-  String get desktopClearFinished => 'إخفاء المنتهية';
 
   @override
   String get desktopClearSelection => 'إلغاء التحديد';
@@ -718,24 +568,13 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopCookiesNone => 'بلا';
 
   @override
-  String get desktopCookiesPrivacy =>
-      'تُرسَل الملفات إلى سيرفرك مباشرة ولا تُحفظ على هذا الكمبيوتر أبداً. ولأنها بمثابة مفاتيح لحساباتك، فلا ترسلها إلا إلى سيرفر تملكه.';
-
-  @override
   String get desktopCookiesRemove => 'إزالة';
-
-  @override
-  String get desktopCookiesReplaceNote =>
-      'كل رفع جديد يحلّ محل ملف الكوكيز على السيرفر بالكامل، فإن أردت الإبقاء على عدة منصات فاختر ملفاتها كلها معاً في كل مرة، ومنها ما رفعته من قبل. ولاختيار أكثر من ملف، اضغط Ctrl أثناء النقر.';
 
   @override
   String get desktopCopiedLinkAdd => 'إضافة…';
 
   @override
-  String get desktopCopiedLinkTitle => 'أتضيف هذا الرابط إلى السيرفر؟';
-
-  @override
-  String get desktopCopyCancelled => 'أُلغي';
+  String get desktopCopiedLinkTitle => 'أتنزّل هذا الرابط؟';
 
   @override
   String get desktopCopyFile => 'نسخ الملف';
@@ -744,30 +583,10 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopCopyFileFailed => 'تعذّر نسخ الملف';
 
   @override
-  String get desktopCopyFileLarge => 'ملف كبير';
-
-  @override
-  String desktopCopyFileLargeMessage(String size) {
-    return 'حجم هذا المقطع $size. يُحفظ أولاً في مجلد التنزيل ثم يُنسخ، وكثير من برامج المحادثة يرفض ملفاً بهذا الحجم.';
-  }
-
-  @override
-  String desktopCopyFileNoSpace(String needed, String free) {
-    return 'المساحة على القرص لا تكفي: الملف $needed والمتاح $free';
-  }
-
-  @override
-  String get desktopCopyFilePreparing =>
-      'يُجهَّز الملف للنسخ، وتقدّمه في التنزيلات';
-
-  @override
   String get desktopCopyLink => 'نسخ الرابط';
 
   @override
   String get desktopCopyOneClip => 'النسخ لمقطع واحد في كل مرة';
-
-  @override
-  String get desktopCopyQueued => 'ينتظر دوره';
 
   @override
   String get desktopCopyQuote => 'انسخ مع الوقت والرابط';
@@ -781,14 +600,11 @@ class MTLocalizationsAr extends MTLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'حذف $count مقطع من السيرفر؟ تبقى نسخها على هذا الكمبيوتر إن وُجدت.',
-      many:
-          'حذف $count مقطعاً من السيرفر؟ تبقى نسخها على هذا الكمبيوتر إن وُجدت.',
-      few:
-          'حذف $count مقاطع من السيرفر؟ تبقى نسخها على هذا الكمبيوتر إن وُجدت.',
-      two: 'حذف مقطعين من السيرفر؟ تبقى نسختاهما على هذا الكمبيوتر إن وُجدتا.',
-      one: 'حذف مقطع واحد من السيرفر؟ تبقى نسخته على هذا الكمبيوتر إن وُجدت.',
+      other: 'حذف $count مقطع؟ تُحذف ملفاتها من هذا الكمبيوتر.',
+      many: 'حذف $count مقطعاً؟ تُحذف ملفاتها من هذا الكمبيوتر.',
+      few: 'حذف $count مقاطع؟ تُحذف ملفاتها من هذا الكمبيوتر.',
+      two: 'حذف مقطعين؟ يُحذف ملفاهما من هذا الكمبيوتر.',
+      one: 'حذف مقطع واحد؟ يُحذف ملفه من هذا الكمبيوتر.',
     );
     return '$_temp0';
   }
@@ -913,14 +729,6 @@ class MTLocalizationsAr extends MTLocalizations {
       'ملفاتك الخاصة: تُحفظ هنا، ثم لا يتدخل فيها التطبيق.';
 
   @override
-  String get desktopDownloadTo => 'تنزيل…';
-
-  @override
-  String desktopDownloading(int percent) {
-    return 'يُنزَّل · $percent٪';
-  }
-
-  @override
   String get desktopDownloads => 'التحميلات';
 
   @override
@@ -942,7 +750,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get desktopEmptyLibraryMessage =>
-      'أضِف رابطاً فيظهر المقطع هنا بعد أن ينزّله السيرفر.';
+      'أضِف رابطاً فيظهر المقطع هنا بعد تنزيله.';
 
   @override
   String get desktopEngine => 'المحرّك';
@@ -1240,9 +1048,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopListeningRoom => 'غرفة الاستماع';
 
   @override
-  String get desktopLocalCopyRemoved => 'أُزيلت النسخة المحلية';
-
-  @override
   String get desktopLogsCopied => 'نُسخ السجل بلا روابط ولا عناوين';
 
   @override
@@ -1281,14 +1086,10 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get desktopNoOfflineMessage =>
-      'اختر «إتاحة دون اتصال» من قائمة مقطع، فيعمل هنا دون السيرفر.';
+      'المقطع الذي يُنزَّل إلى هذا الكمبيوتر يعمل من هنا، ويظهر في هذه القائمة.';
 
   @override
   String get desktopNoOfflineTitle => 'لا شيء محفوظ على هذا الكمبيوتر بعد';
-
-  @override
-  String get desktopNoServerMessage =>
-      'اربط التطبيق بسيرفر Vidhoist فتظهر مكتبته هنا.';
 
   @override
   String get desktopNoTags =>
@@ -1296,7 +1097,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get desktopNoTranscriptMessage =>
-      'يظهر هنا حين يحفظ السيرفر ترجمة المقطع.';
+      'يظهر هنا حين تُنزَّل ترجمة المقطع معه.';
 
   @override
   String get desktopNoTranscriptTitle => 'لا نص لهذا المقطع';
@@ -1327,9 +1128,6 @@ class MTLocalizationsAr extends MTLocalizations {
       'شغّل مقطعاً فيظهر هنا نصه وما يليه وتفاصيله.';
 
   @override
-  String get desktopNoticeSaved => 'حُفظ على هذا الكمبيوتر';
-
-  @override
   String get desktopNotifyArrivalsHint =>
       'إشعار من Windows حين تصل إلى السيرفر مقاطع جديدة من القنوات التي تتابعها.';
 
@@ -1343,18 +1141,6 @@ class MTLocalizationsAr extends MTLocalizations {
   @override
   String desktopOfflineCount(int count) {
     return 'دون اتصال: $count';
-  }
-
-  @override
-  String get desktopOfflineFolder => 'مجلد «دون اتصال»';
-
-  @override
-  String get desktopOfflineFolderHint =>
-      'نسخ يعرفها التطبيق ويشغّلها دون السيرفر، ويحذفها «إزالة النسخة المحلية».';
-
-  @override
-  String desktopOfflineProgress(int percent) {
-    return 'دون اتصال · $percent٪';
   }
 
   @override
@@ -1408,9 +1194,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopPlaysNext => 'سيُشغَّل بعد الحالي';
 
   @override
-  String get desktopPullAfter => 'ثم نزّله إلى هذا الكمبيوتر';
-
-  @override
   String get desktopQueueEnd => 'لا شيء بعد هذا المقطع';
 
   @override
@@ -1456,7 +1239,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get desktopRestoreBody =>
-      'تصبح وسوم هذا الكمبيوتر وقوائمه وإعداداته كما في النسخة، ولا يُمسّ السيرفر.';
+      'تصبح وسوم هذا الكمبيوتر وقوائمه وإعداداته كما في النسخة، ولا تُمسّ الملفات المنزّلة.';
 
   @override
   String get desktopRestoreTitle => 'استعادة هذه النسخة؟';
@@ -1485,16 +1268,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopSavedSearchName => 'اسم البحث';
 
   @override
-  String desktopSavingOffline(int percent) {
-    return 'يُحفظ دون اتصال · $percent٪';
-  }
-
-  @override
-  String desktopSavingTo(String folder) {
-    return 'يُحفظ في $folder';
-  }
-
-  @override
   String get desktopSearch => 'البحث';
 
   @override
@@ -1521,72 +1294,7 @@ class MTLocalizationsAr extends MTLocalizations {
   }
 
   @override
-  String get desktopServerFolders => 'بالمجلدات نفسها التي على السيرفر';
-
-  @override
-  String get desktopServerFoldersHint =>
-      'مثلاً: المقطع الذي في مجلد «أطفال» على السيرفر يُحفظ في مجلد بالاسم نفسه هنا.';
-
-  @override
-  String get desktopServerPartMissing =>
-      'السيرفر لا يستجيب، فهذا ما كان فيه آخر مرة.';
-
-  @override
-  String get desktopServerVersion => 'نسخة السيرفر';
-
-  @override
-  String get desktopSetupAgain => 'إعداد من جديد';
-
-  @override
   String get desktopSetupChooseFile => 'اختر ملفاً…';
-
-  @override
-  String get desktopSetupConnect => 'اتصل';
-
-  @override
-  String get desktopSetupEnter => 'أدخل العنوان';
-
-  @override
-  String get desktopSetupFoundNone =>
-      'لم يستجب أي سيرفر Vidhoist على هذه المنافذ.';
-
-  @override
-  String get desktopSetupHttpWarning =>
-      'العنوان الذي يبدأ بـ http:// خارج شبكة البيت يُرسل كلمة المرور دون تشفير.';
-
-  @override
-  String get desktopSetupImport => 'استيراد من الجوال';
-
-  @override
-  String get desktopSetupImportHint =>
-      'اختر نسخة احتياطية من Vidhoist Super: يُقترح عنوان سيرفرها هنا، وتُضاف وسومها وقوائمها.';
-
-  @override
-  String get desktopSetupLater => 'لاحقاً';
-
-  @override
-  String get desktopSetupNeedsPassword => 'يحتاج كلمة مرور';
-
-  @override
-  String get desktopSetupNoServer => 'ليس عندك سيرفر؟';
-
-  @override
-  String get desktopSetupPorts => 'المنافذ';
-
-  @override
-  String get desktopSetupSearch => 'ابحث في شبكتي';
-
-  @override
-  String get desktopSetupSearchHint =>
-      'يبحث عن Vidhoist في شبكة هذا الكمبيوتر، حين تنقر فقط.';
-
-  @override
-  String desktopSetupSearching(int percent) {
-    return 'جارٍ البحث… $percent٪';
-  }
-
-  @override
-  String get desktopSetupTitle => 'اربط البرنامج بسيرفر Vidhoist';
 
   @override
   String get desktopShortcutsApp => 'التطبيق';
@@ -1768,9 +1476,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get desktopTheater => 'وضع المسرح';
-
-  @override
-  String get desktopToThisComputer => 'إلى هذا الكمبيوتر';
 
   @override
   String get desktopTranscriptFirst => 'اجلب نصّه أولاً';
@@ -1958,20 +1663,10 @@ class MTLocalizationsAr extends MTLocalizations {
   String get emptyLibraryMessage => 'أضِف رابط فيديو، أو اسحب للتحديث.';
 
   @override
-  String get emptyOfflineMessage =>
-      'اختر «إتاحة دون اتصال» من قائمة مقطع، فيعمل هنا دون السيرفر.';
-
-  @override
-  String get emptyOfflineTitle => 'لا شيء محفوظ على هذا الجوال بعد';
-
-  @override
   String get emptyPlaylist => 'قائمة فارغة';
 
   @override
   String get emptyPlaylistMessage => 'أضِف فيديوهات من المكتبة';
-
-  @override
-  String get endpointUrl => 'عنوان السيرفر الخارجي';
 
   @override
   String engineDownloadingProgress(Object percent) {
@@ -2021,37 +1716,15 @@ class MTLocalizationsAr extends MTLocalizations {
   String get enterFullscreen => 'ملء الشاشة';
 
   @override
-  String get errAuth => 'اسم المستخدم أو كلمة المرور خاطئة';
-
-  @override
-  String get errFileGone =>
-      'الملف لم يعد على السيرفر. أعد المحاولة لتحميله من جديد.';
-
-  @override
-  String get errNetwork => 'تعذر الوصول للسيرفر';
-
-  @override
-  String get errNoApi =>
-      'العنوان يستجيب، لكن لا تعمل عليه واجهة Vidhoist البرمجية';
-
-  @override
-  String get errNotVidhoist => 'هذا العنوان ليس سيرفر Vidhoist';
+  String get errNetwork => 'تعذّر الاتصال بالموقع';
 
   @override
   String get errPlatformBlocked =>
-      'المنصة تطلب تسجيل الدخول، وعلى مدير السيرفر تحديث الكوكيز';
+      'المنصة تطلب تسجيل الدخول، ولا يُنزَّل هذا المقطع بدونه';
 
   @override
   String get errPlatformBlockedCookies =>
       'المنصة تطلب تسجيل الدخول. ارفع ملف كوكيز من الإعدادات ← الكوكيز';
-
-  @override
-  String get errPollTimeout => 'تأخّر ردّ السيرفر، فأعد المحاولة.';
-
-  @override
-  String errServer(Object message) {
-    return 'خطأ من السيرفر: $message';
-  }
 
   @override
   String errorGeneric(Object message) {
@@ -2085,13 +1758,6 @@ class MTLocalizationsAr extends MTLocalizations {
       'نسخة مؤرَّخة لإرسالها أو حفظها في مكان آخر';
 
   @override
-  String get externalNetworkDesc =>
-      'إن تعذّر الوصول إلى العنوان المحلي، جرّب التطبيق العناوين أدناه بالترتيب من الأعلى، واتصل بأول عنوان يستجيب.';
-
-  @override
-  String get externalNetworkSection => 'شبكة خارجية';
-
-  @override
   String get externalPlayerShort => 'مشغل خارجي';
 
   @override
@@ -2122,9 +1788,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get filterOffline => 'بلا اتصال';
 
   @override
-  String get filterServer => 'السيرفر';
-
-  @override
   String get filterVideo => 'فيديو';
 
   @override
@@ -2134,16 +1797,8 @@ class MTLocalizationsAr extends MTLocalizations {
   String get folder => 'المجلد';
 
   @override
-  String get foldersDisabled =>
-      'هذا السيرفر لا يسمح بالمجلدات: الخيار CUSTOM_DIRS مطفأ في إعداداته.';
-
-  @override
   String get foldersHelp =>
-      'يُنشأ المجلد على السيرفر داخل التنزيلات، ويُحفظ المقطع فيه مباشرة، فتراه في مشاركة الشبكة وفي أي برنامج آخر. اتركه «بلا مجلد» فلا يتغير شيء. ولتعمل المجلدات يحتاج السيرفر أمرين: أن يكون CUSTOM_DIRS مفعّلاً، وهو الافتراضي في Vidhoist، وألا يكون في YTDL_OPTIONS المفتاح outtmpl، لأنه يحفظ كل ملف أعلى التنزيلات أياً كان المجلد المختار. ولتسمية الملفات بطريقتك استعمل OUTPUT_TEMPLATE بدلاً منه. دليل الإعداد فيه الأسطر.';
-
-  @override
-  String get foldersIgnored =>
-      'هذا السيرفر يحفظ كل ملف أعلى التنزيلات أياً كان المجلد المختار، لأن في YTDL_OPTIONS عنده outtmpl. دليل الإعداد يشرح نقله إلى OUTPUT_TEMPLATE.';
+      'يُنشأ المجلد داخل مجلد التنزيل، ويُحفظ المقطع فيه مباشرة، فتراه في المستكشف وفي أي برنامج آخر. اتركه «بلا مجلد» فيذهب المقطع إلى أعلى مجلد التنزيل.';
 
   @override
   String get follow => 'متابعة';
@@ -2230,19 +1885,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get listenInBackground => 'الاستماع في الخلفية';
 
   @override
-  String get localCopyRemoved => 'أُزيلت النسخة المحلية';
-
-  @override
-  String get localNetworkDesc =>
-      'يتصل التطبيق بالسيرفر عبر هذا العنوان متى أمكن الوصول إليه.';
-
-  @override
-  String get localNetworkSection => 'شبكة محلية';
-
-  @override
-  String get localUrlLabel => 'عنوان السيرفر المحلي';
-
-  @override
   String get lockTouch => 'قفل اللمس';
 
   @override
@@ -2251,12 +1893,6 @@ class MTLocalizationsAr extends MTLocalizations {
   @override
   String get logsSanitizedNote =>
       'تُحذف الروابط والعناوين وبيانات الدخول قبل المشاركة';
-
-  @override
-  String get madeOffline => 'صار متاحاً دون اتصال';
-
-  @override
-  String get makeOffline => 'إتاحة دون اتصال';
 
   @override
   String get manageTags => 'إدارة الوسوم';
@@ -2279,7 +1915,8 @@ class MTLocalizationsAr extends MTLocalizations {
   String get mediaAccessTitle => 'اسمح بالوصول إلى الوسائط';
 
   @override
-  String get vidhoistCredit => 'السيرفر ذاتي الاستضافة الذي يتصل به التطبيق';
+  String get vidhoistCredit =>
+      'أداة التنزيل ذاتية الاستضافة التي جاء Vidhoist من تطبيقاتها';
 
   @override
   String get mobileEngineIpv4 => 'الاتصال عبر IPv4';
@@ -2382,13 +2019,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get needsAttention => 'تحتاج انتباهك';
 
   @override
-  String get networkSettings => 'الشبكات';
-
-  @override
-  String get networkSettingsSubtitle =>
-      'التبديل التلقائي بين عناوين السيرفر المحلية والخارجية';
-
-  @override
   String get neverChecked => 'لم يُتحقَّق بعد';
 
   @override
@@ -2396,21 +2026,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get newFolderHint => 'مثال: Ai/دروس';
-
-  @override
-  String newFromSubscriptions(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count مقطع جديد من قنواتك',
-      many: '$count مقطعاً جديداً من قنواتك',
-      few: '$count مقاطع جديدة من قنواتك',
-      two: 'مقطعان جديدان من قنواتك',
-      one: 'مقطع جديد من قناة تتابعها',
-      zero: 'لا جديد',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get newPlaylistAction => 'قائمة جديدة';
@@ -2456,11 +2071,7 @@ class MTLocalizationsAr extends MTLocalizations {
   String get noResultsMessage => 'لا توجد عناصر مطابقة لبحثك.';
 
   @override
-  String get noServerMessage =>
-      'أدخل رابط سيرفر Vidhoist من الإعدادات لبدء التحميل';
-
-  @override
-  String get noServerTitle => 'لا سيرفر بعد';
+  String get noServerTitle => 'محرك التنزيل غير جاهز';
 
   @override
   String get noTagsYet => 'لا وسوم بعد، أنشئ أول وسم من الأسفل.';
@@ -2476,19 +2087,7 @@ class MTLocalizationsAr extends MTLocalizations {
       'لا صلة للتطبيق بمشروع yt-dlp ولا بأي منصة محتوى، ولا يحظى بتأييدها.';
 
   @override
-  String notEnoughSpace(String needed, String free) {
-    return 'لا تتسع ذاكرة الجوال: يحتاج $needed والمتاح $free';
-  }
-
-  @override
   String get nothingHereYet => 'لا يوجد شيء بعد';
-
-  @override
-  String get notifyArrivals => 'نبّهني بما يصل تلقائياً';
-
-  @override
-  String get notifyArrivalsDesc =>
-      'يصلك إشعار واحد حين تصل إلى السيرفر مقاطع جديدة من قناة تتابعها، ويظهر عند فتح التطبيق أو العودة إليه أو تحديث المكتبة، لا أثناء عمله في الخلفية.';
 
   @override
   String get nowPlaying => 'قيد التشغيل';
@@ -2504,14 +2103,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get ok => 'حسناً';
-
-  @override
-  String get onServerPhase => 'على السيرفر';
-
-  @override
-  String onServerProgress(Object percent) {
-    return 'على السيرفر · $percent٪';
-  }
 
   @override
   String get onlyNewVideos =>
@@ -2531,7 +2122,7 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get ownFolderNote =>
-      'مجلد داخل تنزيلات السيرفر، تراه في مشاركة الشبكة وفي أي برنامج آخر. يذهب إليه ما ينزل من الآن فقط، وما نزل قبله يبقى مكانه.';
+      'مجلد داخل مجلد التنزيل، تراه في المستكشف وفي أي برنامج آخر. يذهب إليه ما ينزل من الآن فقط، وما نزل قبله يبقى مكانه.';
 
   @override
   String get password => 'كلمة المرور';
@@ -2549,9 +2140,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String percentValue(Object percent) {
     return '$percent٪';
   }
-
-  @override
-  String get phoneCopiesSection => 'إلى الجوال';
 
   @override
   String get pickAnotherFile => 'من ملف آخر…';
@@ -2633,14 +2221,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get previous => 'السابق';
-
-  @override
-  String get pullingToDevice => 'جارٍ الحفظ في الجهاز…';
-
-  @override
-  String pullingToDeviceProgress(Object percent) {
-    return 'جارٍ الحفظ في الجهاز · $percent٪';
-  }
 
   @override
   String get quality => 'الجودة';
@@ -2786,46 +2366,7 @@ class MTLocalizationsAr extends MTLocalizations {
   String get remove => 'إزالة';
 
   @override
-  String removedFailed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'أُزيل $count تحميل فاشل',
-      many: 'أُزيل $count تحميلاً فاشلاً',
-      few: 'أُزيلت $count تحميلات فاشلة',
-      two: 'أُزيل تحميلان فاشلان',
-      one: 'أُزيل تحميل فاشل واحد',
-      zero: 'لا شيء لإزالته: لم تعد فاشلة',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get removeFailed => 'أزل الفاشلة';
-
-  @override
-  String get removeFailedBody =>
-      'يُزال من قائمة السيرفر ما فشل فقط. وكل ما اكتمل، وهو ما تعرضه مكتبتك، يبقى كما هو تماماً.';
-
-  @override
-  String removeFailedTitle(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'إزالة $count تحميل فاشل؟',
-      many: 'إزالة $count تحميلاً فاشلاً؟',
-      few: 'إزالة $count تحميلات فاشلة؟',
-      two: 'إزالة تحميلين فاشلين؟',
-      one: 'إزالة تحميل فاشل واحد؟',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get removeFromFavorites => 'إزالة من المفضلة';
-
-  @override
-  String get removeLocalCopy => 'إزالة النسخة المحلية';
 
   @override
   String removeUnavailable(int count) {
@@ -2890,12 +2431,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get saveSettings => 'حفظ الإعدادات';
 
   @override
-  String get saveToDevice => 'حفظ في الجهاز';
-
-  @override
-  String get savedOnDevice => 'محفوظ في الجهاز';
-
-  @override
   String get searchLogs => 'بحث في السجلّات…';
 
   @override
@@ -2921,112 +2456,7 @@ class MTLocalizationsAr extends MTLocalizations {
   }
 
   @override
-  String get serverConfiguration => 'إعداد السيرفر';
-
-  @override
-  String serverFailuresLine(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count تحميل لم يكتمل على السيرفر',
-      many: '$count تحميلاً لم يكتمل على السيرفر',
-      few: '$count تحميلات لم تكتمل على السيرفر',
-      two: 'تحميلان لم يكتملا على السيرفر',
-      one: 'تحميل واحد لم يكتمل على السيرفر',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get serverFailuresNote =>
-      'أوقفها السيرفر بخطأ، سواء أُضيفت من هذا الجوال أو من اشتراك أو من صفحة Vidhoist.';
-
-  @override
-  String get serverFailuresTitle => 'لم تكتمل على السيرفر';
-
-  @override
-  String serverFilesCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ملفاً على السيرفر',
-      few: '$count ملفات على السيرفر',
-      two: 'ملفان على السيرفر',
-      one: 'ملف واحد على السيرفر',
-      zero: 'لا ملفات على السيرفر',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get serverKeepsFilesBody =>
-      'يُحذف العنصر من السجل لكن ملفه يبقى على القرص، فتمتلئ مساحة السيرفر. اضبط DELETE_FILE_ON_TRASHCAN=true في حاوية Vidhoist.';
-
-  @override
-  String get serverKeepsFilesTitle => 'خادمك لا يحذف الملفات';
-
-  @override
-  String serverQueueCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count في الانتظار',
-      few: '$count في الانتظار',
-      two: 'اثنان في الانتظار',
-      one: 'واحد في الانتظار',
-      zero: '',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get serverSearchHint =>
-      'يبحث عن Vidhoist في شبكة Wi‑Fi التي يتصل بها هذا الجوال، حين تنقر فقط.';
-
-  @override
-  String get serverStatusChecking => 'جارٍ فحص الاتصال…';
-
-  @override
-  String get serverStatusConnected => 'متصل بالسيرفر';
-
-  @override
-  String get serverStatusOffline => 'تعذّر الوصول للخادم';
-
-  @override
-  String get serverStatusUnconfigured => 'لم يُضبط السيرفر';
-
-  @override
-  String get serverUnreachableLocalHint =>
-      'ما زال بإمكانك تشغيل المقاطع المحفوظة على هاتفك.';
-
-  @override
   String get serverUrl => 'رابط السيرفر (Vidhoist)';
-
-  @override
-  String get serverUrlHelpBody =>
-      'عنوان خادم Vidhoist، مثل http://192.168.1.10:8081. في المنزل استخدم عنوان IP المحلي مع HTTP العادي، ومن خارج المنزل استخدم عنوان HTTPS (مثل Cloudflare Tunnel).';
-
-  @override
-  String get serverUrlHelpTitle => 'حول رابط السيرفر';
-
-  @override
-  String get serverUrlHint => 'http://192.168.1.5:8086 أو https://domain.com';
-
-  @override
-  String get serverUrlRequired => 'رابط السيرفر مطلوب';
-
-  @override
-  String serverVersionLabel(String version) {
-    return 'Vidhoist $version';
-  }
-
-  @override
-  String serverVersionOutdated(String latest) {
-    return 'يتوفر تحديث: $latest';
-  }
-
-  @override
-  String get serverVersionUnknown => 'الإصدار غير معروف';
 
   @override
   String get settings => 'الإعدادات';
@@ -3044,9 +2474,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get settingsGroupData => 'البيانات';
 
   @override
-  String get settingsGroupServer => 'السيرفر';
-
-  @override
   String get settingsPlayback => 'التشغيل';
 
   @override
@@ -3054,12 +2481,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get settingsTranscripts => 'النصوص والترجمة';
-
-  @override
-  String get settingsValueArrivals => 'إشعار بما يصل';
-
-  @override
-  String get settingsValueAuto => 'تلقائي';
 
   @override
   String settingsValueChannels(int count) {
@@ -3083,18 +2504,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get settingsValueCompatOn => 'أفضل توافق: مفعّل';
 
   @override
-  String get settingsValueExternalNow => 'الخارجي الآن';
-
-  @override
-  String get settingsValueLocalNow => 'المحلي الآن';
-
-  @override
-  String get settingsValueManual => 'يدوي';
-
-  @override
-  String get settingsValueNoPassword => 'بلا كلمة مرور';
-
-  @override
   String get settingsValueNotSet => 'لم يُضبط بعد';
 
   @override
@@ -3113,41 +2522,10 @@ class MTLocalizationsAr extends MTLocalizations {
   String get settingsValueWifiOnly => 'Wi‑Fi فقط';
 
   @override
-  String get setupServer => 'إعداد السيرفر';
-
-  @override
   String get share => 'مشاركة';
 
   @override
-  String get shareGoesOn =>
-      'التجهيز مستمر في الخلفية، وتُفتح قائمة المشاركة حين يجهز. تقدّمه في التنزيلات.';
-
-  @override
-  String get shareLargeBody =>
-      'يُنزَّل إلى هذا الجوال أولاً، ثم تُفتح قائمة المشاركة.';
-
-  @override
-  String shareLargeTitle(String size) {
-    return 'تنزيل $size للمشاركة؟';
-  }
-
-  @override
   String get shareLogs => 'مشاركة السجلات';
-
-  @override
-  String get shareMessagingLimit =>
-      'واتساب وتيليجرام يقبلان حتى 2 GB؛ وللأكبر استعمل Drive أو Quick Share.';
-
-  @override
-  String get sharePreparing => 'تجهيز المشاركة';
-
-  @override
-  String shareProgressOf(String received, String total) {
-    return '$received من $total';
-  }
-
-  @override
-  String get shareReady => 'جاهز للمشاركة';
 
   @override
   String get shareSelected => 'مشاركة المحدد';
@@ -3165,10 +2543,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get signInRequired => 'يلزم تسجيل الدخول';
-
-  @override
-  String get signInRequiredHint =>
-      'رفض السيرفر بيانات الدخول المحفوظة. حدّث اسم المستخدم وكلمة المرور في الإعدادات.';
 
   @override
   String get size => 'الحجم';
@@ -3254,13 +2628,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get subscriptionsSubtitle => 'قنوات يتابعها السيرفر نيابةً عنك';
-
-  @override
-  String get subscriptionsUnsupported => 'نسخة Vidhoist لديك لا تدعم الاشتراكات';
-
-  @override
-  String get subscriptionsUnsupportedBody =>
-      'حدّث حاوية Vidhoist إلى إصدار يدعم اشتراكات القنوات، ثم عد إلى هنا. بقية ميزات التطبيق تعمل كالمعتاد.';
 
   @override
   String get subtitles => 'الترجمة على الفيديو';
@@ -3370,9 +2737,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get tagsOpenFiltered => 'تفتح المكتبة مصفّاةً بالوسم';
-
-  @override
-  String get testingConnection => 'جارٍ اختبار الاتصال…';
 
   @override
   String get theme => 'السمة';
@@ -3593,9 +2957,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get updateChecking => 'جارٍ التحقق…';
-
-  @override
-  String get updateCredentials => 'تحديث بيانات الدخول';
 
   @override
   String get updateDownloadFailed => 'تعذّر تنزيل التحديث';

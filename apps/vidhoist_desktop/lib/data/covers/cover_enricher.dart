@@ -7,28 +7,26 @@ import 'package:mt_media/library.dart';
 import 'cover_shrink.dart';
 import 'mp4_cover.dart';
 
-/// Where a clip's bytes are read from: a range reader on the server's own
-/// file, or null when the clip is not there.
+/// Where a clip's bytes are read from: a range reader on its file on this
+/// computer, or null when the file is not there.
 typedef ReaderFor = RangeReader? Function(LibraryItem item);
 
 /// A picture the player's engine takes from a clip's own file: a video's
 /// frame, or the cover embedded in an audio file; null when none came.
 typedef FrameFor = Future<Uint8List?> Function(LibraryItem item);
 
-/// Covers the server never names, kept on this computer: **the picture
-/// embedded in an audio file**, read from the server by ranges for M4A and
-/// by the engine for the rest, and for a video **a frame of the video
-/// itself** ([FrameFor]).
+/// Covers the history never names, kept on this computer: **the picture
+/// embedded in an audio file**, read by ranges for M4A and by the engine
+/// for the rest, and for a video **a frame of the video itself**
+/// ([FrameFor]).
 ///
 /// The phone takes these from Android's media retriever, which Windows does
-/// not have. Measured on the owner's server: every audio download (M4A) has
-/// one, and reading it costs a quarter of a megabyte and a fifth of a
-/// second on the home network, a second or two through the tunnel.
+/// not have. Measured on Vidhoist's downloads: every audio download (M4A) has
+/// one, near the start of the file, so a quarter of a megabyte is read.
 ///
 /// The rules the phone keeps: a cover already known (YouTube's, or one
 /// found before) is never written over; a clip that yields none is noted in
-/// [ProbeFailureIndex] and left alone for a day; the server's password goes
-/// only to the server, since [ReaderFor] reads nothing else.
+/// [ProbeFailureIndex] and left alone for a day.
 class CoverEnricher {
   CoverEnricher({
     required this.artwork,

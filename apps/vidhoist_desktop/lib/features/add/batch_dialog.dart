@@ -11,7 +11,6 @@ import '../../data/downloads_data.dart';
 import '../../shell/shell_metrics.dart';
 import '../library/artwork.dart';
 import 'add_options.dart';
-import 'pull_after.dart';
 import '../../shell/ember_dialog.dart';
 
 /// How a playlist's clips are read; a test puts its own in.
@@ -64,11 +63,6 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
     }
     final soundOnly = list.kind == PlaylistKind.soundcloud;
     final choice = soundOnly ? _choice.copyWith(audio: true) : _choice;
-    // "Then download it to this computer" holds for every link sent here,
-    // as it does in the add dialog: shown and ignored, it was a promise
-    // the playlist broke.
-    final pull = await PullAfter.ask(ref, choice);
-    if (!pull.go || !mounted) return;
     final ids = [
       for (final url in urls)
         engine
@@ -80,7 +74,6 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
             )
             .id,
     ];
-    PullAfter.mark(ref, choice, pull.into, ids);
     if (urls.length > 1) {
       unawaited(ref.read(batchCollectorProvider).begin(list.title, ids));
     }

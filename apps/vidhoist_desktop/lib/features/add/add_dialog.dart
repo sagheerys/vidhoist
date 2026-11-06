@@ -16,7 +16,6 @@ import 'batch_dialog.dart';
 import 'link_lines.dart';
 import 'link_preview_card.dart';
 import 'links_view.dart';
-import 'pull_after.dart';
 import '../../shell/ember_dialog.dart';
 
 /// Opens the add dialog with [text] in its field: a link, or a text that
@@ -43,10 +42,6 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
   /// The links sent, each with its task, so its line follows it.
   Map<String, String> _tasks = const {};
 
-  /// The folder picked for "then download it to this computer", or null
-  /// for the download folder.
-  String? _pullInto;
-
   bool get _sent => _tasks.isNotEmpty;
 
   @override
@@ -72,22 +67,11 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
     if (mounted) showMTNotice(context, message: message, kind: kind);
   }
 
-  Future<bool> _askPullFolder() async {
-    final asked = await PullAfter.ask(ref, _choice);
-    _pullInto = asked.into;
-    return asked.go;
-  }
-
-  void _markPull(Iterable<String> taskIds) =>
-      PullAfter.mark(ref, _choice, _pullInto, taskIds);
-
   /// Several links, sent together with the one choice for all.
   Future<void> _submitMany(ReadLinks read) async {
     final engine = ref.read(downloadEngineProvider);
     if (engine == null) return _notice(context.mtl.engineErrMissing);
-    if (!await _askPullFolder() || !mounted) return;
     setState(() => _tasks = LinksView.submit(engine, read, _choice));
-    _markPull(_tasks.values);
   }
 
   /// One link: a playlist goes to its own dialog, anything else is added.
@@ -102,13 +86,11 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
       navigator.pop();
       return showBatchDialog(navigator.context, resolved);
     }
-    if (!await _askPullFolder() || !mounted) return;
-    final task = engine.submit(
+    engine.submit(
       url,
       _choice.qualityFor(resolved),
       folder: _choice.folderPath,
     );
-    _markPull([task.id]);
     navigator.pop();
     _notice(l.downloadStarted, kind: MTNoticeKind.done);
   }
@@ -176,10 +158,8 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
                   choice: _choice,
                   tasks: _tasks,
                   onRemove: (line) => setState(() => _removed.add(line.url)),
-                  onRetry: (url, id) {
-                    _markPull([id]);
-                    setState(() => _tasks = {..._tasks, url: id});
-                  },
+                  onRetry: (url, id) =>
+                      setState(() => _tasks = {..._tasks, url: id}),
                 )
               else if (single case final line?)
                 switch (line.state) {

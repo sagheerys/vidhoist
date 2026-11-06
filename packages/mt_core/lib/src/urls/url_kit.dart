@@ -245,7 +245,7 @@ abstract final class UrlKit {
   }
 
   /// Is this a short link that needs redirect resolution?
-  /// (`docs/SERVER-API.md` §4.)
+  /// (`docs/ENGINE.md`, Short links.)
   ///
   /// **This list is correctness, not convenience** (field report 2026-09-20,
   /// Reddit). Vidhoist files an item under the URL **yt-dlp ended at**, and

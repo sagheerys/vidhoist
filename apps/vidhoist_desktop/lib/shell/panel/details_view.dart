@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
 import 'package:mt_media/mt_media.dart';
 import 'package:mt_ui/mt_ui.dart';
 
@@ -68,31 +67,22 @@ class DetailsView extends ConsumerWidget {
             load: ref.read(videoSurfaceProvider).quality,
           ),
           if (when != null) row(l.downloadDate, mtTimeAgo(context, when)),
-          if (entry != null) row(l.availability, _availability(l, entry)),
+          if (entry != null && entry.isOffline)
+            row(l.availability, l.availabilityOffline),
           if (folder.isNotEmpty) row(l.folder, mtName(folder)),
           if (lists.isNotEmpty)
             row(l.inPlaylists, lists.map(mtName).join(l.listSeparator)),
           if (tags.isNotEmpty) row(l.tags, tags.join(l.listSeparator)),
           // Where it plays from only when the availability above is missing:
           // beside it, the two read as the same line twice.
-          if (entry == null)
-            row(
-              l.source,
-              item.localPath != null
-                  ? l.playingFromDevice
-                  : l.streamingFromServer,
-            ),
+          if (entry == null && item.localPath != null)
+            row(l.source, l.playingFromDevice),
           const SizedBox(height: MTSpace.md),
           _LinkRow(url: url),
         ],
       ),
     );
   }
-
-  static String _availability(MTLocalizations l, LibraryItem entry) => [
-    if (entry.isOffline) l.availabilityOffline,
-    if (entry.onServer) l.availabilityServer,
-  ].join(' + ');
 }
 
 class _Row extends StatelessWidget {

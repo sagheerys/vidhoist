@@ -44,9 +44,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get activeNow => 'Active now';
 
   @override
-  String get addEndpoint => 'Add endpoint';
-
-  @override
   String get addLinkFab => 'Add link';
 
   @override
@@ -63,7 +60,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String addedNToServer(int count) {
-    return 'Added $count to server';
+    return 'Added $count to the downloads';
   }
 
   @override
@@ -73,9 +70,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String addedToPlaylistCount(int count) {
     return '$count added to the playlist';
   }
-
-  @override
-  String get addingToServer => 'Sending to the server…';
 
   @override
   String get allDownloadsFinished => 'All downloads finished.';
@@ -113,9 +107,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get audioStereo => 'Stereo';
 
   @override
-  String get authHelper => 'Leave empty for open servers (no password)';
-
-  @override
   String get authentication => 'Authentication (optional)';
 
   @override
@@ -139,27 +130,10 @@ class MTLocalizationsEn extends MTLocalizations {
       'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.';
 
   @override
-  String get autoSwitchDisabledHint =>
-      'Auto-switching is off, so the app uses the single Server URL from Settings.';
-
-  @override
-  String get autoUrlSwitching => 'Automatic URL switching';
-
-  @override
-  String get autoUrlSwitchingDesc =>
-      'Connect through the local URL when it is reachable, and use external connections elsewhere';
-
-  @override
   String get availability => 'Availability';
 
   @override
   String get availabilityOffline => 'Offline (local copy)';
-
-  @override
-  String get availabilityServer => 'Server (stream)';
-
-  @override
-  String get availableOfflineNow => 'Now available offline';
 
   @override
   String get backgroundDownload => 'Downloading files in background...';
@@ -195,9 +169,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get batchNothingSelected => 'Select at least one item';
 
   @override
-  String get batchSaveToDevice => 'Save a copy on the device';
-
-  @override
   String batchSelectedOf(int selected, int total) {
     return '$selected of $total selected';
   }
@@ -223,9 +194,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get cancel => 'Cancel';
-
-  @override
-  String get cancelSaveToDevice => 'Stop saving to the phone';
 
   @override
   String get changeQuality => 'Change quality';
@@ -295,9 +263,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get chooseOptions => 'Options';
 
   @override
-  String get cleaningServer => 'Cleaning up the server...';
-
-  @override
   String get clear => 'Clear';
 
   @override
@@ -335,12 +300,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get completed => 'Completed';
 
   @override
-  String get connectionFailed => 'Connection failed';
-
-  @override
-  String get connectionSuccessful => 'Connected. Settings saved.';
-
-  @override
   String get continueAsAudio => 'Continue as audio';
 
   @override
@@ -357,19 +316,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get cookies => 'Cookies';
 
   @override
-  String get cookiesAbsent => 'The server has no cookies';
-
-  @override
-  String get cookiesDelete => 'Delete the cookies';
-
-  @override
-  String get cookiesDeleteBody =>
-      'The server stops using them, and the platforms that needed a login will refuse again.';
-
-  @override
-  String get cookiesDeleted => 'Cookies deleted from the server';
-
-  @override
   String get cookiesHelp =>
       'In your browser, use an extension that exports cookies in the Netscape format (one file per platform) and pick the files here. The server then uses them for every download, and yt-dlp decides when it needs them. Cookies expire, so a download that starts failing again usually means a fresh export is due.';
 
@@ -378,40 +324,8 @@ class MTLocalizationsEn extends MTLocalizations {
       'None of these files holds cookies in the Netscape format';
 
   @override
-  String get cookiesPresent => 'The server has cookies';
-
-  @override
-  String get cookiesPrivacy =>
-      'The file is sent straight to your server and never stored on this phone. It is your accounts\' sign-in material, so only ever upload it to a server you own.';
-
-  @override
-  String get cookiesReplace => 'Replace the cookies files';
-
-  @override
-  String get cookiesReplaceNote =>
-      'Each upload replaces the server\'s whole cookies file. To keep several platforms, pick all their files together every time, the ones you sent before too. To pick more than one, long-press the first file.';
-
-  @override
-  String cookiesSentFor(String sites) {
-    return 'Cookies sent for: $sites';
-  }
-
-  @override
   String get cookiesSubtitle =>
       'For the platforms that will not download without a login';
-
-  @override
-  String get cookiesTooLarge =>
-      'That file is larger than 1 MB, which is more than the server accepts.';
-
-  @override
-  String get cookiesUnknown => 'This Vidhoist cannot say whether it has cookies';
-
-  @override
-  String get cookiesUpload => 'Choose cookies files';
-
-  @override
-  String get cookiesUploaded => 'Cookies sent to the server';
 
   @override
   String get cookiesWhat =>
@@ -419,17 +333,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get copiedToClipboard => 'Copied to clipboard';
-
-  @override
-  String copyingToPhone(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count clips to this phone',
-      one: '1 clip to this phone',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get copyright => '© 2026 Yasir Sagheer';
@@ -452,12 +355,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get delete => 'Delete';
-
-  @override
-  String get deleteFromServer => 'Delete from server';
-
-  @override
-  String get deleteFromServerConfirm => 'Remove this item from the server?';
 
   @override
   String deleteMultipleConfirm(int count) {
@@ -494,9 +391,6 @@ class MTLocalizationsEn extends MTLocalizations {
   }
 
   @override
-  String get deletedFromServer => 'Deleted from the server';
-
-  @override
   String deletedTitle(Object title) {
     return 'Deleted: $title';
   }
@@ -515,51 +409,6 @@ class MTLocalizationsEn extends MTLocalizations {
     );
     return '$_temp0';
   }
-
-  @override
-  String get desktopAddressAdd => 'Add';
-
-  @override
-  String get desktopAddressInUse => 'In use';
-
-  @override
-  String get desktopAddressInvalid => 'Not an address, or already in the list';
-
-  @override
-  String get desktopAddressNew =>
-      'New address, e.g. https://vidhoist.example.com';
-
-  @override
-  String get desktopAddressStatusNotVidhoist => 'Not a Vidhoist server';
-
-  @override
-  String get desktopAddressStatusOk => 'Answers';
-
-  @override
-  String get desktopAddressStatusRefused => 'Refuses the password';
-
-  @override
-  String get desktopAddressStatusUnreachable => 'Not reachable';
-
-  @override
-  String get desktopAddressTest => 'Test';
-
-  @override
-  String get desktopAddressUse => 'Use';
-
-  @override
-  String get desktopAddresses => 'Addresses';
-
-  @override
-  String get desktopAddressesHint =>
-      'The app uses the address you choose and never switches by itself.';
-
-  @override
-  String get desktopAskEachTime => 'Ask me every time';
-
-  @override
-  String get desktopAskEachTimeHint =>
-      'Windows asks for a folder at each download.';
 
   @override
   String get desktopBack => 'Back';
@@ -638,6 +487,13 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopChannelsInLibrary => 'Channels in your library';
 
   @override
+  String get desktopChannelsLater => 'Not in this version';
+
+  @override
+  String get desktopChannelsLaterBody =>
+      'Following a channel needs a scheduler on this computer, and that comes in a later version. The clips you download stay in the library.';
+
+  @override
   String get desktopChapters => 'Chapters';
 
   @override
@@ -648,9 +504,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get desktopClearFilters => 'Clear filters';
-
-  @override
-  String get desktopClearFinished => 'Hide finished';
 
   @override
   String get desktopClearSelection => 'Clear selection';
@@ -688,24 +541,13 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopCookiesNone => 'None';
 
   @override
-  String get desktopCookiesPrivacy =>
-      'The files go straight to your server and are never kept on this computer. They are your accounts\' sign-in material, so only ever send them to a server you own.';
-
-  @override
   String get desktopCookiesRemove => 'Remove';
-
-  @override
-  String get desktopCookiesReplaceNote =>
-      'Each upload replaces the server\'s whole cookies file. To keep several platforms, choose all their files together every time, the ones you sent before too. Hold Ctrl to choose more than one.';
 
   @override
   String get desktopCopiedLinkAdd => 'Add…';
 
   @override
-  String get desktopCopiedLinkTitle => 'Add this link to the server?';
-
-  @override
-  String get desktopCopyCancelled => 'Cancelled';
+  String get desktopCopiedLinkTitle => 'Download this link?';
 
   @override
   String get desktopCopyFile => 'Copy file';
@@ -714,30 +556,10 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopCopyFileFailed => 'The file could not be copied';
 
   @override
-  String get desktopCopyFileLarge => 'A large file';
-
-  @override
-  String desktopCopyFileLargeMessage(String size) {
-    return 'This clip is $size. It is saved to your download folder first, then copied; many chat apps refuse a file this big.';
-  }
-
-  @override
-  String desktopCopyFileNoSpace(String needed, String free) {
-    return 'Not enough space on the drive: the file is $needed and $free is free';
-  }
-
-  @override
-  String get desktopCopyFilePreparing =>
-      'Preparing the file to copy; its progress is in Downloads';
-
-  @override
   String get desktopCopyLink => 'Copy link';
 
   @override
   String get desktopCopyOneClip => 'Copying takes one clip at a time';
-
-  @override
-  String get desktopCopyQueued => 'Waiting its turn';
 
   @override
   String get desktopCopyQuote => 'Copy with time and link';
@@ -751,9 +573,8 @@ class MTLocalizationsEn extends MTLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Delete $count clips from the server? Copies on this computer stay.',
-      one: 'Delete 1 clip from the server? A copy on this computer stays.',
+      other: 'Delete $count clips? Their files on this computer are deleted.',
+      one: 'Delete 1 clip? Its file on this computer is deleted.',
     );
     return '$_temp0';
   }
@@ -881,14 +702,6 @@ class MTLocalizationsEn extends MTLocalizations {
       'Your own files: saved here, then the app leaves them alone.';
 
   @override
-  String get desktopDownloadTo => 'Download…';
-
-  @override
-  String desktopDownloading(int percent) {
-    return 'Downloading · $percent%';
-  }
-
-  @override
   String get desktopDownloads => 'Downloads';
 
   @override
@@ -910,7 +723,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get desktopEmptyLibraryMessage =>
-      'Add a link, and the clip appears here once the server has it.';
+      'Add a link, and the clip appears here once it is downloaded.';
 
   @override
   String get desktopEngine => 'Engine';
@@ -1207,9 +1020,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopListeningRoom => 'Listening room';
 
   @override
-  String get desktopLocalCopyRemoved => 'Local copy removed';
-
-  @override
   String get desktopLogsCopied => 'Log copied, without links or addresses';
 
   @override
@@ -1249,14 +1059,10 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get desktopNoOfflineMessage =>
-      'Choose “Make available offline” from a clip\'s menu, and it plays here without the server.';
+      'A clip downloaded to this computer plays from here, and shows in this list.';
 
   @override
   String get desktopNoOfflineTitle => 'Nothing kept on this computer yet';
-
-  @override
-  String get desktopNoServerMessage =>
-      'Set up your Vidhoist server and its library appears here.';
 
   @override
   String get desktopNoTags =>
@@ -1264,7 +1070,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get desktopNoTranscriptMessage =>
-      'It shows here once the server has the clip\'s subtitles.';
+      'It shows here once the clip\'s subtitles are downloaded with it.';
 
   @override
   String get desktopNoTranscriptTitle => 'No transcript for this clip';
@@ -1292,9 +1098,6 @@ class MTLocalizationsEn extends MTLocalizations {
       'Play a clip and its transcript, what comes next and its details appear here.';
 
   @override
-  String get desktopNoticeSaved => 'Saved to this computer';
-
-  @override
   String get desktopNotifyArrivalsHint =>
       'A Windows notice when new clips from the channels you follow reach the server.';
 
@@ -1308,18 +1111,6 @@ class MTLocalizationsEn extends MTLocalizations {
   @override
   String desktopOfflineCount(int count) {
     return '$count offline';
-  }
-
-  @override
-  String get desktopOfflineFolder => 'Offline folder';
-
-  @override
-  String get desktopOfflineFolderHint =>
-      'Copies the app knows and plays without the server; \"Remove local copy\" deletes them.';
-
-  @override
-  String desktopOfflineProgress(int percent) {
-    return 'Offline · $percent%';
   }
 
   @override
@@ -1373,9 +1164,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopPlaysNext => 'Plays next, after this one';
 
   @override
-  String get desktopPullAfter => 'Then download it to this computer';
-
-  @override
   String get desktopQueueEnd => 'Nothing comes after this one';
 
   @override
@@ -1421,7 +1209,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get desktopRestoreBody =>
-      'This computer\'s tags, lists and settings become what the backup holds. The server is not touched.';
+      'This computer\'s tags, lists and settings become what the backup holds. The downloaded files are not touched.';
 
   @override
   String get desktopRestoreTitle => 'Restore this backup?';
@@ -1450,16 +1238,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopSavedSearchName => 'Search name';
 
   @override
-  String desktopSavingOffline(int percent) {
-    return 'Saving offline · $percent%';
-  }
-
-  @override
-  String desktopSavingTo(String folder) {
-    return 'Saving to $folder';
-  }
-
-  @override
   String get desktopSearch => 'Search';
 
   @override
@@ -1483,72 +1261,7 @@ class MTLocalizationsEn extends MTLocalizations {
   }
 
   @override
-  String get desktopServerFolders => 'Same folders as on the server';
-
-  @override
-  String get desktopServerFoldersHint =>
-      'For example, a clip in a folder called “Kids” on the server is saved in a folder of the same name here.';
-
-  @override
-  String get desktopServerPartMissing =>
-      'The server isn\'t answering, so this is what it held last time.';
-
-  @override
-  String get desktopServerVersion => 'Server version';
-
-  @override
-  String get desktopSetupAgain => 'Set up again';
-
-  @override
   String get desktopSetupChooseFile => 'Choose a file…';
-
-  @override
-  String get desktopSetupConnect => 'Connect';
-
-  @override
-  String get desktopSetupEnter => 'Enter the address';
-
-  @override
-  String get desktopSetupFoundNone =>
-      'No Vidhoist server answered on these ports.';
-
-  @override
-  String get desktopSetupHttpWarning =>
-      'An http:// address outside your home network sends the password unencrypted.';
-
-  @override
-  String get desktopSetupImport => 'Import from the phone';
-
-  @override
-  String get desktopSetupImportHint =>
-      'Choose a Vidhoist Super backup: its server address is offered here, and its tags and lists are added.';
-
-  @override
-  String get desktopSetupLater => 'Later';
-
-  @override
-  String get desktopSetupNeedsPassword => 'Needs a password';
-
-  @override
-  String get desktopSetupNoServer => 'No server yet?';
-
-  @override
-  String get desktopSetupPorts => 'Ports';
-
-  @override
-  String get desktopSetupSearch => 'Search my network';
-
-  @override
-  String get desktopSetupSearchHint =>
-      'Looks for Vidhoist on this computer\'s network, only when you click.';
-
-  @override
-  String desktopSetupSearching(int percent) {
-    return 'Searching… $percent%';
-  }
-
-  @override
-  String get desktopSetupTitle => 'Connect to your Vidhoist server';
 
   @override
   String get desktopShortcutsApp => 'App';
@@ -1727,9 +1440,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get desktopTheater => 'Theater';
-
-  @override
-  String get desktopToThisComputer => 'To this computer';
 
   @override
   String get desktopTranscriptFirst => 'Fetch its transcript first';
@@ -1920,20 +1630,10 @@ class MTLocalizationsEn extends MTLocalizations {
   String get emptyLibraryMessage => 'Add a video link, or pull to refresh.';
 
   @override
-  String get emptyOfflineMessage =>
-      'Choose “Make available offline” on a clip, and it plays here without the server.';
-
-  @override
-  String get emptyOfflineTitle => 'Nothing saved on this phone yet';
-
-  @override
   String get emptyPlaylist => 'Empty playlist';
 
   @override
   String get emptyPlaylistMessage => 'Add videos from the library';
-
-  @override
-  String get endpointUrl => 'Endpoint URL';
 
   @override
   String engineDownloadingProgress(Object percent) {
@@ -1985,36 +1685,15 @@ class MTLocalizationsEn extends MTLocalizations {
   String get enterFullscreen => 'Fullscreen';
 
   @override
-  String get errAuth => 'Wrong username or password';
-
-  @override
-  String get errFileGone =>
-      'The file is no longer on the server. Try again to download it anew.';
-
-  @override
-  String get errNetwork => 'Cannot reach the server';
-
-  @override
-  String get errNoApi => 'The address responds but has no Vidhoist API';
-
-  @override
-  String get errNotVidhoist => 'This address is not a Vidhoist server';
+  String get errNetwork => 'No connection to the site';
 
   @override
   String get errPlatformBlocked =>
-      'The platform requires login. The server admin should refresh the cookies';
+      'The platform requires a login, which this clip cannot be downloaded without';
 
   @override
   String get errPlatformBlockedCookies =>
       'The platform requires login. Send it a cookies file from Settings → Cookies';
-
-  @override
-  String get errPollTimeout => 'The server took too long. Try again.';
-
-  @override
-  String errServer(Object message) {
-    return 'Server error: $message';
-  }
 
   @override
   String errorGeneric(Object message) {
@@ -2043,13 +1722,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get exportShareSubtitle => 'A dated copy to send or keep elsewhere';
-
-  @override
-  String get externalNetworkDesc =>
-      'When the local URL can\'t be reached, the app connects through the first reachable URL below, from top to bottom.';
-
-  @override
-  String get externalNetworkSection => 'External network';
 
   @override
   String get externalPlayerShort => 'Another player';
@@ -2082,9 +1754,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get filterOffline => 'Offline';
 
   @override
-  String get filterServer => 'Server';
-
-  @override
   String get filterVideo => 'Video';
 
   @override
@@ -2094,16 +1763,8 @@ class MTLocalizationsEn extends MTLocalizations {
   String get folder => 'Folder';
 
   @override
-  String get foldersDisabled =>
-      'This server does not allow folders: CUSTOM_DIRS is off in its settings.';
-
-  @override
   String get foldersHelp =>
-      'A folder is made on the server, inside its downloads, and the clip is saved straight into it, where the network share and any other app see it. Leave it at \"No folder\" and nothing changes. For folders to work the server needs two things: CUSTOM_DIRS on, which is Vidhoist\'s default, and no outtmpl in YTDL_OPTIONS, which would save every file at the top whatever folder is chosen. To name files your way, use OUTPUT_TEMPLATE instead. The setup guide shows the lines.';
-
-  @override
-  String get foldersIgnored =>
-      'This server saves every file at the top of the downloads, whatever folder is chosen: its YTDL_OPTIONS has an outtmpl. The setup guide says how to move it to OUTPUT_TEMPLATE.';
+      'A folder is made inside the download folder, and the clip is saved straight into it, where Explorer and any other app see it. Leave it at \"No folder\" and the clip goes to the top of the download folder.';
 
   @override
   String get follow => 'Follow';
@@ -2187,19 +1848,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get listenInBackground => 'Listen in the background';
 
   @override
-  String get localCopyRemoved => 'Local copy removed';
-
-  @override
-  String get localNetworkDesc =>
-      'The app connects to the server through this URL when it can be reached.';
-
-  @override
-  String get localNetworkSection => 'Local network';
-
-  @override
-  String get localUrlLabel => 'Local server URL';
-
-  @override
   String get lockTouch => 'Lock touch';
 
   @override
@@ -2208,12 +1856,6 @@ class MTLocalizationsEn extends MTLocalizations {
   @override
   String get logsSanitizedNote =>
       'Links, addresses and credentials are stripped before sharing';
-
-  @override
-  String get madeOffline => 'Saved for offline';
-
-  @override
-  String get makeOffline => 'Make available offline';
 
   @override
   String get manageTags => 'Manage tags';
@@ -2236,7 +1878,8 @@ class MTLocalizationsEn extends MTLocalizations {
   String get mediaAccessTitle => 'Allow access to your media';
 
   @override
-  String get vidhoistCredit => 'The self-hosted server this app is a client for';
+  String get vidhoistCredit =>
+      'The self-hosted downloader whose apps Vidhoist comes from';
 
   @override
   String get mobileEngineIpv4 => 'Connect over IPv4';
@@ -2340,13 +1983,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get needsAttention => 'Needs your attention';
 
   @override
-  String get networkSettings => 'Networks';
-
-  @override
-  String get networkSettingsSubtitle =>
-      'Auto-switch between local and external server URLs';
-
-  @override
   String get neverChecked => 'Not checked yet';
 
   @override
@@ -2354,17 +1990,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get newFolderHint => 'e.g. Ai/Lessons';
-
-  @override
-  String newFromSubscriptions(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count new from the channels you follow',
-      one: '1 new from a channel you follow',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get newPlaylistAction => 'New playlist';
@@ -2410,11 +2035,7 @@ class MTLocalizationsEn extends MTLocalizations {
   String get noResultsMessage => 'No items match your search.';
 
   @override
-  String get noServerMessage =>
-      'Enter your Vidhoist server address in Settings to start downloading';
-
-  @override
-  String get noServerTitle => 'No server yet';
+  String get noServerTitle => 'The download engine is not ready';
 
   @override
   String get noTagsYet => 'No tags yet. Create one below.';
@@ -2430,19 +2051,7 @@ class MTLocalizationsEn extends MTLocalizations {
       'Not affiliated with yt-dlp or with any content platform, and not endorsed by them.';
 
   @override
-  String notEnoughSpace(String needed, String free) {
-    return 'Not enough room on the phone: needs $needed, $free free';
-  }
-
-  @override
   String get nothingHereYet => 'Nothing here yet';
-
-  @override
-  String get notifyArrivals => 'Tell me what arrives by itself';
-
-  @override
-  String get notifyArrivalsDesc =>
-      'One notice when a followed channel\'s new videos land on the server. It appears when you open the app, return to it, or refresh the library, not while the app is in the background.';
 
   @override
   String get nowPlaying => 'Now playing';
@@ -2458,14 +2067,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get ok => 'OK';
-
-  @override
-  String get onServerPhase => 'On the server';
-
-  @override
-  String onServerProgress(Object percent) {
-    return 'On the server · $percent%';
-  }
 
   @override
   String get onlyNewVideos =>
@@ -2485,7 +2086,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get ownFolderNote =>
-      'A folder in the server\'s downloads, which the network share and other apps see too. Only what arrives from now on goes there; what is already downloaded stays where it is.';
+      'A folder inside the download folder, which Explorer and other apps see too. Only what arrives from now on goes there; what is already downloaded stays where it is.';
 
   @override
   String get password => 'Password';
@@ -2503,9 +2104,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String percentValue(Object percent) {
     return '$percent%';
   }
-
-  @override
-  String get phoneCopiesSection => 'To this phone';
 
   @override
   String get pickAnotherFile => 'From another file…';
@@ -2588,14 +2186,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get previous => 'Previous';
-
-  @override
-  String get pullingToDevice => 'Saving to device…';
-
-  @override
-  String pullingToDeviceProgress(Object percent) {
-    return 'Saving to device · $percent%';
-  }
 
   @override
   String get quality => 'Quality';
@@ -2737,40 +2327,7 @@ class MTLocalizationsEn extends MTLocalizations {
   String get remove => 'Remove';
 
   @override
-  String removedFailed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Removed $count failed downloads',
-      one: 'Removed 1 failed download',
-      zero: 'Nothing to remove: they are no longer failed',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get removeFailed => 'Remove the failed';
-
-  @override
-  String get removeFailedBody =>
-      'Only downloads that failed leave the server\'s list. Everything that finished, which is what your library shows, stays exactly as it is.';
-
-  @override
-  String removeFailedTitle(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Remove $count failed downloads?',
-      one: 'Remove 1 failed download?',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get removeFromFavorites => 'Remove from favorites';
-
-  @override
-  String get removeLocalCopy => 'Remove local copy';
 
   @override
   String removeUnavailable(int count) {
@@ -2832,12 +2389,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get saveSettings => 'Save settings';
 
   @override
-  String get saveToDevice => 'Save to device';
-
-  @override
-  String get savedOnDevice => 'Saved on device';
-
-  @override
   String get searchLogs => 'Search logs…';
 
   @override
@@ -2863,105 +2414,7 @@ class MTLocalizationsEn extends MTLocalizations {
   }
 
   @override
-  String get serverConfiguration => 'Server configuration';
-
-  @override
-  String serverFailuresLine(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count downloads didn\'t finish on the server',
-      one: '1 download didn\'t finish on the server',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get serverFailuresNote =>
-      'Stopped by the server with an error, whether added from this phone, a subscription or Vidhoist\'s own page.';
-
-  @override
-  String get serverFailuresTitle => 'Didn\'t finish on the server';
-
-  @override
-  String serverFilesCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count files on the server',
-      one: '1 file on the server',
-      zero: 'No files on the server',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get serverKeepsFilesBody =>
-      'The history entry is removed but the file stays on disk, so the server fills up. Set DELETE_FILE_ON_TRASHCAN=true on the Vidhoist container.';
-
-  @override
-  String get serverKeepsFilesTitle => 'Your server is not deleting the files';
-
-  @override
-  String serverQueueCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count in the queue',
-      one: '1 in the queue',
-      zero: '',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get serverSearchHint =>
-      'Looks for Vidhoist on the Wi-Fi this phone is on, only when you tap.';
-
-  @override
-  String get serverStatusChecking => 'Checking connection…';
-
-  @override
-  String get serverStatusConnected => 'Connected to server';
-
-  @override
-  String get serverStatusOffline => 'Server unreachable';
-
-  @override
-  String get serverStatusUnconfigured => 'No server configured';
-
-  @override
-  String get serverUnreachableLocalHint =>
-      'Videos saved on this phone still play.';
-
-  @override
   String get serverUrl => 'Server URL (Vidhoist)';
-
-  @override
-  String get serverUrlHelpBody =>
-      'The address of your Vidhoist server, e.g. http://192.168.1.10:8081. Use the LAN IP for plain HTTP at home, or an HTTPS address (e.g. a Cloudflare Tunnel) for access from outside.';
-
-  @override
-  String get serverUrlHelpTitle => 'About the server URL';
-
-  @override
-  String get serverUrlHint => 'http://192.168.1.5:8086 or https://domain.com';
-
-  @override
-  String get serverUrlRequired => 'Server URL is required';
-
-  @override
-  String serverVersionLabel(String version) {
-    return 'Vidhoist $version';
-  }
-
-  @override
-  String serverVersionOutdated(String latest) {
-    return 'Update available: $latest';
-  }
-
-  @override
-  String get serverVersionUnknown => 'Version unknown';
 
   @override
   String get settings => 'Settings';
@@ -2979,9 +2432,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get settingsGroupData => 'Data';
 
   @override
-  String get settingsGroupServer => 'Server';
-
-  @override
   String get settingsPlayback => 'Playback';
 
   @override
@@ -2989,12 +2439,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get settingsTranscripts => 'Transcripts & subtitles';
-
-  @override
-  String get settingsValueArrivals => 'tells you what arrives';
-
-  @override
-  String get settingsValueAuto => 'Automatic';
 
   @override
   String settingsValueChannels(int count) {
@@ -3015,18 +2459,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get settingsValueCompatOn => 'Best compatibility: on';
 
   @override
-  String get settingsValueExternalNow => 'external now';
-
-  @override
-  String get settingsValueLocalNow => 'local now';
-
-  @override
-  String get settingsValueManual => 'Manual';
-
-  @override
-  String get settingsValueNoPassword => 'no password';
-
-  @override
   String get settingsValueNotSet => 'Not set up yet';
 
   @override
@@ -3045,41 +2477,10 @@ class MTLocalizationsEn extends MTLocalizations {
   String get settingsValueWifiOnly => 'Wi‑Fi only';
 
   @override
-  String get setupServer => 'Set up the server';
-
-  @override
   String get share => 'Share';
 
   @override
-  String get shareGoesOn =>
-      'Still preparing in the background. The share menu opens when it is ready; its progress is in Downloads.';
-
-  @override
-  String get shareLargeBody =>
-      'It downloads to this phone first, then the share menu opens.';
-
-  @override
-  String shareLargeTitle(String size) {
-    return 'Download $size to share?';
-  }
-
-  @override
   String get shareLogs => 'Share logs';
-
-  @override
-  String get shareMessagingLimit =>
-      'WhatsApp and Telegram take up to 2 GB; for larger files use Drive or Quick Share.';
-
-  @override
-  String get sharePreparing => 'Preparing to share';
-
-  @override
-  String shareProgressOf(String received, String total) {
-    return '$received of $total';
-  }
-
-  @override
-  String get shareReady => 'Ready to share';
 
   @override
   String get shareSelected => 'Share selected';
@@ -3097,10 +2498,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get signInRequired => 'Sign-in required';
-
-  @override
-  String get signInRequiredHint =>
-      'The server rejected the saved credentials. Update the username and password in settings.';
 
   @override
   String get size => 'Size';
@@ -3186,14 +2583,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get subscriptionsSubtitle => 'Channels the server follows for you';
-
-  @override
-  String get subscriptionsUnsupported =>
-      'This Vidhoist is older than subscriptions';
-
-  @override
-  String get subscriptionsUnsupportedBody =>
-      'Update the Vidhoist container to a release that has channel subscriptions, then come back here. Nothing else in the app is affected.';
 
   @override
   String get subtitles => 'Subtitles';
@@ -3303,9 +2692,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get tagsOpenFiltered => 'Opens the library filtered';
-
-  @override
-  String get testingConnection => 'Testing connection…';
 
   @override
   String get theme => 'Theme';
@@ -3514,9 +2900,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get updateChecking => 'Checking…';
-
-  @override
-  String get updateCredentials => 'Update credentials';
 
   @override
   String get updateDownloadFailed => 'Couldn\'t download the update';

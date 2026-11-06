@@ -63,10 +63,7 @@ void main() {
         null,
       ),
     );
-    final h = ShellHarness(
-      library: [_clip, _other],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [_clip, _other], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     return h;
@@ -245,7 +242,8 @@ void main() {
           .single;
       expect(facts(), isNot(contains('p ')));
       expect(facts(), contains('412.0 MB'));
-      expect(facts(), contains('On the server'));
+      // No clip is on a server any more, and the line does not say one is.
+      expect(facts(), isNot(contains('On the server')));
 
       h.video.pictureSize.value = const Size(1920, 1080);
       await tester.pumpAndSettle();

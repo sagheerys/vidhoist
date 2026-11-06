@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/library/choose_mark.dart';
 import 'package:vidhoist_desktop/features/library/selection.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_ui/mt_ui.dart';
 
@@ -13,6 +12,7 @@ LibraryItem _clip(String id, String title) => LibraryItem(
   canonicalUrl: 'https://youtu.be/$id',
   title: title,
   onServer: true,
+  localPath: 'C:\\Downloads\\$id.m4a',
   isAudio: true,
   timestamp: DateTime(2026, 10, 20),
 );
@@ -27,10 +27,7 @@ final _library = [
 void main() {
   Future<ShellHarness> open(WidgetTester tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
-    final h = ShellHarness(
-      library: _library,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: _library, withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     return h;
@@ -134,22 +131,22 @@ void main() {
     expect(find.text('4 selected'), findsOneWidget);
   });
 
-  testWidgets('deleting the chosen clips asks once, then goes by each one\'s '
-      'canonical link', (tester) async {
-    final h = await open(tester);
+  testWidgets('deleting the chosen clips asks once, naming their files', (
+    tester,
+  ) async {
+    await open(tester);
     await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
     await click(tester, 'Amber Skies');
     await click(tester, 'Blue Hour');
     await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
-    await tester.tap(byLabel('Delete from server'));
+    expect(byLabel('Delete from server'), findsNothing);
+    await tester.tap(byLabel('Delete'));
     await tester.pumpAndSettle();
     expect(find.textContaining('Delete 2 clips'), findsOneWidget);
-    await tester.tap(find.text('Delete').last);
+    expect(find.textContaining('files on this computer'), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
     await tester.pumpAndSettle();
-    expect(h.api.deleted, [
-      ['https://youtu.be/aaaaaaaaaaa'],
-      ['https://youtu.be/bbbbbbbbbbb'],
-    ]);
+    expect(find.text('2 selected'), findsOneWidget);
   });
 
   test('**the guard**: Enter and a screen reader play, as they always did; '

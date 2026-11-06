@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/incoming_links.dart';
-import 'package:mt_core/mt_core.dart';
 
 import 'support/shell_harness.dart';
 
@@ -74,7 +73,7 @@ void main() {
     final links = IncomingLinks()..add('https://www.youtube.com/watch?v=abc');
     final h = ShellHarness(
       library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       overrides: [incomingLinksProvider.overrideWithValue(links)],
     );
     await tester.pumpWidget(h.app());
@@ -104,7 +103,7 @@ void main() {
     final links = IncomingLinks();
     final h = ShellHarness(
       library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       overrides: [incomingLinksProvider.overrideWithValue(links)],
     );
     await tester.pumpWidget(h.app());

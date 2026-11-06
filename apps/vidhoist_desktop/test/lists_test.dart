@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/clip/clip_action_row.dart';
+import 'package:vidhoist_desktop/features/clip/clip_actions.dart';
 import 'package:vidhoist_desktop/features/clip/clip_page.dart';
-import 'package:vidhoist_desktop/features/clip/clip_stage.dart';
 import 'package:vidhoist_desktop/features/library/library_state.dart';
 import 'package:vidhoist_desktop/features/lists/lists_page.dart';
 import 'package:vidhoist_desktop/features/lists/playlist_line.dart';
@@ -70,10 +70,7 @@ void main() {
     Size window = const Size(1440, 900),
   }) async {
     ShellHarness.useWindow(tester, window);
-    final h = ShellHarness(
-      library: _library,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: _library, withEngine: true);
     await h.store.setString(PlaylistsStore.prefsKey, jsonEncode(lists));
     await h.store.setString(
       'tags_index',
@@ -361,9 +358,7 @@ void main() {
     expect(made.items.map((e) => e.canonicalUrl), [_a]);
   });
 
-  testWidgets('deleting from the server takes the clip out of the lists', (
-    tester,
-  ) async {
+  testWidgets('deleting a clip takes it out of the lists', (tester) async {
     final h = await open(
       tester,
       lists: [
@@ -371,19 +366,15 @@ void main() {
       ],
       at: EmberRoutes.item(_b),
     );
-    await tester.tapAt(
-      tester.getCenter(find.byType(ClipStage)),
-      buttons: kSecondaryMouseButton,
-      kind: PointerDeviceKind.mouse,
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(EmberSidebar)),
+    );
+    await tester.runAsync(
+      () => container
+          .read(clipActionsProvider)
+          .deleteFile(const LibraryItem(canonicalUrl: _b, title: 'b')),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Delete from server'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Delete'));
-    await tester.pumpAndSettle();
-    expect(h.api.deleted, [
-      [_b],
-    ]);
     // The guard: a dead line left behind is skipped as broken each time
     // the list plays.
     expect((await stored(h)).single.items.map((e) => e.canonicalUrl), [_a]);

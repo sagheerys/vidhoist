@@ -13,14 +13,14 @@ void main() {
     test('copyWith keeps the identity and updates the phase', () {
       final task = DownloadTask(inputUrl: 'u', quality: Quality.audio);
       final updated = task.copyWith(
-        phase: TaskPhase.polling,
+        phase: TaskPhase.downloading,
         canonicalUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         progress: 0.5,
       );
       expect(updated.id, task.id);
       expect(updated.createdAt, task.createdAt);
       expect(updated.quality, Quality.audio);
-      expect(updated.phase, TaskPhase.polling);
+      expect(updated.phase, TaskPhase.downloading);
       expect(updated.progress, 0.5);
       expect(task.phase, TaskPhase.queued, reason: 'الأصل لا يتغير');
     });
@@ -45,7 +45,8 @@ void main() {
       expect(task.copyWith(phase: TaskPhase.completed).isFinished, isTrue);
       expect(task.copyWith(phase: TaskPhase.failed).isFinished, isTrue);
       expect(task.copyWith(phase: TaskPhase.cancelled).isFinished, isTrue);
-      expect(task.copyWith(phase: TaskPhase.pulling).isFinished, isFalse);
+      expect(task.copyWith(phase: TaskPhase.downloading).isFinished, isFalse);
+      expect(task.copyWith(phase: TaskPhase.paused).isFinished, isFalse);
     });
   });
 
@@ -76,7 +77,7 @@ void main() {
     test('a waiting task lowers the average rather than being excluded', () {
       // One at 90% and two queued gives 30%, not 90%.
       final average = averageTaskProgress([
-        make(TaskPhase.pulling, 0.9),
+        make(TaskPhase.downloading, 0.9),
         make(TaskPhase.queued, 0),
         make(TaskPhase.queued, 0),
       ]);
@@ -86,8 +87,8 @@ void main() {
     test('an ordinary average', () {
       expect(
         averageTaskProgress([
-          make(TaskPhase.polling, 0.25),
-          make(TaskPhase.pulling, 0.75),
+          make(TaskPhase.downloading, 0.25),
+          make(TaskPhase.downloading, 0.75),
         ]),
         closeTo(0.5, 0.001),
       );

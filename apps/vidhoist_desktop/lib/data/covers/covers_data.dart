@@ -19,8 +19,8 @@ import 'mp4_cover.dart';
 final coverFolderProvider = Provider<Directory?>((ref) => null);
 
 /// Takes one frame from a video, given where it is and the headers to
-/// read it with. Overridden in main with the engine's; null (tests) leaves
-/// videos alone.
+/// read it with (none, for a file here). Overridden in main with the
+/// engine's; null (tests) leaves videos alone.
 final frameGrabProvider =
     Provider<
       Future<Uint8List?> Function(String url, Map<String, String> headers)?
@@ -33,53 +33,26 @@ final probeFailureIndexProvider = Provider(
   ),
 );
 
-/// Reads a clip's file **on the server, and only there**, with the
-/// server's own headers, so its password never reaches another host.
-RangeReader serverRangeReader(VidhoistApiClient api, String serverFilename) {
-  final uri = Uri.parse(api.downloadUrl(serverFilename));
-  return (start, length) async {
-    final client = HttpClient()
-      ..connectionTimeout = const Duration(seconds: 15);
-    try {
-      final request = await client.getUrl(uri);
-      api.streamingHeaders.forEach(request.headers.set);
-      request.headers.set(
-        HttpHeaders.rangeHeader,
-        'bytes=$start-${start + length - 1}',
-      );
-      final response = await request.close();
-      if (response.statusCode != HttpStatus.partialContent &&
-          response.statusCode != HttpStatus.ok) {
-        throw HttpException('status ${response.statusCode}', uri: uri);
-      }
-      // A server that ignores ranges sends the whole file: take what was
-      // asked for and stop listening.
-      final bytes = BytesBuilder(copy: false);
-      await for (final chunk in response) {
-        bytes.add(chunk);
-        if (bytes.length >= length) break;
-      }
-      final all = bytes.takeBytes();
-      return all.length > length ? Uint8List.sublistView(all, 0, length) : all;
-    } finally {
-      client.close(force: true);
-    }
-  };
-}
+/// Reads a range of a clip's file on this computer.
+RangeReader localRangeReader(String path) => (start, length) async {
+  final file = await File(path).open();
+  try {
+    await file.setPosition(start);
+    return await file.read(length);
+  } finally {
+    await file.close();
+  }
+};
 
-/// Where a video's frame is taken from: **a copy on this computer is read
-/// in place, with no credentials**; otherwise the server's own file with
-/// the server's own headers, and nothing else.
+/// Where a video's frame is taken from: its file on this computer, read
+/// in place; nothing when the file is not there.
 FrameFor videoFrameFor(
   Future<Uint8List?> Function(String url, Map<String, String> headers) grab,
-  VidhoistApiClient api,
 ) => (item) async {
   if (item.localPath case final path? when File(path).existsSync()) {
     return grab(path, const {});
   }
-  final name = item.serverFilename;
-  if (!item.onServer || name == null) return null;
-  return grab(api.downloadUrl(name), api.streamingHeaders);
+  return null;
 };
 
 /// Looks for missing covers in the background whenever the library is
@@ -87,20 +60,17 @@ FrameFor videoFrameFor(
 /// found every few covers and at the end. Watched by the shell.
 final coverEnrichmentProvider = Provider<void>((ref) {
   final folder = ref.watch(coverFolderProvider);
-  final api = ref.watch(apiClientProvider);
-  if (folder == null || api == null) return;
+  if (folder == null) return;
   final enricher = CoverEnricher(
     artwork: ref.watch(artworkIndexProvider),
     failures: ref.watch(probeFailureIndexProvider),
     folder: folder,
-    readerFor: (item) {
-      final name = item.serverFilename;
-      return item.onServer && name != null
-          ? serverRangeReader(api, name)
-          : null;
+    readerFor: (item) => switch (item.localPath) {
+      final path? when File(path).existsSync() => localRangeReader(path),
+      _ => null,
     },
     frameFor: switch (ref.watch(frameGrabProvider)) {
-      final grab? => videoFrameFor(grab, api),
+      final grab? => videoFrameFor(grab),
       null => null,
     },
   );
@@ -109,7 +79,7 @@ final coverEnrichmentProvider = Provider<void>((ref) {
   final cache = ref.watch(artworkCacheProvider);
   final CoverFetcher fetch = cache == null
       ? (_) async => const FetchedCover.failed()
-      : cachedCoverFetcher(cache, api.imageHeadersFor);
+      : cachedCoverFetcher(cache, (_) => const {});
   var running = false;
   var stopped = false;
   ref.onDispose(() => stopped = true);
@@ -174,8 +144,8 @@ final coverEnrichmentProvider = Provider<void>((ref) {
             ref.invalidate(libraryItemsProvider);
           }
         } else if (++missed >= _missesBeforeRest) {
-          // The server has likely gone away; marking every clip after this
-          // as having no cover would hide them all for a day.
+          // The files are likely out of reach; marking every clip after
+          // this as having no cover would hide them all for a day.
           break;
         }
       }

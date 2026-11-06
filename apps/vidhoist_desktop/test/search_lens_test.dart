@@ -18,7 +18,7 @@ void main() {
   ) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final h = ShellHarness(
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       overrides: [
         // Logs reads its file; one that is never written is enough here.
         loggerProvider.overrideWithValue(

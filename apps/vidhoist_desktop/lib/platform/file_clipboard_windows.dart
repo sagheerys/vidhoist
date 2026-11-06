@@ -61,22 +61,6 @@ void _preferCopy() {
   }
 }
 
-/// Bytes free to this user on the drive that holds [folder]; null when
-/// Windows cannot say.
-int? freeBytesAt(String folder) {
-  final path = folder.toNativeUtf16();
-  final free = calloc<Uint64>();
-  try {
-    return GetDiskFreeSpaceEx(path, free, nullptr, nullptr) == FALSE
-        ? null
-        : free.value;
-  } finally {
-    calloc
-      ..free(path)
-      ..free(free);
-  }
-}
-
 /// DROPFILES is five 32-bit fields.
 const _dropFilesHeader = 20;
 const _dropEffectCopy = 1;

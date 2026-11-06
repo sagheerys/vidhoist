@@ -84,10 +84,10 @@ class StatsPage extends ConsumerWidget {
           message: l.desktopEmptyLibraryMessage,
         ),
       ),
-      AsyncError() => Center(
+      AsyncError(:final error) => Center(
         child: MTEmptyFrame(
-          title: l.serverStatusOffline,
-          message: l.desktopServerPartMissing,
+          title: l.failed,
+          message: l.errorGeneric('$error'),
           actionLabel: l.retry,
           onAction: () => ref.invalidate(libraryStatsProvider),
         ),

@@ -158,7 +158,6 @@ void main() {
   ) async {
     await at(tester, const Size(411, 914));
     final l10n = l10nOf(tester);
-    expect(find.text(l10n.serverConfiguration), findsNothing);
     expect(find.text(l10n.mobileSettingsEngine), findsOneWidget);
     // Before its first update the library cannot tell its version.
     expect(find.text(l10n.mobileEngineVersionUnknown), findsOneWidget);

@@ -167,14 +167,7 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
     final chosen = ref.watch(readingLanguageProvider(url));
     final transcript =
         kept.where((t) => t.language == chosen).firstOrNull ??
-        ref
-            .watch(
-              transcriptForProvider((
-                canonicalUrl: url,
-                serverFilename: item.serverFilename,
-              )),
-            )
-            .valueOrNull;
+        ref.watch(transcriptForProvider(url)).valueOrNull;
     if (transcript != _drawn) {
       _drawn = transcript;
       _paragraphs = transcript == null

@@ -149,7 +149,7 @@ void main() {
     final adding = DownloadTask(
       inputUrl: 'https://youtu.be/abc',
       quality: Quality.best,
-    ).copyWith(phase: TaskPhase.adding);
+    ).copyWith(phase: TaskPhase.preparing);
     tasks.add([adding]);
     await pumpEventQueue();
     expect(notices.showing, hasLength(1));

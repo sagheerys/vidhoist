@@ -6,8 +6,6 @@ import 'package:go_router/go_router.dart';
 /// has (the desktop habits, and the offline and download folders).
 enum EmberSettingsPane {
   engine,
-  server,
-  network,
   subscriptions,
   cookies,
   downloads,

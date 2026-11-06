@@ -98,12 +98,7 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
     final item = widget.item;
     final segments =
         ref
-            .watch(
-              transcriptForProvider((
-                canonicalUrl: item.canonicalUrl,
-                serverFilename: item.serverFilename,
-              )),
-            )
+            .watch(transcriptForProvider(item.canonicalUrl))
             .valueOrNull
             ?.segments ??
         const <TranscriptSegment>[];

@@ -6,7 +6,6 @@ import 'package:vidhoist_desktop/features/library/library_heading.dart';
 import 'package:vidhoist_desktop/features/library/sort_button.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_ui/mt_ui.dart';
 
@@ -28,10 +27,7 @@ final _many = [
 void main() {
   Future<ShellHarness> library(WidgetTester tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
-    final h = ShellHarness(
-      library: _many,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: _many, withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     return h;

@@ -76,7 +76,7 @@ void main() {
     ];
     final h = ShellHarness(
       library: items,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       overrides: [
         desktopFoldersProvider.overrideWithValue(_Folders(root.path)),
         filesToClipboardProvider.overrideWithValue((paths) {

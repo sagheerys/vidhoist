@@ -8,24 +8,19 @@ import 'folder_picker.dart';
 
 /// **"Save in its own folder"** for a followed channel, as on the phone:
 /// off unless the subscription already has one; when on, the folder is
-/// named after the channel by default, or picked among the server's, or
-/// made new. A choice, not a rule: most people never open the server's
-/// folders.
+/// named after the channel by default, or picked among the library's, or
+/// made new. A choice, not a rule: most people never open the folders.
 class OwnFolderField extends StatelessWidget {
   const OwnFolderField({
     super.key,
     required this.on,
     required this.choice,
-    required this.audio,
     required this.onToggle,
     required this.onPicked,
   });
 
   final bool on;
   final FolderChoice choice;
-
-  /// The channel downloads sound, whose folders the server keeps apart.
-  final bool audio;
   final ValueChanged<bool> onToggle;
   final ValueChanged<FolderChoice> onPicked;
 
@@ -34,7 +29,6 @@ class OwnFolderField extends StatelessWidget {
     FocusManager.instance.primaryFocus?.unfocus();
     final picked = await showFolderPicker(
       context,
-      audio: audio,
       current: choice,
       // "No folder" is the switch turned off, so it is not offered twice.
       offerTop: false,

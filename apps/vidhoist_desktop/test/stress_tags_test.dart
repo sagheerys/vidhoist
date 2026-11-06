@@ -66,15 +66,10 @@ Future<ShellHarness> boot(
   List<Map<String, Object?>> lists = const [],
   Size window = const Size(1440, 900),
   bool arabic = false,
-  ServerFolders? folders,
 }) async {
   ShellHarness.useWindow(tester, window);
   if (arabic) ShellHarness.useArabic(tester);
-  final h = ShellHarness(
-    library: library,
-    server: ServerConfig(baseUrl: 'http://nas:8081'),
-  );
-  if (folders != null) h.api.folders = folders;
+  final h = ShellHarness(library: library, withEngine: true);
   await h.store.setString('tags_index', jsonEncode(tags));
   await h.store.setString(PlaylistsStore.prefsKey, jsonEncode(lists));
   final ms = await timed(() async {
@@ -222,7 +217,6 @@ void main() {
         tags: {
           url(0): [tag],
         },
-        folders: ServerFolders(video: [folder]),
         lists: [
           {
             'id': 'p-long',

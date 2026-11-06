@@ -7,7 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/settings/appearance_pane.dart';
 import 'package:vidhoist_desktop/features/settings/appearance_preview.dart';
-import 'package:vidhoist_desktop/data/channels_data.dart';
 import 'package:vidhoist_desktop/data/choices_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
@@ -54,11 +53,10 @@ void main() {
     ShellHarness.useWindow(tester, window);
     final h = ShellHarness(
       library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       workArea: workArea,
       overrides: [
         installedVersionProvider.overrideWith((ref) async => '0.1.0'),
-        channelsProvider.overrideWith((ref) async => const ChannelsState([])),
         ...overrides,
       ],
     );
@@ -150,7 +148,7 @@ void main() {
     testWidgets('the list says the quality under Downloads', (tester) async {
       await open(
         tester,
-        '/settings/server',
+        '/settings/engine',
         overrides: [
           initialDefaultQualityProvider.overrideWithValue(Quality.q1080),
         ],
@@ -159,13 +157,11 @@ void main() {
     });
   });
 
-  testWidgets('subscriptions: the notice can be turned off, and Channels '
-      'is one click away', (tester) async {
-    final h = await open(tester, '/settings/subscriptions');
-    expect(find.text('No channels yet'), findsWidgets);
-    await tester.tap(find.byType(MTSwitch));
-    await tester.pumpAndSettle();
-    expect(await h.store.getBool(NotifyArrivalsNotifier.key), isFalse);
+  testWidgets('subscriptions: not in this version, and Channels is one '
+      'click away', (tester) async {
+    await open(tester, '/settings/subscriptions');
+    final l = lookupMTLocalizations(const Locale('en'));
+    expect(find.text(l.desktopChannelsLater), findsWidgets);
     await tester.tap(find.text('Open channels'));
     await tester.pumpAndSettle();
     final router = GoRouter.of(tester.element(find.byType(EmberSidebar)));

@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/listening/listening_lines.dart';
 import 'package:vidhoist_desktop/features/listening/listening_room.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_media/mt_media.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
@@ -63,7 +62,7 @@ void main() {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final h = ShellHarness(
       library: _library,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       transcripts: {_song: _words},
     );
     await tester.pumpWidget(h.app());

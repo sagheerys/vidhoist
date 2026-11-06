@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/copied_links.dart';
 import 'package:vidhoist_desktop/data/desktop_habits.dart';
 import 'package:vidhoist_desktop/data/notices.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 
 import 'support/shell_harness.dart';
@@ -105,7 +104,7 @@ void main() {
             serverFilename: 'Kept.mp4',
           ),
         ],
-        server: ServerConfig(baseUrl: 'http://nas:8081'),
+        withEngine: true,
         overrides: [
           initialOfferCopiedLinksProvider.overrideWithValue(on),
           clipboardPortProvider.overrideWithValue(clipboard),
@@ -133,7 +132,7 @@ void main() {
         ..copy('https://youtu.be/kept0000000');
       await tester.pumpAndSettle();
       final [notice] = notices.shown;
-      expect(notice.title, 'Add this link to the server?');
+      expect(notice.title, 'Download this link?');
       expect(notice.body, 'https://youtu.be/abcdefghijk');
 
       notice.actions.single.onPressed();

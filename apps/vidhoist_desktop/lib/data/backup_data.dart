@@ -8,17 +8,12 @@ import '../di.dart';
 import 'folders_data.dart';
 import 'library_data.dart';
 import 'lists_data.dart';
-import 'setup_data.dart';
 import 'transcripts_data.dart';
 
 /// Where the dated backups of this computer are kept:
 /// `%APPDATA%\Vidhoist\backup`. Overridden in main; null (tests) keeps
 /// none.
 final backupFolderProvider = Provider<Directory?>((ref) => null);
-
-/// The server addresses the last imported phone backup named, offered by
-/// the first-run setup and never written over an address already set.
-final setupHintProvider = StateProvider<List<String>>((ref) => const []);
 
 /// What a dropped or chosen file did.
 sealed class ImportOutcome {
@@ -94,7 +89,6 @@ class EmberBackups {
         store: _ref.read(keyValueStoreProvider),
         mutex: _ref.read(prefsMutexProvider),
       ).mergeFrom(contents);
-      _ref.read(setupHintProvider.notifier).state = result.serverAddresses;
       _refresh();
       return MergedBackup(result);
     }

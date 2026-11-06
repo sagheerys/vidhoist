@@ -53,7 +53,7 @@ void main() {
     final root = Directory.systemTemp.createTempSync('ember_a11y_');
     addTearDown(() => root.deleteSync(recursive: true));
     final h = ShellHarness(
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       library: [
         LibraryItem(
           canonicalUrl: _video.canonicalUrl,

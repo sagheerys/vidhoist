@@ -9,12 +9,9 @@ import '../../data/choices_data.dart';
 import '../../data/desktop_habits.dart';
 import '../../data/downloads_data.dart';
 import '../../data/hints_data.dart';
-import '../../data/library_data.dart';
 import '../../shell/pill.dart';
-import '../setup/setup_dialog.dart';
 import 'appearance_pane.dart';
 import 'browser_button.dart';
-import 'server_version_line.dart';
 import '../../shell/folded_text.dart';
 
 /// One setting: its name, a line saying what it does, and its control at
@@ -121,45 +118,6 @@ class SwitchLine extends StatelessWidget {
       trailing: MTSwitch(value: value, onChanged: onChanged),
     ),
   );
-}
-
-/// The server: where it is and who signs in. The account is set up by the
-/// first-run setup; the address is chosen in Addresses.
-class ServerPane extends ConsumerWidget {
-  const ServerPane({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final config = ref.watch(serverConfigProvider);
-    final again = MTLinkButton(
-      label: config == null ? l.desktopSetupConnect : l.desktopSetupAgain,
-      onPressed: () => unawaited(showSetupDialog(context)),
-    );
-    if (config == null) {
-      return SettingLine(title: l.serverStatusUnconfigured, trailing: again);
-    }
-    final history = ref.watch(historyProvider);
-    final status = switch (history) {
-      AsyncData() => l.serverStatusConnected,
-      AsyncError() => l.serverStatusOffline,
-      _ => l.serverStatusChecking,
-    };
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SettingLine(
-          title: l.serverUrl,
-          value: config.baseUrl,
-          hint: status,
-          trailing: again,
-        ),
-        if (config.username case final user? when user.isNotEmpty)
-          SettingLine(title: l.username, value: user),
-        const ServerVersionLine(),
-      ],
-    );
-  }
 }
 
 /// How links are added: the quality an add starts with, and the

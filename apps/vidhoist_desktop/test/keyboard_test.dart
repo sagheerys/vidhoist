@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/data/volume.dart';
 import 'package:vidhoist_desktop/shell/keyboard.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
@@ -137,8 +136,12 @@ void main() {
     ) async {
       final h = await open(tester);
       h.player.showPlaying([_clip('a')]);
-      GoRouter.of(tester.element(find.byType(EmberSidebar)))
-          .go('/settings/network');
+      await tester.tap(
+        find.descendant(
+          of: find.byType(EmberSidebar),
+          matching: find.text('Add link'),
+        ),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.byType(TextField).first);
       await tester.pump();

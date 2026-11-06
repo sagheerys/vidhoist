@@ -56,21 +56,17 @@ void main() {
   Future<ShellHarness> open(
     WidgetTester tester, {
     List<LibraryItem>? library,
-    ServerConfig? server,
   }) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
-    final h = ShellHarness(library: library, server: server);
+    final h = ShellHarness(library: library, withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     return h;
   }
 
   Finder titleOf(String t) => find.text(t);
-  final server = ServerConfig(baseUrl: 'http://nas:8081');
 
-  testWidgets('no server and nothing local: it asks for a link', (
-    tester,
-  ) async {
+  testWidgets('nothing downloaded yet: it asks for a link', (tester) async {
     await open(tester);
     // Downloads run on this computer: a link is what fills it, not a
     // server.
@@ -79,7 +75,7 @@ void main() {
   });
 
   testWidgets('the library opens in the grid, newest first', (tester) async {
-    await open(tester, library: _library, server: server);
+    await open(tester, library: _library);
     expect(find.byType(MTMediaGridCard), findsNWidgets(4));
     final titles = [
       for (final t in ['Blue Hour', 'Amber Skies', 'Homelab Hour - Ep. 12'])
@@ -95,7 +91,7 @@ void main() {
   testWidgets('the kind chips filter, and a second click clears', (
     tester,
   ) async {
-    await open(tester, library: _library, server: server);
+    await open(tester, library: _library);
     await tester.tap(find.text('Audio'));
     await tester.pumpAndSettle();
     expect(find.byType(MTMediaGridCard), findsOneWidget);
@@ -121,7 +117,7 @@ void main() {
 
   testWidgets('the platforms are one pill whose menu carries live counts, '
       'most first', (tester) async {
-    await open(tester, library: _library, server: server);
+    await open(tester, library: _library);
     // **The guard**: no row of platform pills, no dot before a count.
     expect(find.text('YouTube · 3'), findsNothing);
     await tester.tap(find.text('Platform'));
@@ -139,7 +135,7 @@ void main() {
 
   testWidgets('a tag picked in the menu includes, then excludes, then lets '
       'go', (tester) async {
-    await open(tester, library: _library, server: server);
+    await open(tester, library: _library);
     Future<void> pick() async {
       await tester.tap(find.widgetWithText(EmberPill, 'Tags'));
       await tester.pumpAndSettle();
@@ -160,7 +156,7 @@ void main() {
 
   testWidgets('**the guard**: the counts follow the place; an empty Offline '
       'page offers no platform at all', (tester) async {
-    await open(tester, library: _library, server: server);
+    await open(tester, library: _library);
     expect(find.text('Platform'), findsOneWidget);
     GoRouter.of(tester.element(find.byType(EmberSidebar)))
         .go(EmberRoutes.offline);
@@ -171,7 +167,7 @@ void main() {
   testWidgets('favourites is one state for its chip and its sidebar entry', (
     tester,
   ) async {
-    await open(tester, library: _library, server: server);
+    await open(tester, library: _library);
     await tester.tap(find.widgetWithText(InkWell, 'Favorites').first);
     await tester.pumpAndSettle();
     expect(find.byType(MTMediaGridCard), findsOneWidget);
@@ -181,7 +177,7 @@ void main() {
   testWidgets('the table sorts from its header, and the choice is kept', (
     tester,
   ) async {
-    final h = await open(tester, library: _library, server: server);
+    final h = await open(tester, library: _library);
     await tester.tap(find.bySemanticsLabel('Table'));
     await tester.pumpAndSettle();
     expect(find.byType(MTMediaRow), findsNWidgets(4));
@@ -215,7 +211,7 @@ void main() {
   testWidgets('a double click plays the list on screen from that clip', (
     tester,
   ) async {
-    final h = await open(tester, library: _library, server: server);
+    final h = await open(tester, library: _library);
     // Audio: it plays from the bar and the list stays on screen. (Any
     // shorts loop left on is let go first.)
     await doubleClick(tester, titleOf('Amber Skies'));
@@ -234,7 +230,6 @@ void main() {
         for (final i in _library)
           if (i.localPath == null) i,
       ],
-      server: server,
     );
     void go(String to) =>
         GoRouter.of(tester.element(find.byType(EmberSidebar))).go(to);
@@ -252,7 +247,7 @@ void main() {
   testWidgets('filters that hide everything offer to clear them', (
     tester,
   ) async {
-    await open(tester, library: _library, server: server);
+    await open(tester, library: _library);
     await tester.tap(find.text('Audio'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Platform'));
@@ -265,17 +260,11 @@ void main() {
     expect(find.byType(MTMediaGridCard), findsNWidgets(4));
   });
 
-  testWidgets("**the guard**: YouTube's cover goes without the password", (
+  testWidgets('**the guard**: no cover is fetched with a credential', (
     tester,
   ) async {
-    final locked = ServerConfig(
-      baseUrl: 'http://nas:8081',
-      username: 'owner',
-      password: 'secret',
-    );
     await open(
       tester,
-      server: locked,
       library: [
         LibraryItem(
           canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
@@ -285,7 +274,7 @@ void main() {
         ),
         LibraryItem(
           canonicalUrl: 'https://example.com/b',
-          title: 'Cover on the server',
+          title: 'Cover elsewhere',
           onServer: true,
           thumbnail: 'http://nas:8081/download/b.jpg',
         ),
@@ -300,7 +289,7 @@ void main() {
     };
     expect(covers.keys, hasLength(2));
     expect(covers['https://i.ytimg.com/vi/aaaaaaaaaaa/hqdefault.jpg'], isEmpty);
-    expect(covers['http://nas:8081/download/b.jpg'], contains('Authorization'));
+    expect(covers['http://nas:8081/download/b.jpg'], isEmpty);
   });
 
   testWidgets('**the guard**: no Material icon on screen, in any layout', (
@@ -308,7 +297,7 @@ void main() {
   ) async {
     // The source check catches `Icons.` written in this app; this one
     // catches the shared widgets it draws.
-    await open(tester, library: _library, server: server);
+    await open(tester, library: _library);
     for (final mode in ['Grid', 'Table', 'Compact']) {
       await tester.tap(find.bySemanticsLabel(mode));
       await tester.pumpAndSettle();
@@ -329,7 +318,7 @@ void main() {
             ];
             tester.platformDispatcher.textScaleFactorTestValue = scale;
             addTearDown(tester.platformDispatcher.clearAllTestValues);
-            final h = ShellHarness(library: _library, server: server);
+            final h = ShellHarness(library: _library);
             await tester.pumpWidget(h.app());
             await tester.pumpAndSettle();
             await tester.tap(

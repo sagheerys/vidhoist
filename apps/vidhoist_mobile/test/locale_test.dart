@@ -70,10 +70,7 @@ void main() {
   test(
     'loading from storage with no language key follows the system',
     () async {
-      final settings = await LiteSettings.load(
-        MemoryKeyValueStore(),
-        MemorySecretStore(),
-      );
+      final settings = await LiteSettings.load(MemoryKeyValueStore());
       expect(settings.localeCode, isNull);
     },
   );

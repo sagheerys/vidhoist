@@ -112,4 +112,37 @@ void main() {
       'YtDlpError(rateLimited): ERROR: HTTP Error 429',
     );
   });
+
+  group('reason: the first sentence of what yt-dlp said', () {
+    test('drops the ERROR prefix, the extractor tag and the id', () {
+      expect(
+        ErrorClassifier.reason('ERROR: [youtube] aaa: Video unavailable'),
+        'Video unavailable',
+      );
+      expect(ErrorClassifier.reason('ERROR: HTTP Error 429'), 'HTTP Error 429');
+    });
+
+    test('keeps the first line of several', () {
+      expect(
+        ErrorClassifier.reason(
+          '[youtube] This video is unavailable\nNo video formats found!\n'
+          'Requested format is not available',
+        ),
+        'This video is unavailable',
+      );
+    });
+
+    test('leaves a plain reason alone', () {
+      expect(
+        ErrorClassifier.reason('URL is missing a host'),
+        'URL is missing a host',
+      );
+      expect(ErrorClassifier.reason('  timeout  '), 'timeout');
+    });
+
+    test('never returns less than it was given', () {
+      expect(ErrorClassifier.reason('[youtube]'), '[youtube]');
+      expect(ErrorClassifier.reason(''), '');
+    });
+  });
 }

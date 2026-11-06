@@ -19,11 +19,6 @@ void main() {
       final text = errorText(l10n, const PlatformBlockedException('...'));
 
       expect(text, l10n.errPlatformBlocked);
-      expect(
-        text,
-        isNot(contains(l10n.cookiesUpload)),
-        reason: 'لا شاشة كوكيز في Lite، فلا تُوجّه إليها',
-      );
     });
   }
 }

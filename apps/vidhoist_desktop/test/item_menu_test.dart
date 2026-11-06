@@ -5,17 +5,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/clip_handover.dart';
 import 'package:vidhoist_desktop/features/library/item_menu.dart';
 import 'package:vidhoist_desktop/features/library/library_item_view.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import 'support/shell_harness.dart';
 
-LibraryItem _clip({bool onServer = true, String? localPath}) => LibraryItem(
+LibraryItem _clip({String? localPath}) => LibraryItem(
   canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
   title: 'Night Drive',
-  onServer: onServer,
-  serverFilename: onServer ? 'Night Drive.mp4' : null,
+  onServer: true,
   localPath: localPath,
   timestamp: DateTime(2026, 10, 20),
 );
@@ -45,54 +43,30 @@ void main() {
       ], everyElement(isNotNull));
     });
 
-    test("**the guard**: then the phone's order, and deleting last, apart and "
-        'in the error colour', () {
+    test('a clip whose file is gone offers nothing to copy, show or '
+        'delete', () {
       expect(choices(_clip()), [
-        ItemChoice.makeOffline,
         ItemChoice.copyLink,
-        ItemChoice.copyFile,
         ItemChoice.openOriginal,
         ItemChoice.addToList,
         ItemChoice.tags,
-        ItemChoice.download,
-        null,
-        ItemChoice.deleteFromServer,
       ]);
-      final last = itemMenuEntries(l, _clip(), hasFile: false).last;
-      expect(last.danger, isTrue);
     });
 
-    test('a clip kept here offers its folder and removing the copy, not '
-        'making it again', () {
-      expect(choices(_clip(localPath: r'C:\x.mp4'), hasFile: true), [
+    test("**the guard**: then the phone's order, and deleting its file last, "
+        'apart and in the error colour; no server action is offered', () {
+      final file = _clip(localPath: r'C:\x.mp4');
+      expect(choices(file, hasFile: true), [
         ItemChoice.copyLink,
         ItemChoice.copyFile,
         ItemChoice.showInFolder,
         ItemChoice.openOriginal,
         ItemChoice.addToList,
         ItemChoice.tags,
-        ItemChoice.download,
-        ItemChoice.removeLocalCopy,
         null,
-        ItemChoice.deleteFromServer,
+        ItemChoice.deleteLocal,
       ]);
-    });
-
-    test('**the guard**: a clip only on this computer is never offered the '
-        "server's actions, and deleting it is deleting its file", () {
-      expect(
-        choices(_clip(onServer: false, localPath: r'C:\x.mp4'), hasFile: true),
-        [
-          ItemChoice.copyLink,
-          ItemChoice.copyFile,
-          ItemChoice.showInFolder,
-          ItemChoice.openOriginal,
-          ItemChoice.addToList,
-          ItemChoice.tags,
-          null,
-          ItemChoice.deleteLocal,
-        ],
-      );
+      expect(itemMenuEntries(l, file, hasFile: true).last.danger, isTrue);
     });
   });
 
@@ -117,7 +91,7 @@ void main() {
       );
       final h = ShellHarness(
         library: library ?? [_clip()],
-        server: ServerConfig(baseUrl: 'http://nas:8081'),
+        withEngine: true,
         overrides: [
           if (dragged != null)
             clipDragProvider.overrideWithValue((item, child) {
@@ -141,27 +115,18 @@ void main() {
     }
 
     testWidgets('**the guard**: a right click on a card opens its menu, and '
-        'deleting asks first, then deletes by the canonical URL', (
-      tester,
-    ) async {
-      final h = await open(tester);
+        'deleting asks first', (tester) async {
+      await open(tester, library: [_clip(localPath: r'C:\x.mp4')]);
       await rightClick(tester, find.text('Night Drive'));
       expect(find.text('Copy link'), findsOneWidget);
-      await tester.tap(find.text('Delete from server'));
+      expect(find.text('Delete from server'), findsNothing);
+      await tester.tap(find.text('Delete video'));
       await tester.pumpAndSettle();
       // Cancelled: nothing goes.
+      expect(find.textContaining('remove the file'), findsOneWidget);
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
-      expect(h.api.deleted, isEmpty);
-
-      await rightClick(tester, find.text('Night Drive'));
-      await tester.tap(find.text('Delete from server'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Delete'));
-      await tester.pumpAndSettle();
-      expect(h.api.deleted, [
-        ['https://youtu.be/aaaaaaaaaaa'],
-      ]);
+      expect(find.text('Night Drive'), findsOneWidget);
     });
 
     for (final arabic in [false, true]) {

@@ -16,9 +16,8 @@ import 'features/settings/auto_backup.dart';
 import 'features/settings/settings_state.dart';
 import 'features/shared/stores.dart';
 
-/// Riverpod injection (TRD §3.1): a settings change rebuilds the client and
-/// the engine automatically, with no Completers and no manual
-/// synchronisation.
+/// Riverpod injection (TRD §3.1): a settings change rebuilds the engine
+/// automatically, with no Completers and no manual synchronisation.
 
 /// Overridden in main once SharedPreferences is ready.
 final keyValueStoreProvider = Provider<KeyValueStore>(
@@ -40,16 +39,10 @@ final settingsProvider = NotifierProvider<SettingsNotifier, LiteSettings>(
   SettingsNotifier.new,
 );
 
-/// The server's client, **never built any more**: downloads run on the
-/// phone. It stays until the server layer is deleted (phase 1, batch 6) so
-/// what still names it compiles, and with it null every server path is off.
-final apiClientProvider = Provider<VidhoistApiClient?>((ref) => null);
-
 // The indexes (§5.5: all of them keyed by the unified item key).
 
-/// canonicalUrl to the local path. In Lite it is filled after every
-/// successful pull, so the URL stays associated with the file even after it
-/// is deleted from the server, which it always is.
+/// canonicalUrl to the local path, filled after every finished download,
+/// so a clip's link stays tied to its file.
 final offlineIndexProvider = Provider(
   (ref) => OfflineIndex(
     store: ref.watch(keyValueStoreProvider),
@@ -137,37 +130,10 @@ final playlistsRevisionProvider = StateProvider<int>((ref) => 0);
 
 /// **Resolving short links before the routing decision** (field report
 /// 2026-09-08): `on.soundcloud.com/…` is an album that contains no
-/// `/sets/`, so it passed as a single clip and the server expanded it into
-/// twenty. The engine resolves for itself later, and resolving what is
+/// `/sets/`, so it passed as a single clip and was expanded into twenty. The engine resolves for itself later, and resolving what is
 /// already resolved costs nothing (`needsResolution` returns false
 /// immediately).
 final shortLinkResolverProvider = Provider((ref) => ShortLinkResolver());
-
-/// The server engine's records of unfinished pulls; unused since the
-/// engine runs on the phone, kept until the server layer goes (batch 6).
-final pendingDownloadsProvider = Provider(
-  (ref) => PendingDownloadsStore(
-    store: ref.watch(keyValueStoreProvider),
-    mutex: ref.watch(prefsMutexProvider),
-  ),
-);
-
-/// See [TrashcanProbe]: whether the server is really deleting the files.
-final trashcanProbeProvider = Provider<TrashcanProbe?>((ref) {
-  final api = ref.watch(apiClientProvider);
-  if (api == null) return null;
-  return TrashcanProbe(
-    api: api,
-    store: ref.watch(keyValueStoreProvider),
-    mutex: ref.watch(prefsMutexProvider),
-  );
-});
-
-/// Whether the last cleanup found the server keeping its files.
-final serverKeepsFilesProvider = FutureProvider<bool>((ref) async {
-  final probe = ref.watch(trashcanProbeProvider);
-  return await probe?.serverKeepsFiles ?? false;
-});
 
 /// youtubedl-android, through `YtDlpBridge.kt`.
 final ytDlpBridgeProvider = Provider<YtDlpBridge>(

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/pill.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 
 import 'support/shell_harness.dart';
@@ -22,10 +21,7 @@ void main() {
   Future<void> open(WidgetTester tester, String route) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     ShellHarness.useArabic(tester);
-    final h = ShellHarness(
-      library: [clip],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [clip], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(clip)], playing: false);

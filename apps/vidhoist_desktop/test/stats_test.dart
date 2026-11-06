@@ -47,7 +47,7 @@ void main() {
             timestamp: DateTime(2026, 10, 1),
           ),
       ],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
     );
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
@@ -67,10 +67,7 @@ void main() {
 
     Future<ShellHarness> open(WidgetTester tester) async {
       ShellHarness.useWindow(tester, const Size(1440, 900));
-      final h = ShellHarness(
-        library: items,
-        server: ServerConfig(baseUrl: 'http://nas:8081'),
-      );
+      final h = ShellHarness(library: items, withEngine: true);
       // Clip a was played here once.
       await PlaybackPositionStore(
         store: h.store,
@@ -86,7 +83,7 @@ void main() {
         'and a suggestion opens a clip without deleting anything', (
       tester,
     ) async {
-      final h = await open(tester);
+      await open(tester);
       await tester.tap(find.bySemanticsLabel('Statistics'));
       await tester.pumpAndSettle();
       expect(find.byType(StatsPage), findsOneWidget);
@@ -135,7 +132,6 @@ void main() {
       await tester.tap(unplayed);
       await tester.pumpAndSettle();
       expect(find.byType(ClipPage), findsOneWidget);
-      expect(h.api.deleted, isEmpty);
     });
 
     testWidgets('the palette has the page too, and the library stays lit in '

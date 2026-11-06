@@ -78,7 +78,6 @@ class BatchPlaylistCollector {
       await playlists.addItems(playlistId, [
         PlaylistEntry(
           canonicalUrl: url,
-          serverFilename: task.serverFilename,
           cachedTitle: task.title,
           cachedThumb: task.thumbnail,
         ),

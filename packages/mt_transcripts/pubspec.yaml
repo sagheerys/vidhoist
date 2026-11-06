@@ -1,5 +1,5 @@
 name: mt_transcripts
-description: "Transcripts for Super: subtitle parsing, Arabic-aware search, a file store, and fetching subtitles from Vidhoist without touching the library — pure Dart, no Flutter."
+description: "Transcripts: subtitle parsing, Arabic-aware search, a file store, and fetching subtitles with yt-dlp for clips already in the library — pure Dart, no Flutter."
 version: 0.1.0
 publish_to: none
 resolution: workspace

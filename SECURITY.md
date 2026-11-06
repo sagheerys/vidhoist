@@ -17,16 +17,16 @@ would rather not be.
 
 ## What is in scope
 
-Vidhoist downloads with yt-dlp on the device. While the move away from the
-Vidhoist server is in progress, the server paths below still exist. The
+Vidhoist downloads with yt-dlp on the device; there is no server. The
 interesting surface is small and worth naming:
 
-- **The server contract.** The apps send `Authorization: Basic` on every
-  request, including streaming. Anything that leaks those credentials — into a
-  log, a backup, a crash report, an intent, a URL — is a real issue.
-- **The path guard.** Server filenames are checked in
-  `VidhoistApiClient.downloadUrl()` before a URL is ever built from them. A name
-  that escapes it and reaches the filesystem or a media player is a real issue.
+- **The engine's command line.** Links and names reach yt-dlp as separate
+  arguments, never through a shell, and its output template keeps every file
+  inside the download folder. A link or a title that runs something, or
+  writes outside that folder, is a real issue.
+- **Cookies.** A cookies file or a browser's cookies are passed to yt-dlp and
+  to nothing else. One that leaks into a log, a backup or another request is
+  a real issue.
 - **The backup file.** It is deliberately plain text and deliberately holds no
   secret: no password, no username, and credentials embedded in a URL are
   stripped. A secret found inside one is a real issue.
@@ -40,11 +40,8 @@ interesting surface is small and worth naming:
 
 ## What is out of scope
 
-- **The Vidhoist server itself.** Report those to
-  [alexta69/vidhoist](https://github.com/alexta69/vidhoist).
-- **yt-dlp**, and the sites it downloads from.
-- **A server exposed without authentication.** These apps cannot protect a
-  server anyone can reach; see [docs/SERVER-SETUP.md](docs/SERVER-SETUP.md).
+- **yt-dlp**, ffmpeg and Deno themselves, and the sites they download from.
+  Report those upstream.
 - **An attacker who already has your unlocked phone.** Android's own protection
   is the boundary; the apps do not add one.
 

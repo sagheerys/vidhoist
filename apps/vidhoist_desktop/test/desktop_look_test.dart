@@ -13,7 +13,6 @@ import 'package:vidhoist_desktop/shell/player_bar.dart';
 import 'package:vidhoist_desktop/shell/player_controls.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/sidebar_items.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_media/mt_media.dart';
 import 'package:mt_ui/mt_ui.dart';
@@ -156,10 +155,7 @@ void main() {
     tester,
   ) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
-    final h = ShellHarness(
-      library: [_clip],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [_clip], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(_clip)], playing: false);
@@ -184,10 +180,7 @@ void main() {
       isAudio: true,
       timestamp: DateTime(2026, 10, 1),
     );
-    final h = ShellHarness(
-      library: [_clip, older],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [_clip, older], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     double topOf(String title) => tester
@@ -211,10 +204,7 @@ void main() {
   testWidgets('**the guard**: the layouts and the figures are glyphs, '
       'named under the mouse', (tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
-    final h = ShellHarness(
-      library: [_clip],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [_clip], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     for (final name in ['Grid', 'Table', 'Compact', 'Statistics']) {

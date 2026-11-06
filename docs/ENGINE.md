@@ -2,7 +2,9 @@
 
 Measured in batch 1 of the phase 1 plan (2026-11-05/06), before any engine
 code was written. This file is the reference for the command lines, the
-measurements and the traps; `docs/legacy/` goes once it covers everything.
+measurements and the traps, and for what carried over from the Vidhoist days
+(the last section): the server contract that came before it was deleted in
+batch 6 (2026-11-06).
 Raw stdout and stderr of the Windows runs are kept as fixtures in
 `packages/mt_ytdlp/test/fixtures/windows/` (media links, the requester's IP
 and local paths replaced).
@@ -187,3 +189,66 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 | IPv4 | `-4` by default on both platforms, with a setting to turn it off |
 | YouTube's wait on Android | Probe once, keep the info JSON, download from it; the waiting screen says what it is doing during the probe |
 | Android first run | Initialise and update the engine on the welcome screen, before the first download |
+
+## What carried over: storage, backups and keys
+
+The parts of the old server contract (`SERVER-API.md`, deleted in batch 6)
+that never depended on the server, as they stand now.
+
+### One key for everything
+
+```
+canonicalUrl (yt-dlp's webpage_url) ─┬─ LocalHistoryStore → the file and its record
+                                     ├─ TagsIndex        → [tags], favourites
+                                     ├─ ArtworkIndex     → cover
+                                     ├─ KeptCoverIndex   → the cover kept as a file
+                                     ├─ PlaylistEntry    (inside saved_playlists)
+                                     └─ playback position
+```
+
+Any new feature keys its data to this, never to a file path and never to a
+title. **Nothing is invented when it is missing**: a file name is not built
+from the title, and an `i.ytimg.com` cover is guessed for YouTube alone.
+
+### SharedPreferences (behind `KeyValueStore` and `PrefsMutex`, always)
+
+| Key | Content |
+|---|---|
+| `local_history_v1` | Every download finished here, with the fields Vidhoist's `/history` had (`url`, `title`, `filename`, `uploader`, `thumbnail`, `size`, `download_type`, `folder`, `timestamp`) plus `path` |
+| `local_pending_v1` | Downloads not finished yet, started again at the next launch; kept out of every backup |
+| `video_quality` · `theme_mode` · `app_locale` | Default quality, theme, language |
+| `tags_index` · `artwork_index` · `saved_playlists` | Tags (favourites as a hidden system tag), covers, saved playlists |
+| `audio_state` · `player_play_mode` · `player_playback_speed` · `playback_pos_<url>` | The audio queue, play modes, speed, resume positions |
+| `compatible_playback` | H.264/AAC first (on by default), for phones that tear on AV1 |
+| `update_*` | Self-update: automatic check, last attempt, skipped version, the downloaded file's version |
+
+Old key names are kept, which is what lets a Vidhoist Lite or Super backup be
+read. `server_url`, `pending_downloads` and `server_keeps_files` from those
+backups are never planted on this device (`BackupService`).
+
+### Backups
+
+- **Plain JSON, no secret, ever**: no password, no user name, and
+  credentials inside a URL are stripped. The encrypted formats of Vidhoist
+  (`MTF1`, `MTBACKUP1`, `MTSBACKUP1`) are **read only**, with the device's
+  key if it survives.
+- The header is checked before any `json.decode`.
+- Dated names, the last seven kept, written atomically (`.tmp` then
+  rename); one identical to the newest is not written. A restore shows the
+  dates; it never restores the newest blindly.
+- Android's own backup leaves out `FlutterSecureStorage.xml`: its contents
+  are encrypted with a key that does not travel.
+
+### Short links and previews
+
+Short links (`vt.tiktok.com`, `fb.watch`, `on.soundcloud.com`, `redd.it`,
+`vimeo.com/<user>/<slug>`, ...) are resolved before the playlist-or-clip
+decision, with an HTTPS-to-HTTP downgrade refused and at most eight hops.
+SoundCloud sets and YouTube playlists are previewed by their own
+resolvers; when one fails, the link goes to yt-dlp as it is.
+
+### The audio handler
+
+`audioHandler.stop()` must clear `mediaItem` and `queue`, or a ghost mini
+player stays: its visibility hangs on `mediaItem != null`, not on the
+processing state.

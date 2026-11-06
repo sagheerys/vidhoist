@@ -170,7 +170,7 @@ class _Bar extends ConsumerWidget {
     final l = context.mtl;
     final text = Theme.of(context).textTheme;
     final selection = ref.read(librarySelectionProvider.notifier);
-    final onServer = items.where((i) => i.onServer).toList();
+    final withFile = items.where((i) => i.isOffline).toList();
     return Material(
       color: p.card,
       elevation: 6,
@@ -222,11 +222,11 @@ class _Bar extends ConsumerWidget {
                 ]),
               ),
             ),
-            if (onServer.isNotEmpty)
+            if (withFile.isNotEmpty)
               EmberPlayerControl(
                 icon: MTIcons.trash,
-                label: l.deleteFromServer,
-                onTap: () => unawaited(_delete(context, ref, onServer)),
+                label: l.delete,
+                onTap: () => unawaited(_delete(context, ref, withFile)),
               ),
             EmberPlayerControl(
               icon: MTIcons.close,
@@ -240,17 +240,17 @@ class _Bar extends ConsumerWidget {
     );
   }
 
-  /// From the server, by each clip's canonical link, after asking once.
+  /// Their files on this computer, after asking once.
   Future<void> _delete(
     BuildContext context,
     WidgetRef ref,
-    List<LibraryItem> onServer,
+    List<LibraryItem> withFile,
   ) async {
     final l = context.mtl;
     final sure = await showMTConfirm(
       context,
-      title: l.deleteFromServer,
-      message: l.desktopDeleteSelectedConfirm(onServer.length),
+      title: l.delete,
+      message: l.desktopDeleteSelectedConfirm(withFile.length),
       confirmLabel: l.delete,
       cancelLabel: l.cancel,
       destructive: true,
@@ -258,11 +258,11 @@ class _Bar extends ConsumerWidget {
     if (!sure) return;
     final actions = ref.read(clipActionsProvider);
     try {
-      for (final item in onServer) {
-        await actions.deleteFromServer(item.canonicalUrl);
+      for (final item in withFile) {
+        await actions.deleteFile(item);
       }
     } on Object catch (e) {
-      // Those deleted before the refusal are gone; the rest stay chosen.
+      // Those deleted before the failure are gone; the rest stay chosen.
       if (context.mounted) {
         showMTNotice(
           context,
@@ -274,7 +274,7 @@ class _Bar extends ConsumerWidget {
     }
     ref.read(librarySelectionProvider.notifier).clear();
     if (context.mounted) {
-      showMTNotice(context, message: l.deletedFromServer);
+      showMTNotice(context, message: l.deletedCount(withFile.length));
     }
   }
 }

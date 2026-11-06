@@ -25,10 +25,8 @@ import 'package:mt_media/library.dart';
 import 'package:mt_media/mt_media.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
 
-import 'fake_api.dart';
 import 'fake_engine.dart';
 
-export 'fake_api.dart';
 export 'fake_engine.dart';
 
 /// A player that records the commands it gets and plays nothing.
@@ -146,9 +144,7 @@ class ShellHarness {
   ShellHarness({
     this.layout = const ShellLayout(),
     this.library,
-    this.server,
     this.transcripts = const {},
-    this.serverError,
     this.zoom = const UiZoom(1.0),
     this.workArea,
     this.overrides = const [],
@@ -156,7 +152,8 @@ class ShellHarness {
     this.night = false,
   });
 
-  /// The engine stands by with no server set up, as in the app itself.
+  /// The engine stands by, as in the app itself; off, there is none, as
+  /// when yt-dlp could not be found.
   final bool withEngine;
 
   /// The app at night, as Windows' dark mode chooses it.
@@ -171,16 +168,10 @@ class ShellHarness {
   /// The screen the window is on, minus the taskbar; null is unknown.
   final Size? workArea;
 
-  /// Stands in for the server, so a test that deletes reaches nothing.
-  late final api = FakeApi(server ?? ServerConfig(baseUrl: 'http://nas:8081'));
   final video = InertVideoSurface();
 
   /// Stands in for the download engine: records what is added.
   final engine = FakeEngine();
-
-  /// Why the server part of the library is missing, as if it stopped
-  /// answering after the library was last read.
-  final Object? serverError;
 
   /// Transcripts by canonical URL, as if already on this computer.
   final Map<String, Transcript> transcripts;
@@ -188,9 +179,8 @@ class ShellHarness {
   final ShellLayout layout;
 
   /// The unified library as if merged; null leaves the real providers,
-  /// which with no server list nothing.
+  /// which with nothing downloaded list nothing.
   final List<LibraryItem>? library;
-  final ServerConfig? server;
   final player = FakePlayer();
   final controls = InertWindowControls();
   final store = MemoryKeyValueStore();
@@ -210,31 +200,21 @@ class ShellHarness {
       initialShellLayoutProvider.overrideWithValue(layout),
       initialUiZoomProvider.overrideWithValue(zoom),
       windowControlsProvider.overrideWithValue(controls),
-      serverConfigProvider.overrideWithValue(server),
       playbackResolverProvider.overrideWithValue(resolver),
       artworkCacheProvider.overrideWithValue(NoCovers()),
       transcriptForProvider.overrideWith(
-        (ref, key) async => transcripts[key.canonicalUrl],
+        (ref, canonicalUrl) async => transcripts[canonicalUrl],
       ),
       if (library case final items?)
         libraryItemsProvider.overrideWith((ref) async => items),
       videoSurfaceProvider.overrideWithValue(video),
-      apiClientProvider.overrideWith(
-        (ref) => ref.watch(serverConfigProvider) == null ? null : api,
-      ),
-      downloadEngineProvider.overrideWith(
-        (ref) => withEngine || ref.watch(serverConfigProvider) != null
-            ? engine
-            : null,
-      ),
+      downloadEngineProvider.overrideWith((ref) => withEngine ? engine : null),
       if (night)
         initialAppearanceProvider.overrideWithValue((
           theme: ThemeMode.dark,
           locale: null,
         )),
       ...overrides,
-      if (serverError case final error?)
-        libraryServerErrorProvider.overrideWithValue(error),
     ],
     child: const EmberApp(),
   );

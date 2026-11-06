@@ -85,30 +85,6 @@ Future<void> showFolderHelp(BuildContext context, String title, String body) =>
       ),
     );
 
-/// A line a picker must say before its list: the server refuses folders,
-/// or ignores them.
-class FolderNotice extends StatelessWidget {
-  const FolderNotice({super.key, required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: MTSpace.xs),
-      padding: const EdgeInsets.all(MTSpace.sm),
-      decoration: BoxDecoration(
-        color: p.cardAlt,
-        border: BorderDirectional(
-          start: BorderSide(color: p.err, width: MTSpace.xxs),
-        ),
-      ),
-      child: Text(text, style: Theme.of(context).textTheme.bodySmall),
-    );
-  }
-}
-
 /// The (?) that opens a help text: **still and grey**, found by whoever
 /// wants it. It used to pulse three times in a circle of the accent as the
 /// picker opened, a light that asked for attention nobody had asked for.

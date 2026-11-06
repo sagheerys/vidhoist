@@ -1,78 +1,18 @@
 /// Every fixed number and list the core uses; no network or download
 /// number is written anywhere else.
 abstract final class MTConstants {
-  // Network timeouts (§1).
-  static const Duration connectTimeout = Duration(seconds: 30);
-  static const Duration receiveTimeout = Duration(seconds: 30);
-
-  /// Pulls only, where large files stream.
-  static const Duration downloadReceiveTimeout = Duration(minutes: 30);
+  /// How long one short link may take to answer.
   static const Duration testConnectionTimeout = Duration(seconds: 10);
 
-  /// The folder list arrives after the whole history on the live channel,
-  /// so its timeout is longer than [testConnectionTimeout].
-  static const Duration foldersTimeout = Duration(seconds: 15);
-
-  /// A quick probe for endpoint switching (EndpointResolver).
-  static const Duration probeTimeout = Duration(seconds: 4);
-
-  /// **A text file from the server** (a transcript): an hour of speech is
-  /// about 100KB of SRT, so the cap refuses only a file that is not one.
+  /// **A text file read whole** (a dropped list of links): the cap refuses
+  /// only a file that is not one.
   static const int maxTextFileBytes = 5 * 1024 * 1024;
-  static const Duration textFileTimeout = Duration(seconds: 15);
 
   /// **How long short-link resolution may hold up a routing decision**
   /// (field report 2026-09-08): deciding "playlist or single" waits on the
   /// network and the user waits with it, so past this limit the link is
   /// used as it is rather than freezing the interface.
   static const Duration routingResolveTimeout = Duration(seconds: 5);
-
-  // Polling rhythm (§2.3).
-  static const Duration pollInterval = Duration(seconds: 5);
-
-  /// 360 x 5s, a **thirty-minute** ceiling for one download pipeline.
-  ///
-  /// It was ten minutes, which a long clip on a busy server passes without
-  /// anything being wrong: the app gave up, the server finished, and the
-  /// file stayed there — one of the ten ways the audit of 2026-09-19 found
-  /// for Lite to break its own promise. The ceiling exists to stop a task
-  /// polling forever, not to judge how long a download should take, so it
-  /// belongs well beyond any real one. Nothing polls faster because of
-  /// this, and a task that finishes early still finishes early.
-  ///
-  /// The record ([PendingDownload]) is the real backstop for whatever
-  /// passes even this.
-  static const int maxPollAttempts = 360;
-
-  /// The allowance for network failures in a row while polling; see
-  /// `DownloadPoller.networkTolerance` (field report 2026-09-13). Six is
-  /// about half a minute when connections are refused and a few minutes
-  /// when they time out.
-  ///
-  /// **Lite uses it too since 2026-09-19.** It kept 0 on the reasoning that
-  /// its foreground service keeps it awake — but the service does not keep
-  /// the *network* up, and a phone moving between Wi-Fi and mobile drops a
-  /// request as readily as a sleeping one does. The cost of failing at the
-  /// first blip is not a red card: the server carries on, finishes the file
-  /// and **nobody comes back for it**. Waiting half a minute for a
-  /// connection that is about to return is the cheaper mistake.
-  static const int pollNetworkTolerance = 6;
-
-  /// The old name, kept so nothing outside has to change at once.
-  static const int superPollNetworkTolerance = pollNetworkTolerance;
-
-  /// Super's live interface refresh, only while something is active.
-  static const Duration livePollInterval = Duration(seconds: 2);
-
-  // Pulling and retrying (§2.4).
-  static const int pullRetries = 3;
-  static const List<Duration> pullRetryBackoff = [
-    Duration(seconds: 3),
-    Duration(seconds: 6),
-  ];
-
-  // The queue (§3).
-  static const int maxConcurrentDownloads = 1;
 
   /// The most links one paste or drop sends together. A page of text can
   /// hold hundreds; past this the rest are left out, and the user is told

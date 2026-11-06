@@ -12,33 +12,25 @@ import '../../router.dart';
 import '../../shell/context_menu.dart';
 import '../../shell/error_text.dart';
 import '../lists/list_dialogs.dart';
-import '../../data/local_copies.dart';
 import 'clip_actions.dart';
-import 'copy_pills.dart';
 
-enum _ClipChoice { download, addToList, copyLink, openOriginal, delete }
+enum _ClipChoice { addToList, copyLink, openOriginal, delete }
 
 /// The right-click menu of a clip's page, and its "More" button: the
-/// actions that do not earn a button, in the phone's order, **deleting from
-/// the server last** and only here, behind a confirmation. A clip only on
-/// this computer is not offered it, as in the library's menu: there is
-/// nothing there to delete. Given a [download] source, "Download…" leads.
+/// actions that do not earn a button, in the phone's order, **deleting the
+/// file last** and only here, behind a confirmation. A clip with no file
+/// here is not offered it: there is nothing to delete.
 Future<void> showClipMenu(
   BuildContext context,
   WidgetRef ref,
   Offset globalPosition,
-  PlaylistItem item, {
-  CopySource? download,
-}) async {
+  PlaylistItem item,
+) async {
   final l = context.mtl;
   final listed = (ref.read(libraryItemsProvider).valueOrNull ?? const [])
       .where((i) => i.canonicalUrl == item.canonicalUrl)
       .firstOrNull;
-  // Unknown to the library (a session from before) keeps the old offer.
-  final onServer = listed?.onServer ?? true;
   final choice = await showEmberMenu(context, globalPosition, [
-    if (download != null)
-      EmberMenuEntry(_ClipChoice.download, MTIcons.saveTo, l.desktopDownloadTo),
     EmberMenuEntry(_ClipChoice.addToList, MTIcons.queue, l.addToPlaylist),
     EmberMenuEntry(_ClipChoice.copyLink, MTIcons.link, l.desktopCopyLink),
     EmberMenuEntry(
@@ -46,12 +38,12 @@ Future<void> showClipMenu(
       MTIcons.external,
       l.openOriginalLink,
     ),
-    if (onServer) ...[
+    if (listed != null && listed.isOffline) ...[
       const EmberMenuEntry.divider(),
       EmberMenuEntry(
         _ClipChoice.delete,
         MTIcons.trash,
-        l.deleteFromServer,
+        l.deleteVideo,
         danger: true,
       ),
     ],
@@ -59,8 +51,6 @@ Future<void> showClipMenu(
   if (choice == null || !context.mounted) return;
   final actions = ref.read(clipActionsProvider);
   switch (choice) {
-    case _ClipChoice.download:
-      await downloadCopy(context, ref, download!);
     case _ClipChoice.addToList:
       await showAddToPlaylistDialog(context, item);
     case _ClipChoice.copyLink:
@@ -71,8 +61,8 @@ Future<void> showClipMenu(
     case _ClipChoice.delete:
       final sure = await showMTConfirm(
         context,
-        title: l.deleteFromServer,
-        message: l.deleteFromServerConfirm,
+        title: l.deleteVideo,
+        message: l.deleteVideoConfirm(mtName(item.title)),
         confirmLabel: l.delete,
         cancelLabel: l.cancel,
         destructive: true,
@@ -80,9 +70,9 @@ Future<void> showClipMenu(
       if (!sure || !context.mounted) return;
       final router = GoRouter.of(context);
       try {
-        await actions.deleteFromServer(item.canonicalUrl);
+        await actions.deleteFile(listed!);
       } on Object catch (e) {
-        // The server said no or did not answer: say why, and stay.
+        // Windows refused (a file held open): say why, and stay.
         if (context.mounted) {
           showMTNotice(
             context,
@@ -93,7 +83,7 @@ Future<void> showClipMenu(
         return;
       }
       if (!context.mounted) return;
-      showMTNotice(context, message: l.deletedFromServer);
+      showMTNotice(context, message: l.deletedTitle(mtName(item.title)));
       router.go(EmberRoutes.library);
   }
 }

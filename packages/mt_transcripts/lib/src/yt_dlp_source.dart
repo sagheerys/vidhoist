@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:mt_core/mt_core.dart' show ErrorClassifier, YtDlpErrorKind;
+
 import 'subtitle_source.dart';
 
 /// Subtitles fetched by yt-dlp on the computer running it.
@@ -120,25 +122,20 @@ class YtDlpSource implements SubtitleSource {
         : const OfferedTracks();
   }
 
-  static final _blocked = RegExp(
-    r'HTTP Error 429|Too Many Requests|not a bot',
-    caseSensitive: false,
-  );
-  static final _gone = RegExp(
-    r'Video unavailable|Private video|has been removed|members-only|'
-    r'account .* terminated|video is not available',
-    caseSensitive: false,
-  );
-
-  /// What a failed run's error output means for the backfill.
+  /// What a failed run's error output means for the backfill, read by the
+  /// download engine's own [ErrorClassifier] so the two never disagree.
+  ///
+  /// YouTube's "not a bot" check is a sign-in request to the classifier,
+  /// but for a run of hundreds of videos it is the same block as a 429:
+  /// going on only deepens it.
   static Exception classify(String stderr) {
-    final errors = stderr
-        .split('\n')
-        .where((line) => line.startsWith('ERROR:'))
-        .join('\n');
-    final text = (errors.isEmpty ? stderr : errors).trim();
-    if (_blocked.hasMatch(text)) return BackfillRateLimited(text);
-    if (_gone.hasMatch(text)) return VideoGone(text);
-    return FetchFailed(text);
+    final error = ErrorClassifier.classify(stderr);
+    final text = error.message.trim();
+    return switch (error.kind) {
+      YtDlpErrorKind.rateLimited ||
+      YtDlpErrorKind.signInRequired => BackfillRateLimited(text),
+      YtDlpErrorKind.unavailable => VideoGone(text),
+      _ => FetchFailed(text),
+    };
   }
 }

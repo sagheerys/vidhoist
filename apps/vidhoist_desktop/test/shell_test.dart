@@ -279,23 +279,13 @@ void main() {
     }
   }
 
-  testWidgets('**the guard**: the last session comes back once, after the '
-      'server is wired', (tester) async {
-    // Restored before, every clip on the server had no address, was
-    // skipped as broken, and the queue emptied itself at start-up.
+  testWidgets('**the guard**: the last session comes back once, not at '
+      'every page', (tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
-    final h = ShellHarness(server: ServerConfig(baseUrl: 'http://nas:8081'));
-    String? address;
-    h.player.onRestore = () {
-      try {
-        address = h.resolver.endpoint.buildUrl('clip.mp4');
-      } on UnsafeFilenameException {
-        address = null; // no server yet: nothing would play
-      }
-    };
+    final h = ShellHarness();
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    expect(address, 'http://nas:8081/download/clip.mp4');
+    expect(h.player.restores, 1);
     await tester.tap(find.text('Playlists'));
     await tester.pumpAndSettle();
     expect(h.player.restores, 1);

@@ -28,7 +28,5 @@ void main() {
     await tester.pumpAndSettle();
     final l = lookupMTLocalizations(const Locale('en'));
     expect(find.text(l.desktopEmptyLibraryLocal), findsOneWidget);
-    expect(find.text(l.serverStatusUnconfigured), findsNothing);
-    expect(find.text(l.desktopSetupConnect), findsNothing);
   });
 }

@@ -128,4 +128,28 @@ abstract final class ErrorClassifier {
     }
     return YtDlpError(YtDlpErrorKind.failed, message, extractor: extractor);
   }
+
+  /// The first sentence of a yt-dlp error, for a phone screen.
+  ///
+  /// yt-dlp writes several lines behind an `ERROR:` and an `[extractor]`
+  /// tag, then often the video id ("ERROR: [youtube] abc: Video
+  /// unavailable\n…"); only that first sentence says anything, and the
+  /// bracketed tag is reordered to the far end of an Arabic line. Returns
+  /// [raw] itself, trimmed, when stripping would leave nothing.
+  static String reason(String raw) {
+    final lines = raw
+        .split('\n')
+        .map((line) => line.trim())
+        .where((line) => line.isNotEmpty);
+    if (lines.isEmpty) return raw.trim();
+    final first = lines.first;
+    final stripped = first
+        .replaceFirst(_errorPrefix, '')
+        .replaceFirst(_tagAndId, '')
+        .trim();
+    return stripped.isEmpty ? first : stripped;
+  }
+
+  static final _errorPrefix = RegExp(r'^ERROR:\s*', caseSensitive: false);
+  static final _tagAndId = RegExp(r'^\[[^\]]+\]\s*([\w-]+:\s+)?');
 }

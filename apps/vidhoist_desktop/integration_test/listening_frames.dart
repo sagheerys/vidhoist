@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vidhoist_desktop/features/listening/listening_room.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
 
@@ -36,7 +35,7 @@ Future<void> main() async {
   );
   final h = ShellHarness(
     library: [item],
-    server: ServerConfig(baseUrl: 'http://nas:8081'),
+    withEngine: true,
     transcripts: {
       _url: Transcript(
         canonicalUrl: _url,

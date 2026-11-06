@@ -33,7 +33,6 @@
         android:label="Vidhoist"
         android:name="${applicationName}"
         android:enableOnBackInvokedCallback="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -78,16 +77,6 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts"/>
         </activity>
-        <!-- The `flutter_background` foreground service that keeps downloads
-             alive in the background. **Without this declaration** the system
-             refuses to start it (`Unable to start service …
-             IsolateHolderService: not found`) and background mode stays
-             silently disabled. -->
-        <service
-            android:name="de.julianassmann.flutter_background.IsolateHolderService"
-            android:foregroundServiceType="dataSync"
-            android:enabled="true"
-            android:exported="false"/>
         <!-- The download engine's own foreground service (EngineService.kt):
              it outlives the Flutter engine, so a download goes on with the
              app swiped away. -->

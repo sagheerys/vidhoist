@@ -16,7 +16,7 @@ void main() {
   final running = DownloadTask(
     inputUrl: 'https://youtu.be/abc',
     quality: Quality.best,
-  ).copyWith(phase: TaskPhase.polling);
+  ).copyWith(phase: TaskPhase.downloading);
 
   Future<StreamController<List<DownloadTask>>> open(
     WidgetTester tester,
@@ -95,17 +95,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('the pull counts up from zero, not down from the server'
-      "'s hundred", (tester) async {
-    final tasks = await open(tester, [running.copyWith(progress: 1)]);
-    expect(find.text('100%'), findsOneWidget);
-
-    tasks.add([running.copyWith(phase: TaskPhase.pulling, progress: 0)]);
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('0%'), findsOneWidget);
-  });
-  testWidgets('**the guard**: a running task shows its title and the server '
+  testWidgets('**the guard**: a running task shows its title and its '
       'speed, and a waiting one its place in line', (tester) async {
     final titled = running.copyWith(
       title: 'Never Gonna Give You Up',

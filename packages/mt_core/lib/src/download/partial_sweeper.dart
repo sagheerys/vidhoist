@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'transfer.dart';
-
 /// **Sweeping orphaned partial files.**
 ///
 /// Killing the app in the middle of a large pull leaves `<name>.part` on
@@ -49,7 +47,7 @@ Future<int> sweepPartialFiles(
 }
 
 /// yt-dlp's work files, none of them a finished download:
-/// - `.part`, the file still arriving (the server pull used it too);
+/// - `.part`, the file still arriving;
 /// - `.ytdl`, its note of where a fragmented download stopped;
 /// - `.part-Frag12`, one fragment of an HLS or DASH stream;
 /// - `[id].f399.mp4`, one stream of a merge that never happened. The `]`
@@ -57,7 +55,7 @@ Future<int> sweepPartialFiles(
 ///   so a song called "track.f1.mp3" is never taken for one;
 /// - `.temp.mp4`, a file ffmpeg was rewriting.
 bool isLeftover(String path) =>
-    path.endsWith(Transfer.partSuffix) ||
+    path.endsWith('.part') ||
     path.endsWith('.ytdl') ||
     _leftover.hasMatch(path);
 

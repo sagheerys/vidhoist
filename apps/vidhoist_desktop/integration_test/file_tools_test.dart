@@ -97,11 +97,5 @@ void main() {
       );
       expect((read!.stdout as String).trim(), file.path);
     });
-
-    testWidgets('the room on a drive is read', (tester) async {
-      final free = freeBytesAt(Directory.systemTemp.path);
-      expect(free, isNotNull);
-      expect(free, greaterThan(0));
-    });
   });
 }

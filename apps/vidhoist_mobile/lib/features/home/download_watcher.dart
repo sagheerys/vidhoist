@@ -114,11 +114,7 @@ final downloadWatcherProvider = Provider<void>((ref) {
             TaskPhase.downloading ||
             TaskPhase.postprocessing ||
             TaskPhase.paused ||
-            TaskPhase.waitingForNetwork ||
-            TaskPhase.adding ||
-            TaskPhase.polling ||
-            TaskPhase.pulling ||
-            TaskPhase.deleting:
+            TaskPhase.waitingForNetwork:
           await showProgressIfChanged(
             id,
             title: task.title ?? texts.downloadingTitle,
@@ -172,9 +168,9 @@ final downloadWatcherProvider = Provider<void>((ref) {
           await notifications.cancel(id);
       }
     }
-    // A task can leave the list with no ending of its own: changing the
-    // server address replaces the engine. Its ongoing notice cannot be
-    // swiped away, so it goes here.
+    // A task can leave the list with no ending of its own: a rebuilt
+    // engine forgets it. Its ongoing notice cannot be swiped away, so it
+    // goes here.
     final listed = {for (final task in tasks) idOf(task)};
     for (final id in [...lastShown.keys.where((id) => !listed.contains(id))]) {
       lastShown.remove(id);
@@ -238,9 +234,7 @@ Future<void> initDownloadNotifications(WidgetRef ref) async {
 int? _percentOf(DownloadTask task) => switch (task.phase) {
   TaskPhase.downloading ||
   TaskPhase.postprocessing ||
-  TaskPhase.paused ||
-  TaskPhase.polling ||
-  TaskPhase.pulling => (task.progress * 100).round(),
+  TaskPhase.paused => (task.progress * 100).round(),
   _ => null,
 };
 

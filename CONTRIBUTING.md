@@ -66,19 +66,19 @@ and on which device. That is most of what this file is asking you to preserve.
 in `apps/*/test/device_matrix.dart`: five screen sizes and three text scales.
 Layout is what breaks on other people's phones and it does not show on yours.
 
-**Layers.** `apps → mt_media → mt_core`. `mt_core` is pure Dart with no Flutter
-import. `mt_ui` knows nothing about the server. All networking lives in
-`VidhoistApiClient` — no `Dio` anywhere else.
+**Layers.** `apps → mt_media → mt_core → mt_ytdlp`. `mt_core` and `mt_ytdlp`
+are pure Dart with no Flutter import. `mt_ui` knows no engine and no app. A
+yt-dlp command line is built and its output read in `mt_ytdlp` alone; each app
+only starts the process.
 
-**Server contract.** [`docs/SERVER-API.md`](docs/SERVER-API.md) is the authority on every
-request and response, including the traps that are documented there because they
-cost real debugging time. Deletion is keyed by the canonical URL from
-`/history`, never by the URL the user typed.
+**The engine.** [`docs/ENGINE.md`](docs/ENGINE.md) is the authority on how
+yt-dlp runs on each platform, what was measured, and the traps that are
+documented there because they cost real debugging time. Every index is keyed by
+the canonical URL yt-dlp reports (`webpage_url`), never by the URL the user
+typed.
 
-**Each app keeps its role.** Lite pulls to the device and cleans the server;
-Super keeps files on the server. Before changing anything shared, ask whether it
-changes the *other* app's behaviour — the download and delete policies run
-through the same engine.
+**Each app keeps its role.** Before changing anything shared, ask whether it
+changes the *other* app's behaviour: both run the same `LocalDownloadEngine`.
 
 ## Fixing a defect
 

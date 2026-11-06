@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 
 import '../library_data.dart';
@@ -26,7 +25,7 @@ typedef ShapeProbe = Future<ProbedShape?> Function(
 final shapeProbeProvider = Provider<ShapeProbe?>((ref) => null);
 
 /// The pause between two clips, so a library of hundreds is read without
-/// the server or this computer noticing; a test makes it zero.
+/// this computer noticing; a test makes it zero.
 final shapeProbeGapProvider = Provider<Duration>(
   (ref) => const Duration(seconds: 1),
 );
@@ -38,35 +37,27 @@ List<LibraryItem> shapeCandidates(List<LibraryItem> items, Set<String> tried) =>
       for (final item in items)
         if (item.duration == null &&
             !tried.contains(item.canonicalUrl) &&
-            (item.localPath != null ||
-                item.onServer && item.serverFilename != null))
+            item.localPath != null)
           item,
     ];
 
-/// Where [item]'s header is read: **a copy on this computer in place, with
-/// no credentials**; otherwise the server's own file with the server's own
-/// headers, and nothing else.
-({String url, Map<String, String> headers})? shapeSourceOf(
-  LibraryItem item,
-  VidhoistApiClient? api,
-) {
+/// Where [item]'s header is read: its file on this computer, in place;
+/// null when the file is not there.
+({String url, Map<String, String> headers})? shapeSourceOf(LibraryItem item) {
   if (item.localPath case final path? when File(path).existsSync()) {
     return (url: path, headers: const {});
   }
-  final name = item.serverFilename;
-  if (!item.onServer || name == null || api == null) return null;
-  return (url: api.downloadUrl(name), headers: api.streamingHeaders);
+  return null;
 }
 
 /// Learns the length of every clip in the library in the background, as
-/// the phone's library enricher does: the server sends none, and a clip
+/// the phone's library enricher does: the history holds none, and a clip
 /// that was never played here showed no length at all. One clip at a time,
 /// newest first so the screen fills from the top; what is learned is kept,
 /// so each clip is read once. Watched by the shell.
 final shapeEnrichmentProvider = Provider<void>((ref) {
   final probe = ref.watch(shapeProbeProvider);
   if (probe == null) return;
-  final api = ref.watch(apiClientProvider);
   final shapes = ref.watch(mediaShapeIndexProvider);
   final gap = ref.watch(shapeProbeGapProvider);
   final tried = <String>{};
@@ -84,15 +75,16 @@ final shapeEnrichmentProvider = Provider<void>((ref) {
       for (final item in shapeCandidates(items, tried)) {
         if (stopped) return;
         tried.add(item.canonicalUrl);
-        final source = shapeSourceOf(item, api);
+        final source = shapeSourceOf(item);
         if (source == null) continue;
         final shape = await probe(source.url, source.headers);
         if (stopped) return;
         if (shape == null) {
           misses.add(item.canonicalUrl);
           if (misses.length >= _missesBeforeRest) {
-            // The server has likely gone away: these are asked again at
-            // the next reading instead of being given up on.
+            // The files are likely out of reach (a drive unplugged):
+            // these are asked again at the next reading instead of being
+            // given up on.
             tried.removeAll(misses);
             break;
           }

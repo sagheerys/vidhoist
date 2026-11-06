@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/ui_zoom.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 
 import 'desktop_matrix.dart';
@@ -51,7 +50,7 @@ void main() {
           tester,
           () => (h = ShellHarness(
             library: _library,
-            server: ServerConfig(baseUrl: 'http://nas:8081'),
+            withEngine: true,
             zoom: UiZoom(zoom),
           )).app(),
           windows: zoom == 1.0

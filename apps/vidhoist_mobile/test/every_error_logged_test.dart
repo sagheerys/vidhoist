@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/shared/error_report.dart';
-import 'package:vidhoist_mobile/features/shared/error_text.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
@@ -59,28 +58,4 @@ void main() {
     expect(logger.lines, contains('shown: could not delete'));
     expect(logger.lines.any((l) => l.contains('broken layout')), isTrue);
   });
-
-  test('a file gone from the server is not called a wrong address', () {
-    final l10n = lookupMTLocalizations(const Locale('en'));
-    expect(
-      errorText(l10n, const FileGoneException('HTTP 404 at /download')),
-      l10n.errFileGone,
-    );
-    expect(errorText(l10n, const NoApiException()), l10n.errNoApi);
-  });
-
-  test(
-    'a server reason is its first sentence, isolated for an Arabic line',
-    () {
-      final l10n = lookupMTLocalizations(const Locale('ar'));
-      final text = errorText(
-        l10n,
-        const ServerErrorException(
-          '[youtube] This video is unavailable\nNo video formats found!',
-        ),
-      );
-      expect(text, l10n.errServer(mtName('This video is unavailable')));
-      expect(text, isNot(contains('[youtube]')));
-    },
-  );
 }

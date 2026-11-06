@@ -4,7 +4,7 @@ import 'url_keyed_index.dart';
 
 /// The artwork index: canonicalUrl to the cover URL captured at add time.
 /// The only fallback allowed for non-YouTube sources, since ytimg URLs are
-/// never invented (trap §6.3). Prefs key: `artwork_index` (§5.1).
+/// never invented (`docs/ENGINE.md`, Storage). Prefs key: `artwork_index`.
 base class ArtworkIndex extends UrlKeyedIndex<String> {
   ArtworkIndex({required super.store, required super.mutex, this.ownFolder})
     : super(prefsKey: 'artwork_index');

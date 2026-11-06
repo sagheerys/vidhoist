@@ -8,7 +8,6 @@ import 'package:vidhoist_desktop/features/reading/reading_room.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/video_surface.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
 import 'package:mt_ui/mt_ui.dart';
@@ -70,7 +69,7 @@ void main() {
     );
     final h = ShellHarness(
       library: [_entry],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       transcripts: {_url: _transcript},
     );
     await tester.pumpWidget(h.app());
