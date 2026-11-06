@@ -71,9 +71,43 @@ All notable changes to Vidhoist. The format follows
 - By day, white cards stand on a soft stone ground (`#F2F1EE`) instead of a
   white one, which glared and left the cards only a hairline to stand on.
 - Windows hides Channels and Sync unless they are switched on in
-  Settings › Engine; they still need a server. The taskbar badge is blue.
+  Settings › Engine. The taskbar badge is blue. Channels say they come in a
+  later version: following needs a scheduler on this computer (1.2).
+- Windows: deleting a clip, from its menu, its page or a selection, deletes
+  its file on this computer, its record, its tags and its lines in the
+  lists. "Show in Explorer when done" now opens on each finished download.
+  Settings › Folders keeps the download folder alone; the offline folder,
+  "ask every time" and the server's folders went with the copies.
+- Strings still shown that named the server say what happens now (a
+  network error, a login a site wants, the folder help, the Vidhoist credit),
+  in English and Arabic alike.
+- The transcript backfill reads yt-dlp's errors with the download engine's
+  own `ErrorClassifier`, so the two never disagree about a line.
+
+### Removed
+- **The Vidhoist server layer, in both apps and every package** (batch 6 of
+  phase 1). In `mt_core`: the API client and everything around it (address
+  switching, LAN probe, live channel, image headers, server reasons), the
+  server download pipeline (add, poll, pull, delete) with its pending pulls,
+  sweeper, transfer and trashcan probe, the server's folders and version,
+  and the Vidhoist release check. In `mt_transcripts`: fetching captions
+  before a clip and reading subtitles beside it on the server, and the
+  command-line backfill that read a server's list. On the phone: the
+  server fields and status card, the "server keeps files" notice,
+  `flutter_background` and the cleartext exception for a LAN server. On
+  Windows: the first-run server setup, Addresses, the server line and
+  version, offline copies and "then download it to this computer", the
+  server's watch on the library, arrival notices for channels, and the
+  debug lab server. `docs/legacy/` (the server contract and its setup
+  guide) went too; what still applies is in `docs/ENGINE.md`.
+- 164 strings in each language that only the server used.
 
 ### Fixed
+- Windows offered "Delete from server" on every clip, did nothing, and said
+  it was deleted. It deletes the file now.
+- Windows looked for missing covers and read clips' lengths only with a
+  server set up, so a library downloaded here never had them; both now read
+  the files on this computer.
 - Self-update would never have offered a Vidhoist release: the phone looked
   for files named "lite" and Windows for "ember", and Windows saved the
   installer as `Vidhoist-Ember-…`. Both now look for `Vidhoist` and tell the
@@ -82,5 +116,7 @@ All notable changes to Vidhoist. The format follows
   `Download/Vidhoist`, as the identity said.
 
 ### Known, deliberately
-- The server code is still in the tree, unused by the downloads; batch 6
-  removes it.
+- `mt_media` keeps its streaming endpoint (always `none`) and the library's
+  "on the server" fields, read from records that still carry the shape of
+  Vidhoist's history; neither streams or reaches a server. `HistoryItem` and
+  `ServerPath` stay for that shape.

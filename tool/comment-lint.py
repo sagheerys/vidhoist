@@ -11,7 +11,7 @@ This fails (exit 1) when a comment in apps/ or packages/:
   * points into the unpublished plan: "07 §3-b", "brief §4",
     "02-TRD.md", "docs/plan". A visitor has none of those files; the
     comment should say the reason itself. The published docs
-    (SERVER-API.md and the rest of docs/) may be cited.
+    (ENGINE.md and the rest of docs/) may be cited.
   * says TODO / FIXME / XXX / HACK without an issue number (#123) or a
     link, so a note-to-self cannot outlive the person who wrote it.
   * is code that was switched off rather than deleted. Git keeps history;

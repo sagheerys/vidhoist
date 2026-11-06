@@ -4,13 +4,13 @@
 inside the app.** No server to run, no account, no ads. Android and Windows,
 Arabic and English, day and night.
 
-> **Status: in the making.** Vidhoist is a fork of
+> **Status: before its first release.** Vidhoist is a fork of
 > [vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) by the same
 > author. The interface, the local library, the players, transcripts, backups
-> and self-update come from there and work today. The download layer is being
-> moved from a Vidhoist server to yt-dlp running on the device; until that lands,
-> the apps still expect a server. The plan, with what changes and what stays,
-> is in [docs/blueprint/REPORT.md](docs/blueprint/REPORT.md) (Arabic).
+> and self-update come from there; the downloads now run on the device with
+> yt-dlp, and nothing needs a server. How the engine runs on each platform is
+> in [docs/ENGINE.md](docs/ENGINE.md); why and how the server went, in
+> [docs/blueprint/REPORT.md](docs/blueprint/REPORT.md) (Arabic).
 
 | | Vidhoist for Android | Vidhoist for Windows |
 |---|---|---|
@@ -78,7 +78,7 @@ copyright and the terms of the sites you download from.
 داخل التطبيق: بلا سيرفر، بلا حساب، بلا إعلانات. لأندرويد وويندوز، بالعربية
 والإنجليزية. المشروع نسخة مشتقّة من
 [vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) للمؤلّف نفسه، ما زال
-في طور البناء: الواجهة والمكتبة والمشغّلات تعمل، وطبقة التحميل تُنقل الآن من
-السيرفر إلى yt-dlp. التفاصيل في [README.ar.md](README.ar.md).
+قبل إصداره الأول: الواجهة والمكتبة والمشغّلات تعمل، والتنزيل يجري على الجهاز
+بـyt-dlp بلا سيرفر. التفاصيل في [README.ar.md](README.ar.md).
 
 </div>
