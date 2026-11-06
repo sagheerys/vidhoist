@@ -89,11 +89,15 @@ yt-dlp --no-config -4 --newline --progress --no-colors
    choice to make.
 9. **Dart reads the progress line by line** from `Process.start` (first line
    about 6 s after the start, then one per update).
-10. Not measured: whether a console window flashes when the GUI app starts
-    `yt-dlp.exe` (needs a local Windows build, which waits on the C++ tools),
-    and QuickJS as the runtime on Windows (1.8 MB instead of Deno's 94; the
-    download of `qjs.exe` was refused by the session's safety check and is
-    left to the owner).
+10. **No console window appears when a GUI app starts a console program
+    with `Process.start`** (measured in batch 5): a Dart program switched to
+    the GUI subsystem, as the Flutter app is, started PowerShell, whose
+    `GetConsoleWindow()` returned 0, where the same PowerShell started with a
+    console of its own got a window. So neither yt-dlp nor `taskkill` nor
+    `tar` needs `CREATE_NO_WINDOW` from the app; yt-dlp starts ffmpeg and
+    Deno hidden itself. Still not measured: QuickJS as the runtime on
+    Windows (1.8 MB instead of Deno's 94; the download of `qjs.exe` was
+    refused by the session's safety check and is left to the owner).
 
 ### Android
 

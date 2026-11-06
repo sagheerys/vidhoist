@@ -5,6 +5,7 @@ import 'package:mt_media/mt_media.dart';
 
 import '../di.dart';
 import 'addresses_data.dart';
+import 'engine_data.dart';
 import 'library_watch.dart';
 import 'setup_data.dart';
 
@@ -30,14 +31,25 @@ final apiClientProvider = Provider<VidhoistApiClient?>((ref) {
   return client;
 });
 
-/// The server history, without the transcripts' own entries (they are not
-/// clips). Null with no server.
+/// The downloads made on this computer, as the server's history was: the
+/// library, the details and the statistics read it unchanged. With a
+/// server still set up (until its layer is removed) its history is read
+/// instead.
 final historyProvider = FutureProvider<HistoryResponse?>((ref) async {
   final api = ref.watch(apiClientProvider);
-  if (api == null) return null;
+  if (api == null) {
+    final local = await ref.watch(localLibraryProvider.future);
+    return HistoryResponse(done: [for (final entry in local) entry.item]);
+  }
   // The watcher's fresh list, when it is what brought this here.
   if (ref.read(historyHandoffProvider).take() case final fresh?) return fresh;
   return (await api.fetchHistory()).withoutCaptions();
+});
+
+/// Each local download's file, by its link: what makes it play from here.
+final localFilesProvider = FutureProvider<Map<String, String>>((ref) async {
+  final local = await ref.watch(localLibraryProvider.future);
+  return {for (final entry in local) entry.item.canonicalUrl: entry.path};
 });
 
 final offlineIndexProvider = Provider(
@@ -86,7 +98,10 @@ final mediaShapeIndexProvider = Provider(
 /// says why the server part is missing. Only a rejected credential, or
 /// nothing at all to show, is an error for the whole page.
 final libraryItemsProvider = FutureProvider<List<LibraryItem>>((ref) async {
-  final offline = await ref.watch(offlineIndexProvider).readAll();
+  final offline = {
+    ...await ref.watch(offlineIndexProvider).readAll(),
+    ...await ref.watch(localFilesProvider.future),
+  };
   HistoryResponse? history;
   try {
     history = await ref.watch(historyProvider.future);

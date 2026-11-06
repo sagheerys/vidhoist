@@ -1,26 +1,42 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
+import '../../data/engine_data.dart';
 import '../../data/folders_data.dart';
-import '../../data/library_data.dart';
-import '../../shell/error_text.dart';
-import 'simple_panes.dart';
 import '../../shell/folded_text.dart';
+import 'appearance_pane.dart';
+import 'simple_panes.dart';
 
-/// Whether the server holds cookies; null while unknown, and for a Vidhoist
-/// too old to say.
-final cookieStatusProvider = FutureProvider<bool?>(
-  (ref) async => ref.watch(apiClientProvider)?.hasCookies(),
-);
+/// How each browser is named on screen; the key is yt-dlp's own.
+const _browserNames = {
+  'edge': 'Edge',
+  'chrome': 'Chrome',
+  'firefox': 'Firefox',
+  'brave': 'Brave',
+  'opera': 'Opera',
+};
 
-/// **Cookies for the platforms that want a login**, sent from files the
-/// browser exported. **Nothing is kept on this computer**: the files are
-/// read, sent and dropped, because they are live sign-ins to someone's
-/// accounts.
+/// The sites the kept cookies file signs in to.
+final cookieSitesProvider = FutureProvider<List<String>>((ref) async {
+  final path = ref.watch(engineOptionsProvider.select((o) => o.cookiesFile));
+  if (path == null) return const [];
+  try {
+    return CookieFiles.sites(await File(path).readAsBytes());
+  } on FileSystemException {
+    return const [];
+  }
+});
+
+/// **Cookies for the sites that want a login**, read by yt-dlp on this
+/// computer: a file the browser exported (several chosen together are
+/// merged into one), kept in the app's local folder and never in a
+/// backup; or a browser whose own cookies yt-dlp reads. Nothing is sent
+/// anywhere.
 class CookiesPane extends ConsumerStatefulWidget {
   const CookiesPane({super.key});
 
@@ -31,41 +47,15 @@ class CookiesPane extends ConsumerStatefulWidget {
 class _CookiesPaneState extends ConsumerState<CookiesPane> {
   var _busy = false;
 
-  Future<void> _run(Future<void> Function() action, String done) async {
-    setState(() => _busy = true);
-    try {
-      await action();
-      ref.invalidate(cookieStatusProvider);
-      if (mounted) showMTNotice(context, message: done);
-    } on Object catch (e) {
-      // The server's own words, which for cookies are the useful ones
-      // ("configured manually via YTDL_OPTIONS" sends its operator to the
-      // container).
-      if (mounted) {
-        showMTNotice(
-          context,
-          message: errorText(context.mtl, e),
-          kind: MTNoticeKind.failed,
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
-  }
-
-  Future<void> _send() async {
-    final api = ref.read(apiClientProvider);
-    if (api == null) return;
+  Future<void> _choose() async {
     final l = context.mtl;
+    final target = ref.read(cookiesFileTargetProvider);
+    if (target == null) return;
     final files = await ref
         .read(desktopFoldersProvider)
         .openFiles(extensions: const ['txt']);
     if (files.isEmpty || !mounted) return;
-    // The server keeps one file and each upload replaces it whole, so the
-    // files chosen together are merged into one; one file goes as chosen.
-    final (name, bytes) = files.length == 1
-        ? files.single
-        : ('cookies.txt', CookieFiles.merge([for (final f in files) f.$2]));
+    final bytes = CookieFiles.merge([for (final f in files) f.$2]);
     if (bytes == null) {
       showMTNotice(
         context,
@@ -74,28 +64,43 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
       );
       return;
     }
-    final sites = CookieFiles.sites(bytes);
-    await _run(
-      () => api.uploadCookies(bytes, filename: name),
-      sites.isEmpty
-          ? l.cookiesUploaded
-          : l.cookiesSentFor(mtLtrRun(sites.join(' · '))),
-    );
+    setState(() => _busy = true);
+    try {
+      final file = File(target);
+      await file.parent.create(recursive: true);
+      await file.writeAsBytes(bytes, flush: true);
+      await ref.read(engineOptionsProvider.notifier).setCookiesFile(target);
+      ref.invalidate(cookieSitesProvider);
+      final sites = CookieFiles.sites(bytes);
+      if (mounted) {
+        showMTNotice(
+          context,
+          message: sites.isEmpty
+              ? l.desktopCookiesKept
+              : l.desktopCookiesKeptFor(mtLtrRun(sites.join(' · '))),
+          kind: MTNoticeKind.done,
+        );
+      }
+    } on FileSystemException catch (e) {
+      if (mounted) {
+        showMTNotice(
+          context,
+          message: l.errorGeneric(e.message),
+          kind: MTNoticeKind.failed,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
 
-  Future<void> _delete() async {
-    final api = ref.read(apiClientProvider);
-    if (api == null) return;
-    final l = context.mtl;
-    final sure = await showMTConfirm(
-      context,
-      title: l.cookiesDelete,
-      message: l.cookiesDeleteBody,
-      confirmLabel: l.delete,
-      cancelLabel: l.cancel,
-      destructive: true,
-    );
-    if (sure) await _run(api.deleteCookies, l.cookiesDeleted);
+  Future<void> _remove(String path) async {
+    try {
+      await File(path).delete();
+    } on FileSystemException {
+      // Already gone: forgetting it is all that is left to do.
+    }
+    await ref.read(engineOptionsProvider.notifier).setCookiesFile(null);
   }
 
   @override
@@ -103,51 +108,71 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
     final l = context.mtl;
     final p = MTThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final api = ref.watch(apiClientProvider);
-    final has = ref.watch(cookieStatusProvider).valueOrNull;
-    final note = text.labelSmall?.copyWith(color: p.ink3);
+    final options = ref.watch(engineOptionsProvider);
+    final file = options.cookiesFile;
+    final browsers = ref.read(engineOptionsProvider.notifier);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         FoldedText(
-          l.cookiesWhat,
+          l.desktopCookiesLocalHint,
           style: text.bodyMedium?.copyWith(color: p.ink2),
         ),
         const SizedBox(height: MTSpace.sm),
         SettingLine(
-          title: api == null
-              ? l.serverStatusUnconfigured
-              : switch (has) {
-                  true => l.cookiesPresent,
-                  false => l.cookiesAbsent,
-                  null => l.cookiesUnknown,
+          title: l.desktopCookiesFile,
+          value: file == null
+              ? l.desktopCookiesNone
+              : switch (ref.watch(cookieSitesProvider).valueOrNull) {
+                  final sites? when sites.isNotEmpty => mtLtrRun(
+                    sites.join(' · '),
+                  ),
+                  _ => l.desktopCookiesKept,
                 },
-          hint: l.cookiesSubtitle,
-          trailing: MTLinkButton(
-            label: has == true ? l.cookiesReplace : l.cookiesUpload,
-            icon: MTIcons.cookie,
-            onPressed: _busy || api == null ? null : () => unawaited(_send()),
+          trailing: Wrap(
+            spacing: MTSpace.xs,
+            children: [
+              MTLinkButton(
+                label: l.desktopCookiesChoose,
+                icon: MTIcons.cookie,
+                onPressed: _busy ? null : () => unawaited(_choose()),
+              ),
+              if (file != null)
+                MTLinkButton(
+                  label: l.desktopCookiesRemove,
+                  icon: MTIcons.trash,
+                  danger: true,
+                  onPressed: _busy ? null : () => unawaited(_remove(file)),
+                ),
+            ],
           ),
         ),
-        // Offered only when there is something to delete: a delete on a
-        // server with none is refused, and teaches that the app guesses.
-        if (has == true)
-          SettingLine(
-            title: l.cookiesDelete,
-            hint: l.cookiesDeleteBody,
-            trailing: MTLinkButton(
-              label: l.delete,
-              danger: true,
-              icon: MTIcons.trash,
-              onPressed: _busy ? null : () => unawaited(_delete()),
+        ChoiceGroup(
+          title: l.desktopCookiesBrowser,
+          hint: l.desktopCookiesBrowserHint,
+          children: [
+            EmberSegments(
+              items: [
+                EmberSegment(
+                  label: l.desktopCookiesNone,
+                  selected: options.cookiesBrowser == null,
+                  onTap: () => unawaited(browsers.setCookiesBrowser(null)),
+                ),
+                for (final browser in cookieBrowsers)
+                  EmberSegment(
+                    label: _browserNames[browser] ?? browser,
+                    selected: options.cookiesBrowser == browser,
+                    onTap: () => unawaited(browsers.setCookiesBrowser(browser)),
+                  ),
+              ],
             ),
-          ),
+          ],
+        ),
         const SizedBox(height: MTSpace.sm),
-        FoldedText(l.desktopCookiesReplaceNote, style: note),
-        const SizedBox(height: MTSpace.sm),
-        FoldedText(l.cookiesHelp, style: note),
-        const SizedBox(height: MTSpace.sm),
-        FoldedText(l.desktopCookiesPrivacy, style: note),
+        FoldedText(
+          l.desktopCookiesHelp,
+          style: text.labelSmall?.copyWith(color: p.ink3),
+        ),
       ],
     );
   }

@@ -1178,11 +1178,71 @@ abstract class MTLocalizations {
   /// **'Clear selection'**
   String get desktopClearSelection;
 
+  /// No description provided for @desktopCookiesBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'From a browser'**
+  String get desktopCookiesBrowser;
+
+  /// No description provided for @desktopCookiesBrowserHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Read from the browser you are signed in with. If they cannot be read, close that browser and try again.'**
+  String get desktopCookiesBrowserHint;
+
+  /// No description provided for @desktopCookiesChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file…'**
+  String get desktopCookiesChoose;
+
+  /// No description provided for @desktopCookiesFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookies file'**
+  String get desktopCookiesFile;
+
+  /// No description provided for @desktopCookiesHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'In your browser, use an extension that exports cookies in the Netscape format (one file per site), and choose the files here together. yt-dlp then uses them for every download. Cookies expire, so a download that starts failing again usually means a fresh export is due.'**
+  String get desktopCookiesHelp;
+
+  /// No description provided for @desktopCookiesKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookies kept on this computer'**
+  String get desktopCookiesKept;
+
+  /// No description provided for @desktopCookiesKeptFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookies kept for: {sites}'**
+  String desktopCookiesKeptFor(String sites);
+
+  /// No description provided for @desktopCookiesLocalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For sites that need you signed in. yt-dlp reads them on this computer, and they go nowhere else.'**
+  String get desktopCookiesLocalHint;
+
+  /// No description provided for @desktopCookiesNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get desktopCookiesNone;
+
   /// No description provided for @desktopCookiesPrivacy.
   ///
   /// In en, this message translates to:
   /// **'The files go straight to your server and are never kept on this computer. They are your accounts\' sign-in material, so only ever send them to a server you own.'**
   String get desktopCookiesPrivacy;
+
+  /// No description provided for @desktopCookiesRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get desktopCookiesRemove;
 
   /// No description provided for @desktopCookiesReplaceNote.
   ///
@@ -1514,6 +1574,12 @@ abstract class MTLocalizations {
   /// **'Nothing is downloading. Add a link, or make a clip available offline.'**
   String get desktopDownloadsEmpty;
 
+  /// No description provided for @desktopDownloadsRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Under way'**
+  String get desktopDownloadsRunning;
+
   /// No description provided for @desktopDragToReorder.
   ///
   /// In en, this message translates to:
@@ -1526,11 +1592,137 @@ abstract class MTLocalizations {
   /// **'Drop to add'**
   String get desktopDropLinks;
 
+  /// No description provided for @desktopEmptyLibraryLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a link, and the clip appears here once it is downloaded.'**
+  String get desktopEmptyLibraryLocal;
+
   /// No description provided for @desktopEmptyLibraryMessage.
   ///
   /// In en, this message translates to:
   /// **'Add a link, and the clip appears here once the server has it.'**
   String get desktopEmptyLibraryMessage;
+
+  /// No description provided for @desktopEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine'**
+  String get desktopEngine;
+
+  /// No description provided for @desktopEngineDenoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Solves YouTube\'s check, for every format it offers'**
+  String get desktopEngineDenoHint;
+
+  /// No description provided for @desktopEngineFetch.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetch'**
+  String get desktopEngineFetch;
+
+  /// No description provided for @desktopEngineFetchCorrupt.
+  ///
+  /// In en, this message translates to:
+  /// **'The file that arrived was not the published one, so it was not used.'**
+  String get desktopEngineFetchCorrupt;
+
+  /// No description provided for @desktopEngineFetchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not be fetched. Check the connection and try again.'**
+  String get desktopEngineFetchFailed;
+
+  /// No description provided for @desktopEngineFetchInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'In use by a download. Try again once it ends.'**
+  String get desktopEngineFetchInUse;
+
+  /// No description provided for @desktopEngineFetching.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetching · {percent}%'**
+  String desktopEngineFetching(int percent);
+
+  /// No description provided for @desktopEngineFfmpegHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Joins picture and sound, and converts audio'**
+  String get desktopEngineFfmpegHint;
+
+  /// No description provided for @desktopEngineIpv4.
+  ///
+  /// In en, this message translates to:
+  /// **'Use IPv4 only'**
+  String get desktopEngineIpv4;
+
+  /// No description provided for @desktopEngineIpv4Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Much faster where IPv6 is broken, as on many home networks. Turn it off only if your network has IPv6 alone.'**
+  String get desktopEngineIpv4Hint;
+
+  /// No description provided for @desktopEngineMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'yt-dlp is not on this computer. Reinstall Vidhoist, or fetch it here.'**
+  String get desktopEngineMissing;
+
+  /// No description provided for @desktopEngineOnFirstUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetched at the first download that needs it'**
+  String get desktopEngineOnFirstUse;
+
+  /// No description provided for @desktopEngineUpToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'yt-dlp is up to date'**
+  String get desktopEngineUpToDate;
+
+  /// No description provided for @desktopEngineUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update yt-dlp'**
+  String get desktopEngineUpdate;
+
+  /// No description provided for @desktopEngineUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The update did not go through. Try again later.'**
+  String get desktopEngineUpdateFailed;
+
+  /// No description provided for @desktopEngineUpdateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sites change often; an old yt-dlp stops working within months.'**
+  String get desktopEngineUpdateHint;
+
+  /// No description provided for @desktopEngineUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'yt-dlp is now {version}'**
+  String desktopEngineUpdated(String version);
+
+  /// No description provided for @desktopEngineUpdating.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating…'**
+  String get desktopEngineUpdating;
+
+  /// No description provided for @desktopEngineVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String desktopEngineVersion(String version);
+
+  /// No description provided for @desktopEngineYtDlpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Reads the link and downloads it'**
+  String get desktopEngineYtDlpHint;
 
   /// No description provided for @desktopExport.
   ///
@@ -1801,6 +1993,18 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Last arrival {when}'**
   String desktopLastArrival(String when);
+
+  /// No description provided for @desktopLaterFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Show channels and sync'**
+  String get desktopLaterFeatures;
+
+  /// No description provided for @desktopLaterFeaturesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Not ready on this engine yet: channels need the app to check them on a schedule, and sync waits for the phone.'**
+  String get desktopLaterFeaturesHint;
 
   /// No description provided for @desktopLess.
   ///
@@ -2857,6 +3061,36 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Volume {percent}%'**
   String desktopVolumeLevel(int percent);
+
+  /// No description provided for @desktopWelcomeFetchNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetch them now'**
+  String get desktopWelcomeFetchNow;
+
+  /// No description provided for @desktopWelcomeHelpers.
+  ///
+  /// In en, this message translates to:
+  /// **'ffmpeg (joins picture and sound) and Deno (needed by YouTube) come down by themselves at the first download, about 160 MB. You can fetch them now instead.'**
+  String get desktopWelcomeHelpers;
+
+  /// No description provided for @desktopWelcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a link from YouTube or another site, and Vidhoist downloads it to this computer with yt-dlp. Nothing goes through a server.'**
+  String get desktopWelcomeMessage;
+
+  /// No description provided for @desktopWelcomeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get desktopWelcomeStart;
+
+  /// No description provided for @desktopWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Vidhoist'**
+  String get desktopWelcomeTitle;
 
   /// No description provided for @desktopWhatsNewAllFeatures.
   ///

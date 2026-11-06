@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 /// The settings sections: the phone app's, plus the two only a computer
 /// has (the desktop habits, and the offline and download folders).
 enum EmberSettingsPane {
+  engine,
   server,
   network,
   subscriptions,

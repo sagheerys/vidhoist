@@ -5,7 +5,7 @@ import 'package:mt_ui/mt_ui.dart';
 import '../data/saved_searches.dart';
 import '../features/folders/folder_tree.dart';
 import '../router.dart';
-import 'server_line.dart';
+import 'engine_line.dart';
 import 'shell_metrics.dart';
 import 'sidebar_items.dart';
 
@@ -27,7 +27,12 @@ class EmberSidebar extends StatelessWidget {
     this.searches = const [],
     this.onSavedSearch,
     this.onSavedSearchMenu,
+    this.showChannels = true,
   });
+
+  /// Channels need a server or a scheduler this engine does not have yet,
+  /// so the shell shows them only behind their switch.
+  final bool showChannels;
 
   /// The saved searches, under "Search", each opening the palette on its
   /// query.
@@ -165,12 +170,13 @@ class EmberSidebar extends StatelessWidget {
                   selected: list.id == currentList,
                   onTap: () => onGo(EmberRoutes.playlist(list.id)),
                 ),
-              item(
-                EmberPlace.channels,
-                MTIcons.subscriptions,
-                l.desktopChannels,
-                EmberRoutes.channels,
-              ),
+              if (showChannels)
+                item(
+                  EmberPlace.channels,
+                  MTIcons.subscriptions,
+                  l.desktopChannels,
+                  EmberRoutes.channels,
+                ),
               if (folders.isNotEmpty && onFolder != null) ...[
                 const SizedBox(height: MTSpace.lg),
                 for (final folder in folders)
@@ -191,7 +197,7 @@ class EmberSidebar extends StatelessWidget {
             ],
           ),
         ),
-        SidebarServerLine(narrow: narrow),
+        SidebarEngineLine(narrow: narrow),
         // Its toggle is in the title bar, above it.
         item(
           EmberPlace.settings,

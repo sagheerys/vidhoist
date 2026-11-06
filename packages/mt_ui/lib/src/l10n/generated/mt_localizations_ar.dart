@@ -686,8 +686,43 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopClearSelection => 'إلغاء التحديد';
 
   @override
+  String get desktopCookiesBrowser => 'من المتصفح';
+
+  @override
+  String get desktopCookiesBrowserHint =>
+      'تُقرأ من المتصفح الذي سجّلت الدخول فيه. إن تعذّرت قراءتها فأغلق المتصفح وحاول مجدداً.';
+
+  @override
+  String get desktopCookiesChoose => 'اختر ملفاً…';
+
+  @override
+  String get desktopCookiesFile => 'ملف الكوكيز';
+
+  @override
+  String get desktopCookiesHelp =>
+      'استعمل في متصفحك إضافةً تصدّر الكوكيز بصيغة Netscape (ملف لكل موقع)، واختر الملفات هنا معاً. يستعملها yt-dlp بعدها في كل تنزيل. تنتهي صلاحية الكوكيز، فإن عاد تنزيل يفشل فالأغلب أن الوقت حان لتصديرها من جديد.';
+
+  @override
+  String get desktopCookiesKept => 'الكوكيز محفوظة على هذا الحاسوب';
+
+  @override
+  String desktopCookiesKeptFor(String sites) {
+    return 'حُفظت الكوكيز لـ: $sites';
+  }
+
+  @override
+  String get desktopCookiesLocalHint =>
+      'للمواقع التي تطلب تسجيل الدخول. يقرؤها yt-dlp على هذا الحاسوب ولا تذهب إلى أي مكان آخر.';
+
+  @override
+  String get desktopCookiesNone => 'بلا';
+
+  @override
   String get desktopCookiesPrivacy =>
       'تُرسَل الملفات إلى سيرفرك مباشرة ولا تُحفظ على هذا الكمبيوتر أبداً. ولأنها بمثابة مفاتيح لحساباتك، فلا ترسلها إلا إلى سيرفر تملكه.';
+
+  @override
+  String get desktopCookiesRemove => 'إزالة';
 
   @override
   String get desktopCookiesReplaceNote =>
@@ -893,14 +928,93 @@ class MTLocalizationsAr extends MTLocalizations {
       'لا شيء قيد التحميل. أضف رابطاً، أو أتِح مقطعاً دون اتصال.';
 
   @override
+  String get desktopDownloadsRunning => 'جارية';
+
+  @override
   String get desktopDragToReorder => 'اسحب لتغيير الترتيب';
 
   @override
   String get desktopDropLinks => 'أفلِته لإضافته';
 
   @override
+  String get desktopEmptyLibraryLocal =>
+      'أضف رابطاً، فيظهر المقطع هنا حين يكتمل تنزيله.';
+
+  @override
   String get desktopEmptyLibraryMessage =>
       'أضِف رابطاً فيظهر المقطع هنا بعد أن ينزّله السيرفر.';
+
+  @override
+  String get desktopEngine => 'المحرّك';
+
+  @override
+  String get desktopEngineDenoHint => 'يحلّ فحص يوتيوب لتظهر كل صيغه';
+
+  @override
+  String get desktopEngineFetch => 'نزّل';
+
+  @override
+  String get desktopEngineFetchCorrupt =>
+      'الملف الذي وصل لا يطابق المنشور، فلم يُستعمل.';
+
+  @override
+  String get desktopEngineFetchFailed =>
+      'تعذّر التنزيل. تحقّق من الاتصال وحاول مجدداً.';
+
+  @override
+  String get desktopEngineFetchInUse =>
+      'مستعمل في تنزيل جارٍ. حاول بعد انتهائه.';
+
+  @override
+  String desktopEngineFetching(int percent) {
+    return 'جارٍ التنزيل · $percent٪';
+  }
+
+  @override
+  String get desktopEngineFfmpegHint => 'يدمج الصورة والصوت ويحوّل الصوتيات';
+
+  @override
+  String get desktopEngineIpv4 => 'استعمل IPv4 فقط';
+
+  @override
+  String get desktopEngineIpv4Hint =>
+      'أسرع بكثير حيث يتعطّل IPv6، كما في كثير من الشبكات المنزلية. أطفئه فقط إن كانت شبكتك بـIPv6 وحده.';
+
+  @override
+  String get desktopEngineMissing =>
+      'yt-dlp غير موجود على هذا الحاسوب. أعد تثبيت Vidhoist، أو نزّله من هنا.';
+
+  @override
+  String get desktopEngineOnFirstUse => 'يُنزَّل مع أول تنزيل يحتاجه';
+
+  @override
+  String get desktopEngineUpToDate => 'yt-dlp محدَّث';
+
+  @override
+  String get desktopEngineUpdate => 'حدّث yt-dlp';
+
+  @override
+  String get desktopEngineUpdateFailed => 'لم يكتمل التحديث. حاول لاحقاً.';
+
+  @override
+  String get desktopEngineUpdateHint =>
+      'تتغيّر المواقع كثيراً، وyt-dlp القديم يتوقف عن العمل خلال أشهر.';
+
+  @override
+  String desktopEngineUpdated(String version) {
+    return 'صار yt-dlp بالإصدار $version';
+  }
+
+  @override
+  String get desktopEngineUpdating => 'جارٍ التحديث…';
+
+  @override
+  String desktopEngineVersion(String version) {
+    return 'الإصدار $version';
+  }
+
+  @override
+  String get desktopEngineYtDlpHint => 'يقرأ الرابط وينزّله';
 
   @override
   String get desktopExport => 'تصدير';
@@ -1068,6 +1182,13 @@ class MTLocalizationsAr extends MTLocalizations {
   String desktopLastArrival(String when) {
     return 'آخر وصول $when';
   }
+
+  @override
+  String get desktopLaterFeatures => 'أظهر القنوات والمزامنة';
+
+  @override
+  String get desktopLaterFeaturesHint =>
+      'لم تكتملا بعد على هذا المحرّك: القنوات تحتاج فحصاً دورياً من التطبيق، والمزامنة تنتظر تطبيق الجوال.';
 
   @override
   String get desktopLess => 'أقل';
@@ -1716,6 +1837,23 @@ class MTLocalizationsAr extends MTLocalizations {
   String desktopVolumeLevel(int percent) {
     return 'الصوت $percent٪';
   }
+
+  @override
+  String get desktopWelcomeFetchNow => 'نزّلهما الآن';
+
+  @override
+  String get desktopWelcomeHelpers =>
+      'ينزل ffmpeg (لدمج الصورة والصوت) وDeno (يحتاجه يوتيوب) تلقائياً مع أول تنزيل، نحو 160 ميغابايت. ويمكنك تنزيلهما الآن.';
+
+  @override
+  String get desktopWelcomeMessage =>
+      'الصق رابطاً من يوتيوب أو أي موقع آخر، فينزّله Vidhoist إلى هذا الحاسوب بمحرّك yt-dlp، دون المرور بأي خادم.';
+
+  @override
+  String get desktopWelcomeStart => 'ابدأ';
+
+  @override
+  String get desktopWelcomeTitle => 'أهلاً بك في Vidhoist';
 
   @override
   String get desktopWhatsNewAllFeatures => 'وكل مزايا Vidhoist';

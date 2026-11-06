@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mt_ui/mt_ui.dart';
 
+import '../../data/later_features.dart';
 import '../../router.dart';
 import 'about_pane.dart';
 import 'addresses_pane.dart';
@@ -9,6 +11,7 @@ import 'appearance_pane.dart';
 import 'backup_pane.dart';
 import 'channels_pane.dart';
 import 'cookies_pane.dart';
+import 'engine_pane.dart';
 import 'folders_pane.dart';
 import 'keep_in_view.dart';
 import 'logs_pane.dart';
@@ -22,7 +25,7 @@ import 'updates_pane.dart';
 /// the chosen one open on the other. Each section has its own address
 /// ([EmberSettingsPane.route]), so a message can open the page that fixes
 /// it.
-class SettingsPlace extends StatelessWidget {
+class SettingsPlace extends ConsumerWidget {
   const SettingsPlace({super.key, required this.pane});
 
   final EmberSettingsPane pane;
@@ -34,18 +37,20 @@ class SettingsPlace extends StatelessWidget {
   static const double _rise = 0.012;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final p = MTThemeX.of(context).palette;
     final l = context.mtl;
     final text = Theme.of(context).textTheme;
+    // The server's sections are left out: downloads run on this computer.
+    // Channels and Sync wait behind their switch.
+    final later = ref.watch(laterFeaturesProvider);
     final groups = [
       (
-        l.settingsGroupServer,
-        const [
-          EmberSettingsPane.server,
-          EmberSettingsPane.network,
-          EmberSettingsPane.subscriptions,
+        l.desktopEngine,
+        [
+          EmberSettingsPane.engine,
           EmberSettingsPane.cookies,
+          if (later) EmberSettingsPane.subscriptions,
         ],
       ),
       (
@@ -60,9 +65,9 @@ class SettingsPlace extends StatelessWidget {
       ),
       (
         l.settingsGroupData,
-        const [
+        [
           EmberSettingsPane.backup,
-          EmberSettingsPane.sync,
+          if (later) EmberSettingsPane.sync,
           EmberSettingsPane.updates,
           EmberSettingsPane.logs,
           EmberSettingsPane.about,
@@ -173,6 +178,7 @@ class SettingsPlace extends StatelessWidget {
                           EmberSettingsPane.updates => const UpdatesPane(),
                           EmberSettingsPane.logs => const LogsPane(),
                           EmberSettingsPane.about => const AboutPane(),
+                          EmberSettingsPane.engine => const EnginePane(),
                         },
                       ],
                     ),
@@ -202,4 +208,5 @@ String paneTitle(MTLocalizations l, EmberSettingsPane pane) => switch (pane) {
   EmberSettingsPane.updates => l.updates,
   EmberSettingsPane.logs => l.diagnosticLogs,
   EmberSettingsPane.about => l.about,
+  EmberSettingsPane.engine => l.desktopEngine,
 };

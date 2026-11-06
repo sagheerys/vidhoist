@@ -8,12 +8,12 @@ import 'local_copies.dart';
 /// (all waiting), when the button shows a moving bar instead of a false 0%.
 typedef TaskbarDownloads = ({int count, double? progress});
 
-/// The downloads on the server and the copies to this computer, together,
-/// as the downloads button counts them.
+/// The downloads under way and the copies to this computer, together, as
+/// the downloads button counts them: a paused one is not moving.
 final taskbarDownloadsProvider = Provider<TaskbarDownloads>((ref) {
   final tasks = [
     for (final t in ref.watch(engineTasksProvider).valueOrNull ?? const [])
-      if (!t.isFinished) t,
+      if (isUnderWay(t)) t,
   ];
   final copies = [
     for (final c in ref.watch(localCopiesProvider))

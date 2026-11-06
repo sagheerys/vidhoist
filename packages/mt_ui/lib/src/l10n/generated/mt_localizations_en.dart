@@ -656,8 +656,43 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopClearSelection => 'Clear selection';
 
   @override
+  String get desktopCookiesBrowser => 'From a browser';
+
+  @override
+  String get desktopCookiesBrowserHint =>
+      'Read from the browser you are signed in with. If they cannot be read, close that browser and try again.';
+
+  @override
+  String get desktopCookiesChoose => 'Choose a file…';
+
+  @override
+  String get desktopCookiesFile => 'Cookies file';
+
+  @override
+  String get desktopCookiesHelp =>
+      'In your browser, use an extension that exports cookies in the Netscape format (one file per site), and choose the files here together. yt-dlp then uses them for every download. Cookies expire, so a download that starts failing again usually means a fresh export is due.';
+
+  @override
+  String get desktopCookiesKept => 'Cookies kept on this computer';
+
+  @override
+  String desktopCookiesKeptFor(String sites) {
+    return 'Cookies kept for: $sites';
+  }
+
+  @override
+  String get desktopCookiesLocalHint =>
+      'For sites that need you signed in. yt-dlp reads them on this computer, and they go nowhere else.';
+
+  @override
+  String get desktopCookiesNone => 'None';
+
+  @override
   String get desktopCookiesPrivacy =>
       'The files go straight to your server and are never kept on this computer. They are your accounts\' sign-in material, so only ever send them to a server you own.';
+
+  @override
+  String get desktopCookiesRemove => 'Remove';
 
   @override
   String get desktopCookiesReplaceNote =>
@@ -861,14 +896,97 @@ class MTLocalizationsEn extends MTLocalizations {
       'Nothing is downloading. Add a link, or make a clip available offline.';
 
   @override
+  String get desktopDownloadsRunning => 'Under way';
+
+  @override
   String get desktopDragToReorder => 'Drag to reorder';
 
   @override
   String get desktopDropLinks => 'Drop to add';
 
   @override
+  String get desktopEmptyLibraryLocal =>
+      'Add a link, and the clip appears here once it is downloaded.';
+
+  @override
   String get desktopEmptyLibraryMessage =>
       'Add a link, and the clip appears here once the server has it.';
+
+  @override
+  String get desktopEngine => 'Engine';
+
+  @override
+  String get desktopEngineDenoHint =>
+      'Solves YouTube\'s check, for every format it offers';
+
+  @override
+  String get desktopEngineFetch => 'Fetch';
+
+  @override
+  String get desktopEngineFetchCorrupt =>
+      'The file that arrived was not the published one, so it was not used.';
+
+  @override
+  String get desktopEngineFetchFailed =>
+      'Could not be fetched. Check the connection and try again.';
+
+  @override
+  String get desktopEngineFetchInUse =>
+      'In use by a download. Try again once it ends.';
+
+  @override
+  String desktopEngineFetching(int percent) {
+    return 'Fetching · $percent%';
+  }
+
+  @override
+  String get desktopEngineFfmpegHint =>
+      'Joins picture and sound, and converts audio';
+
+  @override
+  String get desktopEngineIpv4 => 'Use IPv4 only';
+
+  @override
+  String get desktopEngineIpv4Hint =>
+      'Much faster where IPv6 is broken, as on many home networks. Turn it off only if your network has IPv6 alone.';
+
+  @override
+  String get desktopEngineMissing =>
+      'yt-dlp is not on this computer. Reinstall Vidhoist, or fetch it here.';
+
+  @override
+  String get desktopEngineOnFirstUse =>
+      'Fetched at the first download that needs it';
+
+  @override
+  String get desktopEngineUpToDate => 'yt-dlp is up to date';
+
+  @override
+  String get desktopEngineUpdate => 'Update yt-dlp';
+
+  @override
+  String get desktopEngineUpdateFailed =>
+      'The update did not go through. Try again later.';
+
+  @override
+  String get desktopEngineUpdateHint =>
+      'Sites change often; an old yt-dlp stops working within months.';
+
+  @override
+  String desktopEngineUpdated(String version) {
+    return 'yt-dlp is now $version';
+  }
+
+  @override
+  String get desktopEngineUpdating => 'Updating…';
+
+  @override
+  String desktopEngineVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get desktopEngineYtDlpHint => 'Reads the link and downloads it';
 
   @override
   String get desktopExport => 'Export';
@@ -1034,6 +1152,13 @@ class MTLocalizationsEn extends MTLocalizations {
   String desktopLastArrival(String when) {
     return 'Last arrival $when';
   }
+
+  @override
+  String get desktopLaterFeatures => 'Show channels and sync';
+
+  @override
+  String get desktopLaterFeaturesHint =>
+      'Not ready on this engine yet: channels need the app to check them on a schedule, and sync waits for the phone.';
 
   @override
   String get desktopLess => 'Less';
@@ -1673,6 +1798,23 @@ class MTLocalizationsEn extends MTLocalizations {
   String desktopVolumeLevel(int percent) {
     return 'Volume $percent%';
   }
+
+  @override
+  String get desktopWelcomeFetchNow => 'Fetch them now';
+
+  @override
+  String get desktopWelcomeHelpers =>
+      'ffmpeg (joins picture and sound) and Deno (needed by YouTube) come down by themselves at the first download, about 160 MB. You can fetch them now instead.';
+
+  @override
+  String get desktopWelcomeMessage =>
+      'Paste a link from YouTube or another site, and Vidhoist downloads it to this computer with yt-dlp. Nothing goes through a server.';
+
+  @override
+  String get desktopWelcomeStart => 'Start';
+
+  @override
+  String get desktopWelcomeTitle => 'Welcome to Vidhoist';
 
   @override
   String get desktopWhatsNewAllFeatures => 'Everything Vidhoist can do';

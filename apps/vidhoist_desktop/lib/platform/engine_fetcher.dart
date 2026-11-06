@@ -213,7 +213,8 @@ class EngineFetcher {
       '-C',
       into.path,
     ]);
-    if (result.exitCode != 0)
+    if (result.exitCode != 0) {
       throw ProcessException('tar', [], '${result.stderr}');
+    }
   }
 }

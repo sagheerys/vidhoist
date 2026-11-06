@@ -1,21 +1,27 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
 
 import '../di.dart';
-import '../platform/desktop_policy.dart';
+import '../identity.dart';
+import '../platform/user_folders.dart';
 import 'appearance_data.dart';
+import 'engine_data.dart';
+import 'folders_data.dart';
 import 'library_data.dart';
 import 'local_copies.dart';
 import 'lists_data.dart';
+import 'sidecar_import.dart';
 import 'transcripts_data.dart';
 
 /// The saved key of "fetch the transcript first", the phone's own, so a
 /// backup carries the choice either way.
 const transcriptsFirstKey = 'transcripts_enabled';
 
-/// Whether the transcript is fetched before a YouTube clip is added; on
-/// unless turned off, as on the phone.
+/// Whether a clip's transcript is fetched with it; on unless turned off,
+/// as on the phone.
 final transcriptsFirstProvider =
     NotifierProvider<TranscriptsFirstNotifier, bool>(
       TranscriptsFirstNotifier.new,
@@ -42,7 +48,8 @@ class TranscriptsFirstNotifier extends Notifier<bool> {
   }
 }
 
-/// How captions are fetched; a test puts its own in.
+/// How captions are fetched from a server; a test puts its own in. Kept
+/// with the server layer until it is removed.
 final captionsFetcherFactoryProvider =
     Provider<CaptionsFetcher Function(VidhoistApi)>((ref) => CaptionsFetcher.new);
 
@@ -54,31 +61,39 @@ final batchCollectorProvider = Provider(
   ),
 );
 
-/// The one download engine, null without a server. **Everything stays on
-/// the server** (the policy is fixed for this app, never a setting), and
-/// nothing is pulled to this computer here: that is the offline copy's
-/// and the download folder's work.
-final downloadEngineProvider = Provider<DownloadEngine?>((ref) {
-  final api = ref.watch(apiClientProvider);
-  if (api == null) return null;
+/// The one download engine: yt-dlp on this computer, null where there is
+/// no backend (a test that does not ask for one). What the last run left
+/// unfinished is queued again as soon as it exists.
+final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
+  final backend = ref.watch(downloadBackendProvider);
+  if (backend == null) return null;
   final collector = ref.watch(batchCollectorProvider);
-  final engine = DownloadEngine(
-    api: api,
-    policy: const DesktopPolicy().deletePolicy,
-    pullToDevice: false,
-    pollNetworkTolerance: MTConstants.pollNetworkTolerance,
-    savePathBuilder: (_, _) => throw StateError('nothing is pulled here'),
+  final engine = LocalDownloadEngine(
+    backend: backend,
+    folderFor: (task) => taskFolder(ref, task),
+    history: ref.watch(localHistoryStoreProvider),
+    pending: LocalPendingStore(
+      ref.watch(keyValueStoreProvider),
+      mutex: ref.watch(prefsMutexProvider),
+    ),
+    // The transcript comes with the clip itself, in the reader's language
+    // then English, when "fetch the transcript" is on.
+    subtitleLanguages: () => ref.read(transcriptsFirstProvider)
+        ? [
+            for (final language in readerLanguages(
+              ref.read(appearanceProvider).locale,
+            ))
+              '$language.*',
+          ]
+        : const [],
     onCompleted: (task) {
-      collector.onFinished(task);
-      ref.invalidate(historyProvider);
-      pullAfterFinished(
-        pulls: ref.read(pullAfterProvider),
-        copies: ref.read(localCopiesProvider.notifier),
-        task: task,
-      );
+      unawaited(collector.onFinished(task));
+      ref.invalidate(localLibraryProvider);
+      unawaited(importSidecarTranscripts(ref, task));
     },
-    beforeAdd: (task) => _transcriptFirst(ref, task, api),
+    onLog: (message) => _log(ref, message),
   );
+  unawaited(engine.restorePending());
   final dropped = engine.updates.listen((task) {
     if (task.phase == TaskPhase.failed || task.phase == TaskPhase.cancelled) {
       collector.onDropped(task.id);
@@ -90,6 +105,26 @@ final downloadEngineProvider = Provider<DownloadEngine?>((ref) {
   });
   return engine;
 });
+
+void _log(Ref ref, String message) {
+  try {
+    unawaited(ref.read(loggerProvider).log(message, tag: 'engine'));
+  } on Object {
+    // No log in tests; a line lost is never a download lost.
+  }
+}
+
+/// The folder a task's file goes to: the download folder, and below it the
+/// folder chosen in the add dialog, if any.
+String taskFolder(Ref ref, DownloadTask task) {
+  final root =
+      ref.read(downloadFolderProvider).valueOrNull ??
+      fallbackDownloadFolder(EmberIdentity.displayName);
+  return switch (task.folder) {
+    final sub? when sub.isNotEmpty => '$root\\$sub',
+    _ => root,
+  };
+}
 
 /// The tasks whose file is to be saved on this computer once the server
 /// has it ("then download it to this computer" in the add dialog), each
@@ -127,42 +162,17 @@ final engineTasksProvider = StreamProvider<List<DownloadTask>>((ref) async* {
   yield* engine.updates.map((_) => engine.tasks);
 });
 
-/// What the downloads button counts: clips the server is still fetching,
-/// and copies coming to this computer.
+/// What the downloads button counts: clips being fetched or waiting their
+/// turn, and copies coming to this computer. A paused one is not under
+/// way.
 final activeDownloadsProvider = Provider<int>((ref) {
   final tasks = ref.watch(engineTasksProvider).valueOrNull ?? const [];
-  return tasks.where((t) => !t.isFinished).length +
-      ref.watch(activeCopiesProvider);
+  return tasks.where(isUnderWay).length + ref.watch(activeCopiesProvider);
 });
 
-/// The engine's hook, run before each clip is added: the transcript of a
-/// single YouTube clip, in the reader's language then English, kept on
-/// this computer. A playlist's clips are skipped (fifty would each wait
-/// for theirs), and it never throws: the clip is added whatever happens.
-Future<void> _transcriptFirst(Ref ref, DownloadTask task, VidhoistApi api) async {
-  if (task.isBatchMember || !ref.read(transcriptsFirstProvider)) return;
-  final store = ref.read(transcriptStoreProvider);
-  final url = task.effectiveUrl;
-  if (store == null || PlaylistDetector.isPlaylist(url)) return;
-  if (UrlKit.youtubeVideoId(url) == null) return;
-  final fetcher = ref.read(captionsFetcherFactoryProvider)(api);
-  for (final language in readerLanguages(ref.read(appearanceProvider).locale)) {
-    try {
-      final result = await fetcher.fetch(url, language: language);
-      if (result.transcript case final transcript?) {
-        await keepTranscript(ref, store, transcript, fetched: true);
-      }
-      // A server that failed once will likely fail again, and each try
-      // holds the clip back.
-      if (result.outcome != CaptionsOutcome.fetched &&
-          result.outcome != CaptionsOutcome.none) {
-        return;
-      }
-    } on Object {
-      return;
-    }
-  }
-}
+/// Not finished, and not paused by the person.
+bool isUnderWay(DownloadTask task) =>
+    !task.isFinished && task.phase != TaskPhase.paused;
 
 /// The folders the server would save into, asked when a picker opens and
 /// forgotten when it closes, so a folder made since shows next time.

@@ -59,7 +59,7 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
     final l = context.mtl;
     final engine = ref.read(downloadEngineProvider);
     if (engine == null) {
-      showMTNotice(context, message: l.noServerTitle);
+      showMTNotice(context, message: l.engineErrMissing);
       return;
     }
     final soundOnly = list.kind == PlaylistKind.soundcloud;

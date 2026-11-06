@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidhoist_desktop/data/addresses_data.dart';
 import 'package:vidhoist_desktop/data/library_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/data/volume.dart';
@@ -15,6 +14,7 @@ import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/player_bar.dart';
 import 'package:vidhoist_desktop/shell/right_panel.dart';
 import 'package:vidhoist_desktop/shell/ember_slider.dart';
+import 'package:vidhoist_desktop/shell/engine_line.dart';
 import 'package:vidhoist_desktop/shell/server_line.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/volume_slider.dart';
@@ -148,33 +148,11 @@ void main() {
     expect(find.textContaining('يبقي الحوض'), findsWidgets);
   });
 
-  testWidgets('the sidebar\'s foot shows the address in use and switches to '
-      'another saved one', (tester) async {
-    await open(
-      tester,
-      playing: false,
-      overrides: [
-        initialAddressesProvider.overrideWithValue(
-          const ServerAddresses(
-            urls: ['http://nas:8081', 'https://tunnel.example.com'],
-            active: 'http://nas:8081',
-          ),
-        ),
-      ],
-    );
-    final line = find.byType(SidebarServerLine);
-    expect(
-      find.descendant(of: line, matching: find.textContaining('nas:8081')),
-      findsOneWidget,
-    );
-    await tester.tap(line);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('tunnel.example.com').last);
-    await tester.pumpAndSettle();
-    expect(
-      containerOf(tester).read(addressesProvider).active,
-      'https://tunnel.example.com',
-    );
+  testWidgets('**the guard**: the sidebar\'s foot is the engine, not the '
+      'server\'s address', (tester) async {
+    await open(tester, playing: false);
+    expect(find.byType(SidebarEngineLine), findsOneWidget);
+    expect(find.byType(SidebarServerLine), findsNothing);
   });
 
   testWidgets('"then download it to this computer" says where, with Change', (

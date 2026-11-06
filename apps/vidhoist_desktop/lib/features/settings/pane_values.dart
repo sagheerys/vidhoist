@@ -5,6 +5,7 @@ import 'package:mt_ui/mt_ui.dart';
 import '../../data/appearance_data.dart';
 import '../../data/channels_data.dart';
 import '../../data/choices_data.dart';
+import '../../data/engine_data.dart';
 import '../../data/library_data.dart';
 import '../../data/update_data.dart';
 import '../../router.dart';
@@ -18,6 +19,10 @@ import 'transcripts_pane.dart';
 String? paneValue(BuildContext context, WidgetRef ref, EmberSettingsPane pane) {
   final l = context.mtl;
   switch (pane) {
+    case EmberSettingsPane.engine:
+      if (!ref.watch(enginePathsProvider).ready) return l.settingsValueNotSet;
+      final version = ref.watch(engineVersionProvider).valueOrNull?.ytDlp;
+      return version == null ? null : mtLtrRun('yt-dlp $version');
     case EmberSettingsPane.server:
       final config = ref.watch(serverConfigProvider);
       if (config == null) return l.settingsValueNotSet;

@@ -27,6 +27,34 @@
       }
     }
   },
+  "@desktopCookiesKeptFor": {
+    "placeholders": {
+      "sites": {
+        "type": "String"
+      }
+    }
+  },
+  "@desktopEngineFetching": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@desktopEngineUpdated": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "@desktopEngineVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "@framesPerSecond": {
     "placeholders": {
       "count": {
@@ -644,7 +672,17 @@
   "desktopClearFilters": "Clear filters",
   "desktopClearFinished": "Hide finished",
   "desktopClearSelection": "Clear selection",
+  "desktopCookiesBrowser": "From a browser",
+  "desktopCookiesBrowserHint": "Read from the browser you are signed in with. If they cannot be read, close that browser and try again.",
+  "desktopCookiesChoose": "Choose a file…",
+  "desktopCookiesFile": "Cookies file",
+  "desktopCookiesHelp": "In your browser, use an extension that exports cookies in the Netscape format (one file per site), and choose the files here together. yt-dlp then uses them for every download. Cookies expire, so a download that starts failing again usually means a fresh export is due.",
+  "desktopCookiesKept": "Cookies kept on this computer",
+  "desktopCookiesKeptFor": "Cookies kept for: {sites}",
+  "desktopCookiesLocalHint": "For sites that need you signed in. yt-dlp reads them on this computer, and they go nowhere else.",
+  "desktopCookiesNone": "None",
   "desktopCookiesPrivacy": "The files go straight to your server and are never kept on this computer. They are your accounts' sign-in material, so only ever send them to a server you own.",
+  "desktopCookiesRemove": "Remove",
   "desktopCookiesReplaceNote": "Each upload replaces the server's whole cookies file. To keep several platforms, choose all their files together every time, the ones you sent before too. Hold Ctrl to choose more than one.",
   "desktopCopiedLinkAdd": "Add…",
   "desktopCopiedLinkTitle": "Add this link to the server?",
@@ -719,9 +757,31 @@
   "@desktopDownloading": {"placeholders": {"percent": {"type": "int"}}},
   "desktopDownloads": "Downloads",
   "desktopDownloadsEmpty": "Nothing is downloading. Add a link, or make a clip available offline.",
+  "desktopDownloadsRunning": "Under way",
   "desktopDragToReorder": "Drag to reorder",
   "desktopDropLinks": "Drop to add",
+  "desktopEmptyLibraryLocal": "Add a link, and the clip appears here once it is downloaded.",
   "desktopEmptyLibraryMessage": "Add a link, and the clip appears here once the server has it.",
+  "desktopEngine": "Engine",
+  "desktopEngineDenoHint": "Solves YouTube's check, for every format it offers",
+  "desktopEngineFetch": "Fetch",
+  "desktopEngineFetchCorrupt": "The file that arrived was not the published one, so it was not used.",
+  "desktopEngineFetchFailed": "Could not be fetched. Check the connection and try again.",
+  "desktopEngineFetchInUse": "In use by a download. Try again once it ends.",
+  "desktopEngineFetching": "Fetching · {percent}%",
+  "desktopEngineFfmpegHint": "Joins picture and sound, and converts audio",
+  "desktopEngineIpv4": "Use IPv4 only",
+  "desktopEngineIpv4Hint": "Much faster where IPv6 is broken, as on many home networks. Turn it off only if your network has IPv6 alone.",
+  "desktopEngineMissing": "yt-dlp is not on this computer. Reinstall Vidhoist, or fetch it here.",
+  "desktopEngineOnFirstUse": "Fetched at the first download that needs it",
+  "desktopEngineUpToDate": "yt-dlp is up to date",
+  "desktopEngineUpdate": "Update yt-dlp",
+  "desktopEngineUpdateFailed": "The update did not go through. Try again later.",
+  "desktopEngineUpdateHint": "Sites change often; an old yt-dlp stops working within months.",
+  "desktopEngineUpdated": "yt-dlp is now {version}",
+  "desktopEngineUpdating": "Updating…",
+  "desktopEngineVersion": "Version {version}",
+  "desktopEngineYtDlpHint": "Reads the link and downloads it",
   "desktopExport": "Export",
   "desktopExportForPhone": "Export for the phone",
   "desktopExportForPhoneHint": "Saves this computer's tags, lists and resume points, and its transcripts, as two files the phone restores. Restoring on the phone replaces its own tags and lists.",
@@ -784,6 +844,8 @@
   "desktopLanguageSystemHint": "Follows the language of Windows.",
   "desktopLastArrival": "Last arrival {when}",
   "@desktopLastArrival": {"placeholders": {"when": {"type": "String"}}},
+  "desktopLaterFeatures": "Show channels and sync",
+  "desktopLaterFeaturesHint": "Not ready on this engine yet: channels need the app to check them on a schedule, and sync waits for the phone.",
   "desktopLess": "Less",
   "desktopLibraryLoading": "Loading the library…",
   "desktopLinkCopied": "Link copied",
@@ -990,6 +1052,11 @@
   "desktopVolume": "Volume",
   "desktopVolumeLevel": "Volume {percent}%",
   "@desktopVolumeLevel": {"placeholders": {"percent": {"type": "int"}}},
+  "desktopWelcomeFetchNow": "Fetch them now",
+  "desktopWelcomeHelpers": "ffmpeg (joins picture and sound) and Deno (needed by YouTube) come down by themselves at the first download, about 160 MB. You can fetch them now instead.",
+  "desktopWelcomeMessage": "Paste a link from YouTube or another site, and Vidhoist downloads it to this computer with yt-dlp. Nothing goes through a server.",
+  "desktopWelcomeStart": "Start",
+  "desktopWelcomeTitle": "Welcome to Vidhoist",
   "desktopWhatsNewAllFeatures": "Everything Vidhoist can do",
   "desktopWidenSidebar": "Expand sidebar",
   "desktopWindowClose": "Close",

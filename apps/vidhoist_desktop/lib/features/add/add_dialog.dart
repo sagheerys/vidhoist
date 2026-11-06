@@ -84,7 +84,7 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
   /// Several links, sent together with the one choice for all.
   Future<void> _submitMany(ReadLinks read) async {
     final engine = ref.read(downloadEngineProvider);
-    if (engine == null) return _notice(context.mtl.noServerTitle);
+    if (engine == null) return _notice(context.mtl.engineErrMissing);
     if (!await _askPullFolder() || !mounted) return;
     setState(() => _tasks = LinksView.submit(engine, read, _choice));
     _markPull(_tasks.values);
@@ -94,7 +94,7 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
   Future<void> _submitOne(String url) async {
     final l = context.mtl;
     final engine = ref.read(downloadEngineProvider);
-    if (engine == null) return _notice(l.noServerTitle);
+    if (engine == null) return _notice(l.engineErrMissing);
     final navigator = Navigator.of(context);
     final resolved = await ShortLinkResolver().resolveForRouting(url);
     if (!mounted) return;

@@ -88,13 +88,9 @@ void main() {
   tearDown(() => root.deleteSync(recursive: true));
 
   group('**the guard**: nothing here deletes from the server', () {
-    test('the engine is built with keepOnServer, and no code in lib can '
-        'ask for autoDelete', () {
-      final container = make();
-      expect(
-        container.read(downloadEngineProvider)!.policy,
-        DeletePolicy.keepOnServer,
-      );
+    // The engine itself downloads on this computer and has no server to
+    // delete from; what is left of the server layer must not either.
+    test('no code in lib can ask for autoDelete', () {
       final offenders = [
         for (final f in Directory('lib').listSync(recursive: true))
           if (f is File &&

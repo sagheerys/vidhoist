@@ -37,7 +37,7 @@ class LinksView extends ConsumerWidget {
   /// Sends every ready link, one after another as the engine's queue
   /// takes them, each with the one choice for all.
   static Map<String, String> submit(
-    DownloadEngine engine,
+    LocalDownloadEngine engine,
     ReadLinks read,
     AddChoice choice,
   ) => {
@@ -205,6 +205,12 @@ class _Line extends StatelessWidget {
 /// How a sent link is going, in a word, or why it failed.
 String taskLine(MTLocalizations l, DownloadTask task) => switch (task.phase) {
   TaskPhase.queued => l.queuedSection,
+  TaskPhase.preparing => l.enginePreparing,
+  TaskPhase.downloading => l.engineDownloadingProgress(
+    (task.progress * 100).floor(),
+  ),
+  TaskPhase.postprocessing => l.enginePostprocessing,
+  TaskPhase.paused => l.enginePaused,
   TaskPhase.adding => l.addingToServer,
   TaskPhase.failed => switch (task.error) {
     final error? => errorText(l, error),

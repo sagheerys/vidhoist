@@ -6,6 +6,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/app.dart';
+import 'package:vidhoist_desktop/data/appearance_data.dart';
 import 'package:vidhoist_desktop/data/downloads_data.dart';
 import 'package:vidhoist_desktop/data/library_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
@@ -151,7 +152,15 @@ class ShellHarness {
     this.zoom = const UiZoom(1.0),
     this.workArea,
     this.overrides = const [],
+    this.withEngine = false,
+    this.night = false,
   });
+
+  /// The engine stands by with no server set up, as in the app itself.
+  final bool withEngine;
+
+  /// The app at night, as Windows' dark mode chooses it.
+  final bool night;
 
   /// More of the app's providers, as a test needs them.
   final List<Override> overrides;
@@ -214,8 +223,15 @@ class ShellHarness {
         (ref) => ref.watch(serverConfigProvider) == null ? null : api,
       ),
       downloadEngineProvider.overrideWith(
-        (ref) => ref.watch(serverConfigProvider) == null ? null : engine,
+        (ref) => withEngine || ref.watch(serverConfigProvider) != null
+            ? engine
+            : null,
       ),
+      if (night)
+        initialAppearanceProvider.overrideWithValue((
+          theme: ThemeMode.dark,
+          locale: null,
+        )),
       ...overrides,
       if (serverError case final error?)
         libraryServerErrorProvider.overrideWithValue(error),

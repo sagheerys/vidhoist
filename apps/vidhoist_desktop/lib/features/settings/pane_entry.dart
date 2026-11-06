@@ -24,6 +24,7 @@ MTIconData _paneIcon(EmberSettingsPane pane) => switch (pane) {
   EmberSettingsPane.updates => MTIcons.saveTo,
   EmberSettingsPane.logs => MTIcons.list,
   EmberSettingsPane.about => MTIcons.info,
+  EmberSettingsPane.engine => MTIcons.bolt,
 };
 
 class PaneEntry extends ConsumerWidget {

@@ -13,8 +13,8 @@ import '../add/links_view.dart';
 import 'panel_line.dart';
 
 /// The downloads, opened from the button above the content and drawn at
-/// its corner: what the server is fetching, what waits its turn, what is
-/// coming to this computer, and what failed, each with its own action.
+/// its corner: what is being fetched, what is paused, what waits its turn,
+/// what is coming from a server, and what failed, each with its own action.
 Future<void> showDownloadsPanel(BuildContext context) => showGeneralDialog(
   context: context,
   barrierDismissible: true,
@@ -57,7 +57,11 @@ class DownloadsPanel extends ConsumerWidget {
     final copies = ref.watch(localCopiesProvider);
     final working = [
       for (final t in tasks)
-        if (!t.isFinished && t.phase != TaskPhase.queued) t,
+        if (isUnderWay(t) && t.phase != TaskPhase.queued) t,
+    ];
+    final paused = [
+      for (final t in tasks)
+        if (t.phase == TaskPhase.paused) t,
     ];
     final waiting = [
       for (final t in tasks)
@@ -71,7 +75,11 @@ class DownloadsPanel extends ConsumerWidget {
     // here, so it never offers to hide what cannot be seen.
     final finished = copies.any((c) => !c.isActive);
     final empty =
-        working.isEmpty && waiting.isEmpty && failed.isEmpty && copies.isEmpty;
+        working.isEmpty &&
+        paused.isEmpty &&
+        waiting.isEmpty &&
+        failed.isEmpty &&
+        copies.isEmpty;
 
     // Hides finished lines from this panel; nothing is deleted, here or on
     // the server.
@@ -132,9 +140,26 @@ class DownloadsPanel extends ConsumerWidget {
                       ),
                     ),
                   if (working.isNotEmpty) ...[
-                    EmberSectionHeader(title: l.onServerPhase),
+                    EmberSectionHeader(title: l.desktopDownloadsRunning),
                     for (final t in working)
-                      _TaskLine(task: t, onCancel: () => engine?.cancel(t.id)),
+                      _TaskLine(
+                        task: t,
+                        onCancel: () => engine?.cancel(t.id),
+                        // Merging or converting is quick and cannot be
+                        // continued later: only a download pauses.
+                        onPause: t.phase == TaskPhase.postprocessing
+                            ? null
+                            : () => engine?.pause(t.id),
+                      ),
+                  ],
+                  if (paused.isNotEmpty) ...[
+                    EmberSectionHeader(title: l.enginePaused),
+                    for (final t in paused)
+                      _TaskLine(
+                        task: t,
+                        onCancel: () => engine?.cancel(t.id),
+                        onResume: () => engine?.resume(t.id),
+                      ),
                   ],
                   if (waiting.isNotEmpty) ...[
                     EmberSectionHeader(title: l.queuedSection),
@@ -173,13 +198,21 @@ class DownloadsPanel extends ConsumerWidget {
   }
 }
 
-/// A clip the server is fetching, waiting for, or failed.
+/// A clip being fetched, paused, waiting its turn, or failed.
 class _TaskLine extends StatelessWidget {
-  const _TaskLine({required this.task, required this.onCancel, this.onRetry});
+  const _TaskLine({
+    required this.task,
+    required this.onCancel,
+    this.onRetry,
+    this.onPause,
+    this.onResume,
+  });
 
   final DownloadTask task;
   final VoidCallback onCancel;
   final VoidCallback? onRetry;
+  final VoidCallback? onPause;
+  final VoidCallback? onResume;
 
   @override
   Widget build(BuildContext context) {
@@ -189,8 +222,10 @@ class _TaskLine extends StatelessWidget {
       thumbnail: task.thumbnail,
       status: taskLine(context.mtl, task),
       error: failed,
-      // Waiting is not working: only a clip the server is on moves.
+      // Waiting is not working: only a clip being fetched moves, and a
+      // paused one keeps its bar where it stopped.
       progress: switch (task.phase) {
+        TaskPhase.downloading || TaskPhase.paused => task.progress,
         TaskPhase.polling when task.hasKnownProgress => task.progress,
         TaskPhase.queued || TaskPhase.failed => null,
         _ => -1,
@@ -198,6 +233,10 @@ class _TaskLine extends StatelessWidget {
       actions: [
         if (onRetry case final retry?)
           MTLinkButton(label: context.mtl.retry, onPressed: retry),
+        if (onPause case final pause?)
+          MTLinkButton(label: context.mtl.pause, onPressed: pause),
+        if (onResume case final resume?)
+          MTLinkButton(label: context.mtl.engineResume, onPressed: resume),
       ],
       onClose: onCancel,
     );

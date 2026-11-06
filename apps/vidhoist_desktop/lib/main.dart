@@ -13,7 +13,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
-import 'data/addresses_data.dart';
 import 'data/appearance_data.dart';
 import 'data/backup_data.dart';
 import 'data/choices_data.dart';
@@ -29,6 +28,7 @@ import 'data/setup_data.dart';
 import 'data/transcripts_data.dart';
 import 'data/update_data.dart';
 import 'features/add/add_entry.dart';
+import 'features/welcome/startup_offers.dart';
 import 'features/library/artwork.dart';
 import 'data/desktop_habits.dart';
 import 'data/notices.dart';
@@ -39,6 +39,7 @@ import 'data/volume.dart';
 import 'di.dart';
 import 'identity.dart';
 import 'platform/clip_drag.dart';
+import 'platform/engine_wiring.dart';
 import 'platform/clipboard_windows.dart';
 import 'platform/link_drop.dart';
 import 'platform/media_kit_debug.dart';
@@ -198,21 +199,10 @@ Future<void> main(List<String> args) async {
   final playKeyOn = await store.getBool(GlobalPlayKey.key) ?? false
       ? await playKey.set(true)
       : false;
-  // The lab file (debug builds) stands in for the first-run setup;
-  // otherwise the server set up before, if any.
+  // No server is read at start: downloads run on this computer, and the
+  // server layer only waits to be removed.
   const secrets = WindowsSecretStore();
-  final setup =
-      labServerFrom(args) ??
-      await ServerSetupStore(
-        store: store,
-        secrets: secrets,
-        mutex: mutex,
-      ).read();
-  final addresses = await AddressesStore(
-    store: store,
-    mutex: mutex,
-  ).read(seed: [...labAddressesFrom(args), ?setup?.baseUrl]);
-  unawaited(logger.log('app started (ember)', tag: 'app'));
+  unawaited(logger.log('app started (engine)', tag: 'app'));
 
   runApp(
     ProviderScope(
@@ -242,8 +232,7 @@ Future<void> main(List<String> args) async {
           UiZoom(window.zoom, lowered: lowered),
         ),
         windowControlsProvider.overrideWithValue(controls),
-        initialServerSetupProvider.overrideWithValue(setup),
-        offerSetupAtStartProvider.overrideWithValue(true),
+        offerWelcomeProvider.overrideWithValue(true),
         offerWhatsNewProvider.overrideWithValue(true),
         vidhoistLatestProvider.overrideWithValue(vidhoistLatestOnGitHub),
         initialAppearanceProvider.overrideWithValue(appearance),
@@ -277,7 +266,11 @@ Future<void> main(List<String> args) async {
           Directory('${roaming.path}/backup'),
         ),
         secretStoreProvider.overrideWithValue(secrets),
-        initialAddressesProvider.overrideWithValue(addresses),
+        ...engineOverrides(
+          roaming: roaming.path,
+          local: local.path,
+          logger: logger,
+        ),
         desktopFoldersProvider.overrideWithValue(const WindowsFolders()),
         transcriptStoreProvider.overrideWithValue(
           TranscriptStore(Directory('${roaming.path}/transcripts')),

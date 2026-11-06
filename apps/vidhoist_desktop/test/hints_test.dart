@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/data/desktop_habits.dart';
 import 'package:vidhoist_desktop/data/hints_data.dart';
 import 'package:vidhoist_desktop/data/notices.dart';
-import 'package:vidhoist_desktop/data/setup_data.dart';
+import 'package:vidhoist_desktop/features/welcome/startup_offers.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/hints_wiring.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
@@ -157,11 +157,11 @@ void main() {
     );
   });
 
-  testWidgets('**the guard**: the server setup at the first start is the '
+  testWidgets('**the guard**: the welcome at the first start is the '
       "session's one interruption", (tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final h = ShellHarness(
-      overrides: [offerSetupAtStartProvider.overrideWithValue(true)],
+      overrides: [offerWelcomeProvider.overrideWithValue(true)],
     );
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();

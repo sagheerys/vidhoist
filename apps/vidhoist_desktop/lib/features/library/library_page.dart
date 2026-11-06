@@ -43,7 +43,9 @@ class LibraryPage extends ConsumerWidget {
     final visible = ref.watch(visibleLibraryProvider(scope));
     final all = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
     final serverMissing = ref.watch(libraryServerErrorProvider) != null;
-    final configured = ref.watch(serverConfigProvider) != null;
+    // Downloads run on this computer: the library is always there to fill,
+    // and the server's setup is offered only while one is still set up.
+    final configured = true;
     final title = switch (scope) {
       LibraryScope.favorites => l.favorites,
       LibraryScope.offline => l.filterOffline,
@@ -165,7 +167,9 @@ class LibraryPage extends ConsumerWidget {
           all.isEmpty
               ? MTEmptyFrame(
                   title: l.noVideosFound,
-                  message: l.desktopEmptyLibraryMessage,
+                  message: ref.watch(serverConfigProvider) == null
+                      ? l.desktopEmptyLibraryLocal
+                      : l.desktopEmptyLibraryMessage,
                   actionLabel: l.addLinkFab,
                   actionIcon: MTIcons.addlink,
                   onAction: () => unawaited(openAddDialog(context)),

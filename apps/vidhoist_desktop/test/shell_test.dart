@@ -103,7 +103,6 @@ void main() {
       ('Favorites', EmberPlace.favorites),
       ('Offline', EmberPlace.offline),
       ('Playlists', EmberPlace.playlists),
-      ('Channels', EmberPlace.channels),
       ('Settings', EmberPlace.settings),
       ('Library', EmberPlace.library),
     ]) {
@@ -159,7 +158,7 @@ void main() {
     h.player.showPlaying([clip('Night Drive'), clip('Blue Hour')]);
     await tester.pumpAndSettle();
     final bar = tester.element(find.byType(EmberPlayerBar));
-    for (final label in ['Channels', 'Playlists', 'Settings', 'Library']) {
+    for (final label in ['Playlists', 'Settings', 'Library']) {
       await tester.tap(find.text(label));
       await tester.pumpAndSettle();
     }
