@@ -21,7 +21,6 @@ import '../home/network_gate.dart';
 import '../home/reception.dart';
 import '../player/playback_providers.dart';
 import '../settings/restore_prompt.dart';
-import '../settings/status_refresh.dart';
 import '../update/update_sheet.dart';
 import '../update/update_state.dart';
 import '../update/whats_new_prompt.dart';
@@ -99,9 +98,15 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
       // Revives the saved audio session, without autoplaying.
       ref.read(audioHandlerProvider).restoreSession();
       await initDownloadNotifications(ref);
-      // **What the last run promised and could not finish** (2026-09-19):
-      // the server keeps working after the app is killed, and without this
-      // the finished file is never pulled and never cleaned off the server.
+      // The engine readied in the background: quick after the first run,
+      // and yt-dlp updated once a week. Its state shows in the settings.
+      if (mounted) {
+        unawaited(
+          ref.read(enginePreparerProvider).ensure().catchError((Object _) {}),
+        );
+      }
+      // **What the last run left unfinished** goes on from its partial
+      // file.
       if (mounted) unawaited(ref.read(pendingRecoveryProvider)());
       if (mounted) await maybeOfferAutoRestore(context, ref);
       if (mounted) await _handleShortcut();
@@ -272,9 +277,9 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     // fade.
     ref.watch(autoRetryProvider);
     ref.watch(batchDropWatcherProvider);
-    // Returning to the app asks the server again; the card is not truthful
-    // without this.
-    ref.watch(statusRefreshProvider);
+    // "Wi-Fi only": losing Wi-Fi pauses a download, and its return resumes
+    // it.
+    ref.watch(wifiPauseProvider);
     _watchEnrichment();
 
     final handler = ref.watch(audioHandlerProvider);

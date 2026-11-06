@@ -17,7 +17,7 @@ class LiteApp extends ConsumerWidget {
     final localeCode = ref.watch(settingsProvider.select((s) => s.localeCode));
 
     return MaterialApp.router(
-      title: 'Vidhoist Lite',
+      title: 'Vidhoist',
       debugShowCheckedModeBanner: false,
       theme: mtTheme(MTVariant.lite, Brightness.light),
       darkTheme: mtTheme(MTVariant.lite, Brightness.dark),

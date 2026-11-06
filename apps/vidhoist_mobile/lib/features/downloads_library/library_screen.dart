@@ -7,10 +7,9 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import '../../di.dart';
-import '../home/add_flow.dart';
+import '../home/network_gate.dart';
 import '../shared/error_text.dart';
 import '../player/playback_providers.dart';
-import '../settings/settings_sections.dart';
 import 'library_providers.dart';
 import 'local_item.dart';
 import 'media_access.dart';
@@ -77,12 +76,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     });
     final options = ref.watch(libraryViewProvider);
     final active = ref.watch(activeTasksProvider);
-    final settings = ref.watch(settingsProvider);
-
-    // The library is local and works with no server, so the empty state
-    // invites configuration only when there is no server **and no files**.
-    final items = ref.watch(localMediaProvider).valueOrNull ?? const [];
-    final needsSetup = !settings.isConfigured && items.isEmpty;
 
     final searching = _searchOpen || options.query.isNotEmpty;
     void closeSearch() {
@@ -116,40 +109,35 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             ),
           ),
         ),
-        body: needsSetup
-            ? MTEmptyState(
-                title: l10n.noServerTitle,
-                message: l10n.noServerMessage,
-                actionLabel: l10n.setupServer,
-                onAction: () => context.go(SettingsPane.server.route),
-              )
-            : MTPullRefresh(
-                onRefresh: () async {
-                  // A failed refresh is shown by the library itself in its
-                  // empty state, and
-                  // rethrowing here escapes the `RefreshIndicator` with
-                  // nobody to catch
-                  // it.
-                  ref.invalidate(localMediaProvider);
-                  try {
-                    await ref.read(localMediaProvider.future);
-                  } on MTApiException {
-                    // Shown in the empty state.
-                  }
-                },
-                // One calm appearance of the content on the first build,
-                // rather than motion per card, which made the list bounce
-                // throughout the scroll.
-                // A wide grid gains columns, and a tablet spreads every mode
-                // across its width; a phone's rows and cards keep theirs.
-                child: MTRevealOnce(
-                  child:
-                      options.mode == LibraryViewMode.grid ||
-                          MTAdaptiveScaffold.hasRail(context)
-                      ? _body(l10n, options, active)
-                      : MTReadableWidth(child: _body(l10n, options, active)),
-                ),
-              ),
+        // No setup to invite any more: the engine is on the phone, readied
+        // by the welcome screen.
+        body: MTPullRefresh(
+          onRefresh: () async {
+            // A failed refresh is shown by the library itself in its
+            // empty state, and
+            // rethrowing here escapes the `RefreshIndicator` with
+            // nobody to catch
+            // it.
+            ref.invalidate(localMediaProvider);
+            try {
+              await ref.read(localMediaProvider.future);
+            } on MTApiException {
+              // Shown in the empty state.
+            }
+          },
+          // One calm appearance of the content on the first build,
+          // rather than motion per card, which made the list bounce
+          // throughout the scroll.
+          // A wide grid gains columns, and a tablet spreads every mode
+          // across its width; a phone's rows and cards keep theirs.
+          child: MTRevealOnce(
+            child:
+                options.mode == LibraryViewMode.grid ||
+                    MTAdaptiveScaffold.hasRail(context)
+                ? _body(l10n, options, active)
+                : MTReadableWidth(child: _body(l10n, options, active)),
+          ),
+        ),
       ),
     );
   }
@@ -272,24 +260,11 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 
   Widget _taskCard(MTLocalizations l10n, DownloadTask task) {
     final engine = ref.read(downloadEngineProvider);
-    final statusText = switch (task.phase) {
-      TaskPhase.queued => l10n.queuedSection,
-      // Rule 4: tapping an item. Audio plays in the background immediately
-      // and
-      // the mini player appears; video opens `/player`. The internal play
-      // queue
-      // is **the library as displayed** at the moment of the tap, with the
-      // same
-      // sorting and filtering.
-      TaskPhase.adding || TaskPhase.polling => l10n.onServerPhase,
-      TaskPhase.waitingForNetwork => l10n.waitingForWifi,
-      TaskPhase.pulling => l10n.pullingToDevice,
-      // Lite cleans the server after pulling, a short phase that deserves
-      // to be named explicitly.
-      TaskPhase.deleting => l10n.cleaningServer,
-      TaskPhase.failed => taskErrorText(l10n, task),
-      _ => l10n.completed,
-    };
+    final statusText = taskStatusText(
+      l10n,
+      task,
+      waitingForWifi: ref.watch(wifiPausedProvider).contains(task.id),
+    );
     return MTDownloadProgressCard(
       key: ValueKey('${task.id}-${task.phase.name}'),
       title: task.title ?? task.effectiveUrl,
@@ -299,6 +274,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       statusText: statusText,
       progress: task.hasKnownProgress ? task.progress : null,
       isError: task.phase == TaskPhase.failed,
+      action: taskCardAction(l10n, task, engine),
       onCancel: () => engine?.cancel(task.id),
     );
   }

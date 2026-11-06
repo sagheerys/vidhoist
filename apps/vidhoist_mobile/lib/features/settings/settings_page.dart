@@ -6,7 +6,7 @@ import 'about_screen.dart';
 import 'backup_screen.dart';
 import 'logs_screen.dart';
 import 'settings_sections.dart';
-import 'widgets/server_fields.dart';
+import 'widgets/engine_fields.dart';
 import 'widgets/settings_fields.dart';
 
 /// A section's page: pushed on a phone, open beside the list on a tablet
@@ -21,9 +21,9 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.mtl;
     return switch (pane) {
-      SettingsPane.server => MTSettingsPage(
-        title: l10n.serverConfiguration,
-        child: const ServerFields(showHeader: false),
+      SettingsPane.engine => MTSettingsPage(
+        title: l10n.mobileSettingsEngine,
+        child: const EngineFields(),
       ),
       SettingsPane.downloads => MTSettingsPage(
         title: l10n.settingsDownloads,

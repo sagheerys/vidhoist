@@ -7,7 +7,9 @@ import 'package:mt_ui/mt_ui.dart';
 
 import '../../di.dart';
 import '../downloads_library/library_providers.dart';
+import '../downloads_library/widgets/task_card_parts.dart';
 import '../shared/error_text.dart';
+import 'network_gate.dart';
 import 'notifications.dart';
 
 final notificationsProvider = Provider((ref) => DownloadNotifications());
@@ -88,8 +90,11 @@ final downloadWatcherProvider = Provider<void>((ref) {
     required String channelName,
     required int? percent,
     required String body,
+    String? taskId,
+    List<NoticeAction> buttons = const [],
   }) async {
-    final signature = '$title|$body|${percent ?? -1}';
+    final signature =
+        '$title|$body|${percent ?? -1}|${buttons.map((b) => b.id).join()}';
     if (lastShown[id] == signature) return;
     lastShown[id] = signature;
     await notifications.showProgress(
@@ -98,6 +103,8 @@ final downloadWatcherProvider = Provider<void>((ref) {
       body: body,
       channelName: channelName,
       percent: percent,
+      taskId: taskId,
+      buttons: buttons,
     );
   }
 
@@ -105,75 +112,36 @@ final downloadWatcherProvider = Provider<void>((ref) {
     final texts = l10n();
     for (final task in tasks) {
       final id = idOf(task);
+      final wifiWait = ref.read(wifiPausedProvider).contains(task.id);
       switch (task.phase) {
-        // **Field report 2026-09-02:** the notification used to start at
-        // the pull only, so the entire server phase, usually the longest,
-        // passed with no notification at all and the app looked idle. Now
-        // every phase announces itself.
-        // The on-device engine's waits (reading the link, a pause) show
-        // as a queued one until its own wording arrives with it.
-        case TaskPhase.queued || TaskPhase.preparing || TaskPhase.paused:
-          await showProgressIfChanged(
-            id,
-            title: task.title ?? texts.downloadingTitle,
-            body: texts.queuedSection,
-            channelName: texts.activeDownloads,
-            // A phase with no known percentage gets an indeterminate bar
-            // rather than a bar frozen at zero.
-            percent: null,
-          );
-        case TaskPhase.adding:
-          await showProgressIfChanged(
-            id,
-            title: task.title ?? texts.downloadingTitle,
-            body: texts.addingToServer,
-            channelName: texts.activeDownloads,
-            percent: null,
-          );
-        case TaskPhase.polling:
-          await showProgressIfChanged(
-            id,
-            title: task.title ?? texts.downloadingTitle,
-            body: texts.onServerProgress(
-              (task.progress * 100).toStringAsFixed(0),
-            ),
-            channelName: texts.activeDownloads,
-            percent: (task.progress * 100).round(),
-          );
-        // The file is ready and the pull is held waiting for Wi-Fi; the
-        // notification says so plainly, or the app looks stuck with no
-        // explanation.
-        case TaskPhase.waitingForNetwork:
-          await showProgressIfChanged(
-            id,
-            title: task.title ?? texts.downloadingTitle,
-            body: texts.waitingForWifi,
-            channelName: texts.activeDownloads,
-            percent: null,
-          );
-        // **The percentage in the notification text too** (field report
-        // 2026-09-03: "the counter does not appear while pulling from the
-        // server to the device"). A notification bar on its own cannot be
-        // read as a number, and pulling is the longest phase in Lite.
-        case TaskPhase.pulling ||
+        // **Field report 2026-09-02:** a phase with no notification made
+        // the app look idle, so every phase announces itself, in the
+        // engine's own words. A phase with no known percentage gets an
+        // indeterminate bar rather than a bar frozen at zero; the
+        // percentage is in the text too, since a bar alone cannot be read
+        // as a number (field report 2026-09-03).
+        case TaskPhase.queued ||
+            TaskPhase.preparing ||
             TaskPhase.downloading ||
-            TaskPhase.postprocessing:
+            TaskPhase.postprocessing ||
+            TaskPhase.paused ||
+            TaskPhase.waitingForNetwork ||
+            TaskPhase.adding ||
+            TaskPhase.polling ||
+            TaskPhase.pulling ||
+            TaskPhase.deleting:
           await showProgressIfChanged(
             id,
             title: task.title ?? texts.downloadingTitle,
-            body: texts.pullingToDeviceProgress(
-              (task.progress * 100).toStringAsFixed(0),
-            ),
+            body: taskNotificationText(texts, task, waitingForWifi: wifiWait),
             channelName: texts.activeDownloads,
-            percent: (task.progress * 100).round(),
-          );
-        case TaskPhase.deleting:
-          await showProgressIfChanged(
-            id,
-            title: task.title ?? texts.downloadingTitle,
-            body: texts.cleaningServer,
-            channelName: texts.activeDownloads,
-            percent: null,
+            percent: _percentOf(task),
+            taskId: task.id,
+            buttons: [
+              if (_pausable(task.phase)) (id: 'pause', label: texts.pause),
+              if (task.phase == TaskPhase.paused)
+                (id: 'resume', label: texts.engineResume),
+            ],
           );
         case TaskPhase.completed:
           lastShown.remove(id);
@@ -223,7 +191,16 @@ final downloadWatcherProvider = Provider<void>((ref) {
       lastShown.remove(id);
       await notifications.cancel(id);
     }
-    await syncBackground(tasks.any((t) => !t.isFinished));
+    // A download paused by hand needs no foreground service; one paused
+    // for Wi-Fi does, to go on when Wi-Fi is back.
+    final wifiPaused = ref.read(wifiPausedProvider);
+    await syncBackground(
+      tasks.any(
+        (t) =>
+            !t.isFinished &&
+            (t.phase != TaskPhase.paused || wifiPaused.contains(t.id)),
+      ),
+    );
   }
 
   ref.listen<AsyncValue<List<DownloadTask>>>(engineTasksProvider, (_, next) {
@@ -245,6 +222,11 @@ Future<void> initDownloadNotifications(WidgetRef ref) async {
     await notifications.init(
       onOpenItem: (key) =>
           ref.read(highlightedItemProvider.notifier).state = key,
+      onTaskAction: (action, taskId) {
+        final engine = ref.read(downloadEngineProvider);
+        if (action == 'pause') engine?.pause(taskId);
+        if (action == 'resume') engine?.resume(taskId);
+      },
     );
     await notifications.requestPermission();
   } on Object catch (e) {
@@ -262,3 +244,18 @@ Future<void> initDownloadNotifications(WidgetRef ref) async {
     }
   }
 }
+
+/// The notification's bar: a percentage only where one is known.
+int? _percentOf(DownloadTask task) => switch (task.phase) {
+  TaskPhase.downloading ||
+  TaskPhase.postprocessing ||
+  TaskPhase.paused ||
+  TaskPhase.polling ||
+  TaskPhase.pulling => (task.progress * 100).round(),
+  _ => null,
+};
+
+bool _pausable(TaskPhase phase) =>
+    phase == TaskPhase.preparing ||
+    phase == TaskPhase.downloading ||
+    phase == TaskPhase.waitingForNetwork;

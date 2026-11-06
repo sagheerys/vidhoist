@@ -5,6 +5,7 @@ import 'package:mt_ui/mt_ui.dart';
 
 import '../../../di.dart';
 import '../../home/add_flow.dart';
+import '../../home/network_gate.dart';
 import 'task_card_parts.dart';
 
 /// The "manage downloads" sheet: in progress, waiting, needs your
@@ -50,6 +51,7 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
     final l10n = context.mtl;
     final tasks = ref.watch(engineTasksProvider).valueOrNull ?? const [];
     final engine = ref.read(downloadEngineProvider);
+    final wifiPaused = ref.watch(wifiPausedProvider);
 
     final running = tasks
         .where((t) => !t.isFinished && t.phase != TaskPhase.queued)
@@ -102,19 +104,17 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
                 waiting: task.phase == TaskPhase.queued,
                 statusText: error
                     ? taskErrorText(l10n, task)
-                    : switch (task.phase) {
-                        // Its place in the line, counted in this section.
-                        TaskPhase.queued => l10n.queuePosition(index + 1),
-                        // The wait is the user's own decision, not a slow
-                        // network.
-                        TaskPhase.waitingForNetwork => l10n.waitingForWifi,
-                        TaskPhase.pulling => l10n.pullingToDevice,
-                        // The percentage is an independent element in the
-                        // card and is not repeated here.
-                        _ => l10n.onServerPhase,
-                      },
+                    : task.phase == TaskPhase.queued
+                    // Its place in the line, counted in this section.
+                    ? l10n.queuePosition(index + 1)
+                    : taskStatusText(
+                        l10n,
+                        task,
+                        waitingForWifi: wifiPaused.contains(task.id),
+                      ),
                 progress: task.hasKnownProgress ? task.progress : null,
                 isError: error,
+                action: error ? null : taskCardAction(l10n, task, engine),
                 // **A failed task is dismissed with the same close button**
                 // (field report 2026-09-03: "if a file fails to download you
                 // cannot remove it from the downloads list"). `onCancel` was

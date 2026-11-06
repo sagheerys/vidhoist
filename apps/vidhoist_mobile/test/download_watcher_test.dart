@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart' show Locale;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
@@ -9,10 +10,13 @@ import 'package:vidhoist_mobile/features/home/download_watcher.dart';
 import 'package:vidhoist_mobile/features/home/notifications.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:mt_core/mt_core.dart';
+import 'package:mt_ui/mt_ui.dart';
 
 /// Posts nothing; remembers what is showing.
 class _Notices extends DownloadNotifications {
   final showing = <int>{};
+  final bodies = <String?>[];
+  final actions = <List<String>>[];
 
   @override
   Future<void> showProgress(
@@ -21,7 +25,13 @@ class _Notices extends DownloadNotifications {
     required String channelName,
     required int? percent,
     String? body,
-  }) async => showing.add(id);
+    String? taskId,
+    List<NoticeAction> buttons = const [],
+  }) async {
+    showing.add(id);
+    bodies.add(body);
+    actions.add([for (final b in buttons) b.id]);
+  }
 
   @override
   Future<void> showResult(
@@ -42,14 +52,79 @@ class _Notices extends DownloadNotifications {
 /// be swiped away, must still go.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  final background = <String>[];
 
-  test('a task gone from the list takes its notice with it', () async {
+  setUp(() {
+    background.clear();
     // The foreground service, answered so the watcher's chain moves on.
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(
-          const MethodChannel('flutter_background'),
-          (call) async => true,
-        );
+        .setMockMethodCallHandler(const MethodChannel('flutter_background'), (
+          call,
+        ) async {
+          background.add(call.method);
+          return true;
+        });
+  });
+
+  ({_Notices notices, StreamController<List<DownloadTask>> tasks}) watch() {
+    final notices = _Notices();
+    final tasks = StreamController<List<DownloadTask>>();
+    addTearDown(tasks.close);
+    final container = ProviderContainer(
+      overrides: [
+        keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
+        prefsMutexProvider.overrideWithValue(PrefsMutex()),
+        initialSettingsProvider.overrideWithValue(const LiteSettings()),
+        loggerProvider.overrideWithValue(
+          MTLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
+        ),
+        notificationsProvider.overrideWithValue(notices),
+        engineTasksProvider.overrideWith((ref) => tasks.stream),
+      ],
+    );
+    addTearDown(container.dispose);
+    container.read(downloadWatcherProvider);
+    return (notices: notices, tasks: tasks);
+  }
+
+  final l10n = lookupMTLocalizations(const Locale('en'));
+  DownloadTask at(TaskPhase phase) => DownloadTask(
+    inputUrl: 'https://youtu.be/abc',
+    quality: Quality.best,
+  ).copyWith(phase: phase, progress: 0.42);
+
+  test('the phone engine phases in its own words, with pause and '
+      'resume', () async {
+    final w = watch();
+    w.tasks.add([at(TaskPhase.downloading)]);
+    await pumpEventQueue();
+    expect(w.notices.bodies.last, l10n.engineDownloadingProgress('42'));
+    expect(w.notices.actions.last, ['pause']);
+
+    w.tasks.add([at(TaskPhase.paused)]);
+    await pumpEventQueue();
+    expect(w.notices.bodies.last, l10n.enginePaused);
+    expect(w.notices.actions.last, ['resume']);
+
+    w.tasks.add([at(TaskPhase.preparing)]);
+    await pumpEventQueue();
+    expect(w.notices.bodies.last, l10n.enginePreparing);
+  });
+
+  test(
+    'a download paused by hand does not keep the foreground service',
+    () async {
+      final w = watch();
+      w.tasks.add([at(TaskPhase.downloading)]);
+      await pumpEventQueue();
+      expect(background, contains('enableBackgroundExecution'));
+      w.tasks.add([at(TaskPhase.paused)]);
+      await pumpEventQueue();
+      expect(background.last, 'disableBackgroundExecution');
+    },
+  );
+
+  test('a task gone from the list takes its notice with it', () async {
     final notices = _Notices();
     final tasks = StreamController<List<DownloadTask>>();
     addTearDown(tasks.close);

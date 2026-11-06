@@ -177,21 +177,29 @@ final ytDlpBridgeProvider = Provider<YtDlpBridge>(
 /// Unpacks the engine and keeps yt-dlp current; the welcome screen and the
 /// engine settings show its state.
 final enginePreparerProvider = Provider((ref) {
-  final logger = ref.watch(loggerProvider);
   final preparer = EnginePreparer(
     bridge: ref.watch(ytDlpBridgeProvider),
     store: ref.watch(keyValueStoreProvider),
     mutex: ref.watch(prefsMutexProvider),
-    onLog: (message) => unawaited(logger.log(message, tag: 'engine')),
+    // Read, not watched: a new preparer would forget the engine is ready.
+    onLog: (message) =>
+        unawaited(ref.read(loggerProvider).log(message, tag: 'engine')),
   );
   ref.onDispose(preparer.dispose);
   return preparer;
 });
 
-final engineStatusProvider = StreamProvider<EngineStatus>((ref) async* {
+/// Listening starts here, at once: a generator would subscribe only after
+/// its first value was taken, and a step finished in between was lost.
+final engineStatusProvider = StreamProvider<EngineStatus>((ref) {
   final preparer = ref.watch(enginePreparerProvider);
-  yield preparer.status;
-  yield* preparer.statuses;
+  final statuses = StreamController<EngineStatus>()..add(preparer.status);
+  final heard = preparer.statuses.listen(statuses.add);
+  ref.onDispose(() {
+    unawaited(heard.cancel());
+    unawaited(statuses.close());
+  });
+  return statuses.stream;
 });
 
 final downloadBackendProvider = Provider<DownloadBackend>(

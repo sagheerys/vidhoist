@@ -4,8 +4,6 @@ import 'package:mt_ui/mt_ui.dart';
 
 import 'settings_page.dart';
 import 'settings_sections.dart';
-import 'widgets/server_keeps_files_notice.dart';
-import 'widgets/server_status_card.dart';
 
 /// **Settings in two panes** on a tablet held sideways (2026-10-10): the
 /// rows of the phone's home page on one side, the chosen section open on
@@ -35,8 +33,6 @@ class SettingsHub extends ConsumerWidget {
               MTSpace.xl,
             ),
             children: [
-              const ServerStatusCard(),
-              const ServerKeepsFilesNotice(),
               for (final (title, entries) in settingsGroups(context, ref))
                 MTSettingsGroup(
                   title: title,

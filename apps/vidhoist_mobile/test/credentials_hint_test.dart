@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
-import 'package:vidhoist_mobile/features/settings/settings_page.dart';
-import 'package:vidhoist_mobile/features/settings/settings_sections.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
+import 'package:vidhoist_mobile/features/settings/widgets/server_fields.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
@@ -19,6 +18,10 @@ import 'device_matrix.dart';
 /// need it. It is now under the field, and these guard both halves: that
 /// it is readable without any tap, and that the extra line it costs does
 /// not push the screen off a small phone at a large font.
+///
+/// The server fields no longer open from the settings (the engine is on the
+/// phone), and go with the server layer in batch 6; until then they are
+/// tested on their own.
 void main() {
   Widget host() {
     final container = ProviderContainer(
@@ -37,7 +40,7 @@ void main() {
         localizationsDelegates: MTLocalizations.localizationsDelegates,
         supportedLocales: MTLocalizations.supportedLocales,
         theme: mtTheme(MTVariant.lite, Brightness.light),
-        home: const SettingsPage(SettingsPane.server),
+        home: const MTSettingsPage(title: 'Server', child: ServerFields()),
       ),
     );
   }
@@ -48,7 +51,7 @@ void main() {
     await tester.pumpWidget(host());
     await tester.pumpAndSettle();
 
-    final l10n = MTLocalizations.of(tester.element(find.byType(SettingsPage)));
+    final l10n = MTLocalizations.of(tester.element(find.byType(ServerFields)));
     expect(
       find.text(l10n.authHelper),
       findsOneWidget,
