@@ -67,18 +67,6 @@ abstract final class ServerPath {
   static bool isSafe(String path) =>
       UrlKit.isSafeServerFilename(relative(path));
 
-  /// The URL path below the server's base, every segment encoded on its
-  /// own so the slashes between folders survive and an Arabic or bracketed
-  /// name does not break the path.
-  static String urlPath(String path) {
-    final route = isAudio(path) ? 'audio_download' : 'download';
-    final encoded = relative(path)
-        .split('/')
-        .map(Uri.encodeComponent)
-        .join('/');
-    return '$route/$encoded';
-  }
-
   /// The file's own name, without any folder.
   static String basename(String path) => relative(path).split('/').last;
 

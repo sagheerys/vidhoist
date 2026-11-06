@@ -23,9 +23,7 @@ void main() {
         secretStoreProvider.overrideWithValue(MemorySecretStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
         initialSettingsProvider.overrideWithValue(
-          await tester.runAsync(
-                () => LiteSettings.load(store),
-              ) ??
+          await tester.runAsync(() => LiteSettings.load(store)) ??
               const LiteSettings(),
         ),
       ],

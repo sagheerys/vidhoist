@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import '../constants/mt_constants.dart';
 import '../download/local_pending.dart';
-import '../download/pending_downloads.dart';
-import '../download/trashcan_probe.dart';
 import '../storage/artwork_index.dart';
 import '../storage/key_value_store.dart';
 import '../storage/secret_store.dart';
@@ -50,24 +48,30 @@ class BackupService {
   /// import accepts either.
   final String variant;
 
-  /// **Keys that describe this phone's dealings with the server, not the
-  /// user's data.** A pending download is a promise *this* process made;
-  /// restored on another phone it would have that phone pull the file and
-  /// delete it from the server while the first is still pulling it. The
-  /// trashcan flag is a fact about one container, and travels with the
-  /// backup to a server it was never measured on. Which version's "what's
-  /// new" this install has seen is about the installed app: a restore from
+  /// **Keys that describe this device, not the user's data.** A pending
+  /// download is a promise *this* process made. The two server-era keys
+  /// (a pending pull from Vidhoist, and whether its trashcan kept files)
+  /// stay out too, so an old backup cannot plant them. Which version's
+  /// "what's new" this install has seen is about the installed app: a
+  /// restore from
   /// an older backup would show a sheet already read, or show one on a
   /// fresh install. The covers kept as files are paths on this device:
   /// restored elsewhere they point at nothing, and the clips they stand
   /// for show no cover at all instead of fetching theirs again.
+  /// The Vidhoist pipeline's unfinished pulls, from before the engine ran
+  /// on the device.
+  static const serverPendingKey = 'pending_downloads';
+
+  /// Whether a Vidhoist server kept its files after a delete.
+  static const serverKeepsFilesKey = 'server_keeps_files';
+
   static const _deviceOnlyKeys = {
     KeptCoverIndex.keptKey,
-    PendingDownloadsStore.prefsKey,
+    serverPendingKey,
     // The on-device engine's unfinished downloads: their partial files are
     // here, and elsewhere each would start again from nothing.
     LocalPendingStore.key,
-    TrashcanProbe.prefsKey,
+    serverKeepsFilesKey,
     UpdatePrefs.lastSeenVersionKey,
     UpdatePrefs.notesKey,
   };

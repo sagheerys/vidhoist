@@ -13,7 +13,6 @@ class MergeResult {
     required this.tagged,
     required this.playlists,
     required this.positions,
-    required this.serverAddresses,
   });
 
   /// Clips whose tags or favourite changed.
@@ -24,10 +23,6 @@ class MergeResult {
 
   /// Resume positions brought up to date.
   final int positions;
-
-  /// The server addresses the backup names, without credentials: a hint
-  /// for a first-run setup, never written over an address already set.
-  final List<String> serverAddresses;
 
   bool get changedNothing => tagged == 0 && playlists == 0 && positions == 0;
 }
@@ -56,12 +51,6 @@ class BackupMerge {
 
   static const _positionPrefix = 'playback_pos_';
   static const _positionStampPrefix = 'playback_stamp_';
-  static const _addressKeys = [
-    'active_url',
-    'server_url',
-    'local_url',
-    'external_urls',
-  ];
 
   /// The typed prefs of a plain MTF backup, by key. An encrypted backup
   /// from an older app version, or anything else, is refused.
@@ -153,7 +142,6 @@ class BackupMerge {
         tagged: tagged,
         playlists: playlists,
         positions: positions,
-        serverAddresses: _addresses(theirs),
       );
     });
   }
@@ -313,18 +301,6 @@ class BackupMerge {
     }
     return changed;
   }
-
-  static List<String> _addresses(Map<String, Object> theirs) => {
-    for (final key in _addressKeys)
-      ...switch (theirs[key]) {
-        final String url when url.trim().isNotEmpty => [url.trim()],
-        final List<String> urls => [
-          for (final u in urls)
-            if (u.trim().isNotEmpty) u.trim(),
-        ],
-        _ => const <String>[],
-      },
-  }.map(BackupService.stripUrlCredentials).toList();
 
   static bool _sameSet(Set<String> a, Set<String> b) =>
       a.length == b.length && a.containsAll(b);

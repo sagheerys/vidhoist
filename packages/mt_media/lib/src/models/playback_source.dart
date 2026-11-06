@@ -36,11 +36,6 @@ class ServerStreamEndpoint {
   final String Function(String serverFilename) buildUrl;
   final Map<String, String> headers;
 
-  factory ServerStreamEndpoint.fromApi(VidhoistApi api) => ServerStreamEndpoint(
-    buildUrl: api.downloadUrl,
-    headers: api.streamingHeaders,
-  );
-
   /// No server configured means local files only.
   static ServerStreamEndpoint get none => ServerStreamEndpoint(
     buildUrl: (_) => throw const UnsafeFilenameException(),

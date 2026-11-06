@@ -12,7 +12,7 @@
 
   The exclusion below fixes that: ordinary data is backed up, secrets are
   not. Losing them is intended — the user re-enters the password once, and
-  it never enters our own backups either (SERVER-API.md §5.4).
+  it never enters our own backups either (ENGINE.md, Storage).
 -->
 <full-backup-content>
     <exclude domain="sharedpref" path="FlutterSecureStorage.xml"/>

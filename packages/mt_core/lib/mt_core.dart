@@ -1,17 +1,10 @@
-/// The MTF core in pure Dart: the Vidhoist API client, the tolerant models,
-/// URL tools, the download engine, storage, backup and logging. The
-/// server's side of the contract is in `docs/SERVER-API.md`.
+/// The core in pure Dart: the download engine over yt-dlp, the tolerant
+/// models, URL tools, storage, backup and logging. How yt-dlp runs on each
+/// platform is in `docs/ENGINE.md`.
 library;
 
 export 'src/api/api_exceptions.dart';
 export 'src/api/cookie_files.dart';
-export 'src/api/endpoint_resolver.dart';
-export 'src/api/lan_probe.dart';
-export 'src/api/image_headers.dart';
-export 'src/api/live_update.dart';
-export 'src/api/vidhoist_api.dart';
-export 'src/api/vidhoist_api_client.dart' show VidhoistApiClient, ServerConfig;
-export 'src/api/server_reason.dart';
 export 'src/backend/download_backend.dart';
 export 'src/backend/fake_backend.dart';
 export 'src/backend/run_reader.dart';
@@ -20,17 +13,11 @@ export 'src/backup/backup_merge.dart';
 export 'src/backup/backup_rotation.dart';
 export 'src/backup/backup_service.dart';
 export 'src/constants/mt_constants.dart';
-export 'src/download/delete_policy.dart';
-export 'src/download/download_engine.dart';
 export 'src/download/download_queue.dart';
 export 'src/download/partial_sweeper.dart';
-export 'src/download/pending_downloads.dart';
-export 'src/download/pending_sweeper.dart';
 export 'src/download/local_download_engine.dart';
 export 'src/download/local_filename.dart';
 export 'src/download/local_pending.dart';
-export 'src/download/trashcan_probe.dart';
-export 'src/download/transfer.dart';
 export 'src/folders/folder_choice.dart';
 export 'src/logging/mt_logger.dart';
 export 'src/logging/stack_place.dart';
@@ -39,8 +26,6 @@ export 'src/models/download_task.dart';
 export 'src/models/history_item.dart';
 export 'src/models/history_response.dart';
 export 'src/models/playlist_preview.dart';
-export 'src/models/server_folders.dart';
-export 'src/models/server_version.dart';
 export 'src/models/quality.dart';
 export 'src/models/saved_playlist.dart';
 export 'src/resolvers/http_fetch.dart';
@@ -69,7 +54,6 @@ export 'src/sync/sync_merge.dart';
 export 'src/sync/sync_snapshot.dart';
 export 'src/update/apk_downloader.dart';
 export 'src/update/app_version.dart';
-export 'src/update/vidhoist_release_checker.dart';
 export 'src/update/release_notes.dart';
 export 'src/update/update_checker.dart';
 export 'src/update/update_prefs.dart';

@@ -9,11 +9,12 @@ const _uuid = Uuid();
 /// normalised.
 enum ItemStatus { inProgress, completed, failed, unknown }
 
-/// One item from `GET /history` (`docs/SERVER-API.md`), parsed
-/// **tolerantly**. The hard rules:
+/// One finished download, in the shape Vidhoist's `GET /history` gave it,
+/// which `LocalHistoryStore` keeps; parsed **tolerantly**. The hard
+/// rules:
 /// - [canonicalUrl] is the primary key for all app data.
 /// - A missing [filename] stays null; it is **never invented from the
-///   title** (trap §6.3).
+///   title** (`docs/ENGINE.md`, Storage).
 /// - The `i.ytimg.com` fallback thumbnail is for YouTube **only**;
 ///   anything else stays imageless, and ArtworkIndex fills it in a layer
 ///   above.

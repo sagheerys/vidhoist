@@ -12,8 +12,7 @@ Widget? taskThumbnail(DownloadTask task) =>
 
 /// The speed while bytes arrive, and nothing in any other phase.
 String? taskSpeed(DownloadTask task) =>
-    (task.phase == TaskPhase.downloading || task.phase == TaskPhase.polling) &&
-        task.speed != null
+    task.phase == TaskPhase.downloading && task.speed != null
     ? mtFormatTransferRate(task.speed!)
     : null;
 
@@ -32,10 +31,6 @@ String taskStatusText(
   TaskPhase.paused => l10n.enginePaused,
   // The wait is the person's own setting, not a slow network.
   TaskPhase.waitingForNetwork => l10n.waitingForWifi,
-  // The server engine's phases, until its layer is deleted (batch 6).
-  TaskPhase.adding || TaskPhase.polling => l10n.onServerPhase,
-  TaskPhase.pulling => l10n.pullingToDevice,
-  TaskPhase.deleting => l10n.cleaningServer,
   TaskPhase.failed => taskErrorText(l10n, task),
   TaskPhase.cancelled => l10n.cancel,
   TaskPhase.completed => l10n.completed,
@@ -51,9 +46,6 @@ String taskNotificationText(
   final percent = (task.progress * 100).toStringAsFixed(0);
   return switch (task.phase) {
     TaskPhase.downloading => l10n.engineDownloadingProgress(percent),
-    TaskPhase.adding => l10n.addingToServer,
-    TaskPhase.polling => l10n.onServerProgress(percent),
-    TaskPhase.pulling => l10n.pullingToDeviceProgress(percent),
     _ => taskStatusText(l10n, task, waitingForWifi: waitingForWifi),
   };
 }

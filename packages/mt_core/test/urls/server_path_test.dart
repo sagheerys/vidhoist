@@ -64,13 +64,11 @@ void main() {
         expect(ServerPath.relative(path), 'Music/a.m4a');
         expect(ServerPath.basename(path), 'a.m4a');
         expect(ServerPath.folderOf(path), 'Music');
-        expect(ServerPath.urlPath(path), 'audio_download/Music/a.m4a');
       },
     );
 
     test('a plain stored name still means the top of download/', () {
       expect(ServerPath.isAudio('a.m4a'), isFalse);
-      expect(ServerPath.urlPath('a b.mp4'), 'download/a%20b.mp4');
       expect(ServerPath.folderOf('a.mp4'), '');
     });
 

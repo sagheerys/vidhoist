@@ -58,5 +58,4 @@ void main() {
     expect(logger.lines, contains('shown: could not delete'));
     expect(logger.lines.any((l) => l.contains('broken layout')), isTrue);
   });
-
 }

@@ -7,10 +7,8 @@ import 'update_release.dart';
 
 /// Checking for updates through GitHub Releases.
 ///
-/// **Completely isolated from `VidhoistApiClient`** (rule 1): it uses the
-/// same [HttpGetString] the platform resolvers use, so the server's
-/// credential header never leaks to GitHub, and GitHub learns nothing
-/// about the server.
+/// It uses the same [HttpGetString] the platform resolvers use, so it
+/// carries no header of anyone else's.
 ///
 /// **Entirely fail-safe**: every error path returns `null`. No network, no
 /// private repository and no unexpected JSON ever shows the user an error

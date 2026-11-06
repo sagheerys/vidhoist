@@ -13,7 +13,6 @@ void main() {
     inputUrl: url,
     quality: Quality.best,
     canonicalUrl: url,
-    serverFilename: '$id.mp4',
     title: title ?? id,
     phase: TaskPhase.completed,
     isBatchMember: true,
@@ -49,7 +48,6 @@ void main() {
         'https://y/3',
       ]);
       expect(saved.items.first.cachedTitle, 'الدرس 1');
-      expect(saved.items.first.serverFilename, 't1.mp4');
     },
   );
 

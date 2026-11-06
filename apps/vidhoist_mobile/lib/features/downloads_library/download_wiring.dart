@@ -36,7 +36,8 @@ Future<void> onDownloadCompleted(
     if (task.title != null && task.title!.isNotEmpty) {
       await ref.read(titleIndexProvider).put(key, task.title!);
     }
-    // Image URLs are never invented (trap §6.3); only what yt-dlp gave.
+    // Image URLs are never invented (`docs/ENGINE.md`, Storage); only
+    // what yt-dlp gave.
     if (task.thumbnail != null && task.thumbnail!.isNotEmpty) {
       await ref.read(artworkIndexProvider).put(key, task.thumbnail!);
     }

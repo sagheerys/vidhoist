@@ -139,8 +139,7 @@ void main() {
     });
   });
 
-  test('nothing device-bound comes over; the addresses are only a hint, '
-      'without credentials', () async {
+  test('nothing device-bound comes over, server addresses neither', () async {
     final phone = _Device(at(0));
     await phone.store.setString('offline_index', '{"$_a": "/storage/a.mp4"}');
     await phone.store.setString('video_sort_option', 'oldest');
@@ -153,10 +152,6 @@ void main() {
     expect(await desk.store.getString('offline_index'), isNull);
     expect(await desk.store.getString('video_sort_option'), isNull);
     expect(await desk.store.getString('active_url'), isNull);
-    expect(result.serverAddresses, [
-      'http://192.168.1.5:8086',
-      'https://vidhoist.example.com',
-    ]);
     expect(result.changedNothing, isTrue);
   });
 

@@ -5,12 +5,9 @@ import 'quality.dart';
 
 const _uuid = Uuid();
 
-/// The phases of a download task.
-///
-/// Two pipelines share them while the server one is being replaced: the
-/// server's add, poll, pull and delete (`DownloadEngine`), and yt-dlp on
-/// the device (`LocalDownloadEngine`): preparing, downloading,
-/// post-processing, with [paused] keeping the partial file for later.
+/// The phases of a download task, as yt-dlp on the device goes through
+/// them (`LocalDownloadEngine`): preparing, downloading, post-processing,
+/// with [paused] keeping the partial file for later.
 enum TaskPhase {
   queued,
 
@@ -28,20 +25,14 @@ enum TaskPhase {
   /// Stopped by the person with the partial file kept; resuming continues
   /// from where it stopped.
   paused,
-  adding,
-  polling,
 
-  /// The file is ready on the server and **the pull is held waiting for
-  /// Wi-Fi**.
+  /// **Held waiting for Wi-Fi** before it starts ("Wi-Fi only").
   ///
-  /// A phase of its own rather than part of `pulling`, on purpose: progress
-  /// does not move here, and the reason is not a slow network but the
-  /// user's
-  /// own choice. Showing it as "pulling 0%" is a lie that suggests the app
-  /// has hung, and showing it as "failed" is another one.
+  /// A phase of its own, on purpose: progress does not move here, and the
+  /// reason is not a slow network but the user's own choice. Showing it as
+  /// "downloading 0%" is a lie that suggests the app has hung, and showing
+  /// it as "failed" is another one.
   waitingForNetwork,
-  pulling,
-  deleting,
   completed,
   failed,
   cancelled,
@@ -57,7 +48,6 @@ class DownloadTask {
     required this.quality,
     this.resolvedUrl,
     this.canonicalUrl,
-    this.serverFilename,
     this.title,
     this.thumbnail,
     this.localPath,
@@ -67,7 +57,6 @@ class DownloadTask {
     this.eta,
     this.error,
     this.isBatchMember = false,
-    this.serverCleanupFailed = false,
     this.folder,
     DateTime? createdAt,
   }) : id = id ?? _uuid.v4(),
@@ -78,30 +67,26 @@ class DownloadTask {
   /// As the user entered it, for display and for retrying.
   final String inputUrl;
 
-  /// After the short link is resolved. This is what is sent to `/add`.
+  /// After the short link is resolved. This is what yt-dlp is given.
   final String? resolvedUrl;
 
-  /// From `/history`. The **only** value valid for deletion and indexing.
+  /// yt-dlp's `webpage_url`. The **only** value valid for indexing.
   final String? canonicalUrl;
-  final String? serverFilename;
 
-  /// The server's title and artwork at the moment of completion. Used for
-  /// the local filename (§2.4), the title and artwork indexes and the
-  /// completion notification. **Neither is invented** when missing (trap
-  /// §6.3).
+  /// The title and artwork yt-dlp read. Used for the title and artwork
+  /// indexes and the completion notification. **Neither is invented** when
+  /// missing (`docs/ENGINE.md`, Storage).
   final String? title;
   final String? thumbnail;
   final String? localPath;
   final Quality quality;
   final TaskPhase phase;
 
-  /// 0 to 1: the server's progress while polling, then the pull's progress
-  /// while pulling.
+  /// 0 to 1, across every part of a merged download.
   final double progress;
 
-  /// The server's download speed in bytes per second while it fetches the
-  /// clip, or null when it is not downloading (waiting, between streams,
-  /// pulling to the device).
+  /// The download speed in bytes per second while bytes arrive, or null
+  /// when nothing is downloading (waiting, between streams, merging).
   final double? speed;
 
   /// Seconds left for the part being downloaded, when yt-dlp knows.
@@ -114,16 +99,10 @@ class DownloadTask {
   /// A single item outranks members of a batch in the queue.
   final bool isBatchMember;
 
-  /// The server folder asked for, or null for the top. Fixed for the task's
-  /// life, so a retry saves where the first attempt was meant to.
+  /// The folder below the download folder asked for, or null for the top.
+  /// Fixed for the task's life, so a retry saves where the first attempt
+  /// was meant to.
   final String? folder;
-
-  /// **The delete after the pull was asked for and refused.** The task
-  /// still completes — the file is on the phone — but whoever asks the
-  /// server "is the file still there?" afterwards must know that it was
-  /// never told to remove it, or a dropped `/delete` reads as a
-  /// misconfigured server.
-  final bool serverCleanupFailed;
   final DateTime createdAt;
 
   /// **Does this phase have known progress?** A waiting task and one held
@@ -145,7 +124,6 @@ class DownloadTask {
     Quality? quality,
     String? resolvedUrl,
     String? canonicalUrl,
-    String? serverFilename,
     String? title,
     String? thumbnail,
     String? localPath,
@@ -154,14 +132,12 @@ class DownloadTask {
     double? Function()? speed,
     int? Function()? eta,
     MTApiException? error,
-    bool? serverCleanupFailed,
   }) => DownloadTask(
     id: id,
     inputUrl: inputUrl,
     quality: quality ?? this.quality,
     resolvedUrl: resolvedUrl ?? this.resolvedUrl,
     canonicalUrl: canonicalUrl ?? this.canonicalUrl,
-    serverFilename: serverFilename ?? this.serverFilename,
     title: title ?? this.title,
     thumbnail: thumbnail ?? this.thumbnail,
     localPath: localPath ?? this.localPath,
@@ -171,7 +147,6 @@ class DownloadTask {
     eta: eta == null ? this.eta : eta(),
     error: error ?? this.error,
     isBatchMember: isBatchMember,
-    serverCleanupFailed: serverCleanupFailed ?? this.serverCleanupFailed,
     folder: folder,
     createdAt: createdAt,
   );
