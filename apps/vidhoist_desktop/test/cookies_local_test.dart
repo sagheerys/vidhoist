@@ -35,7 +35,9 @@ void main() {
     store = MemoryKeyValueStore();
     folders = _Folders();
   });
-  tearDown(() => root.delete(recursive: true));
+  // Windows can hold the new cookies file a moment longer (a scanner
+  // reading it): the temporary folder goes when it lets go.
+  tearDown(() => _remove(root));
 
   String target() => '${root.path}\\cookies.txt';
 
@@ -68,7 +70,16 @@ void main() {
     await tester.pumpWidget(app());
     await tester.pumpAndSettle();
     await tester.tap(find.text(l.desktopCookiesChoose));
-    await settle(tester);
+    // The file is written, then the choice saved: under the full suite's
+    // load that took longer than a fixed wait (2026-11-07), so it waits for
+    // the choice itself.
+    await settle(
+      tester,
+      until: () async =>
+          File(target()).existsSync() &&
+          await store.getString(EngineOptionsNotifier.cookiesFileKey) ==
+              target(),
+    );
     final kept = File(target()).readAsStringSync();
     expect(kept, contains('.youtube.com'));
     expect(kept, contains('.instagram.com'));
@@ -141,13 +152,33 @@ class _Folders extends NoFolders {
 
 /// Lets the pane's real file work finish: a widget test's clock does not
 /// wait for the disk.
-Future<void> settle(WidgetTester tester) async {
-  // Each step on the disk is a turn of the real loop, then a pump.
-  for (var i = 0; i < 10; i++) {
+Future<void> settle(
+  WidgetTester tester, {
+  Future<bool> Function()? until,
+}) async {
+  // Each step on the disk is a turn of the real loop, then a pump; with
+  // [until], as many as it takes, up to ten seconds (a flushed write under
+  // the full suite's load has taken more than two).
+  for (var i = 0; i < (until == null ? 10 : 500); i++) {
     await tester.runAsync(
       () => Future<void>.delayed(const Duration(milliseconds: 20)),
     );
     await tester.pump();
+    if (until != null && i >= 9 && await until()) break;
   }
   await tester.pumpAndSettle();
+}
+
+/// Deletes [dir], waiting on the real clock (a widget test's own clock does
+/// not move); one Windows still holds is left in the temp folder rather
+/// than failing a test that has passed.
+Future<void> _remove(Directory dir) async {
+  for (var tries = 0; tries < 20; tries++) {
+    try {
+      if (dir.existsSync()) dir.deleteSync(recursive: true);
+      return;
+    } on FileSystemException {
+      sleep(const Duration(milliseconds: 50));
+    }
+  }
 }
