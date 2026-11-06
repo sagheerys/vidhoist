@@ -100,6 +100,10 @@ class MainActivity : AudioServiceActivity() {
                         }
                     }
                 }
+                // The processor families this phone runs, most preferred
+                // first: a release carries one APK per ABI, since the
+                // engine's Python and ffmpeg are compiled for each.
+                "supportedAbis" -> result.success(android.os.Build.SUPPORTED_ABIS.toList())
                 // The launcher shortcut's destination, **consumed once**.
                 // Keeping it would re-run the shortcut on every return to the
                 // app.

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -77,10 +78,31 @@ final updatePrefsProvider = Provider(
   ),
 );
 
+/// The phone's ABIs, most preferred first; read once in main.
+final deviceAbisProvider = Provider<List<String>>((ref) => const []);
+
+/// `Build.SUPPORTED_ABIS`, or nothing where the channel does not answer
+/// (the update then takes the first APK it finds).
+Future<List<String>> readDeviceAbis() async {
+  try {
+    final abis = await const MethodChannel('vidhoist_mobile/media')
+        .invokeListMethod<String>('supportedAbis');
+    return abis ?? const [];
+  } on Object {
+    return const [];
+  }
+}
+
 /// **The marker identifies this app's file** in a release that also carries
-/// the Windows installer; the extension keeps the phone to the APK.
+/// the Windows installer; the extension keeps the phone to the APK, and the
+/// ABIs to the APK built for this phone's processor (the engine's Python
+/// and ffmpeg are compiled per ABI).
 final updateCheckerProvider = Provider(
-  (ref) => UpdateChecker(fetch: ioHttpGetString, assetMarker: 'vidhoist'),
+  (ref) => UpdateChecker(
+    fetch: ioHttpGetString,
+    assetMarker: 'vidhoist',
+    abis: ref.watch(deviceAbisProvider),
+  ),
 );
 
 final apkDownloaderProvider = Provider((ref) => ApkDownloader());

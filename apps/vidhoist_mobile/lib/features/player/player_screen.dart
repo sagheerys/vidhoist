@@ -11,6 +11,7 @@ import '../downloads_library/library_actions.dart';
 import '../downloads_library/library_providers.dart';
 import '../downloads_library/local_item.dart';
 import '../shared/membership.dart';
+import 'sidecar_subtitles.dart';
 import 'playback_providers.dart';
 import '../shared/open_web_link.dart';
 
@@ -68,6 +69,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     // is outside its permitted scope.
     final membership =
         ref.watch(membershipIndexProvider).valueOrNull ?? const {};
+    final subtitles = ref.watch(subtitleCacheProvider);
 
     return MTVideoScreen(
       session: session,
@@ -79,6 +81,8 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
         context.mtl,
       ),
       subtitleBuilder: (context, item) => _subtitle(context, item, membership),
+      // The subtitles fetched with the download, read from beside it.
+      captions: (item) => sidecarCaptionsFor(ref, subtitles, item),
       actions: _actions(session),
       onContinueAsAudio: _continueAsAudio,
       // **Never asked twice** (field report 2026-09-02): someone who had

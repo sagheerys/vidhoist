@@ -5,6 +5,7 @@ import 'package:mt_core/mt_core.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../di.dart';
+import '../player/sidecar_subtitles.dart';
 import '../settings/auto_backup.dart';
 import 'download_wiring.dart';
 import 'library_providers.dart';
@@ -40,6 +41,8 @@ class LibraryActions {
         await file.delete();
         deleted++;
       }
+      // The subtitles fetched with it are of no use without it.
+      await deleteSidecarSubtitles(item.path);
       final url = item.canonicalUrl;
       if (url != null) await _ref.read(offlineIndexProvider).removeKey(url);
       await _ref.read(titleIndexProvider).removeKey(item.key);
