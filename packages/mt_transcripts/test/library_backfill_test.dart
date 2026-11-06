@@ -324,6 +324,39 @@ void main() {
       );
     });
 
+    // The download engine's classifier reads the same stderr; the backfill
+    // and a download must never disagree about what a line means.
+    test('its errors, read as the download engine reads them', () {
+      expect(
+        YtDlpSource.classify('ERROR: [youtube] x: This video is unavailable'),
+        isA<VideoGone>(),
+      );
+      expect(
+        YtDlpSource.classify('ERROR: [generic] x: HTTP Error 404: Not Found'),
+        isA<VideoGone>(),
+      );
+      expect(
+        YtDlpSource.classify(
+          "ERROR: [youtube] x: Private video. Sign in if you've been "
+          'granted access to this video',
+        ),
+        isA<VideoGone>(),
+      );
+      expect(
+        YtDlpSource.classify(
+          "ERROR: [youtube] x: Sign in to confirm you're not a bot.",
+        ),
+        isA<BackfillRateLimited>(),
+      );
+      expect(
+        YtDlpSource.classify(
+          'ERROR: [youtube] x: The uploader has not made this video '
+          'available in your country',
+        ),
+        isA<FetchFailed>(),
+      );
+    });
+
     test('its tracks, without the live chat', () {
       final offered = YtDlpSource.offeredIn({
         'subtitles': {'en': [], 'live_chat': []},
