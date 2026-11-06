@@ -24,6 +24,13 @@ All notable changes to Vidhoist. The format follows
   prints back: progress, the parts of a merged download, the finished file,
   the info JSON, classified errors and the engine's version. Pure Dart, not
   yet used by the apps.
+- In `mt_core`, beside the server engine: `DownloadBackend` (yt-dlp on the
+  device, one implementation per app), `LocalDownloadEngine` (probe once and
+  download from the probe, pause and resume, a Wi-Fi gate before starting,
+  one retry at best when a height cannot be met, unfinished downloads queued
+  again at the next launch), `LocalHistoryStore` (the library's records kept
+  on the device, in the fields the server's history had) and `FakeBackend`
+  for tests. Not used by the apps yet.
 
 ### Changed
 - Package and application identifiers: `apps/vidhoist_mobile`

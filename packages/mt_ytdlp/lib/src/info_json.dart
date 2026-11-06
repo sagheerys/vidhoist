@@ -2,8 +2,8 @@ import 'dart:convert';
 
 /// One item of a flat playlist (`CommandBuilder.playlist`): enough to list
 /// it and to download it later, nothing read from its own page.
-class PlaylistEntry {
-  const PlaylistEntry({
+class FlatEntry {
+  const FlatEntry({
     required this.id,
     required this.url,
     this.title,
@@ -137,7 +137,7 @@ class InfoJson {
   Set<String> get automaticCaptions => _keys('automatic_captions');
 
   /// A flat playlist's items; empty for a single video.
-  List<PlaylistEntry> get entries => [
+  List<FlatEntry> get entries => [
     if (raw['entries'] case final List list)
       for (final e in list)
         if (e is Map<String, Object?>)
@@ -145,7 +145,7 @@ class InfoJson {
             final String id,
             final String url,
           ))
-            PlaylistEntry(
+            FlatEntry(
               id: id,
               url: url,
               title: e['title'] is String ? e['title'] as String : null,

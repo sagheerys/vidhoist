@@ -43,7 +43,7 @@ apps/vidhoist_super ┘            │                 ▲
 
 | Package | Contains | Hard rule |
 |---|---|---|
-| `mt_core` | Vidhoist API client, models, download engine, storage, backup, URL tools | **Pure Dart. No Flutter import.** Tested with `dart test`. |
+| `mt_core` | Vidhoist API client, models, download engine, storage, backup, URL tools; and, beside them while the server layer is retired, `DownloadBackend` (yt-dlp on the device, implemented by each app), `LocalDownloadEngine` and `LocalHistoryStore` | **Pure Dart. No Flutter import.** Tested with `dart test`. |
 | `mt_media` | Audio handler, video playback, playback stores | Knows the server only through `mt_core` |
 | `mt_ui` | Design tokens, themes, shared widgets, localisation | **Does not know the server exists** |
 | `mt_transcripts` | Subtitle parsing, Arabic-aware search, the transcript store, fetching subtitles without disturbing the library | **Pure Dart. Super only**: Lite does not depend on it, so the family app cannot reach it |

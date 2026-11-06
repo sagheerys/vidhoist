@@ -10,6 +10,9 @@ import 'transfer.dart';
 /// startup**. The library scan skips `.part` on purpose, so the space is
 /// lost without the user ever seeing it.
 ///
+/// yt-dlp leaves more than `.part` behind when it is stopped:
+/// [isLeftover] names each kind.
+///
 /// [olderThan] protects a pull **happening right now** from being swept
 /// out from under it.
 Future<int> sweepPartialFiles(
@@ -28,7 +31,7 @@ Future<int> sweepPartialFiles(
     if (!await dir.exists()) return 0;
     await for (final entity in dir.list(followLinks: false)) {
       if (entity is! File) continue;
-      if (!entity.path.endsWith(Transfer.partSuffix)) continue;
+      if (!isLeftover(entity.path)) continue;
       try {
         final stat = await entity.stat();
         if (stat.modified.isAfter(cutoff)) continue;
@@ -44,3 +47,20 @@ Future<int> sweepPartialFiles(
   }
   return removed;
 }
+
+/// yt-dlp's work files, none of them a finished download:
+/// - `.part`, the file still arriving (the server pull used it too);
+/// - `.ytdl`, its note of where a fragmented download stopped;
+/// - `.part-Frag12`, one fragment of an HLS or DASH stream;
+/// - `[id].f399.mp4`, one stream of a merge that never happened. The `]`
+///   before it is the app's own name template (`%(title).80B [%(id)s]`),
+///   so a song called "track.f1.mp3" is never taken for one;
+/// - `.temp.mp4`, a file ffmpeg was rewriting.
+bool isLeftover(String path) =>
+    path.endsWith(Transfer.partSuffix) ||
+    path.endsWith('.ytdl') ||
+    _leftover.hasMatch(path);
+
+final _leftover = RegExp(
+  r'(\.part-Frag\d+(\.part)?|\]\.f\d+(-\w+)?\.\w+|\.temp\.\w+)$',
+);

@@ -1,3 +1,5 @@
+import 'package:mt_ytdlp/mt_ytdlp.dart' show YtDlpError, YtDlpErrorKind;
+
 /// Classified error types thrown by the core. The app turns them into
 /// translated text at display time: the core holds no interface strings.
 sealed class MTApiException implements Exception {
@@ -100,4 +102,25 @@ final class LocalFailureException extends MTApiException {
 /// slowest link in the chain, and the answer is known in advance.
 final class CookiesTooLargeException extends MTApiException {
   const CookiesTooLargeException([super.detail]);
+}
+
+/// yt-dlp on the device failed, for the reason in [kind]: the app words
+/// each kind its own way, and [detail] keeps the `ERROR:` lines for the
+/// log.
+///
+/// The two reasons the server pipeline already had a type for keep it:
+/// a network failure is a [NetworkException], and a site that wants a
+/// signed-in session is a [PlatformBlockedException], so their wording
+/// and their retry rules stay as they were.
+final class EngineFailureException extends MTApiException {
+  const EngineFailureException(this.kind, [super.detail]);
+
+  final YtDlpErrorKind kind;
+
+  /// The classified error in the core's terms.
+  static MTApiException from(YtDlpError error) => switch (error.kind) {
+    YtDlpErrorKind.network => NetworkException(error.message),
+    YtDlpErrorKind.signInRequired => PlatformBlockedException(error.message),
+    final kind => EngineFailureException(kind, error.message),
+  };
 }

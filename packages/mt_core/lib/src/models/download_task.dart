@@ -5,10 +5,29 @@ import 'quality.dart';
 
 const _uuid = Uuid();
 
-/// The phases of a download task along the four-stage pipeline: add,
-/// poll, pull, delete by policy.
+/// The phases of a download task.
+///
+/// Two pipelines share them while the server one is being replaced: the
+/// server's add, poll, pull and delete (`DownloadEngine`), and yt-dlp on
+/// the device (`LocalDownloadEngine`): preparing, downloading,
+/// post-processing, with [paused] keeping the partial file for later.
 enum TaskPhase {
   queued,
+
+  /// yt-dlp reads the link: title, formats, YouTube's challenge. No
+  /// percentage yet, and on a phone it can take most of a minute.
+  preparing,
+
+  /// The file is arriving; [DownloadTask.progress] moves.
+  downloading,
+
+  /// ffmpeg merges the streams or converts the sound; quick, with no
+  /// percentage of its own.
+  postprocessing,
+
+  /// Stopped by the person with the partial file kept; resuming continues
+  /// from where it stopped.
+  paused,
   adding,
   polling,
 
@@ -45,6 +64,7 @@ class DownloadTask {
     this.phase = TaskPhase.queued,
     this.progress = 0,
     this.speed,
+    this.eta,
     this.error,
     this.isBatchMember = false,
     this.serverCleanupFailed = false,
@@ -84,6 +104,9 @@ class DownloadTask {
   /// pulling to the device).
   final double? speed;
 
+  /// Seconds left for the part being downloaded, when yt-dlp knows.
+  final int? eta;
+
   /// The classified error on failure. The app turns its type into
   /// translated text (TRD §3.3).
   final MTApiException? error;
@@ -107,7 +130,9 @@ class DownloadTask {
   /// by the network gate do not move, so showing "0%" over them is a lie
   /// that suggests a hang (the same reasoning as `waitingForNetwork`).
   bool get hasKnownProgress =>
-      phase != TaskPhase.queued && phase != TaskPhase.waitingForNetwork;
+      phase != TaskPhase.queued &&
+      phase != TaskPhase.waitingForNetwork &&
+      phase != TaskPhase.preparing;
 
   bool get isFinished =>
       phase == TaskPhase.completed ||
@@ -127,6 +152,7 @@ class DownloadTask {
     TaskPhase? phase,
     double? progress,
     double? Function()? speed,
+    int? Function()? eta,
     MTApiException? error,
     bool? serverCleanupFailed,
   }) => DownloadTask(
@@ -142,6 +168,7 @@ class DownloadTask {
     phase: phase ?? this.phase,
     progress: progress ?? this.progress,
     speed: speed == null ? this.speed : speed(),
+    eta: eta == null ? this.eta : eta(),
     error: error ?? this.error,
     isBatchMember: isBatchMember,
     serverCleanupFailed: serverCleanupFailed ?? this.serverCleanupFailed,

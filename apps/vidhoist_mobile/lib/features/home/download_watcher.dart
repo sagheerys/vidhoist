@@ -110,7 +110,9 @@ final downloadWatcherProvider = Provider<void>((ref) {
         // the pull only, so the entire server phase, usually the longest,
         // passed with no notification at all and the app looked idle. Now
         // every phase announces itself.
-        case TaskPhase.queued:
+        // The on-device engine's waits (reading the link, a pause) show
+        // as a queued one until its own wording arrives with it.
+        case TaskPhase.queued || TaskPhase.preparing || TaskPhase.paused:
           await showProgressIfChanged(
             id,
             title: task.title ?? texts.downloadingTitle,
@@ -153,7 +155,9 @@ final downloadWatcherProvider = Provider<void>((ref) {
         // 2026-09-03: "the counter does not appear while pulling from the
         // server to the device"). A notification bar on its own cannot be
         // read as a number, and pulling is the longest phase in Lite.
-        case TaskPhase.pulling:
+        case TaskPhase.pulling ||
+            TaskPhase.downloading ||
+            TaskPhase.postprocessing:
           await showProgressIfChanged(
             id,
             title: task.title ?? texts.downloadingTitle,

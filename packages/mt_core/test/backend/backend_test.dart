@@ -1,0 +1,155 @@
+import 'dart:io';
+
+import 'package:mt_core/mt_core.dart';
+import 'package:test/test.dart';
+
+/// The real Windows runs measured in batch 1, kept in `mt_ytdlp`.
+String fixture(String name) =>
+    File('../mt_ytdlp/test/fixtures/windows/$name').readAsStringSync();
+
+Stream<String> linesOf(String text) => Stream.fromIterable(text.split('\n'));
+
+Future<List<BackendEvent>> read(String stdout, int code, String stderr) =>
+    readDownloadRun(
+      linesOf(stdout),
+      Future.value((exitCode: code, stderr: stderr)),
+    ).toList();
+
+void main() {
+  group('reading a run', () {
+    test('a merged 1080p download: progress, then the file', () async {
+      final events = await read(
+        fixture('yt-1080-js.stdout.txt'),
+        0,
+        fixture('yt-1080-js.stderr.txt'),
+      );
+      final progress = events.whereType<BackendProgress>().toList();
+      expect(progress, isNotEmpty);
+      expect(progress.last.progress.fraction, 1);
+      expect(progress.last.progress.part, 2);
+      final finished = events.last as BackendFinished;
+      expect(finished.path, endsWith('[aqz-KE-bpKQ].mp4'));
+    });
+
+    test('announced parts and post-processing come through', () async {
+      final events = await read(
+        [
+          '[vh-parts] 1000 [900, 100]',
+          '[vh] downloading 450 900 NA 1 1 NA NA',
+          '[vh] finished 900 900 NA 1 NA NA NA',
+          '[vh] downloading 50 100 NA 1 1 NA NA',
+          '[vh] finished 100 100 NA 1 NA NA NA',
+          '[vh-pp] started Merger',
+          '[vh-pp] finished Merger',
+          'something else',
+          r'[vh-file] C:\out\a [x].mp4',
+        ].join('\n'),
+        0,
+        '',
+      );
+      final fractions = [
+        for (final e in events.whereType<BackendProgress>())
+          e.progress.fraction,
+      ];
+      expect(fractions.first, 0.45);
+      expect(fractions[2], closeTo(0.95, 1e-9));
+      expect(
+        events.whereType<BackendPostprocessing>().single.postprocessor,
+        'Merger',
+      );
+      expect((events.last as BackendFinished).path, r'C:\out\a [x].mp4');
+    });
+
+    test('a failed run is classified from its stderr', () async {
+      final events = await read('', 1, fixture('tiktok.stderr.txt'));
+      final failed = events.single as BackendFailed;
+      expect(failed.error.kind, YtDlpErrorKind.geoBlocked);
+    });
+
+    test('success without a file is a failure', () async {
+      final events = await read('[vh] finished 1 1 NA 1 NA NA NA', 0, 'odd');
+      final failed = events.last as BackendFailed;
+      expect(failed.error.kind, YtDlpErrorKind.failed);
+      expect(failed.error.message, contains('without naming a file'));
+    });
+  });
+
+  group('the request', () {
+    test('each quality has its format choice', () {
+      expect(
+        {
+          for (final q in Quality.values)
+            q: DownloadRequest(
+              taskId: 't',
+              url: 'u',
+              folder: 'f',
+              quality: q,
+            ).formatChoice,
+        },
+        {
+          Quality.best: FormatChoice.best,
+          Quality.q1080: FormatChoice.h1080,
+          Quality.q720: FormatChoice.h720,
+          Quality.q480: FormatChoice.h480,
+          Quality.q360: FormatChoice.h360,
+          Quality.audio: FormatChoice.audio,
+        },
+      );
+    });
+
+    test('from a link, or from a probe when there is one', () {
+      const request = DownloadRequest(
+        taskId: 't',
+        url: 'https://x',
+        folder: '/out',
+        quality: Quality.q720,
+        compatible: true,
+        subtitleLanguages: ['ar.*'],
+        playlistItems: [2],
+      );
+      final spec = request.toSpec();
+      expect(spec.url, 'https://x');
+      expect(spec.infoJsonPath, isNull);
+      expect(spec.choice, FormatChoice.h720);
+      expect(spec.compatible, isTrue);
+      expect(spec.subtitleLanguages, ['ar.*']);
+      expect(spec.playlistItems, [2]);
+
+      final probed = request.copyWith(infoJsonPath: () => '/c/p.json');
+      expect(probed.toSpec().url, isNull);
+      expect(probed.toSpec().infoJsonPath, '/c/p.json');
+      expect(probed.copyWith(infoJsonPath: () => null).infoJsonPath, isNull);
+      expect(probed.copyWith(quality: Quality.best).quality, Quality.best);
+      expect(probed.copyWith(quality: Quality.best).infoJsonPath, '/c/p.json');
+    });
+  });
+
+  test('engine errors in the core terms', () {
+    YtDlpError e(YtDlpErrorKind kind) => YtDlpError(kind, 'm');
+    expect(
+      EngineFailureException.from(e(YtDlpErrorKind.network)),
+      isA<NetworkException>(),
+    );
+    expect(
+      EngineFailureException.from(e(YtDlpErrorKind.signInRequired)),
+      isA<PlatformBlockedException>(),
+    );
+    final disk = EngineFailureException.from(e(YtDlpErrorKind.diskFull));
+    expect((disk as EngineFailureException).kind, YtDlpErrorKind.diskFull);
+    expect(disk.detail, 'm');
+    expect(disk.isRetryable, isFalse);
+  });
+
+  test('the fake backend answers versions and updates', () async {
+    final fake = FakeBackend();
+    expect((await fake.version()).ytDlp.toString(), '2026.10.26');
+    final outcome = await fake.updateEngine();
+    expect(outcome.updated, isFalse);
+    expect(fake.updates, 1);
+    final probe = await FakeBackend(
+      scripts: {'u': const FakeScript(keepsInfoJson: false)},
+    ).probe('u');
+    expect(probe.infoJsonPath, isNull);
+    expect(probe.info.title, 'Title of u');
+  });
+}
