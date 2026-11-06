@@ -15,7 +15,7 @@ and local paths replaced).
 | Runner | the PyInstaller build itself | `io.github.junkfood02.youtubedl-android` 0.18.1 (`library` + `ffmpeg`), Python bundled |
 | ffmpeg | yt-dlp/FFmpeg-Builds master, win64 GPL static | bundled with the library |
 | JavaScript for YouTube | Deno 2.9.8, and none | QuickJS bundled (`libqjs.so`), passed by the library on every request |
-| Machine | i5-9400F, 16 GB, Windows 11 | emulator, API 36.1 x86_64 (no phone attached) |
+| Machine | i5-9400F, 16 GB, Windows 11 | emulator, API 36.1 x86_64; then a Galaxy S22 Ultra (arm64-v8a, Android 16) on the same home network |
 
 ## The command line that works
 
@@ -97,22 +97,30 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 
 ### Android
 
-11. **The library's first initialisation takes about 44 s** on the emulator
-    (Python and ffmpeg are unpacked); later ones take 0.35–1.4 s. The
-    welcome screen has to cover the first one, in the background.
+11. **The library's first initialisation takes 4.2 s on the phone** (44 s on
+    the emulator: Python and ffmpeg are unpacked); later ones take
+    0.03–0.13 s. The welcome screen covers the first one, in the background.
 12. **The bundled yt-dlp is a year old and fails on YouTube** until it is
-    updated. `updateYoutubeDL(STABLE)` took 15 s and brought 2026.10.26. The
+    updated. `updateYoutubeDL(STABLE)` took 1.4 s on the phone (15 s on the
+    emulator) and brought 2026.10.26. Until the first update `version()`
+    returns null, so the app cannot show the bundled version. The
     first run must update before the first download, and the update must
     stay reachable from the engine settings.
 13. **QuickJS works for YouTube with no setup**: the library adds
-    `--js-runtimes quickjs:<path>` to every request. 1080p (148 MB) took
-    56 s, the H.264 720p selector 64 s, audio to M4A 34 s.
-14. **The first progress arrives 25–27 s after the start** on the emulator,
-    against about 5 s on Windows with Deno. The emulator and QuickJS's
-    slower challenge solving are the likely causes; it must be measured on
-    a phone before the waiting screen is designed.
+    `--js-runtimes quickjs:<path>` to every request, and yt-dlp's challenge
+    scripts (`yt_dlp_ejs` 0.8.0) come in the library's Python. On the phone,
+    with `-4`: 1080p (148 MB) 71 s, the H.264 720p selector 77 s, audio to
+    M4A 56 s.
+14. **On the phone YouTube waits about 50 s before the first byte, every
+    time.** Instagram, Facebook and SoundCloud start within 3–6 s on the
+    same network, so the wait is QuickJS solving YouTube's challenge
+    (verbose run: no retries, the time sits between "Solving JS challenges
+    using quickjs" and the formats). A cache folder (`--cache-dir`) does not
+    shorten it. The `android_vr` client needs no challenge but offers 360p
+    only; `tv` and `web_safari` fail.
 15. **`destroyProcessById` stops a download at once**: no Python or ffmpeg
-    process left, the folder no longer grows.
+    process left, the folder no longer grows. On the phone it stopped a
+    1080p download at 40 s and left no file behind.
 16. **What the engine adds per ABI** (arm64-v8a, compressed in the APK):
     ffmpeg 33.8 MB, Python 13.4 MB, yt-dlp 3 MB, QuickJS 0.4 MB, about
     51 MB in all. A release APK per ABI should land around 70 MB; measured
@@ -121,18 +129,37 @@ yt-dlp --no-config -4 --newline --progress --no-colors
     `llvm-strip` print harmless "not a valid object file" errors.
 17. The library asks for Android 7.0 (API 24) at least, the same floor as
     the app, so the minimum stays as it is.
-18. **Not measured:** Instagram, TikTok, Facebook and SoundCloud on Android.
-    The emulator's network here resolves `facebook.com` to 127.0.0.1 and
-    refuses other hosts, and with public DNS it resolves nothing; the
-    commands are the ones that worked on Windows. Left to the owner's
-    phone, with a download in the background and the app swiped away.
+18. **The other platforms work on the phone** with the commands from
+    Windows: Instagram 4.5 s, Facebook 3.9 s, SoundCloud 21 s (the original
+    upload needs an account; the stream came instead), one TikTok post
+    9.2 s. The same TikTok post as on Windows is blocked for a Saudi IP and
+    TikTok warns that no impersonation target is available; the X test
+    link is dead upstream. A download that goes on with the app swiped
+    away needs the foreground service of batch 4 and is measured there.
+19. **The fix is in the flow, not the engine: probe once, download from the
+    probe.** `--skip-download --write-info-json` (57 s, the challenge
+    solved once), then `--load-info-json <file> -f <selector>` started the
+    1080p download after 2.6 s and finished it in 32 s. The app already
+    probes a link to offer its qualities; keeping that JSON and downloading
+    from it removes the second wait. The media links inside expire after
+    some hours, so a download queued longer, or resumed the next day,
+    probes again. The JSON holds links signed for the requester's IP: it
+    stays in the app's cache and is never logged or exported.
+20. **Without `-4` the phone waits longer still** (audio: first progress
+    after 121 s against 52 s with it; the two video cases did not finish in
+    four minutes). Same network as finding 7; `-4` goes on Android too.
+21. **The library keys options by name**: `addOption("-f", …)` twice keeps
+    one of them, and an option added without its value breaks the command
+    line. The engine wrapper builds the whole argument list itself and
+    passes each option with its value in one call.
 
 ## Decisions this asks for
 
 | Question | Recommendation |
 |---|---|
 | Go on with yt-dlp on both platforms? | **Yes.** Nothing measured blocks it. |
-| JavaScript runtime on Windows | QuickJS if it holds on Windows (1.8 MB); otherwise Deno downloaded on first need rather than shipped (94 MB) |
+| JavaScript runtime on Windows | Deno, downloaded on first need rather than shipped (94 MB): it solved YouTube's challenge within seconds, where QuickJS took about 50 s on the phone. QuickJS (1.8 MB) only if a Windows measurement shows it fast |
 | ffmpeg on Windows | Downloaded on first use, or the shared build; never the 162 MB static one in the installer |
-| IPv4 | `-4` by default, with a setting to turn it off |
+| IPv4 | `-4` by default on both platforms, with a setting to turn it off |
+| YouTube's wait on Android | Probe once, keep the info JSON, download from it; the waiting screen says what it is doing during the probe |
 | Android first run | Initialise and update the engine on the welcome screen, before the first download |
