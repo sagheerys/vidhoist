@@ -179,6 +179,33 @@ yt-dlp --no-config -4 --newline --progress --no-colors
     `30767602 []` for audio alone, so the progress bar is weighted by bytes
     from the start.
 
+### After the apps ran on the engine (2026-11-07)
+
+24. **A path printed on Windows lost every character outside the console
+    code page**: a title with `/` is saved with `⧸`, and `%(filepath)s`
+    came back without it, naming no file. `PYTHONUTF8` and
+    `PYTHONIOENCODING` do not reach the frozen build; `--encoding utf-8`
+    does.
+25. **Subtitles are fetched before the video, with progress lines of their
+    own** (`info.ext` `vtt`, `info.format_id` `NA`). Counted as the
+    announced parts, two subtitle files took the bar to 100% in the second
+    second of a 20-second download. The progress line now ends with
+    `%(info.format_id)s` and lines without one move nothing: 4% at 4 s, 50%
+    at 10 s, 100% at 16 s. Progress itself reaches the app as it happens
+    (151 lines at 89 moments over 8 s); nothing buffers it.
+26. **`ar.*` asks for every machine translation into Arabic** (`ar-fr-FR`,
+    one request per source track), and YouTube answered one with 429. A
+    region is upper case (`ar-SA`), a translation's source lower case, so
+    the patterns are the language, `-orig` and `-[A-Z]+`. A refused track
+    no longer fails the video (`--ignore-errors` with subtitles): a real
+    failure still exits 1.
+27. **`--embed-thumbnail` puts the cover in `moov` > … > `covr`, near the
+    start**, for MP4 (AV1, VP9, H.264), M4A, MP3 and the original audio, on
+    Windows and on the Android emulator; the temporary JPG is removed. A
+    single WebM refuses a cover and the refusal fails the download (exit 1);
+    `--remux-video mp4` first, without re-encoding, makes it an MP4 that
+    takes one.
+
 ## Decisions this asks for
 
 | Question | Recommendation |

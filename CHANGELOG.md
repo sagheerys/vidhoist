@@ -68,6 +68,10 @@ All notable changes to Vidhoist. The format follows
   another size starts. Brought in with `tool/port_from_vidhoist.py`.
 - The sync subfolder is `Vidhoist Sync`, so Vidhoist and Vidhoist never share
   one library when pointed at the same synced folder.
+- Nothing is saved beside a video but its subtitles: no `.info.json` and no
+  `.jpg`. The cover goes inside the file, where it outlives the site
+  deleting it; videos are saved as MP4 for that. Windows now reads that
+  cover before taking a frame of the video.
 - By day, white cards stand on a soft stone ground (`#F2F1EE`) instead of a
   white one, which glared and left the cards only a hairline to stand on.
 - Windows hides Channels and Sync unless they are switched on in
@@ -103,6 +107,15 @@ All notable changes to Vidhoist. The format follows
 - 164 strings in each language that only the server used.
 
 ### Fixed
+- The download counter jumped from 0 to 100%: the subtitle files, fetched
+  before the video, were counted as its parts. It now moves with the video
+  alone, on both apps.
+- Subtitles asked for every machine translation into Arabic and English
+  (`ar-fr-FR`…), which YouTube can refuse; now the language, its original
+  track and its regions.
+- Windows: a finished video whose title had a `/` never reached the library
+  (the path read back lost the `⧸` yt-dlp writes for it), and a download
+  restored at launch went to the default folder instead of the chosen one.
 - Windows offered "Delete from server" on every clip, did nothing, and said
   it was deleted. It deletes the file now.
 - Windows looked for missing covers and read clips' lengths only with a
