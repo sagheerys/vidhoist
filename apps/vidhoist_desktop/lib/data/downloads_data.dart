@@ -63,7 +63,7 @@ final batchCollectorProvider = Provider(
 
 /// The one download engine: yt-dlp on this computer, null where there is
 /// no backend (a test that does not ask for one). What the last run left
-/// unfinished is queued again as soon as it exists.
+/// unfinished is queued again once the download folder is known.
 final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
   final backend = ref.watch(downloadBackendProvider);
   if (backend == null) return null;
@@ -96,7 +96,14 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
     },
     onLog: (message) => _log(ref, message),
   );
-  unawaited(engine.restorePending());
+  // Only once the download folder is known: restored before it, a task
+  // went to the default folder whatever folder had been chosen.
+  unawaited(
+    ref
+        .read(downloadFolderProvider.future)
+        .then<void>((_) {}, onError: (Object _) {})
+        .then((_) => alive ? engine.restorePending() : null),
+  );
   final dropped = engine.updates.listen((task) {
     if (task.phase == TaskPhase.failed || task.phase == TaskPhase.cancelled) {
       collector.onDropped(task.id);

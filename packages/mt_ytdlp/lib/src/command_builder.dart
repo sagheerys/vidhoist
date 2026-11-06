@@ -134,6 +134,10 @@ abstract final class CommandBuilder {
   static List<String> _base(EngineSetup setup) => [
     '--ignore-config',
     '--no-colors',
+    // Without it the frozen Windows build drops characters outside the
+    // console code page from what it prints, such as the "⧸" it puts in a
+    // file name for "/"; the path read back then names no file.
+    if (setup.platform == HostPlatform.windows) ...['--encoding', 'utf-8'],
     if (setup.forceIpv4) '-4',
     if (setup.ffmpegDir case final dir?) ...['--ffmpeg-location', dir],
     if (setup.jsRuntime case final runtime?) ...['--js-runtimes', runtime],

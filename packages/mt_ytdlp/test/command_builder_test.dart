@@ -189,6 +189,24 @@ void main() {
     });
   });
 
+  test('**the guard**: on Windows yt-dlp prints in UTF-8', () {
+    // Owner, 2026-11-06: a title with "/" is saved as "⧸", which yt-dlp
+    // printed without that character on Windows; the path read back did not
+    // exist and the finished video never reached the library. The Python
+    // environment variables do not reach the frozen build; --encoding does.
+    for (final args in [
+      CommandBuilder.download(
+        const DownloadSpec(url: 'u', folder: 'f'),
+        windows,
+      ),
+      CommandBuilder.probe('u', windows),
+      CommandBuilder.playlist('p', windows),
+    ]) {
+      expect(valueOf(args, '--encoding'), 'utf-8');
+    }
+    expect(CommandBuilder.probe('u', android), isNot(contains('--encoding')));
+  });
+
   test('probe asks for the info JSON of one video', () {
     expect(CommandBuilder.probe('https://youtu.be/x', android), [
       '--ignore-config',

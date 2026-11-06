@@ -8,6 +8,7 @@ import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/folders_data.dart';
 import 'package:vidhoist_desktop/data/library_data.dart';
 import 'package:vidhoist_desktop/di.dart';
+import 'package:vidhoist_desktop/identity.dart';
 import 'package:vidhoist_desktop/platform/engine_locator.dart';
 
 /// The app on the engine of this computer: what the engine options make
@@ -71,11 +72,13 @@ void main() {
     });
     tearDown(() => downloads.delete(recursive: true));
 
-    ProviderContainer container() {
+    ProviderContainer container({Duration folderDelay = Duration.zero}) {
       final c = ProviderContainer(
         overrides: [
           keyValueStoreProvider.overrideWithValue(store),
-          desktopFoldersProvider.overrideWithValue(_Folders(downloads.path)),
+          desktopFoldersProvider.overrideWithValue(
+            _Folders(downloads.path, delay: folderDelay),
+          ),
           downloadBackendProvider.overrideWithValue(backend),
         ],
       );
@@ -184,15 +187,42 @@ void main() {
       expect(backend.requests.single.url, 'https://example.com/left');
       expect(backend.requests.single.quality, Quality.q720);
     });
+
+    test('**the guard**: what is restored at launch waits for the download '
+        'folder', () async {
+      // 2026-11-06: restored before the folder was read, a download went to
+      // the default Downloads\Vidhoist whatever folder had been chosen (and
+      // this test's file landed in the real one).
+      await LocalPendingStore(store).put(
+        DownloadTask(
+          inputUrl: 'https://example.com/late',
+          quality: Quality.best,
+        ),
+      );
+      backend.scripts['https://example.com/late'] = writes('late.mp4');
+      final c = container(folderDelay: const Duration(milliseconds: 50));
+      c.read(downloadEngineProvider);
+      for (var i = 0; i < 300 && backend.requests.isEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      expect(
+        backend.requests.single.folder,
+        '${downloads.path}\\${EmberIdentity.displayName}',
+      );
+    });
   });
 }
 
 class _Folders extends NoFolders {
-  _Folders(this.downloadsRoot);
+  _Folders(this.downloadsRoot, {this.delay = Duration.zero});
 
   final String downloadsRoot;
+  final Duration delay;
 
-  // The test's own folder stands for Downloads\Vidhoist.
+  // The test's own folder stands for Downloads (the app adds Vidhoist).
   @override
-  Future<String?> downloads() async => downloadsRoot;
+  Future<String?> downloads() async {
+    await Future<void>.delayed(delay);
+    return downloadsRoot;
+  }
 }
