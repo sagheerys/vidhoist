@@ -18,6 +18,23 @@ void main() {
     expect(superDay.card, const Color(0xFFFFFFFF));
   });
 
+  test('**the guard**: by day the cards stand on a ground a step below '
+      'them', () {
+    // White cards on a white ground read as one glaring sheet (owner,
+    // 2026-11-06). A soft stone ground, as grouped lists do, lifts the cards
+    // by their own lightness; too dark a ground goes grey and dull.
+    for (final variant in MTVariant.values) {
+      final p = MTPalette.of(variant, Brightness.light);
+      final step = p.card.computeLuminance() - p.bg.computeLuminance();
+      expect(step, inInclusiveRange(0.06, 0.14), reason: '$variant');
+      expect(
+        p.bg.computeLuminance() - p.cardAlt.computeLuminance(),
+        greaterThan(0.03),
+        reason: 'the secondary ground stays a step below the ground',
+      );
+    }
+  });
+
   test('**the guard**: the night ground is charcoal, not espresso', () {
     final night = MTPalette.of(MTVariant.superApp, Brightness.dark);
     expect(red(night.bg) - blue(night.bg), lessThanOrEqualTo(5));

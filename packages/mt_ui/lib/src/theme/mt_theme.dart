@@ -42,10 +42,10 @@ ThemeData mtTheme(
               )
       : (
           const Color(0xFFFFFFFF),
-          const Color(0xFFF8F6F3),
-          const Color(0xFFEFECE7),
-          const Color(0xFFEAE7E1),
-          const Color(0xFFE3DFD8),
+          const Color(0xFFF8F7F5),
+          const Color(0xFFEBE9E5),
+          const Color(0xFFE5E3DE),
+          const Color(0xFFDEDBD5),
         );
 
   final scheme = ColorScheme(

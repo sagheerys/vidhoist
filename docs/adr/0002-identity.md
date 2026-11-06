@@ -30,6 +30,10 @@ search, npm, PyPI and the `.com`/`.app`/`.io` domains.
 3. **Grounds:** white `#FFFFFF` by day, black `#000000` by night, with lifted
    cards (`#121212`) so hairlines still read. The espresso ink `#2B211B` is
    kept so the white does not go cold.
+   **Amended 2026-11-06 (owner):** white cards on a white ground glared and
+   the cards had only a hairline to stand on. The day ground is now a soft
+   stone `#F2F1EE` under white `#FFFFFF` cards, the way grouped lists lift
+   their rows; `palette_ground_test` holds the step between them.
 4. **One palette for both apps.** `liteDay/liteNight` are aliases of
    `superDay/superNight`. The parent's per-app accents (ember, petrol) are
    gone.

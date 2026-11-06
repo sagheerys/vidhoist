@@ -113,13 +113,15 @@ class MTPalette {
         (MTVariant.lite, Brightness.dark) => liteNight,
       };
 
-  // Vidhoist by day (identity decision 2026-11-04): a plain white ground
-  // with the Wahaj espresso ink kept for warmth, and a blue accent. Desktop
-  // and phone share one palette pair, so superDay/liteDay are aliases.
+  // Vidhoist by day: white cards on a soft stone ground, the Wahaj espresso
+  // ink kept for warmth, and a blue accent. The ground was plain white at
+  // first (2026-11-04); white on white glared and the cards had only their
+  // hairline to stand on (owner, 2026-11-06). Desktop and phone share one
+  // palette pair, so superDay/liteDay are aliases.
   static const MTPalette superDay = MTPalette(
-    bg: Color(0xFFFFFFFF),
+    bg: Color(0xFFF2F1EE),
     card: Color(0xFFFFFFFF),
-    cardAlt: Color(0xFFF3F2F0), // a secondary ground, one step below bg
+    cardAlt: Color(0xFFE8E6E2), // a secondary ground, one step below bg
     ink: Color(0xFF2B211B),
     ink2: Color(0xAD2B211B), // rgba(43,33,27,.68)
     ink3: Color(0x732B211B), // rgba(43,33,27,.45)
