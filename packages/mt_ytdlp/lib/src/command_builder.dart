@@ -123,8 +123,12 @@ abstract final class CommandBuilder {
     'fragment_count',
   ];
 
+  /// The fields, then the format being fetched: a subtitle file has none
+  /// (`NA`), which tells it from the video and audio (measured 2026-11-07).
   static String get _progressTemplate =>
-      'download:$progressTag ${_progressFields.map((f) => '%(progress.$f)s').join(' ')}';
+      'download:$progressTag '
+      '${_progressFields.map((f) => '%(progress.$f)s').join(' ')} '
+      '%(info.format_id)s';
 
   static const _postprocessTemplate =
       'postprocess:$postprocessTag %(progress.status)s %(progress.postprocessor)s';

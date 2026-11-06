@@ -44,6 +44,33 @@ void main() {
       expect(line.fraction, closeTo(31744 / 124386876, 1e-9));
     });
 
+    test('**the guard**: a subtitle file is told from the video by its '
+        'missing format', () {
+      // Measured 2026-11-07: yt-dlp fetches the subtitles first, with
+      // progress lines of their own and no format id; counted as the
+      // video's parts, two files took the bar to 100% before the video began.
+      final subtitle = YtDlpLine.parse(
+        '[vh] downloading 4096 40582 NA 81743.5 NA NA NA NA',
+      ) as ProgressLine;
+      expect(subtitle.isSideFile, isTrue);
+      final video = YtDlpLine.parse(
+        '[vh] downloading 4096 71283827 NA 81743.5 872 NA NA 399',
+      ) as ProgressLine;
+      expect(video.isSideFile, isFalse);
+      expect(video.downloaded, 4096);
+      expect(video.formatId, '399');
+      final drc = YtDlpLine.parse(
+        '[vh] finished 100 100 NA 1 NA NA NA 251-drc',
+      ) as ProgressLine;
+      expect(drc.formatId, '251-drc');
+      // A line from before the format field (the batch 1 runs) is media.
+      final old = YtDlpLine.parse(
+        '[vh] downloading 1024 124386876 NA 61791.8 2014 NA NA',
+      ) as ProgressLine;
+      expect(old.isSideFile, isFalse);
+      expect(old.formatId, isNull);
+    });
+
     test('a fragmented stream gives an estimate and fragment numbers', () {
       final line = YtDlpLine.parse(
         '[vh] downloading 2048 NA 40960.5 NA NA 3 20',

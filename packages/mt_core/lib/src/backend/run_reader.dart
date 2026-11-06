@@ -22,6 +22,9 @@ Stream<BackendEvent> readDownloadRun(
     switch (YtDlpLine.parse(raw)) {
       case PartsLine parts:
         tracker.expectParts(parts);
+      // Subtitles come first and are not among the announced parts.
+      case ProgressLine(isSideFile: true):
+        break;
       case ProgressLine line:
         yield BackendProgress(tracker.add(line));
       case PostprocessLine(status: 'started', :final postprocessor):

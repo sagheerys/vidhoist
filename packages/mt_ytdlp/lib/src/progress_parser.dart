@@ -49,6 +49,8 @@ final class ProgressLine extends YtDlpLine {
     this.eta,
     this.fragmentIndex,
     this.fragmentCount,
+    this.formatId,
+    this.isSideFile = false,
   });
 
   /// `downloading`, `finished` or `error`.
@@ -68,6 +70,14 @@ final class ProgressLine extends YtDlpLine {
   final int? fragmentIndex;
   final int? fragmentCount;
 
+  /// The format being fetched, such as `399`; null for a subtitle file and
+  /// on lines printed before the field existed.
+  final String? formatId;
+
+  /// A file beside the video, such as a subtitle: the line names no format.
+  /// Not one of the parts yt-dlp announced, so it moves no progress.
+  final bool isSideFile;
+
   bool get isFinished => status == 'finished';
 
   /// The stream's size, exact when yt-dlp knows it.
@@ -85,9 +95,11 @@ final class ProgressLine extends YtDlpLine {
   /// The fields after the tag, as `CommandBuilder` orders them; yt-dlp
   /// writes `NA` for a field it does not know. Null when the status is
   /// missing or a field is not a number.
+  static bool _none(String field) => field == 'NA' || field == 'None';
+
   static ProgressLine? tryParse(String fields) {
     final f = fields.split(' ').where((s) => s.isNotEmpty).toList();
-    if (f.isEmpty || f.length > 8) return null;
+    if (f.isEmpty || f.length > 9) return null;
     num? at(int i) {
       if (i >= f.length || f[i] == 'NA' || f[i] == 'None') return null;
       return num.tryParse(f[i]) ?? double.nan;
@@ -105,6 +117,8 @@ final class ProgressLine extends YtDlpLine {
       eta: whole(values[4]),
       fragmentIndex: whole(values[5]),
       fragmentCount: whole(values[6]),
+      formatId: f.length == 9 && !_none(f[8]) ? f[8] : null,
+      isSideFile: f.length == 9 && _none(f[8]),
     );
   }
 }

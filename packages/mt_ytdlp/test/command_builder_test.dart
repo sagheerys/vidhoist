@@ -69,6 +69,8 @@ void main() {
       final templates = valuesOf(args, '--progress-template');
       expect(templates, hasLength(2));
       expect(templates[0], startsWith('download:[vh] %(progress.status)s '));
+      // Last, the format: a subtitle file has none (measured 2026-11-07).
+      expect(templates[0], endsWith(' %(info.format_id)s'));
       expect(templates[1], startsWith('postprocess:[vh-pp] '));
       expect(valuesOf(args, '--print'), [
         'video:[vh-parts] %(filesize_approx)s '

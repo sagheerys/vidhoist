@@ -60,6 +60,36 @@ void main() {
       expect((events.last as BackendFinished).path, r'C:\out\a [x].mp4');
     });
 
+    test(
+      '**the guard**: subtitles fetched first do not fill the bar',
+      () async {
+        // Owner, 2026-11-07, on the phone and on Windows: the counter went
+        // from 0 to 100 at once. Two subtitle files had taken the places of
+        // the video and its audio; measured on a real run with subtitles.
+        final events = await read(
+          [
+            '[vh-parts] 1000 [900, 100]',
+            '[vh] downloading 20 40 NA 1 NA NA NA NA',
+            '[vh] finished 40 40 NA 1 NA NA NA NA',
+            '[vh] downloading 30 60 NA 1 NA NA NA NA',
+            '[vh] finished 60 60 NA 1 NA NA NA NA',
+            '[vh] downloading 450 900 NA 1 1 NA NA 399',
+            '[vh] finished 900 900 NA 1 NA NA NA 399',
+            '[vh] downloading 50 100 NA 1 1 NA NA 251',
+            '[vh] finished 100 100 NA 1 NA NA NA 251',
+            r'[vh-file] C:\out\a [x].mp4',
+          ].join('\n'),
+          0,
+          '',
+        );
+        final fractions = [
+          for (final e in events.whereType<BackendProgress>())
+            e.progress.fraction,
+        ];
+        expect(fractions, [0.45, 0.9, 0.95, 1.0]);
+      },
+    );
+
     test('a failed run is classified from its stderr', () async {
       final events = await read('', 1, fixture('tiktok.stderr.txt'));
       final failed = events.single as BackendFailed;
