@@ -20,6 +20,11 @@ String errorText(MTLocalizations l, Object error) => switch (error) {
   ServerErrorException(:final detail) => l.errServer(
     detail == null ? '?' : mtName(serverReason(detail)),
   ),
+  EngineFailureException(:final kind, :final detail) => engineErrorText(
+    l,
+    kind,
+    detail,
+  ),
   CancelledException() => l.cancel,
   _ => l.errorGeneric(error.toString()),
 };
@@ -29,3 +34,29 @@ String errorText(MTLocalizations l, Object error) => switch (error) {
 bool isAlreadyFollowed(Object error) =>
     error is ServerErrorException &&
     (error.detail ?? '').toLowerCase().contains('already subscribed');
+
+/// What yt-dlp on the device failed at, as a sentence the person can act
+/// on. Only an unforeseen failure shows yt-dlp's own reason, its first
+/// sentence isolated so its English keeps its order inside an Arabic line.
+String engineErrorText(
+  MTLocalizations l,
+  YtDlpErrorKind kind,
+  String? detail,
+) => switch (kind) {
+  YtDlpErrorKind.unavailable => l.engineErrUnavailable,
+  YtDlpErrorKind.geoBlocked => l.engineErrGeoBlocked,
+  YtDlpErrorKind.unsupportedUrl => l.engineErrUnsupported,
+  YtDlpErrorKind.rateLimited => l.engineErrRateLimited,
+  YtDlpErrorKind.formatUnavailable => l.engineErrFormat,
+  YtDlpErrorKind.diskFull => l.engineErrDiskFull,
+  YtDlpErrorKind.engineMissing => l.engineErrMissing,
+  // These two arrive as NetworkException and PlatformBlockedException,
+  // and are worded there; here only if a caller passes them directly.
+  YtDlpErrorKind.network => l.errNetwork,
+  YtDlpErrorKind.signInRequired => l.engineErrFailed(
+    mtName(serverReason(detail ?? '')),
+  ),
+  YtDlpErrorKind.failed => l.engineErrFailed(
+    mtName(serverReason(detail ?? '')),
+  ),
+};

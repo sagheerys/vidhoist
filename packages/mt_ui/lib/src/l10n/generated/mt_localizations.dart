@@ -3080,6 +3080,84 @@ abstract class MTLocalizations {
   /// **'Endpoint URL'**
   String get endpointUrl;
 
+  /// No description provided for @engineDownloadingProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading · {percent}%'**
+  String engineDownloadingProgress(Object percent);
+
+  /// No description provided for @engineErrDiskFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough storage space for this file'**
+  String get engineErrDiskFull;
+
+  /// No description provided for @engineErrFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Download failed: {reason}'**
+  String engineErrFailed(Object reason);
+
+  /// No description provided for @engineErrFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'This quality is not available for this video'**
+  String get engineErrFormat;
+
+  /// No description provided for @engineErrGeoBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available in your country'**
+  String get engineErrGeoBlocked;
+
+  /// No description provided for @engineErrMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The download engine is missing or incomplete. Set it up again from Settings'**
+  String get engineErrMissing;
+
+  /// No description provided for @engineErrRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'The site is limiting requests. Try again in a while'**
+  String get engineErrRateLimited;
+
+  /// No description provided for @engineErrUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This video is unavailable, private or removed'**
+  String get engineErrUnavailable;
+
+  /// No description provided for @engineErrUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This link is not supported'**
+  String get engineErrUnsupported;
+
+  /// No description provided for @enginePaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get enginePaused;
+
+  /// No description provided for @enginePostprocessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Finishing the file…'**
+  String get enginePostprocessing;
+
+  /// No description provided for @enginePreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading the link…'**
+  String get enginePreparing;
+
+  /// No description provided for @engineResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get engineResume;
+
   /// No description provided for @enterFullscreen.
   ///
   /// In en, this message translates to:

@@ -129,6 +129,20 @@
       }
     }
   },
+  "@engineDownloadingProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "Object"
+      }
+    }
+  },
+  "@engineErrFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "Object"
+      }
+    }
+  },
   "@errServer": {
     "placeholders": {
       "message": {
@@ -1021,6 +1035,19 @@
   "emptyPlaylist": "Empty playlist",
   "emptyPlaylistMessage": "Add videos from the library",
   "endpointUrl": "Endpoint URL",
+  "engineDownloadingProgress": "Downloading · {percent}%",
+  "engineErrDiskFull": "Not enough storage space for this file",
+  "engineErrFailed": "Download failed: {reason}",
+  "engineErrFormat": "This quality is not available for this video",
+  "engineErrGeoBlocked": "Not available in your country",
+  "engineErrMissing": "The download engine is missing or incomplete. Set it up again from Settings",
+  "engineErrRateLimited": "The site is limiting requests. Try again in a while",
+  "engineErrUnavailable": "This video is unavailable, private or removed",
+  "engineErrUnsupported": "This link is not supported",
+  "enginePaused": "Paused",
+  "enginePostprocessing": "Finishing the file…",
+  "enginePreparing": "Reading the link…",
+  "engineResume": "Resume",
   "enterFullscreen": "Fullscreen",
   "errAuth": "Wrong username or password",
   "errFileGone": "The file is no longer on the server. Try again to download it anew.",

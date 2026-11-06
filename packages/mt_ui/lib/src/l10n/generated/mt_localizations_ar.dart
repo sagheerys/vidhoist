@@ -1836,6 +1836,50 @@ class MTLocalizationsAr extends MTLocalizations {
   String get endpointUrl => 'عنوان السيرفر الخارجي';
 
   @override
+  String engineDownloadingProgress(Object percent) {
+    return 'جارٍ التنزيل · $percent٪';
+  }
+
+  @override
+  String get engineErrDiskFull => 'لا توجد مساحة تخزين كافية لهذا الملف';
+
+  @override
+  String engineErrFailed(Object reason) {
+    return 'فشل التنزيل: $reason';
+  }
+
+  @override
+  String get engineErrFormat => 'هذه الجودة غير متاحة لهذا المقطع';
+
+  @override
+  String get engineErrGeoBlocked => 'غير متاح في بلدك';
+
+  @override
+  String get engineErrMissing =>
+      'محرّك التنزيل مفقود أو ناقص. أعد تجهيزه من الإعدادات';
+
+  @override
+  String get engineErrRateLimited => 'الموقع يحدّ الطلبات الآن. حاول بعد قليل';
+
+  @override
+  String get engineErrUnavailable => 'هذا المقطع غير متاح أو خاص أو محذوف';
+
+  @override
+  String get engineErrUnsupported => 'هذا الرابط غير مدعوم';
+
+  @override
+  String get enginePaused => 'متوقف مؤقتاً';
+
+  @override
+  String get enginePostprocessing => 'جارٍ تجهيز الملف…';
+
+  @override
+  String get enginePreparing => 'جارٍ قراءة الرابط…';
+
+  @override
+  String get engineResume => 'استئناف';
+
+  @override
   String get enterFullscreen => 'ملء الشاشة';
 
   @override

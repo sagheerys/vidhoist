@@ -1794,6 +1794,52 @@ class MTLocalizationsEn extends MTLocalizations {
   String get endpointUrl => 'Endpoint URL';
 
   @override
+  String engineDownloadingProgress(Object percent) {
+    return 'Downloading · $percent%';
+  }
+
+  @override
+  String get engineErrDiskFull => 'Not enough storage space for this file';
+
+  @override
+  String engineErrFailed(Object reason) {
+    return 'Download failed: $reason';
+  }
+
+  @override
+  String get engineErrFormat => 'This quality is not available for this video';
+
+  @override
+  String get engineErrGeoBlocked => 'Not available in your country';
+
+  @override
+  String get engineErrMissing =>
+      'The download engine is missing or incomplete. Set it up again from Settings';
+
+  @override
+  String get engineErrRateLimited =>
+      'The site is limiting requests. Try again in a while';
+
+  @override
+  String get engineErrUnavailable =>
+      'This video is unavailable, private or removed';
+
+  @override
+  String get engineErrUnsupported => 'This link is not supported';
+
+  @override
+  String get enginePaused => 'Paused';
+
+  @override
+  String get enginePostprocessing => 'Finishing the file…';
+
+  @override
+  String get enginePreparing => 'Reading the link…';
+
+  @override
+  String get engineResume => 'Resume';
+
+  @override
   String get enterFullscreen => 'Fullscreen';
 
   @override
