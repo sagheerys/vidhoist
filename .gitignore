@@ -73,6 +73,8 @@ CLAUDE.local.md
 # anybody noticed, so the rule is the extension now. Add `!tool/<name>.ps1`
 # below if one is ever meant to be published.
 tool/*.ps1
+# Published: no local path, and the installer's test reads its pins.
+!tool/fetch-engine.ps1
 tool/*.cmd
 tool/build-lite.log
 # The screenshot kit (mock server, generated demo media, emulator driver):
