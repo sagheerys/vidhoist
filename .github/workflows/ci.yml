@@ -47,8 +47,8 @@ jobs:
       - name: Check comments
         run: python3 tool/comment-lint.py
 
-      # mt_core and mt_transcripts are pure Dart, so they run under
-      # `dart test`; the rest need the Flutter test runner.
+      # mt_core, mt_transcripts and mt_ytdlp are pure Dart, so they run
+      # under `dart test`; the rest need the Flutter test runner.
       - name: Test mt_core
         run: dart test
         working-directory: packages/mt_core
@@ -56,6 +56,10 @@ jobs:
       - name: Test mt_transcripts
         run: dart test
         working-directory: packages/mt_transcripts
+
+      - name: Test mt_ytdlp
+        run: dart test
+        working-directory: packages/mt_ytdlp
 
       - name: Test mt_media
         run: flutter test --no-pub

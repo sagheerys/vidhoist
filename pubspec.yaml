@@ -9,6 +9,7 @@ workspace:
   - packages/mt_transcripts
   - packages/mt_media
   - packages/mt_ui
+  - packages/mt_ytdlp
   - apps/vidhoist_mobile
   - apps/vidhoist_desktop
 

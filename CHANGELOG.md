@@ -17,6 +17,13 @@ All notable changes to Vidhoist. The format follows
   by `tool/icons/vidhoist_kit.py`.
 - `docs/blueprint/REPORT.md`: the plan for replacing the Vidhoist server with
   yt-dlp running on the device, and `docs/adr/` for the decisions taken.
+- `docs/ENGINE.md`: yt-dlp measured on Windows, on the Android emulator and on
+  a phone before any engine code, with the real output kept as test fixtures.
+- `packages/mt_ytdlp`: the yt-dlp command lines (format selectors, IPv4 by
+  default, downloading from a probe's info JSON), and reading what yt-dlp
+  prints back: progress, the parts of a merged download, the finished file,
+  the info JSON, classified errors and the engine's version. Pure Dart, not
+  yet used by the apps.
 
 ### Changed
 - Package and application identifiers: `apps/vidhoist_mobile`

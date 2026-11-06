@@ -47,6 +47,7 @@ apps/vidhoist_super ┘            │                 ▲
 | `mt_media` | Audio handler, video playback, playback stores | Knows the server only through `mt_core` |
 | `mt_ui` | Design tokens, themes, shared widgets, localisation | **Does not know the server exists** |
 | `mt_transcripts` | Subtitle parsing, Arabic-aware search, the transcript store, fetching subtitles without disturbing the library | **Pure Dart. Super only**: Lite does not depend on it, so the family app cannot reach it |
+| `mt_ytdlp` | yt-dlp's command lines and reading what it prints: format selectors, progress and file lines, the info JSON, errors, versions | **Pure Dart, no dependencies, no processes.** Tested on real yt-dlp output (`test/fixtures/`); each app starts the process its own way |
 | `apps/*` | Screens, routing, dependency injection | May depend on the packages above; only Super on `mt_transcripts` |
 
 Three consequences worth remembering:
@@ -112,6 +113,7 @@ flutter pub get                      # once, at the repository root
 flutter analyze --no-pub             # zero issues is the gate
 cd packages/mt_core && dart test     # pure Dart core
 cd packages/mt_transcripts && dart test
+cd packages/mt_ytdlp && dart test
 flutter test --no-pub                # in mt_media, mt_ui and both apps
 flutter build apk --debug            # in apps/vidhoist_mobile or apps/vidhoist_super
 ```

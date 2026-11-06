@@ -148,10 +148,24 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 20. **Without `-4` the phone waits longer still** (audio: first progress
     after 121 s against 52 s with it; the two video cases did not finish in
     four minutes). Same network as finding 7; `-4` goes on Android too.
-21. **The library keys options by name**: `addOption("-f", …)` twice keeps
-    one of them, and an option added without its value breaks the command
-    line. The engine wrapper builds the whole argument list itself and
-    passes each option with its value in one call.
+21. **The library groups options by name**: `addOption` keeps every value
+    but writes each option's values together, in the order the names first
+    came, so a second `-f` lands next to the first and the last one wins;
+    an option added without its value breaks the command line. The engine
+    builds the whole argument list itself (`mt_ytdlp`'s `CommandBuilder`)
+    and hands it over with `addCommands`, which keeps the order.
+
+22. **A probe's `-J` output is as good as `--write-info-json` for this**:
+    `--load-info-json probe-json.stdout.txt --simulate -f <selector>` picks
+    the formats without the network. The six selectors of `mt_ytdlp`'s
+    `FormatSelector`, checked that way on the fixture: best 401+258 (AV1
+    2160p, AAC), 1080 399+258, 360 396+258, compatible best 299+258 (H.264
+    1080p60), compatible 720 298+258 (H.264 720p60), audio 258 (AAC).
+23. **The parts' sizes can be printed before the first byte**:
+    `--print "video:%(filesize_approx)s %(requested_formats.:.filesize_approx)j"`
+    gave `181292478 [150524845, 30767602]` for the compatible 720p pick and
+    `30767602 []` for audio alone, so the progress bar is weighted by bytes
+    from the start.
 
 ## Decisions this asks for
 

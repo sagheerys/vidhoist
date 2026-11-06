@@ -1,0 +1,12 @@
+name: mt_ytdlp
+description: "yt-dlp for the apps without running it: the command lines, the progress and file lines it prints, the info JSON, its errors and its version. Pure Dart, no Flutter, no processes."
+version: 0.1.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6
