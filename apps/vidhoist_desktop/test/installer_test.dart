@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/identity.dart';
+import 'package:vidhoist_desktop/platform/engine_pins.dart';
 
 /// The installer script and the app must agree on the names Windows knows
 /// the app by; a mismatch shows up only on a user's computer, as an
@@ -100,6 +101,34 @@ void main() {
         r"\Run', '{#AppName}')",
       ),
     );
+  });
+
+  test('**the guard**: it ships yt-dlp in tools, where the app looks, and '
+      'neither ffmpeg nor Deno', () {
+    expect(
+      iss,
+      contains(
+        r'Source: "{#ToolsDir}\yt-dlp\*"; DestDir: "{app}\tools\yt-dlp"; '
+        'Flags: ignoreversion recursesubdirs createallsubdirs',
+      ),
+    );
+    // An update's folder build replaces the old one whole: a stale file in
+    // _internal would be loaded by the new yt-dlp.
+    expect(iss, contains(r'Type: filesandordirs; Name: "{app}\tools\yt-dlp"'));
+    final shipped = RegExp(
+      r'^Source: .*$',
+      multiLine: true,
+    ).allMatches(iss).map((m) => m[0]!.toLowerCase());
+    expect(shipped.where((s) => s.contains('ffmpeg')), isEmpty);
+    expect(shipped.where((s) => s.contains('deno')), isEmpty);
+  });
+
+  test("tool/fetch-engine.ps1 pins the app's own yt-dlp, hash and all", () {
+    final script = File('../../tool/fetch-engine.ps1').readAsStringSync();
+    for (final asset in enginePins.values) {
+      expect(script, contains(asset.url.toString()));
+      expect(script, contains(asset.sha256));
+    }
   });
 
   test('every message the installer adds is in English and Arabic', () {

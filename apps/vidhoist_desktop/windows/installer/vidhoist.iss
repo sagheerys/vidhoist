@@ -41,6 +41,11 @@
 ; beside the app so that a computer without it still starts the app: the
 ; x64 Microsoft.VC143.CRT folder of Visual Studio's redistributables. Not
 ; System32, which this 32-bit compiler sees as the 32-bit SysWOW64.
+; yt-dlp's folder build, put there by tool\fetch-engine.ps1. ffmpeg and
+; Deno are not shipped: the app fetches them on first need.
+#ifndef ToolsDir
+  #define ToolsDir "..\..\tools"
+#endif
 #ifndef CrtDir
   #error Pass the x64 runtime folder: ISCC /DCrtDir=...\x64\Microsoft.VC143.CRT
 #endif
@@ -134,12 +139,16 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [InstallDelete]
 ; The previous version's assets, so none of them outlives the update.
 Type: filesandordirs; Name: "{app}\data"
+; The engine is replaced whole: a stale file left in its _internal folder
+; would be loaded by the new yt-dlp.
+Type: filesandordirs; Name: "{app}\tools\yt-dlp"
 
 [Files]
 Source: "{#BuildDir}\*"; DestDir: "{app}"; Excludes: "*.pdb,*.lib,*.exp"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#CrtDir}\msvcp140.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CrtDir}\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CrtDir}\vcruntime140_1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ToolsDir}\yt-dlp\*"; DestDir: "{app}\tools\yt-dlp"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 ; The name and the AppUserModelID are the ones the app gives itself, so
