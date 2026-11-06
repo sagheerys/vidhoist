@@ -6,15 +6,13 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import '../../data/downloads_data.dart';
-import '../../data/folders_data.dart';
-import '../../data/local_copies.dart';
 import '../../shell/section_header.dart';
 import '../add/links_view.dart';
 import 'panel_line.dart';
 
 /// The downloads, opened from the button above the content and drawn at
 /// its corner: what is being fetched, what is paused, what waits its turn,
-/// what is coming from a server, and what failed, each with its own action.
+/// and what failed, each with its own action.
 Future<void> showDownloadsPanel(BuildContext context) => showGeneralDialog(
   context: context,
   barrierDismissible: true,
@@ -54,7 +52,6 @@ class DownloadsPanel extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final engine = ref.watch(downloadEngineProvider);
     final tasks = ref.watch(engineTasksProvider).valueOrNull ?? const [];
-    final copies = ref.watch(localCopiesProvider);
     final working = [
       for (final t in tasks)
         if (isUnderWay(t) && t.phase != TaskPhase.queued) t,
@@ -71,24 +68,8 @@ class DownloadsPanel extends ConsumerWidget {
       for (final t in tasks)
         if (t.phase == TaskPhase.failed) t,
     ];
-    // Only lines the panel shows: a clip the server finished has no line
-    // here, so it never offers to hide what cannot be seen.
-    final finished = copies.any((c) => !c.isActive);
     final empty =
-        working.isEmpty &&
-        paused.isEmpty &&
-        waiting.isEmpty &&
-        failed.isEmpty &&
-        copies.isEmpty;
-
-    // Hides finished lines from this panel; nothing is deleted, here or on
-    // the server.
-    void clearFinished() {
-      ref.read(localCopiesProvider.notifier).clearFinished();
-      for (final t in tasks) {
-        if (t.isFinished && t.phase != TaskPhase.failed) engine?.forget(t.id);
-      }
-    }
+        working.isEmpty && paused.isEmpty && waiting.isEmpty && failed.isEmpty;
 
     return SafeArea(
       child: Align(
@@ -116,21 +97,7 @@ class DownloadsPanel extends ConsumerWidget {
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(MTSpace.md),
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l.desktopDownloads,
-                          style: text.titleMedium,
-                        ),
-                      ),
-                      if (finished)
-                        MTLinkButton(
-                          label: l.desktopClearFinished,
-                          onPressed: clearFinished,
-                        ),
-                    ],
-                  ),
+                  Text(l.desktopDownloads, style: text.titleMedium),
                   if (empty)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: MTSpace.lg),
@@ -165,10 +132,6 @@ class DownloadsPanel extends ConsumerWidget {
                     EmberSectionHeader(title: l.queuedSection),
                     for (final t in waiting)
                       _TaskLine(task: t, onCancel: () => engine?.cancel(t.id)),
-                  ],
-                  if (copies.isNotEmpty) ...[
-                    EmberSectionHeader(title: l.desktopToThisComputer),
-                    for (final c in copies) _CopyLine(copy: c),
                   ],
                   if (failed.isNotEmpty) ...[
                     EmberSectionHeader(title: l.needsAttention),
@@ -226,7 +189,6 @@ class _TaskLine extends StatelessWidget {
       // paused one keeps its bar where it stopped.
       progress: switch (task.phase) {
         TaskPhase.downloading || TaskPhase.paused => task.progress,
-        TaskPhase.polling when task.hasKnownProgress => task.progress,
         TaskPhase.queued || TaskPhase.failed => null,
         _ => -1,
       },
@@ -239,53 +201,6 @@ class _TaskLine extends StatelessWidget {
           MTLinkButton(label: context.mtl.engineResume, onPressed: resume),
       ],
       onClose: onCancel,
-    );
-  }
-}
-
-/// A copy coming to this computer, or come.
-class _CopyLine extends ConsumerWidget {
-  const _CopyLine({required this.copy});
-
-  final LocalCopy copy;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final copies = ref.read(localCopiesProvider.notifier);
-    final percent = (copy.progress * 100).round();
-    final status = switch (copy.phase) {
-      CopyPhase.queued => l.desktopCopyQueued,
-      CopyPhase.pulling when copy.kind == CopyKind.offline =>
-        l.desktopSavingOffline(percent),
-      CopyPhase.pulling => l.desktopDownloading(percent),
-      CopyPhase.done when copy.kind == CopyKind.offline => l.madeOffline,
-      CopyPhase.done => l.desktopSavedIn(copy.folder),
-      CopyPhase.failed => l.failed,
-      CopyPhase.cancelled => l.desktopCopyCancelled,
-    };
-    return PanelLine(
-      title: copy.title,
-      thumbnail: copy.thumbnail,
-      status: status,
-      error: copy.phase == CopyPhase.failed,
-      done: copy.phase == CopyPhase.done,
-      progress: switch (copy.phase) {
-        CopyPhase.pulling => copy.progress,
-        _ => null,
-      },
-      actions: [
-        if (copy.phase == CopyPhase.failed || copy.phase == CopyPhase.cancelled)
-          MTLinkButton(label: l.retry, onPressed: () => copies.retry(copy.id)),
-        if (copy.phase == CopyPhase.done)
-          if (copy.path case final path?)
-            MTLinkButton(
-              label: l.desktopShowInFolder,
-              onPressed: () =>
-                  unawaited(ref.read(desktopFoldersProvider).reveal(path)),
-            ),
-      ],
-      onClose: copy.isActive ? () => copies.cancel(copy.id) : null,
     );
   }
 }

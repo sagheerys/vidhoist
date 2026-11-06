@@ -36,12 +36,7 @@ class TranscriptView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.mtl;
-    final transcript = ref.watch(
-      transcriptForProvider((
-        canonicalUrl: item.canonicalUrl,
-        serverFilename: item.serverFilename,
-      )),
-    );
+    final transcript = ref.watch(transcriptForProvider(item.canonicalUrl));
     return switch (transcript) {
       AsyncData(value: final t?) when !t.isEmpty => _Lines(
         key: ValueKey(item.canonicalUrl),

@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/platform/desktop_capability.dart';
-import 'package:vidhoist_desktop/platform/desktop_policy.dart';
-import 'package:mt_core/mt_core.dart';
 
 void main() {
   group('DesktopCapability', () {
@@ -31,15 +29,6 @@ void main() {
       expect(other.canShowTaskbarProgress(), isFalse);
       expect(other.canUseSmtc(), isFalse);
       expect(other.canDragFilesOut(), isFalse);
-    });
-  });
-
-  group('DesktopPolicy', () {
-    test('clips stay on the server and the address is chosen by hand', () {
-      const policy = DesktopPolicy();
-      expect(policy.deletePolicy, DeletePolicy.keepOnServer);
-      expect(policy.shouldSwitchAddressesAutomatically(), isFalse);
-      expect(policy.shouldOfferDownloadToFolder(), isTrue);
     });
   });
 

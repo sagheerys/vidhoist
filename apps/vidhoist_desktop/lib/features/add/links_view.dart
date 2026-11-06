@@ -211,14 +211,13 @@ String taskLine(MTLocalizations l, DownloadTask task) => switch (task.phase) {
   ),
   TaskPhase.postprocessing => l.enginePostprocessing,
   TaskPhase.paused => l.enginePaused,
-  TaskPhase.adding => l.addingToServer,
   TaskPhase.failed => switch (task.error) {
     final error? => errorText(l, error),
     null => l.failed,
   },
   TaskPhase.cancelled => l.cancel,
   TaskPhase.completed => l.completed,
-  _ => l.onServerPhase,
+  TaskPhase.waitingForNetwork => l.waitingForWifi,
 };
 
 /// What will happen to a link that has not been sent.

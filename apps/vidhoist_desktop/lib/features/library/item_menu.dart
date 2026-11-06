@@ -7,11 +7,9 @@ import 'package:mt_media/library.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import '../../data/folders_data.dart';
-import '../../data/local_copies.dart';
 import '../../shell/context_menu.dart';
 import '../../shell/error_text.dart';
 import '../clip/clip_actions.dart';
-import '../clip/copy_pills.dart';
 import '../clip/tags_dialog.dart';
 import '../lists/list_dialogs.dart';
 import 'clip_keys.dart';
@@ -22,16 +20,12 @@ enum ItemChoice {
   playNext,
   readingRoom,
   favorite,
-  makeOffline,
   copyLink,
   copyFile,
   showInFolder,
   openOriginal,
   addToList,
   tags,
-  download,
-  removeLocalCopy,
-  deleteFromServer,
   deleteLocal,
 }
 
@@ -46,7 +40,6 @@ List<EmberMenuEntry<ItemChoice>> itemMenuEntries(
   LibraryItem item, {
   required bool hasFile,
 }) {
-  final source = copySourceOf(item);
   return [
     EmberMenuEntry(
       ItemChoice.play,
@@ -73,15 +66,13 @@ List<EmberMenuEntry<ItemChoice>> itemMenuEntries(
       shortcut: ClipKeys.favorite,
     ),
     const EmberMenuEntry.divider(),
-    if (source != null && !item.isOffline)
-      EmberMenuEntry(ItemChoice.makeOffline, MTIcons.offline, l.makeOffline),
     EmberMenuEntry(
       ItemChoice.copyLink,
       MTIcons.link,
       l.desktopCopyLink,
       shortcut: ClipKeys.copyLink,
     ),
-    if (hasFile || source != null)
+    if (hasFile)
       EmberMenuEntry(
         ItemChoice.copyFile,
         MTIcons.copy,
@@ -101,29 +92,15 @@ List<EmberMenuEntry<ItemChoice>> itemMenuEntries(
     ),
     EmberMenuEntry(ItemChoice.addToList, MTIcons.queue, l.addToPlaylist),
     EmberMenuEntry(ItemChoice.tags, MTIcons.tags, l.tags),
-    if (source != null)
-      EmberMenuEntry(ItemChoice.download, MTIcons.saveTo, l.desktopDownloadTo),
-    if (item.isOffline && item.onServer)
-      EmberMenuEntry(
-        ItemChoice.removeLocalCopy,
-        MTIcons.offline,
-        l.removeLocalCopy,
-      ),
-    if (item.onServer || item.isOffline) const EmberMenuEntry.divider(),
-    if (item.onServer)
-      EmberMenuEntry(
-        ItemChoice.deleteFromServer,
-        MTIcons.trash,
-        l.deleteFromServer,
-        danger: true,
-      )
-    else if (item.isOffline)
+    if (item.isOffline) ...[
+      const EmberMenuEntry.divider(),
       EmberMenuEntry(
         ItemChoice.deleteLocal,
         MTIcons.trash,
         l.deleteVideo,
         danger: true,
       ),
+    ],
   ];
 }
 
@@ -145,7 +122,6 @@ Future<void> showItemMenu(
     itemMenuEntries(l, item, hasFile: hasFile),
   );
   if (choice == null || !context.mounted) return;
-  final source = copySourceOf(item);
   switch (choice) {
     case ItemChoice.play:
       onPlay();
@@ -155,8 +131,6 @@ Future<void> showItemMenu(
       openReadingOf(context, item.canonicalUrl);
     case ItemChoice.favorite:
       await ref.read(clipActionsProvider).toggleFavorite(item.canonicalUrl);
-    case ItemChoice.makeOffline:
-      if (source != null) await makeOfflineCopy(context, ref, source);
     case ItemChoice.copyLink:
       await copyLinkOf(context, item.canonicalUrl);
     case ItemChoice.copyFile:
@@ -169,19 +143,15 @@ Future<void> showItemMenu(
       await showAddToPlaylistDialog(context, toPlaylistItem(item));
     case ItemChoice.tags:
       await showTagsDialog(context, item.canonicalUrl);
-    case ItemChoice.download:
-      if (source != null) await downloadCopy(context, ref, source);
-    case ItemChoice.removeLocalCopy:
-      await removeOfflineCopy(context, ref, item);
-    case ItemChoice.deleteFromServer:
+    case ItemChoice.deleteLocal:
       final sure = await _sure(
         context,
-        l.deleteFromServer,
-        l.deleteFromServerConfirm,
+        l.deleteVideo,
+        l.deleteVideoConfirm(mtName(item.title)),
       );
-      if (!sure) return;
+      if (!sure || !context.mounted) return;
       try {
-        await ref.read(clipActionsProvider).deleteFromServer(item.canonicalUrl);
+        await ref.read(clipActionsProvider).deleteFile(item);
       } on Object catch (e) {
         if (context.mounted) {
           showMTNotice(
@@ -192,17 +162,6 @@ Future<void> showItemMenu(
         }
         return;
       }
-      if (context.mounted) {
-        showMTNotice(context, message: l.deletedFromServer);
-      }
-    case ItemChoice.deleteLocal:
-      final sure = await _sure(
-        context,
-        l.deleteVideo,
-        l.deleteVideoConfirm(mtName(item.title)),
-      );
-      if (!sure || !context.mounted) return;
-      await ref.read(localCopiesProvider.notifier).removeLocalCopy(item);
       if (context.mounted) {
         showMTNotice(context, message: l.deletedTitle(mtName(item.title)));
       }

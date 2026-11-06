@@ -7,7 +7,6 @@ import 'package:vidhoist_desktop/features/clip/video_controls.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/ember_slider.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 
 import 'support/shell_harness.dart';
@@ -41,10 +40,7 @@ void main() {
       serverFilename: 'Night Drive.mp4',
       timestamp: DateTime(2026, 10, 20),
     );
-    final h = ShellHarness(
-      library: [clip],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [clip], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(clip)], playing: false);

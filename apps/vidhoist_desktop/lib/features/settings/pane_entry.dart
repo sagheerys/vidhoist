@@ -10,8 +10,6 @@ import 'settings_place.dart';
 /// the setting as it stands, so a look down the list answers most questions
 /// without opening anything.
 MTIconData _paneIcon(EmberSettingsPane pane) => switch (pane) {
-  EmberSettingsPane.server => MTIcons.server,
-  EmberSettingsPane.network => MTIcons.globe,
   EmberSettingsPane.subscriptions => MTIcons.subscriptions,
   EmberSettingsPane.cookies => MTIcons.cookie,
   EmberSettingsPane.downloads => MTIcons.download,

@@ -28,10 +28,7 @@ void main() {
     Map<String, List<String>> tags = const {},
   }) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
-    final h = ShellHarness(
-      library: [item],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [item], withEngine: true);
     // Before the first read: lists are read once at start.
     if (playlists.isNotEmpty) {
       await h.store.setString(PlaylistsStore.prefsKey, jsonEncode(playlists));

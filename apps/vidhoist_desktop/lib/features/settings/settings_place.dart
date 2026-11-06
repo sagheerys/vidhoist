@@ -6,7 +6,6 @@ import 'package:mt_ui/mt_ui.dart';
 import '../../data/later_features.dart';
 import '../../router.dart';
 import 'about_pane.dart';
-import 'addresses_pane.dart';
 import 'appearance_pane.dart';
 import 'backup_pane.dart';
 import 'channels_pane.dart';
@@ -41,7 +40,6 @@ class SettingsPlace extends ConsumerWidget {
     final p = MTThemeX.of(context).palette;
     final l = context.mtl;
     final text = Theme.of(context).textTheme;
-    // The server's sections are left out: downloads run on this computer.
     // Channels and Sync wait behind their switch.
     final later = ref.watch(laterFeaturesProvider);
     final groups = [
@@ -161,8 +159,6 @@ class SettingsPlace extends ConsumerWidget {
                         ),
                         const SizedBox(height: MTSpace.lg),
                         switch (pane) {
-                          EmberSettingsPane.server => const ServerPane(),
-                          EmberSettingsPane.network => const AddressesPane(),
                           EmberSettingsPane.downloads => const DownloadsPane(),
                           EmberSettingsPane.folders => const FoldersPane(),
                           EmberSettingsPane.desktop => const DesktopPane(),
@@ -194,8 +190,6 @@ class SettingsPlace extends ConsumerWidget {
 }
 
 String paneTitle(MTLocalizations l, EmberSettingsPane pane) => switch (pane) {
-  EmberSettingsPane.server => l.settingsGroupServer,
-  EmberSettingsPane.network => l.desktopAddresses,
   EmberSettingsPane.subscriptions => l.subscriptions,
   EmberSettingsPane.cookies => l.cookies,
   EmberSettingsPane.downloads => l.settingsDownloads,

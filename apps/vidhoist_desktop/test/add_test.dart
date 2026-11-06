@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vidhoist_desktop/data/downloads_data.dart';
 import 'package:vidhoist_desktop/features/add/add_entry.dart';
 import 'package:vidhoist_desktop/features/add/batch_dialog.dart';
 import 'package:vidhoist_desktop/features/add/link_lines.dart';
@@ -118,7 +117,7 @@ void main() {
         harness ??
         ShellHarness(
           library: library,
-          server: ServerConfig(baseUrl: 'http://nas:8081'),
+          withEngine: true,
           overrides: [
             previewFetchProvider.overrideWithValue(
               (uri) async => jsonEncode({
@@ -205,8 +204,17 @@ void main() {
   testWidgets('a folder chosen is sent; the next add starts at the top', (
     tester,
   ) async {
-    final h = await open(tester);
-    h.api.folders = const ServerFolders(video: ['Ai', 'Ai/Lessons']);
+    // The picker offers the folders the library's clips are in.
+    final h = await open(
+      tester,
+      library: const [
+        LibraryItem(
+          canonicalUrl: 'https://youtu.be/lessonsaaaa',
+          title: 'A lesson',
+          serverFilename: 'Ai/Lessons/A lesson.mp4',
+        ),
+      ],
+    );
     await openDialog(tester, _yt);
     await tester.tap(find.text('No folder'));
     await tester.pumpAndSettle();
@@ -217,16 +225,6 @@ void main() {
     expect(h.engine.submitted.single.folder, 'Ai/Lessons');
     await openDialog(tester);
     expect(find.text('No folder'), findsOneWidget);
-  });
-
-  testWidgets('a server without folders says so in the picker', (tester) async {
-    final h = await open(tester);
-    h.api.folders = const ServerFolders.disabled();
-    await openDialog(tester, _yt);
-    await tester.tap(find.text('No folder'));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('CUSTOM_DIRS'), findsOneWidget);
-    expect(find.text('New folder…'), findsNothing);
   });
 
   testWidgets('several links: one line each, sent as one batch', (
@@ -258,7 +256,7 @@ void main() {
     expect(
       find.descendant(
         of: find.byType(AlertDialog),
-        matching: find.text('Cannot reach the server'),
+        matching: find.text('No connection to the site'),
       ),
       findsOneWidget,
     );
@@ -293,7 +291,7 @@ void main() {
   ) async {
     final h = ShellHarness(
       library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       overrides: [
         playlistReaderProvider.overrideWithValue(
           (url) async => PlaylistPreview(
@@ -328,48 +326,6 @@ void main() {
       mutex: PrefsMutex(),
     ).readAll();
     expect(saved.single.name, 'Homelab Season');
-  });
-
-  testWidgets('**the guard**: "then download it to this computer" in a '
-      'playlist holds for every clip sent', (tester) async {
-    final h = ShellHarness(
-      library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-      overrides: [
-        playlistReaderProvider.overrideWithValue(
-          (url) async => PlaylistPreview(
-            kind: PlaylistKind.youtube,
-            title: 'Homelab Season',
-            tracks: [
-              for (final id in ['aaaaaaaaaaa', 'bbbbbbbbbbb'])
-                PlaylistTrack(
-                  url: 'https://www.youtube.com/watch?v=$id',
-                  title: 'Episode $id',
-                ),
-            ],
-          ),
-        ),
-      ],
-    );
-    await open(tester, harness: h);
-    await openDialog(tester, _list);
-    await tester.tap(find.widgetWithText(FilledButton, 'Batch download'));
-    await tester.pumpAndSettle();
-    final pull = find.text(
-      'Then download it to this computer',
-      skipOffstage: false,
-    );
-    await tester.ensureVisible(pull);
-    await tester.tap(pull);
-    await tester.pump();
-    await tester.tap(find.text('Download selected'));
-    await tester.pumpAndSettle();
-    final container = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
-    );
-    final pulls = container.read(pullAfterProvider);
-    expect(h.engine.submitted, hasLength(2));
-    expect(pulls.keys.toSet(), {for (final t in h.engine.submitted) t.id});
   });
 
   group('Ctrl+V', () {
@@ -457,10 +413,7 @@ void main() {
     ShellHarness.useArabic(tester);
     ShellHarness.useWindow(tester, const Size(1440, 900));
     clipboard(tester, '');
-    final h = ShellHarness(
-      library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: const [], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     await tester.tap(byLabel('إضافة رابط'));
@@ -481,10 +434,7 @@ void main() {
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     ShellHarness.useWindow(tester, const Size(960, 600));
     clipboard(tester, '');
-    final h = ShellHarness(
-      library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: const [], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     await tester.tap(byLabel('إضافة رابط'));

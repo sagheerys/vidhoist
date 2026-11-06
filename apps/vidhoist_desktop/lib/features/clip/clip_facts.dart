@@ -33,7 +33,6 @@ class ClipFacts extends ConsumerWidget {
             mtLtrRun('${size.shortestSide.round()}p'),
           fileFormatOf(entry),
           if (entry.sizeBytes case final bytes?) mtFormatSize(bytes),
-          if (entry.onServer) l.onServerPhase,
           if (entry.isOffline) l.filterOffline,
         ]);
         if (line.isEmpty) return const SizedBox.shrink();

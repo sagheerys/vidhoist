@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,14 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/data/library_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/data/volume.dart';
-import 'package:vidhoist_desktop/features/add/add_dialog.dart';
 import 'package:vidhoist_desktop/features/reading/reading_find.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/player_bar.dart';
 import 'package:vidhoist_desktop/shell/right_panel.dart';
 import 'package:vidhoist_desktop/shell/ember_slider.dart';
 import 'package:vidhoist_desktop/shell/engine_line.dart';
-import 'package:vidhoist_desktop/shell/server_line.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/volume_slider.dart';
 import 'package:mt_core/mt_core.dart';
@@ -59,7 +55,7 @@ void main() {
     ShellHarness.useWindow(tester, window);
     final h = ShellHarness(
       library: [_entry],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       transcripts: {_url: _said('en', 'The pool keeps the pool warm.')},
       overrides: overrides,
     );
@@ -152,24 +148,7 @@ void main() {
       'server\'s address', (tester) async {
     await open(tester, playing: false);
     expect(find.byType(SidebarEngineLine), findsOneWidget);
-    expect(find.byType(SidebarServerLine), findsNothing);
-  });
-
-  testWidgets('"then download it to this computer" says where, with Change', (
-    tester,
-  ) async {
-    await open(tester, playing: false);
-    unawaited(
-      openAddDialog(
-        tester.element(find.byType(EmberSidebar)),
-        text: 'https://youtu.be/bbbbbbbbbbb',
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('Download folder'), findsNothing);
-    await tester.tap(find.text('Then download it to this computer'));
-    await tester.pumpAndSettle();
-    expect(find.text('Download folder'), findsOneWidget);
+    expect(find.textContaining('8081'), findsNothing);
   });
 
   testWidgets('a section below the list\'s fold is brought into view', (

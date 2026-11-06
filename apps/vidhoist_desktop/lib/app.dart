@@ -75,7 +75,7 @@ class _EmberAppState extends ConsumerState<EmberApp> {
         settings: (pane) => SettingsPlace(
           pane:
               EmberSettingsPane.values.asNameMap()[pane] ??
-              EmberSettingsPane.server,
+              EmberSettingsPane.engine,
         ),
       );
 

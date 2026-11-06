@@ -277,14 +277,6 @@ void main() {
   });
 
   group("**the guard**: where a video's frame is read from", () {
-    final api = VidhoistApiClient(
-      config: ServerConfig(
-        baseUrl: 'http://127.0.0.1:9',
-        username: 'owner',
-        password: 'secret',
-      ),
-    );
-    tearDownAll(api.close);
     final calls = <(String, Map<String, String>)>[];
     setUp(calls.clear);
     Future<Uint8List?> grab(String url, Map<String, String> headers) async {
@@ -292,106 +284,65 @@ void main() {
       return _jpeg;
     }
 
-    test("the server's file, with the server's own password", () async {
-      await videoFrameFor(grab, api)(
-        const LibraryItem(
-          canonicalUrl: 'https://www.instagram.com/reel/a/',
-          title: 'a',
-          onServer: true,
-          serverFilename: 'Kids/a.mp4',
-        ),
-      );
-      final (url, headers) = calls.single;
-      expect(url, startsWith('http://127.0.0.1:9/'));
-      expect(url, endsWith('a.mp4'));
-      expect(headers['Authorization'], startsWith('Basic '));
-    });
-
-    test('a copy on this computer, read in place with no password', () async {
+    test('its file on this computer, read in place with no header', () async {
       final dir = Directory.systemTemp.createTempSync('ember_local_');
       addTearDown(() => _remove(dir));
       final file = File('${dir.path}/a.mp4')..writeAsBytesSync([0]);
-      await videoFrameFor(grab, api)(
+      await videoFrameFor(grab)(
         LibraryItem(
           canonicalUrl: 'https://www.instagram.com/reel/a/',
           title: 'a',
-          onServer: true,
-          serverFilename: 'a.mp4',
           localPath: file.path,
         ),
       );
       expect(calls.single, (file.path, const <String, String>{}));
     });
 
-    test('nothing for a clip neither here nor there', () async {
-      final picture = await videoFrameFor(grab, api)(
-        const LibraryItem(canonicalUrl: 'https://x.com/a', title: 'a'),
+    test('nothing for a clip whose file is not here', () async {
+      final picture = await videoFrameFor(grab)(
+        const LibraryItem(
+          canonicalUrl: 'https://x.com/a',
+          title: 'a',
+          localPath: r'C:\no\such\file.mp4',
+        ),
       );
       expect(picture, isNull);
       expect(calls, isEmpty);
     });
   });
 
-  test('**the guard**: the server reader sends the password to the server '
-      'and reads only a range', () async {
-    final file = _file(moovFirst: true, cover: _jpeg, media: 600 * 1024);
-    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    final seen = <String?>[];
-    final ranges = <String?>[];
-    server.listen((request) async {
-      seen.add(request.headers.value(HttpHeaders.authorizationHeader));
-      final range = request.headers.value(HttpHeaders.rangeHeader);
-      ranges.add(range);
-      final m = RegExp(r'bytes=(\d+)-(\d+)').firstMatch(range ?? '');
-      final start = int.parse(m!.group(1)!);
-      final end = (int.parse(m.group(2)!) + 1).clamp(0, file.length);
-      request.response
-        ..statusCode = HttpStatus.partialContent
-        ..add(file.sublist(start, end));
-      await request.response.close();
-    });
-    addTearDown(() => server.close(force: true));
-    final api = VidhoistApiClient(
-      config: ServerConfig(
-        baseUrl: 'http://127.0.0.1:${server.port}',
-        username: 'owner',
-        password: 'secret',
-      ),
-    );
-    addTearDown(api.close);
-
-    final cover = await Mp4Cover.find(serverRangeReader(api, 'clip.m4a'));
-    expect(cover, _jpeg);
-    expect(seen, everyElement(startsWith('Basic ')));
-    expect(ranges.first, 'bytes=0-${Mp4Cover.firstRead - 1}');
+  test('the cover inside a file here is read by ranges', () async {
+    final dir = Directory.systemTemp.createTempSync('ember_range_');
+    addTearDown(() => _remove(dir));
+    final file = File('${dir.path}/clip.m4a')
+      ..writeAsBytesSync(
+        _file(moovFirst: true, cover: _jpeg, media: 600 * 1024),
+      );
+    expect(await Mp4Cover.find(localRangeReader(file.path)), _jpeg);
   });
 
   test('**the guard**: the newest clips get their frames first, as the '
       'library opens, not the oldest', () async {
     final dir = Directory.systemTemp.createTempSync('ember_order_');
     addTearDown(() => _remove(dir));
-    final api = VidhoistApiClient(
-      config: ServerConfig(baseUrl: 'http://127.0.0.1:9'),
-    );
-    addTearDown(api.close);
     LibraryItem video(String id, int day) => LibraryItem(
       canonicalUrl: 'https://www.instagram.com/reel/$id/',
       title: id,
-      onServer: true,
-      serverFilename: '$id.mp4',
+      localPath: (File('${dir.path}/$id.mp4')..writeAsBytesSync([0])).path,
       timestamp: DateTime(2026, 10, day),
     );
     final asked = <String>[];
     final container = ProviderContainer(
       overrides: [
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
-        coverFolderProvider.overrideWithValue(dir),
-        apiClientProvider.overrideWith((ref) => api),
+        coverFolderProvider.overrideWithValue(
+          Directory('${dir.path}/covers')..createSync(),
+        ),
         libraryItemsProvider.overrideWith(
           (ref) async => [video('old', 1), video('new', 20), video('mid', 9)],
         ),
         frameGrabProvider.overrideWithValue((url, headers) async {
-          asked.add(url.split('/').last);
+          asked.add(url.split(RegExp(r'[/\\]')).last);
           return _jpeg;
         }),
       ],
@@ -405,7 +356,7 @@ void main() {
     expect(asked, ['new.mp4', 'mid.mp4', 'old.mp4']);
     // The round ends by looking over the kept covers; let it finish before
     // the folder goes.
-    final done = File('${dir.path}/.shrunk-$coverWidth');
+    final done = File('${dir.path}/covers/.shrunk-$coverWidth');
     while (!done.existsSync() && clock.elapsed < const Duration(seconds: 40)) {
       await Future<void>.delayed(const Duration(milliseconds: 10));
     }

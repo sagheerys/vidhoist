@@ -8,7 +8,6 @@ import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/player_bar.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/video_surface.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_media/mt_media.dart';
 import 'package:mt_ui/mt_ui.dart';
@@ -30,10 +29,7 @@ final _queue = [toPlaylistItem(_first), toPlaylistItem(_second)];
 void main() {
   Future<ShellHarness> watching(WidgetTester tester, {Size? window}) async {
     ShellHarness.useWindow(tester, window ?? const Size(1440, 900));
-    final h = ShellHarness(
-      library: [_first, _second],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [_first, _second], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     // Paused, so the page settles; the first of two clips in the player.

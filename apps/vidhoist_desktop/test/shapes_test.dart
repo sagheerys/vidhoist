@@ -9,33 +9,34 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_media/mt_media.dart' show MediaShape;
 
-import 'support/fake_api.dart';
+late Directory _root;
 
-LibraryItem _clip(
-  String id, {
-  Duration? duration,
-  String? localPath,
-  bool onServer = true,
-}) => LibraryItem(
-  canonicalUrl: 'https://youtu.be/$id',
-  title: id,
-  onServer: onServer,
-  serverFilename: onServer ? '$id.mp4' : null,
-  localPath: localPath,
-  duration: duration,
-  timestamp: DateTime(2026, 11, 1),
-);
+/// A clip with its file on this computer, unless it is not [here].
+LibraryItem _clip(String id, {Duration? duration, bool here = true}) =>
+    LibraryItem(
+      canonicalUrl: 'https://youtu.be/$id',
+      title: id,
+      localPath: here
+          ? (File('${_root.path}\\$id.mp4')..writeAsBytesSync([1])).path
+          : null,
+      duration: duration,
+      timestamp: DateTime(2026, 11, 1),
+    );
 
-/// **Every clip's length in Ember** (owner's request 2026-11-04): the server
-/// sends none, so a clip never played on this computer showed no length.
-/// Its header is read in the background, as the phone's enricher does.
+/// **Every clip's length in Ember** (owner's request 2026-11-04): the
+/// history holds none, so a clip never played on this computer showed no
+/// length. Its header is read in the background, as the phone's enricher
+/// does.
 void main() {
+  setUpAll(() => _root = Directory.systemTemp.createTempSync('ember_shape_'));
+  tearDownAll(() => _root.deleteSync(recursive: true));
+
   group('which clips are read, and where', () {
     test('only those with no length yet and a file to read', () {
       final items = [
         _clip('known', duration: const Duration(minutes: 3)),
         _clip('unknown'),
-        _clip('nowhere', onServer: false),
+        _clip('nowhere', here: false),
         _clip('tried'),
       ];
       expect(
@@ -47,28 +48,17 @@ void main() {
       );
     });
 
-    test("**the guard**: a copy here is read in place with no credentials; "
-        "only the server's own file gets the server's headers", () {
-      final root = Directory.systemTemp.createTempSync('ember_shape_');
-      addTearDown(() => root.deleteSync(recursive: true));
-      final file = File('${root.path}\\kept.mp4')..writeAsBytesSync([1]);
-      final api = VidhoistApiClient(
-        config: ServerConfig(
-          baseUrl: 'http://nas:8081',
-          username: 'me',
-          password: 'secret',
-        ),
-      );
-      addTearDown(api.close);
-
-      final local = shapeSourceOf(_clip('a', localPath: file.path), api)!;
-      expect(local.url, file.path);
+    test('**the guard**: a file here is read in place with no header; a '
+        'file gone is not read at all', () {
+      final local = shapeSourceOf(_clip('a'))!;
+      expect(local.url, endsWith('a.mp4'));
       expect(local.headers, isEmpty);
-
-      final remote = shapeSourceOf(_clip('b'), api)!;
-      expect(remote.url, startsWith('http://nas:8081/'));
-      expect(remote.headers, api.streamingHeaders);
-      expect(remote.headers, isNotEmpty);
+      final gone = LibraryItem(
+        canonicalUrl: 'https://youtu.be/b',
+        title: 'b',
+        localPath: '${_root.path}\\gone.mp4',
+      );
+      expect(shapeSourceOf(gone), isNull);
     });
   });
 
@@ -80,9 +70,6 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           keyValueStoreProvider.overrideWithValue(store),
-          apiClientProvider.overrideWith(
-            (ref) => FakeApi(ServerConfig(baseUrl: 'http://nas:8081')),
-          ),
           libraryItemsProvider.overrideWith((ref) async => items),
           shapeProbeProvider.overrideWithValue(probe),
           shapeProbeGapProvider.overrideWithValue(Duration.zero),
@@ -127,7 +114,7 @@ void main() {
       expect(shapes['https://youtu.be/song']!.aspectRatio, 1);
     });
 
-    test('**the guard**: a server that stops answering is left after six '
+    test('**the guard**: files that cannot be read are left after six '
         'misses, and those are asked again later', () async {
       var asked = 0;
       final c = make([for (var i = 0; i < 10; i++) _clip('c$i')], (

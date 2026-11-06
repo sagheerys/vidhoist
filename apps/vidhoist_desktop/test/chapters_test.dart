@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
 import 'package:mt_ui/mt_ui.dart';
@@ -41,7 +40,7 @@ void main() {
       ShellHarness.useWindow(tester, const Size(1440, 900));
       final h = ShellHarness(
         library: [entry],
-        server: ServerConfig(baseUrl: 'http://nas:8081'),
+        withEngine: true,
         transcripts: {
           _url: Transcript(
             canonicalUrl: _url,

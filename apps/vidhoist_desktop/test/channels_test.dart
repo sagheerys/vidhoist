@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vidhoist_desktop/data/channels_data.dart';
 import 'package:vidhoist_desktop/features/channels/channel_page.dart';
 import 'package:vidhoist_desktop/features/channels/channel_row.dart';
 import 'package:vidhoist_desktop/features/channels/channels_page.dart';
@@ -13,6 +14,7 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_ui/mt_ui.dart';
 
+import 'support/fake_channels.dart';
 import 'support/shell_harness.dart';
 
 /// Rows shaped as the owner's server answers `/subscriptions`: a channel
@@ -153,23 +155,29 @@ void main() {
     );
   });
 
-  Future<ShellHarness> open(
+  /// The page over [subs] kept by a [FakeChannels]; with [source] false,
+  /// as 1.0 ships it, with nowhere to keep channels at all.
+  Future<FakeChannels> open(
     WidgetTester tester, {
-    List<ChannelSubscription>? subs = const [],
+    List<ChannelSubscription> subs = const [],
     List<LibraryItem> library = const [],
     String at = EmberRoutes.channels,
+    bool source = true,
   }) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
+    final channels = FakeChannels(subs);
     final h = ShellHarness(
       library: library,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
+      overrides: [
+        if (source) channelSourceProvider.overrideWithValue(channels),
+      ],
     );
-    h.api.subscriptions = subs;
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     GoRouter.of(tester.element(find.byType(EmberSidebar))).go(at);
     await tester.pumpAndSettle();
-    return h;
+    return channels;
   }
 
   final checked = DateTime.now().subtract(const Duration(hours: 2));
@@ -215,14 +223,12 @@ void main() {
     expect(find.textContaining('12 videos known'), findsOneWidget);
   });
 
-  testWidgets('an older server, and an empty one, each say what they are', (
-    tester,
-  ) async {
-    await open(tester, subs: null);
-    expect(
-      find.text('This Vidhoist is older than subscriptions'),
-      findsOneWidget,
-    );
+  testWidgets('**the guard**: with nowhere to keep channels, as in 1.0, the '
+      'page says they come later and offers nothing to follow', (tester) async {
+    await open(tester, source: false);
+    final l = lookupMTLocalizations(const Locale('en'));
+    expect(find.text(l.desktopChannelsLater), findsOneWidget);
+    expect(find.text(l.desktopChannelsLaterBody), findsOneWidget);
     expect(find.text('Follow a channel'), findsNothing);
   });
 
@@ -235,20 +241,17 @@ void main() {
   });
 
   testWidgets('the switch pauses a channel without asking', (tester) async {
-    final h = await open(tester, subs: [_sub('a', 'Alpha - Videos')]);
+    final channels = await open(tester, subs: [_sub('a', 'Alpha - Videos')]);
     await tester.tap(find.byType(MTSwitch));
     await tester.pumpAndSettle();
-    expect(
-      h.api.channelCalls.single,
-      startsWith('update a name=- enabled=false'),
-    );
+    expect(channels.calls.single, startsWith('update a name=- enabled=false'));
     expect(find.text('Paused'), findsOneWidget);
   });
 
   testWidgets('following sends the link, the interval and best quality', (
     tester,
   ) async {
-    final h = await open(tester);
+    final channels = await open(tester);
     await tester.tap(find.text('Follow a channel').first);
     await tester.pumpAndSettle();
     await tester.enterText(
@@ -258,9 +261,8 @@ void main() {
     await tester.pump();
     await tester.tap(find.widgetWithText(FilledButton, 'Follow'));
     await tester.pumpAndSettle();
-    expect(h.api.channelCalls, [
-      'subscribe https://www.youtube.com/@fieldnotes best 60 - compat=false '
-          'folder=-',
+    expect(channels.calls, [
+      'follow https://www.youtube.com/@fieldnotes best 60 - folder=-',
     ]);
     expect(find.textContaining('Now following'), findsOneWidget);
     expect(find.byType(ChannelRow), findsOneWidget);
@@ -269,10 +271,8 @@ void main() {
   testWidgets('a channel followed twice is named, in the dialog', (
     tester,
   ) async {
-    final h = await open(tester);
-    h.api.followFailure = const ServerErrorException(
-      'This channel is already subscribed',
-    );
+    final channels = await open(tester);
+    channels.followFailure = const AlreadyFollowedException();
     await tester.tap(find.text('Follow a channel').first);
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField).first, 'https://x.y/@z');
@@ -286,7 +286,7 @@ void main() {
   testWidgets("a channel's page: the server's facts, check, edit, unfollow", (
     tester,
   ) async {
-    final h = await open(
+    final channels = await open(
       tester,
       subs: [_sub('a', 'Alpha - Videos', checked: checked, folder: 'Tech')],
       at: EmberRoutes.channel('a'),
@@ -298,7 +298,7 @@ void main() {
 
     await tester.tap(find.text('Check now'));
     await tester.pumpAndSettle();
-    expect(h.api.channelCalls.last, 'check a');
+    expect(channels.calls.last, 'check a');
 
     await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();
@@ -307,7 +307,7 @@ void main() {
     await tester.pumpAndSettle();
     // The folder is left as it is; only what changed is sent.
     expect(
-      h.api.channelCalls.last,
+      channels.calls.last,
       'update a name=Alpha enabled=- every=- filter=- clear=false folder=-',
     );
 
@@ -315,7 +315,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Unfollow').last);
     await tester.pumpAndSettle();
-    expect(h.api.channelCalls.last, 'delete a');
+    expect(channels.calls.last, 'delete a');
     expect(find.byType(ChannelsPage), findsOneWidget);
   });
 

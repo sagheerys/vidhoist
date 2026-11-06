@@ -35,10 +35,7 @@ void main() {
     );
     addTearDown(container.dispose);
     return container.read(
-      transcriptForProvider((
-        canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
-        serverFilename: null,
-      )).future,
+      transcriptForProvider('https://youtu.be/aaaaaaaaaaa').future,
     );
   }
 

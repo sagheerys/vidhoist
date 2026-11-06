@@ -91,7 +91,7 @@ void main() {
     );
     final h = ShellHarness(
       library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       overrides: [
         loggerProvider.overrideWithValue(logger),
         desktopFoldersProvider.overrideWithValue(dialogs),

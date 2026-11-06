@@ -6,7 +6,6 @@ import '../../data/appearance_data.dart';
 import '../../data/channels_data.dart';
 import '../../data/choices_data.dart';
 import '../../data/engine_data.dart';
-import '../../data/library_data.dart';
 import '../../data/update_data.dart';
 import '../../router.dart';
 import '../../shell/ui_zoom.dart';
@@ -23,10 +22,6 @@ String? paneValue(BuildContext context, WidgetRef ref, EmberSettingsPane pane) {
       if (!ref.watch(enginePathsProvider).ready) return l.settingsValueNotSet;
       final version = ref.watch(engineVersionProvider).valueOrNull?.ytDlp;
       return version == null ? null : mtLtrRun('yt-dlp $version');
-    case EmberSettingsPane.server:
-      final config = ref.watch(serverConfigProvider);
-      if (config == null) return l.settingsValueNotSet;
-      return Uri.tryParse(config.baseUrl)?.authority ?? config.baseUrl;
     case EmberSettingsPane.subscriptions:
       final channels = ref.watch(channelsProvider).valueOrNull?.subscriptions;
       return channels == null ? null : l.settingsValueChannels(channels.length);

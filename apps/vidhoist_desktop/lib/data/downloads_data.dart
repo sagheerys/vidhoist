@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
 
 import '../di.dart';
 import '../identity.dart';
@@ -11,7 +10,6 @@ import 'appearance_data.dart';
 import 'engine_data.dart';
 import 'folders_data.dart';
 import 'library_data.dart';
-import 'local_copies.dart';
 import 'lists_data.dart';
 import 'sidecar_import.dart';
 import 'transcripts_data.dart';
@@ -47,11 +45,6 @@ class TranscriptsFirstNotifier extends Notifier<bool> {
         );
   }
 }
-
-/// How captions are fetched from a server; a test puts its own in. Kept
-/// with the server layer until it is removed.
-final captionsFetcherFactoryProvider =
-    Provider<CaptionsFetcher Function(VidhoistApi)>((ref) => CaptionsFetcher.new);
 
 /// Collects a playlist's clips into one saved list as they arrive.
 final batchCollectorProvider = Provider(
@@ -130,31 +123,6 @@ String taskFolder(Ref ref, DownloadTask task) {
   };
 }
 
-/// The tasks whose file is to be saved on this computer once the server
-/// has it ("then download it to this computer" in the add dialog), each
-/// with the folder picked for it, or null for the download folder.
-final pullAfterProvider = Provider<Map<String, String?>>((ref) => {});
-
-/// A finished task asked to come to this computer goes to the copies; the
-/// server keeps its own, as always here. Anything else is left alone.
-void pullAfterFinished({
-  required Map<String, String?> pulls,
-  required LocalCopies copies,
-  required DownloadTask task,
-}) {
-  if (!pulls.containsKey(task.id)) return;
-  final into = pulls.remove(task.id);
-  final path = task.serverFilename;
-  final url = task.canonicalUrl;
-  if (path == null || url == null) return;
-  copies.download((
-    canonicalUrl: url,
-    title: task.title ?? ServerPath.basename(path),
-    serverPath: path,
-    thumbnail: task.thumbnail,
-  ), into: into).ignore();
-}
-
 /// The engine's tasks, first as they are, then at each change.
 final engineTasksProvider = StreamProvider<List<DownloadTask>>((ref) async* {
   final engine = ref.watch(downloadEngineProvider);
@@ -167,31 +135,18 @@ final engineTasksProvider = StreamProvider<List<DownloadTask>>((ref) async* {
 });
 
 /// What the downloads button counts: clips being fetched or waiting their
-/// turn, and copies coming to this computer. A paused one is not under
-/// way.
+/// turn. A paused one is not under way.
 final activeDownloadsProvider = Provider<int>((ref) {
   final tasks = ref.watch(engineTasksProvider).valueOrNull ?? const [];
-  return tasks.where(isUnderWay).length + ref.watch(activeCopiesProvider);
+  return tasks.where(isUnderWay).length;
 });
 
 /// Not finished, and not paused by the person.
 bool isUnderWay(DownloadTask task) =>
     !task.isFinished && task.phase != TaskPhase.paused;
 
-/// The folders the server would save into, asked when a picker opens and
-/// forgotten when it closes, so a folder made since shows next time.
-final serverFoldersProvider = FutureProvider.autoDispose<ServerFolders?>(
-  (ref) async => ref.watch(apiClientProvider)?.fetchFolders(),
-);
-
 /// The folders the library's clips sit in.
 final libraryFolderPathsProvider = Provider<Set<String>>((ref) {
   final items = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
   return {for (final item in items) ?item.folderPath};
 });
-
-/// Whether the server ignores the chosen folder ([foldersIgnored]).
-final foldersIgnoredProvider = Provider<bool>(
-  (ref) =>
-      foldersIgnored(ref.watch(historyProvider).valueOrNull?.done ?? const []),
-);

@@ -1,17 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidhoist_desktop/features/clip/clip_action_row.dart';
-import 'package:vidhoist_desktop/data/addresses_data.dart';
-import 'package:vidhoist_desktop/data/setup_data.dart';
-import 'package:vidhoist_desktop/data/downloads_data.dart';
 import 'package:vidhoist_desktop/data/folders_data.dart';
-import 'package:vidhoist_desktop/data/library_data.dart';
-import 'package:vidhoist_desktop/data/local_copies.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/downloads/downloads_panel.dart';
 import 'package:vidhoist_desktop/features/settings/folders_pane.dart';
@@ -56,7 +48,7 @@ void main() {
     );
     final h = ShellHarness(
       library: library,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       overrides: [
         desktopFoldersProvider.overrideWithValue(const _Folders()),
         // Logs reads its file; one that is never written is enough here.
@@ -111,7 +103,7 @@ void main() {
     });
 
     testWidgets('empty, it says how downloads begin, and offers nothing to '
-        'hide even after the server finished a clip', (tester) async {
+        'hide even after a clip finished', (tester) async {
       final h = await open(tester);
       h.engine.finish(h.engine.submit(_reel, Quality.best));
       await tester.pumpAndSettle();
@@ -122,79 +114,15 @@ void main() {
     });
   });
 
-  testWidgets('a clip on the server offers an offline copy and a download', (
-    tester,
-  ) async {
-    await open(
-      tester,
-      to: '/item/${Uri.encodeComponent(_reel)}',
-      library: const [
-        LibraryItem(
-          canonicalUrl: _reel,
-          title: 'A reel',
-          onServer: true,
-          serverFilename: 'Kids/abc.mp4',
-        ),
-      ],
-    );
-    // **The guard**: the offline copy leads the page as its one filled
-    // button, and "Download…" waits under More.
-    expect(
-      find.widgetWithText(FilledButton, 'Make available offline'),
-      findsOneWidget,
-    );
-    expect(find.text('Download…'), findsNothing);
-    await tester.tap(
-      find.descendant(
-        of: find.byType(ClipActionRow),
-        matching: find.bySemanticsLabel('More'),
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('Download…'), findsOneWidget);
-  });
-
-  testWidgets('"then download it to this computer" marks the clip sent', (
-    tester,
-  ) async {
-    final h = await open(tester);
-    await tester.tap(
-      find.descendant(
-        of: find.byType(EmberSidebar),
-        matching: find.text('Add link'),
-      ),
-    );
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField).first, _reel);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Then download it to this computer'));
-    await tester.pump();
-    await tester.tap(find.widgetWithText(FilledButton, 'Start download'));
-    await tester.pumpAndSettle();
-    final container = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
-    );
-    expect(container.read(pullAfterProvider), {
-      h.engine.submitted.single.id: null,
-    });
-  });
-
   group('settings', () {
-    testWidgets('the folders pane shows the default folders and the rules', (
-      tester,
-    ) async {
+    testWidgets('the folders pane shows the download folder', (tester) async {
       await open(tester, to: '/settings/folders');
       expect(find.byType(FoldersPane), findsOneWidget);
-      // **The guard** (owner's choice, 2026-11-05): the folders bear the
+      // **The guard** (owner's choice, 2026-11-05): the folder bears the
       // app's own name, not Vidhoist's.
-      expect(find.text(r'C:\Users\me\Videos\Vidhoist\Offline'), findsOneWidget);
       expect(find.text(r'C:\Users\me\Downloads\Vidhoist'), findsOneWidget);
-      await tester.tap(find.byType(MTSwitch).first);
-      await tester.pumpAndSettle();
-      // The download folder now reads "ask me every time", beside the
-      // switch's own name.
-      expect(find.text('Ask me every time'), findsNWidgets(2));
-      expect(find.text(r'C:\Users\me\Downloads\Vidhoist'), findsNothing);
+      // The offline copies of a server's clips went with the server.
+      expect(find.textContaining(r'Videos'), findsNothing);
     });
 
     testWidgets('**the guard**: "Change…" and "Open in Explorer" stand apart '
@@ -224,106 +152,4 @@ void main() {
       }
     });
   });
-
-  group('**the guard**: the address is chosen by hand', () {
-    ProviderContainer make(MemoryKeyValueStore store) {
-      final c = ProviderContainer(
-        overrides: [
-          keyValueStoreProvider.overrideWithValue(store),
-          initialServerSetupProvider.overrideWithValue(
-            ServerConfig(
-              baseUrl: 'http://192.168.1.10:8081',
-              username: 'me',
-              password: 'secret',
-            ),
-          ),
-          initialAddressesProvider.overrideWithValue(
-            const ServerAddresses(
-              urls: ['http://192.168.1.10:8081', 'https://tunnel.example.com'],
-            ),
-          ),
-          // The home address is down and the tunnel answers: the phone
-          // would switch; this app must not.
-          endpointResolverProvider.overrideWithValue(
-            EndpointResolver(
-              probe: (url) async => url.contains('tunnel')
-                  ? MTEndpointStatus.ok
-                  : MTEndpointStatus.unreachable,
-            ),
-          ),
-        ],
-      );
-      addTearDown(c.dispose);
-      return c;
-    }
-
-    test('an address that stops answering is not swapped for one that '
-        'answers; "Use" swaps, keeping the account', () async {
-      final store = MemoryKeyValueStore();
-      final c = make(store);
-      final statuses = await c.read(addressStatusesProvider.future);
-      expect(statuses['https://tunnel.example.com'], MTEndpointStatus.ok);
-      expect(c.read(serverConfigProvider)!.baseUrl, 'http://192.168.1.10:8081');
-
-      await c
-          .read(addressesProvider.notifier)
-          .use('https://tunnel.example.com');
-      final config = c.read(serverConfigProvider)!;
-      expect(config.baseUrl, 'https://tunnel.example.com');
-      expect(config.password, 'secret');
-      expect(
-        (await AddressesStore(store: store, mutex: PrefsMutex()).read()).active,
-        'https://tunnel.example.com',
-      );
-    });
-
-    test('an address is added once, cleaned; the one in use cannot be '
-        'removed', () async {
-      final c = make(MemoryKeyValueStore());
-      final addresses = c.read(addressesProvider.notifier);
-      expect(await addresses.add(' https://new.example.com/ '), isTrue);
-      expect(await addresses.add('https://new.example.com'), isFalse);
-      expect(await addresses.add('not an address'), isFalse);
-      await addresses.remove('http://192.168.1.10:8081');
-      expect(c.read(addressesProvider).urls, [
-        'http://192.168.1.10:8081',
-        'https://tunnel.example.com',
-        'https://new.example.com',
-      ]);
-    });
-  });
-
-  test('the copies count toward the downloads badge', () {
-    final c = ProviderContainer(
-      overrides: [
-        localCopiesProvider.overrideWith(_TwoCopies.new),
-        downloadEngineProvider.overrideWithValue(null),
-      ],
-    );
-    addTearDown(c.dispose);
-    expect(c.read(activeDownloadsProvider), 1);
-  });
-}
-
-class _TwoCopies extends LocalCopies {
-  @override
-  List<LocalCopy> build() => const [
-    LocalCopy(
-      id: 'a',
-      kind: CopyKind.offline,
-      canonicalUrl: _reel,
-      title: 'A reel',
-      serverPath: 'abc.mp4',
-      folder: 'C:',
-    ),
-    LocalCopy(
-      id: 'b',
-      kind: CopyKind.download,
-      canonicalUrl: _reel,
-      title: 'A reel',
-      serverPath: 'abc.mp4',
-      folder: 'C:',
-      phase: CopyPhase.done,
-    ),
-  ];
 }

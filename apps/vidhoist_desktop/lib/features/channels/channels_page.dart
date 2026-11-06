@@ -8,7 +8,6 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import '../../data/channels_data.dart';
-import '../../data/library_data.dart';
 import '../../router.dart';
 import '../../shell/error_text.dart';
 import '../../shell/pill.dart';
@@ -31,7 +30,7 @@ class ChannelsPage extends ConsumerWidget {
     final asked = ref.watch(channelsProvider);
     final state = asked.valueOrNull;
     final match = ref.watch(channelMatchProvider).valueOrNull;
-    final configured = ref.watch(serverConfigProvider) != null;
+    final configured = ref.watch(channelSourceProvider) != null;
     final subs = state?.sorted ?? const <ChannelSubscription>[];
     final supported = state?.supported ?? false;
 
@@ -44,8 +43,8 @@ class ChannelsPage extends ConsumerWidget {
     if (!configured) {
       body = fill(
         MTEmptyFrame(
-          title: l.serverStatusUnconfigured,
-          message: l.desktopNoServerMessage,
+          title: l.desktopChannelsLater,
+          message: l.desktopChannelsLaterBody,
         ),
       );
     } else if (state == null) {
@@ -58,13 +57,6 @@ class ChannelsPage extends ConsumerWidget {
                 onAction: () => ref.invalidate(channelsProvider),
               )
             : const MTSpinner(),
-      );
-    } else if (!supported) {
-      body = fill(
-        MTEmptyFrame(
-          title: l.subscriptionsUnsupported,
-          message: l.subscriptionsUnsupportedBody,
-        ),
       );
     } else if (subs.isEmpty) {
       body = fill(

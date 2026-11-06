@@ -7,7 +7,6 @@ import 'package:vidhoist_desktop/features/clip/clip_page.dart';
 import 'package:vidhoist_desktop/features/library/library_page.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/mini_window.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/mt_media.dart';
 
 import 'support/shell_harness.dart';
@@ -30,10 +29,7 @@ void main() {
         null,
       ),
     );
-    final h = ShellHarness(
-      library: const [],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: const [], withEngine: true);
     await tester.pumpWidget(h.app());
     // Paused: a running clip's equalizer never lets the test settle.
     if (playing != null) h.player.showPlaying([playing], playing: false);

@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/shell_layout.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_ui/mt_ui.dart';
 
@@ -33,7 +32,7 @@ void main() {
     );
     final h = ShellHarness(
       layout: const ShellLayout(sidebarNarrow: true),
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       library: [
         for (final folder in ['Ai', 'Games', 'Quran'])
           for (var i = 0; i < 12; i++) _in(folder, '$folder$i'),

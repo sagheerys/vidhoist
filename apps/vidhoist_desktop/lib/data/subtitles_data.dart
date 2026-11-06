@@ -90,27 +90,27 @@ final emberSubtitlesProvider = Provider<EmberSubtitles>((ref) {
 /// subtitles tell them; null with no transcript. The same list comes back
 /// until the transcript changes, so the captions do not regroup on every
 /// rebuild.
-final captionLinesProvider =
-    Provider.family<List<MTCaptionLine>?, TranscriptKey>((ref, key) {
-      final transcript = ref.watch(transcriptForProvider(key)).valueOrNull;
-      if (transcript == null || transcript.isEmpty) return null;
-      return _linesOf(transcript);
-    });
+final captionLinesProvider = Provider.family<List<MTCaptionLine>?, String>((
+  ref,
+  canonicalUrl,
+) {
+  final transcript = ref.watch(transcriptForProvider(canonicalUrl)).valueOrNull;
+  if (transcript == null || transcript.isEmpty) return null;
+  return _linesOf(transcript);
+});
 
 /// **Every language the clip's subtitles come in**, the reader's first,
 /// then English, then the rest: what the player's switch walks, so an
 /// Arabic reader goes from the Arabic to the English and back. Null with
 /// no transcript at all.
 final captionTracksProvider =
-    Provider.family<Map<String, List<MTCaptionLine>>?, TranscriptKey>((
+    Provider.family<Map<String, List<MTCaptionLine>>?, String>((
       ref,
-      key,
+      canonicalUrl,
     ) {
-      final first = ref.watch(transcriptForProvider(key)).valueOrNull;
+      final first = ref.watch(transcriptForProvider(canonicalUrl)).valueOrNull;
       final kept =
-          ref
-              .watch(transcriptLanguagesProvider(key.canonicalUrl))
-              .valueOrNull ??
+          ref.watch(transcriptLanguagesProvider(canonicalUrl)).valueOrNull ??
           const <Transcript>[];
       final all = [
         ?first,

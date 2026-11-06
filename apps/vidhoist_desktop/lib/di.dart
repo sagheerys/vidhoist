@@ -15,13 +15,16 @@ final keyValueStoreProvider = Provider<KeyValueStore>(
 /// One lock for all storage, shared by everyone rather than created twice.
 final prefsMutexProvider = Provider((ref) => PrefsMutex());
 
+/// Windows' own encrypted store, put in by main; in memory for tests.
+final secretStoreProvider = Provider<SecretStore>((ref) => MemorySecretStore());
+
 /// The diagnostic log; overridden in main with its path.
 final loggerProvider = Provider<MTLogger>(
   (ref) => throw UnimplementedError('overridden in main'),
 );
 
-/// Overridden in main. The server address is wired into it when the
-/// server settings arrive, as on the phone.
+/// Overridden in main. Every clip here is a file on this computer, so it
+/// never streams.
 final playbackResolverProvider = Provider<PlaybackSourceResolver>(
   (ref) => throw UnimplementedError('overridden in main'),
 );

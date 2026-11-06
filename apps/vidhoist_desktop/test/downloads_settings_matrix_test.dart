@@ -5,17 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vidhoist_desktop/data/addresses_data.dart';
-import 'package:vidhoist_desktop/data/backup_data.dart';
 import 'package:vidhoist_desktop/data/folders_data.dart';
-import 'package:vidhoist_desktop/data/local_copies.dart';
 import 'package:vidhoist_desktop/data/sync_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/downloads/downloads_button.dart';
 import 'package:vidhoist_desktop/features/settings/whats_new.dart';
-import 'package:vidhoist_desktop/features/setup/setup_dialog.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
@@ -34,32 +30,6 @@ class _Folders extends NoFolders {
 
   @override
   Future<String?> downloads() async => r'C:\Users\me\Downloads';
-}
-
-class _Copies extends LocalCopies {
-  @override
-  List<LocalCopy> build() => const [
-    LocalCopy(
-      id: 'a',
-      kind: CopyKind.offline,
-      canonicalUrl: 'https://www.instagram.com/reel/a/',
-      title: 'A long title of a reel that never quite ends, as titles do',
-      serverPath: 'a.mp4',
-      folder: r'C:\Users\me\Videos\Vidhoist\Offline',
-      phase: CopyPhase.pulling,
-      progress: .4,
-    ),
-    LocalCopy(
-      id: 'b',
-      kind: CopyKind.download,
-      canonicalUrl: 'https://www.instagram.com/reel/b/',
-      title: 'Saved',
-      serverPath: 'Kids/b.mp4',
-      folder: r'C:\Users\me\Downloads\Vidhoist\Kids\and\deeper\folders',
-      phase: CopyPhase.done,
-      path: r'C:\Users\me\Downloads\Vidhoist\Kids\b.mp4',
-    ),
-  ];
 }
 
 /// Long on purpose, in both scripts.
@@ -104,22 +74,9 @@ TranscriptIndex _index() => TranscriptIndex()
 
 ShellHarness _harness({List<LibraryItem> library = const []}) => ShellHarness(
   library: library,
-  server: ServerConfig(baseUrl: 'http://nas:8081'),
+  withEngine: true,
   overrides: [
     desktopFoldersProvider.overrideWithValue(const _Folders()),
-    localCopiesProvider.overrideWith(_Copies.new),
-    initialAddressesProvider.overrideWithValue(
-      const ServerAddresses(
-        urls: [
-          'http://192.168.1.10:8081',
-          'https://vidhoist.a-rather-long-domain-name.example.com',
-        ],
-        active: 'http://192.168.1.10:8081',
-      ),
-    ),
-    endpointResolverProvider.overrideWithValue(
-      EndpointResolver(probe: (url) async => MTEndpointStatus.unauthorized),
-    ),
     // A log that is never written: the pane shows its empty state.
     loggerProvider.overrideWithValue(MTLogger(filePath: 'no-such-log.txt')),
     installedVersionProvider.overrideWith((ref) async => '0.12.10'),
@@ -129,8 +86,6 @@ ShellHarness _harness({List<LibraryItem> library = const []}) => ShellHarness(
 
 void main() {
   for (final pane in [
-    'server',
-    'network',
     'downloads',
     'folders',
     'desktop',
@@ -162,7 +117,7 @@ void main() {
       tester,
       () => ShellHarness(
         library: const [],
-        server: ServerConfig(baseUrl: 'http://nas:8081'),
+        withEngine: true,
         overrides: [
           installedVersionProvider.overrideWith((ref) async => '0.12.10'),
           updateProvider.overrideWith(_Found.new),
@@ -193,23 +148,6 @@ void main() {
       },
       then: (tester) async {
         await tester.tap(find.byType(DownloadsButton));
-      },
-    );
-  });
-
-  testWidgets('the first-run setup, with servers found', (tester) async {
-    await expectNoOverflow(
-      tester,
-      () => ShellHarness(
-        library: const [],
-        overrides: [
-          setupHintProvider.overrideWith(
-            (ref) => ['https://vidhoist.a-rather-long-domain-name.example.com'],
-          ),
-        ],
-      ).app(),
-      then: (tester) async {
-        unawaited(showSetupDialog(tester.element(find.byType(EmberSidebar))));
       },
     );
   });

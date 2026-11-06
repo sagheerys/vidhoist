@@ -15,12 +15,7 @@ import '../settings/appearance_pane.dart';
 /// comes in (the switch walks them), at the size and over the background
 /// chosen. Null for a clip with no transcript.
 MTCaptions? emberCaptionsFor(WidgetRef ref, PlaylistItem item) {
-  final tracks = ref.watch(
-    captionTracksProvider((
-      canonicalUrl: item.canonicalUrl,
-      serverFilename: item.serverFilename,
-    )),
-  );
+  final tracks = ref.watch(captionTracksProvider(item.canonicalUrl));
   if (tracks == null) return null;
   final subtitles = ref.watch(emberSubtitlesProvider);
   return MTCaptions(

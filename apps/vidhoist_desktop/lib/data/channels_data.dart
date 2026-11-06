@@ -3,11 +3,56 @@ import 'package:mt_core/mt_core.dart';
 
 import 'library_data.dart';
 
-/// What the server says about the channels it follows.
+/// Where followed channels are kept and checked.
 ///
-/// Null [subscriptions] is not an empty list: it is a Vidhoist older than
-/// subscriptions, and the page says so rather than offering a button that
-/// could never work.
+/// **None in 1.0**: following was Vidhoist's, done by the server on its own
+/// schedule, and the scheduler that will do it on this computer comes after
+/// 1.1 (`docs/blueprint/EXECUTION-PLAN.md`). The page, hidden behind its
+/// switch, is kept for it; this is the shape it will fill.
+abstract interface class ChannelSource {
+  Future<List<ChannelSubscription>> list();
+
+  /// Returns the channel as resolved, so its own title can be shown.
+  /// Throws [AlreadyFollowedException] for a channel followed already.
+  Future<ChannelSubscription?> follow(
+    String url,
+    Quality quality, {
+    required int checkIntervalMinutes,
+    String? titleRegex,
+    String? folder,
+  });
+
+  /// Null leaves a field as it is; [clearTitleRegex] empties the filter.
+  Future<void> update(
+    String id, {
+    String? name,
+    bool? enabled,
+    int? checkIntervalMinutes,
+    String? titleRegex,
+    bool clearTitleRegex = false,
+    String? folder,
+  });
+
+  Future<void> unfollow(List<String> ids);
+
+  /// Looks for new clips now; null [ids] checks them all.
+  Future<void> check({List<String>? ids});
+}
+
+/// A channel followed twice: the dialog names it rather than failing.
+class AlreadyFollowedException implements Exception {
+  const AlreadyFollowedException();
+}
+
+/// Overridden once a [ChannelSource] exists; null, as in 1.0, is nowhere
+/// to keep channels.
+final channelSourceProvider = Provider<ChannelSource?>((ref) => null);
+
+/// The followed channels.
+///
+/// Null [subscriptions] is not an empty list: it is nowhere to keep them,
+/// and the page says so rather than offering a button that could never
+/// work.
 class ChannelsState {
   const ChannelsState(this.subscriptions);
 
@@ -28,13 +73,12 @@ class ChannelsState {
       subscriptions?.where((s) => s.id == id).firstOrNull;
 }
 
-/// The list, read again on demand. **Not polled**: the server checks on its
-/// own schedule, and what it downloads arrives through the history like
-/// everything else.
+/// The list, read again on demand rather than polled: what a check
+/// downloads arrives through the library like everything else.
 final channelsProvider = FutureProvider<ChannelsState>((ref) async {
-  final api = ref.watch(apiClientProvider);
-  if (api == null) return const ChannelsState(null);
-  return ChannelsState(await api.fetchSubscriptions());
+  final source = ref.watch(channelSourceProvider);
+  if (source == null) return const ChannelsState(null);
+  return ChannelsState(await source.list());
 });
 
 /// The intervals offered, in minutes, as on the phone: nothing under half
@@ -42,7 +86,7 @@ final channelsProvider = FutureProvider<ChannelsState>((ref) async {
 /// for a video that comes weekly.
 const channelIntervals = <int>[30, 60, 180, 360, 720, 1440];
 
-/// The offered interval nearest to [minutes]: a server set up elsewhere
+/// The offered interval nearest to [minutes]: a channel followed elsewhere
 /// may hold any number, and the choice must not show empty.
 int nearestChannelInterval(int minutes) => channelIntervals.contains(minutes)
     ? minutes
@@ -51,20 +95,17 @@ int nearestChannelInterval(int minutes) => channelIntervals.contains(minutes)
       );
 
 /// What can be done to the followed channels. Each action **reads the list
-/// again** rather than editing a copy: the server owns this state, may
+/// again** rather than editing a copy: the source owns this state, may
 /// refuse a change, and a check changes fields nobody sent.
 class ChannelsController {
   const ChannelsController(this._ref);
 
   final Ref _ref;
 
-  VidhoistApi? get _api => _ref.read(apiClientProvider);
+  ChannelSource? get _source => _ref.read(channelSourceProvider);
 
-  /// Returns the channel's own title as the server resolved it, so the
-  /// notice names what was followed rather than echoing the link.
-  ///
-  /// The phones' "compatible video" preset is not sent: it exists for
-  /// phone decoders, and this player plays every format the server makes.
+  /// Returns the channel's own title as it was resolved, so the notice
+  /// names what was followed rather than echoing the link.
   Future<String?> follow(
     String url, {
     required Quality quality,
@@ -73,23 +114,23 @@ class ChannelsController {
     bool ownFolder = false,
     String folder = '',
   }) async {
-    final api = _api;
-    if (api == null) throw const NoApiException();
+    final source = _source;
+    if (source == null) return null;
     final named = ownFolder ? ServerPath.cleanFolder(folder) : '';
-    final created = await api.subscribe(
+    final created = await source.follow(
       url,
       quality,
       checkIntervalMinutes: checkIntervalMinutes,
       titleRegex: titleRegex,
       folder: named.isEmpty ? null : named,
     );
-    // **An empty name means the channel's own**, which only the server
-    // knows once it has resolved the link. Set straight after: nothing is
-    // downloaded in between, since following marks what is there as seen.
+    // **An empty name means the channel's own**, known only once the link
+    // is resolved. Set straight after: nothing is downloaded in between,
+    // since following marks what is there as seen.
     if (ownFolder && named.isEmpty && created != null) {
       final fromChannel = channelFolderName(created.name);
       if (fromChannel.isNotEmpty) {
-        await api.updateSubscription(created.id, folder: fromChannel);
+        await source.update(created.id, folder: fromChannel);
       }
     }
     _reload();
@@ -97,7 +138,7 @@ class ChannelsController {
   }
 
   Future<void> setEnabled(ChannelSubscription sub, bool enabled) async {
-    await _api?.updateSubscription(sub.id, enabled: enabled);
+    await _source?.update(sub.id, enabled: enabled);
     _reload();
   }
 
@@ -109,15 +150,14 @@ class ChannelsController {
     required String titleRegex,
     String? folder,
   }) async {
-    await _api?.updateSubscription(
+    await _source?.update(
       sub.id,
       name: name == sub.name ? null : name,
       checkIntervalMinutes: checkIntervalMinutes == sub.checkIntervalMinutes
           ? null
           : checkIntervalMinutes,
       titleRegex: titleRegex.isEmpty ? null : titleRegex,
-      // An emptied field is a deletion, and the server reads only the
-      // keys it is sent.
+      // An emptied field is a deletion, not a field left as it was.
       clearTitleRegex: titleRegex.isEmpty && sub.titleRegex != null,
       folder: folder,
     );
@@ -125,7 +165,7 @@ class ChannelsController {
   }
 
   Future<void> unfollow(ChannelSubscription sub) async {
-    await _api?.deleteSubscriptions([sub.id]);
+    await _source?.unfollow([sub.id]);
     _reload();
   }
 
@@ -133,7 +173,7 @@ class ChannelsController {
   /// is read again when it ends, **and the library with it**, or a check
   /// that found something looks like one that did nothing.
   Future<void> checkNow({ChannelSubscription? only}) async {
-    await _api?.checkSubscriptions(ids: only == null ? null : [only.id]);
+    await _source?.check(ids: only == null ? null : [only.id]);
     _reload();
     _ref.invalidate(historyProvider);
   }

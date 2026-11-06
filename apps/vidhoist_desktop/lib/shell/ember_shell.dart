@@ -12,7 +12,6 @@ import '../data/shapes/shapes_data.dart';
 import '../data/library_data.dart';
 import '../data/folder_watch.dart';
 import '../data/later_features.dart';
-import '../data/library_watch.dart';
 import '../data/sync_runner.dart';
 import '../data/taskbar_data.dart';
 import '../data/lists_data.dart';
@@ -124,13 +123,11 @@ class _EmberShellState extends ConsumerState<EmberShell> {
     final player = ref.watch(playerProvider);
     final controls = ref.watch(windowControlsProvider);
     final router = GoRouter.of(context);
-    ref.watch(playbackWiringProvider);
     ref.watch(sessionRestoreProvider);
     ref.watch(coverEnrichmentProvider);
     ref.watch(shapeEnrichmentProvider);
     ref.watch(startupBackupProvider);
     ref.watch(syncRunnerProvider);
-    ref.watch(libraryWatchProvider);
     ref.watch(folderWatchProvider);
     ref.watch(taskbarDownloadsWiringProvider);
 

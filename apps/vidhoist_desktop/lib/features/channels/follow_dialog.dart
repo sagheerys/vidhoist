@@ -120,7 +120,9 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
       if (!mounted) return;
       setState(() {
         _busy = false;
-        _failure = isAlreadyFollowed(e) ? l.alreadySubscribed : errorText(l, e);
+        _failure = e is AlreadyFollowedException
+            ? l.alreadySubscribed
+            : errorText(l, e);
       });
     }
   }
@@ -228,9 +230,6 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
               OwnFolderField(
                 on: _ownFolder,
                 choice: _folder,
-                audio: _isEdit
-                    ? widget.editing!.quality == Quality.audio.wire
-                    : _quality == Quality.audio,
                 onToggle: (on) => setState(() => _ownFolder = on),
                 onPicked: (folder) => setState(() => _folder = folder),
               ),

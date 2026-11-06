@@ -183,7 +183,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(inPanel(find.text('Homelab Hour')), findsOneWidget);
     expect(inPanel(find.text('YouTube')), findsOneWidget);
-    expect(inPanel(find.text('Streaming from the server')), findsOneWidget);
+    // Nothing plays from a server any more, and nothing says so.
+    expect(inPanel(find.text('Streaming from the server')), findsNothing);
 
     await tester.tap(inPanel(find.text('Copy link')));
     await tester.pumpAndSettle();
@@ -201,7 +202,7 @@ void main() {
           canonicalUrl: _url,
           title: 'Homelab Hour - Ep. 12',
           serverFilename: 'Homelab Hour [aaaaaaaaaaa].mkv',
-          onServer: true,
+          localPath: r'C:\Downloads\Homelab Hour [aaaaaaaaaaa].mkv',
           sizeBytes: 412 * 1024 * 1024,
           timestamp: DateTime(2026, 10, 20),
           tags: const ['homelab', MTConstants.favoritesSystemTag],
@@ -231,10 +232,10 @@ void main() {
     expect(inPanel(find.textContaining('1080p')), findsOneWidget);
     expect(inPanel(find.textContaining('AV1')), findsOneWidget);
     expect(inPanel(find.textContaining('Opus')), findsOneWidget);
-    expect(inPanel(find.text('Server (stream)')), findsOneWidget);
+    expect(inPanel(find.text('Server (stream)')), findsNothing);
     // **The guard**: said once. Beside the availability, a "source" line
     // only said the same thing again.
-    expect(inPanel(find.text('Streaming from the server')), findsNothing);
+    expect(inPanel(find.text('Playing from your device')), findsNothing);
     expect(inPanel(find.text('homelab')), findsOneWidget);
     expect(inPanel(find.textContaining('__favorites__')), findsNothing);
   });

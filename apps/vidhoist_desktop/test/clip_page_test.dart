@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,11 +59,7 @@ void main() {
     UiZoom zoom = const UiZoom(1.0),
   }) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
-    final h = ShellHarness(
-      library: _library,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-      zoom: zoom,
-    );
+    final h = ShellHarness(library: _library, withEngine: true, zoom: zoom);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     return h;
@@ -185,65 +179,8 @@ void main() {
     expect((menu.top - at.dy).abs(), lessThan(60));
   });
 
-  testWidgets('deleting from the server asks first, then forgets the clip', (
-    tester,
-  ) async {
-    final h = await onVideo(tester);
-    await TagsIndex(
-      store: h.store,
-      mutex: PrefsMutex(),
-    ).toggleTag(_video, 'homelab');
-    await rightClick(
-      tester,
-      tester.getCenter(find.byKey(InertVideoSurface.pictureKey)),
-    );
-    await tester.tap(find.text('Delete from server'));
-    await tester.pumpAndSettle();
-
-    // Asked; cancelling deletes nothing.
-    await tester.tap(find.text('Cancel'));
-    await tester.pumpAndSettle();
-    expect(h.api.deleted, isEmpty);
-
-    await rightClick(
-      tester,
-      tester.getCenter(find.byKey(InertVideoSurface.pictureKey)),
-    );
-    await tester.tap(find.text('Delete from server'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Delete'));
-    await tester.pumpAndSettle();
-    expect(h.api.deleted, [
-      [_video],
-    ]);
-    expect(h.player.calls, contains('stop'));
-    expect(
-      await TagsIndex(store: h.store, mutex: PrefsMutex()).tagsOf(_video),
-      isEmpty,
-    );
-    expect(find.byType(ClipPage), findsNothing);
-  });
-
-  testWidgets('**the guard**: a server that refuses the delete leaves the '
-      'clip playing and its page open, and says why', (tester) async {
-    final h = await onVideo(tester);
-    h.api.deleteError = const NetworkException('down');
-    await rightClick(
-      tester,
-      tester.getCenter(find.byKey(InertVideoSurface.pictureKey)),
-    );
-    await tester.tap(find.text('Delete from server'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Delete'));
-    await tester.pumpAndSettle();
-    expect(h.api.deleted, isEmpty);
-    expect(h.player.calls, isNot(contains('stop')));
-    expect(find.byType(ClipPage), findsOneWidget);
-    expect(find.byType(MTNotice), findsOneWidget);
-  });
-
-  testWidgets('**the guard**: a clip only on this computer is not offered '
-      'deleting from the server on its page', (tester) async {
+  testWidgets('**the guard**: a clip on this computer is offered deleting '
+      'its file, never deleting from a server', (tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final local = LibraryItem(
       canonicalUrl: _video,
@@ -252,10 +189,7 @@ void main() {
       timestamp: DateTime(2026, 10, 22),
       duration: _s(2500),
     );
-    final h = ShellHarness(
-      library: [local],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [local], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(local)], playing: false);
@@ -267,40 +201,7 @@ void main() {
     );
     expect(find.text('Copy link'), findsOneWidget);
     expect(find.text('Delete from server'), findsNothing);
-  });
-
-  testWidgets('**the guard**: a clip with a copy here keeps its tags', (
-    tester,
-  ) async {
-    // Deleting from the server must not take the computer's copy out of
-    // the library: it lives on as local-only, with all it carries.
-    final dir = Directory.systemTemp.createTempSync('ember_keep_');
-    addTearDown(() => dir.deleteSync(recursive: true));
-    final copy = File('${dir.path}/clip.mp4')..writeAsStringSync('x');
-    final h = await onVideo(tester);
-    await OfflineIndex(
-      store: h.store,
-      mutex: PrefsMutex(),
-    ).put(_video, copy.path);
-    await TagsIndex(
-      store: h.store,
-      mutex: PrefsMutex(),
-    ).toggleTag(_video, 'homelab');
-    await rightClick(
-      tester,
-      tester.getCenter(find.byKey(InertVideoSurface.pictureKey)),
-    );
-    await tester.tap(find.text('Delete from server'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Delete'));
-    await tester.pumpAndSettle();
-    expect(h.api.deleted, [
-      [_video],
-    ]);
-    expect(
-      await TagsIndex(store: h.store, mutex: PrefsMutex()).tagsOf(_video),
-      ['homelab'],
-    );
+    expect(find.text('Delete video'), findsOneWidget);
   });
 
   testWidgets('a short plays its lane in a 9:16 column, looping', (

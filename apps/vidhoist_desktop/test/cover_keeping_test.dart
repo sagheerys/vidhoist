@@ -107,15 +107,11 @@ void main() {
   test('**the guard**: the library covers are kept as files, and a '
       'YouTube clip taken down gets a frame of its own file', () async {
     final covers = Directory('${dir.path}/kept');
-    final api = VidhoistApiClient(
-      config: ServerConfig(baseUrl: 'http://127.0.0.1:9'),
-    );
-    addTearDown(api.close);
+    // Each clip's own file, which the frame is taken from.
     LibraryItem clip(String id, String cover) => LibraryItem(
       canonicalUrl: 'https://www.youtube.com/watch?v=$id',
       title: id,
-      onServer: true,
-      serverFilename: '$id.mp4',
+      localPath: (File('${dir.path}/$id.mp4')..writeAsBytesSync([0])).path,
       thumbnail: cover,
       timestamp: DateTime(2026, 10, 20),
     );
@@ -125,7 +121,6 @@ void main() {
       overrides: [
         keyValueStoreProvider.overrideWithValue(store),
         coverFolderProvider.overrideWithValue(covers),
-        apiClientProvider.overrideWith((ref) => api),
         artworkCacheProvider.overrideWithValue(
           cacheOver(_Web({alive: 200, taken: 404})),
         ),
@@ -182,7 +177,7 @@ void main() {
     tester,
   ) async {
     const url = 'https://www.youtube.com/watch?v=aaaaaaaaaaa';
-    final h = ShellHarness(server: ServerConfig(baseUrl: 'http://nas:8081'));
+    final h = ShellHarness(withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     final container = ProviderScope.containerOf(
@@ -192,7 +187,9 @@ void main() {
     await tester.runAsync(() async {
       file.writeAsBytesSync([0xFF, 0xD8, 0xFF, 7]);
       await container.read(keptCoverIndexProvider).put(url, file.path);
-      await container.read(clipActionsProvider).deleteFromServer(url);
+      await container
+          .read(clipActionsProvider)
+          .deleteFile(const LibraryItem(canonicalUrl: url, title: 'a'));
     });
     expect(file.existsSync(), isFalse);
     expect(await container.read(keptCoverIndexProvider).readAll(), isEmpty);

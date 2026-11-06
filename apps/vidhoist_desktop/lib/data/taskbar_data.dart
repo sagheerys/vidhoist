@@ -1,31 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'downloads_data.dart';
-import 'local_copies.dart';
 
 /// What the taskbar button says of the downloads: how many are under way,
 /// and how far they are together, or null while none has a known share
 /// (all waiting), when the button shows a moving bar instead of a false 0%.
 typedef TaskbarDownloads = ({int count, double? progress});
 
-/// The downloads under way and the copies to this computer, together, as
-/// the downloads button counts them: a paused one is not moving.
+/// The downloads under way, as the downloads button counts them: a paused
+/// one is not moving.
 final taskbarDownloadsProvider = Provider<TaskbarDownloads>((ref) {
   final tasks = [
     for (final t in ref.watch(engineTasksProvider).valueOrNull ?? const [])
       if (isUnderWay(t)) t,
   ];
-  final copies = [
-    for (final c in ref.watch(localCopiesProvider))
-      if (c.isActive) c,
-  ];
   final shares = [
     for (final t in tasks)
       if (t.hasKnownProgress) t.progress,
-    for (final c in copies) c.progress,
   ];
   return (
-    count: tasks.length + copies.length,
+    count: tasks.length,
     progress: shares.isEmpty
         ? null
         : shares.reduce((a, b) => a + b) / shares.length,

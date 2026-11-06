@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/now_playing.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 
 import 'support/shell_harness.dart';
@@ -24,10 +23,7 @@ void main() {
       thumbnail: banded,
       timestamp: DateTime(2026, 10, 20),
     );
-    final h = ShellHarness(
-      library: [clip],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: [clip], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(clip)], playing: false);

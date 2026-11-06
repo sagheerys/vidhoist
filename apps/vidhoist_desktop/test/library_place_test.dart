@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/library/library_page.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/context_menu.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 
 import 'support/shell_harness.dart';
@@ -18,6 +17,7 @@ List<LibraryItem> _clips(int n) => [
       title: 'Clip $i',
       onServer: true,
       serverFilename: 'Clip $i.mp4',
+      localPath: 'C:\\Downloads\\Clip $i.mp4',
       timestamp: DateTime(2026, 11, 1).subtract(Duration(minutes: i)),
     ),
 ];
@@ -40,10 +40,7 @@ void main() {
         null,
       ),
     );
-    final h = ShellHarness(
-      library: _clips(80),
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
-    );
+    final h = ShellHarness(library: _clips(80), withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     return h;
@@ -107,8 +104,8 @@ void main() {
       expect(emberMenuRowHeight(entries, 200), emberMenuTightRow);
     });
 
-    testWidgets('**the guard**: in the smallest window, Delete from server '
-        'is in view without scrolling the menu', (tester) async {
+    testWidgets('**the guard**: in the smallest window, deleting is in '
+        'view without scrolling the menu', (tester) async {
       await open(tester, const Size(960, 600));
       await tester.tapAt(
         tester.getCenter(find.text('Clip 0')),
@@ -116,7 +113,7 @@ void main() {
         kind: PointerDeviceKind.mouse,
       );
       await tester.pumpAndSettle();
-      final delete = find.text('Delete from server');
+      final delete = find.text('Delete video');
       expect(delete, findsOneWidget);
       final menu = tester.getRect(
         find

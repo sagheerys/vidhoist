@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
 
 import 'appearance_data.dart';
-import 'library_data.dart';
 import 'sync_data.dart';
 
 /// The transcripts on this computer, in `%APPDATA%\Vidhoist Ember\transcripts\`
@@ -27,9 +26,9 @@ final transcriptIndexProvider = FutureProvider<TranscriptIndex>((ref) async {
 });
 
 /// Writes [transcript] and adds it to the search index. One this
-/// computer [fetched] from the server also goes to the sync folder, if
-/// sync is on; one read from a file or another device does not, so every
-/// transcript there stays a single copy.
+/// computer [fetched] itself also goes to the sync folder, if sync is on;
+/// one read from a file or another device does not, so every transcript
+/// there stays a single copy.
 Future<void> keepTranscript(
   Ref ref,
   TranscriptStore store,
@@ -54,45 +53,17 @@ void noteTranscript(Ref ref, Transcript transcript) {
   }
 }
 
-/// Which clip's transcript to show: its key, and its file on the server,
-/// beside which the server keeps the subtitles it downloaded.
-typedef TranscriptKey = ({String canonicalUrl, String? serverFilename});
-
-/// The transcript of one clip, in the reader's language when there is a
-/// choice.
-///
-/// **Read from this computer first; failing that, once from the server**:
-/// a clip whose subtitles the server saved beside it (a `.vtt` next to the
-/// file, as the phone's backfill reads them) is fetched the first time it
-/// plays, then kept. Kept for the session too, so a clip with none is not
-/// asked about again on every play.
-final transcriptForProvider = FutureProvider.family<Transcript?, TranscriptKey>(
-  (ref, key) async {
-    final store = ref.watch(transcriptStoreProvider);
-    if (store == null) return null;
-    final languages = readerLanguages(ref.watch(appearanceProvider).locale);
-    final stored = await store.readFor(key.canonicalUrl);
-    if (_pick(stored, languages) case final kept?) return kept;
-
-    final api = ref.watch(apiClientProvider);
-    final filename = key.serverFilename;
-    if (api == null || filename == null) return null;
-    final reader = SidecarReader(api);
-    for (final language in languages) {
-      final result = await reader.read(
-        canonicalUrl: key.canonicalUrl,
-        filename: filename,
-        language: language,
-      );
-      if (result.outcome == SidecarOutcome.failed) return null;
-      if (result.transcript case final found?) {
-        await keepTranscript(ref, store, found, fetched: true);
-        return found;
-      }
-    }
-    return null;
-  },
-);
+/// The transcript of one clip, by its link, in the reader's language when
+/// there is a choice; the subtitles came with the download itself.
+final transcriptForProvider = FutureProvider.family<Transcript?, String>((
+  ref,
+  canonicalUrl,
+) async {
+  final store = ref.watch(transcriptStoreProvider);
+  if (store == null) return null;
+  final languages = readerLanguages(ref.watch(appearanceProvider).locale);
+  return _pick(await store.readFor(canonicalUrl), languages);
+});
 
 /// Every language this computer keeps for one clip, for the reading
 /// room's choice between them.
@@ -120,8 +91,8 @@ List<String> readerLanguages(String? chosen) {
 
 /// The transcript in the first of [languages] there is one for. Null when
 /// only other languages are kept: one is never put in front of the reader
-/// unasked (owner's decision 2026-11-04), so the server is asked for the
-/// reader's own instead, and the reading room still offers the rest.
+/// unasked (owner's decision 2026-11-04), and the reading room still offers
+/// the rest.
 Transcript? _pick(List<Transcript> all, List<String> languages) {
   for (final language in languages) {
     for (final t in all) {

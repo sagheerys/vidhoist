@@ -1,31 +1,20 @@
-import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/backup_data.dart';
 import 'package:vidhoist_desktop/data/folders_data.dart';
 import 'package:vidhoist_desktop/data/library_data.dart';
-import 'package:vidhoist_desktop/data/setup_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/settings/backup_actions.dart';
-import 'package:vidhoist_desktop/features/setup/setup_dialog.dart';
-import 'package:vidhoist_desktop/features/setup/setup_sections.dart';
-import 'package:vidhoist_desktop/shell/pill.dart';
-import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
-
-import 'support/shell_harness.dart';
 
 const _a = 'https://www.youtube.com/watch?v=aaaaaaaaaaa';
 
-/// A phone's backup: one favourite, its server's address with a password
-/// in it (which must not come over).
+/// A phone's backup: one favourite, and the address of the server the
+/// phone once had (which must not come over).
 Future<String> _phoneBackup() async {
   final store = MemoryKeyValueStore();
   final mutex = PrefsMutex();
@@ -91,8 +80,8 @@ void main() {
       },
     );
 
-    test("**the guard**: a phone's backup is added, and its address only "
-        'offered, without its password', () async {
+    test("**the guard**: a phone's backup is added, and its server's "
+        'address does not come over', () async {
       final tags = c.read(tagsIndexProvider);
       await tags.toggleTag(_a, 'mine');
       final outcome = await c
@@ -103,7 +92,6 @@ void main() {
         'mine',
         MTConstants.favoritesSystemTag,
       });
-      expect(c.read(setupHintProvider), ['http://192.168.1.10:8081']);
       expect(await store.getString('active_url'), isNull);
     });
 
@@ -151,150 +139,5 @@ void main() {
     expect(isBackupText(await _phoneBackup()), isTrue);
     expect(isBackupText(TranscriptBundle.encode(const [])), isTrue);
     expect(isBackupText('https://youtu.be/aaaaaaaaaaa'), isFalse);
-  });
-
-  group('the first-run setup', () {
-    Future<ShellHarness> open(
-      WidgetTester tester, {
-      Object? refuse,
-      List<LanHit> found = const [],
-    }) async {
-      ShellHarness.useWindow(tester, const Size(1440, 900));
-      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.platform,
-        (call) async => call.method == 'Clipboard.getData'
-            ? <String, Object?>{'text': ''}
-            : null,
-      );
-      addTearDown(
-        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-          SystemChannels.platform,
-          null,
-        ),
-      );
-      final h = ShellHarness(
-        library: const [],
-        overrides: [
-          connectionTestProvider.overrideWithValue((config) async {
-            if (refuse case final e?) throw e;
-          }),
-          lanProbeProvider.overrideWithValue(
-            LanProbe(
-              adapters: () async => [
-                (
-                  name: 'Ethernet',
-                  addresses: [InternetAddress('192.168.1.20')],
-                ),
-              ],
-              connect: (host, port, _) async =>
-                  found.any((f) => f.url == 'http://${host.address}:$port'),
-              identify: (url, _) async =>
-                  found.where((f) => f.url == url).firstOrNull,
-            ),
-          ),
-        ],
-      );
-      await tester.pumpWidget(h.app());
-      await tester.pumpAndSettle();
-      // Opened as Settings › Server opens it: the library no longer asks
-      // for a server now that downloads run on this computer.
-      unawaited(showSetupDialog(tester.element(find.byType(EmberSidebar))));
-      await tester.pumpAndSettle();
-      return h;
-    }
-
-    ProviderContainer container(WidgetTester tester) =>
-        ProviderScope.containerOf(tester.element(find.byType(EmberSidebar)));
-
-    Finder field(String label) => find.widgetWithText(TextField, label);
-
-    testWidgets('an address that answers is kept, **the password in the '
-        'secret store and never in the settings file**', (tester) async {
-      final h = await open(tester);
-      await tester.enterText(field('Server URL (Vidhoist)'), 'http://nas:8086/');
-      await tester.enterText(field('Username'), 'me');
-      await tester.enterText(field('Password'), 'secret');
-      await tester.tap(find.widgetWithText(FilledButton, 'Connect'));
-      await tester.pumpAndSettle();
-      final c = container(tester);
-      final setup = c.read(serverSetupProvider)!;
-      expect((setup.baseUrl, setup.username), ('http://nas:8086', 'me'));
-      expect(await c.read(secretStoreProvider).read('password'), 'secret');
-      for (final key in await h.store.keys()) {
-        expect('${await h.store.get(key)}', isNot(contains('secret')));
-      }
-      expect(find.text('Connect to your Vidhoist server'), findsNothing);
-    });
-
-    testWidgets('**the guard**: the address, user name and password fields '
-        'stand apart, so no label sits on the field above', (tester) async {
-      await open(tester);
-      final rects = [
-        for (final label in ['Server URL (Vidhoist)', 'Username', 'Password'])
-          tester.getRect(field(label)),
-      ];
-      for (var i = 1; i < rects.length; i++) {
-        expect(rects[i].top - rects[i - 1].bottom, MTSpace.md);
-      }
-    });
-
-    testWidgets('a refused password says so and keeps nothing', (tester) async {
-      await open(tester, refuse: const AuthFailureException());
-      await tester.enterText(field('Server URL (Vidhoist)'), 'http://nas:8086');
-      await tester.tap(find.widgetWithText(FilledButton, 'Connect'));
-      await tester.pumpAndSettle();
-      expect(find.text('Wrong username or password'), findsOneWidget);
-      expect(container(tester).read(serverSetupProvider), isNull);
-    });
-
-    testWidgets('a server found on the network fills the address', (
-      tester,
-    ) async {
-      await open(
-        tester,
-        found: const [
-          LanHit(
-            url: 'http://192.168.1.10:8081',
-            status: MTEndpointStatus.ok,
-            version: ServerVersion(version: '2026.10.09'),
-          ),
-        ],
-      );
-      await tester.tap(find.text('Search my network').last);
-      await tester.pumpAndSettle();
-      // **The guard**: the server found stands apart from the ports field.
-      final found = find.ancestor(
-        of: find.textContaining('2026.10.09'),
-        matching: find.byType(EmberPill),
-      );
-      expect(
-        tester.getRect(found).top - tester.getRect(field('Ports')).bottom,
-        MTSpace.sm,
-      );
-      await tester.tap(find.textContaining('2026.10.09'));
-      await tester.pumpAndSettle();
-      expect(
-        tester.widget<TextField>(field('Server URL (Vidhoist)')).controller!.text,
-        'http://192.168.1.10:8081',
-      );
-    });
-
-    testWidgets('a password sent over plain http beyond the home network is '
-        'warned about; at home it is not', (tester) async {
-      await open(tester);
-      await tester.enterText(field('Password'), 'secret');
-      await tester.enterText(
-        field('Server URL (Vidhoist)'),
-        'http://vidhoist.example.com',
-      );
-      await tester.pump();
-      expect(find.textContaining('unencrypted'), findsOneWidget);
-      await tester.enterText(
-        field('Server URL (Vidhoist)'),
-        'http://192.168.1.10:8081',
-      );
-      await tester.pump();
-      expect(find.textContaining('unencrypted'), findsNothing);
-    });
   });
 }

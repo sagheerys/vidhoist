@@ -29,32 +29,6 @@ class DefaultQualityNotifier extends Notifier<Quality> {
   }
 }
 
-/// Whether a notice says what the followed channels brought; on unless
-/// turned off, under the phone's own key.
-final notifyArrivalsProvider = NotifierProvider<NotifyArrivalsNotifier, bool>(
-  NotifyArrivalsNotifier.new,
-);
-
-class NotifyArrivalsNotifier extends Notifier<bool> {
-  static const key = 'notify_arrivals';
-
-  @override
-  bool build() {
-    ref
-        .read(keyValueStoreProvider)
-        .getBool(key)
-        .then((saved) => state = saved ?? true, onError: (_) {});
-    return true;
-  }
-
-  Future<void> set(bool on) {
-    state = on;
-    return ref
-        .read(prefsMutexProvider)
-        .run(() => ref.read(keyValueStoreProvider).setBool(key, on));
-  }
-}
-
 /// Whether a file downloaded to this computer opens Explorer on it when it
 /// is done; off until chosen, as a window appearing by itself surprises.
 final revealAfterDownloadProvider =

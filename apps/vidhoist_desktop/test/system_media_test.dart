@@ -185,7 +185,7 @@ void main() {
       final taskbar = _Taskbar();
       final h = ShellHarness(
         library: const [],
-        server: ServerConfig(baseUrl: 'http://nas:8081'),
+        withEngine: true,
         overrides: [taskbarPortProvider.overrideWithValue(taskbar)],
       );
       await tester.pumpWidget(h.app());

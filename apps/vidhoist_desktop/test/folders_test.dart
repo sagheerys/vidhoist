@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vidhoist_desktop/data/channels_data.dart';
 import 'package:vidhoist_desktop/features/folders/folder_tree.dart';
 import 'package:vidhoist_desktop/features/library/library_state.dart';
 import 'package:vidhoist_desktop/router.dart';
@@ -10,6 +11,7 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_ui/mt_ui.dart';
 
+import 'support/fake_channels.dart';
 import 'support/shell_harness.dart';
 
 LibraryItem _in(String id, String? folder) => LibraryItem(
@@ -46,25 +48,26 @@ void main() {
     expect(parentFolder('Ai'), isNull);
   });
 
-  Future<ShellHarness> open(
+  /// The library over its folders, and channels kept by a [FakeChannels].
+  Future<FakeChannels> open(
     WidgetTester tester, {
     List<ChannelSubscription> subs = const [],
     String? at,
   }) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
+    final channels = FakeChannels(subs);
     final h = ShellHarness(
       library: _library,
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
+      overrides: [channelSourceProvider.overrideWithValue(channels)],
     );
-    h.api.subscriptions = subs;
-    h.api.folders = const ServerFolders(video: ['Ai', 'Games']);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     if (at != null) {
       GoRouter.of(tester.element(find.byType(EmberSidebar))).go(at);
       await tester.pumpAndSettle();
     }
-    return h;
+    return channels;
   }
 
   Finder inSidebar(String text) => find.descendant(
@@ -108,7 +111,7 @@ void main() {
   testWidgets(
     '**the guard**: following into its own folder names it after the channel',
     (tester) async {
-      final h = await open(tester, at: EmberRoutes.channels);
+      final channels = await open(tester, at: EmberRoutes.channels);
       await tester.tap(find.text('Follow a channel').first);
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField).first, 'https://x.y/@z');
@@ -117,8 +120,8 @@ void main() {
       expect(find.text('Named after the channel'), findsOneWidget);
       await tester.tap(find.widgetWithText(FilledButton, 'Follow'));
       await tester.pumpAndSettle();
-      expect(h.api.channelCalls, [
-        'subscribe https://x.y/@z best 60 - compat=false folder=-',
+      expect(channels.calls, [
+        'follow https://x.y/@z best 60 - folder=-',
         'update new name=- enabled=- every=- filter=- clear=false '
             'folder=Field Notes - Videos',
       ]);
@@ -126,7 +129,7 @@ void main() {
   );
 
   testWidgets('a folder picked when following goes with it', (tester) async {
-    final h = await open(tester, at: EmberRoutes.channels);
+    final channels = await open(tester, at: EmberRoutes.channels);
     await tester.tap(find.text('Follow a channel').first);
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField).first, 'https://x.y/@z');
@@ -138,9 +141,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Follow'));
     await tester.pumpAndSettle();
-    expect(h.api.channelCalls, [
-      'subscribe https://x.y/@z best 60 - compat=false folder=Games',
-    ]);
+    expect(channels.calls, ['follow https://x.y/@z best 60 - folder=Games']);
   });
 
   testWidgets('an edit sends the folder only when it changed', (tester) async {
@@ -152,12 +153,16 @@ void main() {
       checkIntervalMinutes: 60,
       folder: 'Tech Ai 1',
     );
-    final h = await open(tester, subs: [sub], at: EmberRoutes.channel('s1'));
+    final channels = await open(
+      tester,
+      subs: [sub],
+      at: EmberRoutes.channel('s1'),
+    );
     await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Save settings'));
     await tester.pumpAndSettle();
-    expect(h.api.channelCalls.last, endsWith('folder=-'));
+    expect(channels.calls.last, endsWith('folder=-'));
     // Off: new clips go back to the top.
     await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();
@@ -165,6 +170,6 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Save settings'));
     await tester.pumpAndSettle();
-    expect(h.api.channelCalls.last, endsWith('folder='));
+    expect(channels.calls.last, endsWith('folder='));
   });
 }

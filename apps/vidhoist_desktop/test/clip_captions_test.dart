@@ -47,7 +47,7 @@ void main() {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final h = ShellHarness(
       library: [_clip],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       transcripts: {_url: _said},
     );
     await tester.pumpWidget(h.app());
@@ -103,7 +103,7 @@ void main() {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final h = ShellHarness(
       library: [_clip],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       transcripts: {_url: _said},
       overrides: [
         transcriptLanguagesProvider.overrideWith(
@@ -174,10 +174,9 @@ void main() {
       ],
     );
     addTearDown(c.dispose);
-    const key = (canonicalUrl: _url, serverFilename: 'homelab.mp4');
-    await c.read(transcriptForProvider(key).future);
+    await c.read(transcriptForProvider(_url).future);
     await c.read(transcriptLanguagesProvider(_url).future);
-    expect(c.read(captionTracksProvider(key))!.keys, ['ar', 'en']);
+    expect(c.read(captionTracksProvider(_url))!.keys, ['ar', 'en']);
     expect(readerLanguages('ar'), ['ar', 'en']);
   });
 

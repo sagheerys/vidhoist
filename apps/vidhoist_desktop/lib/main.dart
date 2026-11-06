@@ -22,9 +22,7 @@ import 'data/covers/covers_data.dart';
 import 'data/folders_data.dart';
 import 'data/incoming_links.dart';
 import 'data/lab_hover.dart';
-import 'data/lab_server.dart';
-import 'data/server_release.dart';
-import 'data/setup_data.dart';
+import 'data/lab_options.dart';
 import 'data/transcripts_data.dart';
 import 'data/update_data.dart';
 import 'features/add/add_entry.dart';
@@ -123,7 +121,7 @@ Future<void> main(List<String> args) async {
   );
   final player = desktop.session;
   await player.loadPreferences();
-  // The last queue comes back with the server (sessionRestoreProvider).
+  // The last queue comes back with the shell (sessionRestoreProvider).
 
   final layout = await ShellLayoutStore(store: store, mutex: mutex).read();
   final zooms = UiZoomStore(store: store, mutex: mutex);
@@ -199,8 +197,6 @@ Future<void> main(List<String> args) async {
   final playKeyOn = await store.getBool(GlobalPlayKey.key) ?? false
       ? await playKey.set(true)
       : false;
-  // No server is read at start: downloads run on this computer, and the
-  // server layer only waits to be removed.
   const secrets = WindowsSecretStore();
   unawaited(logger.log('app started (engine)', tag: 'app'));
 
@@ -234,7 +230,6 @@ Future<void> main(List<String> args) async {
         windowControlsProvider.overrideWithValue(controls),
         offerWelcomeProvider.overrideWithValue(true),
         offerWhatsNewProvider.overrideWithValue(true),
-        vidhoistLatestProvider.overrideWithValue(vidhoistLatestOnGitHub),
         initialAppearanceProvider.overrideWithValue(appearance),
         initialDefaultQualityProvider.overrideWithValue(
           Quality.fromWire(await store.getString(DefaultQualityNotifier.key)),

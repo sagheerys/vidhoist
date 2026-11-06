@@ -86,19 +86,17 @@ String folderLabel(MTLocalizations l, FolderChoice choice) => choice.channelName
     ? l.noFolder
     : mtName(choice.path);
 
-/// Picks a server folder: the top, the channel's own name when following,
-/// any folder the server has (empty ones too) or the library uses, or a new
-/// one, nested if typed so (`Ai/Lessons`). Null when dismissed.
+/// Picks a folder below the download folder: the top, the channel's own
+/// name when following, any folder the library uses, or a new one, nested
+/// if typed so (`Ai/Lessons`). Null when dismissed.
 Future<FolderChoice?> showFolderPicker(
   BuildContext context, {
-  required bool audio,
   required FolderChoice current,
   bool offerTop = true,
   bool offerChannelName = false,
 }) => showEmberDialog<FolderChoice>(
   context: context,
   builder: (_) => _FolderPicker(
-    audio: audio,
     current: current,
     offerTop: offerTop,
     offerChannelName: offerChannelName,
@@ -107,13 +105,11 @@ Future<FolderChoice?> showFolderPicker(
 
 class _FolderPicker extends ConsumerWidget {
   const _FolderPicker({
-    required this.audio,
     required this.current,
     required this.offerTop,
     required this.offerChannelName,
   });
 
-  final bool audio;
   final FolderChoice current;
   final bool offerTop;
   final bool offerChannelName;
@@ -123,15 +119,7 @@ class _FolderPicker extends ConsumerWidget {
     final l = context.mtl;
     final p = MTThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final server = ref.watch(serverFoldersProvider);
-    final disabled = server.valueOrNull?.enabled == false;
-    final folders = disabled
-        ? const <String>[]
-        : pickableFolders(
-            server.valueOrNull,
-            ref.watch(libraryFolderPathsProvider),
-            audio: audio,
-          );
+    final folders = pickableFolders(ref.watch(libraryFolderPathsProvider));
 
     Widget option({
       required MTIconData icon,
@@ -217,11 +205,6 @@ class _FolderPicker extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (server.isLoading) const MTFilmStrip(),
-            if (disabled)
-              FolderNotice(text: l.foldersDisabled)
-            else if (ref.watch(foldersIgnoredProvider))
-              FolderNotice(text: l.foldersIgnored),
             Flexible(
               child: SingleChildScrollView(
                 child: Column(
@@ -253,13 +236,12 @@ class _FolderPicker extends ConsumerWidget {
                         onTap: () =>
                             Navigator.of(context).pop(FolderChoice(path)),
                       ),
-                    if (!disabled)
-                      option(
-                        icon: MTIcons.plus,
-                        title: l.newFolder,
-                        selected: false,
-                        onTap: () => unawaited(makeNew()),
-                      ),
+                    option(
+                      icon: MTIcons.plus,
+                      title: l.newFolder,
+                      selected: false,
+                      onTap: () => unawaited(makeNew()),
+                    ),
                   ],
                 ),
               ),

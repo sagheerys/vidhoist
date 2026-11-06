@@ -16,6 +16,7 @@ import 'package:flutter/material.dart'
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vidhoist_desktop/data/channels_data.dart';
 import 'package:vidhoist_desktop/shell/panel/panel_tabs.dart';
 import 'package:vidhoist_desktop/features/add/add_entry.dart';
 import 'package:vidhoist_desktop/features/add/batch_dialog.dart';
@@ -39,6 +40,7 @@ import 'package:mt_transcripts/mt_transcripts.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import 'desktop_matrix.dart';
+import 'support/fake_channels.dart';
 import 'support/shell_harness.dart';
 
 // Every screen and panel Ember has, through the window matrix. The titles
@@ -51,8 +53,6 @@ const _longTitle =
 const _arabicTitle =
     'ساعة المختبر المنزلي - الحلقة 12: اللقطات والنسخ المتماثل ولماذا لا '
     'تُعدّ نسخة احتياطية إلا تلك التي في جهاز آخر';
-
-final _server = ServerConfig(baseUrl: 'http://nas:8081');
 
 final _library = [
   LibraryItem(
@@ -148,14 +148,40 @@ Future<void> _openPanel(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+/// Channels with long names in both scripts, one failed and one paused.
+List<ChannelSubscription> _subscriptions() => [
+  for (final (i, name) in [
+    'Homelab Hour with a rather long channel name - Videos',
+    'قناة المختبر - Videos',
+    'GAMER SNACK | جيمر سناك - Videos',
+  ].indexed)
+    ChannelSubscription(
+      id: 's$i',
+      name: name,
+      url: 'https://www.youtube.com/@channel$i/videos',
+      enabled: i != 2,
+      checkIntervalMinutes: 180,
+      quality: 'best',
+      titleRegex: i == 0 ? 'Episode|Live' : null,
+      seenCount: 55,
+      lastChecked: DateTime(2026, 10, 23),
+      error: i == 1
+          ? 'ERROR: [youtube:tab] channel0: This channel does not exist. '
+                'HTTP Error 404: Not Found'
+          : null,
+      folder: i == 0 ? 'Homelab/Archive of long episodes' : null,
+    ),
+];
+
 /// Lists and channels with long names in both scripts, a pinned list, a
 /// line whose clip is gone, a channel that failed and one paused.
 ShellHarness _stocked({double zoom = 1.0}) {
   final h = ShellHarness(
     library: _library,
-    server: _server,
+    withEngine: true,
     zoom: UiZoom(zoom),
     overrides: [
+      channelSourceProvider.overrideWithValue(FakeChannels(_subscriptions())),
       playlistReaderProvider.overrideWithValue(
         (url) async => PlaylistPreview(
           kind: PlaylistKind.youtube,
@@ -171,9 +197,6 @@ ShellHarness _stocked({double zoom = 1.0}) {
         ),
       ),
     ],
-  );
-  h.api.folders = const ServerFolders(
-    video: ['Homelab/Archive of long episodes', 'قناة المختبر الطويلة'],
   );
   unawaited(
     h.store.setString(
@@ -208,29 +231,6 @@ ShellHarness _stocked({double zoom = 1.0}) {
       }),
     ),
   );
-  h.api.subscriptions = [
-    for (final (i, name) in [
-      'Homelab Hour with a rather long channel name - Videos',
-      'قناة المختبر - Videos',
-      'GAMER SNACK | جيمر سناك - Videos',
-    ].indexed)
-      ChannelSubscription(
-        id: 's$i',
-        name: name,
-        url: 'https://www.youtube.com/@channel$i/videos',
-        enabled: i != 2,
-        checkIntervalMinutes: 180,
-        quality: 'best',
-        titleRegex: i == 0 ? 'Episode|Live' : null,
-        seenCount: 55,
-        lastChecked: DateTime(2026, 10, 23),
-        error: i == 1
-            ? 'ERROR: [youtube:tab] channel0: This channel does not exist. '
-                  'HTTP Error 404: Not Found'
-            : null,
-        folder: i == 0 ? 'Homelab/Archive of long episodes' : null,
-      ),
-  ];
   return h;
 }
 
@@ -263,38 +263,27 @@ void main() {
     await expectNoOverflow(tester, () => ShellHarness().app());
   });
 
-  testWidgets('a server with an empty library', (tester) async {
+  testWidgets('an empty library', (tester) async {
     await expectNoOverflow(
       tester,
-      () => ShellHarness(library: const [], server: _server).app(),
+      () => ShellHarness(library: const [], withEngine: true).app(),
     );
   });
 
   for (final mode in emberLibraryModes) {
     testWidgets('the library as ${mode.name}', (tester) async {
       await expectNoOverflow(tester, () {
-        final h = ShellHarness(library: _library, server: _server);
+        final h = ShellHarness(library: _library, withEngine: true);
         unawaited(h.store.setString(EmberLibraryNotifier.modeKey, mode.name));
         return h.app();
       });
     });
   }
 
-  testWidgets('the server stopped answering', (tester) async {
-    await expectNoOverflow(
-      tester,
-      () => ShellHarness(
-        library: _library,
-        server: _server,
-        serverError: Exception('down'),
-      ).app(),
-    );
-  });
-
   testWidgets('filters that hide everything', (tester) async {
     await expectNoOverflow(
       tester,
-      () => ShellHarness(library: _library, server: _server).app(),
+      () => ShellHarness(library: _library, withEngine: true).app(),
       then: (tester) async {
         _container(tester).read(libraryViewProvider.notifier)
           ..setType(MediaTypeFilter.audio)
@@ -309,7 +298,7 @@ void main() {
       () => ShellHarness(
         layout: const ShellLayout(sidebarNarrow: true, panelHidden: true),
         library: _library,
-        server: _server,
+        withEngine: true,
       ).app(),
     );
   });
@@ -325,7 +314,7 @@ void main() {
     testWidgets('the place $place', (tester) async {
       await expectNoOverflow(
         tester,
-        () => ShellHarness(library: _library, server: _server).app(),
+        () => ShellHarness(library: _library, withEngine: true).app(),
         then: (tester) async {
           GoRouter.of(tester.element(find.byType(LibraryPage))).go(place);
         },
@@ -385,7 +374,7 @@ void main() {
       tester,
       () => ShellHarness(
         library: _library,
-        server: _server,
+        withEngine: true,
         overrides: [
           linkDropProvider.overrideWithValue(
             (child, _) => Stack(
@@ -476,7 +465,7 @@ void main() {
         tester,
         () => (h = ShellHarness(
           library: _library,
-          server: _server,
+          withEngine: true,
           transcripts: {_url: _transcript},
         )).app(),
         then: (tester) async {
@@ -528,7 +517,7 @@ void main() {
   /// Both rooms read the same words; only which clip they belong to differs.
   ShellHarness withWords({double zoom = 1}) => ShellHarness(
     library: _library,
-    server: _server,
+    withEngine: true,
     transcripts: {_url: _transcript, _queue[1].canonicalUrl: _transcript},
     zoom: UiZoom(zoom),
   );
@@ -585,7 +574,7 @@ void main() {
       tester,
       () => (h = ShellHarness(
         library: _library,
-        server: _server,
+        withEngine: true,
         transcripts: {_url: _transcript},
       )).app(),
       then: (tester) => readingRoom(tester, h),
@@ -606,7 +595,7 @@ void main() {
         await expectNoOverflow(tester, () {
           final h = ShellHarness(
             library: _library,
-            server: _server,
+            withEngine: true,
             zoom: UiZoom(zoom),
           );
           unawaited(h.store.setString(EmberLibraryNotifier.modeKey, mode.name));
@@ -634,7 +623,7 @@ void main() {
         tester,
         () => (h = ShellHarness(
           library: _library,
-          server: _server,
+          withEngine: true,
           transcripts: {_url: _transcript},
           zoom: UiZoom(zoom),
         )).app(),
@@ -678,7 +667,7 @@ void main() {
           tester,
           () => (h = ShellHarness(
             library: _library,
-            server: _server,
+            withEngine: true,
             transcripts: {_url: _transcript},
             zoom: UiZoom(zoom),
           )).app(),

@@ -7,12 +7,12 @@ import 'package:mt_media/library.dart';
 import 'package:mt_media/mt_media.dart';
 import 'package:mt_ui/mt_ui.dart';
 
+import '../../data/engine_data.dart';
 import '../../data/library_data.dart';
 import '../../di.dart';
 import '../../router.dart';
 import '../add/add_dialog.dart';
 import '../clip/clip_state.dart';
-import '../setup/setup_dialog.dart';
 import 'library_chips.dart';
 import 'library_heading.dart';
 import 'library_skeleton.dart';
@@ -42,10 +42,6 @@ class LibraryPage extends ConsumerWidget {
     final options = ref.watch(libraryViewProvider);
     final visible = ref.watch(visibleLibraryProvider(scope));
     final all = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
-    final serverMissing = ref.watch(libraryServerErrorProvider) != null;
-    // Downloads run on this computer: the library is always there to fill,
-    // and the server's setup is offered only while one is still set up.
-    final configured = true;
     final title = switch (scope) {
       LibraryScope.favorites => l.favorites,
       LibraryScope.offline => l.filterOffline,
@@ -96,19 +92,9 @@ class LibraryPage extends ConsumerWidget {
                 MTSpace.xl,
                 MTSpace.md,
               ),
-              sliver: SliverList.list(
-                children: [
-                  LibraryChips(scope: scope),
-                  if (serverMissing && all.isNotEmpty) ...[
-                    const SizedBox(height: MTSpace.md),
-                    _ServerMissing(
-                      onRetry: () => ref.invalidate(historyProvider),
-                    ),
-                  ],
-                ],
-              ),
+              sliver: SliverList.list(children: [LibraryChips(scope: scope)]),
             ),
-            ..._content(context, ref, visible, all, configured, held),
+            ..._content(context, ref, visible, all, held),
           ],
         ),
       ),
@@ -120,7 +106,6 @@ class LibraryPage extends ConsumerWidget {
     WidgetRef ref,
     AsyncValue<List<LibraryItem>> visible,
     List<LibraryItem> all,
-    bool configured,
     int held,
   ) {
     final l = context.mtl;
@@ -132,29 +117,16 @@ class LibraryPage extends ConsumerWidget {
         child: Center(child: child),
       ),
     );
-    if (!configured && all.isEmpty) {
-      return [
-        fill(
-          MTEmptyFrame(
-            title: l.serverStatusUnconfigured,
-            message: l.desktopNoServerMessage,
-            actionLabel: l.desktopSetupConnect,
-            actionIcon: MTIcons.server,
-            onAction: () => unawaited(showSetupDialog(context)),
-          ),
-        ),
-      ];
-    }
     final items = visible.valueOrNull;
     if (items == null) {
       if (visible.hasError) {
         return [
           fill(
             MTEmptyFrame(
-              title: l.serverStatusOffline,
-              message: l.desktopServerPartMissing,
+              title: l.failed,
+              message: l.errorGeneric('${visible.error}'),
               actionLabel: l.retry,
-              onAction: () => ref.invalidate(historyProvider),
+              onAction: () => ref.invalidate(localLibraryProvider),
             ),
           ),
         ];
@@ -167,9 +139,7 @@ class LibraryPage extends ConsumerWidget {
           all.isEmpty
               ? MTEmptyFrame(
                   title: l.noVideosFound,
-                  message: ref.watch(serverConfigProvider) == null
-                      ? l.desktopEmptyLibraryLocal
-                      : l.desktopEmptyLibraryMessage,
+                  message: l.desktopEmptyLibraryLocal,
                   actionLabel: l.addLinkFab,
                   actionIcon: MTIcons.addlink,
                   onAction: () => unawaited(openAddDialog(context)),
@@ -284,33 +254,6 @@ class _Items extends ConsumerWidget {
           );
         },
       ),
-    );
-  }
-}
-
-/// The library is shown from the last answer because the server is not
-/// answering now.
-class _ServerMissing extends StatelessWidget {
-  const _ServerMissing({required this.onRetry});
-
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
-    return Row(
-      children: [
-        Flexible(
-          child: Text(
-            l.desktopServerPartMissing,
-            style: Theme.of(context).textTheme.bodySmall
-                ?.copyWith(color: p.ink2),
-          ),
-        ),
-        const SizedBox(width: MTSpace.sm),
-        MTLinkButton(label: l.retry, onPressed: onRetry),
-      ],
     );
   }
 }

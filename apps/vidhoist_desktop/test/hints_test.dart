@@ -40,7 +40,7 @@ void main() {
     final notices = _Notices();
     final h = ShellHarness(
       library: [_clip],
-      server: ServerConfig(baseUrl: 'http://nas:8081'),
+      withEngine: true,
       overrides: [noticePortProvider.overrideWithValue(notices)],
     );
     await tester.pumpWidget(h.app());
