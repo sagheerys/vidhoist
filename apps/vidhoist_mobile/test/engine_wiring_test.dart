@@ -94,7 +94,7 @@ void main() {
     await until(() => engine.taskById(task.id)!.isFinished);
     final request = backend.requests.single;
     expect(request.compatible, isTrue);
-    expect(request.subtitleLanguages, ['ar.*', 'en.*']);
+    expect(request.subtitleLanguages, SubtitleLanguages.patterns(['ar', 'en']));
     expect(request.folder, liteMediaDir);
   });
 

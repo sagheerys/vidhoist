@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mt_core/mt_core.dart';
+import 'package:vidhoist_desktop/data/appearance_data.dart';
 import 'package:vidhoist_desktop/data/downloads_data.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/folders_data.dart';
@@ -139,6 +141,32 @@ void main() {
       final items = await c.read(libraryItemsProvider.future);
       expect(items.single.localPath, done.localPath);
       expect(items.single.title, 'Title of https://example.com/a');
+    });
+
+    test('the transcript is asked for in the language of the app and in '
+        'never their machine translations', () async {
+      backend.scripts['https://example.com/s'] = writes('s.mp4');
+      final c = ProviderContainer(
+        overrides: [
+          keyValueStoreProvider.overrideWithValue(store),
+          desktopFoldersProvider.overrideWithValue(_Folders(downloads.path)),
+          downloadBackendProvider.overrideWithValue(backend),
+          initialAppearanceProvider.overrideWithValue((
+            theme: ThemeMode.system,
+            locale: 'ar',
+          )),
+        ],
+      );
+      addTearDown(c.dispose);
+      await c.read(downloadFolderProvider.future);
+      final task = c
+          .read(downloadEngineProvider)!
+          .submit('https://example.com/s', Quality.best);
+      await finish(c, task);
+      expect(
+        backend.requests.single.subtitleLanguages,
+        SubtitleLanguages.patterns(['ar', 'en']),
+      );
     });
 
     test('a clip in a chosen folder goes below the download folder', () async {

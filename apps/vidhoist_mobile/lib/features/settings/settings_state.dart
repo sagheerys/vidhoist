@@ -36,9 +36,10 @@ class LiteSettings {
   /// Never renamed: a renamed key shows the welcome screen again.
   static const welcomedKey = 'engine_welcome_done';
 
-  /// What `--sub-langs` asks for: the app's two languages.
+  /// What `--sub-langs` asks for: the app's two languages, without their
+  /// machine translations (`SubtitleLanguages`).
   List<String> get subtitleLanguages =>
-      subtitles ? const ['ar.*', 'en.*'] : const [];
+      subtitles ? SubtitleLanguages.patterns(const ['ar', 'en']) : const [];
 
   final Quality quality;
 

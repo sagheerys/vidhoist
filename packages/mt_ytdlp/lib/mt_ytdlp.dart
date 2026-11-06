@@ -14,3 +14,4 @@ export 'src/format_selector.dart';
 export 'src/info_json.dart';
 export 'src/progress_parser.dart';
 export 'src/progress_tracker.dart';
+export 'src/subtitle_languages.dart';

@@ -40,7 +40,10 @@ void main() {
   });
 
   test('subtitles ask for Arabic and English, or nothing', () {
-    expect(const LiteSettings().subtitleLanguages, ['ar.*', 'en.*']);
+    expect(
+      const LiteSettings().subtitleLanguages,
+      SubtitleLanguages.patterns(['ar', 'en']),
+    );
     expect(const LiteSettings(subtitles: false).subtitleLanguages, isEmpty);
   });
 }

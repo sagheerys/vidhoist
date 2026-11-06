@@ -73,12 +73,9 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
     // The transcript comes with the clip itself, in the reader's language
     // then English, when "fetch the transcript" is on.
     subtitleLanguages: () => ref.read(transcriptsFirstProvider)
-        ? [
-            for (final language in readerLanguages(
-              ref.read(appearanceProvider).locale,
-            ))
-              '$language.*',
-          ]
+        ? SubtitleLanguages.patterns(
+            readerLanguages(ref.read(appearanceProvider).locale),
+          )
         : const [],
     onCompleted: (task) {
       // A download can end as the app closes, after this provider has gone.
