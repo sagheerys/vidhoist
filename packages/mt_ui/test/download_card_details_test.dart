@@ -64,6 +64,49 @@ void main() {
     expect(byWahaj(MTIcons.download), findsNothing);
   });
 
+  testWidgets('a second action beside the cancel: pause, then resume', (
+    tester,
+  ) async {
+    var taps = 0;
+    await tester.pumpWidget(
+      host(
+        MTDownloadProgressCard(
+          title: 'Clip',
+          statusText: 'Downloading',
+          progress: 0.3,
+          onCancel: () {},
+          action: MTDownloadCardAction(
+            icon: MTIcons.pause,
+            tooltip: 'Pause',
+            onTap: () => taps++,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(byWahaj(MTIcons.close), findsOneWidget);
+    await tester.tap(find.byTooltip('Pause'));
+    expect(taps, 1);
+  });
+
+  testWidgets('a finished card has no action', (tester) async {
+    await tester.pumpWidget(
+      host(
+        MTDownloadProgressCard(
+          title: 'Clip',
+          statusText: 'Done',
+          done: true,
+          action: MTDownloadCardAction(
+            icon: MTIcons.pause,
+            tooltip: 'Pause',
+            onTap: () {},
+          ),
+        ),
+      ),
+    );
+    expect(find.byTooltip('Pause'), findsNothing);
+  });
+
   test('the speed reads in kilobytes under a megabyte a second', () {
     expect(mtFormatTransferRate(512 * 1024), contains('512 KB/s'));
     expect(mtFormatTransferRate(1.5 * 1024 * 1024), contains('1.5 MB/s'));

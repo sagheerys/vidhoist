@@ -86,7 +86,14 @@ class DownloadRequest {
 
   /// The download as `mt_ytdlp` builds its command line: from the probe's
   /// JSON when there is one, otherwise from the link.
-  DownloadSpec toSpec() => DownloadSpec(
+  ///
+  /// A backend whose folder is public turns the side files off: the info
+  /// JSON holds links signed for this device's address, and a loose
+  /// picture shows up in a phone's gallery.
+  DownloadSpec toSpec({
+    bool writeInfoJson = true,
+    bool writeThumbnail = true,
+  }) => DownloadSpec(
     url: infoJsonPath == null ? url : null,
     infoJsonPath: infoJsonPath,
     folder: folder,
@@ -94,6 +101,8 @@ class DownloadRequest {
     compatible: compatible,
     subtitleLanguages: subtitleLanguages,
     playlistItems: playlistItems,
+    writeInfoJson: writeInfoJson,
+    writeThumbnail: writeThumbnail,
   );
 
   DownloadRequest copyWith({
