@@ -68,6 +68,8 @@ All notable changes to Vidhoist. The format follows
   another size starts. Brought in with `tool/port_from_vidhoist.py`.
 - The sync subfolder is `Vidhoist Sync`, so Vidhoist and Vidhoist never share
   one library when pointed at the same synced folder.
+- By day, white cards stand on a soft stone ground (`#F2F1EE`) instead of a
+  white one, which glared and left the cards only a hairline to stand on.
 - Windows hides Channels and Sync unless they are switched on in
   Settings › Engine; they still need a server. The taskbar badge is blue.
 
