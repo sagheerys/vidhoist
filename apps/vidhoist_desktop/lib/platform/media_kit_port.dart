@@ -22,7 +22,7 @@ class MediaKitPort implements MediaPlayerPort {
       ..add(s.completed.listen(_onCompleted))
       ..add(s.error.listen(_onEngineError))
       ..add(s.log.listen(_onLog));
-    unawaited(_reconnectDroppedStreams());
+    unawaited(_applyEngineOptions());
   }
 
   /// The one player of the app; a second call throws.
@@ -71,17 +71,28 @@ class MediaKitPort implements MediaPlayerPort {
     if (completed) _states.add(MediaPlaybackState.completed);
   }
 
-  /// **mpv's own reconnection for a dropped stream**: off by default in
-  /// ffmpeg, so a connection the network or a tunnel cut ended the clip
-  /// where it was.
-  Future<void> _reconnectDroppedStreams() async {
+  /// What mpv is told before its first clip.
+  ///
+  /// - **Its own reconnection for a dropped stream**: off by default in
+  ///   ffmpeg, so a connection the network or a tunnel cut ended the clip
+  ///   where it was.
+  /// - **No subtitle file of its own**: yt-dlp writes `.ar.vtt` and
+  ///   `.en.vtt` beside every video, mpv loaded one by itself and drew it
+  ///   under the app's captions, over the seek bar (owner, 2026-11-07).
+  ///   The app draws the subtitles.
+  static const engineOptions = {
+    'stream-lavf-o':
+        'reconnect=1,reconnect_streamed=1,reconnect_on_network_error=1,'
+        'reconnect_delay_max=5',
+    'sub-auto': 'no',
+  };
+
+  Future<void> _applyEngineOptions() async {
     final native = _player.platform;
     if (native is! NativePlayer) return;
-    await native.setProperty(
-      'stream-lavf-o',
-      'reconnect=1,reconnect_streamed=1,reconnect_on_network_error=1,'
-          'reconnect_delay_max=5',
-    );
+    for (final MapEntry(:key, :value) in engineOptions.entries) {
+      await native.setProperty(key, value);
+    }
   }
 
   void _onLog(PlayerLog log) {
