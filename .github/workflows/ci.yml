@@ -89,6 +89,11 @@ jobs:
         app: [vidhoist_mobile]
 
     steps:
+      # With yt-dlp, Python and ffmpeg in the APK (batch 4) the runner ran out
+      # of disk again (2026-11-06). Toolchains this build never uses go first.
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/boost /usr/share/swift && df -h /
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
@@ -108,5 +113,5 @@ jobs:
       # Debug builds only: release signing needs a keystore that is not in
       # this repository.
       - name: Build ${{ matrix.app }}
-        run: flutter build apk --debug
+        run: flutter build apk --debug --target-platform android-arm64
         working-directory: apps/${{ matrix.app }}
