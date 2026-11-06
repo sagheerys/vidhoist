@@ -146,12 +146,6 @@ abstract class MTLocalizations {
   /// **'Active now'**
   String get activeNow;
 
-  /// No description provided for @addEndpoint.
-  ///
-  /// In en, this message translates to:
-  /// **'Add endpoint'**
-  String get addEndpoint;
-
   /// No description provided for @addLinkFab.
   ///
   /// In en, this message translates to:
@@ -185,7 +179,7 @@ abstract class MTLocalizations {
   /// No description provided for @addedNToServer.
   ///
   /// In en, this message translates to:
-  /// **'Added {count} to server'**
+  /// **'Added {count} to the downloads'**
   String addedNToServer(int count);
 
   /// No description provided for @addedToFavorites.
@@ -199,12 +193,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'{count} added to the playlist'**
   String addedToPlaylistCount(int count);
-
-  /// No description provided for @addingToServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Sending to the server…'**
-  String get addingToServer;
 
   /// No description provided for @allDownloadsFinished.
   ///
@@ -272,12 +260,6 @@ abstract class MTLocalizations {
   /// **'Stereo'**
   String get audioStereo;
 
-  /// No description provided for @authHelper.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave empty for open servers (no password)'**
-  String get authHelper;
-
   /// No description provided for @authentication.
   ///
   /// In en, this message translates to:
@@ -320,24 +302,6 @@ abstract class MTLocalizations {
   /// **'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.'**
   String get autoRetryHelp;
 
-  /// No description provided for @autoSwitchDisabledHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto-switching is off, so the app uses the single Server URL from Settings.'**
-  String get autoSwitchDisabledHint;
-
-  /// No description provided for @autoUrlSwitching.
-  ///
-  /// In en, this message translates to:
-  /// **'Automatic URL switching'**
-  String get autoUrlSwitching;
-
-  /// No description provided for @autoUrlSwitchingDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Connect through the local URL when it is reachable, and use external connections elsewhere'**
-  String get autoUrlSwitchingDesc;
-
   /// No description provided for @availability.
   ///
   /// In en, this message translates to:
@@ -349,18 +313,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Offline (local copy)'**
   String get availabilityOffline;
-
-  /// No description provided for @availabilityServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Server (stream)'**
-  String get availabilityServer;
-
-  /// No description provided for @availableOfflineNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Now available offline'**
-  String get availableOfflineNow;
 
   /// No description provided for @backgroundDownload.
   ///
@@ -416,12 +368,6 @@ abstract class MTLocalizations {
   /// **'Select at least one item'**
   String get batchNothingSelected;
 
-  /// No description provided for @batchSaveToDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Save a copy on the device'**
-  String get batchSaveToDevice;
-
   /// No description provided for @batchSelectedOf.
   ///
   /// In en, this message translates to:
@@ -463,12 +409,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
-
-  /// No description provided for @cancelSaveToDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop saving to the phone'**
-  String get cancelSaveToDevice;
 
   /// No description provided for @changeQuality.
   ///
@@ -566,12 +506,6 @@ abstract class MTLocalizations {
   /// **'Options'**
   String get chooseOptions;
 
-  /// No description provided for @cleaningServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Cleaning up the server...'**
-  String get cleaningServer;
-
   /// No description provided for @clear.
   ///
   /// In en, this message translates to:
@@ -644,18 +578,6 @@ abstract class MTLocalizations {
   /// **'Completed'**
   String get completed;
 
-  /// No description provided for @connectionFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Connection failed'**
-  String get connectionFailed;
-
-  /// No description provided for @connectionSuccessful.
-  ///
-  /// In en, this message translates to:
-  /// **'Connected. Settings saved.'**
-  String get connectionSuccessful;
-
   /// No description provided for @continueAsAudio.
   ///
   /// In en, this message translates to:
@@ -686,30 +608,6 @@ abstract class MTLocalizations {
   /// **'Cookies'**
   String get cookies;
 
-  /// No description provided for @cookiesAbsent.
-  ///
-  /// In en, this message translates to:
-  /// **'The server has no cookies'**
-  String get cookiesAbsent;
-
-  /// No description provided for @cookiesDelete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete the cookies'**
-  String get cookiesDelete;
-
-  /// No description provided for @cookiesDeleteBody.
-  ///
-  /// In en, this message translates to:
-  /// **'The server stops using them, and the platforms that needed a login will refuse again.'**
-  String get cookiesDeleteBody;
-
-  /// No description provided for @cookiesDeleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Cookies deleted from the server'**
-  String get cookiesDeleted;
-
   /// No description provided for @cookiesHelp.
   ///
   /// In en, this message translates to:
@@ -722,65 +620,11 @@ abstract class MTLocalizations {
   /// **'None of these files holds cookies in the Netscape format'**
   String get cookiesNotNetscape;
 
-  /// No description provided for @cookiesPresent.
-  ///
-  /// In en, this message translates to:
-  /// **'The server has cookies'**
-  String get cookiesPresent;
-
-  /// No description provided for @cookiesPrivacy.
-  ///
-  /// In en, this message translates to:
-  /// **'The file is sent straight to your server and never stored on this phone. It is your accounts\' sign-in material, so only ever upload it to a server you own.'**
-  String get cookiesPrivacy;
-
-  /// No description provided for @cookiesReplace.
-  ///
-  /// In en, this message translates to:
-  /// **'Replace the cookies files'**
-  String get cookiesReplace;
-
-  /// No description provided for @cookiesReplaceNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Each upload replaces the server\'s whole cookies file. To keep several platforms, pick all their files together every time, the ones you sent before too. To pick more than one, long-press the first file.'**
-  String get cookiesReplaceNote;
-
-  /// No description provided for @cookiesSentFor.
-  ///
-  /// In en, this message translates to:
-  /// **'Cookies sent for: {sites}'**
-  String cookiesSentFor(String sites);
-
   /// No description provided for @cookiesSubtitle.
   ///
   /// In en, this message translates to:
   /// **'For the platforms that will not download without a login'**
   String get cookiesSubtitle;
-
-  /// No description provided for @cookiesTooLarge.
-  ///
-  /// In en, this message translates to:
-  /// **'That file is larger than 1 MB, which is more than the server accepts.'**
-  String get cookiesTooLarge;
-
-  /// No description provided for @cookiesUnknown.
-  ///
-  /// In en, this message translates to:
-  /// **'This Vidhoist cannot say whether it has cookies'**
-  String get cookiesUnknown;
-
-  /// No description provided for @cookiesUpload.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose cookies files'**
-  String get cookiesUpload;
-
-  /// No description provided for @cookiesUploaded.
-  ///
-  /// In en, this message translates to:
-  /// **'Cookies sent to the server'**
-  String get cookiesUploaded;
 
   /// No description provided for @cookiesWhat.
   ///
@@ -793,12 +637,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Copied to clipboard'**
   String get copiedToClipboard;
-
-  /// No description provided for @copyingToPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 clip to this phone} other{{count} clips to this phone}}'**
-  String copyingToPhone(int count);
 
   /// No description provided for @copyright.
   ///
@@ -841,18 +679,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
-
-  /// No description provided for @deleteFromServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete from server'**
-  String get deleteFromServer;
-
-  /// No description provided for @deleteFromServerConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove this item from the server?'**
-  String get deleteFromServerConfirm;
 
   /// No description provided for @deleteMultipleConfirm.
   ///
@@ -902,12 +728,6 @@ abstract class MTLocalizations {
   /// **'{count} deleted'**
   String deletedCount(Object count);
 
-  /// No description provided for @deletedFromServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Deleted from the server'**
-  String get deletedFromServer;
-
   /// No description provided for @deletedTitle.
   ///
   /// In en, this message translates to:
@@ -925,90 +745,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{Nothing to add} =1{Add 1 link} other{Add {count} links}}'**
   String desktopAddLinks(int count);
-
-  /// No description provided for @desktopAddressAdd.
-  ///
-  /// In en, this message translates to:
-  /// **'Add'**
-  String get desktopAddressAdd;
-
-  /// No description provided for @desktopAddressInUse.
-  ///
-  /// In en, this message translates to:
-  /// **'In use'**
-  String get desktopAddressInUse;
-
-  /// No description provided for @desktopAddressInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Not an address, or already in the list'**
-  String get desktopAddressInvalid;
-
-  /// No description provided for @desktopAddressNew.
-  ///
-  /// In en, this message translates to:
-  /// **'New address, e.g. https://vidhoist.example.com'**
-  String get desktopAddressNew;
-
-  /// No description provided for @desktopAddressStatusNotVidhoist.
-  ///
-  /// In en, this message translates to:
-  /// **'Not a Vidhoist server'**
-  String get desktopAddressStatusNotVidhoist;
-
-  /// No description provided for @desktopAddressStatusOk.
-  ///
-  /// In en, this message translates to:
-  /// **'Answers'**
-  String get desktopAddressStatusOk;
-
-  /// No description provided for @desktopAddressStatusRefused.
-  ///
-  /// In en, this message translates to:
-  /// **'Refuses the password'**
-  String get desktopAddressStatusRefused;
-
-  /// No description provided for @desktopAddressStatusUnreachable.
-  ///
-  /// In en, this message translates to:
-  /// **'Not reachable'**
-  String get desktopAddressStatusUnreachable;
-
-  /// No description provided for @desktopAddressTest.
-  ///
-  /// In en, this message translates to:
-  /// **'Test'**
-  String get desktopAddressTest;
-
-  /// No description provided for @desktopAddressUse.
-  ///
-  /// In en, this message translates to:
-  /// **'Use'**
-  String get desktopAddressUse;
-
-  /// No description provided for @desktopAddresses.
-  ///
-  /// In en, this message translates to:
-  /// **'Addresses'**
-  String get desktopAddresses;
-
-  /// No description provided for @desktopAddressesHint.
-  ///
-  /// In en, this message translates to:
-  /// **'The app uses the address you choose and never switches by itself.'**
-  String get desktopAddressesHint;
-
-  /// No description provided for @desktopAskEachTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Ask me every time'**
-  String get desktopAskEachTime;
-
-  /// No description provided for @desktopAskEachTimeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Windows asks for a folder at each download.'**
-  String get desktopAskEachTimeHint;
 
   /// No description provided for @desktopBack.
   ///
@@ -1142,6 +878,18 @@ abstract class MTLocalizations {
   /// **'Channels in your library'**
   String get desktopChannelsInLibrary;
 
+  /// No description provided for @desktopChannelsLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Not in this version'**
+  String get desktopChannelsLater;
+
+  /// No description provided for @desktopChannelsLaterBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Following a channel needs a scheduler on this computer, and that comes in a later version. The clips you download stay in the library.'**
+  String get desktopChannelsLaterBody;
+
   /// No description provided for @desktopChapters.
   ///
   /// In en, this message translates to:
@@ -1165,12 +913,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Clear filters'**
   String get desktopClearFilters;
-
-  /// No description provided for @desktopClearFinished.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide finished'**
-  String get desktopClearFinished;
 
   /// No description provided for @desktopClearSelection.
   ///
@@ -1232,23 +974,11 @@ abstract class MTLocalizations {
   /// **'None'**
   String get desktopCookiesNone;
 
-  /// No description provided for @desktopCookiesPrivacy.
-  ///
-  /// In en, this message translates to:
-  /// **'The files go straight to your server and are never kept on this computer. They are your accounts\' sign-in material, so only ever send them to a server you own.'**
-  String get desktopCookiesPrivacy;
-
   /// No description provided for @desktopCookiesRemove.
   ///
   /// In en, this message translates to:
   /// **'Remove'**
   String get desktopCookiesRemove;
-
-  /// No description provided for @desktopCookiesReplaceNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Each upload replaces the server\'s whole cookies file. To keep several platforms, choose all their files together every time, the ones you sent before too. Hold Ctrl to choose more than one.'**
-  String get desktopCookiesReplaceNote;
 
   /// No description provided for @desktopCopiedLinkAdd.
   ///
@@ -1259,14 +989,8 @@ abstract class MTLocalizations {
   /// No description provided for @desktopCopiedLinkTitle.
   ///
   /// In en, this message translates to:
-  /// **'Add this link to the server?'**
+  /// **'Download this link?'**
   String get desktopCopiedLinkTitle;
-
-  /// No description provided for @desktopCopyCancelled.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancelled'**
-  String get desktopCopyCancelled;
 
   /// No description provided for @desktopCopyFile.
   ///
@@ -1280,30 +1004,6 @@ abstract class MTLocalizations {
   /// **'The file could not be copied'**
   String get desktopCopyFileFailed;
 
-  /// No description provided for @desktopCopyFileLarge.
-  ///
-  /// In en, this message translates to:
-  /// **'A large file'**
-  String get desktopCopyFileLarge;
-
-  /// No description provided for @desktopCopyFileLargeMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This clip is {size}. It is saved to your download folder first, then copied; many chat apps refuse a file this big.'**
-  String desktopCopyFileLargeMessage(String size);
-
-  /// No description provided for @desktopCopyFileNoSpace.
-  ///
-  /// In en, this message translates to:
-  /// **'Not enough space on the drive: the file is {needed} and {free} is free'**
-  String desktopCopyFileNoSpace(String needed, String free);
-
-  /// No description provided for @desktopCopyFilePreparing.
-  ///
-  /// In en, this message translates to:
-  /// **'Preparing the file to copy; its progress is in Downloads'**
-  String get desktopCopyFilePreparing;
-
   /// No description provided for @desktopCopyLink.
   ///
   /// In en, this message translates to:
@@ -1315,12 +1015,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Copying takes one clip at a time'**
   String get desktopCopyOneClip;
-
-  /// No description provided for @desktopCopyQueued.
-  ///
-  /// In en, this message translates to:
-  /// **'Waiting its turn'**
-  String get desktopCopyQueued;
 
   /// No description provided for @desktopCopyQuote.
   ///
@@ -1337,7 +1031,7 @@ abstract class MTLocalizations {
   /// No description provided for @desktopDeleteSelectedConfirm.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{Delete 1 clip from the server? A copy on this computer stays.} other{Delete {count} clips from the server? Copies on this computer stay.}}'**
+  /// **'{count, plural, =1{Delete 1 clip? Its file on this computer is deleted.} other{Delete {count} clips? Their files on this computer are deleted.}}'**
   String desktopDeleteSelectedConfirm(int count);
 
   /// No description provided for @desktopDesktopSection.
@@ -1550,18 +1244,6 @@ abstract class MTLocalizations {
   /// **'Your own files: saved here, then the app leaves them alone.'**
   String get desktopDownloadFolderHint;
 
-  /// No description provided for @desktopDownloadTo.
-  ///
-  /// In en, this message translates to:
-  /// **'Download…'**
-  String get desktopDownloadTo;
-
-  /// No description provided for @desktopDownloading.
-  ///
-  /// In en, this message translates to:
-  /// **'Downloading · {percent}%'**
-  String desktopDownloading(int percent);
-
   /// No description provided for @desktopDownloads.
   ///
   /// In en, this message translates to:
@@ -1601,7 +1283,7 @@ abstract class MTLocalizations {
   /// No description provided for @desktopEmptyLibraryMessage.
   ///
   /// In en, this message translates to:
-  /// **'Add a link, and the clip appears here once the server has it.'**
+  /// **'Add a link, and the clip appears here once it is downloaded.'**
   String get desktopEmptyLibraryMessage;
 
   /// No description provided for @desktopEngine.
@@ -2078,12 +1760,6 @@ abstract class MTLocalizations {
   /// **'Listening room'**
   String get desktopListeningRoom;
 
-  /// No description provided for @desktopLocalCopyRemoved.
-  ///
-  /// In en, this message translates to:
-  /// **'Local copy removed'**
-  String get desktopLocalCopyRemoved;
-
   /// No description provided for @desktopLogsCopied.
   ///
   /// In en, this message translates to:
@@ -2159,7 +1835,7 @@ abstract class MTLocalizations {
   /// No description provided for @desktopNoOfflineMessage.
   ///
   /// In en, this message translates to:
-  /// **'Choose “Make available offline” from a clip\'s menu, and it plays here without the server.'**
+  /// **'A clip downloaded to this computer plays from here, and shows in this list.'**
   String get desktopNoOfflineMessage;
 
   /// No description provided for @desktopNoOfflineTitle.
@@ -2167,12 +1843,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Nothing kept on this computer yet'**
   String get desktopNoOfflineTitle;
-
-  /// No description provided for @desktopNoServerMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Set up your Vidhoist server and its library appears here.'**
-  String get desktopNoServerMessage;
 
   /// No description provided for @desktopNoTags.
   ///
@@ -2183,7 +1853,7 @@ abstract class MTLocalizations {
   /// No description provided for @desktopNoTranscriptMessage.
   ///
   /// In en, this message translates to:
-  /// **'It shows here once the server has the clip\'s subtitles.'**
+  /// **'It shows here once the clip\'s subtitles are downloaded with it.'**
   String get desktopNoTranscriptMessage;
 
   /// No description provided for @desktopNoTranscriptTitle.
@@ -2216,12 +1886,6 @@ abstract class MTLocalizations {
   /// **'Play a clip and its transcript, what comes next and its details appear here.'**
   String get desktopNothingPlayingHint;
 
-  /// No description provided for @desktopNoticeSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved to this computer'**
-  String get desktopNoticeSaved;
-
   /// No description provided for @desktopNotifyArrivalsHint.
   ///
   /// In en, this message translates to:
@@ -2245,24 +1909,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'{count} offline'**
   String desktopOfflineCount(int count);
-
-  /// No description provided for @desktopOfflineFolder.
-  ///
-  /// In en, this message translates to:
-  /// **'Offline folder'**
-  String get desktopOfflineFolder;
-
-  /// No description provided for @desktopOfflineFolderHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Copies the app knows and plays without the server; \"Remove local copy\" deletes them.'**
-  String get desktopOfflineFolderHint;
-
-  /// No description provided for @desktopOfflineProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Offline · {percent}%'**
-  String desktopOfflineProgress(int percent);
 
   /// No description provided for @desktopOpenChannels.
   ///
@@ -2354,12 +2000,6 @@ abstract class MTLocalizations {
   /// **'Plays next, after this one'**
   String get desktopPlaysNext;
 
-  /// No description provided for @desktopPullAfter.
-  ///
-  /// In en, this message translates to:
-  /// **'Then download it to this computer'**
-  String get desktopPullAfter;
-
   /// No description provided for @desktopQueueEnd.
   ///
   /// In en, this message translates to:
@@ -2441,7 +2081,7 @@ abstract class MTLocalizations {
   /// No description provided for @desktopRestoreBody.
   ///
   /// In en, this message translates to:
-  /// **'This computer\'s tags, lists and settings become what the backup holds. The server is not touched.'**
+  /// **'This computer\'s tags, lists and settings become what the backup holds. The downloaded files are not touched.'**
   String get desktopRestoreBody;
 
   /// No description provided for @desktopRestoreTitle.
@@ -2486,18 +2126,6 @@ abstract class MTLocalizations {
   /// **'Search name'**
   String get desktopSavedSearchName;
 
-  /// No description provided for @desktopSavingOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Saving offline · {percent}%'**
-  String desktopSavingOffline(int percent);
-
-  /// No description provided for @desktopSavingTo.
-  ///
-  /// In en, this message translates to:
-  /// **'Saving to {folder}'**
-  String desktopSavingTo(String folder);
-
   /// No description provided for @desktopSearch.
   ///
   /// In en, this message translates to:
@@ -2528,125 +2156,11 @@ abstract class MTLocalizations {
   /// **'{count, plural, =1{1 selected} other{{count} selected}}'**
   String desktopSelectedCount(int count);
 
-  /// No description provided for @desktopServerFolders.
-  ///
-  /// In en, this message translates to:
-  /// **'Same folders as on the server'**
-  String get desktopServerFolders;
-
-  /// No description provided for @desktopServerFoldersHint.
-  ///
-  /// In en, this message translates to:
-  /// **'For example, a clip in a folder called “Kids” on the server is saved in a folder of the same name here.'**
-  String get desktopServerFoldersHint;
-
-  /// No description provided for @desktopServerPartMissing.
-  ///
-  /// In en, this message translates to:
-  /// **'The server isn\'t answering, so this is what it held last time.'**
-  String get desktopServerPartMissing;
-
-  /// No description provided for @desktopServerVersion.
-  ///
-  /// In en, this message translates to:
-  /// **'Server version'**
-  String get desktopServerVersion;
-
-  /// No description provided for @desktopSetupAgain.
-  ///
-  /// In en, this message translates to:
-  /// **'Set up again'**
-  String get desktopSetupAgain;
-
   /// No description provided for @desktopSetupChooseFile.
   ///
   /// In en, this message translates to:
   /// **'Choose a file…'**
   String get desktopSetupChooseFile;
-
-  /// No description provided for @desktopSetupConnect.
-  ///
-  /// In en, this message translates to:
-  /// **'Connect'**
-  String get desktopSetupConnect;
-
-  /// No description provided for @desktopSetupEnter.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter the address'**
-  String get desktopSetupEnter;
-
-  /// No description provided for @desktopSetupFoundNone.
-  ///
-  /// In en, this message translates to:
-  /// **'No Vidhoist server answered on these ports.'**
-  String get desktopSetupFoundNone;
-
-  /// No description provided for @desktopSetupHttpWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'An http:// address outside your home network sends the password unencrypted.'**
-  String get desktopSetupHttpWarning;
-
-  /// No description provided for @desktopSetupImport.
-  ///
-  /// In en, this message translates to:
-  /// **'Import from the phone'**
-  String get desktopSetupImport;
-
-  /// No description provided for @desktopSetupImportHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a Vidhoist Super backup: its server address is offered here, and its tags and lists are added.'**
-  String get desktopSetupImportHint;
-
-  /// No description provided for @desktopSetupLater.
-  ///
-  /// In en, this message translates to:
-  /// **'Later'**
-  String get desktopSetupLater;
-
-  /// No description provided for @desktopSetupNeedsPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Needs a password'**
-  String get desktopSetupNeedsPassword;
-
-  /// No description provided for @desktopSetupNoServer.
-  ///
-  /// In en, this message translates to:
-  /// **'No server yet?'**
-  String get desktopSetupNoServer;
-
-  /// No description provided for @desktopSetupPorts.
-  ///
-  /// In en, this message translates to:
-  /// **'Ports'**
-  String get desktopSetupPorts;
-
-  /// No description provided for @desktopSetupSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Search my network'**
-  String get desktopSetupSearch;
-
-  /// No description provided for @desktopSetupSearchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Looks for Vidhoist on this computer\'s network, only when you click.'**
-  String get desktopSetupSearchHint;
-
-  /// No description provided for @desktopSetupSearching.
-  ///
-  /// In en, this message translates to:
-  /// **'Searching… {percent}%'**
-  String desktopSetupSearching(int percent);
-
-  /// No description provided for @desktopSetupTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Connect to your Vidhoist server'**
-  String get desktopSetupTitle;
 
   /// No description provided for @desktopShortcutsApp.
   ///
@@ -2941,12 +2455,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Theater'**
   String get desktopTheater;
-
-  /// No description provided for @desktopToThisComputer.
-  ///
-  /// In en, this message translates to:
-  /// **'To this computer'**
-  String get desktopToThisComputer;
 
   /// No description provided for @desktopTranscriptFirst.
   ///
@@ -3284,18 +2792,6 @@ abstract class MTLocalizations {
   /// **'Add a video link, or pull to refresh.'**
   String get emptyLibraryMessage;
 
-  /// No description provided for @emptyOfflineMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose “Make available offline” on a clip, and it plays here without the server.'**
-  String get emptyOfflineMessage;
-
-  /// No description provided for @emptyOfflineTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing saved on this phone yet'**
-  String get emptyOfflineTitle;
-
   /// No description provided for @emptyPlaylist.
   ///
   /// In en, this message translates to:
@@ -3307,12 +2803,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Add videos from the library'**
   String get emptyPlaylistMessage;
-
-  /// No description provided for @endpointUrl.
-  ///
-  /// In en, this message translates to:
-  /// **'Endpoint URL'**
-  String get endpointUrl;
 
   /// No description provided for @engineDownloadingProgress.
   ///
@@ -3398,40 +2888,16 @@ abstract class MTLocalizations {
   /// **'Fullscreen'**
   String get enterFullscreen;
 
-  /// No description provided for @errAuth.
-  ///
-  /// In en, this message translates to:
-  /// **'Wrong username or password'**
-  String get errAuth;
-
-  /// No description provided for @errFileGone.
-  ///
-  /// In en, this message translates to:
-  /// **'The file is no longer on the server. Try again to download it anew.'**
-  String get errFileGone;
-
   /// No description provided for @errNetwork.
   ///
   /// In en, this message translates to:
-  /// **'Cannot reach the server'**
+  /// **'No connection to the site'**
   String get errNetwork;
-
-  /// No description provided for @errNoApi.
-  ///
-  /// In en, this message translates to:
-  /// **'The address responds but has no Vidhoist API'**
-  String get errNoApi;
-
-  /// No description provided for @errNotVidhoist.
-  ///
-  /// In en, this message translates to:
-  /// **'This address is not a Vidhoist server'**
-  String get errNotVidhoist;
 
   /// No description provided for @errPlatformBlocked.
   ///
   /// In en, this message translates to:
-  /// **'The platform requires login. The server admin should refresh the cookies'**
+  /// **'The platform requires a login, which this clip cannot be downloaded without'**
   String get errPlatformBlocked;
 
   /// No description provided for @errPlatformBlockedCookies.
@@ -3439,18 +2905,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'The platform requires login. Send it a cookies file from Settings → Cookies'**
   String get errPlatformBlockedCookies;
-
-  /// No description provided for @errPollTimeout.
-  ///
-  /// In en, this message translates to:
-  /// **'The server took too long. Try again.'**
-  String get errPollTimeout;
-
-  /// No description provided for @errServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Server error: {message}'**
-  String errServer(Object message);
 
   /// No description provided for @errorGeneric.
   ///
@@ -3487,18 +2941,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'A dated copy to send or keep elsewhere'**
   String get exportShareSubtitle;
-
-  /// No description provided for @externalNetworkDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'When the local URL can\'t be reached, the app connects through the first reachable URL below, from top to bottom.'**
-  String get externalNetworkDesc;
-
-  /// No description provided for @externalNetworkSection.
-  ///
-  /// In en, this message translates to:
-  /// **'External network'**
-  String get externalNetworkSection;
 
   /// No description provided for @externalPlayerShort.
   ///
@@ -3560,12 +3002,6 @@ abstract class MTLocalizations {
   /// **'Offline'**
   String get filterOffline;
 
-  /// No description provided for @filterServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Server'**
-  String get filterServer;
-
   /// No description provided for @filterVideo.
   ///
   /// In en, this message translates to:
@@ -3584,23 +3020,11 @@ abstract class MTLocalizations {
   /// **'Folder'**
   String get folder;
 
-  /// No description provided for @foldersDisabled.
-  ///
-  /// In en, this message translates to:
-  /// **'This server does not allow folders: CUSTOM_DIRS is off in its settings.'**
-  String get foldersDisabled;
-
   /// No description provided for @foldersHelp.
   ///
   /// In en, this message translates to:
-  /// **'A folder is made on the server, inside its downloads, and the clip is saved straight into it, where the network share and any other app see it. Leave it at \"No folder\" and nothing changes. For folders to work the server needs two things: CUSTOM_DIRS on, which is Vidhoist\'s default, and no outtmpl in YTDL_OPTIONS, which would save every file at the top whatever folder is chosen. To name files your way, use OUTPUT_TEMPLATE instead. The setup guide shows the lines.'**
+  /// **'A folder is made inside the download folder, and the clip is saved straight into it, where Explorer and any other app see it. Leave it at \"No folder\" and the clip goes to the top of the download folder.'**
   String get foldersHelp;
-
-  /// No description provided for @foldersIgnored.
-  ///
-  /// In en, this message translates to:
-  /// **'This server saves every file at the top of the downloads, whatever folder is chosen: its YTDL_OPTIONS has an outtmpl. The setup guide says how to move it to OUTPUT_TEMPLATE.'**
-  String get foldersIgnored;
 
   /// No description provided for @follow.
   ///
@@ -3734,30 +3158,6 @@ abstract class MTLocalizations {
   /// **'Listen in the background'**
   String get listenInBackground;
 
-  /// No description provided for @localCopyRemoved.
-  ///
-  /// In en, this message translates to:
-  /// **'Local copy removed'**
-  String get localCopyRemoved;
-
-  /// No description provided for @localNetworkDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'The app connects to the server through this URL when it can be reached.'**
-  String get localNetworkDesc;
-
-  /// No description provided for @localNetworkSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Local network'**
-  String get localNetworkSection;
-
-  /// No description provided for @localUrlLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Local server URL'**
-  String get localUrlLabel;
-
   /// No description provided for @lockTouch.
   ///
   /// In en, this message translates to:
@@ -3775,18 +3175,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Links, addresses and credentials are stripped before sharing'**
   String get logsSanitizedNote;
-
-  /// No description provided for @madeOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved for offline'**
-  String get madeOffline;
-
-  /// No description provided for @makeOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Make available offline'**
-  String get makeOffline;
 
   /// No description provided for @manageTags.
   ///
@@ -3827,7 +3215,7 @@ abstract class MTLocalizations {
   /// No description provided for @vidhoistCredit.
   ///
   /// In en, this message translates to:
-  /// **'The self-hosted server this app is a client for'**
+  /// **'The self-hosted downloader whose apps Vidhoist comes from'**
   String get vidhoistCredit;
 
   /// No description provided for @mobileEngineIpv4.
@@ -4010,18 +3398,6 @@ abstract class MTLocalizations {
   /// **'Needs your attention'**
   String get needsAttention;
 
-  /// No description provided for @networkSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Networks'**
-  String get networkSettings;
-
-  /// No description provided for @networkSettingsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto-switch between local and external server URLs'**
-  String get networkSettingsSubtitle;
-
   /// No description provided for @neverChecked.
   ///
   /// In en, this message translates to:
@@ -4039,12 +3415,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'e.g. Ai/Lessons'**
   String get newFolderHint;
-
-  /// No description provided for @newFromSubscriptions.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 new from a channel you follow} other{{count} new from the channels you follow}}'**
-  String newFromSubscriptions(int count);
 
   /// No description provided for @newPlaylistAction.
   ///
@@ -4130,16 +3500,10 @@ abstract class MTLocalizations {
   /// **'No items match your search.'**
   String get noResultsMessage;
 
-  /// No description provided for @noServerMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your Vidhoist server address in Settings to start downloading'**
-  String get noServerMessage;
-
   /// No description provided for @noServerTitle.
   ///
   /// In en, this message translates to:
-  /// **'No server yet'**
+  /// **'The download engine is not ready'**
   String get noServerTitle;
 
   /// No description provided for @noTagsYet.
@@ -4166,29 +3530,11 @@ abstract class MTLocalizations {
   /// **'Not affiliated with yt-dlp or with any content platform, and not endorsed by them.'**
   String get notAffiliated;
 
-  /// No description provided for @notEnoughSpace.
-  ///
-  /// In en, this message translates to:
-  /// **'Not enough room on the phone: needs {needed}, {free} free'**
-  String notEnoughSpace(String needed, String free);
-
   /// No description provided for @nothingHereYet.
   ///
   /// In en, this message translates to:
   /// **'Nothing here yet'**
   String get nothingHereYet;
-
-  /// No description provided for @notifyArrivals.
-  ///
-  /// In en, this message translates to:
-  /// **'Tell me what arrives by itself'**
-  String get notifyArrivals;
-
-  /// No description provided for @notifyArrivalsDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'One notice when a followed channel\'s new videos land on the server. It appears when you open the app, return to it, or refresh the library, not while the app is in the background.'**
-  String get notifyArrivalsDesc;
 
   /// No description provided for @nowPlaying.
   ///
@@ -4219,18 +3565,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'OK'**
   String get ok;
-
-  /// No description provided for @onServerPhase.
-  ///
-  /// In en, this message translates to:
-  /// **'On the server'**
-  String get onServerPhase;
-
-  /// No description provided for @onServerProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'On the server · {percent}%'**
-  String onServerProgress(Object percent);
 
   /// No description provided for @onlyNewVideos.
   ///
@@ -4265,7 +3599,7 @@ abstract class MTLocalizations {
   /// No description provided for @ownFolderNote.
   ///
   /// In en, this message translates to:
-  /// **'A folder in the server\'s downloads, which the network share and other apps see too. Only what arrives from now on goes there; what is already downloaded stays where it is.'**
+  /// **'A folder inside the download folder, which Explorer and other apps see too. Only what arrives from now on goes there; what is already downloaded stays where it is.'**
   String get ownFolderNote;
 
   /// No description provided for @password.
@@ -4297,12 +3631,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'{percent}%'**
   String percentValue(Object percent);
-
-  /// No description provided for @phoneCopiesSection.
-  ///
-  /// In en, this message translates to:
-  /// **'To this phone'**
-  String get phoneCopiesSection;
 
   /// No description provided for @pickAnotherFile.
   ///
@@ -4453,18 +3781,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Previous'**
   String get previous;
-
-  /// No description provided for @pullingToDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Saving to device…'**
-  String get pullingToDevice;
-
-  /// No description provided for @pullingToDeviceProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Saving to device · {percent}%'**
-  String pullingToDeviceProgress(Object percent);
 
   /// No description provided for @quality.
   ///
@@ -4700,41 +4016,11 @@ abstract class MTLocalizations {
   /// **'Remove'**
   String get remove;
 
-  /// No description provided for @removedFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{Nothing to remove: they are no longer failed} =1{Removed 1 failed download} other{Removed {count} failed downloads}}'**
-  String removedFailed(int count);
-
-  /// No description provided for @removeFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove the failed'**
-  String get removeFailed;
-
-  /// No description provided for @removeFailedBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Only downloads that failed leave the server\'s list. Everything that finished, which is what your library shows, stays exactly as it is.'**
-  String get removeFailedBody;
-
-  /// No description provided for @removeFailedTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Remove 1 failed download?} other{Remove {count} failed downloads?}}'**
-  String removeFailedTitle(int count);
-
   /// No description provided for @removeFromFavorites.
   ///
   /// In en, this message translates to:
   /// **'Remove from favorites'**
   String get removeFromFavorites;
-
-  /// No description provided for @removeLocalCopy.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove local copy'**
-  String get removeLocalCopy;
 
   /// No description provided for @removeUnavailable.
   ///
@@ -4832,18 +4118,6 @@ abstract class MTLocalizations {
   /// **'Save settings'**
   String get saveSettings;
 
-  /// No description provided for @saveToDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Save to device'**
-  String get saveToDevice;
-
-  /// No description provided for @savedOnDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved on device'**
-  String get savedOnDevice;
-
   /// No description provided for @searchLogs.
   ///
   /// In en, this message translates to:
@@ -4886,137 +4160,11 @@ abstract class MTLocalizations {
   /// **'{count} selected'**
   String selectedCount(int count);
 
-  /// No description provided for @serverConfiguration.
-  ///
-  /// In en, this message translates to:
-  /// **'Server configuration'**
-  String get serverConfiguration;
-
-  /// No description provided for @serverFailuresLine.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 download didn\'t finish on the server} other{{count} downloads didn\'t finish on the server}}'**
-  String serverFailuresLine(int count);
-
-  /// No description provided for @serverFailuresNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Stopped by the server with an error, whether added from this phone, a subscription or Vidhoist\'s own page.'**
-  String get serverFailuresNote;
-
-  /// No description provided for @serverFailuresTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Didn\'t finish on the server'**
-  String get serverFailuresTitle;
-
-  /// No description provided for @serverFilesCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No files on the server} =1{1 file on the server} other{{count} files on the server}}'**
-  String serverFilesCount(int count);
-
-  /// No description provided for @serverKeepsFilesBody.
-  ///
-  /// In en, this message translates to:
-  /// **'The history entry is removed but the file stays on disk, so the server fills up. Set DELETE_FILE_ON_TRASHCAN=true on the Vidhoist container.'**
-  String get serverKeepsFilesBody;
-
-  /// No description provided for @serverKeepsFilesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Your server is not deleting the files'**
-  String get serverKeepsFilesTitle;
-
-  /// No description provided for @serverQueueCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{} =1{1 in the queue} other{{count} in the queue}}'**
-  String serverQueueCount(int count);
-
-  /// No description provided for @serverSearchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Looks for Vidhoist on the Wi-Fi this phone is on, only when you tap.'**
-  String get serverSearchHint;
-
-  /// No description provided for @serverStatusChecking.
-  ///
-  /// In en, this message translates to:
-  /// **'Checking connection…'**
-  String get serverStatusChecking;
-
-  /// No description provided for @serverStatusConnected.
-  ///
-  /// In en, this message translates to:
-  /// **'Connected to server'**
-  String get serverStatusConnected;
-
-  /// No description provided for @serverStatusOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Server unreachable'**
-  String get serverStatusOffline;
-
-  /// No description provided for @serverStatusUnconfigured.
-  ///
-  /// In en, this message translates to:
-  /// **'No server configured'**
-  String get serverStatusUnconfigured;
-
-  /// No description provided for @serverUnreachableLocalHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Videos saved on this phone still play.'**
-  String get serverUnreachableLocalHint;
-
   /// No description provided for @serverUrl.
   ///
   /// In en, this message translates to:
   /// **'Server URL (Vidhoist)'**
   String get serverUrl;
-
-  /// No description provided for @serverUrlHelpBody.
-  ///
-  /// In en, this message translates to:
-  /// **'The address of your Vidhoist server, e.g. http://192.168.1.10:8081. Use the LAN IP for plain HTTP at home, or an HTTPS address (e.g. a Cloudflare Tunnel) for access from outside.'**
-  String get serverUrlHelpBody;
-
-  /// No description provided for @serverUrlHelpTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'About the server URL'**
-  String get serverUrlHelpTitle;
-
-  /// No description provided for @serverUrlHint.
-  ///
-  /// In en, this message translates to:
-  /// **'http://192.168.1.5:8086 or https://domain.com'**
-  String get serverUrlHint;
-
-  /// No description provided for @serverUrlRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Server URL is required'**
-  String get serverUrlRequired;
-
-  /// No description provided for @serverVersionLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Vidhoist {version}'**
-  String serverVersionLabel(String version);
-
-  /// No description provided for @serverVersionOutdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Update available: {latest}'**
-  String serverVersionOutdated(String latest);
-
-  /// No description provided for @serverVersionUnknown.
-  ///
-  /// In en, this message translates to:
-  /// **'Version unknown'**
-  String get serverVersionUnknown;
 
   /// No description provided for @settings.
   ///
@@ -5048,12 +4196,6 @@ abstract class MTLocalizations {
   /// **'Data'**
   String get settingsGroupData;
 
-  /// No description provided for @settingsGroupServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Server'**
-  String get settingsGroupServer;
-
   /// No description provided for @settingsPlayback.
   ///
   /// In en, this message translates to:
@@ -5072,18 +4214,6 @@ abstract class MTLocalizations {
   /// **'Transcripts & subtitles'**
   String get settingsTranscripts;
 
-  /// No description provided for @settingsValueArrivals.
-  ///
-  /// In en, this message translates to:
-  /// **'tells you what arrives'**
-  String get settingsValueArrivals;
-
-  /// No description provided for @settingsValueAuto.
-  ///
-  /// In en, this message translates to:
-  /// **'Automatic'**
-  String get settingsValueAuto;
-
   /// No description provided for @settingsValueChannels.
   ///
   /// In en, this message translates to:
@@ -5101,30 +4231,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Best compatibility: on'**
   String get settingsValueCompatOn;
-
-  /// No description provided for @settingsValueExternalNow.
-  ///
-  /// In en, this message translates to:
-  /// **'external now'**
-  String get settingsValueExternalNow;
-
-  /// No description provided for @settingsValueLocalNow.
-  ///
-  /// In en, this message translates to:
-  /// **'local now'**
-  String get settingsValueLocalNow;
-
-  /// No description provided for @settingsValueManual.
-  ///
-  /// In en, this message translates to:
-  /// **'Manual'**
-  String get settingsValueManual;
-
-  /// No description provided for @settingsValueNoPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'no password'**
-  String get settingsValueNoPassword;
 
   /// No description provided for @settingsValueNotSet.
   ///
@@ -5162,65 +4268,17 @@ abstract class MTLocalizations {
   /// **'Wi‑Fi only'**
   String get settingsValueWifiOnly;
 
-  /// No description provided for @setupServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Set up the server'**
-  String get setupServer;
-
   /// No description provided for @share.
   ///
   /// In en, this message translates to:
   /// **'Share'**
   String get share;
 
-  /// No description provided for @shareGoesOn.
-  ///
-  /// In en, this message translates to:
-  /// **'Still preparing in the background. The share menu opens when it is ready; its progress is in Downloads.'**
-  String get shareGoesOn;
-
-  /// No description provided for @shareLargeBody.
-  ///
-  /// In en, this message translates to:
-  /// **'It downloads to this phone first, then the share menu opens.'**
-  String get shareLargeBody;
-
-  /// No description provided for @shareLargeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Download {size} to share?'**
-  String shareLargeTitle(String size);
-
   /// No description provided for @shareLogs.
   ///
   /// In en, this message translates to:
   /// **'Share logs'**
   String get shareLogs;
-
-  /// No description provided for @shareMessagingLimit.
-  ///
-  /// In en, this message translates to:
-  /// **'WhatsApp and Telegram take up to 2 GB; for larger files use Drive or Quick Share.'**
-  String get shareMessagingLimit;
-
-  /// No description provided for @sharePreparing.
-  ///
-  /// In en, this message translates to:
-  /// **'Preparing to share'**
-  String get sharePreparing;
-
-  /// No description provided for @shareProgressOf.
-  ///
-  /// In en, this message translates to:
-  /// **'{received} of {total}'**
-  String shareProgressOf(String received, String total);
-
-  /// No description provided for @shareReady.
-  ///
-  /// In en, this message translates to:
-  /// **'Ready to share'**
-  String get shareReady;
 
   /// No description provided for @shareSelected.
   ///
@@ -5251,12 +4309,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Sign-in required'**
   String get signInRequired;
-
-  /// No description provided for @signInRequiredHint.
-  ///
-  /// In en, this message translates to:
-  /// **'The server rejected the saved credentials. Update the username and password in settings.'**
-  String get signInRequiredHint;
 
   /// No description provided for @size.
   ///
@@ -5419,18 +4471,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Channels the server follows for you'**
   String get subscriptionsSubtitle;
-
-  /// No description provided for @subscriptionsUnsupported.
-  ///
-  /// In en, this message translates to:
-  /// **'This Vidhoist is older than subscriptions'**
-  String get subscriptionsUnsupported;
-
-  /// No description provided for @subscriptionsUnsupportedBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Update the Vidhoist container to a release that has channel subscriptions, then come back here. Nothing else in the app is affected.'**
-  String get subscriptionsUnsupportedBody;
 
   /// No description provided for @subtitles.
   ///
@@ -5617,12 +4657,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Opens the library filtered'**
   String get tagsOpenFiltered;
-
-  /// No description provided for @testingConnection.
-  ///
-  /// In en, this message translates to:
-  /// **'Testing connection…'**
-  String get testingConnection;
 
   /// No description provided for @theme.
   ///
@@ -5935,12 +4969,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Checking…'**
   String get updateChecking;
-
-  /// No description provided for @updateCredentials.
-  ///
-  /// In en, this message translates to:
-  /// **'Update credentials'**
-  String get updateCredentials;
 
   /// No description provided for @updateDownloadFailed.
   ///
