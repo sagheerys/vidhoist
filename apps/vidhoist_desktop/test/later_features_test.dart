@@ -7,9 +7,10 @@ import 'package:vidhoist_desktop/shell/sidebar.dart';
 
 import 'support/shell_harness.dart';
 
-/// **The guard**: Channels and Sync are hidden in 1.0, never removed: the
-/// sidebar and Settings leave them out until their switch is on, and the
-/// server's own sections are gone from Settings.
+/// **The guard**: Sync is hidden until the phone app has it, never
+/// removed: Settings leaves it out until its switch is on. Channels work
+/// on this computer since 1.2 and are always there, and the server's own
+/// sections are gone from Settings.
 void main() {
   Future<ShellHarness> open(WidgetTester tester, {bool later = false}) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
@@ -40,16 +41,16 @@ void main() {
     matching: find.text(label),
   );
 
-  testWidgets('off: no Channels, no Sync, no server sections', (tester) async {
+  testWidgets('off: Channels, no Sync, no server sections', (tester) async {
     await open(tester);
-    expect(inSidebar('Channels'), findsNothing);
+    expect(inSidebar('Channels'), findsOneWidget);
     expect(find.text('Sync'), findsNothing);
     expect(find.text('Addresses'), findsNothing);
     // The engine's own section is first, where the server's was.
     expect(find.text('Engine'), findsWidgets);
   });
 
-  testWidgets('on: both come back', (tester) async {
+  testWidgets('on: Sync comes back', (tester) async {
     await open(tester, later: true);
     expect(inSidebar('Channels'), findsOneWidget);
     expect(find.text('Sync'), findsWidgets);

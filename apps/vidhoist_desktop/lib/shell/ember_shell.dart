@@ -7,11 +7,11 @@ import 'package:mt_media/mt_media.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import '../data/backup_data.dart';
+import '../data/channels_data.dart';
 import '../data/covers/covers_data.dart';
 import '../data/shapes/shapes_data.dart';
 import '../data/library_data.dart';
 import '../data/folder_watch.dart';
-import '../data/later_features.dart';
 import '../data/sync_runner.dart';
 import '../data/taskbar_data.dart';
 import '../data/lists_data.dart';
@@ -128,6 +128,8 @@ class _EmberShellState extends ConsumerState<EmberShell> {
     ref.watch(shapeEnrichmentProvider);
     ref.watch(startupBackupProvider);
     ref.watch(syncRunnerProvider);
+    // Followed channels are checked as they fall due, window or tray.
+    ref.watch(channelTickerProvider);
     ref.watch(folderWatchProvider);
     ref.watch(taskbarDownloadsWiringProvider);
 
@@ -308,7 +310,6 @@ class _EmberShellState extends ConsumerState<EmberShell> {
                         EmberSidebar(
                           narrow: arranged.sidebarNarrow,
                           current: place,
-                          showChannels: ref.watch(laterFeaturesProvider),
                           pinned: ref.watch(pinnedPlaylistsProvider),
                           currentList: _openList(widget.location),
                           folders: sidebarFolders(

@@ -40,7 +40,7 @@ class SettingsPlace extends ConsumerWidget {
     final p = MTThemeX.of(context).palette;
     final l = context.mtl;
     final text = Theme.of(context).textTheme;
-    // Channels and Sync wait behind their switch.
+    // Sync waits behind its switch, until the phone app has it.
     final later = ref.watch(laterFeaturesProvider);
     final groups = [
       (
@@ -48,7 +48,7 @@ class SettingsPlace extends ConsumerWidget {
         [
           EmberSettingsPane.engine,
           EmberSettingsPane.cookies,
-          if (later) EmberSettingsPane.subscriptions,
+          EmberSettingsPane.subscriptions,
         ],
       ),
       (

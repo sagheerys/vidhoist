@@ -67,13 +67,7 @@ class LibraryPage extends ConsumerWidget {
               child: PinnedLibraryHeading(
                 child: LibraryHeading(
                   title: title,
-                  counts: all.isEmpty
-                      ? null
-                      : mtMetaLine([
-                          l.transcriptsClips(held),
-                          if (scope == LibraryScope.all && offline > 0)
-                            l.desktopOfflineCount(offline),
-                        ]),
+                  counts: all.isEmpty ? null : l.transcriptsClips(held),
                   mode: options.mode,
                   onMode: (m) => unawaited(
                     ref.read(libraryViewProvider.notifier).setMode(m),

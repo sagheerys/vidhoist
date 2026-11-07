@@ -85,7 +85,8 @@ void main() {
     expect(titles[0], lessThan(titles[1]));
     expect(titles[1], lessThan(titles[2]));
     expect(find.textContaining('4 clips'), findsOneWidget);
-    expect(find.textContaining('1 offline'), findsOneWidget);
+    // Every clip is a file here: no count of the ones "offline".
+    expect(find.textContaining('offline'), findsNothing);
   });
 
   testWidgets('the kind chips filter, and a second click clears', (
@@ -181,9 +182,9 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Table'));
     await tester.pumpAndSettle();
     expect(find.byType(MTMediaRow), findsNWidgets(4));
-    // **The guard**: only the copy on this computer is marked, not
-    // "Server" on every row, and no platform letters beside the titles.
-    expect(find.byType(MTLocationBadge), findsOneWidget);
+    // **The guard**: no mark of where a clip is, since every clip is a
+    // file on this computer, and no platform letters beside the titles.
+    expect(find.byType(MTLocationBadge), findsNothing);
     expect(find.byType(MTPlatformChip), findsNothing);
     // **The guard**: the source column names the site, for every row, the
     // server's too; it used to stay empty.

@@ -240,9 +240,10 @@ class _Head extends ConsumerWidget {
             null => null,
           },
         ),
-        // Said rather than shown as nothing: the server's history may not
-        // name channels at all, and then only a folder of its own matches
-        // a channel's clips. A channel that has one says nothing.
+        // Said rather than shown as nothing: clips from before the engine
+        // kept the uploader may not name their channel, and then only a
+        // folder of its own matches a channel's clips. A channel that has
+        // one says nothing.
         if (stats == null &&
             !namesChannels &&
             (sub.folder?.isEmpty ?? true)) ...[

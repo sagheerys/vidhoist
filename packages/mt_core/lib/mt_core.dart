@@ -14,6 +14,7 @@ export 'src/backup/backup_rotation.dart';
 export 'src/backup/backup_service.dart';
 export 'src/channels/channel_record.dart';
 export 'src/channels/channel_source.dart';
+export 'src/channels/channel_ticker.dart';
 export 'src/channels/local_channels.dart';
 export 'src/constants/mt_constants.dart';
 export 'src/download/download_queue.dart';

@@ -967,11 +967,11 @@ class MTLocalizationsEn extends MTLocalizations {
   }
 
   @override
-  String get desktopLaterFeatures => 'Show channels and sync';
+  String get desktopLaterFeatures => 'Show sync';
 
   @override
   String get desktopLaterFeaturesHint =>
-      'Not ready on this engine yet: channels need the app to check them on a schedule, and sync waits for the phone.';
+      'Not ready yet: sync waits for the phone app.';
 
   @override
   String get desktopLess => 'Less';
@@ -1042,7 +1042,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get desktopNoChannelNames =>
-      'Your server doesn\'t record which channel each clip came from, so this channel\'s clips can\'t be picked out. Follow it with its own folder, and whatever arrives there shows here.';
+      'The clips in your library don\'t name their channel, so this channel\'s clips can\'t be picked out. Follow it with its own folder, and whatever arrives there shows here.';
 
   @override
   String get desktopNoFavoritesMessage =>
@@ -2585,7 +2585,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get subscriptionQualityHelp =>
-      'The server keeps the quality chosen when you follow, and does not let it be changed. To change it: Check now, then unfollow and follow again.\n\n\"Best\" can mean 4K in the AV1 format. Recent phones play it smoothly; if you see stuttering, your phone does not decode AV1 in hardware: choose 1080p, or turn on \"Best playback compatibility\" before following.';
+      'The quality is set when you follow and can\'t be changed afterwards. To change it: Check now, then unfollow and follow again.\n\n\"Best\" can mean 4K in the AV1 format, which an older computer may play with stutters: choose 1080p if it does.';
 
   @override
   String get subscriptionQualityNote => 'Can\'t be changed after following.';
@@ -2598,7 +2598,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get subscriptionsEmptyBody =>
-      'Follow a channel and the server downloads each new video by itself, straight into your library. What is already on the channel stays where it is.';
+      'Follow a channel and each new video downloads into your library by itself, while Vidhoist is open or in the tray. What is already on the channel is not downloaded.';
 
   @override
   String get subscriptionsSubtitle => 'Channels the server follows for you';
@@ -2729,7 +2729,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get titleFilterHelp =>
-      'The server downloads a new video from this channel only if its title contains what you write here.\n\n• A plain word is enough: Episode\n• Any of several words: Episode|Part (the | means \"or\")\n• English is case-sensitive: episode does not match Episode. Write [Ee]pisode, or both words.\n\nA video the filter skips counts as seen for good: removing the filter later downloads what comes after, not what was skipped.';
+      'A new video from this channel is downloaded only if its title contains what you write here.\n\n• A plain word is enough: Episode\n• Any of several words: Episode|Part (the | means \"or\")\n• Capitals don\'t matter: episode matches Episode too.\n\nA video the filter skips counts as seen for good: removing the filter later downloads what comes after, not what was skipped.';
 
   @override
   String get titleFilterHelper =>
@@ -2888,7 +2888,7 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get unfollowConfirmBody =>
-      'The server forgets which videos it has already seen. If you follow this channel again later, everything on it by then counts as seen, and what you missed is not filled in. Pausing keeps that memory.';
+      'Vidhoist forgets which videos it has already seen on this channel. If you follow it again later, everything on it by then counts as seen, and what you missed is not filled in. Pausing keeps that memory.';
 
   @override
   String get unlockTouch => 'Unlock';

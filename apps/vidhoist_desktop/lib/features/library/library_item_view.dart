@@ -127,13 +127,9 @@ class LibraryItemView extends ConsumerWidget {
       if (item.timestamp != null && columns?.added != true)
         mtTimeAgo(context, item.timestamp!),
     ]);
-    // A server's library is on the server row after row, so only a copy on
-    // this computer earns a mark; and the platform has its own filter, so
-    // no coloured letters beside every title either (as on the grid).
-    final locationLabel = switch (item.location) {
-      MTMediaLocation.offline || MTMediaLocation.both => l.availabilityOffline,
-      MTMediaLocation.onServer || MTMediaLocation.none => null,
-    };
+    // No mark of where a clip is: every clip is a file on this computer,
+    // so "offline" beside each title would say nothing. The platform has
+    // its own filter, so no coloured letters beside every title either.
     const platform = MTPlatformKind.other;
     final duration = item.duration == null
         ? null
@@ -165,7 +161,6 @@ class LibraryItemView extends ConsumerWidget {
             : mtTimeAgo(context, item.timestamp!),
         tags: item.tags,
         location: item.location,
-        locationLabel: locationLabel,
         sourceName: platformLabel(l, MediaPlatform.detect(item.canonicalUrl)),
         favorite: item.favorite,
         audio: item.isAudio,
@@ -183,7 +178,6 @@ class LibraryItemView extends ConsumerWidget {
         thumbnail: cover(_gridCell, _gridCell * 9 / 16),
         platform: platform,
         location: item.location,
-        locationLabel: locationLabel,
         duration: duration,
         favorite: item.favorite,
         audio: item.isAudio,
@@ -200,7 +194,6 @@ class LibraryItemView extends ConsumerWidget {
       thumbnail: cover(_compactWidth, _compactWidth * 10 / 16),
       platform: platform,
       location: item.location,
-      locationLabel: locationLabel,
       duration: duration,
       favorite: item.favorite,
       audio: item.isAudio,

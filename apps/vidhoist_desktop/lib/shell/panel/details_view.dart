@@ -67,16 +67,11 @@ class DetailsView extends ConsumerWidget {
             load: ref.read(videoSurfaceProvider).quality,
           ),
           if (when != null) row(l.downloadDate, mtTimeAgo(context, when)),
-          if (entry != null && entry.isOffline)
-            row(l.availability, l.availabilityOffline),
           if (folder.isNotEmpty) row(l.folder, mtName(folder)),
           if (lists.isNotEmpty)
             row(l.inPlaylists, lists.map(mtName).join(l.listSeparator)),
           if (tags.isNotEmpty) row(l.tags, tags.join(l.listSeparator)),
-          // Where it plays from only when the availability above is missing:
-          // beside it, the two read as the same line twice.
-          if (entry == null && item.localPath != null)
-            row(l.source, l.playingFromDevice),
+          if (item.localPath != null) row(l.source, l.playingFromDevice),
           const SizedBox(height: MTSpace.md),
           _LinkRow(url: url),
         ],

@@ -1,11 +1,52 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
 
+import '../di.dart';
+import 'downloads_data.dart';
+import 'engine_data.dart';
 import 'library_data.dart';
 
-/// Where channels are kept ([ChannelSource], in `mt_core`): overridden
-/// at startup; null is nowhere to keep them.
-final channelSourceProvider = Provider<ChannelSource?>((ref) => null);
+/// Where channels are kept: on this computer, read through yt-dlp, what
+/// is new handed to the download queue like a pasted link. Null where
+/// there is no engine (a test that does not ask for one).
+final channelSourceProvider = Provider<ChannelSource?>((ref) {
+  final backend = ref.watch(downloadBackendProvider);
+  if (backend == null) return null;
+  return LocalChannelSource(
+    store: ref.watch(keyValueStoreProvider),
+    backend: backend,
+    enqueue: (url, quality, folder) =>
+        ref.read(downloadEngineProvider)?.submit(url, quality, folder: folder),
+    onLog: (message) => _log(ref, message),
+  );
+});
+
+/// Checks the channels when they are due, while the app runs. Watched by
+/// the shell, so it lives as long as the window.
+final channelTickerProvider = Provider<void>((ref) {
+  final source = ref.watch(channelSourceProvider);
+  if (source is! LocalChannelSource) return;
+  final ticker = ChannelTicker(
+    source: source,
+    onChecked: () {
+      ref
+        ..invalidate(channelsProvider)
+        ..invalidate(historyProvider);
+    },
+    onError: (e) => _log(ref, 'channel check failed: $e'),
+  )..start();
+  ref.onDispose(ticker.stop);
+});
+
+void _log(Ref ref, String message) {
+  try {
+    unawaited(ref.read(loggerProvider).log(message, tag: 'channels'));
+  } on Object {
+    // No log in tests.
+  }
+}
 
 /// The followed channels.
 ///

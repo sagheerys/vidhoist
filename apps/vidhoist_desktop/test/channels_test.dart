@@ -319,7 +319,7 @@ void main() {
     expect(find.byType(ChannelsPage), findsOneWidget);
   });
 
-  testWidgets("a server that names no channel says why its page is empty", (
+  testWidgets("clips that name no channel: the page says why it is empty", (
     tester,
   ) async {
     await open(
@@ -334,7 +334,7 @@ void main() {
       ],
       at: EmberRoutes.channel('a'),
     );
-    expect(find.textContaining("doesn't record which channel"), findsOneWidget);
+    expect(find.textContaining("don't name their channel"), findsOneWidget);
   });
 
   testWidgets('**the guard**: a channel that saves into its own folder says '
@@ -353,7 +353,7 @@ void main() {
       ],
       at: EmberRoutes.channel('a'),
     );
-    expect(find.textContaining("doesn't record which channel"), findsNothing);
+    expect(find.textContaining("don't name their channel"), findsNothing);
   });
 
   testWidgets('a channel the library has and nobody follows can be followed', (

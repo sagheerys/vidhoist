@@ -27,12 +27,7 @@ class EmberSidebar extends StatelessWidget {
     this.searches = const [],
     this.onSavedSearch,
     this.onSavedSearchMenu,
-    this.showChannels = true,
   });
-
-  /// Channels need a server or a scheduler this engine does not have yet,
-  /// so the shell shows them only behind their switch.
-  final bool showChannels;
 
   /// The saved searches, under "Search", each opening the palette on its
   /// query.
@@ -170,13 +165,12 @@ class EmberSidebar extends StatelessWidget {
                   selected: list.id == currentList,
                   onTap: () => onGo(EmberRoutes.playlist(list.id)),
                 ),
-              if (showChannels)
-                item(
-                  EmberPlace.channels,
-                  MTIcons.subscriptions,
-                  l.desktopChannels,
-                  EmberRoutes.channels,
-                ),
+              item(
+                EmberPlace.channels,
+                MTIcons.subscriptions,
+                l.desktopChannels,
+                EmberRoutes.channels,
+              ),
               if (folders.isNotEmpty && onFolder != null) ...[
                 const SizedBox(height: MTSpace.lg),
                 for (final folder in folders)

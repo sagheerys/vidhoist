@@ -5,6 +5,23 @@ All notable changes to Vidhoist. The format follows
 
 ## [Unreleased]
 
+### Added
+- Following channels on Windows, on the computer itself. Each new video of
+  a followed channel downloads into the library at the quality, in the
+  folder and through the title filter chosen for it, while Vidhoist is open
+  or in the tray; a check missed while it was closed is made a little after
+  it opens. What was on the channel before following is not downloaded. A
+  YouTube channel's link follows its videos, not its Shorts or live
+  streams, and a stream on the air arrives once it is over.
+
+### Changed
+- Channels are always in the sidebar and in Settings; the "later features"
+  switch now hides Sync alone.
+- The channel pages and the title filter no longer speak of a server, and
+  the title filter ignores capitals.
+- The Windows library no longer marks every clip "offline": every clip is
+  a file on this computer.
+
 ## [1.0.0] - 2026-11-07
 
 ### Added

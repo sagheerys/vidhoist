@@ -3,9 +3,9 @@ import 'package:mt_core/mt_core.dart';
 
 import '../di.dart';
 
-/// Whether Channels and Sync are shown. Both were built on the server
-/// (channels need a scheduler here, sync waits for the phone), so 1.0
-/// hides them rather than removing them; off unless turned on.
+/// Whether Sync is shown. It was built on the server and waits for the
+/// phone app, so it is hidden rather than removed; off unless turned on.
+/// Channels were behind it too until 1.2 checked them on this computer.
 final laterFeaturesProvider = NotifierProvider<LaterFeaturesNotifier, bool>(
   LaterFeaturesNotifier.new,
 );
