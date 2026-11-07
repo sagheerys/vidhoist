@@ -113,6 +113,8 @@ All notable changes to Vidhoist. The format follows
 - Subtitles asked for every machine translation into Arabic and English
   (`ar-fr-FR`…), which YouTube can refuse; now the language, its original
   track and its regions.
+- Windows showed two subtitles at once: the app's, and one mpv loaded by
+  itself from the `.vtt` beside the video, over the seek bar.
 - Windows: a finished video whose title had a `/` never reached the library
   (the path read back lost the `⧸` yt-dlp writes for it), and a download
   restored at launch went to the default folder instead of the chosen one.
