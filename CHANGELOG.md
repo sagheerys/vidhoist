@@ -55,6 +55,8 @@ All notable changes to Vidhoist. The format follows
   on CC, kept between runs.
 
 ### Changed
+- Version 1.0.0 in both apps (build 16, above the parent's 15).
+- The README says 1.0.0 and shows the Android app.
 - Package and application identifiers: `apps/vidhoist_mobile`
   (`com.yasir.vidhoist`), `apps/vidhoist_desktop` (`Vidhoist`,
   `%APPDATA%\Vidhoist`, link scheme `vidhoist://`, a new installer AppId).

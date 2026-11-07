@@ -6,7 +6,7 @@
 التطبيق.** بلا سيرفر تشغّله، بلا حساب، بلا إعلانات. لأندرويد وويندوز، بالعربية
 والإنجليزية، نهاراً وليلاً.
 
-> **الحالة: قبل الإصدار الأول.** Vidhoist نسخة مشتقّة من
+> **الحالة: الإصدار 1.0.0، تجريبي.** Vidhoist نسخة مشتقّة من
 > [vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) للمؤلّف نفسه.
 > الواجهة والمكتبة المحلية والمشغّلات والنصوص والنسخ الاحتياطي والتحديث الذاتي
 > جاءت منه، والتنزيل يجري الآن على الجهاز بـyt-dlp ولا يحتاج سيرفراً. كيف يعمل
@@ -16,9 +16,16 @@
 | | Vidhoist لأندرويد | Vidhoist لويندوز |
 |---|---|---|
 | المجلد | `apps/vidhoist_mobile` | `apps/vidhoist_desktop` |
-| المحرّك | yt-dlp على الجهاز (المخطّط: `youtubedl-android`) | `yt-dlp.exe` وffmpeg بجانب التطبيق |
+| المحرّك | yt-dlp وffmpeg داخل التطبيق (`youtubedl-android`) | `yt-dlp.exe` بجانب التطبيق، وffmpeg يُنزَّل عند أول حاجة |
 | المكتبة | مجلد التنزيل، يُمسح محلياً | مكتبة محلية بوسوم وقوائم ونصوص |
 | التثبيت | APK من صفحة الإصدارات، يحدّث نفسه | مثبّت Inno Setup، يحدّث نفسه |
+
+<p>
+  <img src="docs/screenshots/android-subtitles-ar.png" width="200" alt="حجم الترجمة وخلفيتها">
+  <img src="docs/screenshots/android-transcript-ar-dark.png" width="200" alt="نص المقطع ليلاً">
+  <img src="docs/screenshots/android-add.png" width="200" alt="إضافة رابط واختيار الجودة">
+  <img src="docs/screenshots/android-transcript.png" width="200" alt="نص المقطع تحت المشغّل">
+</p>
 
 ## لماذا نسخة مشتقّة
 

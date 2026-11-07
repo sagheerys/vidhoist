@@ -4,7 +4,7 @@
 inside the app.** No server to run, no account, no ads. Android and Windows,
 Arabic and English, day and night.
 
-> **Status: before its first release.** Vidhoist is a fork of
+> **Status: 1.0.0, a beta.** Vidhoist is a fork of
 > [vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) by the same
 > author. The interface, the local library, the players, transcripts, backups
 > and self-update come from there; the downloads now run on the device with
@@ -15,9 +15,16 @@ Arabic and English, day and night.
 | | Vidhoist for Android | Vidhoist for Windows |
 |---|---|---|
 | Folder | `apps/vidhoist_mobile` | `apps/vidhoist_desktop` |
-| Engine | yt-dlp on the device (planned: `youtubedl-android`) | `yt-dlp.exe` + ffmpeg beside the app |
+| Engine | yt-dlp and ffmpeg inside the app (`youtubedl-android`) | `yt-dlp.exe` beside the app; ffmpeg fetched on first need |
 | Library | the download folder, scanned locally | a local library with tags, lists and transcripts |
 | Install | APK from Releases, self-updating | Inno Setup installer, self-updating |
+
+<p>
+  <img src="docs/screenshots/android-add.png" width="200" alt="Adding a link: pick a quality and start">
+  <img src="docs/screenshots/android-transcript.png" width="200" alt="The transcript under the player, the line being said lit">
+  <img src="docs/screenshots/android-subtitles-ar.png" width="200" alt="Subtitle size and background, in Arabic">
+  <img src="docs/screenshots/android-transcript-ar-dark.png" width="200" alt="The transcript at night, in Arabic">
+</p>
 
 ## Why a fork
 
@@ -77,8 +84,8 @@ copyright and the terms of the sites you download from.
 **Vidhoist** يحمّل الفيديو والصوت من الإنترنت إلى جهازك مباشرة بمحرّك yt-dlp
 داخل التطبيق: بلا سيرفر، بلا حساب، بلا إعلانات. لأندرويد وويندوز، بالعربية
 والإنجليزية. المشروع نسخة مشتقّة من
-[vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) للمؤلّف نفسه، ما زال
-قبل إصداره الأول: الواجهة والمكتبة والمشغّلات تعمل، والتنزيل يجري على الجهاز
-بـyt-dlp بلا سيرفر. التفاصيل في [README.ar.md](README.ar.md).
+[vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) للمؤلّف نفسه، وهذا
+إصداره الأول 1.0.0 (تجريبي): الواجهة والمكتبة والمشغّلات تعمل، والتنزيل يجري
+على الجهاز بـyt-dlp بلا سيرفر. التفاصيل في [README.ar.md](README.ar.md).
 
 </div>
