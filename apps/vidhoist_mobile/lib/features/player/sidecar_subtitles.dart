@@ -74,9 +74,32 @@ Future<Map<String, List<MTCaptionLine>>> readSidecarSubtitles(
     return at < 0 ? preferred.length : at;
   }
 
+  // The plain code before its variants ("ar" before "ar-orig"), so it is
+  // the one kept when they are the same.
   final order = tracks.keys.toList()
-    ..sort((a, b) => rank(a).compareTo(rank(b)));
-  return {for (final language in order) language: tracks[language]!};
+    ..sort((a, b) {
+      final byRank = rank(a).compareTo(rank(b));
+      return byRank != 0 ? byRank : a.length.compareTo(b.length);
+    });
+  final kept = <String, List<MTCaptionLine>>{};
+  for (final language in order) {
+    final lines = tracks[language]!;
+    if (!kept.values.any((other) => _sameLines(other, lines))) {
+      kept[language] = lines;
+    }
+  }
+  return kept;
+}
+
+/// A clip spoken in Arabic comes with `ar` and `ar-orig` byte for byte the
+/// same (the owner's phone, 2026-11-07); offering both put "AR" in the
+/// switch twice.
+bool _sameLines(List<MTCaptionLine> a, List<MTCaptionLine> b) {
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i].start != b[i].start || a[i].text != b[i].text) return false;
+  }
+  return true;
 }
 
 /// The subtitles read so far, by media path, for the player. The player's

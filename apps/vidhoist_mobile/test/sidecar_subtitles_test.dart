@@ -64,6 +64,33 @@ void main() {
     expect(File(other).existsSync(), isTrue);
   });
 
+  // Found on the owner's phone 2026-11-07: a clip spoken in Arabic comes
+  // with `ar` and `ar-orig`, byte for byte the same, and the switch offered
+  // "AR" twice.
+  test(
+    'a copy of another language under a second name is one language',
+    () async {
+      final video = put('Clip [abc].mp4');
+      put('Clip [abc].ar.vtt', arVtt);
+      put('Clip [abc].ar-orig.vtt', arVtt);
+      put('Clip [abc].en.vtt', vtt);
+
+      final tracks = await readSidecarSubtitles(video, preferred: const ['ar']);
+      expect(tracks.keys, ['ar', 'en']);
+    },
+  );
+
+  test('two different tracks of one language are both kept', () async {
+    final video = put('Clip [abc].mp4');
+    put('Clip [abc].ar.vtt', arVtt);
+    put(
+      'Clip [abc].ar-orig.vtt',
+      'WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nأهلاً\n',
+    );
+    final tracks = await readSidecarSubtitles(video);
+    expect(tracks, hasLength(2));
+  });
+
   test('the player asks once per clip, and the answer comes back', () async {
     final video = put('Clip [abc].mp4');
     put('Clip [abc].en.vtt', vtt);

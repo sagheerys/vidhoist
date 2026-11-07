@@ -115,6 +115,9 @@ All notable changes to Vidhoist. The format follows
 - 164 strings in each language that only the server used.
 
 ### Fixed
+- The phone offered "AR" twice in the subtitles' language switch for a clip
+  spoken in Arabic: YouTube sends the same file as `ar` and `ar-orig`. A
+  copy of another language is now read as one.
 - The download counter jumped from 0 to 100%: the subtitle files, fetched
   before the video, were counted as its parts. It now moves with the video
   alone, on both apps.
