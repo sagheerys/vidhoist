@@ -494,6 +494,33 @@ void main() {
       await leave(tester, hidden);
     });
 
+    // Batch 6b: the size, the background and the transcript are a long
+    // press away on the phone; a tap still only shows and hides.
+    testWidgets('a long press opens the options; a tap only toggles', (
+      tester,
+    ) async {
+      final shown = ValueNotifier(false);
+      var opened = 0;
+      final session = await show(
+        tester,
+        (_) => MTCaptions(
+          lines: [line(0, 9000, 'hello')],
+          shown: shown,
+          onOptions: (_) => opened++,
+        ),
+      );
+      await tester.longPress(byWahaj(MTIcons.captionsOff));
+      await tester.pump(kDoubleTapTimeout + const Duration(milliseconds: 50));
+      expect(opened, 1);
+      expect(shown.value, isFalse);
+
+      await tester.tap(byWahaj(MTIcons.captionsOff));
+      await tester.pump(kDoubleTapTimeout + const Duration(milliseconds: 50));
+      expect(shown.value, isTrue);
+      expect(opened, 1);
+      await leave(tester, session);
+    });
+
     testWidgets('a clip without subtitles has no button', (tester) async {
       final session = await show(tester, (_) => null);
       expect(byWahaj(MTIcons.captionsOff), findsNothing);

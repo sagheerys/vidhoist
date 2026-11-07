@@ -12,6 +12,7 @@ import '../downloads_library/library_providers.dart';
 import '../downloads_library/local_item.dart';
 import '../shared/membership.dart';
 import 'sidecar_subtitles.dart';
+import 'transcript_sheet.dart';
 import 'playback_providers.dart';
 import '../shared/open_web_link.dart';
 
@@ -70,6 +71,11 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     final membership =
         ref.watch(membershipIndexProvider).valueOrNull ?? const {};
     final subtitles = ref.watch(subtitleCacheProvider);
+    // The subtitles' size and background, so a change in the settings or
+    // under CC shows at once.
+    ref.watch(
+      settingsProvider.select((s) => (s.captionSize, s.captionBackground)),
+    );
 
     return MTVideoScreen(
       session: session,
@@ -82,8 +88,9 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
       ),
       subtitleBuilder: (context, item) => _subtitle(context, item, membership),
       // The subtitles fetched with the download, read from beside it.
-      captions: (item) => sidecarCaptionsFor(ref, subtitles, item),
-      actions: _actions(session),
+      captions: (item) =>
+          sidecarCaptionsFor(ref, subtitles, item, session: session),
+      actions: _actions(session, subtitles),
       onContinueAsAudio: _continueAsAudio,
       // **Never asked twice** (field report 2026-09-02): someone who had
       // already moved the clip to audio and then pressed back was asked
@@ -104,7 +111,10 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     membership[item.canonicalUrl]?.line(context.mtl),
   ]);
 
-  List<MTPlayerAction> _actions(MTVideoSession session) {
+  List<MTPlayerAction> _actions(
+    MTVideoSession session,
+    Map<String, Map<String, List<MTCaptionLine>>> subtitles,
+  ) {
     final l10n = context.mtl;
     final item = session.current;
     if (item == null) return const [];
@@ -122,6 +132,21 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
         onTap: () =>
             ref.read(libraryActionsProvider).toggleFavorite(item.canonicalUrl),
       ),
+      // The clip's subtitles read as a transcript, searched, and played
+      // from any line (batch 6b).
+      if (sidecarTracksFor(ref, subtitles, item) case final tracks?)
+        MTPlayerAction(
+          icon: MTIcons.transcript,
+          label: l10n.mobileTranscript,
+          onTap: () => unawaited(
+            showTranscriptSheet(
+              context,
+              session: session,
+              tracks: tracks,
+              language: ref.read(subtitleChoiceProvider).language,
+            ),
+          ),
+        ),
       MTPlayerAction(
         icon: MTIcons.headphones,
         label: l10n.continueAsAudio,

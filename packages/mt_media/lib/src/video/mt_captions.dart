@@ -56,6 +56,7 @@ class MTCaptions {
     this.background = MTCaptionBackground.solid,
     this.tracks = const {},
     this.language,
+    this.onOptions,
   });
 
   /// The lines shown when no other language is chosen.
@@ -71,6 +72,11 @@ class MTCaptions {
   /// The language chosen with the switch, kept by the app from clip to
   /// clip. Null, or a language this clip lacks, shows [lines].
   final ValueNotifier<String?>? language;
+
+  /// Opened by a long press on CC: the app's own choices for the subtitles
+  /// (on the phone, their size, their background and the transcript).
+  /// Null leaves CC a plain switch.
+  final void Function(BuildContext context)? onOptions;
 
   /// The language on screen, for the switch's label.
   String? get current {

@@ -1920,11 +1920,30 @@ class MTLocalizationsEn extends MTLocalizations {
   String get mobileSettingsGroupEngine => 'Engine';
 
   @override
+  String get mobileSubtitleOptions => 'Size, background and the transcript';
+
+  @override
+  String get mobileSubtitleStyleHelp =>
+      'Also in the player: hold the CC button.';
+
+  @override
   String get mobileSubtitles => 'Download subtitles';
 
   @override
   String get mobileSubtitlesHelp =>
       'Arabic and English subtitles, when the video has them, saved beside it and shown in the player.';
+
+  @override
+  String get mobileSubtitlesSizeLarger => 'Larger';
+
+  @override
+  String get mobileTranscript => 'Transcript';
+
+  @override
+  String get mobileTranscriptHint => 'Tap a line to play from there.';
+
+  @override
+  String get mobileTranscriptOpen => 'Read the transcript';
 
   @override
   String get mobileWelcomeBody =>

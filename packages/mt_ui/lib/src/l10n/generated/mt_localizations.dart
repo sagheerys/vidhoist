@@ -3284,6 +3284,18 @@ abstract class MTLocalizations {
   /// **'Engine'**
   String get mobileSettingsGroupEngine;
 
+  /// No description provided for @mobileSubtitleOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Size, background and the transcript'**
+  String get mobileSubtitleOptions;
+
+  /// No description provided for @mobileSubtitleStyleHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Also in the player: hold the CC button.'**
+  String get mobileSubtitleStyleHelp;
+
   /// No description provided for @mobileSubtitles.
   ///
   /// In en, this message translates to:
@@ -3295,6 +3307,30 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Arabic and English subtitles, when the video has them, saved beside it and shown in the player.'**
   String get mobileSubtitlesHelp;
+
+  /// No description provided for @mobileSubtitlesSizeLarger.
+  ///
+  /// In en, this message translates to:
+  /// **'Larger'**
+  String get mobileSubtitlesSizeLarger;
+
+  /// No description provided for @mobileTranscript.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcript'**
+  String get mobileTranscript;
+
+  /// No description provided for @mobileTranscriptHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a line to play from there.'**
+  String get mobileTranscriptHint;
+
+  /// No description provided for @mobileTranscriptOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the transcript'**
+  String get mobileTranscriptOpen;
 
   /// No description provided for @mobileWelcomeBody.
   ///

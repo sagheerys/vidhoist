@@ -1956,11 +1956,29 @@ class MTLocalizationsAr extends MTLocalizations {
   String get mobileSettingsGroupEngine => 'المحرّك';
 
   @override
+  String get mobileSubtitleOptions => 'الحجم والخلفية والنص';
+
+  @override
+  String get mobileSubtitleStyleHelp => 'وفي المشغّل: اضغط زر CC مطوّلاً.';
+
+  @override
   String get mobileSubtitles => 'تنزيل الترجمات';
 
   @override
   String get mobileSubtitlesHelp =>
       'الترجمة العربية والإنجليزية إن وُجدت، تُحفظ بجانب المقطع وتظهر في المشغّل.';
+
+  @override
+  String get mobileSubtitlesSizeLarger => 'أكبر';
+
+  @override
+  String get mobileTranscript => 'النص';
+
+  @override
+  String get mobileTranscriptHint => 'اضغط سطراً ليبدأ التشغيل منه.';
+
+  @override
+  String get mobileTranscriptOpen => 'قراءة النص';
 
   @override
   String get mobileWelcomeBody =>

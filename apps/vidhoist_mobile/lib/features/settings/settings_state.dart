@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart' show MTPictureInPicture;
+import 'package:mt_media/mt_media.dart'
+    show MTCaptionBackground, MTPictureInPicture;
 
 import '../../di.dart';
 
@@ -19,6 +20,8 @@ class LiteSettings {
     this.localeCode,
     this.forceIpv4 = true,
     this.subtitles = true,
+    this.captionSize = 1,
+    this.captionBackground = 0,
     this.welcomed = false,
   });
 
@@ -28,6 +31,27 @@ class LiteSettings {
 
   /// Subtitles fetched with the download itself, saved beside the file.
   final bool subtitles;
+
+  /// The subtitles' size over the video: an index into [captionScales],
+  /// medium at first.
+  final int captionSize;
+
+  /// What sits behind them: an index into [MTCaptionBackground.values],
+  /// the dark capsule at first.
+  final int captionBackground;
+
+  /// Small, medium, large and larger. The first three are the Windows
+  /// app's; the fourth is for reading from across a room.
+  static const captionScales = [0.85, 1.0, 1.25, 1.5];
+
+  double get captionScale =>
+      captionScales[captionSize.clamp(0, captionScales.length - 1)];
+
+  MTCaptionBackground get captionBackdrop =>
+      MTCaptionBackground.values[captionBackground.clamp(
+        0,
+        MTCaptionBackground.values.length - 1,
+      )];
 
   /// The welcome screen has readied the engine once; a fresh install shows
   /// it first.
@@ -82,6 +106,8 @@ class LiteSettings {
     String? localeCode,
     bool? forceIpv4,
     bool? subtitles,
+    int? captionSize,
+    int? captionBackground,
     bool? welcomed,
 
     /// Distinguishes "clear the language" from "do not change it": `null`
@@ -98,6 +124,8 @@ class LiteSettings {
     localeCode: clearLocale ? null : (localeCode ?? this.localeCode),
     forceIpv4: forceIpv4 ?? this.forceIpv4,
     subtitles: subtitles ?? this.subtitles,
+    captionSize: captionSize ?? this.captionSize,
+    captionBackground: captionBackground ?? this.captionBackground,
     welcomed: welcomed ?? this.welcomed,
   );
 
@@ -118,6 +146,8 @@ class LiteSettings {
       localeCode: await store.getString('app_locale'),
       forceIpv4: await store.getBool('engine_force_ipv4') ?? true,
       subtitles: await store.getBool('download_subtitles') ?? true,
+      captionSize: await store.getInt('caption_size') ?? 1,
+      captionBackground: await store.getInt('caption_background') ?? 0,
       welcomed: await store.getBool(welcomedKey) ?? false,
     );
   }
@@ -183,6 +213,16 @@ class SettingsNotifier extends Notifier<LiteSettings> {
   Future<void> setSubtitles(bool enabled) async {
     await _mutex.run(() => _store.setBool('download_subtitles', enabled));
     state = state.copyWith(subtitles: enabled);
+  }
+
+  Future<void> setCaptionSize(int size) async {
+    await _mutex.run(() => _store.setInt('caption_size', size));
+    state = state.copyWith(captionSize: size);
+  }
+
+  Future<void> setCaptionBackground(int background) async {
+    await _mutex.run(() => _store.setInt('caption_background', background));
+    state = state.copyWith(captionBackground: background);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {

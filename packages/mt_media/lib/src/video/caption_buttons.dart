@@ -5,7 +5,8 @@ import 'mt_captions.dart';
 import 'video_buttons.dart';
 
 /// The subtitles' buttons in the top bar: the language, while the subtitles
-/// show and the clip has more than one, then CC.
+/// show and the clip has more than one, then CC, whose long press opens
+/// [MTCaptions.onOptions].
 class MTCaptionButtons extends StatelessWidget {
   const MTCaptionButtons({super.key, required this.captions});
 
@@ -30,6 +31,11 @@ class MTCaptionButtons extends StatelessWidget {
               onTap: () => captions.shown.value = !shown,
               tooltip: shown ? l10n.subtitlesHide : l10n.subtitlesShow,
               active: shown,
+              onLongPress: switch (captions.onOptions) {
+                final open? => () => open(context),
+                null => null,
+              },
+              longPressHint: l10n.mobileSubtitleOptions,
             ),
           ],
         );

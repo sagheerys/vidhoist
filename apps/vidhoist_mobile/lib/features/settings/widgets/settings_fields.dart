@@ -6,6 +6,7 @@ import 'package:mt_ui/mt_ui.dart';
 
 import '../../../di.dart';
 import 'help_button.dart';
+import '../../player/caption_style.dart';
 
 /// A row that opens one of the settings screens.
 class SettingsNavTile extends StatelessWidget {
@@ -144,7 +145,8 @@ class DownloadFields extends ConsumerWidget {
   }
 }
 
-/// How a clip plays: the compatible format, and picture in picture.
+/// How a clip plays: the compatible format, picture in picture, and the
+/// subtitles' size and background.
 class PlaybackFields extends ConsumerWidget {
   const PlaybackFields({super.key});
 
@@ -153,6 +155,7 @@ class PlaybackFields extends ConsumerWidget {
     final l10n = context.mtl;
     final settings = ref.watch(settingsProvider);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SettingsSwitchTile(
           title: l10n.compatiblePlayback,
@@ -165,6 +168,16 @@ class PlaybackFields extends ConsumerWidget {
           subtitle: l10n.pictureInPictureHelp,
           value: settings.pictureInPicture,
           onChanged: ref.read(settingsProvider.notifier).setPictureInPicture,
+        ),
+        const SizedBox(height: MTSpace.lg),
+        MTSectionHeader(title: l10n.subtitles),
+        const SizedBox(height: MTSpace.sm),
+        const CaptionStyleFields(),
+        const SizedBox(height: MTSpace.sm),
+        Text(
+          l10n.mobileSubtitleStyleHelp,
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(color: MTThemeX.of(context).palette.ink3),
         ),
       ],
     );

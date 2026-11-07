@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,8 @@ import 'package:mt_media/mt_media.dart';
 import 'package:mt_transcripts/mt_transcripts.dart';
 
 import '../../di.dart';
+import 'caption_style.dart';
+import 'transcript_sheet.dart';
 
 const _extensions = {'vtt', 'srt'};
 
@@ -122,10 +125,52 @@ class SubtitleChoice {
 }
 
 /// The player's subtitles for [item]: null while they are read, and for a
-/// clip that has none, so no CC button is offered.
+/// clip that has none, so no CC button is offered. At the size and over
+/// the background chosen in the settings; a long press on CC opens those
+/// choices and the transcript of [session]'s clip.
 ///
 /// [subtitles] is the [subtitleCacheProvider] map the player watched.
 MTCaptions? sidecarCaptionsFor(
+  WidgetRef ref,
+  Map<String, Map<String, List<MTCaptionLine>>> subtitles,
+  PlaylistItem item, {
+  MTVideoSession? session,
+}) {
+  final tracks = sidecarTracksFor(ref, subtitles, item);
+  if (tracks == null) return null;
+  final choice = ref.read(subtitleChoiceProvider);
+  final settings = ref.read(settingsProvider);
+  late final MTCaptions captions;
+  captions = MTCaptions(
+    lines: tracks.values.first,
+    tracks: tracks.length > 1 ? tracks : const {},
+    shown: choice.shown,
+    language: choice.language,
+    scale: settings.captionScale,
+    background: settings.captionBackdrop,
+    onOptions: session == null
+        ? null
+        : (context) => unawaited(
+            showCaptionOptions(
+              context,
+              captions,
+              onTranscript: () => unawaited(
+                showTranscriptSheet(
+                  context,
+                  session: session,
+                  tracks: tracks,
+                  language: choice.language,
+                ),
+              ),
+            ),
+          ),
+  );
+  return captions;
+}
+
+/// [item]'s subtitles by language, the reader's first: null while they
+/// are read and for a clip with none.
+Map<String, List<MTCaptionLine>>? sidecarTracksFor(
   WidgetRef ref,
   Map<String, Map<String, List<MTCaptionLine>>> subtitles,
   PlaylistItem item,
@@ -137,14 +182,7 @@ MTCaptions? sidecarCaptionsFor(
     ref.read(subtitleCacheProvider.notifier).want(path);
     return null;
   }
-  if (tracks.isEmpty) return null;
-  final choice = ref.read(subtitleChoiceProvider);
-  return MTCaptions(
-    lines: tracks.values.first,
-    tracks: tracks.length > 1 ? tracks : const {},
-    shown: choice.shown,
-    language: choice.language,
-  );
+  return tracks.isEmpty ? null : tracks;
 }
 
 String _stem(String name) {

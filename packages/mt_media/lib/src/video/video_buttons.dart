@@ -19,6 +19,8 @@ class MTVideoIconButton extends StatelessWidget {
     required this.tooltip,
     this.size = 36,
     this.active = false,
+    this.onLongPress,
+    this.longPressHint,
   });
 
   final MTIconData icon;
@@ -27,32 +29,42 @@ class MTVideoIconButton extends StatelessWidget {
   final double size;
   final bool active;
 
+  /// A second action under a long press, said by [longPressHint] to a
+  /// screen reader. With one the tooltip gives way: on a phone it shows on
+  /// the same long press.
+  final VoidCallback? onLongPress;
+  final String? longPressHint;
+
   @override
   Widget build(BuildContext context) {
     final p = MTThemeX.of(context).palette;
-    return Tooltip(
-      message: tooltip,
-      child: Material(
-        color: active
-            ? p.accent.withValues(alpha: 0.3)
-            : Colors.black.withValues(alpha: 0.4),
+    final button = Material(
+      color: active
+          ? p.accent.withValues(alpha: 0.3)
+          : Colors.black.withValues(alpha: 0.4),
+      borderRadius: BorderRadius.circular(MTRadius.field - 1),
+      child: InkWell(
+        onTap: onTap,
+        onLongPress: onLongPress,
         borderRadius: BorderRadius.circular(MTRadius.field - 1),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(MTRadius.field - 1),
-          child: SizedBox(
-            width: size,
-            height: size,
-            // Subtitles on and off, the play mode, full screen: the
-            // glyph swaps rather than jumps.
-            child: MTIconSwap(
-              icon: icon,
-              size: size * 0.42,
-              color: MTPalette.serverCardInk,
-            ),
+        child: SizedBox(
+          width: size,
+          height: size,
+          // Subtitles on and off, the play mode, full screen: the
+          // glyph swaps rather than jumps.
+          child: MTIconSwap(
+            icon: icon,
+            size: size * 0.42,
+            color: MTPalette.serverCardInk,
           ),
         ),
       ),
+    );
+    if (onLongPress == null) return Tooltip(message: tooltip, child: button);
+    return Semantics(
+      label: tooltip,
+      onLongPressHint: longPressHint,
+      child: button,
     );
   }
 }

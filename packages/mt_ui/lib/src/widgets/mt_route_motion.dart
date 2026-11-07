@@ -38,6 +38,8 @@ Future<T?> showMTSheet<T>({
   bool useRootNavigator = false,
   bool useSafeArea = false,
   BoxConstraints? constraints,
+  bool? showDragHandle,
+  Color? barrierColor,
 }) => showModalBottomSheet<T>(
   context: context,
   builder: builder,
@@ -45,6 +47,8 @@ Future<T?> showMTSheet<T>({
   useRootNavigator: useRootNavigator,
   useSafeArea: useSafeArea,
   constraints: constraints,
+  showDragHandle: showDragHandle,
+  barrierColor: barrierColor,
   sheetAnimationStyle: mtSheetMotion(context),
 );
 

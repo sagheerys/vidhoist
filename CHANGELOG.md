@@ -45,6 +45,14 @@ All notable changes to Vidhoist. The format follows
     line in the sidebar and a Settings › Engine pane replace the server
     setup. Cookies come from local files or from a browser. The installer
     ships yt-dlp (`tool/fetch-engine.ps1`).
+- The transcript on the phone: the player's "Transcript" button, or a long
+  press on CC, opens the clip's subtitles line by line, the one being said lit
+  and followed, with a search that ignores hamza and vowel marks, steps
+  between results, a switch between languages, and a tap on a line to play
+  from there.
+- The subtitles' size (small, medium, large, larger) and background (dark,
+  light, none) on the phone, in the playback settings and under a long press
+  on CC, kept between runs.
 
 ### Changed
 - Package and application identifiers: `apps/vidhoist_mobile`
