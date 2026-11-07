@@ -5,6 +5,8 @@ All notable changes to Vidhoist. The format follows
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-07
+
 ### Added
 - The project. Vidhoist starts from
   [vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) v2.7.0
