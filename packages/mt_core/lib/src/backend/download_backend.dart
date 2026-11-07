@@ -14,6 +14,10 @@ abstract interface class DownloadBackend {
   /// once instead of reading the page again (`docs/ENGINE.md`, finding 19).
   Future<ProbeResult> probe(String url);
 
+  /// Lists a channel or a playlist without reading each clip
+  /// (`CommandBuilder.playlist`): its newest [limit] items, or all.
+  Future<InfoJson> list(String url, {int? limit});
+
   /// Runs one download. The stream ends after one [BackendFinished] or
   /// [BackendFailed]; a download stopped by [cancel] ends without either.
   Stream<BackendEvent> download(DownloadRequest request);

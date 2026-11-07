@@ -130,6 +130,18 @@ class ProcessYtDlpBackend implements DownloadBackend {
   }
 
   @override
+  Future<InfoJson> list(String url, {int? limit}) async {
+    final run = await engine();
+    if (run == null) throw _missing;
+    final (:code, :stdout, :stderr) = await _collect(
+      run.ytDlp,
+      CommandBuilder.playlist(url, run.setup, limit: limit),
+    );
+    if (code != 0) throw ErrorClassifier.classify(stderr);
+    return InfoJson.parse(stdout);
+  }
+
+  @override
   Stream<BackendEvent> download(DownloadRequest request) async* {
     final run = await engine();
     if (run == null) {

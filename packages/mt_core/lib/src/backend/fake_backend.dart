@@ -52,6 +52,30 @@ class FakeBackend implements DownloadBackend {
     );
   }
 
+  /// What [list] answers, by link: the listing as yt-dlp prints it, or
+  /// the error it throws. A link with neither lists nothing.
+  final Map<String, Object> listings = {};
+
+  /// Every link [list] was asked for, in order.
+  final List<String> listed = [];
+
+  @override
+  Future<InfoJson> list(String url, {int? limit}) async {
+    listed.add(url);
+    final answer = listings[url];
+    if (answer is Exception) throw answer;
+    if (answer is Error) throw answer;
+    final raw = answer is Map<String, Object?>
+        ? answer
+        : <String, Object?>{'_type': 'playlist', 'entries': const []};
+    final entries = raw['entries'];
+    return InfoJson.fromMap({
+      ...raw,
+      if (limit != null && entries is List && entries.length > limit)
+        'entries': entries.take(limit).toList(),
+    });
+  }
+
   @override
   Stream<BackendEvent> download(DownloadRequest request) async* {
     requests.add(request);

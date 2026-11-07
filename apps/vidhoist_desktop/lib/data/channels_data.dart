@@ -3,49 +3,8 @@ import 'package:mt_core/mt_core.dart';
 
 import 'library_data.dart';
 
-/// Where followed channels are kept and checked.
-///
-/// **None in 1.0**: following was Vidhoist's, done by the server on its own
-/// schedule, and the scheduler that will do it on this computer comes after
-/// 1.1 (`docs/blueprint/EXECUTION-PLAN.md`). The page, hidden behind its
-/// switch, is kept for it; this is the shape it will fill.
-abstract interface class ChannelSource {
-  Future<List<ChannelSubscription>> list();
-
-  /// Returns the channel as resolved, so its own title can be shown.
-  /// Throws [AlreadyFollowedException] for a channel followed already.
-  Future<ChannelSubscription?> follow(
-    String url,
-    Quality quality, {
-    required int checkIntervalMinutes,
-    String? titleRegex,
-    String? folder,
-  });
-
-  /// Null leaves a field as it is; [clearTitleRegex] empties the filter.
-  Future<void> update(
-    String id, {
-    String? name,
-    bool? enabled,
-    int? checkIntervalMinutes,
-    String? titleRegex,
-    bool clearTitleRegex = false,
-    String? folder,
-  });
-
-  Future<void> unfollow(List<String> ids);
-
-  /// Looks for new clips now; null [ids] checks them all.
-  Future<void> check({List<String>? ids});
-}
-
-/// A channel followed twice: the dialog names it rather than failing.
-class AlreadyFollowedException implements Exception {
-  const AlreadyFollowedException();
-}
-
-/// Overridden once a [ChannelSource] exists; null, as in 1.0, is nowhere
-/// to keep channels.
+/// Where channels are kept ([ChannelSource], in `mt_core`): overridden
+/// at startup; null is nowhere to keep them.
 final channelSourceProvider = Provider<ChannelSource?>((ref) => null);
 
 /// The followed channels.

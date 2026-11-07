@@ -1,5 +1,4 @@
 import 'package:mt_core/mt_core.dart';
-import 'package:vidhoist_desktop/data/channels_data.dart';
 
 /// Followed channels kept in memory, recording what was asked of them as
 /// the server's client once did, so the hidden Channels page keeps its

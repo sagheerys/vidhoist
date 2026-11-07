@@ -7,6 +7,7 @@
 /// `Process` on Windows, the youtubedl-android library on Android.
 library;
 
+export 'src/channel_feed.dart';
 export 'src/command_builder.dart';
 export 'src/engine_version.dart';
 export 'src/error_classifier.dart';

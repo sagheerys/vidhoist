@@ -83,6 +83,42 @@ class ChannelYtDlpBackend implements DownloadBackend {
     }
   }
 
+  /// Through a file, as a probe: a channel's listing is larger than a
+  /// platform message should carry.
+  @override
+  Future<InfoJson> list(String url, {int? limit}) async {
+    final id = 'list-${DateTime.now().microsecondsSinceEpoch}-${_count++}';
+    _probes.add(id);
+    final String kept;
+    final BridgeRun run;
+    try {
+      kept = '${(await _probeFolder()).path}/$id.json';
+      await ready();
+      if (_stopAsked.remove(id)) throw const CancelledException();
+      run = await bridge.execute(
+        id,
+        CommandBuilder.playlist(url, _setup, limit: limit),
+        stdoutFile: kept,
+      );
+    } on PlatformException catch (e) {
+      throw _broken(e);
+    } finally {
+      _probes.remove(id);
+      _stopAsked.remove(id);
+    }
+    try {
+      if (run.cancelled) throw const CancelledException();
+      if (run.exitCode != 0) throw ErrorClassifier.classify(run.stderr);
+      try {
+        return InfoJson.parse(await File(kept).readAsString());
+      } on FormatException catch (e) {
+        throw YtDlpError(YtDlpErrorKind.failed, 'unreadable listing: $e');
+      }
+    } finally {
+      await _delete(kept);
+    }
+  }
+
   @override
   Stream<BackendEvent> download(DownloadRequest request) async* {
     final id = request.taskId;
