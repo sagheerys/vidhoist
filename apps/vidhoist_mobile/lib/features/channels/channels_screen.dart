@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import '../shared/error_text.dart';
-import 'channel_actions.dart';
+import 'channel_card.dart';
 import 'channels_state.dart';
 import 'follow_sheet.dart';
 
@@ -64,8 +63,11 @@ class _ChannelsScreenState extends ConsumerState<ChannelsScreen> {
     } else {
       body = MTReadableWidth(
         child: ListView(
-          padding: const EdgeInsets.only(bottom: MTSpace.xxl * 2),
-          children: [for (final sub in subs) ChannelTile(sub: sub)],
+          padding: const EdgeInsets.only(
+            top: MTSpace.xs,
+            bottom: MTSpace.xxl * 3,
+          ),
+          children: [for (final sub in subs) ChannelCard(sub: sub)],
         ),
       );
     }
@@ -91,50 +93,6 @@ class _ChannelsScreenState extends ConsumerState<ChannelsScreen> {
             )
           : null,
       body: body,
-    );
-  }
-}
-
-/// One channel: its name, and how its last check went.
-class ChannelTile extends ConsumerWidget {
-  const ChannelTile({super.key, required this.sub});
-
-  final ChannelSubscription sub;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
-    final text = Theme.of(context).textTheme;
-    final line = sub.hasError
-        ? sub.error!
-        : mtMetaLine([
-            if (!sub.enabled) l10n.subscriptionPaused,
-            switch (sub.lastChecked) {
-              final at? => l10n.lastCheckedAt(mtTimeAgo(context, at)),
-              null => l10n.neverChecked,
-            },
-            if (sub.titleRegex case final filter?) mtLtrRun(filter),
-          ]);
-    return ListTile(
-      minTileHeight: 64,
-      leading: MTIcon(
-        sub.hasError ? MTIcons.alert : MTIcons.subscriptions,
-        color: sub.hasError ? p.err : (sub.enabled ? p.accent : p.ink3),
-      ),
-      title: Text(
-        mtName(sub.name),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: sub.enabled ? null : TextStyle(color: p.ink3),
-      ),
-      subtitle: Text(
-        line,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: text.bodySmall?.copyWith(color: sub.hasError ? p.err : p.ink3),
-      ),
-      onTap: () => unawaited(showChannelActions(context, ref, sub)),
     );
   }
 }

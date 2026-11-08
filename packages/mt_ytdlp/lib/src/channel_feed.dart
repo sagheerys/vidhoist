@@ -9,6 +9,9 @@ class ChannelFeed {
     required this.entries,
     this.channelUrl,
     this.isClip = false,
+    this.avatarUrl,
+    this.bannerUrl,
+    this.followers,
   });
 
   /// The listing as yt-dlp printed it.
@@ -48,6 +51,14 @@ class ChannelFeed {
       // The handle reads better than the id, and both list the same.
       channelUrl: text('uploader_url') ?? text('channel_url'),
       isClip: !info.isPlaylist,
+      // YouTube names its square picture the avatar and its wide one the
+      // banner, each at several sizes.
+      avatarUrl: pickThumbnail(raw, maxWidth: 900, where: (w, h) => w == h),
+      bannerUrl: pickThumbnail(raw, maxWidth: 1280, where: (w, h) => w > h * 3),
+      followers: switch (raw['channel_follower_count']) {
+        final num n when n >= 0 => n.round(),
+        _ => null,
+      },
     );
   }
 
@@ -61,6 +72,15 @@ class ChannelFeed {
   /// A link to one clip rather than to a list: it is followed by its
   /// channel ([channelUrl]).
   final bool isClip;
+
+  /// The channel's square picture, where the site has one.
+  final String? avatarUrl;
+
+  /// The wide picture across the top of its page.
+  final String? bannerUrl;
+
+  /// How many follow it, as the site counts them.
+  final int? followers;
 }
 
 final _youTubeChannel = RegExp(

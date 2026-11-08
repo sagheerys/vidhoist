@@ -202,6 +202,17 @@ class MTLocalizationsEn extends MTLocalizations {
   String get channelNameFolder => 'Named after the channel';
 
   @override
+  String channelFollowers(String count) {
+    return '$count subscribers';
+  }
+
+  @override
+  String get channelLatest => 'Newest videos';
+
+  @override
+  String get channelNoClipsYet => 'Its newest videos show after the next check';
+
+  @override
   String get channelUrl => 'Link to a channel, a playlist or one of its videos';
 
   @override

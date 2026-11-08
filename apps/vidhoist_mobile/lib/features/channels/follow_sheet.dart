@@ -7,6 +7,7 @@ import '../../di.dart';
 import '../home/quick_download.dart';
 import '../player/caption_style.dart';
 import '../shared/error_text.dart';
+import 'channel_card.dart';
 import 'channels_state.dart';
 
 /// Follows a channel, or with [editing] changes how often it is read and
@@ -150,8 +151,7 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
             label(l10n.checkEvery),
             CaptionChoiceChips(
               labels: [
-                for (final m in channelIntervals)
-                  m < 60 ? l10n.every30Minutes : l10n.everyHours(m ~/ 60),
+                for (final m in channelIntervals) channelIntervalLabel(l10n, m),
               ],
               chosen: channelIntervals.indexOf(_interval),
               onChosen: (i) => setState(() => _interval = channelIntervals[i]),

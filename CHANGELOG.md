@@ -22,6 +22,11 @@ All notable changes to Vidhoist. The format follows
   the quality chosen when following, while Vidhoist is open or in the
   background, and what came while it was closed downloads when it opens.
   The channels are in the backup.
+- The phone's channels page shows each channel as a card: its picture, how
+  many subscribe, how often it is checked and at what quality, and its
+  newest videos, any of which downloads with a tap. A channel's sheet shows
+  its banner, opens the channel itself ("Open channel"), and keeps
+  unfollowing apart from checking, pausing and editing.
 
 ### Changed
 - Channels are always in the sidebar and in Settings; the "later features"

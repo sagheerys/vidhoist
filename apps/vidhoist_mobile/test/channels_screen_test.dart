@@ -6,6 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 import 'package:vidhoist_mobile/di.dart';
+import 'package:vidhoist_mobile/features/channels/channel_actions.dart';
+import 'package:vidhoist_mobile/features/channels/channel_avatar.dart';
+import 'package:vidhoist_mobile/features/channels/channel_card.dart';
 import 'package:vidhoist_mobile/features/channels/channels_screen.dart';
 import 'package:vidhoist_mobile/features/channels/channels_state.dart';
 import 'package:vidhoist_mobile/features/channels/follow_sheet.dart';
@@ -20,9 +23,15 @@ Map<String, Object?> _feed(List<String> ids, {String id = 'UC_some'}) => {
   '_type': 'playlist',
   'channel': 'Some Channel',
   'channel_id': id,
+  'channel_follower_count': 1234567,
   'entries': [
     for (final v in ids)
-      {'id': v, 'url': 'https://www.youtube.com/watch?v=$v', 'title': v},
+      {
+        'id': v,
+        'url': 'https://www.youtube.com/watch?v=$v',
+        'title': 'Episode $v',
+        'duration': 754,
+      },
   ],
 };
 
@@ -129,7 +138,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(backend.listed, [_videos]);
     expect(backups.requests, 1, reason: 'a follow is backed up');
-    expect(find.byType(ChannelTile), findsOneWidget);
+    expect(find.byType(ChannelCard), findsOneWidget);
     expect(find.textContaining('Now following'), findsOneWidget);
   });
 
@@ -149,6 +158,59 @@ void main() {
       () => c.read(channelSourceProvider).list(),
     );
     expect(kept!.single.enabled, isFalse);
+  });
+
+  testWidgets('the card: its letter, who follows it, its newest clips', (
+    tester,
+  ) async {
+    final c = container();
+    await tester.runAsync(() => followSome(c));
+    await tester.pumpWidget(app(c));
+    await tester.pumpAndSettle();
+    final card = find.byType(ChannelCard);
+    expect(
+      find.descendant(of: card, matching: find.text('S')),
+      findsOneWidget,
+      reason: 'no picture yet: the first letter',
+    );
+    expect(find.textContaining('1.23M subscribers'), findsOneWidget);
+    expect(find.textContaining('Every hour'), findsOneWidget);
+    expect(find.textContaining('Episode a'), findsOneWidget);
+    expect(find.text('12:34'), findsOneWidget);
+  });
+
+  testWidgets('a tap on a clip downloads it by hand', (tester) async {
+    final c = container();
+    await tester.runAsync(() => followSome(c));
+    await tester.pumpWidget(app(c));
+    await tester.pumpAndSettle();
+    await tester.tap(find.textContaining('Episode a'));
+    await tester.pumpAndSettle();
+    expect(engine.tasks.single.inputUrl, 'https://www.youtube.com/watch?v=a');
+    expect(find.textContaining('Download started'), findsOneWidget);
+  });
+
+  testWidgets('its sheet: what it is set to, and unfollow apart', (
+    tester,
+  ) async {
+    final c = container();
+    await tester.runAsync(() => followSome(c));
+    await tester.pumpWidget(app(c));
+    await tester.pumpAndSettle();
+    await tester.tap(find.textContaining('Some Channel'));
+    await tester.pumpAndSettle();
+    for (final label in [
+      'Check now',
+      'Pause',
+      'Edit',
+      'Open channel',
+      'Unfollow',
+    ]) {
+      expect(find.text(label), findsOneWidget, reason: label);
+    }
+    await tester.tap(find.text('Unfollow'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget, reason: 'asked first');
   });
 
   testWidgets('a failed check shows on its row', (tester) async {
@@ -179,8 +241,33 @@ void main() {
         await full
             .read(channelSourceProvider)
             .update('UC_some', titleRegex: 'حلقة|episode');
+        await full
+            .read(channelSourceProvider)
+            .update('UC_some', enabled: false);
       });
       await expectNoOverflow(tester, () => app(full, lang: lang));
+    });
+
+    testWidgets('the channel sheet fits every phone, $lang', (tester) async {
+      final c = container();
+      final sub = await tester.runAsync(() async {
+        await followSome(c);
+        return (await c.read(channelSourceProvider).list()).single;
+      });
+      await expectNoOverflow(
+        tester,
+        () => UncontrolledProviderScope(
+          container: c,
+          child: MaterialApp(
+            theme: mtTheme(MTVariant.lite, Brightness.light),
+            locale: Locale(lang),
+            localizationsDelegates: MTLocalizations.localizationsDelegates,
+            supportedLocales: MTLocalizations.supportedLocales,
+            home: _OpensSheet(channel: sub),
+          ),
+        ),
+      );
+      expect(find.byType(ChannelAvatar), findsOneWidget);
     });
 
     testWidgets('the follow sheet fits every phone, $lang', (tester) async {
@@ -215,19 +302,25 @@ class _Backups implements AutoBackup {
 }
 
 /// Opens the follow sheet once it is on screen, so the matrix measures it.
-class _OpensSheet extends StatefulWidget {
-  const _OpensSheet();
+class _OpensSheet extends ConsumerStatefulWidget {
+  const _OpensSheet({this.channel});
+
+  /// This channel's own sheet rather than the follow sheet.
+  final ChannelSubscription? channel;
 
   @override
-  State<_OpensSheet> createState() => _OpensSheetState();
+  ConsumerState<_OpensSheet> createState() => _OpensSheetState();
 }
 
-class _OpensSheetState extends State<_OpensSheet> {
+class _OpensSheetState extends ConsumerState<_OpensSheet> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => showFollowSheet(context),
+      (_) => switch (widget.channel) {
+        final sub? => showChannelActions(context, ref, sub),
+        null => showFollowSheet(context),
+      },
     );
   }
 

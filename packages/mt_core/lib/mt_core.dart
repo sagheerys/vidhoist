@@ -25,6 +25,7 @@ export 'src/download/local_pending.dart';
 export 'src/folders/folder_choice.dart';
 export 'src/logging/mt_logger.dart';
 export 'src/logging/stack_place.dart';
+export 'src/models/channel_clip.dart';
 export 'src/models/channel_subscription.dart';
 export 'src/models/download_task.dart';
 export 'src/models/history_item.dart';

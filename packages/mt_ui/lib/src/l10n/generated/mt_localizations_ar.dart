@@ -223,6 +223,17 @@ class MTLocalizationsAr extends MTLocalizations {
   String get channelNameFolder => 'باسم القناة';
 
   @override
+  String channelFollowers(String count) {
+    return '$count مشترك';
+  }
+
+  @override
+  String get channelLatest => 'أحدث المقاطع';
+
+  @override
+  String get channelNoClipsYet => 'تظهر أحدث مقاطعها بعد الفحص القادم';
+
+  @override
   String get channelUrl => 'رابط قناة أو قائمة أو أحد مقاطعها';
 
   @override

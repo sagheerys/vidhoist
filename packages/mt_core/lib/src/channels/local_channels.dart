@@ -137,7 +137,7 @@ class LocalChannelSource implements ChannelSource {
         for (final e in feed.entries)
           if (!e.isPending) e.id,
       ],
-    );
+    )..refresh(feed);
     records.add(record);
     await _save();
     onLog?.call('channel followed: ${record.seen.length} clips seen');
@@ -240,7 +240,9 @@ class LocalChannelSource implements ChannelSource {
       }
       record.markSeen(entry.id);
     }
-    record.error = null;
+    record
+      ..error = null
+      ..refresh(feed);
     if (fresh.isNotEmpty) {
       onLog?.call('channel checked: ${fresh.length} new');
     }

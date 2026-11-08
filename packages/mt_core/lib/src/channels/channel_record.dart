@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:mt_ytdlp/mt_ytdlp.dart';
+
+import '../models/channel_clip.dart';
 import '../models/channel_subscription.dart';
 
 /// One followed channel as [LocalChannelSource] keeps it: what the page
@@ -18,6 +21,10 @@ class ChannelRecord {
     this.folder,
     this.lastChecked,
     this.error,
+    this.avatarUrl,
+    this.bannerUrl,
+    this.followers,
+    this.recent = const [],
   }) : seen = _capped(seen);
 
   final String id;
@@ -37,6 +44,35 @@ class ChannelRecord {
   String? folder;
   DateTime? lastChecked;
   String? error;
+
+  String? avatarUrl;
+  String? bannerUrl;
+  int? followers;
+
+  /// The newest clips the last listing named, for the page.
+  List<ChannelClip> recent;
+
+  /// A page row shows a few; a listing names [LocalChannelSource.listLimit].
+  static const recentCap = 8;
+
+  /// What a listing says the channel looks like now. A picture the listing
+  /// left out stays as it was: one site answers without it now and then.
+  void refresh(ChannelFeed feed) {
+    avatarUrl = feed.avatarUrl ?? avatarUrl;
+    bannerUrl = feed.bannerUrl ?? bannerUrl;
+    followers = feed.followers ?? followers;
+    recent = [
+      for (final e in feed.entries.where((e) => !e.isPending).take(recentCap))
+        ChannelClip(
+          id: e.id,
+          url: e.url,
+          title: e.title,
+          thumbnail: e.thumbnail,
+          duration: e.duration,
+          published: e.published,
+        ),
+    ];
+  }
 
   /// The ids met, oldest first.
   final List<String> seen;
@@ -74,6 +110,10 @@ class ChannelRecord {
     lastChecked: lastChecked,
     error: error,
     folder: folder,
+    avatarUrl: avatarUrl,
+    bannerUrl: bannerUrl,
+    followers: followers,
+    recent: recent,
   );
 
   Map<String, Object?> toJson() => {
@@ -88,6 +128,10 @@ class ChannelRecord {
     if (folder != null) 'folder': folder,
     if (lastChecked != null) 'checked': lastChecked!.millisecondsSinceEpoch,
     if (error != null) 'error': error,
+    if (avatarUrl != null) 'avatar': avatarUrl,
+    if (bannerUrl != null) 'banner': bannerUrl,
+    if (followers != null) 'followers': followers,
+    if (recent.isNotEmpty) 'recent': [for (final c in recent) c.toJson()],
     'seen': seen,
   };
 
@@ -122,6 +166,16 @@ class ChannelRecord {
           ? DateTime.fromMillisecondsSinceEpoch(checked)
           : null,
       error: text('error'),
+      avatarUrl: text('avatar'),
+      bannerUrl: text('banner'),
+      followers: switch (raw['followers']) {
+        final int n when n >= 0 => n,
+        _ => null,
+      },
+      recent: [
+        if (raw['recent'] case final List clips)
+          for (final c in clips) ?ChannelClip.fromJson(c),
+      ],
       seen: [
         if (raw['seen'] case final List ids)
           for (final s in ids)

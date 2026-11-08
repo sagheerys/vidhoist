@@ -9,12 +9,20 @@ class FlatEntry {
     this.title,
     this.duration,
     this.liveStatus,
+    this.thumbnail,
+    this.published,
   });
 
   final String id;
   final String url;
   final String? title;
   final Duration? duration;
+
+  /// The frame a list shows for it, no wider than a phone needs.
+  final String? thumbnail;
+
+  /// When it went up, where the listing says; YouTube's often does not.
+  final DateTime? published;
 
   /// yt-dlp's `live_status`: `is_live`, `is_upcoming`, `was_live`, or null.
   final String? liveStatus;
@@ -166,6 +174,43 @@ class InfoJson {
               liveStatus: e['live_status'] is String
                   ? e['live_status'] as String
                   : null,
+              thumbnail: pickThumbnail(e, maxWidth: 720),
+              published: e['timestamp'] is num
+                  ? DateTime.fromMillisecondsSinceEpoch(
+                      (e['timestamp'] as num).round() * 1000,
+                      isUtc: true,
+                    )
+                  : null,
             ),
   ];
+}
+
+/// The widest picture in [map]'s `thumbnails` no wider than [maxWidth],
+/// else its `thumbnail`: a listing offers a frame at several sizes, and a
+/// phone row is not worth the largest. [where] keeps only some, such as a
+/// channel's square avatar.
+String? pickThumbnail(
+  Map<String, Object?> map, {
+  required int maxWidth,
+  bool Function(int width, int height)? where,
+}) {
+  String? best;
+  var bestWidth = -1;
+  if (map['thumbnails'] case final List list) {
+    for (final t in list) {
+      if (t is! Map || t['url'] is! String) continue;
+      final w = t['width'];
+      final h = t['height'];
+      if (w is! num || h is! num) continue;
+      if (where != null && !where(w.round(), h.round())) continue;
+      if (w > maxWidth || w <= bestWidth) continue;
+      best = t['url'] as String;
+      bestWidth = w.round();
+    }
+  }
+  if (best != null || where != null) return best;
+  return switch (map['thumbnail']) {
+    final String s when s.isNotEmpty => s,
+    _ => null,
+  };
 }

@@ -1,3 +1,5 @@
+import 'channel_clip.dart';
+
 /// **A channel the server watches on the user's behalf** (§2.7).
 ///
 /// The app owns none of the mechanism: Vidhoist runs the check loop, keeps
@@ -19,6 +21,10 @@ class ChannelSubscription {
     this.lastChecked,
     this.error,
     this.folder,
+    this.avatarUrl,
+    this.bannerUrl,
+    this.followers,
+    this.recent = const [],
   });
 
   final String id;
@@ -61,6 +67,17 @@ class ChannelSubscription {
   /// never moves a file that is already downloaded.
   final String? folder;
 
+  /// The channel's square picture and its page's wide one, from the last
+  /// listing; null for a site without them, or before the first check.
+  final String? avatarUrl;
+  final String? bannerUrl;
+
+  /// How many follow it, as the site counts them.
+  final int? followers;
+
+  /// Its newest clips, newest first, as the last check listed them.
+  final List<ChannelClip> recent;
+
   bool get hasError => error != null && error!.trim().isNotEmpty;
 
   ChannelSubscription copyWith({
@@ -81,6 +98,10 @@ class ChannelSubscription {
     lastChecked: lastChecked,
     error: error,
     folder: folder,
+    avatarUrl: avatarUrl,
+    bannerUrl: bannerUrl,
+    followers: followers,
+    recent: recent,
   );
 
   /// Returns null for anything that is not a usable row, so one malformed
