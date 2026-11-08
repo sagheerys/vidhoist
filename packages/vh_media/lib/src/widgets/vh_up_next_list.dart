@@ -1,0 +1,256 @@
+import 'package:flutter/material.dart';
+import 'package:vh_ui/vh_ui.dart';
+
+import '../models/playlist_item.dart';
+import 'media_time.dart';
+
+/// The app builds the thumbnail, from cached_network_image or a local
+/// file; vh_media knows neither the image package nor the server.
+/// **Returns `null` when there is no cover**, never an empty `SizedBox`:
+/// the fallback, an audio or film icon, is drawn on nothing, and returning
+/// an empty widget killed that fallback and left a blank square in the
+/// audio player and the mini player (device check 2026-09-05).
+typedef VhArtworkBuilder = Widget? Function(
+  BuildContext context,
+  PlaylistItem item,
+);
+
+/// The "up next" rows, the same content in all three shapes: a section
+/// under portrait video, a side panel in landscape, a bottom sheet in
+/// audio.
+class VhUpNextList extends StatefulWidget {
+  const VhUpNextList({
+    super.key,
+    required this.items,
+    required this.currentIndex,
+    required this.onTap,
+    this.artwork,
+    this.dark = false,
+    this.paused = false,
+    this.shrinkWrap = false,
+    this.physics,
+    this.revealCurrent = false,
+  });
+
+  final List<PlaylistItem> items;
+
+  /// The index inside [items] of the item currently playing, or -1 for
+  /// none.
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  final VhArtworkBuilder? artwork;
+  final bool dark;
+
+  /// The current item is **paused**, so the indicator stands still rather
+  /// than dancing (the same cure as the queue screen: field report
+  /// 2026-09-04).
+  final bool paused;
+  final bool shrinkWrap;
+  final ScrollPhysics? physics;
+
+  /// **Opens on the current item** (field report 2026-09-26: with the song
+  /// playing near the end of a thirty-song queue, the sheet opened at the
+  /// top and it had to be hunted for). Only where the list scrolls by
+  /// itself: nested in a page, under the portrait video, moving it would
+  /// move the page.
+  final bool revealCurrent;
+
+  @override
+  State<VhUpNextList> createState() => _VhUpNextListState();
+}
+
+class _VhUpNextListState extends State<VhUpNextList> {
+  final _controller = ScrollController();
+  final _currentKey = GlobalKey();
+
+  /// Where the current row settles: a fifth of the way down, so the song
+  /// before it shows too and it reads as a place in the list.
+  static const _alignment = 0.2;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.revealCurrent && widget.currentIndex > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _reveal());
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  /// Rows are built lazily, so a far one does not exist yet: jump to its
+  /// estimated place — rows are near enough the same height — then, once
+  /// it is built, put it exactly where it belongs.
+  void _reveal() {
+    if (!mounted) return;
+    if (_currentKey.currentContext case final BuildContext row) {
+      Scrollable.ensureVisible(row, alignment: _alignment);
+      return;
+    }
+    if (!_controller.hasClients) return;
+    final position = _controller.position;
+    final perRow =
+        (position.maxScrollExtent + position.viewportDimension) /
+        widget.items.length;
+    position.jumpTo(
+      (perRow * widget.currentIndex - position.viewportDimension * _alignment)
+          .clamp(0.0, position.maxScrollExtent),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (_currentKey.currentContext case final BuildContext row) {
+        Scrollable.ensureVisible(row, alignment: _alignment);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => ListView.builder(
+    controller: _controller,
+    shrinkWrap: widget.shrinkWrap,
+    physics: widget.physics,
+    padding: EdgeInsets.zero,
+    itemCount: widget.items.length,
+    itemBuilder: (context, index) => _UpNextRow(
+      key: index == widget.currentIndex ? _currentKey : null,
+      item: widget.items[index],
+      playing: index == widget.currentIndex,
+      paused: widget.paused,
+      artwork: widget.artwork,
+      dark: widget.dark,
+      onTap: () => widget.onTap(index),
+    ),
+  );
+}
+
+/// The same rows as a sliver, for a page that scrolls them together with
+/// what sits above them (under the portrait video). Only the rows on screen
+/// are built: a nested list sized to its content built every one of a
+/// 468-clip queue, covers included, on every tick of the video's clock,
+/// and the player stuttered (field report 2026-09-30).
+class VhUpNextSliver extends StatelessWidget {
+  const VhUpNextSliver({
+    super.key,
+    required this.items,
+    required this.currentIndex,
+    required this.onTap,
+    this.artwork,
+    this.paused = false,
+  });
+
+  final List<PlaylistItem> items;
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  final VhArtworkBuilder? artwork;
+  final bool paused;
+
+  @override
+  Widget build(BuildContext context) => SliverList.builder(
+    itemCount: items.length,
+    itemBuilder: (context, index) => _UpNextRow(
+      item: items[index],
+      playing: index == currentIndex,
+      paused: paused,
+      artwork: artwork,
+      dark: false,
+      onTap: () => onTap(index),
+    ),
+  );
+}
+
+class _UpNextRow extends StatelessWidget {
+  const _UpNextRow({
+    super.key,
+    required this.item,
+    required this.playing,
+    required this.paused,
+    required this.dark,
+    required this.onTap,
+    this.artwork,
+  });
+
+  final PlaylistItem item;
+  final bool playing;
+  final bool paused;
+  final bool dark;
+  final VoidCallback onTap;
+  final VhArtworkBuilder? artwork;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    final text = Theme.of(context).textTheme;
+    final ink = dark ? p.miniInk : p.ink;
+    final muted = dark ? p.miniInkMuted : p.ink3;
+    final line = dark ? p.miniInk.withValues(alpha: 0.08) : p.line;
+
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: VhSpace.sm),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: line)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: dark ? 58 : 74,
+              height: dark ? 36 : 46,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                color: dark ? p.miniInk.withValues(alpha: 0.1) : p.cardAlt,
+                borderRadius: BorderRadius.circular(VhRadius.thumb - 2),
+                border: Border.all(color: line),
+              ),
+              // **The icon sits underneath, not beside** (field report
+              // 2026-09-20: "an audio clip in the video player's queue is a
+              // black square"). The builder returns null only when there is
+              // no cover at all; a cover that **fails to load** — a cleared
+              // cache, a deleted extracted cover, a thumbnail the server no
+              // longer serves — returns an empty box instead, and the
+              // fallback beside it never ran. On a dark sheet an empty box
+              // is a black square. A cover that does load simply covers
+              // this.
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Center(
+                    child: VhIcon(
+                      item.isAudio ? VhIcons.music : VhIcons.video,
+                      size: 16,
+                      color: muted,
+                    ),
+                  ),
+                  ?artwork?.call(context, item),
+                ],
+              ),
+            ),
+            const SizedBox(width: VhSpace.sm),
+            Expanded(
+              child: VhForeignText(
+                item.title,
+                maxLines: 2,
+                style: text.bodySmall!.copyWith(
+                  fontSize: dark ? 10.5 : 12,
+                  color: playing ? p.accentInk : (dark ? p.miniInkMuted : ink),
+                  fontWeight: playing ? FontWeight.w700 : FontWeight.w500,
+                ),
+              ),
+            ),
+            const SizedBox(width: VhSpace.xs),
+            if (playing)
+              VhEqualizer(size: 11, animate: !paused)
+            else if (item.duration != null)
+              Text(
+                vhFormatDuration(item.duration!),
+                style: text.labelSmall!.copyWith(color: muted).tabular,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}

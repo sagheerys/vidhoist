@@ -1,5 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:mt_ui/mt_ui.dart' show MTPalette;
+import 'package:vh_ui/vh_ui.dart' show VhPalette;
 
 /// A button on a download's notification: its id comes back to the app.
 typedef NoticeAction = ({String id, String label});
@@ -116,7 +116,7 @@ class DownloadNotifications {
         channelName,
         importance: Importance.defaultImportance,
         priority: Priority.defaultPriority,
-        color: isError ? MTPalette.notificationError : null,
+        color: isError ? VhPalette.notificationError : null,
       ),
     ),
     payload: payload,

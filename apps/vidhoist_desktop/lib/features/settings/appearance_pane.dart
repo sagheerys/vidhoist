@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/appearance_data.dart';
 import '../../shell/ui_zoom.dart';
@@ -17,11 +17,11 @@ class AppearancePane extends ConsumerWidget {
 
   /// The pane's widest: the choices at a readable width, then the preview.
   static const double maxWidth =
-      MTBreakpoint.readable + MTSpace.xxl + AppearancePreview.width;
+      VhBreakpoint.readable + VhSpace.xxl + AppearancePreview.width;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final look = ref.watch(appearanceProvider);
     final appearance = ref.read(appearanceProvider.notifier);
     final zoom = ref.watch(uiZoomProvider);
@@ -29,7 +29,7 @@ class AppearancePane extends ConsumerWidget {
     final tooLarge = uiZoomSteps.any((s) => !zooms.fits(s));
     final faded = uiZoomSteps
         .where((s) => !zooms.fits(s))
-        .map((s) => mtLtrRun(UiZoom(s).percent))
+        .map((s) => vhLtrRun(UiZoom(s).percent))
         .join(' ');
     final choices = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -37,14 +37,14 @@ class AppearancePane extends ConsumerWidget {
         ChoiceGroup(
           title: l.theme,
           children: [
-            EmberSegments(
+            DesktopSegments(
               items: [
                 for (final (mode, label) in [
                   (ThemeMode.system, l.themeSystem),
                   (ThemeMode.light, l.themeLight),
                   (ThemeMode.dark, l.themeDark),
                 ])
-                  EmberSegment(
+                  DesktopSegment(
                     label: label,
                     selected: look.theme == mode,
                     onTap: () => appearance.setTheme(mode),
@@ -57,16 +57,16 @@ class AppearancePane extends ConsumerWidget {
           title: l.language,
           hint: look.locale == null ? l.desktopLanguageSystemHint : null,
           children: [
-            EmberSegments(
+            DesktopSegments(
               items: [
-                EmberSegment(
+                DesktopSegment(
                   label: l.languageSystem,
                   selected: look.locale == null,
                   onTap: () => appearance.setLocale(null),
                 ),
                 for (final code in appearanceLocales)
-                  EmberSegment(
-                    label: mtLanguageName(code),
+                  DesktopSegment(
+                    label: vhLanguageName(code),
                     selected: look.locale == code,
                     onTap: () => appearance.setLocale(code),
                   ),
@@ -81,16 +81,16 @@ class AppearancePane extends ConsumerWidget {
           hint: [
             if (tooLarge) '$faded: ${l.desktopUiSizeTooLarge}',
             l.desktopUiSizeHint(
-              mtLtrRun('Ctrl+='),
-              mtLtrRun('Ctrl+−'),
-              mtLtrRun('Ctrl+0'),
+              vhLtrRun('Ctrl+='),
+              vhLtrRun('Ctrl+−'),
+              vhLtrRun('Ctrl+0'),
             ),
           ].join('\n'),
           children: [
-            EmberSegments(
+            DesktopSegments(
               items: [
                 for (final step in uiZoomSteps)
-                  EmberSegment(
+                  DesktopSegment(
                     label: UiZoom(step).percent,
                     selected: zoom.value == step,
                     enabled: zooms.fits(step) || zoom.value == step,
@@ -107,12 +107,12 @@ class AppearancePane extends ConsumerWidget {
         final preview = AppearancePreview(theme: look.theme, zoom: zoom.value);
         // Beside the choices once they keep a readable width of their own;
         // under them where they would not.
-        if (box.maxWidth < MTBreakpoint.readable) {
+        if (box.maxWidth < VhBreakpoint.readable) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               choices,
-              const SizedBox(height: MTSpace.md),
+              const SizedBox(height: VhSpace.md),
               preview,
             ],
           );
@@ -123,9 +123,9 @@ class AppearancePane extends ConsumerWidget {
             // The choices as wide as their words, so the preview stands
             // beside them and not across an empty middle.
             Flexible(child: IntrinsicWidth(child: choices)),
-            const SizedBox(width: MTSpace.xxl),
+            const SizedBox(width: VhSpace.xxl),
             Padding(
-              padding: const EdgeInsets.only(top: MTSpace.lg),
+              padding: const EdgeInsets.only(top: VhSpace.lg),
               child: preview,
             ),
           ],
@@ -136,31 +136,31 @@ class AppearancePane extends ConsumerWidget {
 }
 
 /// Choices joined on one ground, the chosen one lifted onto the card.
-class EmberSegments extends StatelessWidget {
-  const EmberSegments({super.key, required this.items});
+class DesktopSegments extends StatelessWidget {
+  const DesktopSegments({super.key, required this.items});
 
-  final List<EmberSegment> items;
+  final List<DesktopSegment> items;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: p.cardAlt,
-        borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(MTSpace.xxs / 2),
+        padding: const EdgeInsets.all(VhSpace.xxs / 2),
         child: Wrap(children: items),
       ),
     );
   }
 }
 
-/// One of [EmberSegments]. A choice this screen cannot hold is faded, not
+/// One of [DesktopSegments]. A choice this screen cannot hold is faded, not
 /// missing, and takes no click.
-class EmberSegment extends StatelessWidget {
-  const EmberSegment({
+class DesktopSegment extends StatelessWidget {
+  const DesktopSegment({
     super.key,
     required this.label,
     required this.selected,
@@ -175,10 +175,10 @@ class EmberSegment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final radius = BorderRadius.circular(
-      MTCorners.desktop.chip - MTSpace.xxs / 2,
+      VhCorners.desktop.chip - VhSpace.xxs / 2,
     );
     return Semantics(
       button: true,
@@ -194,8 +194,8 @@ class EmberSegment extends StatelessWidget {
             onTap: enabled ? onTap : null,
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: MTSpace.md,
-                vertical: MTSpace.xs,
+                horizontal: VhSpace.md,
+                vertical: VhSpace.xs,
               ),
               child: Text(
                 label,
@@ -228,18 +228,18 @@ class ChoiceGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: MTSpace.sm),
+      padding: const EdgeInsets.symmetric(vertical: VhSpace.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: text.bodyLarge?.copyWith(color: p.ink)),
-          const SizedBox(height: MTSpace.xs),
-          Wrap(spacing: MTSpace.xs, runSpacing: MTSpace.xs, children: children),
+          const SizedBox(height: VhSpace.xs),
+          Wrap(spacing: VhSpace.xs, runSpacing: VhSpace.xs, children: children),
           if (hint case final hint?) ...[
-            const SizedBox(height: MTSpace.xs),
+            const SizedBox(height: VhSpace.xs),
             Text(hint, style: text.labelSmall?.copyWith(color: p.ink3)),
           ],
         ],

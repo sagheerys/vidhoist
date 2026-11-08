@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/engine_data.dart';
 import '../../data/folders_data.dart';
@@ -48,7 +48,7 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
   var _busy = false;
 
   Future<void> _choose() async {
-    final l = context.mtl;
+    final l = context.vhl;
     final target = ref.read(cookiesFileTargetProvider);
     if (target == null) return;
     final files = await ref
@@ -57,10 +57,10 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
     if (files.isEmpty || !mounted) return;
     final bytes = CookieFiles.merge([for (final f in files) f.$2]);
     if (bytes == null) {
-      showMTNotice(
+      showVhNotice(
         context,
         message: l.cookiesNotNetscape,
-        kind: MTNoticeKind.failed,
+        kind: VhNoticeKind.failed,
       );
       return;
     }
@@ -73,20 +73,20 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
       ref.invalidate(cookieSitesProvider);
       final sites = CookieFiles.sites(bytes);
       if (mounted) {
-        showMTNotice(
+        showVhNotice(
           context,
           message: sites.isEmpty
               ? l.desktopCookiesKept
-              : l.desktopCookiesKeptFor(mtLtrRun(sites.join(' · '))),
-          kind: MTNoticeKind.done,
+              : l.desktopCookiesKeptFor(vhLtrRun(sites.join(' · '))),
+          kind: VhNoticeKind.done,
         );
       }
     } on FileSystemException catch (e) {
       if (mounted) {
-        showMTNotice(
+        showVhNotice(
           context,
           message: l.errorGeneric(e.message),
-          kind: MTNoticeKind.failed,
+          kind: VhNoticeKind.failed,
         );
       }
     } finally {
@@ -105,8 +105,8 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final options = ref.watch(engineOptionsProvider);
     final file = options.cookiesFile;
@@ -118,29 +118,29 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
           l.desktopCookiesLocalHint,
           style: text.bodyMedium?.copyWith(color: p.ink2),
         ),
-        const SizedBox(height: MTSpace.sm),
+        const SizedBox(height: VhSpace.sm),
         SettingLine(
           title: l.desktopCookiesFile,
           value: file == null
               ? l.desktopCookiesNone
               : switch (ref.watch(cookieSitesProvider).valueOrNull) {
-                  final sites? when sites.isNotEmpty => mtLtrRun(
+                  final sites? when sites.isNotEmpty => vhLtrRun(
                     sites.join(' · '),
                   ),
                   _ => l.desktopCookiesKept,
                 },
           trailing: Wrap(
-            spacing: MTSpace.xs,
+            spacing: VhSpace.xs,
             children: [
-              MTLinkButton(
+              VhLinkButton(
                 label: l.desktopCookiesChoose,
-                icon: MTIcons.cookie,
+                icon: VhIcons.cookie,
                 onPressed: _busy ? null : () => unawaited(_choose()),
               ),
               if (file != null)
-                MTLinkButton(
+                VhLinkButton(
                   label: l.desktopCookiesRemove,
-                  icon: MTIcons.trash,
+                  icon: VhIcons.trash,
                   danger: true,
                   onPressed: _busy ? null : () => unawaited(_remove(file)),
                 ),
@@ -151,15 +151,15 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
           title: l.desktopCookiesBrowser,
           hint: l.desktopCookiesBrowserHint,
           children: [
-            EmberSegments(
+            DesktopSegments(
               items: [
-                EmberSegment(
+                DesktopSegment(
                   label: l.desktopCookiesNone,
                   selected: options.cookiesBrowser == null,
                   onTap: () => unawaited(browsers.setCookiesBrowser(null)),
                 ),
                 for (final browser in cookieBrowsers)
-                  EmberSegment(
+                  DesktopSegment(
                     label: _browserNames[browser] ?? browser,
                     selected: options.cookiesBrowser == browser,
                     onTap: () => unawaited(browsers.setCookiesBrowser(browser)),
@@ -168,7 +168,7 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
             ),
           ],
         ),
-        const SizedBox(height: MTSpace.sm),
+        const SizedBox(height: VhSpace.sm),
         FoldedText(
           l.desktopCookiesHelp,
           style: text.labelSmall?.copyWith(color: p.ink3),

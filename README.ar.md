@@ -42,7 +42,7 @@ Flutter 3.47 فما فوق (Dart ^3.13). من جذر المستودع:
 
 ```bash
 flutter pub get
-cd packages/mt_ui && flutter gen-l10n && cd ../..
+cd packages/vh_ui && flutter gen-l10n && cd ../..
 flutter analyze --no-pub
 cd apps/vidhoist_mobile  && flutter build apk --debug
 cd apps/vidhoist_desktop && flutter build windows --debug
@@ -50,8 +50,8 @@ cd apps/vidhoist_desktop && flutter build windows --debug
 
 <div dir="rtl">
 
-الاختبارات: `dart test` في `packages/mt_core` و`packages/mt_transcripts`،
-و`flutter test --no-pub` في `packages/mt_media` و`packages/mt_ui`
+الاختبارات: `dart test` في `packages/vh_core` و`packages/vh_transcripts`،
+و`flutter test --no-pub` في `packages/vh_media` و`packages/vh_ui`
 و`apps/vidhoist_mobile` و`apps/vidhoist_desktop`.
 
 الأيقونات وملفات الهوية تُولَّد ولا تُرسم يدوياً:
@@ -65,10 +65,10 @@ cd apps/vidhoist_desktop && flutter build windows --debug
 ```
 apps/vidhoist_mobile     تطبيق أندرويد
 apps/vidhoist_desktop    تطبيق ويندوز
-packages/mt_core         Dart خالص: النماذج، التخزين، محرّك التحميل، النسخ الاحتياطي، التحديث
-packages/mt_media        المشغّلات والمشغّل المصغّر وجلسة الوسائط
-packages/mt_ui           نظام تصميم «وهج»: الرموز، الأيقونات، نصوص EN/AR
-packages/mt_transcripts  الترجمات والبحث في النصوص
+packages/vh_core         Dart خالص: النماذج، التخزين، محرّك التحميل، النسخ الاحتياطي، التحديث
+packages/vh_media        المشغّلات والمشغّل المصغّر وجلسة الوسائط
+packages/vh_ui           نظام تصميم «وهج»: الرموز، الأيقونات، نصوص EN/AR
+packages/vh_transcripts  الترجمات والبحث في النصوص
 third_party/             إضافتان معدَّلتان، انظر PATCHES.md في كلٍّ منهما
 docs/                    البنية، المخطّط، القرارات (docs/adr)
 ```

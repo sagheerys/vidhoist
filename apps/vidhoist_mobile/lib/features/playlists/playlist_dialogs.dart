@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import 'playlists_providers.dart';
@@ -13,10 +13,10 @@ Future<String?> promptPlaylistName(
   String? initialName,
   String? title,
 }) {
-  final l10n = context.mtl;
+  final l10n = context.vhl;
   // The dialog owns the controller and disposes it; see
   // `mt_text_prompt.dart`.
-  return promptMTText(
+  return promptVhText(
     context,
     title: title ?? l10n.createPlaylist,
     confirmLabel: initialName == null ? l10n.create : l10n.rename,
@@ -35,10 +35,10 @@ Future<void> showCreatePlaylistDialog(
   await ref.read(playlistsStoreProvider).create(name);
   ref.invalidate(playlistsProvider);
   if (context.mounted) {
-    showMTSnack(
+    showVhSnack(
       context,
-      context.mtl.playlistCreated,
-      type: MTSnackType.success,
+      context.vhl.playlistCreated,
+      type: VhSnackType.success,
     );
   }
 }
@@ -49,11 +49,11 @@ void showPlaylistActionsSheet(
   WidgetRef ref,
   SavedPlaylist playlist,
 ) {
-  final l10n = context.mtl;
-  final p = MTThemeX.of(context).palette;
+  final l10n = context.vhl;
+  final p = VhThemeX.of(context).palette;
   final store = ref.read(playlistsStoreProvider);
 
-  showMTSheet<void>(
+  showVhSheet<void>(
     context: context,
     useRootNavigator: true,
     builder: (sheetContext) => SafeArea(
@@ -62,10 +62,10 @@ void showPlaylistActionsSheet(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(
-              MTSpace.xl,
-              MTSpace.lg,
-              MTSpace.xl,
-              MTSpace.sm,
+              VhSpace.xl,
+              VhSpace.lg,
+              VhSpace.xl,
+              VhSpace.sm,
             ),
             child: Text(
               playlist.name,
@@ -76,8 +76,8 @@ void showPlaylistActionsSheet(
           ),
           const Divider(),
           ListTile(
-            leading: MTIcon(
-              playlist.pinned ? MTIcons.pinOn : MTIcons.pin,
+            leading: VhIcon(
+              playlist.pinned ? VhIcons.pinOn : VhIcons.pin,
               color: p.ink2,
             ),
             title: Text(
@@ -90,7 +90,7 @@ void showPlaylistActionsSheet(
             },
           ),
           ListTile(
-            leading: MTIcon(MTIcons.edit, color: p.ink2),
+            leading: VhIcon(VhIcons.edit, color: p.ink2),
             title: Text(l10n.rename),
             onTap: () async {
               Navigator.pop(sheetContext);
@@ -116,7 +116,7 @@ void showPlaylistActionsSheet(
           if (ref.read(playlistViewProvider(playlist.id)).valueOrNull
               case final PlaylistView view when view.missing.isNotEmpty)
             ListTile(
-              leading: MTIcon(MTIcons.queueRemove, color: p.ink2),
+              leading: VhIcon(VhIcons.queueRemove, color: p.ink2),
               title: Text(l10n.removeUnavailable(view.missing.length)),
               onTap: () async {
                 Navigator.pop(sheetContext);
@@ -130,7 +130,7 @@ void showPlaylistActionsSheet(
             ),
           const Divider(),
           ListTile(
-            leading: MTIcon(MTIcons.trash, color: p.err),
+            leading: VhIcon(VhIcons.trash, color: p.err),
             title: Text(
               l10n.delete,
               style: Theme.of(context).textTheme.bodyMedium!
@@ -144,11 +144,11 @@ void showPlaylistActionsSheet(
               await store.delete(playlist.id);
               ref.invalidate(playlistsProvider);
               if (context.mounted) {
-                showMTSnack(context, l10n.playlistDeleted);
+                showVhSnack(context, l10n.playlistDeleted);
               }
             },
           ),
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
         ],
       ),
     ),
@@ -156,11 +156,11 @@ void showPlaylistActionsSheet(
 }
 
 Future<bool> _confirmDelete(BuildContext context, String name) async {
-  final l10n = context.mtl;
-  final result = await showMTDialog<bool>(
+  final l10n = context.vhl;
+  final result = await showVhDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
-      content: Text(l10n.deletePlaylistConfirm(mtName(name))),
+      content: Text(l10n.deletePlaylistConfirm(vhName(name))),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(dialogContext, false),

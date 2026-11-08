@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/subtitles_data.dart';
 import '../../di.dart';
@@ -45,14 +45,14 @@ class ClipVideoControls extends ConsumerStatefulWidget {
 }
 
 class _ClipVideoControlsState extends ConsumerState<ClipVideoControls> {
-  late final MTPlayer _player = ref.read(playerProvider);
+  late final VhPlayer _player = ref.read(playerProvider);
   late final _clock = PlayerCaptionClock(_player);
   bool _awake = false;
   Timer? _rest;
 
   /// The room the controls take at the picture's foot while they show:
   /// the subtitles rise above it, and come down when it fades.
-  static const double _barRoom = MTSpace.xxl * 3 + MTSpace.sm;
+  static const double _barRoom = VhSpace.xxl * 3 + VhSpace.sm;
 
   @override
   void dispose() {
@@ -73,7 +73,7 @@ class _ClipVideoControlsState extends ConsumerState<ClipVideoControls> {
   }
 
   @override
-  Widget build(BuildContext context) => StreamBuilder<MTPlayerState>(
+  Widget build(BuildContext context) => StreamBuilder<VhPlayerState>(
     stream: _player.states,
     initialData: _player.state,
     builder: (context, snap) {
@@ -88,7 +88,7 @@ class _ClipVideoControlsState extends ConsumerState<ClipVideoControls> {
           fit: StackFit.expand,
           children: [
             widget.child,
-            ?_captions(state.current, lift: shown ? _barRoom : MTSpace.lg),
+            ?_captions(state.current, lift: shown ? _barRoom : VhSpace.lg),
             Align(
               alignment: Alignment.bottomCenter,
               // Never in the focus order, shown or not: the arrows are
@@ -99,7 +99,7 @@ class _ClipVideoControlsState extends ConsumerState<ClipVideoControls> {
                   ignoring: !shown,
                   child: AnimatedOpacity(
                     opacity: shown ? 1 : 0,
-                    duration: mtMotionDuration(context, MTMotion.fast),
+                    duration: vhMotionDuration(context, VhMotion.fast),
                     child: _Bar(
                       player: _player,
                       state: state,
@@ -119,14 +119,14 @@ class _ClipVideoControlsState extends ConsumerState<ClipVideoControls> {
   /// it has a transcript; null without one. Redrawn when their size or
   /// background changes.
   Widget? _captions(PlaylistItem? item, {required double lift}) {
-    if (item == null || emberCaptionsFor(ref, item) == null) return null;
-    final subtitles = ref.watch(emberSubtitlesProvider);
+    if (item == null || desktopCaptionsFor(ref, item) == null) return null;
+    final subtitles = ref.watch(desktopSubtitlesProvider);
     return ListenableBuilder(
       listenable: Listenable.merge([subtitles.size, subtitles.background]),
-      builder: (context, _) => MTCaptionsLayer(
+      builder: (context, _) => VhCaptionsLayer(
         key: ValueKey(item.canonicalUrl),
         clock: _clock,
-        captions: emberCaptionsFor(ref, item)!,
+        captions: desktopCaptionsFor(ref, item)!,
         lift: lift,
       ),
     );
@@ -138,14 +138,14 @@ class _ClipVideoControlsState extends ConsumerState<ClipVideoControls> {
 class _Bar extends ConsumerWidget {
   const _Bar({required this.player, required this.state, required this.short});
 
-  final MTPlayer player;
-  final MTPlayerState state;
+  final VhPlayer player;
+  final VhPlayerState state;
   final bool short;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final controls = ref.watch(windowControlsProvider);
     final theater = ref.watch(theaterProvider);
     final speeds = PlaybackSpeeds.options;
@@ -155,21 +155,21 @@ class _Bar extends ConsumerWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.transparent, MTPalette.fullscreenScrim],
+          colors: [Colors.transparent, VhPalette.fullscreenScrim],
         ),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
-          MTSpace.md,
-          MTSpace.xl,
-          MTSpace.xs,
-          MTSpace.xs,
+          VhSpace.md,
+          VhSpace.xl,
+          VhSpace.xs,
+          VhSpace.xs,
         ),
         child: Directionality(
           textDirection: TextDirection.ltr,
           child: ValueListenableBuilder<bool>(
             valueListenable: controls.fullScreen,
-            builder: (context, full, _) => EmberSeekBar(
+            builder: (context, full, _) => DesktopSeekBar(
               player: player,
               duration: state.duration,
               onPicture: true,
@@ -183,21 +183,21 @@ class _Bar extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (full) ...[
-                      const EmberVolumeSlider(onPicture: true),
-                      const SizedBox(width: MTSpace.xs),
+                      const DesktopVolumeSlider(onPicture: true),
+                      const SizedBox(width: VhSpace.xs),
                     ],
                     if (state.current case final item?)
-                      EmberCaptionButtons(item: item),
-                    MTShortcutTooltip(
+                      DesktopCaptionButtons(item: item),
+                    VhShortcutTooltip(
                       message: l.playbackSpeed,
                       child: TextButton(
                         onPressed: () => player.setSpeed(nextSpeed),
                         child: Semantics(
                           label: l.playbackSpeed,
-                          value: mtLtrRun('${state.speed}×'),
+                          value: vhLtrRun('${state.speed}×'),
                           excludeSemantics: true,
                           child: Text(
-                            mtLtrRun('${state.speed}×'),
+                            vhLtrRun('${state.speed}×'),
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium
@@ -208,8 +208,8 @@ class _Bar extends ConsumerWidget {
                       ),
                     ),
                     if (!short && !full)
-                      EmberPlayerControl(
-                        icon: MTIcons.theater,
+                      DesktopPlayerControl(
+                        icon: VhIcons.theater,
                         label: l.desktopTheater,
                         selected: theater,
                         ink: Colors.white,
@@ -217,8 +217,8 @@ class _Bar extends ConsumerWidget {
                         onTap: () =>
                             ref.read(theaterProvider.notifier).state = !theater,
                       ),
-                    EmberPlayerControl(
-                      icon: full ? MTIcons.collapse : MTIcons.fullscreen,
+                    DesktopPlayerControl(
+                      icon: full ? VhIcons.collapse : VhIcons.fullscreen,
                       label: full ? l.exitFullscreen : l.enterFullscreen,
                       shortcut: 'F11',
                       ink: Colors.white,
@@ -235,29 +235,29 @@ class _Bar extends ConsumerWidget {
   }
 
   /// Previous, play and next, in full screen where the player bar is not.
-  Widget _transport(BuildContext context, MTLocalizations l) => Row(
+  Widget _transport(BuildContext context, VhLocalizations l) => Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      EmberPlayerControl(
-        icon: MTIcons.prev,
+      DesktopPlayerControl(
+        icon: VhIcons.prev,
         label: l.previous,
         ink: Colors.white,
         onTap: player.skipToPrevious,
       ),
-      EmberPlayerControl(
-        icon: state.playing ? MTIcons.pause : MTIcons.playFill,
+      DesktopPlayerControl(
+        icon: state.playing ? VhIcons.pause : VhIcons.playFill,
         label: state.playing ? l.pause : l.play,
         shortcut: 'Space',
         ink: Colors.white,
         onTap: state.playing ? player.pause : player.play,
       ),
-      EmberPlayerControl(
-        icon: MTIcons.next,
+      DesktopPlayerControl(
+        icon: VhIcons.next,
         label: l.next,
         ink: Colors.white,
         onTap: player.skipToNext,
       ),
-      const SizedBox(width: MTSpace.xs),
+      const SizedBox(width: VhSpace.xs),
     ],
   );
 }

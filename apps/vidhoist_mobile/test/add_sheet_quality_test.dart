@@ -8,8 +8,8 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/home/add_flow.dart';
 import 'package:vidhoist_mobile/features/home/link_preview_view.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
@@ -24,10 +24,10 @@ void main() {
     return ProviderScope(
       overrides: _overrides(engine),
       child: MaterialApp.router(
-        theme: mtTheme(MTVariant.lite, Brightness.light),
+        theme: vhTheme(VhVariant.phone, Brightness.light),
         locale: const Locale('en'),
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
         routerConfig: GoRouter(
           routes: [
             GoRoute(
@@ -92,9 +92,9 @@ List<Override> _overrides(LocalDownloadEngine? engine) => [
   keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
   secretStoreProvider.overrideWithValue(MemorySecretStore()),
   prefsMutexProvider.overrideWithValue(PrefsMutex()),
-  initialSettingsProvider.overrideWithValue(const LiteSettings()),
+  initialSettingsProvider.overrideWithValue(const PhoneSettings()),
   loggerProvider.overrideWithValue(
-    MTLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
+    VhLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
   ),
   downloadEngineProvider.overrideWithValue(engine),
   linkPreviewResolverProvider.overrideWithValue(
@@ -110,9 +110,9 @@ class _Opened extends StatelessWidget {
   Widget build(BuildContext context) => ProviderScope(
     overrides: _overrides(null),
     child: MaterialApp.router(
-      theme: mtTheme(MTVariant.lite, Brightness.light),
-      localizationsDelegates: MTLocalizations.localizationsDelegates,
-      supportedLocales: MTLocalizations.supportedLocales,
+      theme: vhTheme(VhVariant.phone, Brightness.light),
+      localizationsDelegates: VhLocalizations.localizationsDelegates,
+      supportedLocales: VhLocalizations.supportedLocales,
       routerConfig: GoRouter(
         routes: [GoRoute(path: '/', builder: (_, _) => const _OpensSheet())],
       ),

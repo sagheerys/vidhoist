@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/choices_data.dart';
 import '../../data/folders_data.dart';
@@ -15,7 +15,7 @@ class FoldersPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final notifier = ref.read(folderSettingsProvider.notifier);
     final folders = ref.read(desktopFoldersProvider);
     final download = ref.watch(downloadFolderProvider).valueOrNull;
@@ -31,13 +31,13 @@ class FoldersPane extends ConsumerWidget {
     // Apart enough to read as two buttons: at the narrow gap the pair read
     // as one phrase ("Change… Open in Explorer").
     Widget actions(String? path, Future<void> Function(String) set) => Wrap(
-      spacing: MTSpace.xl,
+      spacing: VhSpace.xl,
       children: [
-        MTLinkButton(
+        VhLinkButton(
           label: l.desktopChangeFolder,
           onPressed: () => unawaited(change(path, set)),
         ),
-        MTLinkButton(
+        VhLinkButton(
           label: l.desktopOpenInExplorer,
           onPressed: path == null ? null : () => unawaited(folders.open(path)),
         ),

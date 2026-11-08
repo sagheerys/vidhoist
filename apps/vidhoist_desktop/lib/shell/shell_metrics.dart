@@ -1,7 +1,7 @@
 import 'shell_layout.dart';
 
 /// The fixed measures of the Windows shell, in logical pixels.
-abstract final class EmberShellSize {
+abstract final class DesktopShellSize {
   static const double titleBar = 48;
 
   /// One caption button, the width Windows itself gives them.
@@ -67,7 +67,7 @@ class ShellArrangement {
   /// sidebar; narrower ones force it to icons.
   final bool canWidenSidebar;
 
-  bool get sidebarNarrow => sidebarWidth == EmberShellSize.sidebarNarrow;
+  bool get sidebarNarrow => sidebarWidth == DesktopShellSize.sidebarNarrow;
 }
 
 /// The column rules: at 1280 and wider everything is as the user left it;
@@ -75,12 +75,12 @@ class ShellArrangement {
 /// below 1100 the panel becomes a layer. The user's choices are kept and
 /// come back when the window grows again.
 ShellArrangement arrangeShell(double width, ShellLayout layout) {
-  final roomy = width >= EmberShellSize.threeColumns;
+  final roomy = width >= DesktopShellSize.threeColumns;
   return ShellArrangement(
     sidebarWidth: roomy && !layout.sidebarNarrow
-        ? EmberShellSize.sidebarWide
-        : EmberShellSize.sidebarNarrow,
-    panelBeside: width >= EmberShellSize.panelBeside,
+        ? DesktopShellSize.sidebarWide
+        : DesktopShellSize.sidebarNarrow,
+    panelBeside: width >= DesktopShellSize.panelBeside,
     canWidenSidebar: roomy,
   );
 }

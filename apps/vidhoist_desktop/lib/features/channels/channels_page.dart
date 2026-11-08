@@ -4,8 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/channels_data.dart';
 import '../../router.dart';
@@ -25,7 +25,7 @@ class ChannelsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final text = Theme.of(context).textTheme;
     final asked = ref.watch(channelsProvider);
     final state = asked.valueOrNull;
@@ -35,14 +35,14 @@ class ChannelsPage extends ConsumerWidget {
     final supported = state?.supported ?? false;
 
     Widget fill(Widget child) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: MTSpace.xxl * 2),
+      padding: const EdgeInsets.symmetric(vertical: VhSpace.xxl * 2),
       child: Center(child: child),
     );
 
     final Widget body;
     if (!configured) {
       body = fill(
-        MTEmptyFrame(
+        VhEmptyFrame(
           title: l.desktopChannelsLater,
           message: l.desktopChannelsLaterBody,
         ),
@@ -50,17 +50,17 @@ class ChannelsPage extends ConsumerWidget {
     } else if (state == null) {
       body = fill(
         asked.hasError
-            ? MTEmptyFrame(
+            ? VhEmptyFrame(
                 title: l.failed,
                 message: errorText(l, asked.error!),
                 actionLabel: l.retry,
                 onAction: () => ref.invalidate(channelsProvider),
               )
-            : const MTSpinner(),
+            : const VhSpinner(),
       );
     } else if (subs.isEmpty) {
       body = fill(
-        MTEmptyFrame(
+        VhEmptyFrame(
           title: l.subscriptionsEmpty,
           message: l.subscriptionsEmptyBody,
           actionLabel: l.followChannel,
@@ -68,14 +68,14 @@ class ChannelsPage extends ConsumerWidget {
         ),
       );
     } else {
-      body = MTReorderMotion(
+      body = VhReorderMotion(
         children: [
           for (final sub in subs)
             ChannelRow(
               key: ValueKey(sub.id),
               sub: sub,
               stats: match?.stats[sub.id],
-              onOpen: () => context.go(EmberRoutes.channel(sub.id)),
+              onOpen: () => context.go(DesktopRoutes.channel(sub.id)),
             ),
         ],
       );
@@ -85,11 +85,11 @@ class ChannelsPage extends ConsumerWidget {
     return LayoutBuilder(
       builder: (context, box) {
         final side = math.max(
-          MTSpace.xl,
-          (box.maxWidth - MTBreakpoint.readable) / 2,
+          VhSpace.xl,
+          (box.maxWidth - VhBreakpoint.readable) / 2,
         );
         return SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(side, MTSpace.sm, side, MTSpace.xl),
+          padding: EdgeInsets.fromLTRB(side, VhSpace.sm, side, VhSpace.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -97,7 +97,7 @@ class ChannelsPage extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Wrap(
-                      spacing: MTSpace.md,
+                      spacing: VhSpace.md,
                       crossAxisAlignment: WrapCrossAlignment.end,
                       children: [
                         Text(l.desktopChannels, style: text.headlineSmall),
@@ -105,7 +105,7 @@ class ChannelsPage extends ConsumerWidget {
                           Text(
                             l.settingsValueChannels(subs.length),
                             style: text.bodySmall?.copyWith(
-                              color: MTThemeX.of(context).palette.ink3,
+                              color: VhThemeX.of(context).palette.ink3,
                             ),
                           ),
                       ],
@@ -119,19 +119,19 @@ class ChannelsPage extends ConsumerWidget {
                         alignment: AlignmentDirectional.centerEnd,
                         child: Wrap(
                           alignment: WrapAlignment.end,
-                          spacing: MTSpace.xs,
-                          runSpacing: MTSpace.xs,
+                          spacing: VhSpace.xs,
+                          runSpacing: VhSpace.xs,
                           children: [
                             if (subs.isNotEmpty)
-                              EmberPill(
+                              DesktopPill(
                                 label: l.desktopCheckAll,
                                 selected: false,
                                 onTap: () =>
                                     unawaited(checkChannels(context, ref)),
                               ),
-                            EmberPill(
+                            DesktopPill(
                               label: l.followChannel,
-                              icon: MTIcons.plus,
+                              icon: VhIcons.plus,
                               selected: false,
                               onTap: () => unawaited(showFollowDialog(context)),
                             ),
@@ -141,12 +141,12 @@ class ChannelsPage extends ConsumerWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: MTSpace.lg),
+              const SizedBox(height: VhSpace.lg),
               body,
               if (unfollowed.isNotEmpty) ...[
-                const SizedBox(height: MTSpace.xl),
-                EmberSectionHeader(title: l.desktopChannelsInLibrary),
-                const SizedBox(height: MTSpace.sm),
+                const SizedBox(height: VhSpace.xl),
+                DesktopSectionHeader(title: l.desktopChannelsInLibrary),
+                const SizedBox(height: VhSpace.sm),
                 for (final channel in unfollowed)
                   _Unfollowed(
                     channel: channel,
@@ -177,11 +177,11 @@ class _Unfollowed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: MTSpace.xs),
+      padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
       child: Row(
         children: [
           Expanded(
@@ -189,7 +189,7 @@ class _Unfollowed extends StatelessWidget {
               channel.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              textDirection: mtTextDirectionOf(
+              textDirection: vhTextDirectionOf(
                 channel.name,
                 Directionality.of(context),
               ),
@@ -200,8 +200,8 @@ class _Unfollowed extends StatelessWidget {
             l.desktopInLibrary(channel.count),
             style: text.labelSmall?.copyWith(color: p.ink3),
           ),
-          const SizedBox(width: MTSpace.md),
-          MTLinkButton(label: l.follow, onPressed: onFollow),
+          const SizedBox(width: VhSpace.md),
+          VhLinkButton(label: l.follow, onPressed: onFollow),
         ],
       ),
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/reading/reading_text.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 TranscriptSegment _line(int from, int to, String text) => TranscriptSegment(
   start: Duration(seconds: from),
@@ -12,7 +12,7 @@ TranscriptSegment _line(int from, int to, String text) => TranscriptSegment(
 
 /// The words and the moment as the reading room copies them; the
 /// paragraphs, quotes and links they are built from live in
-/// mt_transcripts with their own tests.
+/// vh_transcripts with their own tests.
 void main() {
   final lines = [
     _line(10, 12, 'The first line'),
@@ -24,7 +24,7 @@ void main() {
   test('**the guard**: is copied with its words, title, span of time and '
       'a link to its first second', () {
     final quote = quoteOf(paragraphs, 0, paragraphs.first.text.length)!;
-    final l = lookupMTLocalizations(const Locale('en'));
+    final l = lookupVhLocalizations(const Locale('en'));
     expect(
       quoteText(
         l,
@@ -37,7 +37,7 @@ void main() {
       '— Night Drive, 0:10–0:15\n'
       'https://youtu.be/aaaaaaaaaaa?t=10s',
     );
-    final ar = lookupMTLocalizations(const Locale('ar'));
+    final ar = lookupVhLocalizations(const Locale('ar'));
     expect(
       quoteText(
         ar,

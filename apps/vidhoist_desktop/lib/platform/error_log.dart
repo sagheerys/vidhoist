@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// Writes every error no code caught to the diagnostic log, as the phone
 /// apps do: a crash in a released build otherwise reaches only a console
 /// nobody has open. A few lines of the stack say where.
-void logEveryError(MTLogger logger) {
+void logEveryError(VhLogger logger) {
   final present = FlutterError.onError;
   FlutterError.onError = (details) {
     unawaited(
@@ -45,4 +45,4 @@ String errorPlace(FlutterErrorDetails details) {
       .join(' ');
 }
 
-String _where(StackTrace? stack) => mtStackPlace(stack?.toString());
+String _where(StackTrace? stack) => vhStackPlace(stack?.toString());

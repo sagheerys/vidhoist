@@ -4,9 +4,9 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../data/transcripts_data.dart';
@@ -68,11 +68,11 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
   /// The embers spread past the cover by this much more than on a phone.
   static const double _glowScale = 1.3;
 
-  late final MTPlayer _player = ref.read(playerProvider);
+  late final VhPlayer _player = ref.read(playerProvider);
   late final ValueNotifier<bool> _playing = ValueNotifier(
     _player.state.playing,
   );
-  StreamSubscription<MTPlayerState>? _states;
+  StreamSubscription<VhPlayerState>? _states;
   final _focus = FocusNode(debugLabel: 'listening', skipTraversal: true);
 
   @override
@@ -93,8 +93,8 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final item = widget.item;
     final segments =
         ref
@@ -110,7 +110,7 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
           children: [
             Positioned.fill(
               child: Padding(
-                padding: const EdgeInsets.all(MTSpace.xxl),
+                padding: const EdgeInsets.all(VhSpace.xxl),
                 child: LayoutBuilder(
                   builder: (context, box) {
                     final cover = _CoverColumn(
@@ -126,7 +126,7 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
                     );
                     final beside =
                         box.maxWidth >=
-                        ListeningRoom.cover + 2 * MTSpace.xxl + _narrowest;
+                        ListeningRoom.cover + 2 * VhSpace.xxl + _narrowest;
                     return beside
                         // Together in the middle: on a wide screen the lines
                         // keep a reading width rather than run to the edge.
@@ -134,14 +134,14 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                width: ListeningRoom.cover + MTSpace.xxl,
+                                width: ListeningRoom.cover + VhSpace.xxl,
                                 child: cover,
                               ),
-                              const SizedBox(width: MTSpace.xxl),
+                              const SizedBox(width: VhSpace.xxl),
                               Flexible(
                                 child: ConstrainedBox(
                                   constraints: const BoxConstraints(
-                                    maxWidth: MTBreakpoint.readable,
+                                    maxWidth: VhBreakpoint.readable,
                                   ),
                                   child: lines,
                                 ),
@@ -159,16 +159,16 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
               ),
             ),
             PositionedDirectional(
-              top: MTSpace.md,
-              end: MTSpace.md,
-              child: MTShortcutTooltip(
+              top: VhSpace.md,
+              end: VhSpace.md,
+              child: VhShortcutTooltip(
                 message: l.desktopListeningClose,
                 shortcut: 'Esc',
                 child: IconButton(
                   onPressed: widget.onClose,
-                  icon: MTIcon(
-                    MTIcons.close,
-                    size: MTDensity.desktop.icon,
+                  icon: VhIcon(
+                    VhIcons.close,
+                    size: VhDensity.desktop.icon,
                     color: p.ink2,
                     semanticLabel: l.desktopListeningClose,
                   ),
@@ -198,7 +198,7 @@ class _CoverColumn extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final library = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
     // The library's cover first: it is the one found later, if the item
@@ -217,18 +217,18 @@ class _CoverColumn extends ConsumerWidget {
               // The frame around the cover reaches past it on every side.
               final size = math.min(
                 ListeningRoom.cover,
-                math.min(box.maxWidth, box.maxHeight) - MTSpace.xxl,
+                math.min(box.maxWidth, box.maxHeight) - VhSpace.xxl,
               );
               if (size < smallest) return const SizedBox();
               return Center(
-                child: MTBreathingGlow(
+                child: VhBreathingGlow(
                   playing: playing,
                   size: size * glowScale,
                   clip: item.canonicalUrl,
                   // Its own layer: the cover is drawn once, not on every
                   // frame the embers behind it move.
                   child: RepaintBoundary(
-                    child: MTTiltedArtwork(
+                    child: VhTiltedArtwork(
                       item: item,
                       size: size,
                       shadow: false,
@@ -246,20 +246,20 @@ class _CoverColumn extends ConsumerWidget {
             },
           ),
         ),
-        const SizedBox(height: MTSpace.lg),
+        const SizedBox(height: VhSpace.lg),
         Text(
           item.title,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
-          textDirection: mtTextDirectionOf(
+          textDirection: vhTextDirectionOf(
             item.title,
             Directionality.of(context),
           ),
           style: text.titleLarge?.copyWith(color: p.ink),
         ),
         if (item.uploader case final who?) ...[
-          const SizedBox(height: MTSpace.xxs),
+          const SizedBox(height: VhSpace.xxs),
           Text(
             who,
             maxLines: 1,

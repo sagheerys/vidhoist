@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/clip_handover.dart';
 import '../../data/library_data.dart';
@@ -40,7 +40,7 @@ class LibraryItemView extends ConsumerWidget {
   final LibraryViewMode mode;
 
   /// Set for a row of the table.
-  final MTMediaColumns? columns;
+  final VhMediaColumns? columns;
 
   /// This is the clip in the player; [paused] says it is not running.
   final bool playing;
@@ -60,8 +60,8 @@ class LibraryItemView extends ConsumerWidget {
   /// The round mark on the clip: adds it to the choice or takes it out.
   final VoidCallback? onToggle;
 
-  /// The cover boxes of the grid and the compact row (`MTLibrarySliver`
-  /// and `MTMediaCard`), for decoding at the size actually drawn.
+  /// The cover boxes of the grid and the compact row (`VhLibrarySliver`
+  /// and `VhMediaCard`), for decoding at the size actually drawn.
   static const double _gridCell = 210;
   static const double _compactWidth = 64;
 
@@ -87,7 +87,7 @@ class LibraryItemView extends ConsumerWidget {
 
   Widget _framed(BuildContext context, WidgetRef ref) {
     if (onChoose == null) return _view(context, ref, onPlay);
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return Listener(
       onPointerDown: (e) {
         if (e.buttons == kPrimaryButton) ClickClock.pointerDown();
@@ -100,7 +100,7 @@ class LibraryItemView extends ConsumerWidget {
           foregroundDecoration: selected
               ? BoxDecoration(
                   border: Border.all(color: p.accent, width: 2),
-                  borderRadius: BorderRadius.circular(MTCorners.desktop.card),
+                  borderRadius: BorderRadius.circular(VhCorners.desktop.card),
                 )
               : null,
           child: _view(
@@ -121,24 +121,24 @@ class LibraryItemView extends ConsumerWidget {
   }
 
   Widget _view(BuildContext context, WidgetRef ref, VoidCallback onTap) {
-    final l = context.mtl;
-    final subtitle = mtMetaLine([
+    final l = context.vhl;
+    final subtitle = vhMetaLine([
       item.uploader,
       if (item.timestamp != null && columns?.added != true)
-        mtTimeAgo(context, item.timestamp!),
+        vhTimeAgo(context, item.timestamp!),
     ]);
     // No mark of where a clip is: every clip is a file on this computer,
     // so "offline" beside each title would say nothing. The platform has
     // its own filter, so no coloured letters beside every title either.
-    const platform = MTPlatformKind.other;
+    const platform = VhPlatformKind.other;
     final duration = item.duration == null
         ? null
-        : mtFormatDuration(item.duration!);
+        : vhFormatDuration(item.duration!);
 
     Future<void> toggleFavorite() async {
       await ref
           .read(tagsIndexProvider)
-          .toggleTag(item.canonicalUrl, MTConstants.favoritesSystemTag);
+          .toggleTag(item.canonicalUrl, VhConstants.favoritesSystemTag);
       ref.invalidate(libraryItemsProvider);
     }
 
@@ -148,17 +148,17 @@ class LibraryItemView extends ConsumerWidget {
         artworkFor(ref, context, item.thumbnail, width: width, height: height);
 
     if (columns case final columns?) {
-      return MTMediaRow(
+      return VhMediaRow(
         columns: columns,
         title: item.title,
         subtitle: subtitle,
-        thumbnail: cover(MTMediaColumns.thumbWidth, MTMediaColumns.thumbHeight),
+        thumbnail: cover(VhMediaColumns.thumbWidth, VhMediaColumns.thumbHeight),
         platform: platform,
         duration: duration,
-        size: item.sizeBytes == null ? null : mtFormatSize(item.sizeBytes!),
+        size: item.sizeBytes == null ? null : vhFormatSize(item.sizeBytes!),
         added: item.timestamp == null
             ? null
-            : mtTimeAgo(context, item.timestamp!),
+            : vhTimeAgo(context, item.timestamp!),
         tags: item.tags,
         sourceName: platformLabel(l, MediaPlatform.detect(item.canonicalUrl)),
         favorite: item.favorite,
@@ -170,7 +170,7 @@ class LibraryItemView extends ConsumerWidget {
       );
     }
     if (mode == LibraryViewMode.grid) {
-      return MTMediaGridCard(
+      return VhMediaGridCard(
         title: item.title,
         subtitle: subtitle,
         // The grid's widest cell, so a cover is never decoded too small.
@@ -185,7 +185,7 @@ class LibraryItemView extends ConsumerWidget {
         onTap: onTap,
       );
     }
-    return MTMediaCard(
+    return VhMediaCard(
       compact: true,
       title: item.title,
       subtitle: subtitle,

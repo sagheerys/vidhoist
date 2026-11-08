@@ -5,10 +5,10 @@ import 'package:vidhoist_desktop/features/clip/clip_page.dart';
 import 'package:vidhoist_desktop/features/stats/stats_bars.dart';
 import 'package:vidhoist_desktop/features/stats/stats_page.dart';
 import 'package:vidhoist_desktop/router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart' show PlaybackPositionStore;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart' show PlaybackPositionStore;
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -89,9 +89,9 @@ void main() {
       // Two clips, 1.2 GB, an hour, none with a transcript, one unplayed.
       for (final figure in [
         '2',
-        mtFormatSize(1200 * _mb),
+        vhFormatSize(1200 * _mb),
         '1 hour',
-        mtLtrRun('0%'),
+        vhLtrRun('0%'),
         '1',
       ]) {
         expect(find.text(figure), findsWidgets, reason: figure);
@@ -144,7 +144,7 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
       expect(find.byType(StatsPage), findsOneWidget);
-      expect(placeOf(Uri.parse(EmberRoutes.stats)), EmberPlace.library);
+      expect(placeOf(Uri.parse(DesktopRoutes.stats)), DesktopPlace.library);
     });
 
     testWidgets('every control on the page has a name', (tester) async {

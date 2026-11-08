@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/key_cap.dart';
 
@@ -10,12 +10,12 @@ class PaletteKeys extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Wrap(
-      spacing: MTSpace.xs,
-      runSpacing: MTSpace.xxs,
+      spacing: VhSpace.xs,
+      runSpacing: VhSpace.xxs,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         for (final (key, what) in [
@@ -25,7 +25,7 @@ class PaletteKeys extends StatelessWidget {
         ]) ...[
           KeyCap(label: key),
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: MTSpace.sm),
+            padding: const EdgeInsetsDirectional.only(end: VhSpace.sm),
             child: Text(what, style: text.labelSmall?.copyWith(color: p.ink3)),
           ),
         ],

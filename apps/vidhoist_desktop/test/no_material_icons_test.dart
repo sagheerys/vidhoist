@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// The Windows app draws its own icon set (MTIcons); the borrowed shapes
+/// The Windows app draws its own icon set (VhIcons); the borrowed shapes
 /// come through it too. A stray Material glyph is the most visible sign of
 /// an app assembled from defaults.
 void main() {
@@ -19,8 +19,8 @@ void main() {
   });
 
   test('**the guard**: no Material progress indicators in lib', () {
-    // The waiting and progress shapes are Wahaj's (MTSpinner, MTProgressBar,
-    // MTFilmStrip) or drawn, like the mini window's hairline.
+    // The waiting and progress shapes are Wahaj's (VhSpinner, VhProgressBar,
+    // VhFilmStrip) or drawn, like the mini window's hairline.
     expect(
       offenders(RegExp(r'\b(Linear|Circular)ProgressIndicator\(')),
       isEmpty,

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 
@@ -16,7 +16,7 @@ class CaptionStyleFields extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
     final title = Theme.of(context).textTheme.titleSmall;
@@ -24,7 +24,7 @@ class CaptionStyleFields extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(l10n.subtitlesSize, style: title),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         CaptionChoiceChips(
           labels: [
             l10n.subtitlesSizeSmall,
@@ -35,9 +35,9 @@ class CaptionStyleFields extends ConsumerWidget {
           chosen: settings.captionSize,
           onChosen: (i) => unawaited(notifier.setCaptionSize(i)),
         ),
-        const SizedBox(height: MTSpace.md),
+        const SizedBox(height: VhSpace.md),
         Text(l10n.subtitlesBackground, style: title),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         CaptionChoiceChips(
           labels: [
             l10n.subtitlesBackgroundSolid,
@@ -47,11 +47,11 @@ class CaptionStyleFields extends ConsumerWidget {
           chosen: settings.captionBackground,
           onChosen: (i) => unawaited(notifier.setCaptionBackground(i)),
         ),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         Text(
           l10n.subtitlesBackgroundHelp,
           style: Theme.of(context).textTheme.bodySmall
-              ?.copyWith(color: MTThemeX.of(context).palette.ink3),
+              ?.copyWith(color: VhThemeX.of(context).palette.ink3),
         ),
       ],
     );
@@ -73,11 +73,11 @@ class CaptionChoiceChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final style = Theme.of(context).textTheme.labelMedium!;
     return Wrap(
-      spacing: MTSpace.xs,
-      runSpacing: MTSpace.xs,
+      spacing: VhSpace.xs,
+      runSpacing: VhSpace.xs,
       children: [
         for (final (i, label) in labels.indexed)
           ChoiceChip(
@@ -101,12 +101,12 @@ class CaptionOptions extends StatelessWidget {
     required this.onTranscript,
   });
 
-  final MTCaptions captions;
+  final VhCaptions captions;
   final VoidCallback onTranscript;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final language = captions.language;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -117,7 +117,7 @@ class CaptionOptions extends StatelessWidget {
           ValueListenableBuilder(
             valueListenable: language!,
             builder: (context, _, _) => Padding(
-              padding: const EdgeInsets.only(top: MTSpace.md),
+              padding: const EdgeInsets.only(top: VhSpace.md),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -125,7 +125,7 @@ class CaptionOptions extends StatelessWidget {
                     l10n.subtitlesLanguage,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
-                  const SizedBox(height: MTSpace.xs),
+                  const SizedBox(height: VhSpace.xs),
                   CaptionChoiceChips(
                     labels: [
                       for (final code in captions.tracks.keys)
@@ -141,10 +141,10 @@ class CaptionOptions extends StatelessWidget {
               ),
             ),
           ),
-        const SizedBox(height: MTSpace.md),
+        const SizedBox(height: VhSpace.md),
         ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: const MTIcon(MTIcons.transcript),
+          leading: const VhIcon(VhIcons.transcript),
           title: Text(l10n.mobileTranscriptOpen),
           onTap: onTranscript,
         ),
@@ -159,15 +159,15 @@ String captionCode(String language) => language.split('-').first.toUpperCase();
 /// Opens [CaptionOptions] from the bottom, over the player.
 Future<void> showCaptionOptions(
   BuildContext context,
-  MTCaptions captions, {
+  VhCaptions captions, {
   required VoidCallback onTranscript,
-}) => showMTSheet<void>(
+}) => showVhSheet<void>(
   context: context,
   isScrollControlled: true,
   useSafeArea: true,
   showDragHandle: true,
   builder: (sheet) => SingleChildScrollView(
-    padding: const EdgeInsets.fromLTRB(MTSpace.lg, 0, MTSpace.lg, MTSpace.lg),
+    padding: const EdgeInsets.fromLTRB(VhSpace.lg, 0, VhSpace.lg, VhSpace.lg),
     child: CaptionOptions(
       captions: captions,
       onTranscript: () {

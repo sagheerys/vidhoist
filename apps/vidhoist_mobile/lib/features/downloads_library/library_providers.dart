@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart' show MediaShape;
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart' show MediaShape;
 
 import '../../di.dart';
 import '../shared/async_view.dart';
@@ -46,7 +46,7 @@ final localMediaProvider = FutureProvider<List<LocalItem>>((ref) async {
   };
 
   final gate = ref.watch(mediaAccessGateProvider);
-  final dir = Directory(liteMediaDir);
+  final dir = Directory(phoneMediaDir);
   // **Permission, not absence.** `exists()` on a folder Android will not let
   // us read throws rather than answering false, and the raw errno used to
   // land on the library screen. The screen offers the permission instead.
@@ -80,7 +80,7 @@ final localMediaProvider = FutureProvider<List<LocalItem>>((ref) async {
         modified: stat.modified,
         thumbnail: LocalItem.coverOf(key, path, kept: kept, artwork: artwork),
         favorite: (tags[key] ?? tags[path] ?? const []).contains(
-          MTConstants.favoritesSystemTag,
+          VhConstants.favoritesSystemTag,
         ),
         duration: shape?.duration,
         aspectRatio: shape?.aspectRatio,

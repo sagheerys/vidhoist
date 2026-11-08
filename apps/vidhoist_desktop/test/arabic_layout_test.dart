@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/pill.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 import 'support/shell_harness.dart';
 
@@ -24,7 +24,7 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(clip)], playing: false);
-    GoRouter.of(tester.element(find.byType(EmberSidebar))).go(route);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(route);
     await tester.pumpAndSettle();
   }
 
@@ -32,7 +32,7 @@ void main() {
       'sits on the Arabic side, on the clip page and in the side panel', (
     tester,
   ) async {
-    await open(tester, EmberRoutes.item(clip.canonicalUrl));
+    await open(tester, DesktopRoutes.item(clip.canonicalUrl));
     final titles = tester
         .widgetList<Text>(find.text(clip.title))
         .where((t) => t.maxLines != 1);
@@ -46,8 +46,8 @@ void main() {
   testWidgets('**the guard**: "back to the clip" points right in Arabic', (
     tester,
   ) async {
-    await open(tester, EmberRoutes.reading(clip.canonicalUrl));
-    final back = find.widgetWithText(EmberPill, 'العودة إلى المقطع');
+    await open(tester, DesktopRoutes.reading(clip.canonicalUrl));
+    final back = find.widgetWithText(DesktopPill, 'العودة إلى المقطع');
     final flip = tester.widget<Transform>(
       find.descendant(of: back, matching: find.byType(Transform)).first,
     );

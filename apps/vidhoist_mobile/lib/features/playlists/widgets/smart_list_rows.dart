@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../playlists_providers.dart';
 
@@ -14,37 +14,37 @@ class SmartListRows extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final l10n = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l10n = context.vhl;
     final text = Theme.of(context).textTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: p.card,
-        borderRadius: BorderRadius.circular(MTRadius.card),
-        border: Border.all(color: p.line, width: MTThemeX.of(context).hairline),
+        borderRadius: BorderRadius.circular(VhRadius.card),
+        border: Border.all(color: p.line, width: VhThemeX.of(context).hairline),
       ),
       child: Column(
         children: [
           for (final (i, list) in lists.indexed) ...[
-            if (i > 0) const Divider(height: 1, indent: MTSpace.md),
+            if (i > 0) const Divider(height: 1, indent: VhSpace.md),
             InkWell(
               onTap: () => onPlay(list),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: MTSpace.md,
-                  vertical: MTSpace.sm + 2,
+                  horizontal: VhSpace.md,
+                  vertical: VhSpace.sm + 2,
                 ),
                 child: Row(
                   children: [
-                    MTIcon(
+                    VhIcon(
                       switch (list.kind) {
-                        SmartListKind.favorites => MTIcons.favorite,
-                        SmartListKind.latest => MTIcons.clock,
+                        SmartListKind.favorites => VhIcons.favorite,
+                        SmartListKind.latest => VhIcons.clock,
                       },
                       size: 20,
                       color: p.ink2,
                     ),
-                    const SizedBox(width: MTSpace.md),
+                    const SizedBox(width: VhSpace.md),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +59,7 @@ class SmartListRows extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            mtMetaLine([
+                            vhMetaLine([
                               l10n.queueItemsCount(list.count),
                               l10n.autoBuilt,
                             ]),
@@ -68,7 +68,7 @@ class SmartListRows extends StatelessWidget {
                         ],
                       ),
                     ),
-                    MTIcon(MTIcons.playFill, size: 22, color: p.ink2),
+                    VhIcon(VhIcons.playFill, size: 22, color: p.ink2),
                   ],
                 ),
               ),

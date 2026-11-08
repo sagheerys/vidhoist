@@ -13,9 +13,9 @@ import 'package:vidhoist_desktop/shell/player_bar.dart';
 import 'package:vidhoist_desktop/shell/player_controls.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/sidebar_items.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -27,11 +27,11 @@ final _clip = LibraryItem(
 );
 
 Widget _host(Widget child, {Brightness brightness = Brightness.light}) =>
-    MTDesktopApp(
+    VhDesktopApp(
       child: MaterialApp(
-        theme: mtDesktopTheme(MTVariant.superApp, brightness),
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
+        theme: vhDesktopTheme(VhVariant.desktop, brightness),
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
         home: Scaffold(body: Center(child: child)),
       ),
     );
@@ -39,7 +39,7 @@ Widget _host(Widget child, {Brightness brightness = Brightness.light}) =>
 void main() {
   test('**the guard**: hovering veils a control, never covers it', () {
     for (final b in Brightness.values) {
-      final theme = mtDesktopTheme(MTVariant.superApp, b);
+      final theme = vhDesktopTheme(VhVariant.desktop, b);
       expect(theme.hoverColor.a, lessThan(0.5), reason: '$b');
       final hovered = theme.iconButtonTheme.style!.overlayColor!.resolve({
         WidgetState.hovered,
@@ -56,8 +56,8 @@ void main() {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            EmberPlayerControl(icon: MTIcons.prev, label: 'a', onTap: () {}),
-            EmberPlayerControl(icon: MTIcons.next, label: 'b', onTap: () {}),
+            DesktopPlayerControl(icon: VhIcons.prev, label: 'a', onTap: () {}),
+            DesktopPlayerControl(icon: VhIcons.next, label: 'b', onTap: () {}),
           ],
         ),
       ),
@@ -77,8 +77,8 @@ void main() {
     );
     await tester.pumpWidget(
       _host(
-        EmberPlayerControl(
-          icon: MTIcons.repeatOne,
+        DesktopPlayerControl(
+          icon: VhIcons.repeatOne,
           label: 'Repeat One',
           selected: true,
           onTap: () {},
@@ -98,7 +98,7 @@ void main() {
         child: _host(const DownloadsButton()),
       ),
     );
-    final glyph = tester.getRect(find.byType(MTIcon).first);
+    final glyph = tester.getRect(find.byType(VhIcon).first);
     final count = tester.getRect(find.text('3'));
     final overlap = glyph.intersect(count);
     expect(
@@ -123,7 +123,7 @@ void main() {
     );
     expect(
       find.descendant(
-        of: find.byType(EmberSidebar),
+        of: find.byType(DesktopSidebar),
         matching: find.text('Collapse sidebar'),
       ),
       findsNothing,
@@ -162,8 +162,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.descendant(
-        of: find.byType(MTMediaRow),
-        matching: find.byType(MTEqualizer),
+        of: find.byType(VhMediaRow),
+        matching: find.byType(VhEqualizer),
       ),
       findsOneWidget,
     );
@@ -185,7 +185,7 @@ void main() {
         .getTopLeft(
           find
               .descendant(
-                of: find.byType(MTMediaGridCard),
+                of: find.byType(VhMediaGridCard),
                 matching: find.text(title),
               )
               .first,
@@ -217,16 +217,16 @@ void main() {
     final h = ShellHarness(library: [_clip]);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    showMTNotice(
-      tester.element(find.byType(EmberPlayerBar)),
+    showVhNotice(
+      tester.element(find.byType(DesktopPlayerBar)),
       message: 'Volume 100%',
     );
     await tester.pumpAndSettle();
-    final card = tester.getRect(find.byType(MTNotice));
-    final bar = tester.getRect(find.byType(EmberPlayerBar));
-    expect(card.width, lessThanOrEqualTo(MTNotice.desktopWidth));
+    final card = tester.getRect(find.byType(VhNotice));
+    final bar = tester.getRect(find.byType(DesktopPlayerBar));
+    expect(card.width, lessThanOrEqualTo(VhNotice.desktopWidth));
     expect(card.bottom, lessThanOrEqualTo(bar.top));
-    expect(card.overlaps(tester.getRect(find.byType(EmberSidebar))), isFalse);
+    expect(card.overlaps(tester.getRect(find.byType(DesktopSidebar))), isFalse);
   });
 
   testWidgets('**the guard**: in Arabic the notice keeps off the sidebar '
@@ -236,13 +236,13 @@ void main() {
     final h = ShellHarness(library: [_clip]);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    showMTNotice(
-      tester.element(find.byType(EmberPlayerBar)),
+    showVhNotice(
+      tester.element(find.byType(DesktopPlayerBar)),
       message: 'الصوت 100%',
     );
     await tester.pumpAndSettle();
-    final card = tester.getRect(find.byType(MTNotice));
-    expect(card.overlaps(tester.getRect(find.byType(EmberSidebar))), isFalse);
+    final card = tester.getRect(find.byType(VhNotice));
+    expect(card.overlaps(tester.getRect(find.byType(DesktopSidebar))), isFalse);
     expect(card.left, lessThan(900 / 2));
   });
 
@@ -261,7 +261,7 @@ void main() {
       ),
     );
     final line = tester.getRect(find.byType(SettingLine));
-    final control = tester.getRect(find.byType(MTSwitch));
+    final control = tester.getRect(find.byType(VhSwitch));
     expect(line.right - control.right, lessThan(1));
     final box = tester.widget<DecoratedBox>(
       find
@@ -280,8 +280,8 @@ void main() {
     final h = ShellHarness(library: [_clip]);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    final router = GoRouter.of(tester.element(find.byType(EmberSidebar)));
-    router.go(EmberSettingsPane.appearance.route);
+    final router = GoRouter.of(tester.element(find.byType(DesktopSidebar)));
+    router.go(DesktopSettingsPane.appearance.route);
     await tester.pumpAndSettle();
     Finder sections() => find
         .descendant(
@@ -290,7 +290,7 @@ void main() {
         )
         .first;
     final list = tester.state(sections());
-    router.go(EmberSettingsPane.about.route);
+    router.go(DesktopSettingsPane.about.route);
     await tester.pumpAndSettle();
     expect(tester.state(sections()), same(list));
   });

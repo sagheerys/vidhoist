@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/update_data.dart';
 import '../../identity.dart';
-import '../../shell/ember_mark.dart';
+import '../../shell/desktop_mark.dart';
 import '../discover/discover_dialog.dart';
 import 'simple_panes.dart';
 import 'whats_new.dart';
@@ -30,24 +30,24 @@ class AboutPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final version = ref.watch(installedVersionProvider).valueOrNull;
     Widget link(String title, String shown, String url, {String? hint}) =>
         SettingLine(
           title: title,
           hint: hint,
-          trailing: MTLinkButton(
+          trailing: VhLinkButton(
             label: shown,
-            icon: MTIcons.external,
+            icon: VhIcons.external,
             onPressed: () => unawaited(
               launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
             ),
           ),
         );
     Widget heading(String title) => Padding(
-      padding: const EdgeInsets.only(top: MTSpace.lg, bottom: MTSpace.xxs),
+      padding: const EdgeInsets.only(top: VhSpace.lg, bottom: VhSpace.xxs),
       child: Text(title, style: text.titleSmall?.copyWith(color: p.ink)),
     );
 
@@ -57,16 +57,16 @@ class AboutPane extends ConsumerWidget {
         // The app's mark beside its name, as on its icon.
         Row(
           children: [
-            const EmberMark(size: _markSize),
-            const SizedBox(width: MTSpace.md),
+            const DesktopMark(size: _markSize),
+            const SizedBox(width: VhSpace.md),
             Expanded(
               child: SettingLine(
-                title: EmberIdentity.displayName,
+                title: DesktopIdentity.displayName,
                 // Without the build number: "+1" is the build tool's counter
                 // and means nothing to the reader.
                 value: version == null ? null : '${l.version} $version',
                 hint: '${l.copyright} · ${l.licensedUnder}',
-                trailing: MTLinkButton(
+                trailing: VhLinkButton(
                   label: l.whatsNewThisVersion,
                   onPressed: () => unawaited(showWhatsNewNow(context, ref)),
                 ),
@@ -77,7 +77,7 @@ class AboutPane extends ConsumerWidget {
         SettingLine(
           title: l.desktopDiscover,
           hint: l.desktopDiscoverHint,
-          trailing: MTLinkButton(
+          trailing: VhLinkButton(
             label: l.desktopDiscoverShow,
             onPressed: () => unawaited(showDiscoverDialog(context)),
           ),
@@ -90,11 +90,11 @@ class AboutPane extends ConsumerWidget {
         link(l.sourceCode, 'sagheerys/vidhoist', _repo),
         SettingLine(
           title: l.licenses,
-          trailing: MTLinkButton(
+          trailing: VhLinkButton(
             label: l.licenses,
             onPressed: () => showLicensePage(
               context: context,
-              applicationName: EmberIdentity.displayName,
+              applicationName: DesktopIdentity.displayName,
               applicationVersion: version,
               // The licences page lists the packages alone; the app's own
               // licence is passed here, or it would appear nowhere.
@@ -115,7 +115,7 @@ class AboutPane extends ConsumerWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         FoldedText(
           l.disclaimerText,
           style: text.bodySmall?.copyWith(color: p.ink2),

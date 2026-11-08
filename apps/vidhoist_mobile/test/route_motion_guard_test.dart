@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// **Guard: every sheet and dialog goes through `showMTSheet` and
-/// `showMTDialog`**, which give them the app's pace (a sheet 320 up and
+/// **Guard: every sheet and dialog goes through `showVhSheet` and
+/// `showVhDialog`**, which give them the app's pace (a sheet 320 up and
 /// 200 down, a dialog growing from 0.96). One raw call to Flutter's
 /// function brings back its default motion on that screen alone.
 void main() {

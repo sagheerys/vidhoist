@@ -13,9 +13,9 @@ import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/downloads/downloads_button.dart';
 import 'package:vidhoist_desktop/features/settings/whats_new.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'desktop_matrix.dart';
 import 'support/shell_harness.dart';
@@ -76,7 +76,7 @@ ShellHarness _harness({List<LibraryItem> library = const []}) => ShellHarness(
   overrides: [
     desktopFoldersProvider.overrideWithValue(const _Folders()),
     // A log that is never written: the pane shows its empty state.
-    loggerProvider.overrideWithValue(MTLogger(filePath: 'no-such-log.txt')),
+    loggerProvider.overrideWithValue(VhLogger(filePath: 'no-such-log.txt')),
     installedVersionProvider.overrideWith((ref) async => '0.12.10'),
     transcriptIndexProvider.overrideWith((ref) async => _index()),
   ],
@@ -101,7 +101,7 @@ void main() {
         tester,
         _harness().app,
         then: (tester) async {
-          GoRouter.of(tester.element(find.byType(EmberSidebar)))
+          GoRouter.of(tester.element(find.byType(DesktopSidebar)))
               .go('/settings/$pane');
         },
       );
@@ -122,7 +122,7 @@ void main() {
         ],
       ).app(),
       then: (tester) async {
-        GoRouter.of(tester.element(find.byType(EmberSidebar)))
+        GoRouter.of(tester.element(find.byType(DesktopSidebar)))
             .go('/settings/updates');
       },
     );
@@ -173,7 +173,7 @@ void main() {
       then: (tester) async {
         unawaited(
           showWhatsNewDialog(
-            tester.element(find.byType(EmberSidebar)),
+            tester.element(find.byType(DesktopSidebar)),
             const WhatsNew(
               version: '0.12.10',
               notes: '## Fixed\n- $_longTitle\n- $_longTitle',
@@ -199,7 +199,7 @@ void main() {
           library: const [],
           overrides: [
             loggerProvider.overrideWithValue(
-              MTLogger(filePath: '${root.path}/log.txt'),
+              VhLogger(filePath: '${root.path}/log.txt'),
             ),
             syncReportProvider.overrideWith(
               (ref) => SyncReport(
@@ -225,7 +225,7 @@ void main() {
         return h.app();
       },
       then: (tester) async {
-        GoRouter.of(tester.element(find.byType(EmberSidebar)))
+        GoRouter.of(tester.element(find.byType(DesktopSidebar)))
             .go('/settings/sync');
       },
     );

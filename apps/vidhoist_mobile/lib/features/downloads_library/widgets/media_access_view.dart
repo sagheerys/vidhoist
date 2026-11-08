@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../library_providers.dart';
 import '../media_access.dart';
@@ -45,8 +45,8 @@ class _MediaAccessViewState extends ConsumerState<MediaAccessView> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = MTLocalizations.of(context);
-    return MTEmptyState(
+    final l10n = VhLocalizations.of(context);
+    return VhEmptyState(
       title: l10n.mediaAccessTitle,
       message: _blocked
           ? l10n.mediaAccessBlockedMessage

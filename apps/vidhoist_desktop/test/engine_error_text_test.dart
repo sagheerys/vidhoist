@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/shell/error_text.dart';
 
 /// Every way yt-dlp on the device can fail has its own sentence, in both
@@ -10,7 +10,7 @@ import 'package:vidhoist_desktop/shell/error_text.dart';
 /// nothing they could act on.
 void main() {
   for (final locale in [const Locale('en'), const Locale('ar')]) {
-    final l = lookupMTLocalizations(locale);
+    final l = lookupVhLocalizations(locale);
     group(locale.languageCode, () {
       final expected = {
         YtDlpErrorKind.unavailable: l.engineErrUnavailable,
@@ -35,7 +35,7 @@ void main() {
             'ERROR: [youtube] x: Something new\n  more',
           ),
         );
-        expect(text, l.engineErrFailed(mtName('Something new')));
+        expect(text, l.engineErrFailed(vhName('Something new')));
       });
 
       test('the sentences differ from one another', () {

@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -42,7 +42,7 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
     // A burst of lines is one reload, not one per line.
     _changes = _logger.changes.listen((_) {
       _settle?.cancel();
-      _settle = Timer(MTMotion.medium, _follow);
+      _settle = Timer(VhMotion.medium, _follow);
     });
   }
 
@@ -55,7 +55,7 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
     super.dispose();
   }
 
-  MTLogger get _logger => ref.read(loggerProvider);
+  VhLogger get _logger => ref.read(loggerProvider);
 
   Future<void> _load() async {
     final text = await _logger.readAll();
@@ -71,7 +71,7 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
   Future<void> _follow() async {
     final atEnd =
         !_scroll.hasClients ||
-        _scroll.position.extentAfter < MTJumpToEnd.nearEnd;
+        _scroll.position.extentAfter < VhJumpToEnd.nearEnd;
     final before = _lines.length;
     await _load();
     if (!mounted || _lines.length <= before) return;
@@ -80,7 +80,7 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => MTJumpToEnd.settleAtEnd(_scroll),
+      (_) => VhJumpToEnd.settleAtEnd(_scroll),
     );
   }
 
@@ -102,8 +102,8 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final query = _search.text.trim().toLowerCase();
     final visible = query.isEmpty
         ? _lines
@@ -119,36 +119,36 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
           IconButton(
             tooltip: l10n.shareLogs,
             onPressed: _lines.isEmpty ? null : _share,
-            icon: const MTIcon(MTIcons.share),
+            icon: const VhIcon(VhIcons.share),
           ),
           IconButton(
             tooltip: l10n.clearLogs,
             onPressed: _lines.isEmpty ? null : _confirmClear,
-            icon: const MTIcon(MTIcons.trash),
+            icon: const VhIcon(VhIcons.trash),
           ),
         ],
       ),
-      body: MTReadableWidth(
+      body: VhReadableWidth(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                MTSpace.pagePad,
-                MTSpace.sm,
-                MTSpace.pagePad,
-                MTSpace.xs,
+                VhSpace.pagePad,
+                VhSpace.sm,
+                VhSpace.pagePad,
+                VhSpace.xs,
               ),
-              child: MTSearchField(
+              child: VhSearchField(
                 hint: l10n.searchLogs,
                 onChanged: (value) => setState(() => _search.text = value),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: MTSpace.pagePad),
+              padding: const EdgeInsets.symmetric(horizontal: VhSpace.pagePad),
               child: Row(
                 children: [
-                  MTIcon(MTIcons.shield, size: 14, color: p.ink3),
-                  const SizedBox(width: MTSpace.xs),
+                  VhIcon(VhIcons.shield, size: 14, color: p.ink3),
+                  const SizedBox(width: VhSpace.xs),
                   Expanded(
                     child: Text(
                       l10n.logsSanitizedNote,
@@ -159,18 +159,18 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: MTSpace.sm),
+            const SizedBox(height: VhSpace.sm),
             Expanded(
               child: _loading
-                  ? const Center(child: MTSpinner())
+                  ? const Center(child: VhSpinner())
                   : visible.isEmpty
-                  ? MTEmptyState(
+                  ? VhEmptyState(
                       title: query.isEmpty ? l10n.logsEmpty : l10n.noResults,
                       message: query.isEmpty
                           ? l10n.noLogsFound
                           : l10n.noResultsMessage,
                     )
-                  : MTJumpToEnd(
+                  : VhJumpToEnd(
                       controller: _scroll,
                       tooltip: l10n.jumpToNewest,
                       fresh: _fresh,
@@ -182,10 +182,10 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
                         // Room under the last line, so the arrow never
                         // covers it.
                         padding: const EdgeInsets.fromLTRB(
-                          MTSpace.pagePad,
+                          VhSpace.pagePad,
                           0,
-                          MTSpace.pagePad,
-                          MTJumpToEnd.reserve,
+                          VhSpace.pagePad,
+                          VhJumpToEnd.reserve,
                         ),
                         itemCount: visible.length,
                         itemBuilder: (context, index) => Padding(
@@ -211,8 +211,8 @@ class _LogsScreenState extends ConsumerState<LogsScreen> {
   }
 
   void _confirmClear() {
-    final l10n = context.mtl;
-    showMTDialog<void>(
+    final l10n = context.vhl;
+    showVhDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         content: Text(l10n.clearLogsConfirm),

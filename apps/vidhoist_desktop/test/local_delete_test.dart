@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/library_data.dart';
 import 'package:vidhoist_desktop/di.dart';
@@ -47,7 +47,7 @@ void main() {
           );
       await c
           .read(tagsIndexProvider)
-          .toggleTag(url, MTConstants.favoritesSystemTag);
+          .toggleTag(url, VhConstants.favoritesSystemTag);
       final before = await c.read(libraryItemsProvider.future);
       final item = before.single;
 

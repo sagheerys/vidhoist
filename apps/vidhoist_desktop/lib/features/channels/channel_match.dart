@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart' show PlaybackPositionStore;
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart' show PlaybackPositionStore;
 
 import '../../data/channels_data.dart';
 import '../../data/library_data.dart';
 import '../../di.dart';
 
 // The matching itself is shared with the phone app.
-export 'package:mt_media/library.dart'
+export 'package:vh_media/library.dart'
     show
         ChannelMatch,
         ChannelStats,

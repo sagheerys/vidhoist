@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'shell/shell_layout.dart';
 
@@ -19,7 +19,7 @@ final prefsMutexProvider = Provider((ref) => PrefsMutex());
 final secretStoreProvider = Provider<SecretStore>((ref) => MemorySecretStore());
 
 /// The diagnostic log; overridden in main with its path.
-final loggerProvider = Provider<MTLogger>(
+final loggerProvider = Provider<VhLogger>(
   (ref) => throw UnimplementedError('overridden in main'),
 );
 
@@ -31,7 +31,7 @@ final playbackResolverProvider = Provider<PlaybackSourceResolver>(
 
 /// The one player, overridden in main: the interface, the media keys and
 /// the tray all talk to this and never to the engine.
-final playerProvider = Provider<MTPlayer>(
+final playerProvider = Provider<VhPlayer>(
   (ref) => throw UnimplementedError('overridden in main'),
 );
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// One line of the transcript: its time and its words, lit while it is
 /// being said, with what the search found marked and the result it is on
@@ -29,10 +29,10 @@ class TranscriptLineTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final theme = Theme.of(context).textTheme;
-    final corner = BorderRadius.circular(MTRadius.field);
-    final direction = mtTextDirectionOf(text, Directionality.of(context));
+    final corner = BorderRadius.circular(VhRadius.field);
+    final direction = vhTextDirectionOf(text, Directionality.of(context));
     return Semantics(
       button: true,
       selected: current,
@@ -40,12 +40,12 @@ class TranscriptLineTile extends StatelessWidget {
         onTap: onTap,
         borderRadius: corner,
         child: AnimatedContainer(
-          duration: mtMotionDuration(context, MTMotion.fast),
+          duration: vhMotionDuration(context, VhMotion.fast),
           // The row is at least a finger high.
           constraints: const BoxConstraints(minHeight: 44),
           padding: const EdgeInsets.symmetric(
-            horizontal: MTSpace.sm,
-            vertical: MTSpace.sm,
+            horizontal: VhSpace.sm,
+            vertical: VhSpace.sm,
           ),
           decoration: BoxDecoration(
             color: current ? p.accentSoft : null,
@@ -55,9 +55,9 @@ class TranscriptLineTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsetsDirectional.only(end: MTSpace.md),
+                padding: const EdgeInsetsDirectional.only(end: VhSpace.md),
                 child: Text(
-                  mtFormatDuration(start),
+                  vhFormatDuration(start),
                   style: theme.labelSmall?.tabular.copyWith(
                     color: current ? p.accentInk : p.ink3,
                     fontWeight: current ? FontWeight.w700 : null,
@@ -67,7 +67,7 @@ class TranscriptLineTile extends StatelessWidget {
               ),
               Expanded(
                 child: AnimatedDefaultTextStyle(
-                  duration: mtMotionDuration(context, MTMotion.fast),
+                  duration: vhMotionDuration(context, VhMotion.fast),
                   style: (theme.bodyMedium ?? const TextStyle()).copyWith(
                     color: current ? p.ink : p.ink2,
                     fontWeight: current ? FontWeight.w600 : null,
@@ -87,7 +87,7 @@ class TranscriptLineTile extends StatelessWidget {
     );
   }
 
-  List<TextSpan> _spans(MTPalette p) {
+  List<TextSpan> _spans(VhPalette p) {
     final spans = <TextSpan>[];
     var at = 0;
     for (final mark in marks) {

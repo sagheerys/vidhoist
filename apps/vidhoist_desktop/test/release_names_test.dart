@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
 
 /// **The update finds Vidhoist's own installer.** The fork kept the

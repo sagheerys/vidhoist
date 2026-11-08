@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/now_playing.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 import 'support/shell_harness.dart';
 
@@ -29,7 +29,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.descendant(
-        of: find.byType(EmberNowPlaying),
+        of: find.byType(DesktopNowPlaying),
         matching: find.text('Night Drive'),
       ),
       findsOneWidget,
@@ -37,7 +37,7 @@ void main() {
     final images = tester
         .widgetList<CachedNetworkImage>(
           find.descendant(
-            of: find.byType(EmberNowPlaying),
+            of: find.byType(DesktopNowPlaying),
             matching: find.byType(CachedNetworkImage),
           ),
         )
@@ -48,7 +48,7 @@ void main() {
     // card's colour, the bands moved rather than gone.
     final image = tester.widget<CachedNetworkImage>(
       find.descendant(
-        of: find.byType(EmberNowPlaying),
+        of: find.byType(DesktopNowPlaying),
         matching: find.byType(CachedNetworkImage),
       ),
     );

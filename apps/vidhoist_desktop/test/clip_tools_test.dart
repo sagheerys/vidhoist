@@ -11,9 +11,9 @@ import 'package:vidhoist_desktop/features/library/library_item_view.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/player_controls.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -35,8 +35,9 @@ final _other = LibraryItem(
   timestamp: DateTime(2026, 10, 19),
 );
 
-Finder _control(String label) =>
-    find.byWidgetPredicate((w) => w is EmberPlayerControl && w.label == label);
+Finder _control(String label) => find.byWidgetPredicate(
+  (w) => w is DesktopPlayerControl && w.label == label,
+);
 
 void main() {
   late List<String> copied;
@@ -68,7 +69,7 @@ void main() {
   }
 
   ProviderContainer containerOf(WidgetTester tester) =>
-      ProviderScope.containerOf(tester.element(find.byType(EmberSidebar)));
+      ProviderScope.containerOf(tester.element(find.byType(DesktopSidebar)));
 
   Finder card(String title) => find.descendant(
     of: find.byType(LibraryItemView),
@@ -102,29 +103,29 @@ void main() {
       final h = await open(tester);
       await rightClick(tester, card('Night Drive'));
       for (final keys in ['Enter', 'Shift Enter', 'Ctrl R', 'F', 'Ctrl C']) {
-        expect(find.text(mtLtrRun(keys)), findsOneWidget, reason: keys);
+        expect(find.text(vhLtrRun(keys)), findsOneWidget, reason: keys);
       }
       await tester.tap(find.text('Add to favorites'));
       await tester.pumpAndSettle();
       final tags = await containerOf(tester)
           .read(tagsIndexProvider)
           .tagsOf(_url);
-      expect(tags, contains(MTConstants.favoritesSystemTag));
+      expect(tags, contains(VhConstants.favoritesSystemTag));
 
       await rightClick(tester, card('Night Drive'));
       await tester.tap(find.text('Play').last);
       await tester.pumpAndSettle();
       expect(h.player.calls, contains('playItems'));
 
-      final router = GoRouter.of(tester.element(find.byType(EmberSidebar)));
-      router.go(EmberRoutes.library);
+      final router = GoRouter.of(tester.element(find.byType(DesktopSidebar)));
+      router.go(DesktopRoutes.library);
       await tester.pumpAndSettle();
       await rightClick(tester, card('Night Drive'));
       await tester.tap(find.text('Reading room').last);
       await tester.pumpAndSettle();
       expect(
         router.routerDelegate.currentConfiguration.uri.toString(),
-        EmberRoutes.reading(_url),
+        DesktopRoutes.reading(_url),
       );
     });
   });
@@ -165,7 +166,7 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.keyF);
     await tester.pumpAndSettle();
     final tags = await containerOf(tester).read(tagsIndexProvider).tagsOf(_url);
-    expect(tags, contains(MTConstants.favoritesSystemTag));
+    expect(tags, contains(VhConstants.favoritesSystemTag));
   });
 
   group('on the clip page', () {
@@ -175,8 +176,8 @@ void main() {
     }) async {
       final h = await open(tester);
       h.player.showPlaying([toPlaylistItem(_clip)], playing: playing);
-      GoRouter.of(tester.element(find.byType(EmberSidebar)))
-          .go(EmberRoutes.item(_url));
+      GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+          .go(DesktopRoutes.item(_url));
       await tester.pumpAndSettle();
       return h;
     }
@@ -245,7 +246,7 @@ void main() {
 
       h.video.pictureSize.value = const Size(1920, 1080);
       await tester.pumpAndSettle();
-      expect(facts(), startsWith('$mtFirstStrongIsolate${mtLtrRun('1080p')}'));
+      expect(facts(), startsWith('$vhFirstStrongIsolate${vhLtrRun('1080p')}'));
     });
   });
 }

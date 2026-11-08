@@ -22,12 +22,12 @@ path unless that change is asked for explicitly.
 ## Before you open a pull request
 
 ```bash
-cd packages/mt_ui && flutter gen-l10n     # only if you touched an .arb file
+cd packages/vh_ui && flutter gen-l10n     # only if you touched an .arb file
 flutter analyze --no-pub                  # must be clean
-cd packages/mt_core  && dart test
-cd packages/mt_media && flutter test --no-pub
-cd packages/mt_ui    && flutter test --no-pub
-cd packages/mt_transcripts && dart test
+cd packages/vh_core  && dart test
+cd packages/vh_media && flutter test --no-pub
+cd packages/vh_ui    && flutter test --no-pub
+cd packages/vh_transcripts && dart test
 cd apps/vidhoist_mobile  && flutter test --no-pub
 cd apps/vidhoist_desktop && flutter test --no-pub
 ```
@@ -41,15 +41,15 @@ the second case needs saying so in the pull request, not deleting the test.
 **Both languages, always.** Every user-facing string lives in `app_en.arb`
 **and** `app_ar.arb`, added in the same change, keys in alphabetical order.
 There are zero hardcoded strings in the UI, and an automated guard
-(`packages/mt_ui/test/arb_parity_test.dart`) fails if the two files drift apart.
+(`packages/vh_ui/test/arb_parity_test.dart`) fails if the two files drift apart.
 Arabic is right-to-left: check numbers, percentages and directional icons in
 both directions.
 
-**Both apps.** Anything in `mt_core`, `mt_media` or `mt_ui` touches the
+**Both apps.** Anything in `vh_core`, `vh_media` or `vh_ui` touches the
 Android and the Windows app at once. Some files are deliberately duplicated per app; a change to one
 copy is applied to the other, or the pull request says why not.
 
-**Both themes.** Every colour is read from `MTPalette` through the context —
+**Both themes.** Every colour is read from `VhPalette` through the context —
 never a literal. A hardcoded colour works in daylight and breaks at night. Any
 new palette field is filled in both palettes (`superDay`, `superNight`; the
 `lite*` names are aliases) with real contrast, not a copied daylight value. Screens
@@ -66,9 +66,9 @@ and on which device. That is most of what this file is asking you to preserve.
 in `apps/*/test/device_matrix.dart`: five screen sizes and three text scales.
 Layout is what breaks on other people's phones and it does not show on yours.
 
-**Layers.** `apps → mt_media → mt_core → mt_ytdlp`. `mt_core` and `mt_ytdlp`
-are pure Dart with no Flutter import. `mt_ui` knows no engine and no app. A
-yt-dlp command line is built and its output read in `mt_ytdlp` alone; each app
+**Layers.** `apps → vh_media → vh_core → vh_ytdlp`. `vh_core` and `vh_ytdlp`
+are pure Dart with no Flutter import. `vh_ui` knows no engine and no app. A
+yt-dlp command line is built and its output read in `vh_ytdlp` alone; each app
 only starts the process.
 
 **The engine.** [`docs/ENGINE.md`](docs/ENGINE.md) is the authority on how
@@ -92,11 +92,11 @@ plausible explanation turned out to be wrong under measurement.
 
 ## Translations
 
-The fastest useful contribution. Copy `packages/mt_ui/lib/src/l10n/app_en.arb`
+The fastest useful contribution. Copy `packages/vh_ui/lib/src/l10n/app_en.arb`
 to `app_<code>.arb`, translate the values (keep the keys and any `{placeholders}`
 exactly), add one line to
-`packages/mt_ui/lib/src/l10n/language_names.dart` with the language's name in
-its own language, then run `cd packages/mt_ui && flutter gen-l10n`.
+`packages/vh_ui/lib/src/l10n/language_names.dart` with the language's name in
+its own language, then run `cd packages/vh_ui && flutter gen-l10n`.
 
 The settings screen builds its list from `supportedLocales`, so there is no
 screen to edit. A translation that misses some keys will be caught by the parity

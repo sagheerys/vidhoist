@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/settings/about_screen.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'device_matrix.dart';
@@ -23,10 +23,10 @@ void main() {
   );
 
   Widget host() => MaterialApp(
-    theme: mtTheme(MTVariant.lite, Brightness.light),
+    theme: vhTheme(VhVariant.phone, Brightness.light),
     locale: const Locale('ar'),
-    localizationsDelegates: MTLocalizations.localizationsDelegates,
-    supportedLocales: MTLocalizations.supportedLocales,
+    localizationsDelegates: VhLocalizations.localizationsDelegates,
+    supportedLocales: VhLocalizations.supportedLocales,
     home: const AboutScreen(),
   );
 
@@ -43,7 +43,7 @@ void main() {
 
   testWidgets('the version, without the build number', (tester) async {
     await open(tester);
-    final l10n = tester.element(find.byType(AboutScreen)).mtl;
+    final l10n = tester.element(find.byType(AboutScreen)).vhl;
 
     expect(find.text('${l10n.version} 2.0.0'), findsOneWidget);
     // **The guard**: the text used to be `2.0.0+7`, and the build number is
@@ -55,7 +55,7 @@ void main() {
     'the licence, the non-affiliation notice and the warranty disclaimer are shown',
     (tester) async {
       await open(tester);
-      final l10n = tester.element(find.byType(AboutScreen)).mtl;
+      final l10n = tester.element(find.byType(AboutScreen)).vhl;
 
       expect(find.text(l10n.licensedUnder), findsOneWidget);
       expect(find.text(l10n.notAffiliated), findsOneWidget);

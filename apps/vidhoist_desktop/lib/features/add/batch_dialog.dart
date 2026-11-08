@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/choices_data.dart';
 import '../../data/downloads_data.dart';
 import '../../shell/shell_metrics.dart';
 import '../library/artwork.dart';
 import 'add_options.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// How a playlist's clips are read; a test puts its own in.
 final playlistReaderProvider =
@@ -55,10 +55,10 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
   final _left = <String>{};
 
   Future<void> _send(PlaylistPreview list, List<String> urls) async {
-    final l = context.mtl;
+    final l = context.vhl;
     final engine = ref.read(downloadEngineProvider);
     if (engine == null) {
-      showMTNotice(context, message: l.engineErrMissing);
+      showVhNotice(context, message: l.engineErrMissing);
       return;
     }
     final soundOnly = list.kind == PlaylistKind.soundcloud;
@@ -78,17 +78,17 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
       unawaited(ref.read(batchCollectorProvider).begin(list.title, ids));
     }
     Navigator.of(context).pop();
-    showMTNotice(
+    showVhNotice(
       context,
       message: l.addedNToServer(ids.length),
-      kind: MTNoticeKind.done,
+      kind: VhNoticeKind.done,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final asked = ref.watch(playlistPreviewProvider(widget.url));
     final list = asked.valueOrNull;
@@ -109,13 +109,13 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
       body = Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const MTFilmStrip(),
-          const SizedBox(height: MTSpace.sm),
+          const VhFilmStrip(),
+          const SizedBox(height: VhSpace.sm),
           Text(l.batchLoading, style: text.bodySmall),
         ],
       );
     } else if (list == null || tracks.isEmpty) {
-      body = MTEmptyFrame(
+      body = VhEmptyFrame(
         title: l.failedToLoadPlaylist,
         message: l.couldNotLoadPlaylist,
         actionLabel: l.retry,
@@ -130,14 +130,14 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
             children: [
               Expanded(
                 child: Text(
-                  mtMetaLine([
+                  vhMetaLine([
                     l.batchSelectedOf(chosen.length, tracks.length),
-                    if (total > Duration.zero) mtFormatDuration(total),
+                    if (total > Duration.zero) vhFormatDuration(total),
                   ]),
                   style: text.labelMedium?.copyWith(color: p.ink2),
                 ),
               ),
-              MTLinkButton(
+              VhLinkButton(
                 label: chosen.length == tracks.length
                     ? l.deselectAll
                     : l.selectAll,
@@ -151,10 +151,10 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
               ),
             ],
           ),
-          const SizedBox(height: MTSpace.xs),
+          const SizedBox(height: VhSpace.xs),
           Row(
             children: [
-              const SizedBox(width: _tickWidth + _thumbWidth + MTSpace.sm),
+              const SizedBox(width: _tickWidth + _thumbWidth + VhSpace.sm),
               Expanded(
                 child: Text(
                   l.titleLabel,
@@ -167,7 +167,7 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
               ),
             ],
           ),
-          Divider(color: p.line, height: MTSpace.sm),
+          Divider(color: p.line, height: VhSpace.sm),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: _listHeight),
             child: ListView.builder(
@@ -181,7 +181,7 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
                     () => on ? _left.add(track.url) : _left.remove(track.url),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: MTSpace.xxs),
+                    padding: const EdgeInsets.symmetric(vertical: VhSpace.xxs),
                     child: Row(
                       children: [
                         SizedBox(
@@ -195,7 +195,7 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
                             ),
                           ),
                         ),
-                        MTMediaThumb(
+                        VhMediaThumb(
                           width: _thumbWidth,
                           height: _thumbWidth * 9 / 16,
                           child: artworkFor(
@@ -205,13 +205,13 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
                             width: _thumbWidth,
                           ),
                         ),
-                        const SizedBox(width: MTSpace.sm),
+                        const SizedBox(width: VhSpace.sm),
                         Expanded(
                           child: Text(
                             track.title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            textDirection: mtTextDirectionOf(
+                            textDirection: vhTextDirectionOf(
                               track.title,
                               Directionality.of(context),
                             ),
@@ -223,10 +223,10 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
                         if (track.duration case final d?)
                           Padding(
                             padding: const EdgeInsetsDirectional.only(
-                              start: MTSpace.sm,
+                              start: VhSpace.sm,
                             ),
                             child: Text(
-                              mtFormatDuration(d),
+                              vhFormatDuration(d),
                               style: text.labelSmall?.tabular.copyWith(
                                 color: p.ink3,
                               ),
@@ -239,7 +239,7 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
               },
             ),
           ),
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
           AddOptions(
             choice: _choice,
             heights: list.kind != PlaylistKind.soundcloud,
@@ -257,7 +257,7 @@ class _BatchDialogState extends ConsumerState<_BatchDialog> {
         overflow: TextOverflow.ellipsis,
       ),
       content: SizedBox(
-        width: EmberShellSize.wideDialog,
+        width: DesktopShellSize.wideDialog,
         child: SingleChildScrollView(child: body),
       ),
       actions: [

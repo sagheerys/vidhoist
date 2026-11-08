@@ -2,22 +2,22 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/lists_data.dart';
 import '../../shell/shell_metrics.dart';
 import 'list_actions.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// Asks for a list's name: a new one, or [initial] to rename.
 Future<String?> promptPlaylistName(
   BuildContext context, {
   String? initial,
 }) async {
-  final l = context.mtl;
-  final name = await promptMTText(
+  final l = context.vhl;
+  final name = await promptVhText(
     context,
     title: initial == null ? l.createPlaylist : l.rename,
     confirmLabel: initial == null ? l.create : l.rename,
@@ -31,11 +31,11 @@ Future<String?> promptPlaylistName(
 
 /// Deleting a list, never its clips, behind a confirmation.
 Future<bool> confirmDeletePlaylist(BuildContext context, String name) {
-  final l = context.mtl;
-  return showMTConfirm(
+  final l = context.vhl;
+  return showVhConfirm(
     context,
     title: l.delete,
-    message: l.deletePlaylistConfirm(mtName(name)),
+    message: l.deletePlaylistConfirm(vhName(name)),
     confirmLabel: l.delete,
     cancelLabel: l.cancel,
     destructive: true,
@@ -97,15 +97,15 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final lists = ref.watch(playlistsProvider).valueOrNull ?? const [];
     final urls = {for (final item in widget.items) item.canonicalUrl};
     return AlertDialog(
       title: Text(l.addToPlaylist),
       content: SizedBox(
-        width: EmberShellSize.smallDialog,
+        width: DesktopShellSize.smallDialog,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -117,16 +117,16 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
                 hintText: l.newPlaylistAction,
                 suffixIcon: IconButton(
                   tooltip: l.create,
-                  icon: MTIcon(MTIcons.plus, color: p.accentInk),
+                  icon: VhIcon(VhIcons.plus, color: p.accentInk),
                   onPressed: () => unawaited(_create(_field.text)),
                 ),
               ),
               onSubmitted: (v) => unawaited(_create(v)),
             ),
-            const SizedBox(height: MTSpace.sm),
+            const SizedBox(height: VhSpace.sm),
             if (lists.isEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: MTSpace.sm),
+                padding: const EdgeInsets.symmetric(vertical: VhSpace.sm),
                 child: Text(
                   l.noPlaylistsMessage,
                   style: text.bodySmall?.copyWith(color: p.ink3),

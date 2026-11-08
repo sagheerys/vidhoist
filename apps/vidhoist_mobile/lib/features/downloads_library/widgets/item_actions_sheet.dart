@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../playlists/add_to_playlist_sheet.dart';
 import '../../shared/error_report.dart';
@@ -16,7 +16,7 @@ import '../../shared/open_web_link.dart';
 /// local). Delete comes last, isolated by a divider and in the error
 /// colour, which is a general navigation rule.
 void showItemActionsSheet(BuildContext context, WidgetRef ref, LocalItem item) {
-  showMTSheet<void>(
+  showVhSheet<void>(
     context: context,
     useRootNavigator: true,
     // As tall as its rows, not the default nine sixteenths of the screen,
@@ -43,8 +43,8 @@ class _ItemActionsSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final actions = ref.read(libraryActionsProvider);
 
     Future<void> run(
@@ -55,7 +55,7 @@ class _ItemActionsSheet extends ConsumerWidget {
       try {
         await action();
         if (successText != null && host.mounted) {
-          showMTSnack(host, successText, type: MTSnackType.success);
+          showVhSnack(host, successText, type: VhSnackType.success);
         }
       } catch (e) {
         if (host.mounted) {
@@ -65,12 +65,12 @@ class _ItemActionsSheet extends ConsumerWidget {
     }
 
     ListTile tile(
-      MTIconData icon,
+      VhIconData icon,
       String label,
       VoidCallback onTap, {
       Color? color,
     }) => ListTile(
-      leading: MTIcon(icon, color: color ?? p.ink2),
+      leading: VhIcon(icon, color: color ?? p.ink2),
       title: Text(
         label,
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: color),
@@ -88,12 +88,12 @@ class _ItemActionsSheet extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                MTSpace.xl,
-                MTSpace.lg,
-                MTSpace.xl,
-                MTSpace.sm,
+                VhSpace.xl,
+                VhSpace.lg,
+                VhSpace.xl,
+                VhSpace.sm,
               ),
-              child: MTForeignText(
+              child: VhForeignText(
                 item.title,
                 maxLines: 1,
                 style: Theme.of(context).textTheme.titleLarge,
@@ -103,32 +103,32 @@ class _ItemActionsSheet extends ConsumerWidget {
             // **Favourites from the menu, not an empty heart on every card**
             // (owner's decision 2026-11-01): the card shows a small heart on
             // favourites alone, and the players keep the one-tap heart.
-            MTFavoriteTile(
+            VhFavoriteTile(
               favorite: item.favorite,
               onTap: () async {
                 Navigator.pop(context);
                 final added = await actions.toggleFavorite(item.key);
                 if (host.mounted) {
-                  showMTSnack(
+                  showVhSnack(
                     host,
                     added ? l10n.addedToFavorites : l10n.removedFromFavorites,
                   );
                 }
               },
             ),
-            tile(MTIcons.info, l10n.details, () {
+            tile(VhIcons.info, l10n.details, () {
               Navigator.pop(context);
               showItemDetailsSheet(host, item);
             }),
             tile(
-              MTIcons.share,
+              VhIcons.share,
               l10n.share,
               () => run(() => actions.share([item])),
             ),
             // An external player gets a file path: Lite has only local
             // files, so no server URL ever leaves the app.
             tile(
-              MTIcons.playback,
+              VhIcons.playback,
               l10n.openInExternalPlayer,
               () => run(() async {
                 final opened = await const ExternalPlayer().open(
@@ -136,47 +136,47 @@ class _ItemActionsSheet extends ConsumerWidget {
                   audio: item.isAudio,
                 );
                 if (!opened && host.mounted) {
-                  showMTSnack(
+                  showVhSnack(
                     host,
                     l10n.noExternalPlayer,
-                    type: MTSnackType.error,
+                    type: VhSnackType.error,
                   );
                 }
               }),
             ),
-            tile(MTIcons.queueAdd, l10n.addToPlaylist, () {
+            tile(VhIcons.queueAdd, l10n.addToPlaylist, () {
               Navigator.pop(context);
               showAddToPlaylistSheet(host, ref, [item]);
             }),
             // The original link is offered only where we know it; it is never
             // rebuilt from a guess.
             if (item.canonicalUrl != null)
-              tile(MTIcons.external, l10n.openOriginalLink, () {
+              tile(VhIcons.external, l10n.openOriginalLink, () {
                 Navigator.pop(context);
                 openWebLink(item.canonicalUrl);
               }),
             const Divider(),
             tile(
-              MTIcons.trash,
+              VhIcons.trash,
               l10n.deleteVideo,
               () => _confirm(
                 context,
                 l10n.deleteVideo,
-                l10n.deleteVideoConfirm(mtName(item.title)),
-                MTDialogClip(
-                  title: mtName(item.title),
+                l10n.deleteVideoConfirm(vhName(item.title)),
+                VhDialogClip(
+                  title: vhName(item.title),
                   thumbnail: artworkFor(item.thumbnail, decodeWidth: 120),
                 ),
                 () {
                   run(
                     () => actions.deleteFiles([item]),
-                    successText: l10n.deletedTitle(mtName(item.title)),
+                    successText: l10n.deletedTitle(vhName(item.title)),
                   );
                 },
               ),
               color: p.err,
             ),
-            const SizedBox(height: MTSpace.md),
+            const SizedBox(height: VhSpace.md),
           ],
         ),
       ),
@@ -193,8 +193,8 @@ class _ItemActionsSheet extends ConsumerWidget {
     Widget clip,
     VoidCallback onYes,
   ) async {
-    final l10n = context.mtl;
-    final sure = await showMTConfirm(
+    final l10n = context.vhl;
+    final sure = await showVhConfirm(
       context,
       title: title,
       message: message,
@@ -213,8 +213,8 @@ void confirmBulkDelete(
   WidgetRef ref,
   Set<String> selection,
 ) {
-  final l10n = context.mtl;
-  showMTDialog<void>(
+  final l10n = context.vhl;
+  showVhDialog<void>(
     context: context,
     builder: (dialogContext) => AlertDialog(
       content: Text(l10n.deleteMultipleConfirm(selection.length)),
@@ -237,10 +237,10 @@ void confirmBulkDelete(
                   .deleteFiles(targets);
               ref.read(libraryViewProvider.notifier).clearSelection();
               if (context.mounted) {
-                showMTSnack(
+                showVhSnack(
                   context,
                   l10n.deletedCount(count),
-                  type: MTSnackType.success,
+                  type: VhSnackType.success,
                 );
               }
             } catch (e) {

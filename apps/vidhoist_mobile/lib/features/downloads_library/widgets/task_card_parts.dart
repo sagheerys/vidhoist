@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../home/add_flow.dart' show taskErrorText;
 import '../artwork_view.dart';
@@ -13,13 +13,13 @@ Widget? taskThumbnail(DownloadTask task) =>
 /// The speed while bytes arrive, and nothing in any other phase.
 String? taskSpeed(DownloadTask task) =>
     task.phase == TaskPhase.downloading && task.speed != null
-    ? mtFormatTransferRate(task.speed!)
+    ? vhFormatTransferRate(task.speed!)
     : null;
 
 /// What a card says a task is doing; the percentage is the card's own.
 /// [waitingForWifi] is a pause "Wi-Fi only" made, not the person.
 String taskStatusText(
-  MTLocalizations l10n,
+  VhLocalizations l10n,
   DownloadTask task, {
   bool waitingForWifi = false,
 }) => switch (task.phase) {
@@ -39,7 +39,7 @@ String taskStatusText(
 /// A notification's line: unlike a card, it carries the percentage in its
 /// text, since a notification's bar alone cannot be read as a number.
 String taskNotificationText(
-  MTLocalizations l10n,
+  VhLocalizations l10n,
   DownloadTask task, {
   bool waitingForWifi = false,
 }) {
@@ -52,8 +52,8 @@ String taskNotificationText(
 
 /// Pause while a download runs or waits for Wi-Fi, resume once paused;
 /// none for a task waiting its turn or already done.
-MTDownloadCardAction? taskCardAction(
-  MTLocalizations l10n,
+VhDownloadCardAction? taskCardAction(
+  VhLocalizations l10n,
   DownloadTask task,
   LocalDownloadEngine? engine,
 ) {
@@ -61,13 +61,13 @@ MTDownloadCardAction? taskCardAction(
   return switch (task.phase) {
     TaskPhase.preparing ||
     TaskPhase.downloading ||
-    TaskPhase.waitingForNetwork => MTDownloadCardAction(
-      icon: MTIcons.pause,
+    TaskPhase.waitingForNetwork => VhDownloadCardAction(
+      icon: VhIcons.pause,
       tooltip: l10n.pause,
       onTap: () => engine.pause(task.id),
     ),
-    TaskPhase.paused => MTDownloadCardAction(
-      icon: MTIcons.play,
+    TaskPhase.paused => VhDownloadCardAction(
+      icon: VhIcons.play,
       tooltip: l10n.engineResume,
       onTap: () => engine.resume(task.id),
     ),

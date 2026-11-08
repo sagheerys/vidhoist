@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'key_cap.dart';
 import 'nav_history.dart';
@@ -9,8 +9,8 @@ import 'nav_history.dart';
 ///
 /// Its bare stretches belong to the title bar beneath, so they move the
 /// window: nothing here paints a ground of its own.
-class EmberContentBar extends StatelessWidget {
-  const EmberContentBar({
+class DesktopContentBar extends StatelessWidget {
+  const DesktopContentBar({
     super.key,
     required this.history,
     required this.onSearch,
@@ -29,15 +29,15 @@ class EmberContentBar extends StatelessWidget {
 
   /// Below this the search box would cut its own hint to nothing, so the
   /// search is a button, as the other tools are.
-  static const searchBoxMin = MTBreakpoint.readable / 4;
+  static const searchBoxMin = VhBreakpoint.readable / 4;
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
+    final l = context.vhl;
     return Padding(
       padding: const EdgeInsetsDirectional.only(
-        start: MTSpace.xl,
-        end: MTSpace.sm,
+        start: VhSpace.xl,
+        end: VhSpace.sm,
       ),
       child: Row(
         children: [
@@ -48,14 +48,14 @@ class EmberContentBar extends StatelessWidget {
             builder: (context, _) => Row(
               children: [
                 _BarButton(
-                  icon: MTIcons.back,
+                  icon: VhIcons.back,
                   label: l.desktopBack,
                   shortcut: 'Alt+←',
                   onTap: history.canGoBack ? history.back : null,
                   mirrored: true,
                 ),
                 _BarButton(
-                  icon: MTIcons.forward,
+                  icon: VhIcons.forward,
                   label: l.desktopForward,
                   shortcut: 'Alt+→',
                   onTap: history.canGoForward ? history.forward : null,
@@ -64,7 +64,7 @@ class EmberContentBar extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: MTSpace.sm),
+          const SizedBox(width: VhSpace.sm),
           // Three parts of the room to the search, one kept bare to take
           // hold of the window by.
           Flexible(
@@ -74,7 +74,7 @@ class EmberContentBar extends StatelessWidget {
                   ? Align(
                       alignment: AlignmentDirectional.centerStart,
                       child: _BarButton(
-                        icon: MTIcons.search,
+                        icon: VhIcons.search,
                         label: l.desktopSearch,
                         shortcut: 'Ctrl+K',
                         onTap: onSearch,
@@ -84,7 +84,7 @@ class EmberContentBar extends StatelessWidget {
                       alignment: AlignmentDirectional.centerStart,
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(
-                          maxWidth: MTBreakpoint.readable / 2,
+                          maxWidth: VhBreakpoint.readable / 2,
                         ),
                         child: _SearchBox(
                           hint: l.desktopSearchHint,
@@ -97,7 +97,7 @@ class EmberContentBar extends StatelessWidget {
           const Spacer(),
           ?downloads,
           _BarButton(
-            icon: MTIcons.transcript,
+            icon: VhIcons.transcript,
             label: panelShown ? l.desktopHidePanel : l.desktopShowPanel,
             onTap: onTogglePanel,
             selected: panelShown,
@@ -118,7 +118,7 @@ class _BarButton extends StatelessWidget {
     this.mirrored = false,
   });
 
-  final MTIconData icon;
+  final VhIconData icon;
   final String label;
   final String? shortcut;
   final VoidCallback? onTap;
@@ -129,14 +129,14 @@ class _BarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final ink = onTap == null ? p.ink3 : (selected ? p.ink : p.ink2);
-    return MTShortcutTooltip(
+    return VhShortcutTooltip(
       message: label,
       shortcut: shortcut,
       // Space each side, as in the player bar: two veils never touch.
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: MTSpace.xxs / 2),
+        padding: const EdgeInsets.symmetric(horizontal: VhSpace.xxs / 2),
         child: _button(context, ink),
       ),
     );
@@ -147,9 +147,9 @@ class _BarButton extends StatelessWidget {
     isSelected: selected,
     icon: Transform.flip(
       flipX: mirrored && Directionality.of(context) == TextDirection.rtl,
-      child: MTIcon(
+      child: VhIcon(
         icon,
-        size: MTDensity.desktop.icon,
+        size: VhDensity.desktop.icon,
         color: ink,
         semanticLabel: label,
       ),
@@ -167,9 +167,9 @@ class _SearchBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final corners = MTCorners.desktop;
+    final corners = VhCorners.desktop;
     return Semantics(
       button: true,
       label: hint,
@@ -180,23 +180,23 @@ class _SearchBox extends StatelessWidget {
           borderRadius: BorderRadius.circular(corners.field),
           side: BorderSide(
             color: p.line2,
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
           child: SizedBox(
-            height: MTDensity.desktop.row,
+            height: VhDensity.desktop.row,
             child: Row(
               children: [
-                const SizedBox(width: MTSpace.md),
-                MTIcon(
-                  MTIcons.search,
-                  size: MTDensity.desktop.icon,
+                const SizedBox(width: VhSpace.md),
+                VhIcon(
+                  VhIcons.search,
+                  size: VhDensity.desktop.icon,
                   color: p.ink3,
                 ),
-                const SizedBox(width: MTSpace.sm),
+                const SizedBox(width: VhSpace.sm),
                 Expanded(
                   child: Text(
                     hint,
@@ -206,7 +206,7 @@ class _SearchBox extends StatelessWidget {
                   ),
                 ),
                 const KeyCap(label: 'Ctrl K'),
-                const SizedBox(width: MTSpace.sm),
+                const SizedBox(width: VhSpace.sm),
               ],
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/ui_zoom.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 import 'desktop_matrix.dart';
 import 'support/shell_harness.dart';
@@ -52,9 +52,9 @@ void main() {
             zoom: UiZoom(zoom),
           )).app(),
           windows: zoom == 1.0
-              ? EmberWindowSize.all
+              ? DesktopWindowSize.all
               : [
-                  EmberWindowSize(
+                  DesktopWindowSize(
                     'smallest at ${(zoom * 100).round()}%',
                     const Size(960, 600) * zoom,
                   ),

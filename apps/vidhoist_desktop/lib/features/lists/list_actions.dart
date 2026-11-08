@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 
 import '../../data/library_data.dart';
 import '../../data/lists_data.dart';

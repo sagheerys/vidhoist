@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/engine_fetch_data.dart';
 import 'package:vidhoist_desktop/di.dart';
@@ -44,10 +44,10 @@ void main() {
         ],
         child: MaterialApp(
           locale: locale,
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
-          theme: mtDesktopTheme(
-            MTVariant.superApp,
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          theme: vhDesktopTheme(
+            VhVariant.desktop,
             night ? Brightness.dark : Brightness.light,
           ),
           home: const Scaffold(
@@ -70,11 +70,11 @@ void main() {
   testWidgets('no yt-dlp: a dot, and the line says so', (tester) async {
     await pump(tester, found: false);
     expect(find.byKey(const ValueKey('engine-dot')), findsOneWidget);
-    final l = lookupMTLocalizations(const Locale('en'));
+    final l = lookupVhLocalizations(const Locale('en'));
     expect(
       find.byWidgetPredicate(
         (w) =>
-            w is MTShortcutTooltip &&
+            w is VhShortcutTooltip &&
             w.message.contains(l.desktopEngineMissing),
       ),
       findsOneWidget,
@@ -91,7 +91,7 @@ void main() {
 
   testWidgets('its menu turns IPv4 off', (tester) async {
     await pump(tester);
-    final l = lookupMTLocalizations(const Locale('en'));
+    final l = lookupVhLocalizations(const Locale('en'));
     await tester.tap(find.byType(SidebarEngineLine));
     await tester.pumpAndSettle();
     await tester.tap(find.text(l.desktopEngineIpv4));
@@ -101,7 +101,7 @@ void main() {
 
   testWidgets('its menu updates yt-dlp', (tester) async {
     await pump(tester);
-    final l = lookupMTLocalizations(const Locale('en'));
+    final l = lookupVhLocalizations(const Locale('en'));
     await tester.tap(find.byType(SidebarEngineLine));
     await tester.pumpAndSettle();
     await tester.tap(find.text(l.desktopEngineUpdate));

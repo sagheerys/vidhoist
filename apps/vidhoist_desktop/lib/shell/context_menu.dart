@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// One line of a right-click menu; null [value] draws a divider.
-class EmberMenuEntry<T> {
-  const EmberMenuEntry(
+class DesktopMenuEntry<T> {
+  const DesktopMenuEntry(
     this.value,
     this.icon,
     this.label, {
@@ -12,7 +12,7 @@ class EmberMenuEntry<T> {
     this.shortcut,
   }) : assert(value != null);
 
-  const EmberMenuEntry.divider()
+  const DesktopMenuEntry.divider()
     : value = null,
       icon = null,
       label = '',
@@ -20,7 +20,7 @@ class EmberMenuEntry<T> {
       shortcut = null;
 
   final T? value;
-  final MTIconData? icon;
+  final VhIconData? icon;
   final String label;
 
   /// The key that does the same on a chosen clip, written as the
@@ -41,24 +41,24 @@ class EmberMenuEntry<T> {
 Future<T?> showEmberMenu<T>(
   BuildContext context,
   Offset globalPosition,
-  List<EmberMenuEntry<T>> entries,
+  List<DesktopMenuEntry<T>> entries,
 ) {
-  final p = MTThemeX.of(context).palette;
+  final p = VhThemeX.of(context).palette;
   final text = Theme.of(context).textTheme;
   final overlay = Overlay.of(context).context.findRenderObject()! as RenderBox;
   final at = overlay.globalToLocal(globalPosition);
   final size = overlay.size;
   final iconRoom = entries.any((e) => e.icon != null);
-  final row = emberMenuRowHeight(entries, size.height);
+  final row = desktopMenuRowHeight(entries, size.height);
   return showMenu<T>(
     context: context,
     // At the app's pace: in as a page comes, out as quickly as a hover;
     // Flutter's own took 300 ms each way.
     popUpAnimationStyle: AnimationStyle(
-      duration: mtMotionDuration(context, MTMotion.page),
-      reverseDuration: mtMotionDuration(context, MTMotion.fast),
-      curve: MTMotion.entrance,
-      reverseCurve: MTMotion.exit,
+      duration: vhMotionDuration(context, VhMotion.page),
+      reverseDuration: vhMotionDuration(context, VhMotion.fast),
+      curve: VhMotion.entrance,
+      reverseCurve: VhMotion.exit,
     ),
     // The menu opens on the reading side of the pointer, as Windows' own
     // do: rightwards in English, leftwards in Arabic, and only turns back
@@ -75,8 +75,8 @@ Future<T?> showEmberMenu<T>(
         : RelativeRect.fromLTRB(at.dx, at.dy, size.width, size.height - at.dy),
     color: p.card,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(MTCorners.desktop.card),
-      side: BorderSide(color: p.line2, width: MTThemeX.of(context).hairline),
+      borderRadius: BorderRadius.circular(VhCorners.desktop.card),
+      side: BorderSide(color: p.line2, width: VhThemeX.of(context).hairline),
     ),
     items: [
       for (final entry in entries)
@@ -88,16 +88,16 @@ Future<T?> showEmberMenu<T>(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (entry.icon case final icon?) ...[
-                  MTIcon(
+                  VhIcon(
                     icon,
-                    size: MTDensity.desktop.icon,
+                    size: VhDensity.desktop.icon,
                     color: entry.danger ? p.err : p.ink2,
                   ),
-                  const SizedBox(width: MTSpace.sm),
+                  const SizedBox(width: VhSpace.sm),
                 ] else if (iconRoom)
                   // Its icon's room kept, so the labels line up (a check by
                   // the chosen one alone).
-                  SizedBox(width: MTDensity.desktop.icon + MTSpace.sm),
+                  SizedBox(width: VhDensity.desktop.icon + VhSpace.sm),
                 // Filling the row sets each hint at the menu's far edge,
                 // in one column down the menu.
                 Expanded(
@@ -110,17 +110,17 @@ Future<T?> showEmberMenu<T>(
                   ),
                 ),
                 if (entry.shortcut case final keys?) ...[
-                  const SizedBox(width: MTSpace.lg),
+                  const SizedBox(width: VhSpace.lg),
                   // Capped, so at a large text size the keys shrink rather
                   // than push the row past the menu's edge.
                   ConstrainedBox(
                     constraints: const BoxConstraints(
-                      maxWidth: MTSpace.xxl * 3,
+                      maxWidth: VhSpace.xxl * 3,
                     ),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        mtLtrRun(keys),
+                        vhLtrRun(keys),
                         semanticsLabel: '',
                         style: text.labelSmall?.copyWith(color: p.ink3),
                       ),
@@ -139,19 +139,19 @@ Future<T?> showEmberMenu<T>(
 /// The height of each row of a menu of [entries] in an overlay [room] tall:
 /// the usual row while the menu fits, shorter rows in a short window so its
 /// last line (often Delete) is not left below the edge, to be scrolled to.
-/// Never under [emberMenuTightRow]: past that the menu scrolls instead.
-double emberMenuRowHeight<T>(List<EmberMenuEntry<T>> entries, double room) {
+/// Never under [desktopMenuTightRow]: past that the menu scrolls instead.
+double desktopMenuRowHeight<T>(List<DesktopMenuEntry<T>> entries, double room) {
   final rows = entries.where((e) => e.value != null).length;
-  if (rows == 0) return MTDensity.desktop.row;
+  if (rows == 0) return VhDensity.desktop.row;
   final dividers = entries.length - rows;
   // Flutter keeps the menu 8 px from each edge of the overlay, pads its
   // list 8 px above and below, and gives a divider 16.
   final free = room - 4 * 8 - dividers * 16;
-  return (free / rows).clamp(emberMenuTightRow, MTDensity.desktop.row);
+  return (free / rows).clamp(desktopMenuTightRow, VhDensity.desktop.row);
 }
 
 /// The shortest a menu row gets: an icon and a line of small text.
-const emberMenuTightRow = 28.0;
+const desktopMenuTightRow = 28.0;
 
 /// The keyboard's way to a right-click menu: the menu key, or Shift+F10,
 /// pressed on whatever has focus inside [child] opens [onMenu] at the

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// One paragraph: its time in the margin, then its prose.
 class ReadingParagraphView extends StatelessWidget {
@@ -51,7 +51,7 @@ class ReadingParagraphView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final base = text.bodyLarge?.copyWith(color: p.ink2, height: 1.9);
     final spans = <InlineSpan>[];
@@ -88,7 +88,7 @@ class ReadingParagraphView extends StatelessWidget {
     final heard =
         line != null && line >= paragraph.first && line <= paragraph.last;
     return Padding(
-      padding: const EdgeInsets.only(bottom: MTSpace.lg),
+      padding: const EdgeInsets.only(bottom: VhSpace.lg),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -96,13 +96,13 @@ class ReadingParagraphView extends StatelessWidget {
           // part of what is selected and copied.
           SelectionContainer.disabled(
             child: SizedBox(
-              width: MTSpace.xxl * 2,
+              width: VhSpace.xxl * 2,
               child: Align(
                 alignment: AlignmentDirectional.topStart,
                 child: TextButton(
                   onPressed: () => onJump(paragraph.first),
                   child: Text(
-                    mtLtrRun(mtFormatDuration(start)),
+                    vhLtrRun(vhFormatDuration(start)),
                     // Grey down the column, and the accent only beside the
                     // paragraph being heard: the time in the accent at the
                     // head of every paragraph dotted the page with it.
@@ -123,7 +123,7 @@ class ReadingParagraphView extends StatelessWidget {
                   onTapUp: (details) => _tapped(prose, details),
                   child: Text.rich(
                     TextSpan(children: spans),
-                    textDirection: mtTextDirectionOf(
+                    textDirection: vhTextDirectionOf(
                       paragraph.text,
                       Directionality.of(context),
                     ),

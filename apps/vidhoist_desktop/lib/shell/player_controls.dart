@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// One of the player bar's icon buttons, ember when its mode is on.
-class EmberPlayerControl extends StatelessWidget {
-  const EmberPlayerControl({
+class DesktopPlayerControl extends StatelessWidget {
+  const DesktopPlayerControl({
     super.key,
     required this.icon,
     required this.label,
@@ -14,7 +14,7 @@ class EmberPlayerControl extends StatelessWidget {
     this.ink,
   });
 
-  final MTIconData icon;
+  final VhIconData icon;
   final String label;
   final VoidCallback? onTap;
   final bool selected;
@@ -28,29 +28,29 @@ class EmberPlayerControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final ink = onTap == null
         ? p.ink3
         : (selected ? color ?? p.ink : this.ink ?? p.ink2);
     // The veil under the mouse is of the glyph's own colour: white over a
     // picture, the ink elsewhere.
     final veil = switch (this.ink) {
-      final light? => light.withValues(alpha: mtHoverVeil * 3),
-      null => p.ink.withValues(alpha: mtHoverVeil),
+      final light? => light.withValues(alpha: vhHoverVeil * 3),
+      null => p.ink.withValues(alpha: vhHoverVeil),
     };
-    return MTShortcutTooltip(
+    return VhShortcutTooltip(
       message: label,
       shortcut: shortcut,
       // A hair of space each side, so the veils of two neighbours under
       // the mouse never touch.
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: MTSpace.xxs / 2),
+        padding: const EdgeInsets.symmetric(horizontal: VhSpace.xxs / 2),
         child: _button(p, ink, veil),
       ),
     );
   }
 
-  Widget _button(MTPalette p, Color ink, Color veil) => IconButton(
+  Widget _button(VhPalette p, Color ink, Color veil) => IconButton(
     onPressed: onTap,
     // A mode or a layout that is on is read as on.
     isSelected: selected,
@@ -58,14 +58,14 @@ class EmberPlayerControl extends StatelessWidget {
     // shuffle) showed only as a change of the glyph's colour, which
     // could not be told apart at a glance.
     style: IconButton.styleFrom(
-      backgroundColor: selected && this.ink == null ? mtSelectedFill(p) : null,
+      backgroundColor: selected && this.ink == null ? vhSelectedFill(p) : null,
       hoverColor: veil,
     ),
     // A mode turned on or off, or the heart filled, swaps its glyph in
     // place rather than jumping.
-    icon: MTIconSwap(
+    icon: VhIconSwap(
       icon: icon,
-      size: MTDensity.desktop.icon,
+      size: VhDensity.desktop.icon,
       color: ink,
       semanticLabel: label,
     ),
@@ -73,8 +73,8 @@ class EmberPlayerControl extends StatelessWidget {
 }
 
 /// The player bar's play and pause, filled with the accent.
-class EmberPlayButton extends StatelessWidget {
-  const EmberPlayButton({
+class DesktopPlayButton extends StatelessWidget {
+  const DesktopPlayButton({
     super.key,
     required this.playing,
     required this.label,
@@ -91,8 +91,8 @@ class EmberPlayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    return MTShortcutTooltip(
+    final p = VhThemeX.of(context).palette;
+    return VhShortcutTooltip(
       message: label,
       shortcut: 'Space',
       // A bare ink well is only tappable; a screen reader also needs to
@@ -101,11 +101,11 @@ class EmberPlayButton extends StatelessWidget {
     );
   }
 
-  Widget _face(MTPalette p) {
+  Widget _face(VhPalette p) {
     return Material(
       color: onTap == null ? p.cardAlt : accent,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(MTCorners.desktop.fab),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.fab),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -113,11 +113,11 @@ class EmberPlayButton extends StatelessWidget {
         // Not the theme's opaque hover fill, which would hide the ember.
         hoverColor: ink.withValues(alpha: 0.12),
         child: SizedBox.square(
-          dimension: MTDensity.desktop.row,
+          dimension: VhDensity.desktop.row,
           child: Center(
-            child: MTIconSwap(
-              icon: playing ? MTIcons.pause : MTIcons.playFill,
-              size: MTDensity.desktop.icon,
+            child: VhIconSwap(
+              icon: playing ? VhIcons.pause : VhIcons.playFill,
+              size: VhDensity.desktop.icon,
               color: onTap == null ? p.ink3 : ink,
               semanticLabel: label,
             ),

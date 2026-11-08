@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'reading_paragraph.dart';
 
@@ -32,7 +32,7 @@ class ReadingArticle extends StatefulWidget {
   final Widget header;
   final List<TranscriptSegment> segments;
   final List<ReadingParagraph> paragraphs;
-  final MTPlayer player;
+  final VhPlayer player;
 
   /// Whether this clip is the one playing, so its line being said is lit.
   final bool following;
@@ -111,8 +111,8 @@ class _ReadingArticleState extends State<ReadingArticle> {
         Scrollable.ensureVisible(
           target,
           alignment: alignment,
-          duration: mtMotionDuration(context, MTMotion.medium),
-          curve: MTMotion.ease,
+          duration: vhMotionDuration(context, VhMotion.medium),
+          curve: VhMotion.ease,
         ),
       );
     });
@@ -120,7 +120,7 @@ class _ReadingArticleState extends State<ReadingArticle> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
+    final l = context.vhl;
     final hit = widget.hit;
     return NotificationListener<UserScrollNotification>(
       onNotification: (n) {
@@ -130,8 +130,8 @@ class _ReadingArticleState extends State<ReadingArticle> {
         return false;
       },
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(MTSpace.xl),
-        child: MTReadableWidth(
+        padding: const EdgeInsets.all(VhSpace.xl),
+        child: VhReadableWidth(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../channels/channels_screen.dart';
 import '../update/update_section.dart';
@@ -20,27 +20,27 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     return switch (pane) {
-      SettingsPane.engine => MTSettingsPage(
+      SettingsPane.engine => VhSettingsPage(
         title: l10n.mobileSettingsEngine,
         child: const EngineFields(),
       ),
       SettingsPane.channels => const ChannelsScreen(),
-      SettingsPane.downloads => MTSettingsPage(
+      SettingsPane.downloads => VhSettingsPage(
         title: l10n.settingsDownloads,
         child: const DownloadFields(),
       ),
-      SettingsPane.playback => MTSettingsPage(
+      SettingsPane.playback => VhSettingsPage(
         title: l10n.settingsPlayback,
         child: const PlaybackFields(),
       ),
-      SettingsPane.appearance => MTSettingsPage(
+      SettingsPane.appearance => VhSettingsPage(
         title: l10n.appearanceAndLanguage,
         child: const AppearanceFields(),
       ),
       SettingsPane.backup => const BackupScreen(),
-      SettingsPane.updates => MTSettingsPage(
+      SettingsPane.updates => VhSettingsPage(
         title: l10n.updates,
         child: const UpdateSection(),
       ),

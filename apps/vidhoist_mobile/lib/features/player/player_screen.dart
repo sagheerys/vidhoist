@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../downloads_library/library_actions.dart';
@@ -50,7 +50,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     // Watched before any early return: `videoSessionProvider` is
     // autoDispose, so reading it without watching disposes it immediately
     // and nothing runs.
@@ -59,7 +59,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     if (request == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: MTEmptyState(
+        body: VhEmptyState(
           title: l10n.videoPlayer,
           message: l10n.noPlayableSource,
         ),
@@ -77,14 +77,14 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
       settingsProvider.select((s) => (s.captionSize, s.captionBackground)),
     );
 
-    return MTVideoScreen(
+    return VhVideoScreen(
       session: session,
       artwork: artworkBuilderFor(ref),
       playlistName: request.playlistName,
       // **Belonging in landscape** (field report 2026-09-04): there is no
       // info sheet there, so the line under the title is its only home.
       membershipLine: membership[session.current?.canonicalUrl]?.line(
-        context.mtl,
+        context.vhl,
       ),
       subtitleBuilder: (context, item) => _subtitle(context, item, membership),
       // The subtitles fetched with the download, read from beside it.
@@ -106,16 +106,16 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     BuildContext context,
     PlaylistItem item,
     Map<String, ItemMembership> membership,
-  ) => mtMetaLine([
+  ) => vhMetaLine([
     platformOfKey(item.canonicalUrl).label,
-    membership[item.canonicalUrl]?.line(context.mtl),
+    membership[item.canonicalUrl]?.line(context.vhl),
   ]);
 
-  List<MTPlayerAction> _actions(
-    MTVideoSession session,
-    Map<String, Map<String, List<MTCaptionLine>>> subtitles,
+  List<VhPlayerAction> _actions(
+    VhVideoSession session,
+    Map<String, Map<String, List<VhCaptionLine>>> subtitles,
   ) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final item = session.current;
     if (item == null) return const [];
     final favorite =
@@ -126,8 +126,8 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
         false;
     return [
       // The one-tap heart: the library cards show it on favourites alone.
-      MTPlayerAction(
-        icon: favorite ? MTIcons.favoriteOn : MTIcons.favorite,
+      VhPlayerAction(
+        icon: favorite ? VhIcons.favoriteOn : VhIcons.favorite,
         label: favorite ? l10n.removeFromFavorites : l10n.addToFavorites,
         onTap: () =>
             ref.read(libraryActionsProvider).toggleFavorite(item.canonicalUrl),
@@ -135,8 +135,8 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
       // The clip's subtitles read as a transcript, searched, and played
       // from any line (batch 6b).
       if (sidecarTracksFor(ref, subtitles, item) case final tracks?)
-        MTPlayerAction(
-          icon: MTIcons.transcript,
+        VhPlayerAction(
+          icon: VhIcons.transcript,
           label: l10n.mobileTranscript,
           onTap: () => unawaited(
             showTranscriptSheet(
@@ -147,20 +147,20 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
             ),
           ),
         ),
-      MTPlayerAction(
-        icon: MTIcons.headphones,
+      VhPlayerAction(
+        icon: VhIcons.headphones,
         label: l10n.continueAsAudio,
         onTap: () => _continueAsAudio(item, session.position, pop: true),
       ),
-      MTPlayerAction(
-        icon: MTIcons.share,
+      VhPlayerAction(
+        icon: VhIcons.share,
         label: l10n.share,
         onTap: () => _share(item),
         inMenu: true,
       ),
       if (item.canonicalUrl.startsWith('http'))
-        MTPlayerAction(
-          icon: MTIcons.external,
+        VhPlayerAction(
+          icon: VhIcons.external,
           label: l10n.openOriginalLink,
           inMenu: true,
           onTap: () => openWebLink(item.canonicalUrl),

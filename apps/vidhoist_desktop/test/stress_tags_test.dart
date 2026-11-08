@@ -14,9 +14,9 @@ import 'package:vidhoist_desktop/features/library/library_chips.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/right_panel.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -80,8 +80,8 @@ Future<ShellHarness> boot(
   return h;
 }
 
-MTLocalizations l10n(WidgetTester tester) =>
-    tester.element(find.byType(EmberSidebar)).mtl;
+VhLocalizations l10n(WidgetTester tester) =>
+    tester.element(find.byType(DesktopSidebar)).vhl;
 
 Future<void> go(
   WidgetTester tester,
@@ -90,7 +90,7 @@ Future<void> go(
   List<String> found,
 ) async {
   final ms = await timed(() async {
-    GoRouter.of(tester.element(find.byType(EmberSidebar))).go(route);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(route);
     await tester.pumpAndSettle();
   });
   debugPrint('[stress] $label: $route settled in $ms ms');
@@ -135,7 +135,7 @@ Future<void> upNext(
   List<String> found,
 ) async {
   final tab = find.descendant(
-    of: find.byType(EmberRightPanel),
+    of: find.byType(DesktopRightPanel),
     matching: find.text(l10n(tester).upNext),
   );
   if (tab.evaluate().isEmpty) return;
@@ -180,14 +180,14 @@ void main() {
           );
           // The chip row scrolls with the grid, so a tall one hides it.
           final chips = tester.getSize(find.byType(LibraryChips)).height;
-          final cards = find.byType(MTMediaGridCard).evaluate().length;
+          final cards = find.byType(VhMediaGridCard).evaluate().length;
           debugPrint(
             '[stress] $label: chip row ${chips.round()} px tall of '
             '${window.height.toInt()}; $cards cards laid out',
           );
-          await go(tester, EmberRoutes.item(url(0)), label, found);
+          await go(tester, DesktopRoutes.item(url(0)), label, found);
           await pillDialog(tester, l10n(tester).tags, label, found);
-          await go(tester, EmberRoutes.playlists, label, found);
+          await go(tester, DesktopRoutes.playlists, label, found);
           expect(found, isEmpty);
         });
       }
@@ -228,12 +228,12 @@ void main() {
           },
         ],
       );
-      await go(tester, EmberRoutes.item(url(0)), label, found);
+      await go(tester, DesktopRoutes.item(url(0)), label, found);
       final l = l10n(tester);
       await pillDialog(tester, l.tags, label, found);
       await pillDialog(tester, l.addToPlaylist, label, found);
-      await go(tester, EmberRoutes.playlists, label, found);
-      await go(tester, EmberRoutes.playlist('p-long'), label, found);
+      await go(tester, DesktopRoutes.playlists, label, found);
+      await go(tester, DesktopRoutes.playlist('p-long'), label, found);
       h.player.showPlaying([toPlaylistItem(long)], playing: false);
       await tester.pumpAndSettle();
       check(tester, '$label player bar', found);

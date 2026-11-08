@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// **The way into choosing**: a round mark at the clip's starting corner,
 /// shown under the mouse, on every clip once one is chosen, and filled
@@ -22,7 +22,7 @@ class ChooseMark extends StatefulWidget {
   final Widget child;
 
   /// The mark's size.
-  static const double size = MTSpace.xl + MTSpace.xxs;
+  static const double size = VhSpace.xl + VhSpace.xxs;
 
   /// The mark itself, for tests.
   static const markKey = ValueKey('choose mark');
@@ -46,13 +46,13 @@ class _ChooseMarkState extends State<ChooseMark> {
         children: [
           widget.child,
           PositionedDirectional(
-            top: MTSpace.xs,
-            start: MTSpace.xs,
+            top: VhSpace.xs,
+            start: VhSpace.xs,
             child: IgnorePointer(
               ignoring: !shown,
               child: AnimatedOpacity(
                 opacity: shown ? 1 : 0,
-                duration: mtMotionDuration(context, MTMotion.fast),
+                duration: vhMotionDuration(context, VhMotion.fast),
                 child: _Mark(
                   key: ChooseMark.markKey,
                   chosen: widget.chosen,
@@ -75,9 +75,9 @@ class _Mark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final label = context.mtl.desktopChooseClip;
-    return MTShortcutTooltip(
+    final p = VhThemeX.of(context).palette;
+    final label = context.vhl.desktopChooseClip;
+    return VhShortcutTooltip(
       message: label,
       shortcut: 'Ctrl',
       child: Semantics(
@@ -97,11 +97,11 @@ class _Mark extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: chosen
                     ? p.accent
-                    : MTPalette.fullscreenScrim.withValues(alpha: 0.45),
+                    : VhPalette.fullscreenScrim.withValues(alpha: 0.45),
                 border: Border.all(color: Colors.white, width: 1.6),
               ),
               child: chosen
-                  ? MTIcon(MTIcons.check, size: MTSpace.md, color: p.onAccent)
+                  ? VhIcon(VhIcons.check, size: VhSpace.md, color: p.onAccent)
                   : null,
             ),
           ),

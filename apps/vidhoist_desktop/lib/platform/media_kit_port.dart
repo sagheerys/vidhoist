@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'one_player_guard.dart';
 import 'player_trace.dart';

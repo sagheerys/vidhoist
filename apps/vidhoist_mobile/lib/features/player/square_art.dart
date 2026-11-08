@@ -3,14 +3,14 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mt_core/mt_core.dart' show youtubeWideCover;
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart' show youtubeWideCover;
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// The square cover for the media notification and the lock screen, made
 /// once a clip and kept in the app's cache folder; see
-/// `MTAudioHandler.squareArt`.
+/// `VhAudioHandler.squareArt`.
 ///
 /// A YouTube song's wide thumbnail comes from the same image cache as the
 /// player's cover, so it is not downloaded twice. Where an upload has no
@@ -28,8 +28,8 @@ Future<Uri?> squareArtFor(PlaylistItem item) async {
 
   final wide = youtubeWideCover(art, item.canonicalUrl);
   Uint8List? png;
-  if (wide != null) png = await mtSquarePng(CachedNetworkImageProvider(wide));
-  png ??= await mtSquarePng(
+  if (wide != null) png = await vhSquarePng(CachedNetworkImageProvider(wide));
+  png ??= await vhSquarePng(
     art.startsWith('/')
         ? FileImage(File(art))
         : CachedNetworkImageProvider(art),

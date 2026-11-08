@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/data/incoming_links.dart';
 import 'package:vidhoist_desktop/features/settings/browser_button.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -26,8 +26,8 @@ void main() {
 
   test('the setup page carries the button to drag, in the language and '
       'direction of the app, and its colours', () async {
-    final ar = await MTLocalizations.delegate.load(const Locale('ar'));
-    final html = browserButtonPage(ar, MTPalette.superDay, rtl: true);
+    final ar = await VhLocalizations.delegate.load(const Locale('ar'));
+    final html = browserButtonPage(ar, VhPalette.desktopDay, rtl: true);
     expect(html, contains('dir="rtl"'));
     expect(html, contains(ar.desktopBrowserPageTitle));
     expect(html, contains('>${ar.desktopBrowserButtonName}</a>'));
@@ -39,13 +39,13 @@ void main() {
         '+encodeURIComponent(location.href)"',
       ),
     );
-    final accent = (MTPalette.superDay.accent.toARGB32() & 0xFFFFFF)
+    final accent = (VhPalette.desktopDay.accent.toARGB32() & 0xFFFFFF)
         .toRadixString(16)
         .padLeft(6, '0');
     expect(html, contains('#$accent'));
-    final en = await MTLocalizations.delegate.load(const Locale('en'));
+    final en = await VhLocalizations.delegate.load(const Locale('en'));
     expect(
-      browserButtonPage(en, MTPalette.superNight, rtl: false),
+      browserButtonPage(en, VhPalette.desktopNight, rtl: false),
       contains('dir="ltr"'),
     );
   });
@@ -75,7 +75,7 @@ void main() {
     final h = ShellHarness(library: const []);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
         .go('/settings/desktop');
     await tester.pumpAndSettle();
     expect(find.text('“To Vidhoist” button in the browser'), findsOneWidget);

@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 
 import '../data/clip_handover.dart';
 
 /// Carried by every drag that starts in this window, so the window's own
 /// drop target lets it pass instead of offering to add it as a link.
-const emberDragMark = 'vidhoist-clip';
+const desktopDragMark = 'vidhoist-clip';
 
 /// A clip dragged to Explorer or the desktop becomes its file; one whose
 /// file is gone does not start a drag.
@@ -26,7 +26,7 @@ class ClipDragSource extends StatelessWidget {
     final path = handover.localFile(item);
     if (path == null) return null;
     final name = path.substring(path.lastIndexOf(r'\') + 1);
-    return DragItem(suggestedName: name, localData: emberDragMark)
+    return DragItem(suggestedName: name, localData: desktopDragMark)
       ..add(Formats.fileUri(Uri.file(path, windows: true)));
   }
 

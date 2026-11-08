@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../home/add_flow.dart' show platformKindOf;
 import '../artwork_view.dart';
@@ -30,8 +30,8 @@ class LibraryItemCard extends ConsumerWidget {
   final LocalItem item;
   final VoidCallback onPlay;
 
-  /// Set for a row in a tablet's table ([MTLibrarySliver]).
-  final MTMediaColumns? columns;
+  /// Set for a row in a tablet's table ([VhLibrarySliver]).
+  final VhMediaColumns? columns;
 
   /// The highlight is temporary by nature: any tap extinguishes it at once,
   /// or the item stays looking "selected" forever (field report
@@ -49,16 +49,16 @@ class LibraryItemCard extends ConsumerWidget {
     // in a 98-point box reserved about 3.5MB per visible card in the image
     // cache.
     final (thumbWidth, thumbHeight) = columns != null
-        ? (MTMediaColumns.thumbWidth, MTMediaColumns.thumbHeight)
+        ? (VhMediaColumns.thumbWidth, VhMediaColumns.thumbHeight)
         : _thumbBox(context, options.mode);
     final thumbnail = artworkFor(
       item.thumbnail,
-      decodeWidth: mtDecodeWidth(context, thumbWidth, thumbHeight),
+      decodeWidth: vhDecodeWidth(context, thumbWidth, thumbHeight),
     );
 
     final subtitle = [
-      mtTimeAgo(context, item.modified),
-      mtFormatSize(item.sizeBytes),
+      vhTimeAgo(context, item.modified),
+      vhFormatSize(item.sizeBytes),
     ].join(' · ');
 
     void onTap() {
@@ -75,15 +75,15 @@ class LibraryItemCard extends ConsumerWidget {
 
     final duration = item.duration == null
         ? null
-        : mtFormatDuration(item.duration!);
+        : vhFormatDuration(item.duration!);
     if (columns case final columns?) {
-      final size = mtFormatSize(item.sizeBytes);
-      final added = mtTimeAgo(context, item.modified);
-      return MTMediaRow(
+      final size = vhFormatSize(item.sizeBytes);
+      final added = vhTimeAgo(context, item.modified);
+      return VhMediaRow(
         columns: columns,
         title: item.title,
         // What has no column of its own stays under the title.
-        subtitle: mtMetaLine([
+        subtitle: vhMetaLine([
           if (!columns.added) added,
           if (!columns.size) size,
         ]),
@@ -102,7 +102,7 @@ class LibraryItemCard extends ConsumerWidget {
       );
     }
     if (options.grid || options.cards) {
-      return MTMediaGridCard(
+      return VhMediaGridCard(
         feed: options.cards,
         title: item.title,
         subtitle: subtitle,
@@ -119,7 +119,7 @@ class LibraryItemCard extends ConsumerWidget {
       );
     }
 
-    return MTMediaCard(
+    return VhMediaCard(
       title: item.title,
       subtitle: subtitle,
       thumbnail: thumbnail,
@@ -141,8 +141,8 @@ class LibraryItemCard extends ConsumerWidget {
   }
 }
 
-/// The thumbnail box size in points for each mode, matching what `mt_ui`
-/// draws (`MTMediaCard._Thumb` and `MTMediaGridCard._Cover`). The height is
+/// The thumbnail box size in points for each mode, matching what `vh_ui`
+/// draws (`VhMediaCard._Thumb` and `VhMediaGridCard._Cover`). The height is
 /// `null` where the cover is 16:9, so its width alone determines the
 /// decode.
 (double, double?) _thumbBox(BuildContext context, LibraryViewMode mode) =>
@@ -154,18 +154,18 @@ class LibraryItemCard extends ConsumerWidget {
       // the narrowest; a phone's card is the screen's width.
       LibraryViewMode.cards => (
         math.min(
-          MediaQuery.sizeOf(context).width - MTSpace.pagePad * 2,
-          MTBreakpoint.cardColumn * 2,
+          MediaQuery.sizeOf(context).width - VhSpace.pagePad * 2,
+          VhBreakpoint.cardColumn * 2,
         ),
         null,
       ),
     };
 
 extension LibraryLayoutOf on LibraryViewMode {
-  MTLibraryLayout get layout => switch (this) {
-    LibraryViewMode.list => MTLibraryLayout.list,
-    LibraryViewMode.compact => MTLibraryLayout.compact,
-    LibraryViewMode.grid => MTLibraryLayout.grid,
-    LibraryViewMode.cards => MTLibraryLayout.cards,
+  VhLibraryLayout get layout => switch (this) {
+    LibraryViewMode.list => VhLibraryLayout.list,
+    LibraryViewMode.compact => VhLibraryLayout.compact,
+    LibraryViewMode.grid => VhLibraryLayout.grid,
+    LibraryViewMode.cards => VhLibraryLayout.cards,
   };
 }

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/sidebar_items.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 void main() {
   testWidgets('**the guard**: a full sidebar line squeezed mid-animation '
       'shows its icon alone rather than overflow', (tester) async {
     for (final width in [80.0, 100.0, 120.0, 140.0, 240.0]) {
       await tester.pumpWidget(
-        MTDesktopApp(
+        VhDesktopApp(
           child: MaterialApp(
-            theme: mtDesktopTheme(MTVariant.superApp, Brightness.light),
+            theme: vhDesktopTheme(VhVariant.desktop, Brightness.light),
             home: Scaffold(
               body: Align(
                 alignment: Alignment.topLeft,
                 child: SizedBox(
                   width: width,
                   child: SidebarItem(
-                    icon: MTIcons.folder,
+                    icon: VhIcons.folder,
                     label: 'Homelab recordings',
                     narrow: false,
                     selected: false,

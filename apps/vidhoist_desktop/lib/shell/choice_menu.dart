@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// A closed list to pick from, with the Wahaj chevron rather than
 /// Material's arrow.
-class EmberChoice<T> extends StatelessWidget {
-  const EmberChoice({
+class DesktopChoice<T> extends StatelessWidget {
+  const DesktopChoice({
     super.key,
     required this.label,
     required this.value,
@@ -21,10 +21,10 @@ class EmberChoice<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final chevron = MTIcon(
-      MTIcons.chevronDown,
-      size: MTSpace.lg,
+    final p = VhThemeX.of(context).palette;
+    final chevron = VhIcon(
+      VhIcons.chevronDown,
+      size: VhSpace.lg,
       color: p.ink2,
     );
     return DropdownMenu<T>(

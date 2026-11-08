@@ -7,12 +7,12 @@ import 'package:vidhoist_mobile/features/downloads_library/library_screen.dart';
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/media_access.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
-import 'wahaj_finder.dart';
+import 'icon_finder.dart';
 
 /// **The whole library on every shape (2026-10-10)**, the twin of Super's:
 /// each view mode, in both languages, across the device matrix's phones,
@@ -49,7 +49,7 @@ void main() {
           keyValueStoreProvider.overrideWithValue(store),
           secretStoreProvider.overrideWithValue(MemorySecretStore()),
           prefsMutexProvider.overrideWithValue(PrefsMutex()),
-          initialSettingsProvider.overrideWithValue(const LiteSettings()),
+          initialSettingsProvider.overrideWithValue(const PhoneSettings()),
           mediaAccessGateProvider.overrideWithValue(
             MediaAccessGate(
               probe: () async => true,
@@ -65,9 +65,9 @@ void main() {
         container: container,
         child: MaterialApp(
           locale: locale,
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
-          theme: mtTheme(MTVariant.lite, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
           home: const LibraryScreen(),
         ),
       );
@@ -96,7 +96,7 @@ void main() {
     addTearDown(tester.view.reset);
     await tester.pumpWidget(host!());
     await tester.pumpAndSettle();
-    expect(find.byType(MTMediaRow), findsWidgets);
+    expect(find.byType(VhMediaRow), findsWidgets);
   });
 
   testWidgets('**the guard**: search sits behind the bar button and back '
@@ -104,12 +104,12 @@ void main() {
     final host = await hostFor(LibraryViewMode.list, const Locale('en'));
     await tester.pumpWidget(host());
     await tester.pumpAndSettle();
-    expect(find.byType(MTQuerySearchField), findsNothing);
-    await tester.tap(byWahaj(MTIcons.search));
+    expect(find.byType(VhQuerySearchField), findsNothing);
+    await tester.tap(byVhIcon(VhIcons.search));
     await tester.pumpAndSettle();
-    expect(find.byType(MTQuerySearchField), findsOneWidget);
+    expect(find.byType(VhQuerySearchField), findsOneWidget);
     await tester.tap(find.byType(BackButtonIcon));
     await tester.pumpAndSettle();
-    expect(find.byType(MTQuerySearchField), findsNothing);
+    expect(find.byType(VhQuerySearchField), findsNothing);
   });
 }

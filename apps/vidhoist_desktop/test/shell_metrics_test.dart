@@ -9,7 +9,7 @@ void main() {
   test('1280 and wider: three columns, the sidebar as the user left it', () {
     for (final width in <double>[1280, 1440, 2560]) {
       final wide = arrangeShell(width, open);
-      expect(wide.sidebarWidth, EmberShellSize.sidebarWide, reason: '$width');
+      expect(wide.sidebarWidth, DesktopShellSize.sidebarWide, reason: '$width');
       expect(wide.panelBeside, isTrue);
       expect(wide.canWidenSidebar, isTrue);
       expect(arrangeShell(width, folded).sidebarNarrow, isTrue);

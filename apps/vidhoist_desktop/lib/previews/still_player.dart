@@ -1,20 +1,20 @@
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/vh_media.dart';
 
 /// A player frozen in one state, for the widget previews: it plays
 /// nothing and ignores every command, so a preview needs no engine.
-class StillPlayer implements MTPlayer {
+class StillPlayer implements VhPlayer {
   StillPlayer([
-    this.state = const MTPlayerState(),
+    this.state = const VhPlayerState(),
     this.position = Duration.zero,
   ]);
 
   @override
-  final MTPlayerState state;
+  final VhPlayerState state;
   @override
   final Duration position;
 
   @override
-  Stream<MTPlayerState> get states => const Stream.empty();
+  Stream<VhPlayerState> get states => const Stream.empty();
   @override
   Stream<Duration> get positionStream => const Stream.empty();
 

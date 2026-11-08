@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import '../../di.dart';
 
 /// The current network state, **synchronously**.
 ///
-/// The engine in mt_core asks the pull gate before fetching any file, and
+/// The engine in vh_core asks the pull gate before fetching any file, and
 /// the question is synchronous on purpose: reading state must not
 /// introduce a wait into a critical path. So we hold a snapshot kept
 /// up to date from `connectivity_plus` rather than querying on every call.
@@ -123,7 +123,7 @@ final wifiPauseProvider = Provider<void>((ref) {
 ///
 /// Two deliberate decisions:
 /// 1. **What the server refused is never retried.**
-///    [MTApiException.isRetryable] separates a broken road from a refusal
+///    [VhApiException.isRetryable] separates a broken road from a refusal
 ///    at the destination; repeating a refusal fails and floods the server.
 /// 2. **Once per task.** A link that fails twice for network reasons
 ///    does not have a network problem, and an unbounded retry loop drains

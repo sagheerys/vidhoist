@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../features/listening/listening_room.dart';
 import 'now_playing.dart';
@@ -12,8 +12,8 @@ import 'volume_slider.dart';
 /// The player bar, fixed at the foot of the window and never hidden, so
 /// sound and its controls survive every move around the app. With nothing
 /// queued the controls stay in place, dimmed.
-class EmberPlayerBar extends StatelessWidget {
-  const EmberPlayerBar({
+class DesktopPlayerBar extends StatelessWidget {
+  const DesktopPlayerBar({
     super.key,
     required this.player,
     required this.onShowQueue,
@@ -24,7 +24,7 @@ class EmberPlayerBar extends StatelessWidget {
     required this.onListen,
   });
 
-  final MTPlayer player;
+  final VhPlayer player;
   final VoidCallback onShowQueue;
 
   /// Opens the playing clip's page, from a click on its title.
@@ -41,17 +41,17 @@ class EmberPlayerBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return Container(
-      height: EmberShellSize.playerBar,
+      height: DesktopShellSize.playerBar,
       decoration: BoxDecoration(
         color: p.bg,
         border: Border(
-          top: BorderSide(color: p.line, width: MTThemeX.of(context).hairline),
+          top: BorderSide(color: p.line, width: VhThemeX.of(context).hairline),
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: MTSpace.xl),
-      child: StreamBuilder<MTPlayerState>(
+      padding: const EdgeInsets.symmetric(horizontal: VhSpace.xl),
+      child: StreamBuilder<VhPlayerState>(
         stream: player.states,
         initialData: player.state,
         builder: (context, snap) {
@@ -59,7 +59,7 @@ class EmberPlayerBar extends StatelessWidget {
           return Row(
             children: [
               Expanded(
-                child: EmberNowPlaying(state: state, onOpen: onOpen),
+                child: DesktopNowPlaying(state: state, onOpen: onOpen),
               ),
               Expanded(
                 flex: 2,
@@ -91,13 +91,13 @@ class EmberPlayerBar extends StatelessWidget {
 class _Transport extends StatelessWidget {
   const _Transport({required this.player, required this.state});
 
-  final MTPlayer player;
-  final MTPlayerState state;
+  final VhPlayer player;
+  final VhPlayerState state;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final live = !state.isEmpty;
     VoidCallback? when(VoidCallback f) => live ? f : null;
     return Directionality(
@@ -108,40 +108,40 @@ class _Transport extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              EmberPlayerControl(
-                icon: MTIcons.shuffle,
+              DesktopPlayerControl(
+                icon: VhIcons.shuffle,
                 label: l.shuffle,
                 selected: state.shuffle,
                 onTap: when(() => player.setShuffle(!state.shuffle)),
               ),
-              EmberPlayerControl(
-                icon: MTIcons.prev,
+              DesktopPlayerControl(
+                icon: VhIcons.prev,
                 label: l.previous,
                 onTap: when(player.skipToPrevious),
               ),
-              const SizedBox(width: MTSpace.xs),
-              EmberPlayButton(
+              const SizedBox(width: VhSpace.xs),
+              DesktopPlayButton(
                 playing: state.playing,
                 label: state.playing ? l.pause : l.play,
                 onTap: when(state.playing ? player.pause : player.play),
                 accent: p.accent,
                 ink: p.onAccent,
               ),
-              const SizedBox(width: MTSpace.xs),
-              EmberPlayerControl(
-                icon: MTIcons.next,
+              const SizedBox(width: VhSpace.xs),
+              DesktopPlayerControl(
+                icon: VhIcons.next,
                 label: l.next,
                 onTap: when(player.skipToNext),
               ),
-              EmberPlayerControl(
+              DesktopPlayerControl(
                 icon: playModeIcon(state.mode),
-                label: mtPlayModeLabel(context, state.mode),
+                label: vhPlayModeLabel(context, state.mode),
                 selected: state.mode != PlayMode.autoNext,
                 onTap: when(() => player.setPlayMode(nextPlayMode(state.mode))),
               ),
             ],
           ),
-          EmberSeekBar(player: player, duration: state.duration),
+          DesktopSeekBar(player: player, duration: state.duration),
         ],
       ),
     );
@@ -158,8 +158,8 @@ class _Extras extends StatelessWidget {
     required this.onListen,
   });
 
-  final MTPlayer player;
-  final MTPlayerState state;
+  final VhPlayer player;
+  final VhPlayerState state;
   final VoidCallback onShowQueue;
   final VoidCallback onMini;
 
@@ -169,8 +169,8 @@ class _Extras extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final speeds = PlaybackSpeeds.options;
     final at = speeds.indexOf(state.speed);
     final nextSpeed = speeds[(at + 1) % speeds.length];
@@ -181,7 +181,7 @@ class _Extras extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          MTShortcutTooltip(
+          VhShortcutTooltip(
             message: l.playbackSpeed,
             child: TextButton(
               onPressed: state.isEmpty
@@ -190,10 +190,10 @@ class _Extras extends StatelessWidget {
               // Read as what it is, then the speed: "Playback speed, 1.0×".
               child: Semantics(
                 label: l.playbackSpeed,
-                value: mtLtrRun('${state.speed}×'),
+                value: vhLtrRun('${state.speed}×'),
                 excludeSemantics: true,
                 child: Text(
-                  mtLtrRun('${state.speed}×'),
+                  vhLtrRun('${state.speed}×'),
                   style: Theme.of(context).textTheme.labelMedium?.tabular
                       .copyWith(color: p.ink2),
                 ),
@@ -201,25 +201,25 @@ class _Extras extends StatelessWidget {
             ),
           ),
           if (listening case final open?)
-            EmberPlayerControl(
-              icon: MTIcons.headphones,
-              label: context.mtl.desktopListeningRoom,
+            DesktopPlayerControl(
+              icon: VhIcons.headphones,
+              label: context.vhl.desktopListeningRoom,
               selected: open,
               onTap: onListen,
             ),
-          EmberPlayerControl(
-            icon: MTIcons.pip,
+          DesktopPlayerControl(
+            icon: VhIcons.pip,
             label: l.desktopMiniWindow,
             shortcut: 'Ctrl M',
             onTap: state.isEmpty ? null : onMini,
           ),
-          EmberPlayerControl(
-            icon: MTIcons.queue,
+          DesktopPlayerControl(
+            icon: VhIcons.queue,
             label: l.queueLabel,
             onTap: onShowQueue,
           ),
-          const SizedBox(width: MTSpace.xs),
-          const EmberVolumeSlider(),
+          const SizedBox(width: VhSpace.xs),
+          const DesktopVolumeSlider(),
         ],
       ),
     );
@@ -232,8 +232,8 @@ PlayMode nextPlayMode(PlayMode mode) =>
 
 /// Each mode its own glyph, so the button says which is on: a "1" in the
 /// loop for one clip, an arrow to a bar for stopping after it.
-MTIconData playModeIcon(PlayMode mode) => switch (mode) {
-  PlayMode.repeatOne => MTIcons.repeatOne,
-  PlayMode.stopAtEnd => MTIcons.stopAfter,
-  PlayMode.autoNext || PlayMode.repeatAll => MTIcons.repeat,
+VhIconData playModeIcon(PlayMode mode) => switch (mode) {
+  PlayMode.repeatOne => VhIcons.repeatOne,
+  PlayMode.stopAtEnd => VhIcons.stopAfter,
+  PlayMode.autoNext || PlayMode.repeatAll => VhIcons.repeat,
 };

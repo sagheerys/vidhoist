@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'settings_hub.dart';
 import 'settings_sections.dart';
@@ -24,33 +24,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (MTAdaptiveScaffold.hasEndPane(context)) {
+    if (VhAdaptiveScaffold.hasEndPane(context)) {
       return SettingsHub(
         selected: _pane,
         onSelect: (pane) => setState(() => _pane = pane),
       );
     }
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settings)),
-      body: MTReadableWidth(
+      body: VhReadableWidth(
         child: ListView(
           // Neither the mini player nor the add button shows on this tab,
           // so the list ends just past its last card; the system's own bar
           // is added where no bottom bar takes it (an upright tablet).
           padding: EdgeInsets.fromLTRB(
-            MTSpace.pagePad,
+            VhSpace.pagePad,
             0,
-            MTSpace.pagePad,
-            MTSpace.xl + MediaQuery.paddingOf(context).bottom,
+            VhSpace.pagePad,
+            VhSpace.xl + MediaQuery.paddingOf(context).bottom,
           ),
           children: [
             for (final (title, entries) in settingsGroups(context, ref))
-              MTSettingsGroup(
+              VhSettingsGroup(
                 title: title,
                 rows: [
                   for (final e in entries)
-                    MTSettingsRow(
+                    VhSettingsRow(
                       icon: e.icon,
                       title: e.title,
                       value: e.value,

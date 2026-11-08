@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../data/transcripts_data.dart';
@@ -44,7 +44,7 @@ class StatsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final stats = ref.watch(libraryStatsProvider);
     return switch (stats) {
       AsyncData(:final value) when value.count > 0 => LayoutBuilder(
@@ -56,18 +56,18 @@ class StatsPage extends ConsumerWidget {
             _suggestions(context, value),
           ];
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(MTSpace.xl),
+            padding: const EdgeInsets.all(VhSpace.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _Heading(stats: value),
-                const SizedBox(height: MTSpace.xl),
+                const SizedBox(height: VhSpace.xl),
                 if (box.maxWidth >= _twoColumns)
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(child: Column(children: left)),
-                      const SizedBox(width: MTSpace.xxl),
+                      const SizedBox(width: VhSpace.xxl),
                       Expanded(child: Column(children: right)),
                     ],
                   )
@@ -79,25 +79,25 @@ class StatsPage extends ConsumerWidget {
         },
       ),
       AsyncData() => Center(
-        child: MTEmptyFrame(
+        child: VhEmptyFrame(
           title: l.noVideosFound,
           message: l.desktopEmptyLibraryMessage,
         ),
       ),
       AsyncError(:final error) => Center(
-        child: MTEmptyFrame(
+        child: VhEmptyFrame(
           title: l.failed,
           message: l.errorGeneric('$error'),
           actionLabel: l.retry,
           onAction: () => ref.invalidate(libraryStatsProvider),
         ),
       ),
-      _ => const Center(child: MTSpinner()),
+      _ => const Center(child: VhSpinner()),
     };
   }
 
   Widget _bySite(BuildContext context, LibraryStats stats) {
-    final l = context.mtl;
+    final l = context.vhl;
     // By room taken; by count when no size is known at all.
     final sized = stats.bySite.any((r) => r.bytes > 0);
     return _Section(
@@ -116,7 +116,7 @@ class StatsPage extends ConsumerWidget {
   }
 
   Widget _byChannel(BuildContext context, LibraryStats stats) {
-    final l = context.mtl;
+    final l = context.vhl;
     return _Section(
       title: l.desktopStatsByChannel,
       child: StatsBars(
@@ -145,7 +145,7 @@ class StatsPage extends ConsumerWidget {
   }
 
   Widget _byMonth(BuildContext context, LibraryStats stats) {
-    final l = context.mtl;
+    final l = context.vhl;
     final dates = MaterialLocalizations.of(context);
     return _Section(
       title: l.desktopStatsByMonth,
@@ -163,7 +163,7 @@ class StatsPage extends ConsumerWidget {
   }
 
   Widget _suggestions(BuildContext context, LibraryStats stats) {
-    final l = context.mtl;
+    final l = context.vhl;
     int room(List<LibraryItem> items) =>
         items.fold(0, (sum, i) => sum + (i.sizeBytes ?? 0));
     return _Section(
@@ -182,7 +182,7 @@ class StatsPage extends ConsumerWidget {
               lead: l.desktopStatsLargest,
               items: stats.neverPlayed.take(_listed).toList(),
               detail: (i) =>
-                  i.sizeBytes == null ? null : mtFormatSize(i.sizeBytes!),
+                  i.sizeBytes == null ? null : vhFormatSize(i.sizeBytes!),
               onOpen: (i) => _open(context, i),
             ),
           if (stats.withoutText.isNotEmpty)
@@ -192,7 +192,7 @@ class StatsPage extends ConsumerWidget {
               lead: l.desktopStatsNewest,
               items: stats.withoutText.take(_listed).toList(),
               detail: (i) =>
-                  i.timestamp == null ? null : mtTimeAgo(context, i.timestamp!),
+                  i.timestamp == null ? null : vhTimeAgo(context, i.timestamp!),
               onOpen: (i) => _open(context, i),
             ),
         ],
@@ -201,11 +201,11 @@ class StatsPage extends ConsumerWidget {
   }
 
   void _open(BuildContext context, LibraryItem item) =>
-      GoRouter.of(context).go(EmberRoutes.item(item.canonicalUrl));
+      GoRouter.of(context).go(DesktopRoutes.item(item.canonicalUrl));
 }
 
-String _countAndSize(MTLocalizations l, int count, int bytes) =>
-    mtMetaLine([l.transcriptsClips(count), if (bytes > 0) mtFormatSize(bytes)]);
+String _countAndSize(VhLocalizations l, int count, int bytes) =>
+    vhMetaLine([l.transcriptsClips(count), if (bytes > 0) vhFormatSize(bytes)]);
 
 /// Arabic-Indic digits as the rest of the app writes digits.
 String westernDigits(String text) => text.replaceAllMapped(
@@ -221,25 +221,25 @@ class _Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final share = (stats.withText * 100 / stats.count).round();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(l.desktopStats, style: text.headlineSmall),
-        const SizedBox(height: MTSpace.xxs),
+        const SizedBox(height: VhSpace.xxs),
         Text(
           l.desktopStatsHint,
           style: text.bodySmall?.copyWith(color: p.ink3),
         ),
-        const SizedBox(height: MTSpace.lg),
+        const SizedBox(height: VhSpace.lg),
         StatsFigures(
           figures: [
             StatsTile(value: '${stats.count}', label: l.desktopStatsClips),
             StatsTile(
-              value: mtFormatSize(stats.bytes),
+              value: vhFormatSize(stats.bytes),
               label: l.desktopStatsRoom,
             ),
             // Only when most lengths are known: a total of the few known
@@ -250,7 +250,7 @@ class _Heading extends StatelessWidget {
                 label: l.desktopStatsLength,
               ),
             StatsTile(
-              value: mtLtrRun('$share%'),
+              value: vhLtrRun('$share%'),
               label: l.desktopStatsWithText,
             ),
             StatsTile(
@@ -272,12 +272,12 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: MTSpace.xl),
+    padding: const EdgeInsets.only(bottom: VhSpace.xl),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        EmberSectionHeader(title: title),
-        const SizedBox(height: MTSpace.md),
+        DesktopSectionHeader(title: title),
+        const SizedBox(height: VhSpace.md),
         child,
       ],
     ),

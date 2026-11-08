@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/platform/window_placement.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 void main() {
   // A 1920x1080 primary with its taskbar, and a second screen to its right.

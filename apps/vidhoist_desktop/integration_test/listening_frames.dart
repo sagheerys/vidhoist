@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vidhoist_desktop/features/listening/listening_room.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import '../test/support/shell_harness.dart';
 

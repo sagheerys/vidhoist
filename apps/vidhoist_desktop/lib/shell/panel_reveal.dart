@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The side panel, **opened and closed in place**: its room widens at the
 /// pace of an entrance while what is in it fades in and slides the last few
@@ -15,7 +15,7 @@ class PanelReveal extends StatefulWidget {
   final Widget child;
 
   /// How far the content slides in from the panel's outer edge.
-  static const double nudge = MTSpace.xs;
+  static const double nudge = VhSpace.xs;
 
   @override
   State<PanelReveal> createState() => _PanelRevealState();
@@ -32,8 +32,8 @@ class _PanelRevealState extends State<PanelReveal>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _motion
-      ..duration = mtMotionDuration(context, MTMotion.medium)
-      ..reverseDuration = mtMotionDuration(context, MTMotion.fast);
+      ..duration = vhMotionDuration(context, VhMotion.medium)
+      ..reverseDuration = vhMotionDuration(context, VhMotion.fast);
   }
 
   @override
@@ -65,8 +65,8 @@ class _PanelRevealState extends State<PanelReveal>
         // closing's own start, so it gathers speed as it leaves.
         final v = _motion.value;
         final t = _motion.status == AnimationStatus.reverse
-            ? 1 - MTMotion.exit.transform(1 - v)
-            : MTMotion.entrance.transform(v);
+            ? 1 - VhMotion.exit.transform(1 - v)
+            : VhMotion.entrance.transform(v);
         final slide = PanelReveal.nudge * (1 - t) * (rtl ? -1 : 1);
         return ClipRect(
           child: Align(
@@ -105,7 +105,7 @@ List<Widget> overlayPanel({
     child: PanelReveal(
       shown: open,
       child: DecoratedBox(
-        decoration: const BoxDecoration(boxShadow: MTShadow.card),
+        decoration: const BoxDecoration(boxShadow: VhShadow.card),
         child: panel,
       ),
     ),

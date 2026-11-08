@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/volume.dart';
 import 'package:vidhoist_desktop/shell/keyboard.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'support/shell_harness.dart';
 
@@ -38,16 +38,16 @@ void main() {
         'ق',
       );
       expect(
-        emberKeyFor(arabicR, control: false, shift: false),
-        EmberKey.repeat,
+        desktopKeyFor(arabicR, control: false, shift: false),
+        DesktopKey.repeat,
       );
       final arabicF = down(
         const LogicalKeyboardKey(0x0628),
         PhysicalKeyboardKey.keyF,
       );
       expect(
-        emberKeyFor(arabicF, control: true, shift: false),
-        EmberKey.search,
+        desktopKeyFor(arabicF, control: true, shift: false),
+        DesktopKey.search,
       );
       final question = down(
         const LogicalKeyboardKey(0x061F),
@@ -55,11 +55,11 @@ void main() {
         '؟',
       );
       expect(
-        emberKeyFor(question, control: false, shift: true),
-        EmberKey.shortcuts,
+        desktopKeyFor(question, control: false, shift: true),
+        DesktopKey.shortcuts,
       );
       // Ctrl with another letter is someone else's.
-      expect(emberKeyFor(arabicR, control: true, shift: false), isNull);
+      expect(desktopKeyFor(arabicR, control: true, shift: false), isNull);
     });
   });
 
@@ -138,7 +138,7 @@ void main() {
       h.player.showPlaying([_clip('a')]);
       await tester.tap(
         find.descendant(
-          of: find.byType(EmberSidebar),
+          of: find.byType(DesktopSidebar),
           matching: find.text('Add link'),
         ),
       );

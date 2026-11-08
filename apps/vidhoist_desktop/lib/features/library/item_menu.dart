@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/folders_data.dart';
 import '../../shell/context_menu.dart';
@@ -35,68 +35,68 @@ enum ItemChoice {
 /// learned twice: the phone's share is the link copied, its external
 /// player the file shown in Explorer. Deleting comes last, apart and in
 /// the error colour, behind a confirmation.
-List<EmberMenuEntry<ItemChoice>> itemMenuEntries(
-  MTLocalizations l,
+List<DesktopMenuEntry<ItemChoice>> itemMenuEntries(
+  VhLocalizations l,
   LibraryItem item, {
   required bool hasFile,
 }) {
   return [
-    EmberMenuEntry(
+    DesktopMenuEntry(
       ItemChoice.play,
-      MTIcons.play,
+      VhIcons.play,
       l.play,
       shortcut: ClipKeys.play,
     ),
-    EmberMenuEntry(
+    DesktopMenuEntry(
       ItemChoice.playNext,
-      MTIcons.next,
+      VhIcons.next,
       l.desktopPlayNext,
       shortcut: ClipKeys.playNext,
     ),
-    EmberMenuEntry(
+    DesktopMenuEntry(
       ItemChoice.readingRoom,
-      MTIcons.reading,
+      VhIcons.reading,
       l.desktopReadingRoom,
       shortcut: ClipKeys.reading,
     ),
-    EmberMenuEntry(
+    DesktopMenuEntry(
       ItemChoice.favorite,
-      item.favorite ? MTIcons.favoriteOn : MTIcons.favorite,
+      item.favorite ? VhIcons.favoriteOn : VhIcons.favorite,
       item.favorite ? l.removeFromFavorites : l.addToFavorites,
       shortcut: ClipKeys.favorite,
     ),
-    const EmberMenuEntry.divider(),
-    EmberMenuEntry(
+    const DesktopMenuEntry.divider(),
+    DesktopMenuEntry(
       ItemChoice.copyLink,
-      MTIcons.link,
+      VhIcons.link,
       l.desktopCopyLink,
       shortcut: ClipKeys.copyLink,
     ),
     if (hasFile)
-      EmberMenuEntry(
+      DesktopMenuEntry(
         ItemChoice.copyFile,
-        MTIcons.copy,
+        VhIcons.copy,
         l.desktopCopyFile,
         shortcut: ClipKeys.copyFile,
       ),
     if (hasFile)
-      EmberMenuEntry(
+      DesktopMenuEntry(
         ItemChoice.showInFolder,
-        MTIcons.folder,
+        VhIcons.folder,
         l.desktopShowInFolder,
       ),
-    EmberMenuEntry(
+    DesktopMenuEntry(
       ItemChoice.openOriginal,
-      MTIcons.external,
+      VhIcons.external,
       l.openOriginalLink,
     ),
-    EmberMenuEntry(ItemChoice.addToList, MTIcons.queue, l.addToPlaylist),
-    EmberMenuEntry(ItemChoice.tags, MTIcons.tags, l.tags),
+    DesktopMenuEntry(ItemChoice.addToList, VhIcons.queue, l.addToPlaylist),
+    DesktopMenuEntry(ItemChoice.tags, VhIcons.tags, l.tags),
     if (item.isOffline) ...[
-      const EmberMenuEntry.divider(),
-      EmberMenuEntry(
+      const DesktopMenuEntry.divider(),
+      DesktopMenuEntry(
         ItemChoice.deleteLocal,
-        MTIcons.trash,
+        VhIcons.trash,
         l.deleteVideo,
         danger: true,
       ),
@@ -113,7 +113,7 @@ Future<void> showItemMenu(
   LibraryItem item, {
   required VoidCallback onPlay,
 }) async {
-  final l = context.mtl;
+  final l = context.vhl;
   final file = item.localPath;
   final hasFile = file != null && File(file).existsSync();
   final choice = await showEmberMenu(
@@ -147,30 +147,30 @@ Future<void> showItemMenu(
       final sure = await _sure(
         context,
         l.deleteVideo,
-        l.deleteVideoConfirm(mtName(item.title)),
+        l.deleteVideoConfirm(vhName(item.title)),
       );
       if (!sure || !context.mounted) return;
       try {
         await ref.read(clipActionsProvider).deleteFile(item);
       } on Object catch (e) {
         if (context.mounted) {
-          showMTNotice(
+          showVhNotice(
             context,
             message: errorText(l, e),
-            kind: MTNoticeKind.failed,
+            kind: VhNoticeKind.failed,
           );
         }
         return;
       }
       if (context.mounted) {
-        showMTNotice(context, message: l.deletedTitle(mtName(item.title)));
+        showVhNotice(context, message: l.deletedTitle(vhName(item.title)));
       }
   }
 }
 
 Future<bool> _sure(BuildContext context, String title, String message) {
-  final l = context.mtl;
-  return showMTConfirm(
+  final l = context.vhl;
+  return showVhConfirm(
     context,
     title: title,
     message: message,

@@ -9,9 +9,9 @@ import 'package:vidhoist_desktop/features/add/batch_dialog.dart';
 import 'package:vidhoist_desktop/features/add/link_lines.dart';
 import 'package:vidhoist_desktop/features/add/link_preview.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -64,7 +64,7 @@ void main() {
         for (var i = 0; i < n; i++)
           'https://www.youtube.com/watch?v=${'$i'.padLeft(11, 'x')}',
       ].join(' ');
-      expect(MTConstants.maxLinksPerAdd, 100);
+      expect(VhConstants.maxLinksPerAdd, 100);
       final hundred = readLinks(links(100), const []);
       expect(hundred.lines, hasLength(100));
       expect(hundred.dropped, 0);
@@ -136,7 +136,7 @@ void main() {
   Future<void> openDialog(WidgetTester tester, [String text = '']) async {
     await tester.tap(
       find.descendant(
-        of: find.byType(EmberSidebar),
+        of: find.byType(DesktopSidebar),
         matching: find.text('Add link'),
       ),
     );
@@ -262,7 +262,7 @@ void main() {
     await tester.tap(
       find.descendant(
         of: find.byType(AlertDialog),
-        matching: find.widgetWithText(MTLinkButton, 'Retry'),
+        matching: find.widgetWithText(VhLinkButton, 'Retry'),
       ),
     );
     await tester.pumpAndSettle();
@@ -422,7 +422,7 @@ void main() {
     final site = tester.getRect(find.byKey(const ValueKey('addLinkSite')));
     final link = tester.getRect(find.byType(EditableText).first);
     // Right to left, the site name sits on the link's left.
-    expect(link.left - site.right, greaterThanOrEqualTo(MTSpace.sm));
+    expect(link.left - site.right, greaterThanOrEqualTo(VhSpace.sm));
   });
 
   testWidgets('in Arabic, a narrow window and large text, no overflow', (
@@ -441,6 +441,6 @@ void main() {
     await tester.enterText(find.byType(TextField).first, '$_yt\n$_insta');
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    expect(find.byType(MTSwitch), findsNothing);
+    expect(find.byType(VhSwitch), findsNothing);
   });
 }

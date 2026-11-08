@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/library_data.dart';
 import 'package:vidhoist_desktop/data/shapes/shapes_data.dart';
 import 'package:vidhoist_desktop/di.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart' show MediaShape;
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart' show MediaShape;
 
 late Directory _root;
 

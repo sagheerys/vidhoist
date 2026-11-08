@@ -12,13 +12,13 @@ void main() {
       RegExp('VALUE "$name", "([^"]*)"').firstMatch(rc)?.group(1);
 
   test('the name is fixed for good', () {
-    expect(EmberIdentity.displayName, 'Vidhoist');
+    expect(DesktopIdentity.displayName, 'Vidhoist');
   });
 
   test('**the guard**: the data folder is %APPDATA%\\Vidhoist', () {
     // path_provider names the folder ProductName, under CompanyName when
     // that is set: a company here would move every user's data.
-    expect(field('ProductName'), EmberIdentity.displayName);
+    expect(field('ProductName'), DesktopIdentity.displayName);
     expect(field('CompanyName'), isEmpty);
   });
 
@@ -30,9 +30,9 @@ void main() {
   });
 
   test('Windows shows the same name for the program and its window', () {
-    expect(field('FileDescription'), EmberIdentity.displayName);
+    expect(field('FileDescription'), DesktopIdentity.displayName);
     final runner = File('windows/runner/main.cpp').readAsStringSync();
-    expect(runner, contains('window.Create(L"${EmberIdentity.displayName}"'));
+    expect(runner, contains('window.Create(L"${DesktopIdentity.displayName}"'));
   });
 
   test('one copy per Windows user, through a pipe name that stays whole', () {

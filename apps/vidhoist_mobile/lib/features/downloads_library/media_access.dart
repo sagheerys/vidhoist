@@ -50,7 +50,7 @@ typedef SettingsOpener = Future<bool> Function();
 /// permission names differ by version (`READ_MEDIA_*` from 13, a single
 /// storage permission before it) and a wrong guess fails silently, so the
 /// gate asks and then simply tries the folder again.
-Future<bool> probeMediaFolder([String path = liteMediaDir]) async {
+Future<bool> probeMediaFolder([String path = phoneMediaDir]) async {
   final dir = Directory(path);
   try {
     if (await dir.exists()) return true;

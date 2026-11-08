@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// A button on a Windows notification.
 typedef NoticeAction = ({String label, void Function() onPressed});
 
 /// A Windows notification, as the app asks for one.
-class EmberNotice {
-  const EmberNotice({
+class DesktopNotice {
+  const DesktopNotice({
     required this.title,
     required this.body,
     this.actions = const [],
@@ -21,14 +21,14 @@ class EmberNotice {
 
 /// Where notices go: Windows' own in main, nowhere in tests.
 abstract class NoticePort {
-  Future<void> show(EmberNotice notice);
+  Future<void> show(DesktopNotice notice);
 }
 
 class NoNotices implements NoticePort {
   const NoNotices();
 
   @override
-  Future<void> show(EmberNotice notice) async {}
+  Future<void> show(DesktopNotice notice) async {}
 }
 
 final noticePortProvider = Provider<NoticePort>((ref) => const NoNotices());

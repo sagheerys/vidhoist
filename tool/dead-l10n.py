@@ -2,7 +2,7 @@
 """Report localization keys that no app shows, and which app shows the rest.
 
 **Why a tool rather than a test.** The `arb_parity_test.dart` guard lives in
-`mt_ui`, which deliberately knows nothing about the apps, so it cannot decide
+`vh_ui`, which deliberately knows nothing about the apps, so it cannot decide
 that a key is dead when it cannot see who uses it. This script stands above
 the whole repository instead.
 
@@ -32,7 +32,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EN_ARB = os.path.join(ROOT, 'packages', 'mt_ui', 'lib', 'src', 'l10n',
+EN_ARB = os.path.join(ROOT, 'packages', 'vh_ui', 'lib', 'src', 'l10n',
                       'app_en.arb')
 SKIP_DIRS = {'.git', '.dart_tool', 'build', '.design', 'node_modules',
              '.agents'}

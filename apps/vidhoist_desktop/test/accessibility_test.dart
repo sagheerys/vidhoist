@@ -16,10 +16,10 @@ import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/focus_regions.dart';
 import 'package:vidhoist_desktop/shell/now_playing.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -65,7 +65,7 @@ void main() {
       ],
       overrides: [
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${root.path}/ember.log'),
+          VhLogger(filePath: '${root.path}/ember.log'),
         ),
       ],
     );
@@ -78,7 +78,7 @@ void main() {
   }
 
   Future<void> go(WidgetTester tester, String place) async {
-    GoRouter.of(tester.element(find.byType(EmberSidebar))).go(place);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(place);
     await tester.pumpAndSettle();
   }
 
@@ -86,12 +86,12 @@ void main() {
       expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
   final places = [
-    EmberRoutes.library,
-    EmberRoutes.item(_video.canonicalUrl),
-    EmberRoutes.reading(_video.canonicalUrl),
-    EmberRoutes.playlists,
-    EmberRoutes.channels,
-    for (final pane in EmberSettingsPane.values) pane.route,
+    DesktopRoutes.library,
+    DesktopRoutes.item(_video.canonicalUrl),
+    DesktopRoutes.reading(_video.canonicalUrl),
+    DesktopRoutes.playlists,
+    DesktopRoutes.channels,
+    for (final pane in DesktopSettingsPane.values) pane.route,
   ];
   for (final place in places) {
     testWidgets('**the guard**: every control has a name, $place', (
@@ -108,8 +108,8 @@ void main() {
   // Narrow, the sidebar shows icons alone, whose names were only in their
   // tooltips, which say nothing to a screen reader.
   for (final place in [
-    EmberRoutes.library,
-    EmberRoutes.item(_video.canonicalUrl),
+    DesktopRoutes.library,
+    DesktopRoutes.item(_video.canonicalUrl),
   ]) {
     testWidgets('**the guard**: every control has a name in a narrow '
         'window, $place', (tester) async {
@@ -159,7 +159,7 @@ void main() {
   // Every page in the content lies over a modal barrier, which hid from a
   // screen reader all that was painted before it: the title bar, the
   // places and the bar with the search. Only the real reader showed it.
-  for (final place in [EmberRoutes.library, EmberRoutes.settings]) {
+  for (final place in [DesktopRoutes.library, DesktopRoutes.settings]) {
     testWidgets('**the guard**: a screen reader reaches every part of the '
         'window, $place', (tester) async {
       final semantics = tester.ensureSemantics();
@@ -196,13 +196,13 @@ void main() {
     // The speed says what it is; its tooltip says nothing to a reader.
     expect(
       tester.getSemantics(find.bySemanticsLabel('Playback speed')),
-      isSemantics(isButton: true, value: mtLtrRun('1.0×')),
+      isSemantics(isButton: true, value: vhLtrRun('1.0×')),
     );
     expect(
       tester.getSemantics(
         find
             .descendant(
-              of: find.byType(EmberNowPlaying),
+              of: find.byType(DesktopNowPlaying),
               matching: find.byType(InkWell),
             )
             // The clip's own; the heart beside it is a button of its own.
@@ -303,9 +303,9 @@ void main() {
     final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       MaterialApp(
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
-        theme: mtTheme(MTVariant.superApp, Brightness.light),
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
+        theme: vhTheme(VhVariant.desktop, Brightness.light),
         home: Center(
           child: FolderHelp(label: 'How folders work', onTap: () {}),
         ),
@@ -341,11 +341,11 @@ void main() {
       }
       final cycle = [
         for (final r in [
-          EmberRegion.sidebar,
-          EmberRegion.contentBar,
-          EmberRegion.content,
-          EmberRegion.panel,
-          EmberRegion.playerBar,
+          DesktopRegion.sidebar,
+          DesktopRegion.contentBar,
+          DesktopRegion.content,
+          DesktopRegion.panel,
+          DesktopRegion.playerBar,
         ])
           r.index.toDouble(),
       ];
@@ -397,8 +397,8 @@ void main() {
         tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
       );
       await open(tester);
-      final context = tester.element(find.byType(EmberSidebar));
-      expect(MTThemeX.of(context).hairline, on ? 2 : 1);
+      final context = tester.element(find.byType(DesktopSidebar));
+      expect(VhThemeX.of(context).hairline, on ? 2 : 1);
       expect(Theme.of(context).dividerTheme.thickness, on ? 2 : 1);
     }
   });
@@ -419,7 +419,7 @@ void main() {
 
     h.player.showPlaying([_video]);
     await still('a clip playing');
-    await go(tester, EmberRoutes.playlists);
+    await go(tester, DesktopRoutes.playlists);
     await still('another place');
     // Wide enough for the wide sidebar and its button.
     ShellHarness.useWindow(tester, const Size(1920, 1080));

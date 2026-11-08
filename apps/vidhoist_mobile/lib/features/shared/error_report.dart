@@ -3,8 +3,8 @@ import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import 'error_text.dart';
@@ -27,10 +27,10 @@ void showErrorSnack(
   String tag = 'ui',
 }) {
   unawaited(logError(ref.read(loggerProvider), error, tag: tag));
-  showMTSnack(
+  showVhSnack(
     context,
-    errorText(context.mtl, error),
-    type: MTSnackType.error,
+    errorText(context.vhl, error),
+    type: VhSnackType.error,
     logged: true,
   );
 }
@@ -40,8 +40,8 @@ void showErrorSnack(
 /// error no code caught. The last two went to the console alone, which nobody
 /// sees on a phone. A few lines of the stack say where, kept on the entry's one
 /// line.
-void logEveryError(MTLogger logger) {
-  mtErrorSnackLog = (message) =>
+void logEveryError(VhLogger logger) {
+  vhErrorSnackLog = (message) =>
       unawaited(logger.error('shown: $message', tag: 'ui'));
   final present = FlutterError.onError;
   FlutterError.onError = (details) {
@@ -60,13 +60,13 @@ void logEveryError(MTLogger logger) {
   };
 }
 
-String _where(StackTrace? stack) => mtStackPlace(stack?.toString());
+String _where(StackTrace? stack) => vhStackPlace(stack?.toString());
 
 /// **It returns the future rather than swallowing it**: the call from the
 /// interface is `unawaited` so the screen never waits on the disk, but a
 /// test needs a decisive await rather than polling that varies with disk
 /// speed.
-Future<void> logError(MTLogger logger, Object error, {String tag = 'ui'}) =>
+Future<void> logError(VhLogger logger, Object error, {String tag = 'ui'}) =>
     logger.error(error.toString(), tag: tag);
 
 /// **The last error's signature per repeating source.** Live polling every
@@ -78,7 +78,7 @@ final _lastSignature = <String, String>{};
 /// Logs the error **if it changed** from what was last logged for this
 /// source.
 Future<void> logErrorOnce(
-  MTLogger logger,
+  VhLogger logger,
   String source,
   Object error, {
   String tag = 'network',

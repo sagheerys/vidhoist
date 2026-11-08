@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/library/library_page.dart';
 import 'package:vidhoist_desktop/router.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 import 'stress_tags_test.dart' hide main;
 
@@ -44,8 +44,8 @@ void main() {
                 saved(i, pinned: i < 200, urls: [url(i % 30)]),
             ],
           );
-          await go(tester, EmberRoutes.playlists, label, found);
-          await go(tester, EmberRoutes.item(url(0)), label, found);
+          await go(tester, DesktopRoutes.playlists, label, found);
+          await go(tester, DesktopRoutes.item(url(0)), label, found);
           await pillDialog(tester, l10n(tester).addToPlaylist, label, found);
           expect(found, isEmpty);
         });
@@ -102,7 +102,7 @@ void main() {
         saved(0, pinned: false, urls: [for (var i = 0; i < 1000; i++) url(i)]),
       ],
     );
-    await go(tester, EmberRoutes.playlist('p0'), label, found);
+    await go(tester, DesktopRoutes.playlist('p0'), label, found);
 
     final queued = await timed(() async {
       h.player.showPlaying(

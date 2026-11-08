@@ -1,11 +1,11 @@
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The quote as it is copied: the words, where they come from and when,
 /// and a link to the moment they begin.
 String quoteText(
-  MTLocalizations l, {
+  VhLocalizations l, {
   required Quote quote,
   required List<TranscriptSegment> segments,
   required String title,
@@ -16,7 +16,7 @@ String quoteText(
   return l.desktopQuote(
     quote.text,
     title,
-    '${mtFormatDuration(from)}–${mtFormatDuration(to)}',
+    '${vhFormatDuration(from)}–${vhFormatDuration(to)}',
     timedLink(canonicalUrl, from),
   );
 }

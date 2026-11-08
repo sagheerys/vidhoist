@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../engine/welcome_screen.dart';
@@ -38,8 +38,8 @@ Future<void> maybeOfferAutoRestore(BuildContext context, WidgetRef ref) async {
       .run(() => store.setBool('auto_restore_offered', true));
   if (!context.mounted) return;
 
-  final l10n = context.mtl;
-  final accepted = await showMTDialog<bool>(
+  final l10n = context.vhl;
+  final accepted = await showVhDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
       title: Text(l10n.restoreSettings),
@@ -64,11 +64,11 @@ Future<void> maybeOfferAutoRestore(BuildContext context, WidgetRef ref) async {
     ref.invalidate(localMediaProvider);
     ref.invalidate(playlistsProvider);
     if (context.mounted) {
-      showMTSnack(context, l10n.autoRestoreSuccess, type: MTSnackType.success);
+      showVhSnack(context, l10n.autoRestoreSuccess, type: VhSnackType.success);
     }
   } catch (_) {
     if (context.mounted) {
-      showMTSnack(context, l10n.restoreFailed, type: MTSnackType.error);
+      showVhSnack(context, l10n.restoreFailed, type: VhSnackType.error);
     }
   }
 }

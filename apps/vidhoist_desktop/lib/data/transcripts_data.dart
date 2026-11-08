@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'appearance_data.dart';
 import 'sync_data.dart';
@@ -37,7 +37,7 @@ Future<void> keepTranscript(
 }) async {
   await store.write(transcript);
   noteTranscript(ref, transcript);
-  if (fetched) unawaited(ref.read(emberSyncProvider).publish(transcript));
+  if (fetched) unawaited(ref.read(desktopSyncProvider).publish(transcript));
 }
 
 /// Adds a transcript already on disk to the search index when the index is

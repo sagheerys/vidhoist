@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/channels_data.dart';
 import '../../router.dart';
@@ -14,7 +14,7 @@ class SubscriptionsPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final channels = ref.watch(channelsProvider).valueOrNull;
     final count = channels?.subscriptions?.length;
     return Column(
@@ -27,9 +27,9 @@ class SubscriptionsPane extends ConsumerWidget {
             _ => l.settingsValueChannels(count ?? 0),
           },
           hint: l.subscriptionsSubtitle,
-          trailing: MTLinkButton(
+          trailing: VhLinkButton(
             label: l.desktopOpenChannels,
-            onPressed: () => context.go(EmberRoutes.channels),
+            onPressed: () => context.go(DesktopRoutes.channels),
           ),
         ),
       ],

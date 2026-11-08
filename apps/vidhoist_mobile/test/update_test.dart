@@ -9,15 +9,15 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/update/update_section.dart';
 import 'package:vidhoist_mobile/features/update/update_sheet.dart';
 import 'package:vidhoist_mobile/features/update/update_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'device_matrix.dart';
 
 /// **Self-update from GitHub** — the app layer's guards.
 ///
-/// The core is tested in `mt_core/test/update`; what is tested here belongs
+/// The core is tested in `vh_core/test/update`; what is tested here belongs
 /// to the app: the silent policy, skipping a version, and what the settings
 /// row displays.
 String releaseJson({String tag = 'v9.9.9'}) => json.encode({
@@ -42,7 +42,7 @@ void main() {
 
   setUp(() {
     store = MemoryKeyValueStore();
-    cacheDir = Directory.systemTemp.createTempSync('mt_update_test_');
+    cacheDir = Directory.systemTemp.createTempSync('vh_update_test_');
     addTearDown(() {
       if (cacheDir.existsSync()) cacheDir.deleteSync(recursive: true);
     });
@@ -197,7 +197,7 @@ void main() {
   });
 
   group('sweeping the update file', () {
-    File apkFile() => File('${cacheDir.path}/${MTConstants.updateApkFileName}');
+    File apkFile() => File('${cacheDir.path}/${VhConstants.updateApkFileName}');
 
     test('**the guard**: it is deleted once the app is the version that was downloaded', () async {
       // Without this, about 40MB stays in the cache forever after the first
@@ -240,10 +240,10 @@ void main() {
     Widget host(ProviderContainer c) => UncontrolledProviderScope(
       container: c,
       child: MaterialApp(
-        theme: mtTheme(MTVariant.lite, Brightness.light),
+        theme: vhTheme(VhVariant.phone, Brightness.light),
         locale: const Locale('ar'),
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
         home: const Scaffold(
           body: SingleChildScrollView(child: UpdateSection()),
         ),
@@ -256,7 +256,7 @@ void main() {
         final c = container();
         await tester.pumpWidget(host(c));
         await tester.pumpAndSettle();
-        final l10n = tester.element(find.byType(UpdateSection)).mtl;
+        final l10n = tester.element(find.byType(UpdateSection)).vhl;
 
         expect(find.text(l10n.checkForUpdates), findsOneWidget);
         expect(find.text(l10n.updateAvailable), findsNothing);
@@ -275,14 +275,14 @@ void main() {
         await tester.pumpWidget(host(c));
         await tester.pumpAndSettle();
         final context = tester.element(find.byType(UpdateSection));
-        final l10n = context.mtl;
+        final l10n = context.vhl;
 
         expect(find.text(l10n.updateAvailable), findsOneWidget);
         expect(find.text('9.9.9'), findsOneWidget);
         // **The guard**: the colour comes from the palette rather than a
         // literal, or one app's colour leaks into the other.
         final title = tester.widget<Text>(find.text(l10n.updateAvailable));
-        expect(title.style!.color, MTThemeX.of(context).palette.accent);
+        expect(title.style!.color, VhThemeX.of(context).palette.accent);
       },
     );
 
@@ -297,10 +297,10 @@ void main() {
     Widget sheetHost(ProviderContainer c) => UncontrolledProviderScope(
       container: c,
       child: MaterialApp(
-        theme: mtTheme(MTVariant.lite, Brightness.light),
+        theme: vhTheme(VhVariant.phone, Brightness.light),
         locale: const Locale('ar'),
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
         // As in the app: the sheet is not inside an outer scroll view.
         home: const Scaffold(body: UpdateSheet()),
       ),
@@ -313,7 +313,7 @@ void main() {
       await c.read(updateControllerProvider.notifier).checkSilently();
       await tester.pumpWidget(sheetHost(c));
       await tester.pumpAndSettle();
-      final l10n = tester.element(find.byType(UpdateSheet)).mtl;
+      final l10n = tester.element(find.byType(UpdateSheet)).vhl;
 
       expect(find.text(l10n.updateVersionAvailable('9.9.9')), findsOneWidget);
       // 12582912 bytes is exactly 12.0 MB: the size is displayed, not
@@ -332,7 +332,7 @@ void main() {
         await c.read(updateControllerProvider.notifier).checkSilently();
         await tester.pumpWidget(sheetHost(c));
         await tester.pumpAndSettle();
-        final l10n = tester.element(find.byType(UpdateSheet)).mtl;
+        final l10n = tester.element(find.byType(UpdateSheet)).vhl;
 
         await tester.tap(find.text(l10n.updateSkipVersion));
         await tester.pumpAndSettle();
@@ -348,7 +348,7 @@ void main() {
         await tester.pumpWidget(sheetHost(c));
         await tester.pumpAndSettle();
         final context = tester.element(find.byType(UpdateSheet));
-        final l10n = context.mtl;
+        final l10n = context.vhl;
 
         unawaited(c.read(updateControllerProvider.notifier).download());
         await tester.pump();
@@ -360,7 +360,7 @@ void main() {
         expect(bar.value, 0.42);
         // **The guard**: the colour comes from the palette; Material's
         // default track comes out greenish over the Wahaj cream.
-        expect(bar.valueColor!.value, MTThemeX.of(context).palette.accent);
+        expect(bar.valueColor!.value, VhThemeX.of(context).palette.accent);
         expect(find.text(l10n.cancel), findsOneWidget);
         expect(find.text(l10n.updateNow), findsNothing);
       },

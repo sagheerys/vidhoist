@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_mobile/features/update/update_state.dart';
 
 /// **The update finds Vidhoist's own APK.** The fork kept the parent's

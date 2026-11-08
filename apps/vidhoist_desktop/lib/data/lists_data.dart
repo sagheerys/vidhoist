@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
 
 import '../di.dart';
 import 'library_data.dart';
@@ -51,7 +51,7 @@ final tagCountsProvider = FutureProvider<Map<String, int>>((ref) async {
   final counts = await ref.watch(tagsIndexProvider).allTagsWithCounts();
   return {
     for (final entry in counts.entries)
-      if (entry.key != MTConstants.favoritesSystemTag) entry.key: entry.value,
+      if (entry.key != VhConstants.favoritesSystemTag) entry.key: entry.value,
   };
 });
 

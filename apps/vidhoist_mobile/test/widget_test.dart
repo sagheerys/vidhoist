@@ -6,8 +6,8 @@ import 'package:vidhoist_mobile/features/downloads_library/library_providers.dar
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/library_chips.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// A test shell in Lite's identity with its localisations, and with no
 /// server and no audio.
@@ -15,10 +15,10 @@ Widget host(Widget child, {List<Override> overrides = const []}) =>
     ProviderScope(
       overrides: overrides,
       child: MaterialApp(
-        theme: mtTheme(MTVariant.lite, Brightness.light),
+        theme: vhTheme(VhVariant.phone, Brightness.light),
         locale: const Locale('ar'),
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
         home: Scaffold(body: child),
       ),
     );
@@ -26,8 +26,8 @@ Widget host(Widget child, {List<Override> overrides = const []}) =>
 LocalItem sample(String name, {MediaPlatform? platform}) => LocalItem(
   key: platform == MediaPlatform.youtube
       ? 'https://youtu.be/$name'
-      : '$liteMediaDir/$name.mp4',
-  path: '$liteMediaDir/$name.mp4',
+      : '$phoneMediaDir/$name.mp4',
+  path: '$phoneMediaDir/$name.mp4',
   canonicalUrl: platform == MediaPlatform.youtube
       ? 'https://youtu.be/$name'
       : null,
@@ -42,7 +42,7 @@ void main() {
   List<Override> base(List<LocalItem> items) => [
     keyValueStoreProvider.overrideWithValue(store),
     secretStoreProvider.overrideWithValue(MemorySecretStore()),
-    initialSettingsProvider.overrideWithValue(const LiteSettings()),
+    initialSettingsProvider.overrideWithValue(const PhoneSettings()),
     localMediaProvider.overrideWith((ref) async => items),
   ];
 

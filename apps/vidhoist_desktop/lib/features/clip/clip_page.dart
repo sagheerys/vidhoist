@@ -4,10 +4,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../di.dart';
@@ -41,9 +41,9 @@ class ClipPage extends ConsumerStatefulWidget {
 }
 
 class _ClipPageState extends ConsumerState<ClipPage> {
-  late final MTPlayer _player = ref.read(playerProvider);
+  late final VhPlayer _player = ref.read(playerProvider);
   DateTime _lastWheel = DateTime.fromMillisecondsSinceEpoch(0);
-  late final StreamSubscription<MTPlayerState> _follow;
+  late final StreamSubscription<VhPlayerState> _follow;
   String? _playing;
 
   /// The clip this page shows, as last built.
@@ -75,13 +75,13 @@ class _ClipPageState extends ConsumerState<ClipPage> {
   /// as a video site does. It stayed behind on the cover of the clip that
   /// had ended, which read as a picture frozen while the sound went on.
   /// A short to a short stays in the lane, which follows by itself.
-  void _onPlayer(MTPlayerState state) {
+  void _onPlayer(VhPlayerState state) {
     final now = state.current;
     final was = _playing;
     _playing = now?.canonicalUrl;
     if (now == null || now.canonicalUrl == was || was != _shown) return;
     if (_inLane && now.isShortForm) return;
-    if (mounted) GoRouter.of(context).go(EmberRoutes.item(now.canonicalUrl));
+    if (mounted) GoRouter.of(context).go(DesktopRoutes.item(now.canonicalUrl));
   }
 
   /// The page was opened on a short, so its lane follows the player.
@@ -106,7 +106,7 @@ class _ClipPageState extends ConsumerState<ClipPage> {
   Widget build(BuildContext context) {
     final controls = ref.watch(windowControlsProvider);
     final library = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
-    return StreamBuilder<MTPlayerState>(
+    return StreamBuilder<VhPlayerState>(
       stream: _player.states,
       initialData: _player.state,
       builder: (context, snap) {
@@ -121,8 +121,8 @@ class _ClipPageState extends ConsumerState<ClipPage> {
             : null;
         if (opened == null) {
           return Center(
-            child: MTEmptyFrame(
-              title: context.mtl.itemUnavailable,
+            child: VhEmptyFrame(
+              title: context.vhl.itemUnavailable,
               message: widget.canonicalUrl,
             ),
           );
@@ -150,7 +150,7 @@ class _ClipPageState extends ConsumerState<ClipPage> {
           ),
         );
         // Its keys (F11, Esc, and ↑/↓ between shorts) are the window's:
-        // see EmberKeyboard.
+        // see DesktopKeyboard.
         return ValueListenableBuilder<bool>(
           valueListenable: controls.fullScreen,
           builder: (context, full, _) => full
@@ -202,28 +202,28 @@ class _ShortsLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.all(MTSpace.xl),
+      padding: const EdgeInsets.all(VhSpace.xl),
       child: Column(
         children: [
           Expanded(child: stage),
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
           Text(
             item.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            textDirection: mtTextDirectionOf(
+            textDirection: vhTextDirectionOf(
               item.title,
               Directionality.of(context),
             ),
             style: text.titleSmall?.copyWith(color: p.ink),
           ),
-          const SizedBox(height: MTSpace.xxs),
+          const SizedBox(height: VhSpace.xxs),
           Text(
-            context.mtl.desktopShortsHint,
+            context.vhl.desktopShortsHint,
             textAlign: TextAlign.center,
             style: text.labelSmall?.copyWith(color: p.ink3),
           ),
@@ -250,20 +250,20 @@ class _ClipLayout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final audioOnly = ref.watch(audioOnlyProvider);
     final theater = ref.watch(theaterProvider);
     final url = item.canonicalUrl;
-    final meta = mtMetaLine([
+    final meta = vhMetaLine([
       ?item.uploader,
       platformLabel(l, MediaPlatform.detect(url)),
-      if (item.duration case final d?) mtFormatDuration(d),
+      if (item.duration case final d?) vhFormatDuration(d),
     ]);
     return LayoutBuilder(
       builder: (context, box) => SingleChildScrollView(
-        padding: const EdgeInsets.all(MTSpace.xl),
+        padding: const EdgeInsets.all(VhSpace.xl),
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
@@ -277,23 +277,23 @@ class _ClipLayout extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 AspectRatio(aspectRatio: 16 / 9, child: stage),
-                const SizedBox(height: MTSpace.lg),
+                const SizedBox(height: VhSpace.lg),
                 Text(
                   item.title,
                   // Its own direction, the interface's side: the line is
                   // as wide as the stage.
-                  textDirection: mtForeignLine(context, item.title).$1,
-                  textAlign: mtForeignLine(context, item.title).$2,
+                  textDirection: vhForeignLine(context, item.title).$1,
+                  textAlign: vhForeignLine(context, item.title).$2,
                   style: text.titleLarge?.copyWith(color: p.ink),
                 ),
-                const SizedBox(height: MTSpace.xxs),
+                const SizedBox(height: VhSpace.xxs),
                 Text(meta, style: text.bodySmall?.copyWith(color: p.ink3)),
                 if (entry case final entry?)
                   ClipFacts(
                     entry: entry,
                     picture: isCurrent && !item.isAudio && !audioOnly,
                   ),
-                const SizedBox(height: MTSpace.md),
+                const SizedBox(height: VhSpace.md),
                 ClipActionRow(
                   item: item,
                   entry: entry,

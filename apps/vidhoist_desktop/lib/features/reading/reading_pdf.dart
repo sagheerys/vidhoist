@@ -3,9 +3,9 @@ import 'dart:ui' show Color, TextDirection;
 
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -18,7 +18,7 @@ typedef ReadingFonts = ({pw.Font latin, pw.Font arabic, pw.Font title});
 /// Loads [ReadingFonts] from the fonts the app already ships.
 Future<ReadingFonts> loadReadingFonts() async {
   Future<pw.Font> font(String file) async =>
-      pw.Font.ttf(await rootBundle.load('packages/mt_ui/assets/fonts/$file'));
+      pw.Font.ttf(await rootBundle.load('packages/vh_ui/assets/fonts/$file'));
   return (
     latin: await font('Tajawal-Regular.ttf'),
     arabic: await font('NotoKufiArabic-Medium.ttf'),
@@ -60,12 +60,12 @@ Future<Uint8List> pdfOf({
 }) {
   title = withoutMarks(title);
   meta = withoutMarks(meta);
-  final palette = MTPalette.superDay;
+  final palette = VhPalette.desktopDay;
   final ink = _colour(palette.ink);
   final quiet = _colour(palette.ink3);
   final accent = _colour(palette.accentInk);
   pw.TextDirection direction(String text) =>
-      mtTextDirectionOf(text, fallback) == TextDirection.rtl
+      vhTextDirectionOf(text, fallback) == TextDirection.rtl
       ? pw.TextDirection.rtl
       : pw.TextDirection.ltr;
   pw.TextStyle styleFor(String text, double size, PdfColor colour) {
@@ -160,7 +160,7 @@ pw.Widget _paragraph(
           child: pw.UrlLink(
             destination: link,
             child: pw.Text(
-              mtFormatDuration(at),
+              vhFormatDuration(at),
               textDirection: pw.TextDirection.ltr,
               style: pw.TextStyle(fontSize: 8, color: accent),
             ),

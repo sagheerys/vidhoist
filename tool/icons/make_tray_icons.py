@@ -2,7 +2,7 @@
 taskbar and cream for a dark one.
 
 - the taskbar preview's buttons, from the Wahaj icons the app draws
-  (packages/mt_ui/lib/src/icons/mt_icons.dart), so they match the player;
+  (packages/vh_ui/lib/src/icons/mt_icons.dart), so they match the player;
 - the count badge on the taskbar button, Vidhoist's blue with a white
   figure (the day accent: one badge serves both taskbars).
 
@@ -26,7 +26,7 @@ INK, CREAM = "#2B211B", "#FBF6EE"
 THEMES = [("light", INK), ("dark", CREAM)]
 SIZES = [(16, 16), (24, 24), (32, 32), (48, 48)]
 OUT = "apps/vidhoist_desktop/assets/tray/"
-ICONS = "packages/mt_ui/lib/src/icons/mt_icons.dart"
+ICONS = "packages/vh_ui/lib/src/icons/mt_icons.dart"
 
 
 def svg_image(svg, scale):
@@ -41,7 +41,7 @@ def wahaj(key):
     """One icon's SVG from the app's own set, slots unfilled."""
     source = open(ICONS, encoding="utf-8").read()
     quotes = "'" * 3
-    pattern = r"MTIconData\(\s*'" + key + r"',\s*r" + quotes + "(.*?)" + quotes
+    pattern = r"VhIconData\(\s*'" + key + r"',\s*r" + quotes + "(.*?)" + quotes
     return re.search(pattern, source, re.S).group(1)
 
 
@@ -55,7 +55,7 @@ def preview_buttons():
 
 def badges():
     """The count on the taskbar button: 1 to 9, then 9+."""
-    # The palette's day accent (packages/mt_ui/lib/src/tokens/palette.dart).
+    # The palette's day accent (packages/vh_ui/lib/src/tokens/palette.dart).
     blue = (0x24, 0x57, 0xD6, 255)
     white = (255, 255, 255, 255)
     font_file = "C:/Windows/Fonts/segoeuib.ttf"

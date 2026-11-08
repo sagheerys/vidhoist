@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// One row of a breakdown: its name, the amount its bar is drawn to, and
 /// that amount as words.
@@ -19,7 +19,7 @@ class StatsBars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final largest = rows.fold(1, (most, r) => math.max(most, r.measure));
     return Column(
@@ -29,7 +29,7 @@ class StatsBars extends StatelessWidget {
             label: '${row.label}: ${row.value}',
             excludeSemantics: true,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: MTSpace.xs),
+              padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
               child: Row(
                 children: [
                   Expanded(
@@ -38,7 +38,7 @@ class StatsBars extends StatelessWidget {
                       row.label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      textDirection: mtTextDirectionOf(
+                      textDirection: vhTextDirectionOf(
                         row.label,
                         Directionality.of(context),
                       ),
@@ -46,9 +46,9 @@ class StatsBars extends StatelessWidget {
                       style: text.bodyMedium?.copyWith(color: p.ink),
                     ),
                   ),
-                  const SizedBox(width: MTSpace.md),
+                  const SizedBox(width: VhSpace.md),
                   Expanded(flex: 4, child: _Bar(share: row.measure / largest)),
-                  const SizedBox(width: MTSpace.md),
+                  const SizedBox(width: VhSpace.md),
                   Expanded(
                     flex: 3,
                     child: Text(
@@ -77,7 +77,7 @@ class _Bar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final round = BorderRadius.circular(_thickness / 2);
     return Container(
       height: _thickness,
@@ -108,10 +108,10 @@ class StatsFigures extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final rule = BorderSide(
       color: p.line,
-      width: MTThemeX.of(context).hairline,
+      width: VhThemeX.of(context).hairline,
     );
     return LayoutBuilder(
       builder: (context, box) {
@@ -126,7 +126,7 @@ class StatsFigures extends StatelessWidget {
         return DecoratedBox(
           decoration: BoxDecoration(
             color: p.card,
-            borderRadius: BorderRadius.circular(MTCorners.desktop.card),
+            borderRadius: BorderRadius.circular(VhCorners.desktop.card),
             border: Border.fromBorderSide(rule),
           ),
           child: Column(
@@ -174,16 +174,16 @@ class StatsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.all(MTSpace.lg),
+      padding: const EdgeInsets.all(VhSpace.lg),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(value, style: text.headlineSmall?.tabular),
-          const SizedBox(height: MTSpace.xxs),
+          const SizedBox(height: VhSpace.xxs),
           Text(label, style: text.labelMedium?.copyWith(color: p.ink3)),
         ],
       ),
@@ -217,27 +217,27 @@ class StatsSuggestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: MTSpace.lg),
+      padding: const EdgeInsets.only(bottom: VhSpace.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(title, style: text.titleSmall?.copyWith(color: p.ink)),
           Text(meta, style: text.bodySmall?.copyWith(color: p.ink3)),
-          const SizedBox(height: MTSpace.xs),
+          const SizedBox(height: VhSpace.xs),
           Text(lead, style: text.labelSmall?.copyWith(color: p.ink3)),
           for (final item in items)
             Semantics(
               button: true,
               child: InkWell(
                 onTap: () => onOpen(item),
-                borderRadius: BorderRadius.circular(MTCorners.desktop.thumb),
+                borderRadius: BorderRadius.circular(VhCorners.desktop.thumb),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                    vertical: MTSpace.xs,
-                    horizontal: MTSpace.xxs,
+                    vertical: VhSpace.xs,
+                    horizontal: VhSpace.xxs,
                   ),
                   child: Row(
                     children: [
@@ -246,7 +246,7 @@ class StatsSuggestion extends StatelessWidget {
                           item.title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          textDirection: mtTextDirectionOf(
+                          textDirection: vhTextDirectionOf(
                             item.title,
                             Directionality.of(context),
                           ),
@@ -254,7 +254,7 @@ class StatsSuggestion extends StatelessWidget {
                         ),
                       ),
                       if (detail(item) case final line?) ...[
-                        const SizedBox(width: MTSpace.md),
+                        const SizedBox(width: VhSpace.md),
                         Text(
                           line,
                           style: text.labelSmall?.tabular.copyWith(

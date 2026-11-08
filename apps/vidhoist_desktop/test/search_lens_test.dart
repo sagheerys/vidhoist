@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -22,22 +22,22 @@ void main() {
       overrides: [
         // Logs reads its file; one that is never written is enough here.
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/ember_none.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/ember_none.log'),
         ),
       ],
     );
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberSettingsPane.logs.route);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopSettingsPane.logs.route);
     await tester.pumpAndSettle();
     final lens = find.descendant(
       of: find.byType(TextField),
       matching: find.byWidgetPredicate(
-        (w) => w is MTIcon && w.icon == MTIcons.search,
+        (w) => w is VhIcon && w.icon == VhIcons.search,
       ),
     );
     expect(lens, findsOneWidget);
-    expect(tester.getSize(lens).width, MTDensity.desktop.icon);
+    expect(tester.getSize(lens).width, VhDensity.desktop.icon);
   });
 }

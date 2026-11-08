@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -152,7 +152,7 @@ class UpdateNotifier extends Notifier<UpdateState> {
     if (current == null || current < downloaded) return;
     try {
       final dir = await ref.read(updateCacheDirProvider.future);
-      final file = File('$dir/${MTConstants.updateApkFileName}');
+      final file = File('$dir/${VhConstants.updateApkFileName}');
       if (file.existsSync()) await file.delete();
     } catch (_) {
       // The cache is unavailable; the system sweeps it under pressure
@@ -246,7 +246,7 @@ class UpdateNotifier extends Notifier<UpdateState> {
     );
     try {
       final dir = await ref.read(updateCacheDirProvider.future);
-      final path = '$dir/${MTConstants.updateApkFileName}';
+      final path = '$dir/${VhConstants.updateApkFileName}';
       await ref
           .read(apkDownloaderProvider)
           .download(

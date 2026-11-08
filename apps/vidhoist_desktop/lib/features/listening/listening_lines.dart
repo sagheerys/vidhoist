@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// **The transcript flowing past** in the listening room: large lines, the
 /// one being said in ink and held a little above the middle, the rest
@@ -19,7 +19,7 @@ class ListeningLines extends StatefulWidget {
   });
 
   final List<TranscriptSegment> segments;
-  final MTPlayer player;
+  final VhPlayer player;
 
   @override
   State<ListeningLines> createState() => _ListeningLinesState();
@@ -73,7 +73,7 @@ class _ListeningLinesState extends State<ListeningLines> {
       final target = _keys[now].currentContext;
       if (target == null || !target.mounted) return;
       final glide = _placed
-          ? mtMotionDuration(context, MTMotion.slow)
+          ? vhMotionDuration(context, VhMotion.slow)
           : Duration.zero;
       _placed = true;
       unawaited(
@@ -81,7 +81,7 @@ class _ListeningLinesState extends State<ListeningLines> {
           target,
           alignment: _hold,
           duration: glide,
-          curve: MTMotion.ease,
+          curve: VhMotion.ease,
         ),
       );
     });
@@ -89,7 +89,7 @@ class _ListeningLinesState extends State<ListeningLines> {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final style = Theme.of(context).textTheme.headlineSmall;
     final segments = widget.segments;
     return LayoutBuilder(
@@ -131,11 +131,11 @@ class _ListeningLinesState extends State<ListeningLines> {
                       cursor: SystemMouseCursors.click,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: MTSpace.sm,
+                          vertical: VhSpace.sm,
                         ),
                         child: Text(
                           segments[i].text,
-                          textDirection: mtTextDirectionOf(
+                          textDirection: vhTextDirectionOf(
                             segments[i].text,
                             Directionality.of(context),
                           ),

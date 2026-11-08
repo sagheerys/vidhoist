@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../shared/error_text.dart';
 import '../shared/open_web_link.dart';
@@ -22,8 +22,8 @@ Future<void> showChannelActions(
   WidgetRef ref,
   ChannelSubscription sub,
 ) async {
-  final l10n = context.mtl;
-  final chosen = await showMTSheet<_Action>(
+  final l10n = context.vhl;
+  final chosen = await showVhSheet<_Action>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
@@ -47,10 +47,10 @@ Future<void> showChannelActions(
     }
   } on Object catch (e) {
     if (context.mounted) {
-      showMTNotice(
+      showVhNotice(
         context,
         message: errorText(l10n, e),
-        kind: MTNoticeKind.failed,
+        kind: VhNoticeKind.failed,
       );
     }
   }
@@ -65,8 +65,8 @@ class _ChannelSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     void pick(_Action a) => Navigator.of(context).pop(a);
     final banner = ref
@@ -76,10 +76,10 @@ class _ChannelSheet extends ConsumerWidget {
         .valueOrNull;
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        MTSpace.pagePad,
+        VhSpace.pagePad,
         0,
-        MTSpace.pagePad,
-        MTSpace.lg,
+        VhSpace.pagePad,
+        VhSpace.lg,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -90,7 +90,7 @@ class _ChannelSheet extends ConsumerWidget {
             clipBehavior: Clip.none,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(MTRadius.card),
+                borderRadius: BorderRadius.circular(VhRadius.card),
                 child: AspectRatio(
                   aspectRatio: 4,
                   child: banner == null
@@ -104,7 +104,7 @@ class _ChannelSheet extends ConsumerWidget {
                 ),
               ),
               PositionedDirectional(
-                start: MTSpace.lg,
+                start: VhSpace.lg,
                 bottom: -_avatar / 2,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -116,9 +116,9 @@ class _ChannelSheet extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: _avatar / 2 + MTSpace.sm),
+          const SizedBox(height: _avatar / 2 + VhSpace.sm),
           Text(
-            mtName(sub.name),
+            vhName(sub.name),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
@@ -128,51 +128,51 @@ class _ChannelSheet extends ConsumerWidget {
             channelMeta(context, sub),
             style: text.bodySmall?.copyWith(color: p.ink3),
           ),
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
           ClipRRect(
-            borderRadius: BorderRadius.circular(MTRadius.thumb),
+            borderRadius: BorderRadius.circular(VhRadius.thumb),
             child: ChannelStatus(sub: sub, detail: true),
           ),
-          const SizedBox(height: MTSpace.lg),
+          const SizedBox(height: VhSpace.lg),
           Row(
             children: [
               _Button(
-                icon: MTIcons.refresh,
+                icon: VhIcons.refresh,
                 label: l10n.checkNow,
                 onTap: () => pick(_Action.check),
               ),
-              const SizedBox(width: MTSpace.sm),
+              const SizedBox(width: VhSpace.sm),
               sub.enabled
                   ? _Button(
-                      icon: MTIcons.pause,
+                      icon: VhIcons.pause,
                       label: l10n.pauseSubscription,
                       onTap: () => pick(_Action.pause),
                     )
                   : _Button(
-                      icon: MTIcons.play,
+                      icon: VhIcons.play,
                       label: l10n.resumeSubscription,
                       onTap: () => pick(_Action.pause),
                     ),
-              const SizedBox(width: MTSpace.sm),
+              const SizedBox(width: VhSpace.sm),
               _Button(
-                icon: MTIcons.edit,
+                icon: VhIcons.edit,
                 label: l10n.editSubscription,
                 onTap: () => pick(_Action.edit),
               ),
             ],
           ),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           // The channel's own page, on YouTube or wherever it lives.
           OutlinedButton.icon(
             onPressed: () => unawaited(openWebLink(sub.url)),
-            icon: MTIcon(MTIcons.external, size: 18, color: p.accent),
+            icon: VhIcon(VhIcons.external, size: 18, color: p.accent),
             label: Text(l10n.openChannel),
           ),
-          const SizedBox(height: MTSpace.xs),
+          const SizedBox(height: VhSpace.xs),
           TextButton.icon(
             style: TextButton.styleFrom(foregroundColor: p.err),
             onPressed: () => pick(_Action.unfollow),
-            icon: MTIcon(MTIcons.trash, size: 18, color: p.err),
+            icon: VhIcon(VhIcons.trash, size: 18, color: p.err),
             label: Text(l10n.unfollow),
           ),
         ],
@@ -186,30 +186,30 @@ class _ChannelSheet extends ConsumerWidget {
 class _Button extends StatelessWidget {
   const _Button({required this.icon, required this.label, required this.onTap});
 
-  final MTIconData icon;
+  final VhIconData icon;
   final String label;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return Expanded(
-      child: MTPressable(
+      child: VhPressable(
         child: Material(
           color: p.cardAlt,
-          borderRadius: BorderRadius.circular(MTRadius.card),
+          borderRadius: BorderRadius.circular(VhRadius.card),
           child: InkWell(
-            borderRadius: BorderRadius.circular(MTRadius.card),
+            borderRadius: BorderRadius.circular(VhRadius.card),
             onTap: onTap,
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: MTSpace.md,
-                horizontal: MTSpace.xs,
+                vertical: VhSpace.md,
+                horizontal: VhSpace.xs,
               ),
               child: Column(
                 children: [
-                  MTIcon(icon, size: 22, color: p.accent),
-                  const SizedBox(height: MTSpace.xs),
+                  VhIcon(icon, size: 22, color: p.accent),
+                  const SizedBox(height: VhSpace.xs),
                   Text(
                     label,
                     maxLines: 2,
@@ -234,11 +234,11 @@ Future<bool> _confirmUnfollow(
   BuildContext context,
   ChannelSubscription sub,
 ) async {
-  final l10n = context.mtl;
-  final yes = await showMTDialog<bool>(
+  final l10n = context.vhl;
+  final yes = await showVhDialog<bool>(
     context: context,
     builder: (dialog) => AlertDialog(
-      title: Text(l10n.unfollowConfirm(mtName(sub.name))),
+      title: Text(l10n.unfollowConfirm(vhName(sub.name))),
       content: Text(l10n.unfollowConfirmBody),
       actions: [
         TextButton(

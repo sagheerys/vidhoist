@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/open_web_link.dart';
 
@@ -23,10 +23,10 @@ Future<void> _guarded(
     await action();
   } on Object catch (e) {
     if (!context.mounted) return;
-    showMTNotice(
+    showVhNotice(
       context,
-      message: errorText(context.mtl, e),
-      kind: MTNoticeKind.failed,
+      message: errorText(context.vhl, e),
+      kind: VhNoticeKind.failed,
     );
   }
 }
@@ -38,7 +38,7 @@ Future<void> checkChannels(
   WidgetRef ref, {
   ChannelSubscription? only,
 }) {
-  showMTNotice(context, message: context.mtl.checkQueued);
+  showVhNotice(context, message: context.vhl.checkQueued);
   return _guarded(
     context,
     () => ref.read(channelsControllerProvider).checkNow(only: only),
@@ -63,10 +63,10 @@ Future<bool> unfollowChannel(
   WidgetRef ref,
   ChannelSubscription sub,
 ) async {
-  final l = context.mtl;
-  final sure = await showMTConfirm(
+  final l = context.vhl;
+  final sure = await showVhConfirm(
     context,
-    title: l.unfollowConfirm(mtName(sub.name)),
+    title: l.unfollowConfirm(vhName(sub.name)),
     message: l.unfollowConfirmBody,
     confirmLabel: l.unfollow,
     cancelLabel: l.cancel,
@@ -93,16 +93,16 @@ Future<void> showChannelMenu(
   ChannelSubscription sub,
   Offset at,
 ) async {
-  final l = context.mtl;
+  final l = context.vhl;
   final router = GoRouter.of(context);
   final choice = await showEmberMenu(context, at, [
-    EmberMenuEntry(_ChannelChoice.open, MTIcons.external, l.openChannel),
-    EmberMenuEntry(_ChannelChoice.check, null, l.checkNow),
-    EmberMenuEntry(_ChannelChoice.edit, null, l.editSubscription),
-    const EmberMenuEntry.divider(),
-    EmberMenuEntry(
+    DesktopMenuEntry(_ChannelChoice.open, VhIcons.external, l.openChannel),
+    DesktopMenuEntry(_ChannelChoice.check, null, l.checkNow),
+    DesktopMenuEntry(_ChannelChoice.edit, null, l.editSubscription),
+    const DesktopMenuEntry.divider(),
+    DesktopMenuEntry(
       _ChannelChoice.unfollow,
-      MTIcons.trash,
+      VhIcons.trash,
       l.unfollow,
       danger: true,
     ),
@@ -117,7 +117,7 @@ Future<void> showChannelMenu(
       await showFollowDialog(context, editing: sub);
     case _ChannelChoice.unfollow:
       if (await unfollowChannel(context, ref, sub)) {
-        router.go(EmberRoutes.channels);
+        router.go(DesktopRoutes.channels);
       }
   }
 }

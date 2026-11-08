@@ -1,0 +1,55 @@
+/// Shared MTF playback: the unified item, the golden source rule, the play
+/// queue, the background audio handler, the players and their widgets, and
+/// the position and state stores.
+library;
+
+export 'src/covers/cached_cover_fetcher.dart';
+export 'src/models/media_quality.dart';
+export 'src/models/play_mode.dart';
+export 'src/models/playback_source.dart';
+export 'src/models/playlist_item.dart';
+export 'src/playback/audio_handler.dart';
+export 'src/playback/just_audio_port.dart';
+export 'src/playback/media_item_mapper.dart';
+export 'src/playback/media_player_port.dart';
+export 'src/playback/vh_player.dart';
+export 'src/playback/vh_session_player.dart';
+export 'src/playback/playback_queue.dart';
+export 'src/screens/vh_audio_screen.dart';
+export 'src/screens/vh_now_playing_panel.dart';
+export 'src/screens/vh_reels_player.dart';
+export 'src/screens/vh_video_screen.dart';
+export 'src/screens/video_info_sheet.dart';
+export 'src/video/vh_captions.dart';
+export 'src/video/vh_orientation.dart';
+export 'src/video/vh_picture_in_picture.dart';
+export 'src/video/vh_video_controls.dart';
+export 'src/video/vh_video_fullscreen.dart';
+export 'src/video/vh_video_session.dart';
+export 'src/video/video_center_controls.dart';
+export 'src/video/video_control_bars.dart';
+export 'src/video/video_side_panel.dart';
+export 'src/stores/audio_state_store.dart';
+export 'src/stores/media_quality_index.dart';
+export 'src/stores/media_shape_index.dart';
+export 'src/stores/playback_position_store.dart';
+export 'src/stores/playback_prefs.dart';
+export 'src/video/reels_handle.dart';
+export 'src/video/reels_overlay.dart';
+export 'src/video/shorts_lane.dart';
+export 'src/widgets/media_time.dart';
+export 'src/widgets/vh_audio_parts.dart';
+export 'src/widgets/vh_breathing_glow.dart';
+export 'src/widgets/vh_chapter_label.dart';
+export 'src/widgets/vh_chapter_track.dart';
+export 'src/widgets/vh_chapters.dart';
+export 'src/widgets/vh_drag_to_dismiss.dart';
+export 'src/widgets/vh_extra_button.dart';
+export 'src/widgets/vh_mini_player.dart';
+export 'src/widgets/vh_now_playing_tabs.dart';
+export 'src/widgets/vh_player_controls_row.dart';
+export 'src/widgets/vh_progress_slider.dart';
+export 'src/widgets/vh_quality_rows.dart';
+export 'src/widgets/vh_queue_panel.dart';
+export 'src/widgets/vh_tilted_artwork.dart';
+export 'src/widgets/vh_up_next_list.dart';

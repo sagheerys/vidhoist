@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/engine_data.dart';
 import '../../data/library_data.dart';
@@ -37,7 +37,7 @@ class LibraryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final options = ref.watch(libraryViewProvider);
     final visible = ref.watch(visibleLibraryProvider(scope));
     final all = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
@@ -77,10 +77,10 @@ class LibraryPage extends ConsumerWidget {
             ),
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(
-                MTSpace.xl,
-                MTSpace.xs,
-                MTSpace.xl,
-                MTSpace.md,
+                VhSpace.xl,
+                VhSpace.xs,
+                VhSpace.xl,
+                VhSpace.md,
               ),
               sliver: SliverList.list(children: [LibraryChips(scope: scope)]),
             ),
@@ -98,12 +98,12 @@ class LibraryPage extends ConsumerWidget {
     List<LibraryItem> all,
     int held,
   ) {
-    final l = context.mtl;
+    final l = context.vhl;
     // A plain box that scrolls with the page, not a fill: a filling sliver
     // measured the message too short under a large font and squeezed it.
     Widget fill(Widget child) => SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: MTSpace.xxl * 2),
+        padding: const EdgeInsets.symmetric(vertical: VhSpace.xxl * 2),
         child: Center(child: child),
       ),
     );
@@ -112,7 +112,7 @@ class LibraryPage extends ConsumerWidget {
       if (visible.hasError) {
         return [
           fill(
-            MTEmptyFrame(
+            VhEmptyFrame(
               title: l.failed,
               message: l.errorGeneric('${visible.error}'),
               actionLabel: l.retry,
@@ -127,22 +127,23 @@ class LibraryPage extends ConsumerWidget {
       return [
         fill(
           all.isEmpty
-              ? MTEmptyFrame(
+              ? VhEmptyFrame(
                   title: l.noVideosFound,
                   message: l.desktopEmptyLibraryLocal,
                   actionLabel: l.addLinkFab,
-                  actionIcon: MTIcons.addlink,
+                  actionIcon: VhIcons.addlink,
                   onAction: () => unawaited(openAddDialog(context)),
                 )
               // Nothing here yet is not a filter that hides too much.
               : held == 0 && scope == LibraryScope.favorites
-              ? MTEmptyFrame(
+              ? VhEmptyFrame(
                   title: l.desktopNoFavoritesTitle,
                   message: l.desktopNoFavoritesMessage,
                   actionLabel: l.navLibrary,
-                  onAction: () => GoRouter.of(context).go(EmberRoutes.library),
+                  onAction: () =>
+                      GoRouter.of(context).go(DesktopRoutes.library),
                 )
-              : MTEmptyFrame(
+              : VhEmptyFrame(
                   title: l.desktopNoMatchTitle,
                   message: l.desktopNoMatchMessage,
                   actionLabel: l.desktopClearFilters,
@@ -154,10 +155,10 @@ class LibraryPage extends ConsumerWidget {
     return [
       SliverPadding(
         padding: const EdgeInsets.fromLTRB(
-          MTSpace.xl,
+          VhSpace.xl,
           0,
-          MTSpace.xl,
-          MTSpace.xl,
+          VhSpace.xl,
+          VhSpace.xl,
         ),
         sliver: _Items(items: items),
       ),
@@ -191,18 +192,18 @@ class _Items extends ConsumerWidget {
         options.tags.join(' '),
         options.excludedTags.join(' '),
       ),
-      sliver: StreamBuilder<MTPlayerState>(
+      sliver: StreamBuilder<VhPlayerState>(
         stream: player.states,
         initialData: player.state,
         builder: (context, snap) {
           final state = snap.data ?? player.state;
           final current = state.current?.canonicalUrl;
-          return MTLibrarySliver(
+          return VhLibrarySliver(
             pinHeader: true,
             layout: switch (options.mode) {
-              LibraryViewMode.list => MTLibraryLayout.list,
-              LibraryViewMode.compact => MTLibraryLayout.compact,
-              _ => MTLibraryLayout.grid,
+              LibraryViewMode.list => VhLibraryLayout.list,
+              LibraryViewMode.compact => VhLibraryLayout.compact,
+              _ => VhLibraryLayout.grid,
             },
             showLocation: true,
             sort: tableSortFor(options.sort, (s) => unawaited(view.setSort(s))),

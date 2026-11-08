@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Every corner in the Windows app comes from the desktop corner scale
-/// (MTCorners.desktop). A number typed in place is how one card ends up
+/// (VhCorners.desktop). A number typed in place is how one card ends up
 /// rounder than its neighbour.
 void main() {
   test('**the guard**: no corner radius written as a number', () {

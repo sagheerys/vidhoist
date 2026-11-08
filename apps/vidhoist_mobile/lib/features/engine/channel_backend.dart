@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart' show PlatformException;
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import 'ytdlp_bridge.dart';
 
 /// yt-dlp on the phone, through youtubedl-android ([YtDlpBridge]).
 ///
-/// The command lines come from `mt_ytdlp` whole and in order (the library's
+/// The command lines come from `vh_ytdlp` whole and in order (the library's
 /// own option list reorders them, `docs/ENGINE.md` finding 21), and what a
 /// run prints goes through [readDownloadRun], as on Windows.
 class ChannelYtDlpBackend implements DownloadBackend {

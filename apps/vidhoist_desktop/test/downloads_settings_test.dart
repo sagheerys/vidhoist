@@ -9,9 +9,9 @@ import 'package:vidhoist_desktop/features/downloads/downloads_panel.dart';
 import 'package:vidhoist_desktop/features/settings/folders_pane.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -53,14 +53,14 @@ void main() {
         desktopFoldersProvider.overrideWithValue(const _Folders()),
         // Logs reads its file; one that is never written is enough here.
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/ember_none.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/ember_none.log'),
         ),
       ],
     );
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     if (to != null) {
-      GoRouter.of(tester.element(find.byType(EmberSidebar))).go(to);
+      GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(to);
       await tester.pumpAndSettle();
     }
     return h;
@@ -130,7 +130,7 @@ void main() {
       await open(tester, to: '/settings/folders');
       final change = tester.getRect(find.text('Change…').first);
       final open_ = tester.getRect(find.text('Open in Explorer').first);
-      expect(open_.left - change.right, greaterThanOrEqualTo(MTSpace.lg));
+      expect(open_.left - change.right, greaterThanOrEqualTo(VhSpace.lg));
     });
 
     testWidgets('**the guard**: every section opens a page of its own, none '
@@ -139,12 +139,12 @@ void main() {
       // Playback's one choice on the phone works around an Android
       // decoder; the computer has nothing to put there.
       expect(
-        EmberSettingsPane.values.map((p) => p.name),
+        DesktopSettingsPane.values.map((p) => p.name),
         isNot(contains('playback')),
       );
       expect(find.text('Playback'), findsNothing);
-      for (final pane in EmberSettingsPane.values) {
-        GoRouter.of(tester.element(find.byType(EmberSidebar))).go(pane.route);
+      for (final pane in DesktopSettingsPane.values) {
+        GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(pane.route);
         await tester.pump();
         await tester.pump();
         expect(tester.takeException(), isNull, reason: pane.name);

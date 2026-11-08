@@ -10,10 +10,10 @@ import 'package:vidhoist_desktop/shell/right_panel.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/ui_zoom.dart';
 import 'package:vidhoist_desktop/shell/video_surface.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'support/shell_harness.dart';
 
@@ -66,7 +66,7 @@ void main() {
 
   /// A clip's title on its library card, not in the bar or the panel.
   Finder cardOf(String title) => find
-      .descendant(of: find.byType(MTMediaGridCard), matching: find.text(title))
+      .descendant(of: find.byType(VhMediaGridCard), matching: find.text(title))
       .first;
 
   Future<void> rightClick(WidgetTester tester, Offset at) async {
@@ -116,20 +116,20 @@ void main() {
 
   testWidgets('theater widens the picture over the side panel', (tester) async {
     await onVideo(tester);
-    expect(find.byType(EmberRightPanel), findsOneWidget);
+    expect(find.byType(DesktopRightPanel), findsOneWidget);
     await tester.tap(find.text('Theater'));
     await tester.pumpAndSettle();
-    expect(find.byType(EmberRightPanel), findsNothing);
+    expect(find.byType(DesktopRightPanel), findsNothing);
 
     // Only on a clip's page: the library has its panel back.
     await tester.tap(
       find.descendant(
-        of: find.byType(EmberSidebar),
+        of: find.byType(DesktopSidebar),
         matching: find.text('Library'),
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.byType(EmberRightPanel), findsOneWidget);
+    expect(find.byType(DesktopRightPanel), findsOneWidget);
   });
 
   testWidgets('F11 fills the screen with the picture, Esc comes back', (
@@ -139,15 +139,15 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.f11);
     await tester.pumpAndSettle();
     expect(h.controls.calls, contains('fullScreen true'));
-    expect(find.byType(EmberSidebar), findsNothing);
+    expect(find.byType(DesktopSidebar), findsNothing);
     // The picture's own controls take the bar's place (the owner's
     // choice, 2026-10-28).
-    expect(find.byType(EmberPlayerBar), findsNothing);
+    expect(find.byType(DesktopPlayerBar), findsNothing);
 
     await tester.sendKeyEvent(LogicalKeyboardKey.escape);
     await tester.pumpAndSettle();
     expect(h.controls.calls.last, 'fullScreen false');
-    expect(find.byType(EmberSidebar), findsOneWidget);
+    expect(find.byType(DesktopSidebar), findsOneWidget);
   });
 
   testWidgets('the favourite button marks the clip', (tester) async {
@@ -162,7 +162,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       await TagsIndex(store: h.store, mutex: PrefsMutex()).tagsOf(_video),
-      [MTConstants.favoritesSystemTag],
+      [VhConstants.favoritesSystemTag],
     );
   });
 
@@ -246,7 +246,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       await TagsIndex(store: h.store, mutex: PrefsMutex()).tagsOf(_shortB),
-      [MTConstants.favoritesSystemTag],
+      [VhConstants.favoritesSystemTag],
     );
   });
 
@@ -259,7 +259,7 @@ void main() {
     h.player.calls.clear();
     await tester.tap(
       find.descendant(
-        of: find.byType(EmberSidebar),
+        of: find.byType(DesktopSidebar),
         matching: find.text('Library'),
       ),
     );
@@ -273,15 +273,15 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(
       find.descendant(
-        of: find.byType(EmberPlayerBar),
+        of: find.byType(DesktopPlayerBar),
         matching: find.text('Homelab Hour - Ep. 12'),
       ),
     );
     await tester.pumpAndSettle();
     expect(find.byType(ClipPage), findsOneWidget);
     expect(
-      tester.widget<EmberSidebar>(find.byType(EmberSidebar)).current,
-      EmberPlace.item,
+      tester.widget<DesktopSidebar>(find.byType(DesktopSidebar)).current,
+      DesktopPlace.item,
     );
   });
 }

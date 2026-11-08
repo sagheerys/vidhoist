@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'channel_art.dart';
 
@@ -16,7 +16,7 @@ class ChannelAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final letter = Container(
       color: p.accentSoft,
       alignment: Alignment.center,
@@ -41,7 +41,7 @@ class ChannelAvatar extends ConsumerWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: p.line, width: MTThemeX.of(context).hairline),
+        border: Border.all(color: p.line, width: VhThemeX.of(context).hairline),
       ),
       child: file == null
           ? letter

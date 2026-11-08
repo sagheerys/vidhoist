@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/library/library_page.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -22,7 +22,7 @@ void main() {
     ShellHarness.useWindow(tester, const Size(1280, 800));
     await tester.pumpWidget(ShellHarness().app());
     await tester.pumpAndSettle();
-    expect(place(tester).windowClass, MTWindowClass.desktop);
+    expect(place(tester).windowClass, VhWindowClass.desktop);
   });
 
   testWidgets('day and night follow Windows', (tester) async {

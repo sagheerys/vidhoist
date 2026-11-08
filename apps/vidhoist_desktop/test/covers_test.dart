@@ -11,8 +11,8 @@ import 'package:vidhoist_desktop/data/covers/cover_enricher.dart';
 import 'package:vidhoist_desktop/data/covers/cover_shrink.dart';
 import 'package:vidhoist_desktop/data/covers/covers_data.dart';
 import 'package:vidhoist_desktop/data/covers/mp4_cover.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
 
 /// An MP4 box: a 32-bit size, a four-letter type, the body.
 Uint8List _box(String type, List<int> body) {

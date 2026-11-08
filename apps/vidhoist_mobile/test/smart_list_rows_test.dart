@@ -7,8 +7,8 @@ import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/playlists/playlists_screen.dart';
 import 'package:vidhoist_mobile/features/playlists/widgets/smart_list_rows.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
@@ -31,7 +31,7 @@ void main() {
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
         secretStoreProvider.overrideWithValue(MemorySecretStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
-        initialSettingsProvider.overrideWithValue(const LiteSettings()),
+        initialSettingsProvider.overrideWithValue(const PhoneSettings()),
         localMediaProvider.overrideWith((ref) async => [clip]),
       ],
     );
@@ -39,10 +39,10 @@ void main() {
     return UncontrolledProviderScope(
       container: container,
       child: MaterialApp(
-        theme: mtTheme(MTVariant.lite, brightness),
+        theme: vhTheme(VhVariant.phone, brightness),
         locale: const Locale('en'),
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
         home: const PlaylistsScreen(),
       ),
     );

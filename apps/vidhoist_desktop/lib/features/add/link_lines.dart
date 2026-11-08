@@ -1,4 +1,4 @@
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// What a link in a pasted or dropped text is, before anything is sent.
 enum LinkState {
@@ -48,7 +48,7 @@ class ReadLinks {
 ReadLinks readLinks(
   String text,
   Iterable<String> library, {
-  int limit = MTConstants.maxLinksPerAdd,
+  int limit = VhConstants.maxLinksPerAdd,
 }) {
   final all = UrlKit.extractAllUrls(text);
   final kept = all.take(limit).toList();

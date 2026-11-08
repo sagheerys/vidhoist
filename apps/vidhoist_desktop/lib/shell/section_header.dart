@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The Wahaj section header as the phones draw it (a Kufi title, a quiet
 /// line at the end, a hairline beneath), except that **the end line gives
 /// way**: in a window at a large font it shortens instead of pushing the
 /// row past its edge. The phones' header keeps its own rules.
-class EmberSectionHeader extends StatelessWidget {
-  const EmberSectionHeader({
+class DesktopSectionHeader extends StatelessWidget {
+  const DesktopSectionHeader({
     super.key,
     required this.title,
     this.trailing,
@@ -19,20 +19,20 @@ class EmberSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(
-        MTSpace.xxs,
-        MTSpace.xxs,
-        MTSpace.xxs,
-        MTSpace.sm,
+        VhSpace.xxs,
+        VhSpace.xxs,
+        VhSpace.xxs,
+        VhSpace.sm,
       ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             color: p.line,
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
         ),
       ),

@@ -32,7 +32,7 @@ BRAND = os.path.join(DESKTOP, "brand")
 
 INK = "#2B211B"
 CREAM = "#FBF6EE"
-ACCENT = "#2457D6"  # MTPalette.superDay.accent; the one place it is repeated
+ACCENT = "#2457D6"  # VhPalette.superDay.accent; the one place it is repeated
 GRID = 256
 SMALL_BELOW = 24
 
@@ -174,7 +174,7 @@ def windows_icons():
 
 
 def _font(size):
-    for f in [os.path.join(ROOT, "packages", "mt_ui", "assets", "fonts", "Tajawal-Bold.ttf"),
+    for f in [os.path.join(ROOT, "packages", "vh_ui", "assets", "fonts", "Tajawal-Bold.ttf"),
               r"C:\Windows\Fonts\segoeuib.ttf"]:
         if os.path.exists(f):
             return ImageFont.truetype(f, size)

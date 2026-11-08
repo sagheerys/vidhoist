@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/platform/run_note.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 void main() {
   late Directory folder;
-  late MTLogger logger;
+  late VhLogger logger;
   late RunNote note;
 
   Future<String> logged() async {
@@ -20,7 +20,7 @@ void main() {
 
   setUp(() async {
     folder = await Directory.systemTemp.createTemp('run_note');
-    logger = MTLogger(filePath: '${folder.path}/app.log');
+    logger = VhLogger(filePath: '${folder.path}/app.log');
     note = nextRun();
   });
 

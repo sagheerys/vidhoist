@@ -9,8 +9,8 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/home/download_watcher.dart';
 import 'package:vidhoist_mobile/features/home/notifications.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// Posts nothing; remembers what is showing.
 class _Notices extends DownloadNotifications {
@@ -77,9 +77,9 @@ void main() {
       overrides: [
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
-        initialSettingsProvider.overrideWithValue(const LiteSettings()),
+        initialSettingsProvider.overrideWithValue(const PhoneSettings()),
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
         ),
         notificationsProvider.overrideWithValue(notices),
         engineTasksProvider.overrideWith((ref) => tasks.stream),
@@ -90,7 +90,7 @@ void main() {
     return (notices: notices, tasks: tasks);
   }
 
-  final l10n = lookupMTLocalizations(const Locale('en'));
+  final l10n = lookupVhLocalizations(const Locale('en'));
   DownloadTask at(TaskPhase phase) => DownloadTask(
     inputUrl: 'https://youtu.be/abc',
     quality: Quality.best,
@@ -135,9 +135,9 @@ void main() {
       overrides: [
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
-        initialSettingsProvider.overrideWithValue(const LiteSettings()),
+        initialSettingsProvider.overrideWithValue(const PhoneSettings()),
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
         ),
         notificationsProvider.overrideWithValue(notices),
         engineTasksProvider.overrideWith((ref) => tasks.stream),

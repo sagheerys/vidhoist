@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/clip_handover.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 void main() {
   late Directory root;

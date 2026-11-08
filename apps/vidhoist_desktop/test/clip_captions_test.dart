@@ -10,10 +10,10 @@ import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/clip/clip_stage.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'support/shell_harness.dart';
 
@@ -52,26 +52,26 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(_clip)], playing: false);
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.item(_url));
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.item(_url));
     await tester.pumpAndSettle();
     return h;
   }
 
   Finder onPicture() => find.descendant(
-    of: find.byType(MTCaptionsLayer),
+    of: find.byType(VhCaptionsLayer),
     matching: find.text('The pool keeps the pool warm.'),
   );
 
   testWidgets('**the guard**: CC puts the transcript over the picture, and '
       'takes it off again', (tester) async {
     final h = await watching(tester);
-    expect(find.byType(MTCaptionsLayer), findsOneWidget);
+    expect(find.byType(VhCaptionsLayer), findsOneWidget);
     expect(onPicture(), findsNothing);
     await tester.tap(find.bySemanticsLabel('Show subtitles'));
     await tester.pumpAndSettle();
     expect(onPicture(), findsOneWidget);
-    expect(await h.store.getBool(EmberSubtitles.key), isTrue);
+    expect(await h.store.getBool(DesktopSubtitles.key), isTrue);
     await tester.tap(find.bySemanticsLabel('Hide subtitles'));
     await tester.pumpAndSettle();
     expect(onPicture(), findsNothing);
@@ -113,8 +113,8 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(_clip)], playing: false);
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.item(_url));
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.item(_url));
     await tester.pumpAndSettle();
     await tester.tap(find.bySemanticsLabel('Show subtitles'));
     await tester.pumpAndSettle();
@@ -122,7 +122,7 @@ void main() {
   }
 
   Finder said(String text) => find.descendant(
-    of: find.byType(MTCaptionsLayer),
+    of: find.byType(VhCaptionsLayer),
     matching: find.text(text),
   );
 
@@ -136,7 +136,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(said('المسبح يدفئ المسبح.'), findsOneWidget);
     expect(find.text('AR'), findsOneWidget);
-    expect(await h.store.getString(EmberSubtitles.languageKey), 'ar');
+    expect(await h.store.getString(DesktopSubtitles.languageKey), 'ar');
   });
 
   testWidgets('**the guard**: the size and the background are chosen on the '
@@ -146,15 +146,15 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Text size · Large'));
     await tester.pumpAndSettle();
-    expect(await h.store.getInt(EmberSubtitles.sizeKey), 2);
+    expect(await h.store.getInt(DesktopSubtitles.sizeKey), 2);
     await tester.tap(find.bySemanticsLabel('Subtitle options'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Background · None'));
     await tester.pumpAndSettle();
-    expect(await h.store.getInt(EmberSubtitles.backgroundKey), 2);
-    final layer = tester.widget<MTCaptionsLayer>(find.byType(MTCaptionsLayer));
-    expect(layer.captions.scale, EmberSubtitles.scales[2]);
-    expect(layer.captions.background, MTCaptionBackground.none);
+    expect(await h.store.getInt(DesktopSubtitles.backgroundKey), 2);
+    final layer = tester.widget<VhCaptionsLayer>(find.byType(VhCaptionsLayer));
+    expect(layer.captions.scale, DesktopSubtitles.scales[2]);
+    expect(layer.captions.background, VhCaptionBackground.none);
   });
 
   test('**the guard**: an Arabic reader gets the Arabic subtitles first, by '

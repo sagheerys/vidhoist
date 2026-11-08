@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'settings_page.dart';
 import 'settings_sections.dart';
@@ -22,24 +22,24 @@ class SettingsHub extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => Row(
     children: [
       SizedBox(
-        width: MTBreakpoint.sidePanel,
+        width: VhBreakpoint.sidePanel,
         child: Scaffold(
-          appBar: AppBar(title: Text(context.mtl.settings)),
+          appBar: AppBar(title: Text(context.vhl.settings)),
           body: ListView(
             padding: const EdgeInsets.fromLTRB(
-              MTSpace.md,
+              VhSpace.md,
               0,
-              MTSpace.md,
-              MTSpace.xl,
+              VhSpace.md,
+              VhSpace.xl,
             ),
             children: [
               for (final (title, entries) in settingsGroups(context, ref))
-                MTSettingsGroup(
+                VhSettingsGroup(
                   title: title,
                   divided: false,
                   rows: [
                     for (final e in entries)
-                      MTSettingsRow(
+                      VhSettingsRow(
                         icon: e.icon,
                         title: e.title,
                         value: e.value,
@@ -56,7 +56,7 @@ class SettingsHub extends ConsumerWidget {
       VerticalDivider(
         width: 1,
         thickness: 1,
-        color: MTThemeX.of(context).palette.line,
+        color: VhThemeX.of(context).palette.line,
       ),
       Expanded(
         child: KeyedSubtree(

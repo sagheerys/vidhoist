@@ -1,0 +1,90 @@
+import 'package:flutter/material.dart';
+
+import '../theme/vh_theme.dart';
+import '../tokens/tokens.dart';
+
+import '../icons/vh_icon.dart';
+import '../icons/vh_icons.dart';
+
+/// The "a link is ready in the clipboard" bar, which sits above the mini
+/// player.
+///
+/// Presentation only: every string and action comes from the app, since
+/// vh_ui does not know the server exists. **Both actions are offered on
+/// purpose**: "download" for the common case and "options" for whoever
+/// wants a different quality, because an immediate download with no way
+/// out unsettles anyone unsure of the result. "Dismiss" is a condition: a
+/// bar that returns after every refusal stops being help and becomes
+/// nagging.
+class VhClipboardBanner extends StatelessWidget {
+  const VhClipboardBanner({
+    super.key,
+    required this.url,
+    required this.title,
+    required this.downloadLabel,
+    required this.optionsLabel,
+    required this.onDownload,
+    required this.onOptions,
+    required this.onDismiss,
+  });
+
+  final String url;
+  final String title;
+  final String downloadLabel;
+  final String optionsLabel;
+  final VoidCallback onDownload;
+  final VoidCallback onOptions;
+  final VoidCallback onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    final text = Theme.of(context).textTheme;
+    return Material(
+      color: p.accentSoft,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          VhSpace.pagePad,
+          VhSpace.sm,
+          VhSpace.sm,
+          VhSpace.sm,
+        ),
+        child: Row(
+          children: [
+            VhIcon(VhIcons.link, size: 18, color: p.accentInk),
+            const SizedBox(width: VhSpace.sm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: text.labelMedium!.copyWith(color: p.accentInk),
+                  ),
+                  // The URL is **always LTR** and truncated from the front:
+                  // its tail, the clip id, is what distinguishes it, while
+                  // its head `https://www.` is the same every time.
+                  Text(
+                    url,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textDirection: TextDirection.ltr,
+                    style: text.labelSmall!.copyWith(color: p.ink3),
+                  ),
+                ],
+              ),
+            ),
+            TextButton(onPressed: onOptions, child: Text(optionsLabel)),
+            FilledButton(onPressed: onDownload, child: Text(downloadLabel)),
+            IconButton(
+              onPressed: onDismiss,
+              visualDensity: VisualDensity.compact,
+              icon: VhIcon(VhIcons.close, size: 18, color: p.ink3),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

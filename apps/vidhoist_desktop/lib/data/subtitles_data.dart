@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import '../di.dart';
 import 'appearance_data.dart';
@@ -15,8 +15,8 @@ import 'transcripts_data.dart';
 /// Settings, and kept between runs. Their size, their background and the
 /// language chosen are the phone's choices too, from Settings or the
 /// player.
-class EmberSubtitles {
-  EmberSubtitles(this._store) {
+class DesktopSubtitles {
+  DesktopSubtitles(this._store) {
     unawaited(_load());
   }
 
@@ -28,7 +28,7 @@ class EmberSubtitles {
   /// Small, medium or large: an index into [scales].
   final size = ValueNotifier(1);
 
-  /// Solid, faint or none: an index into [MTCaptionBackground.values].
+  /// Solid, faint or none: an index into [VhCaptionBackground.values].
   final background = ValueNotifier(0);
 
   /// The language picked, kept from clip to clip; null puts the reader's
@@ -45,10 +45,10 @@ class EmberSubtitles {
 
   double get scale => scales[size.value.clamp(0, scales.length - 1)];
 
-  MTCaptionBackground get backdrop =>
-      MTCaptionBackground.values[background.value.clamp(
+  VhCaptionBackground get backdrop =>
+      VhCaptionBackground.values[background.value.clamp(
         0,
-        MTCaptionBackground.values.length - 1,
+        VhCaptionBackground.values.length - 1,
       )];
 
   Future<void> _load() async {
@@ -80,8 +80,8 @@ class EmberSubtitles {
   }
 }
 
-final emberSubtitlesProvider = Provider<EmberSubtitles>((ref) {
-  final subtitles = EmberSubtitles(ref.watch(keyValueStoreProvider));
+final desktopSubtitlesProvider = Provider<DesktopSubtitles>((ref) {
+  final subtitles = DesktopSubtitles(ref.watch(keyValueStoreProvider));
   ref.onDispose(subtitles.dispose);
   return subtitles;
 });
@@ -90,7 +90,7 @@ final emberSubtitlesProvider = Provider<EmberSubtitles>((ref) {
 /// subtitles tell them; null with no transcript. The same list comes back
 /// until the transcript changes, so the captions do not regroup on every
 /// rebuild.
-final captionLinesProvider = Provider.family<List<MTCaptionLine>?, String>((
+final captionLinesProvider = Provider.family<List<VhCaptionLine>?, String>((
   ref,
   canonicalUrl,
 ) {
@@ -104,7 +104,7 @@ final captionLinesProvider = Provider.family<List<MTCaptionLine>?, String>((
 /// Arabic reader goes from the Arabic to the English and back. Null with
 /// no transcript at all.
 final captionTracksProvider =
-    Provider.family<Map<String, List<MTCaptionLine>>?, String>((
+    Provider.family<Map<String, List<VhCaptionLine>>?, String>((
       ref,
       canonicalUrl,
     ) {
@@ -128,14 +128,14 @@ final captionTracksProvider =
       return {for (final t in all) t.language: _linesOf(t)};
     });
 
-List<MTCaptionLine> _linesOf(Transcript transcript) => [
+List<VhCaptionLine> _linesOf(Transcript transcript) => [
   for (final s in transcript.segments)
-    MTCaptionLine(
+    VhCaptionLine(
       start: s.start,
       end: s.end,
       text: s.text,
       words: switch (s.words) {
-        final words? => [for (final w in words) MTCaptionWord(w.start, w.text)],
+        final words? => [for (final w in words) VhCaptionWord(w.start, w.text)],
         null => null,
       },
     ),
@@ -143,14 +143,14 @@ List<MTCaptionLine> _linesOf(Transcript transcript) => [
 
 /// The app's player as the captions' clock: its position on each report,
 /// and whether it runs.
-class PlayerCaptionClock extends ChangeNotifier implements MTCaptionClock {
+class PlayerCaptionClock extends ChangeNotifier implements VhCaptionClock {
   PlayerCaptionClock(this._player) {
     _subs
       ..add(_player.states.listen((_) => notifyListeners()))
       ..add(_player.positionStream.listen((_) => notifyListeners()));
   }
 
-  final MTPlayer _player;
+  final VhPlayer _player;
   final _subs = <StreamSubscription<Object?>>[];
 
   @override

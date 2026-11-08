@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
 import 'package:vidhoist_desktop/di.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// `releases/latest` as GitHub answers it, for a release of all three
 /// apps whose installer is served by [setupUrl].

@@ -1,21 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import '../../di.dart';
 import '../downloads_library/local_item.dart';
 
 /// The backups folder, inside the app's media folder (§5.3).
-const liteBackupDir = '$liteMediaDir/backups';
+const phoneBackupDir = '$phoneMediaDir/backups';
 
 /// The backup name prefix, **new on purpose** (requested 2026-09-04): the
 /// old name `vidhoist_mobile_backup.json` is owned by an earlier install, and
 /// Android 11+ refuses to let this one write over it (`errno 13`).
-const liteBackupPrefix = 'vidhoist_mobile';
+const phoneBackupPrefix = 'vidhoist_mobile';
 
 final backupRotationProvider = Provider(
-  (ref) => BackupRotation(directory: liteBackupDir, prefix: liteBackupPrefix),
+  (ref) => BackupRotation(directory: phoneBackupDir, prefix: phoneBackupPrefix),
 );
 
 final autoBackupProvider = Provider(
@@ -60,7 +60,7 @@ class AutoBackup {
 
   final BackupService service;
   final BackupRotation rotation;
-  final MTLogger logger;
+  final VhLogger logger;
 
   /// Told after each copy lands on disk.
   final void Function()? onWritten;

@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/clip_handover.dart';
 import 'package:vidhoist_desktop/features/library/item_menu.dart';
 import 'package:vidhoist_desktop/features/library/library_item_view.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -19,7 +19,7 @@ LibraryItem _clip({String? localPath}) => LibraryItem(
 
 void main() {
   group('what the menu offers, by the clip', () {
-    final l = lookupMTLocalizations(const Locale('en'));
+    final l = lookupVhLocalizations(const Locale('en'));
     List<ItemChoice?> choices(LibraryItem item, {bool hasFile = false}) => [
       for (final e in itemMenuEntries(l, item, hasFile: hasFile).skip(5))
         e.value,

@@ -5,9 +5,9 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/player/playback_providers.dart';
 import 'package:vidhoist_mobile/features/playlists/widgets/playlist_cards.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// **Guards from a device review on 2026-09-05**: two visual flaws seen on
 /// the device, each with a root in a single line.
@@ -16,10 +16,10 @@ void main() {
       ProviderScope(
         overrides: overrides,
         child: MaterialApp(
-          theme: mtTheme(MTVariant.lite, Brightness.light),
+          theme: vhTheme(VhVariant.phone, Brightness.light),
           locale: const Locale('ar'),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
           home: Scaffold(body: child),
         ),
       );
@@ -86,7 +86,7 @@ void main() {
           overrides: [
             keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
             secretStoreProvider.overrideWithValue(MemorySecretStore()),
-            initialSettingsProvider.overrideWithValue(const LiteSettings()),
+            initialSettingsProvider.overrideWithValue(const PhoneSettings()),
           ],
         ),
       );

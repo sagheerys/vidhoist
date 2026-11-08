@@ -10,8 +10,8 @@ import 'window_placement.dart';
 
 /// The main window: opened where it was left, saved whenever it moves or
 /// resizes, and closed only after [beforeClose] has run.
-class EmberWindow with WindowListener {
-  EmberWindow._(this._placements, this._beforeClose, this._hideOnClose);
+class DesktopWindow with WindowListener {
+  DesktopWindow._(this._placements, this._beforeClose, this._hideOnClose);
 
   final WindowPlacementStore _placements;
   final Future<void> Function() _beforeClose;
@@ -33,7 +33,7 @@ class EmberWindow with WindowListener {
   /// Shows the window at the interface size [zoom], or the largest that
   /// fits the screen it opens on. [beforeClose] runs when the user closes
   /// it, so the playback position and queue are written first.
-  static Future<EmberWindow> open({
+  static Future<DesktopWindow> open({
     required WindowPlacementStore placements,
     required Future<void> Function() beforeClose,
     required double zoom,
@@ -41,7 +41,7 @@ class EmberWindow with WindowListener {
     WindowStart start = WindowStart.shown,
   }) async {
     await windowManager.ensureInitialized();
-    final window = EmberWindow._(
+    final window = DesktopWindow._(
       placements,
       beforeClose,
       hideOnClose ?? () => false,
@@ -68,7 +68,7 @@ class EmberWindow with WindowListener {
       WindowOptions(
         size: bounds.size,
         minimumSize: minimumWindowAt(window.zoom),
-        title: EmberIdentity.displayName,
+        title: DesktopIdentity.displayName,
         // The shell draws its own title bar on the stone paper.
         titleBarStyle: TitleBarStyle.hidden,
       ),

@@ -69,12 +69,12 @@ All notable changes to Vidhoist. The format follows
   yt-dlp running on the device, and `docs/adr/` for the decisions taken.
 - `docs/ENGINE.md`: yt-dlp measured on Windows, on the Android emulator and on
   a phone before any engine code, with the real output kept as test fixtures.
-- `packages/mt_ytdlp`: the yt-dlp command lines (format selectors, IPv4 by
+- `packages/vh_ytdlp`: the yt-dlp command lines (format selectors, IPv4 by
   default, downloading from a probe's info JSON), and reading what yt-dlp
   prints back: progress, the parts of a merged download, the finished file,
   the info JSON, classified errors and the engine's version. Pure Dart, not
   yet used by the apps.
-- In `mt_core`, beside the server engine: `DownloadBackend` (yt-dlp on the
+- In `vh_core`, beside the server engine: `DownloadBackend` (yt-dlp on the
   device, one implementation per app), `LocalDownloadEngine` (probe once and
   download from the probe, pause and resume, a Wi-Fi gate before starting,
   one retry at best when a height cannot be met, unfinished downloads queued
@@ -150,11 +150,11 @@ All notable changes to Vidhoist. The format follows
 
 ### Removed
 - **The Vidhoist server layer, in both apps and every package** (batch 6 of
-  phase 1). In `mt_core`: the API client and everything around it (address
+  phase 1). In `vh_core`: the API client and everything around it (address
   switching, LAN probe, live channel, image headers, server reasons), the
   server download pipeline (add, poll, pull, delete) with its pending pulls,
   sweeper, transfer and trashcan probe, the server's folders and version,
-  and the Vidhoist release check. In `mt_transcripts`: fetching captions
+  and the Vidhoist release check. In `vh_transcripts`: fetching captions
   before a clip and reading subtitles beside it on the server, and the
   command-line backfill that read a server's list. On the phone: the
   server fields and status card, the "server keeps files" notice,
@@ -194,7 +194,7 @@ All notable changes to Vidhoist. The format follows
   `Download/Vidhoist`, as the identity said.
 
 ### Known, deliberately
-- `mt_media` keeps its streaming endpoint (always `none`) and the library's
+- `vh_media` keeps its streaming endpoint (always `none`) and the library's
   "on the server" fields, read from records that still carry the shape of
   Vidhoist's history; neither streams or reaches a server. `HistoryItem` and
   `ServerPath` stay for that shape.

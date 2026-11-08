@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'shell_metrics.dart';
 
@@ -16,7 +16,7 @@ class CaptionButton extends StatefulWidget {
     this.forceHover = false,
   });
 
-  final MTIconData icon;
+  final VhIconData icon;
   final String label;
   final VoidCallback onTap;
 
@@ -33,14 +33,14 @@ class _CaptionButtonState extends State<CaptionButton> {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final lit = _hover || widget.forceHover;
     final fill = !lit ? null : (widget.danger ? p.err : p.cardAlt);
     final ink = lit && widget.danger ? p.bg : p.ink2;
     return Semantics(
       button: true,
       label: widget.label,
-      child: MTShortcutTooltip(
+      child: VhShortcutTooltip(
         message: widget.label,
         child: MouseRegion(
           onEnter: (_) => setState(() => _hover = true),
@@ -48,12 +48,12 @@ class _CaptionButtonState extends State<CaptionButton> {
           child: GestureDetector(
             onTap: widget.onTap,
             child: AnimatedContainer(
-              duration: mtMotionDuration(context, MTMotion.fast),
-              width: EmberShellSize.captionButton,
-              height: EmberShellSize.titleBar,
+              duration: vhMotionDuration(context, VhMotion.fast),
+              width: DesktopShellSize.captionButton,
+              height: DesktopShellSize.titleBar,
               color: fill ?? p.bg,
               alignment: Alignment.center,
-              child: MTIcon(widget.icon, size: MTSpace.lg, color: ink),
+              child: VhIcon(widget.icon, size: VhSpace.lg, color: ink),
             ),
           ),
         ),

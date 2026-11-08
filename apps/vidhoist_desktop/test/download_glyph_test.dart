@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/downloads_data.dart';
 import 'package:vidhoist_desktop/features/downloads/download_glyph.dart';
 import 'package:vidhoist_desktop/features/downloads/downloads_button.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The downloads arrow moves while anything downloads, as the phone's does,
 /// and stands still otherwise.
@@ -22,11 +22,11 @@ void main() {
           activeDownloadsProvider.overrideWithValue(active),
           if (!motion) downloadMotionProvider.overrideWithValue(false),
         ],
-        child: MTDesktopApp(
+        child: VhDesktopApp(
           child: MaterialApp(
-            theme: mtDesktopTheme(MTVariant.superApp, Brightness.light),
-            localizationsDelegates: MTLocalizations.localizationsDelegates,
-            supportedLocales: MTLocalizations.supportedLocales,
+            theme: vhDesktopTheme(VhVariant.desktop, Brightness.light),
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
             builder: (context, child) => MediaQuery(
               data: MediaQuery.of(context).copyWith(disableAnimations: still),
               child: child!,
@@ -37,7 +37,7 @@ void main() {
       ),
     );
     // Into the fall, where the arrow is furthest from rest.
-    await tester.pump(MTDownloadsIcon.period * 0.65);
+    await tester.pump(VhDownloadsIcon.period * 0.65);
   }
 
   /// How far the arrow stands from rest, and how faded it is.

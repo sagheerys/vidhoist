@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/downloads_sheet.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/task_card_parts.dart';
@@ -11,7 +11,7 @@ import 'package:vidhoist_mobile/features/downloads_library/widgets/task_card_par
 /// with their speed, finishing the file, paused; and pause and resume
 /// beside the cancel.
 void main() {
-  final l10n = lookupMTLocalizations(const Locale('en'));
+  final l10n = lookupVhLocalizations(const Locale('en'));
   DownloadTask at(TaskPhase phase) => DownloadTask(
     inputUrl: 'https://youtu.be/abc',
     quality: Quality.best,
@@ -80,9 +80,9 @@ void main() {
       ProviderScope(
         overrides: [downloadEngineProvider.overrideWithValue(engine)],
         child: MaterialApp(
-          theme: mtTheme(MTVariant.lite, Brightness.light),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
           home: Scaffold(
             body: Builder(
               builder: (context) => TextButton(

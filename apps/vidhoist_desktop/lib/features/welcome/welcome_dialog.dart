@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/appearance_data.dart';
 import '../../data/engine_data.dart';
@@ -10,7 +10,7 @@ import '../../data/engine_fetch_data.dart';
 import '../../data/folders_data.dart';
 import '../../data/hints_data.dart';
 import '../../platform/engine_locator.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 import '../../shell/engine_line.dart';
 import '../../shell/shell_metrics.dart';
 import '../settings/appearance_pane.dart';
@@ -37,8 +37,8 @@ class WelcomeDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final folder = ref.watch(downloadFolderProvider).valueOrNull;
     final look = ref.watch(appearanceProvider);
@@ -64,7 +64,7 @@ class WelcomeDialog extends ConsumerWidget {
     return AlertDialog(
       title: Text(l.desktopWelcomeTitle),
       content: SizedBox(
-        width: EmberShellSize.addDialog,
+        width: DesktopShellSize.addDialog,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -74,29 +74,29 @@ class WelcomeDialog extends ConsumerWidget {
                 l.desktopWelcomeMessage,
                 style: text.bodyMedium?.copyWith(color: p.ink2),
               ),
-              const SizedBox(height: MTSpace.md),
+              const SizedBox(height: VhSpace.md),
               SettingLine(
                 title: l.desktopDownloadFolder,
                 value: folder,
-                trailing: MTLinkButton(
+                trailing: VhLinkButton(
                   label: l.desktopChangeFolder,
-                  icon: MTIcons.folder,
+                  icon: VhIcons.folder,
                   onPressed: () => unawaited(_pickFolder(ref, folder)),
                 ),
               ),
               ChoiceGroup(
                 title: l.language,
                 children: [
-                  EmberSegments(
+                  DesktopSegments(
                     items: [
-                      EmberSegment(
+                      DesktopSegment(
                         label: l.languageSystem,
                         selected: look.locale == null,
                         onTap: () => appearance.setLocale(null),
                       ),
                       for (final code in appearanceLocales)
-                        EmberSegment(
-                          label: mtLanguageName(code),
+                        DesktopSegment(
+                          label: vhLanguageName(code),
                           selected: look.locale == code,
                           onTap: () => appearance.setLocale(code),
                         ),
@@ -107,11 +107,11 @@ class WelcomeDialog extends ConsumerWidget {
               SettingLine(
                 title: l.desktopEngine,
                 value: paths.ready
-                    ? mtLtrRun('yt-dlp${version == null ? '' : ' $version'}')
+                    ? vhLtrRun('yt-dlp${version == null ? '' : ' $version'}')
                     : l.desktopEngineMissing,
               ),
               if (missing.isNotEmpty) ...[
-                const SizedBox(height: MTSpace.sm),
+                const SizedBox(height: VhSpace.sm),
                 Text(
                   l.desktopWelcomeHelpers,
                   style: text.labelSmall?.copyWith(color: p.ink3),
@@ -119,7 +119,7 @@ class WelcomeDialog extends ConsumerWidget {
                 for (final part in missing)
                   if (fetchLine(part) case final line?)
                     Padding(
-                      padding: const EdgeInsets.only(top: MTSpace.xxs),
+                      padding: const EdgeInsets.only(top: VhSpace.xxs),
                       child: Text(
                         line,
                         style: text.labelSmall?.copyWith(color: p.ink2),

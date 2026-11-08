@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/choices_data.dart';
 import '../../data/downloads_data.dart';
@@ -16,7 +16,7 @@ import 'batch_dialog.dart';
 import 'link_lines.dart';
 import 'link_preview_card.dart';
 import 'links_view.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// Opens the add dialog with [text] in its field: a link, or a text that
 /// holds several, from the clipboard, a drop or the button.
@@ -63,20 +63,20 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
     ], dropped: read.dropped);
   }
 
-  void _notice(String message, {MTNoticeKind kind = MTNoticeKind.info}) {
-    if (mounted) showMTNotice(context, message: message, kind: kind);
+  void _notice(String message, {VhNoticeKind kind = VhNoticeKind.info}) {
+    if (mounted) showVhNotice(context, message: message, kind: kind);
   }
 
   /// Several links, sent together with the one choice for all.
   Future<void> _submitMany(ReadLinks read) async {
     final engine = ref.read(downloadEngineProvider);
-    if (engine == null) return _notice(context.mtl.engineErrMissing);
+    if (engine == null) return _notice(context.vhl.engineErrMissing);
     setState(() => _tasks = LinksView.submit(engine, read, _choice));
   }
 
   /// One link: a playlist goes to its own dialog, anything else is added.
   Future<void> _submitOne(String url) async {
-    final l = context.mtl;
+    final l = context.vhl;
     final engine = ref.read(downloadEngineProvider);
     if (engine == null) return _notice(l.engineErrMissing);
     final navigator = Navigator.of(context);
@@ -92,12 +92,12 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
       folder: _choice.folderPath,
     );
     navigator.pop();
-    _notice(l.downloadStarted, kind: MTNoticeKind.done);
+    _notice(l.downloadStarted, kind: VhNoticeKind.done);
   }
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
+    final l = context.vhl;
     final read = _read();
     final lines = read.lines;
     final many = lines.length > 1 || read.dropped > 0;
@@ -110,7 +110,7 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
     return AlertDialog(
       title: Text(l.addUrl),
       content: SizedBox(
-        width: many ? EmberShellSize.wideDialog : EmberShellSize.addDialog,
+        width: many ? DesktopShellSize.wideDialog : DesktopShellSize.addDialog,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -138,7 +138,7 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
                         ? null
                         : Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: MTSpace.sm,
+                              horizontal: VhSpace.sm,
                             ),
                             child: Text(
                               platformLabel(l, MediaPlatform.detect(url)),
@@ -151,7 +151,7 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
                   ),
                 ),
               ),
-              const SizedBox(height: MTSpace.md),
+              const SizedBox(height: VhSpace.md),
               if (many)
                 LinksView(
                   read: read,
@@ -166,7 +166,7 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
                   LinkState.playlist => LinkStateLine(line: line),
                   _ => LinkPreviewCard(url: line.url),
                 },
-              const SizedBox(height: MTSpace.md),
+              const SizedBox(height: VhSpace.md),
               if (single?.state != LinkState.playlist)
                 AddOptions(
                   choice: _choice,

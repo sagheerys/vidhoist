@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import '../di.dart';
 import 'library_data.dart';
@@ -86,12 +86,12 @@ class SyncReport {
 
 final syncReportProvider = StateProvider<SyncReport?>((ref) => null);
 
-final emberSyncProvider = Provider((ref) => EmberSync(ref));
+final desktopSyncProvider = Provider((ref) => DesktopSync(ref));
 
 /// **One run of the sync**: read the other devices' files, merge them into
 /// this computer, write its own file, and trade transcripts.
-class EmberSync {
-  EmberSync(this._ref);
+class DesktopSync {
+  DesktopSync(this._ref);
 
   final Ref _ref;
 

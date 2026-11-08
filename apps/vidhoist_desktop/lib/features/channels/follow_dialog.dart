@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/channels_data.dart';
 import '../../shell/error_text.dart';
@@ -11,7 +11,7 @@ import '../../shell/choice_menu.dart';
 import '../../shell/shell_metrics.dart';
 import '../folders/folder_widgets.dart';
 import '../folders/own_folder_field.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// Following a channel, or editing one already followed: one dialog,
 /// since the fields are the same. The link cannot change on an edit (it
@@ -85,7 +85,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
   }
 
   Future<void> _submit() async {
-    final l = context.mtl;
+    final l = context.vhl;
     final controller = ref.read(channelsControllerProvider);
     final filter = _filter.text.trim();
     setState(() {
@@ -116,11 +116,11 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
         );
         // The title yt-dlp resolved is the proof the right channel was
         // followed, the more so when a clip's link was given.
-        message = l.subscriptionAdded(mtName(named ?? url));
+        message = l.subscriptionAdded(vhName(named ?? url));
       }
       if (!mounted) return;
       Navigator.of(context).pop();
-      showMTNotice(context, message: message, kind: MTNoticeKind.done);
+      showVhNotice(context, message: message, kind: VhNoticeKind.done);
     } on Object catch (e) {
       if (!mounted) return;
       setState(() {
@@ -134,11 +134,11 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final canSubmit = !_busy && (_isEdit || _url.text.trim().isNotEmpty);
-    const gap = SizedBox(height: MTSpace.md);
+    const gap = SizedBox(height: VhSpace.md);
     return AlertDialog(
       title: Text(
         widget.editing?.name ?? widget.name ?? l.followChannel,
@@ -146,7 +146,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
         overflow: TextOverflow.ellipsis,
       ),
       content: SizedBox(
-        width: EmberShellSize.formDialog,
+        width: DesktopShellSize.formDialog,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -172,7 +172,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
                   ),
                 ),
               gap,
-              EmberChoice<int>(
+              DesktopChoice<int>(
                 label: l.checkEvery,
                 value: _interval,
                 onChanged: (v) => setState(() => _interval = v),
@@ -185,7 +185,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
               ),
               if (!_isEdit) ...[
                 gap,
-                EmberChoice<Quality>(
+                DesktopChoice<Quality>(
                   label: l.subscriptionQuality,
                   helper: l.subscriptionQualityNote,
                   value: _quality,
@@ -200,7 +200,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
                 ),
                 Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: MTLinkButton(
+                  child: VhLinkButton(
                     label: l.helpAboutField,
                     onPressed: () => unawaited(
                       showFolderHelp(
@@ -224,7 +224,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
               ),
               Align(
                 alignment: AlignmentDirectional.centerStart,
-                child: MTLinkButton(
+                child: VhLinkButton(
                   label: l.helpAboutField,
                   onPressed: () => unawaited(
                     showFolderHelp(context, l.titleFilter, l.titleFilterHelp),
@@ -263,7 +263,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
         FilledButton(
           onPressed: canSubmit ? () => unawaited(_submit()) : null,
           child: _busy
-              ? const MTSpinner(size: MTSpace.lg)
+              ? const VhSpinner(size: VhSpace.lg)
               : Text(_isEdit ? l.saveSettings : l.follow),
         ),
       ],

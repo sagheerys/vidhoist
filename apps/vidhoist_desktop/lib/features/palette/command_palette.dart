@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../data/saved_searches.dart';
@@ -33,8 +33,8 @@ Future<void> showCommandPalette(
   context: context,
   barrierDismissible: true,
   barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-  barrierColor: MTThemeX.of(context).palette.ink.withValues(alpha: 0.18),
-  transitionDuration: mtMotionDuration(context, MTMotion.fast),
+  barrierColor: VhThemeX.of(context).palette.ink.withValues(alpha: 0.18),
+  transitionDuration: vhMotionDuration(context, VhMotion.fast),
   pageBuilder: (_, _, _) => _Palette(commands: commands, initial: initial),
   transitionBuilder: (_, animation, _, child) =>
       FadeTransition(opacity: animation, child: child),
@@ -52,7 +52,7 @@ Future<void> playFromMoment(
   await player.setLooping(false);
   await player.playItems([toPlaylistItem(item)]);
   await player.seek(start);
-  if (!item.isAudio) router.go(EmberRoutes.item(item.canonicalUrl));
+  if (!item.isAudio) router.go(DesktopRoutes.item(item.canonicalUrl));
 }
 
 class _Palette extends ConsumerStatefulWidget {
@@ -110,7 +110,7 @@ class _PaletteState extends ConsumerState<_Palette> {
     final router = GoRouter.of(context);
     return [
       for (final item in r.titles)
-        () => router.go(EmberRoutes.item(item.canonicalUrl)),
+        () => router.go(DesktopRoutes.item(item.canonicalUrl)),
       for (final match in r.said)
         () =>
             unawaited(playFromMoment(ref, router, match.item, match.hit.start)),
@@ -122,7 +122,7 @@ class _PaletteState extends ConsumerState<_Palette> {
   void _save() {
     final query = _query.text.trim();
     unawaited(ref.read(savedSearchesProvider.notifier).add(query));
-    showMTNotice(context, message: context.mtl.desktopSearchSaved);
+    showVhNotice(context, message: context.vhl.desktopSearchSaved);
   }
 
   void _run(List<VoidCallback> actions, int index) {
@@ -141,7 +141,7 @@ class _PaletteState extends ConsumerState<_Palette> {
       unawaited(
         Scrollable.ensureVisible(
           row,
-          duration: mtMotionDuration(context, MTMotion.fast),
+          duration: vhMotionDuration(context, VhMotion.fast),
           alignmentPolicy: by > 0
               ? ScrollPositionAlignmentPolicy.keepVisibleAtEnd
               : ScrollPositionAlignmentPolicy.keepVisibleAtStart,
@@ -154,8 +154,8 @@ class _PaletteState extends ConsumerState<_Palette> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final results = _results();
     final actions = _actions(results);
     _pages = results.titles.length + results.said.length;
@@ -183,10 +183,10 @@ class _PaletteState extends ConsumerState<_Palette> {
       alignment: Alignment.topCenter,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
-          MTSpace.lg,
+          VhSpace.lg,
           _topGap,
-          MTSpace.lg,
-          MTSpace.lg,
+          VhSpace.lg,
+          VhSpace.lg,
         ),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: _width),
@@ -194,10 +194,10 @@ class _PaletteState extends ConsumerState<_Palette> {
             color: p.card,
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(MTCorners.desktop.card),
+              borderRadius: BorderRadius.circular(VhCorners.desktop.card),
               side: BorderSide(
                 color: p.line2,
-                width: MTThemeX.of(context).hairline,
+                width: VhThemeX.of(context).hairline,
               ),
             ),
             clipBehavior: Clip.antiAlias,
@@ -217,7 +217,7 @@ class _PaletteState extends ConsumerState<_Palette> {
                     const SingleActivator(LogicalKeyboardKey.numpadEnter): open,
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(MTSpace.md),
+                    padding: const EdgeInsets.all(VhSpace.md),
                     child: TextField(
                       controller: _query,
                       autofocus: true,
@@ -235,7 +235,7 @@ class _PaletteState extends ConsumerState<_Palette> {
                       : ListView(
                           controller: _scroll,
                           shrinkWrap: true,
-                          padding: const EdgeInsets.only(bottom: MTSpace.sm),
+                          padding: const EdgeInsets.only(bottom: VhSpace.sm),
                           children: [
                             if (results.titles.isNotEmpty)
                               PaletteHeader(l.desktopPaletteTitles),
@@ -270,7 +270,7 @@ class _PaletteState extends ConsumerState<_Palette> {
                               pick(
                                 l.desktopPaletteSave,
                                 (on) => CommandRow(
-                                  icon: MTIcons.plus,
+                                  icon: VhIcons.plus,
                                   label: l.desktopPaletteSave,
                                   selected: on,
                                 ),
@@ -281,8 +281,8 @@ class _PaletteState extends ConsumerState<_Palette> {
                 Divider(height: 1, color: p.line),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: MTSpace.md,
-                    vertical: MTSpace.xs,
+                    horizontal: VhSpace.md,
+                    vertical: VhSpace.xs,
                   ),
                   child: const PaletteKeys(),
                 ),

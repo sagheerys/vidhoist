@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../home/network_gate.dart';
@@ -66,7 +66,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     ref.listen<String?>(highlightedItemProvider, (_, next) {
       _highlightTimer?.cancel();
       if (next == null) return;
@@ -93,7 +93,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         // Selecting swaps the bar with a short fade rather than a cut.
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: MTAnimatedSwap(
+          child: VhAnimatedSwap(
             child: KeyedSubtree(
               key: ValueKey(options.selecting),
               child: options.selecting
@@ -111,7 +111,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         ),
         // No setup to invite any more: the engine is on the phone, readied
         // by the welcome screen.
-        body: MTPullRefresh(
+        body: VhPullRefresh(
           onRefresh: () async {
             // A failed refresh is shown by the library itself in its
             // empty state, and
@@ -121,7 +121,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             ref.invalidate(localMediaProvider);
             try {
               await ref.read(localMediaProvider.future);
-            } on MTApiException {
+            } on VhApiException {
               // Shown in the empty state.
             }
           },
@@ -130,12 +130,12 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           // throughout the scroll.
           // A wide grid gains columns, and a tablet spreads every mode
           // across its width; a phone's rows and cards keep theirs.
-          child: MTRevealOnce(
+          child: VhRevealOnce(
             child:
                 options.mode == LibraryViewMode.grid ||
-                    MTAdaptiveScaffold.hasRail(context)
+                    VhAdaptiveScaffold.hasRail(context)
                 ? _body(l10n, options, active)
-                : MTReadableWidth(child: _body(l10n, options, active)),
+                : VhReadableWidth(child: _body(l10n, options, active)),
           ),
         ),
       ),
@@ -146,7 +146,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   /// the header is a sliver and the items are a `SliverList.builder` that
   /// builds only what is visible.
   Widget _body(
-    MTLocalizations l10n,
+    VhLocalizations l10n,
     LibraryViewOptions options,
     List<DownloadTask> active,
   ) {
@@ -154,12 +154,12 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     return CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: MTSpace.pagePad),
+          padding: const EdgeInsets.symmetric(horizontal: VhSpace.pagePad),
           sliver: SliverList.list(
             children: [
-              const SizedBox(height: MTSpace.xs),
+              const SizedBox(height: VhSpace.xs),
               const LibraryFilterChips(),
-              const SizedBox(height: MTSpace.md),
+              const SizedBox(height: VhSpace.md),
               ..._activeStrip(l10n, active),
             ],
           ),
@@ -174,9 +174,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         ...switch (itemsAsync) {
           AsyncValue(valueOrNull: final value?) when value.isNotEmpty => [
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: MTSpace.pagePad),
+              padding: const EdgeInsets.symmetric(horizontal: VhSpace.pagePad),
               // No "where is it" column: every item here is on the device.
-              sliver: MTLibrarySliver(
+              sliver: VhLibrarySliver(
                 layout: options.mode.layout,
                 itemCount: value.length,
                 itemBuilder: (context, index, columns) =>
@@ -187,8 +187,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           // The page keeps its shape while the first answer comes.
           AsyncLoading() => [
             const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: MTSpace.pagePad),
-              sliver: MTRowsSkeleton(),
+              padding: EdgeInsets.symmetric(horizontal: VhSpace.pagePad),
+              sliver: VhRowsSkeleton(),
             ),
           ],
           // The message comes from the error itself rather than from a
@@ -200,7 +200,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           ],
           AsyncError(:final error) => [
             SliverToBoxAdapter(
-              child: MTEmptyState(
+              child: VhEmptyState(
                 title: l10n.tryAgain,
                 message: errorText(l10n, error),
                 actionLabel: l10n.retry,
@@ -214,15 +214,15 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               // everything is not an empty library.
               child: switch (options) {
                 LibraryViewOptions(query: final q) when q.isNotEmpty =>
-                  MTEmptyState(
+                  VhEmptyState(
                     title: l10n.noResults,
                     message: l10n.noResultsMessage,
                   ),
-                LibraryViewOptions(narrowed: true) => MTEmptyState(
+                LibraryViewOptions(narrowed: true) => VhEmptyState(
                   title: l10n.emptyFilteredTitle,
                   message: l10n.emptyFilteredMessage,
                 ),
-                _ => MTEmptyState(
+                _ => VhEmptyState(
                   title: l10n.noDownloads,
                   message: l10n.noDownloadsMessage,
                 ),
@@ -242,30 +242,30 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   /// Field report 2026-09-03: "several downloads all appear in the
   /// downloads library while a button for them already sits in the header.
   /// Find a way to stop them crowding one place."
-  List<Widget> _activeStrip(MTLocalizations l10n, List<DownloadTask> active) {
+  List<Widget> _activeStrip(VhLocalizations l10n, List<DownloadTask> active) {
     if (active.isEmpty) return const [];
     return [
       if (active.length == 1)
         _taskCard(l10n, active.first)
       else
-        MTActiveDownloadsBar(
+        VhActiveDownloadsBar(
           label: l10n.activeDownloadsCount(active.length),
           actionLabel: l10n.viewAll,
           progress: averageTaskProgress(active),
           onTap: () => showDownloadsSheet(context),
         ),
-      const SizedBox(height: MTSpace.sm),
+      const SizedBox(height: VhSpace.sm),
     ];
   }
 
-  Widget _taskCard(MTLocalizations l10n, DownloadTask task) {
+  Widget _taskCard(VhLocalizations l10n, DownloadTask task) {
     final engine = ref.read(downloadEngineProvider);
     final statusText = taskStatusText(
       l10n,
       task,
       waitingForWifi: ref.watch(wifiPausedProvider).contains(task.id),
     );
-    return MTDownloadProgressCard(
+    return VhDownloadProgressCard(
       key: ValueKey('${task.id}-${task.phase.name}'),
       title: task.title ?? task.effectiveUrl,
       thumbnail: taskThumbnail(task),
@@ -303,7 +303,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 
   /// The card reads the mode from the options itself; it is not passed
   /// twice.
-  Widget _itemCard(LocalItem item, MTMediaColumns? columns) => LibraryItemCard(
+  Widget _itemCard(LocalItem item, VhMediaColumns? columns) => LibraryItemCard(
     item: item,
     columns: columns,
     onPlay: () => _play(item),

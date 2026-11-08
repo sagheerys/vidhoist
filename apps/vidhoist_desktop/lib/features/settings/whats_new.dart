@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/hints_data.dart';
 import '../../data/update_data.dart';
 import '../../di.dart';
 import '../../shell/shell_metrics.dart';
 import '../discover/discover_dialog.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 import '../../shell/open_web_link.dart';
 
 final whatsNewServiceProvider = Provider(
@@ -61,10 +61,10 @@ Future<void> showWhatsNewNow(BuildContext context, WidgetRef ref) async {
 /// "What's new" in the middle of the window, as a computer shows it, not
 /// a sheet from the bottom edge as on the phone.
 Future<void> showWhatsNewDialog(BuildContext context, WhatsNew notes) {
-  final l = context.mtl;
-  final p = MTThemeX.of(context).palette;
+  final l = context.vhl;
+  final p = VhThemeX.of(context).palette;
   final arabic = Localizations.localeOf(context).languageCode == 'ar';
-  final body = mtReleaseNotesFor(
+  final body = vhReleaseNotesFor(
     notes.notes,
     arabic: arabic,
     app: 'ember',
@@ -74,31 +74,31 @@ Future<void> showWhatsNewDialog(BuildContext context, WhatsNew notes) {
     builder: (dialog) => AlertDialog(
       title: Row(
         children: [
-          MTIcon(MTIcons.info, color: p.accent),
-          const SizedBox(width: MTSpace.sm),
+          VhIcon(VhIcons.info, color: p.accent),
+          const SizedBox(width: VhSpace.sm),
           Expanded(child: Text(l.whatsNewTitle(notes.version))),
         ],
       ),
       content: SizedBox(
-        width: EmberShellSize.addDialog,
+        width: DesktopShellSize.addDialog,
         child: SingleChildScrollView(
           child: body.isEmpty
               ? Text(l.whatsNewUnavailable)
-              : MTMarkdownText(source: body),
+              : VhMarkdownText(source: body),
         ),
       ),
       actions: [
         // The rest of what the app does, for whoever wants it.
-        MTLinkButton(
+        VhLinkButton(
           label: l.desktopWhatsNewAllFeatures,
           onPressed: () {
             Navigator.of(dialog).pop();
             if (context.mounted) unawaited(showDiscoverDialog(context));
           },
         ),
-        MTLinkButton(
+        VhLinkButton(
           label: l.whatsNewReleasePage,
-          icon: MTIcons.external,
+          icon: VhIcons.external,
           onPressed: () => unawaited(openWebLink(notes.pageUrl)),
         ),
         FilledButton(

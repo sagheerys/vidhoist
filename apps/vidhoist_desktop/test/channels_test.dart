@@ -10,9 +10,9 @@ import 'package:vidhoist_desktop/features/channels/channel_row.dart';
 import 'package:vidhoist_desktop/features/channels/channels_page.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/fake_channels.dart';
 import 'support/shell_harness.dart';
@@ -129,7 +129,7 @@ void main() {
       "the owner's real history names no channel, so nothing matches",
       () async {
         final raw = File(
-          '../../packages/mt_core/test/fixtures/real/history_real_done.json',
+          '../../packages/vh_core/test/fixtures/real/history_real_done.json',
         ).readAsStringSync();
         final history = HistoryResponse.fromJson(
           jsonDecode(raw) as Map<String, dynamic>,
@@ -159,7 +159,7 @@ void main() {
     WidgetTester tester, {
     List<ChannelSubscription> subs = const [],
     List<LibraryItem> library = const [],
-    String at = EmberRoutes.channels,
+    String at = DesktopRoutes.channels,
     bool source = true,
   }) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
@@ -173,7 +173,7 @@ void main() {
     );
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    GoRouter.of(tester.element(find.byType(EmberSidebar))).go(at);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(at);
     await tester.pumpAndSettle();
     return channels;
   }
@@ -224,7 +224,7 @@ void main() {
   testWidgets('**the guard**: with nowhere to keep channels, as in 1.0, the '
       'page says they come later and offers nothing to follow', (tester) async {
     await open(tester, source: false);
-    final l = lookupMTLocalizations(const Locale('en'));
+    final l = lookupVhLocalizations(const Locale('en'));
     expect(find.text(l.desktopChannelsLater), findsOneWidget);
     expect(find.text(l.desktopChannelsLaterBody), findsOneWidget);
     expect(find.text('Follow a channel'), findsNothing);
@@ -240,7 +240,7 @@ void main() {
 
   testWidgets('the switch pauses a channel without asking', (tester) async {
     final channels = await open(tester, subs: [_sub('a', 'Alpha - Videos')]);
-    await tester.tap(find.byType(MTSwitch));
+    await tester.tap(find.byType(VhSwitch));
     await tester.pumpAndSettle();
     expect(channels.calls.single, startsWith('update a name=- enabled=false'));
     expect(find.text('Paused'), findsOneWidget);
@@ -287,7 +287,7 @@ void main() {
     final channels = await open(
       tester,
       subs: [_sub('a', 'Alpha - Videos', checked: checked, folder: 'Tech')],
-      at: EmberRoutes.channel('a'),
+      at: DesktopRoutes.channel('a'),
     );
     expect(find.byType(ChannelPage), findsOneWidget);
     expect(find.text('Every hour'), findsOneWidget);
@@ -326,7 +326,7 @@ void main() {
       library: [
         LibraryItem(canonicalUrl: 'https://youtu.be/x', title: 'No uploader'),
       ],
-      at: EmberRoutes.channel('a'),
+      at: DesktopRoutes.channel('a'),
     );
     expect(find.textContaining("don't name their channel"), findsOneWidget);
   });
@@ -341,7 +341,7 @@ void main() {
       library: [
         LibraryItem(canonicalUrl: 'https://youtu.be/x', title: 'No uploader'),
       ],
-      at: EmberRoutes.channel('a'),
+      at: DesktopRoutes.channel('a'),
     );
     expect(find.textContaining("don't name their channel"), findsNothing);
   });

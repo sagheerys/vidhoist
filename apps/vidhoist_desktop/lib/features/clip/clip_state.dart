@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/vh_media.dart';
 
 import '../../di.dart';
 import '../../router.dart';
@@ -44,7 +44,7 @@ Future<void> openFromList(
 /// [openFromList] for a saved list, which names itself to the player so
 /// its play mode is its own.
 Future<void> playFromList(
-  MTPlayer player,
+  VhPlayer player,
   GoRouter router,
   List<PlaylistItem> list,
   int index, {
@@ -70,13 +70,13 @@ Future<void> playFromList(
       playlistName: playlistName,
     );
   }
-  if (!item.isAudio) router.go(EmberRoutes.item(item.canonicalUrl));
+  if (!item.isAudio) router.go(DesktopRoutes.item(item.canonicalUrl));
 }
 
 /// Plays [item] from [at]: sought if it is the clip playing ([isCurrent]),
 /// otherwise played alone from there, as a click in its transcript does.
 Future<void> playFrom(
-  MTPlayer player,
+  VhPlayer player,
   PlaylistItem item, {
   required bool isCurrent,
   required Duration at,

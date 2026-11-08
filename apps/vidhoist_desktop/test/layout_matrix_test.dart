@@ -27,17 +27,17 @@ import 'package:vidhoist_desktop/features/library/library_page.dart';
 import 'package:vidhoist_desktop/features/library/library_state.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/drop_frame.dart';
-import 'package:vidhoist_desktop/shell/ember_shell.dart';
+import 'package:vidhoist_desktop/shell/desktop_shell.dart';
 import 'package:vidhoist_desktop/shell/key_cap.dart';
 import 'package:vidhoist_desktop/shell/right_panel.dart';
 import 'package:vidhoist_desktop/shell/shell_layout.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/ui_zoom.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'desktop_matrix.dart';
 import 'support/fake_channels.dart';
@@ -128,15 +128,15 @@ final _transcript = Transcript(
 
 /// The provider container behind the screen on display.
 ProviderContainer _container(WidgetTester tester) =>
-    ProviderScope.containerOf(tester.element(find.byType(EmberShell)));
+    ProviderScope.containerOf(tester.element(find.byType(DesktopShell)));
 
 /// Opens the side panel when the window is too narrow to show it beside.
 Future<void> _openPanel(WidgetTester tester) async {
-  if (find.byType(EmberRightPanel).evaluate().isNotEmpty) return;
+  if (find.byType(DesktopRightPanel).evaluate().isNotEmpty) return;
   await tester.tap(
     find.byWidgetPredicate(
       (w) =>
-          w is MTShortcutTooltip &&
+          w is VhShortcutTooltip &&
           (w.message == 'Show side panel' ||
               w.message == 'إظهار اللوحة الجانبية'),
     ),
@@ -232,10 +232,10 @@ ShellHarness _stocked({double zoom = 1.0}) {
 
 /// The stocked lists and channels, one place at a time.
 const _stockedPlaces = [
-  EmberRoutes.playlists,
+  DesktopRoutes.playlists,
   '/playlists/p0',
   '/playlists/p1',
-  EmberRoutes.channels,
+  DesktopRoutes.channels,
   '/channels/s0',
   '/channels/s1',
 ];
@@ -266,11 +266,11 @@ void main() {
     );
   });
 
-  for (final mode in emberLibraryModes) {
+  for (final mode in desktopLibraryModes) {
     testWidgets('the library as ${mode.name}', (tester) async {
       await expectNoOverflow(tester, () {
         final h = ShellHarness(library: _library, withEngine: true);
-        unawaited(h.store.setString(EmberLibraryNotifier.modeKey, mode.name));
+        unawaited(h.store.setString(DesktopLibraryNotifier.modeKey, mode.name));
         return h.app();
       });
     });
@@ -300,11 +300,11 @@ void main() {
   });
 
   for (final place in [
-    EmberRoutes.favorites,
-    EmberRoutes.search,
-    EmberRoutes.playlists,
-    EmberRoutes.channels,
-    EmberRoutes.settings,
+    DesktopRoutes.favorites,
+    DesktopRoutes.search,
+    DesktopRoutes.playlists,
+    DesktopRoutes.channels,
+    DesktopRoutes.settings,
   ]) {
     testWidgets('the place $place', (tester) async {
       await expectNoOverflow(
@@ -351,7 +351,7 @@ void main() {
         // Its top edge: a card the drag just brought in may be cut below.
         await tester.tapAt(
           tester.getRect(find.byType(LibraryItemView).first).topCenter +
-              const Offset(0, MTSpace.sm),
+              const Offset(0, VhSpace.sm),
           buttons: kSecondaryMouseButton,
           kind: PointerDeviceKind.mouse,
         );
@@ -378,7 +378,7 @@ void main() {
                 Positioned.fill(
                   child: Builder(
                     builder: (context) =>
-                        DropFrame(label: context.mtl.desktopDropLinks),
+                        DropFrame(label: context.vhl.desktopDropLinks),
                   ),
                 ),
               ],
@@ -412,7 +412,7 @@ void main() {
       () => _stocked().app(),
       then: (tester) async {
         unawaited(
-          showDiscoverDialog(tester.element(find.byType(EmberSidebar))),
+          showDiscoverDialog(tester.element(find.byType(DesktopSidebar))),
         );
         await tester.pumpAndSettle();
         expect(find.byType(KeyCap), findsWidgets);
@@ -438,7 +438,7 @@ void main() {
           await tester.tap(
             find.byWidgetPredicate(
               (w) =>
-                  w is MTShortcutTooltip &&
+                  w is VhShortcutTooltip &&
                   (w.message == 'Add link' || w.message == 'إضافة رابط'),
             ),
           );
@@ -485,7 +485,7 @@ void main() {
     h.player.showPlaying(_queue, playing: false);
     await tester.pumpAndSettle();
     GoRouter.of(tester.element(find.byType(LibraryPage)))
-        .go(EmberRoutes.reading(_url));
+        .go(DesktopRoutes.reading(_url));
     await tester.pumpAndSettle();
     // With its find bar open, the tallest it gets.
     await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
@@ -506,7 +506,7 @@ void main() {
   /// The clip page with its chapters listed beneath.
   Future<void> chapters(WidgetTester tester) async {
     GoRouter.of(tester.element(find.byType(LibraryPage)))
-        .go(EmberRoutes.item(_url));
+        .go(DesktopRoutes.item(_url));
   }
 
   /// Both rooms read the same words; only which clip they belong to differs.
@@ -519,7 +519,8 @@ void main() {
 
   /// The library statistics, from the library's counts.
   Future<void> stats(WidgetTester tester) async {
-    GoRouter.of(tester.element(find.byType(LibraryPage))).go(EmberRoutes.stats);
+    GoRouter.of(tester.element(find.byType(LibraryPage)))
+        .go(DesktopRoutes.stats);
   }
 
   testWidgets('the library statistics', (tester) async {
@@ -556,7 +557,7 @@ void main() {
           h.player.showPlaying([item], playing: false);
           await tester.pumpAndSettle();
           GoRouter.of(tester.element(find.byType(LibraryPage)))
-              .go(EmberRoutes.item(item.canonicalUrl));
+              .go(DesktopRoutes.item(item.canonicalUrl));
           if (full) h.controls.setFullScreen(true);
         },
       );
@@ -579,11 +580,11 @@ void main() {
   // The interface size at both ends, each in its smallest window, and the
   // laptop that only fits at 90%.
   for (final (zoom, window) in [
-    (0.8, const EmberWindowSize('smallest at 80%', Size(768, 480))),
-    (1.5, const EmberWindowSize('smallest at 150%', Size(1440, 900))),
-    (0.9, const EmberWindowSize('laptop 1093x566 at 90%', Size(1093, 566))),
+    (0.8, const DesktopWindowSize('smallest at 80%', Size(768, 480))),
+    (1.5, const DesktopWindowSize('smallest at 150%', Size(1440, 900))),
+    (0.9, const DesktopWindowSize('laptop 1093x566 at 90%', Size(1093, 566))),
   ]) {
-    for (final mode in emberLibraryModes) {
+    for (final mode in desktopLibraryModes) {
       testWidgets('the library as ${mode.name}, ${window.name}', (
         tester,
       ) async {
@@ -593,7 +594,9 @@ void main() {
             withEngine: true,
             zoom: UiZoom(zoom),
           );
-          unawaited(h.store.setString(EmberLibraryNotifier.modeKey, mode.name));
+          unawaited(
+            h.store.setString(DesktopLibraryNotifier.modeKey, mode.name),
+          );
           return h.app();
         }, windows: [window]);
       });

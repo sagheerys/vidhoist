@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/folders_data.dart';
 import 'package:vidhoist_desktop/di.dart';
@@ -21,7 +21,7 @@ void main() {
   late Directory root;
   late MemoryKeyValueStore store;
   late _Folders folders;
-  final l = lookupMTLocalizations(const Locale('en'));
+  final l = lookupVhLocalizations(const Locale('en'));
 
   const youtube =
       '# Netscape HTTP Cookie File\n'
@@ -48,12 +48,12 @@ void main() {
       cookiesFileTargetProvider.overrideWithValue(target()),
     ],
     child: MaterialApp(
-      localizationsDelegates: MTLocalizations.localizationsDelegates,
-      supportedLocales: MTLocalizations.supportedLocales,
-      theme: mtDesktopTheme(MTVariant.superApp, brightness),
+      localizationsDelegates: VhLocalizations.localizationsDelegates,
+      supportedLocales: VhLocalizations.supportedLocales,
+      theme: vhDesktopTheme(VhVariant.desktop, brightness),
       home: const Scaffold(
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(MTSpace.lg),
+          padding: EdgeInsets.all(VhSpace.lg),
           child: CookiesPane(),
         ),
       ),
@@ -114,13 +114,13 @@ void main() {
   testWidgets('a browser is chosen, and none again', (tester) async {
     await tester.pumpWidget(app());
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(EmberSegment, 'Firefox'));
+    await tester.tap(find.widgetWithText(DesktopSegment, 'Firefox'));
     await tester.pumpAndSettle();
     expect(
       await store.getString(EngineOptionsNotifier.cookiesBrowserKey),
       'firefox',
     );
-    await tester.tap(find.widgetWithText(EmberSegment, l.desktopCookiesNone));
+    await tester.tap(find.widgetWithText(DesktopSegment, l.desktopCookiesNone));
     await tester.pumpAndSettle();
     expect(await store.getString(EngineOptionsNotifier.cookiesBrowserKey), '');
   });
@@ -133,8 +133,8 @@ void main() {
         tester,
         () => app(brightness: brightness),
         windows: const [
-          EmberWindowSize('smallest 960x600', Size(960, 600)),
-          EmberWindowSize('laptop 1440x900', Size(1440, 900)),
+          DesktopWindowSize('smallest 960x600', Size(960, 600)),
+          DesktopWindowSize('laptop 1440x900', Size(1440, 900)),
         ],
       );
     });

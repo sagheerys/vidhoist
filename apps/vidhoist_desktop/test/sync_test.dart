@@ -11,8 +11,8 @@ import 'package:vidhoist_desktop/data/sync_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'support/shell_harness.dart';
 
@@ -84,7 +84,7 @@ void main() {
           keyValueStoreProvider.overrideWithValue(store),
           transcriptStoreProvider.overrideWithValue(transcripts),
           loggerProvider.overrideWithValue(
-            MTLogger(filePath: '${root.path}/log.txt'),
+            VhLogger(filePath: '${root.path}/log.txt'),
           ),
           backupFolderProvider.overrideWithValue(
             Directory('${root.path}/backup'),
@@ -99,7 +99,7 @@ void main() {
         'computer writes its own file beside them', () async {
       await _phoneWrote(folder);
       await c.read(tagsIndexProvider).toggleTag(_trip, 'nature');
-      await c.read(emberSyncProvider).run();
+      await c.read(desktopSyncProvider).run();
 
       expect((await c.read(tagsIndexProvider).tagsOf(_trip)).toSet(), {
         'travel',
@@ -116,7 +116,7 @@ void main() {
 
     test('**the guard**: a transcript this computer fetched is published; '
         "one imported from a phone's file is not", () async {
-      await c.read(emberSyncProvider).run();
+      await c.read(desktopSyncProvider).run();
       final id = c.read(syncSettingsProvider).value!.deviceId!;
       final ref = c.read(_refProvider);
       await keepTranscript(
@@ -143,13 +143,13 @@ void main() {
 
     test('**the guard**: a file a day old is written again though nothing '
         'changed, so the others do not take this computer for gone', () async {
-      await c.read(emberSyncProvider).run();
+      await c.read(desktopSyncProvider).run();
       final id = c.read(syncSettingsProvider).value!.deviceId!;
       final old = DateTime.now()
           .subtract(const Duration(days: 2))
           .millisecondsSinceEpoch;
       await folder.write((await folder.read(id))!.copyWith(writtenAt: old));
-      await c.read(emberSyncProvider).run();
+      await c.read(desktopSyncProvider).run();
       expect((await folder.read(id))!.writtenAt, greaterThan(old));
     });
 
@@ -172,14 +172,14 @@ void main() {
               .join(';');
       final before = state();
       await _phoneWrote(folder);
-      await c.read(emberSyncProvider).run();
+      await c.read(desktopSyncProvider).run();
       expect(state(), before);
     });
 
     test('turned off, nothing is read or written', () async {
       await _phoneWrote(folder);
       await c.read(syncSettingsProvider.notifier).turnOff();
-      await c.read(emberSyncProvider).run();
+      await c.read(desktopSyncProvider).run();
       expect(await c.read(tagsIndexProvider).tagsOf(_trip), isEmpty);
     });
   });
@@ -206,7 +206,7 @@ void main() {
         library: const [],
         overrides: [
           loggerProvider.overrideWithValue(
-            MTLogger(filePath: '${root.path}/log.txt'),
+            VhLogger(filePath: '${root.path}/log.txt'),
           ),
         ],
       );
@@ -218,7 +218,7 @@ void main() {
       await tester.runAsync(() => _phoneWrote(folder, ago: phoneAgo));
       await tester.pumpWidget(h.app());
       await settle(tester);
-      GoRouter.of(tester.element(find.byType(EmberSidebar)))
+      GoRouter.of(tester.element(find.byType(DesktopSidebar)))
           .go('/settings/sync');
       await settle(tester);
       return h;

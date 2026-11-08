@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/downloads_data.dart';
 import 'download_glyph.dart';
@@ -16,16 +16,16 @@ class DownloadsButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final active = ref.watch(activeDownloadsProvider);
     final label = active > 0
         ? '${l.desktopDownloads} · ${l.activeDownloadsCount(active)}'
         : l.desktopDownloads;
-    return MTShortcutTooltip(
+    return VhShortcutTooltip(
       message: label,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: MTSpace.xxs / 2),
+        padding: const EdgeInsets.symmetric(horizontal: VhSpace.xxs / 2),
         child: IconButton(
           onPressed: () => unawaited(showDownloadsPanel(context)),
           // The count beside the arrow's corner, not over the arrow: Material's
@@ -43,8 +43,8 @@ class DownloadsButton extends ConsumerWidget {
               ),
               if (active > 0)
                 PositionedDirectional(
-                  top: -MTSpace.xs,
-                  end: -MTSpace.sm,
+                  top: -VhSpace.xs,
+                  end: -VhSpace.sm,
                   child: ExcludeSemantics(child: _Count(active)),
                 ),
             ],
@@ -63,22 +63,22 @@ class _Count extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return Container(
-      constraints: const BoxConstraints(minWidth: MTSpace.lg),
-      padding: const EdgeInsets.symmetric(horizontal: MTSpace.xxs),
+      constraints: const BoxConstraints(minWidth: VhSpace.lg),
+      padding: const EdgeInsets.symmetric(horizontal: VhSpace.xxs),
       decoration: BoxDecoration(
         color: p.accent,
-        borderRadius: BorderRadius.circular(MTSpace.lg),
-        border: Border.all(color: p.bg, width: MTSpace.xxs / 2),
+        borderRadius: BorderRadius.circular(VhSpace.lg),
+        border: Border.all(color: p.bg, width: VhSpace.xxs / 2),
       ),
       // A new number rises into place from below as the old one leaves, so
       // the count is seen to change.
       child: ClipRect(
         child: AnimatedSwitcher(
-          duration: mtMotionDuration(context, MTMotion.page),
-          switchInCurve: MTMotion.entrance,
-          switchOutCurve: MTMotion.exit,
+          duration: vhMotionDuration(context, VhMotion.page),
+          switchInCurve: VhMotion.entrance,
+          switchOutCurve: VhMotion.exit,
           transitionBuilder: (child, motion) => FadeTransition(
             opacity: motion,
             child: SlideTransition(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'data/appearance_data.dart';
 import 'data/system_media.dart';
@@ -18,15 +18,15 @@ import 'features/settings/settings_place.dart';
 import 'features/stats/stats_page.dart';
 import 'router.dart';
 import 'shell/shell_metrics.dart';
-import 'shell/ember_shell.dart';
+import 'shell/desktop_shell.dart';
 import 'shell/key_gate.dart';
 import 'shell/zoom_frame.dart';
 
 /// The Vidhoist Ember root: the Wahaj desktop theme in Super's identity,
 /// day or night and the language as chosen in Appearance (Windows' own by
 /// default), plus the router.
-class EmberApp extends ConsumerStatefulWidget {
-  const EmberApp({super.key, this.router, this.locale, this.initialLocation});
+class DesktopApp extends ConsumerStatefulWidget {
+  const DesktopApp({super.key, this.router, this.locale, this.initialLocation});
 
   /// For tests; the app builds its own otherwise.
   final GoRouter? router;
@@ -40,10 +40,10 @@ class EmberApp extends ConsumerStatefulWidget {
   final String? initialLocation;
 
   @override
-  ConsumerState<EmberApp> createState() => _EmberAppState();
+  ConsumerState<DesktopApp> createState() => _DesktopAppState();
 }
 
-class _EmberAppState extends ConsumerState<EmberApp> {
+class _DesktopAppState extends ConsumerState<DesktopApp> {
   @override
   void initState() {
     super.initState();
@@ -57,9 +57,9 @@ class _EmberAppState extends ConsumerState<EmberApp> {
   late final GoRouter _router =
       widget.router ??
       buildEmberRouter(
-        initialLocation: widget.initialLocation ?? EmberRoutes.library,
+        initialLocation: widget.initialLocation ?? DesktopRoutes.library,
         shell: (_, state, child) =>
-            EmberShell(location: state.uri, child: child),
+            DesktopShell(location: state.uri, child: child),
         library: (only) =>
             LibraryPage(key: ValueKey(only), scope: LibraryPage.scopeOf(only)),
         item: (url) => ClipPage(key: ValueKey(url), canonicalUrl: url ?? ''),
@@ -74,8 +74,8 @@ class _EmberAppState extends ConsumerState<EmberApp> {
         stats: (_) => const StatsPage(),
         settings: (pane) => SettingsPlace(
           pane:
-              EmberSettingsPane.values.asNameMap()[pane] ??
-              EmberSettingsPane.engine,
+              DesktopSettingsPane.values.asNameMap()[pane] ??
+              DesktopSettingsPane.engine,
         ),
       );
 
@@ -85,33 +85,34 @@ class _EmberAppState extends ConsumerState<EmberApp> {
     // layouts may take their desktop branch here and never on a phone.
     final look = ref.watch(appearanceProvider);
     final chosen = look.locale;
-    return MTDesktopApp(
-      noticeLift: EmberShellSize.playerBar,
+    return VhDesktopApp(
+      noticeLift: DesktopShellSize.playerBar,
       child: MaterialApp.router(
-        title: EmberIdentity.displayName,
+        title: DesktopIdentity.displayName,
         debugShowCheckedModeBanner: false,
-        theme: mtDesktopTheme(MTVariant.superApp, Brightness.light),
-        darkTheme: mtDesktopTheme(MTVariant.superApp, Brightness.dark),
+        theme: vhDesktopTheme(VhVariant.desktop, Brightness.light),
+        darkTheme: vhDesktopTheme(VhVariant.desktop, Brightness.dark),
         // Chosen by Flutter itself while Windows' high contrast is on.
-        highContrastTheme: mtDesktopTheme(
-          MTVariant.superApp,
+        highContrastTheme: vhDesktopTheme(
+          VhVariant.desktop,
           Brightness.light,
           highContrast: true,
         ),
-        highContrastDarkTheme: mtDesktopTheme(
-          MTVariant.superApp,
+        highContrastDarkTheme: vhDesktopTheme(
+          VhVariant.desktop,
           Brightness.dark,
           highContrast: true,
         ),
         themeMode: look.theme,
         locale: widget.locale ?? (chosen == null ? null : Locale(chosen)),
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
-        localeListResolutionCallback: mtLocaleResolution,
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
+        localeListResolutionCallback: vhLocaleResolution,
         routerConfig: _router,
         builder: (context, child) => KeyGate(
-          child: EmberZoomFrame(
-            onChangeZoom: () => _router.go(EmberSettingsPane.appearance.route),
+          child: DesktopZoomFrame(
+            onChangeZoom: () =>
+                _router.go(DesktopSettingsPane.appearance.route),
             child: child!,
           ),
         ),
@@ -122,21 +123,21 @@ class _EmberAppState extends ConsumerState<EmberApp> {
 
 /// The Wahaj component sheet for review by eye (`--gallery`, with
 /// `--night` and `--ltr`), outside the app's storage and player.
-class EmberGalleryApp extends StatelessWidget {
-  const EmberGalleryApp({super.key, this.night = false, this.arabic = true});
+class DesktopGalleryApp extends StatelessWidget {
+  const DesktopGalleryApp({super.key, this.night = false, this.arabic = true});
 
   final bool night;
   final bool arabic;
 
   @override
   Widget build(BuildContext context) {
-    return MTDesktopApp(
+    return VhDesktopApp(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: mtDesktopTheme(MTVariant.superApp, Brightness.light),
-        darkTheme: mtDesktopTheme(MTVariant.superApp, Brightness.dark),
+        theme: vhDesktopTheme(VhVariant.desktop, Brightness.light),
+        darkTheme: vhDesktopTheme(VhVariant.desktop, Brightness.dark),
         themeMode: night ? ThemeMode.dark : ThemeMode.light,
-        home: MTWahajGallery(arabic: arabic),
+        home: VhGallery(arabic: arabic),
       ),
     );
   }

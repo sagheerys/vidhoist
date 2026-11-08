@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/volume.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'support/shell_harness.dart';
 

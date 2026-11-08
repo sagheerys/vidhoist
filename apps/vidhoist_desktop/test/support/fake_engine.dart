@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// A download engine that records what it is given and runs nothing; a
 /// test moves a task along with [advance], [fail] or [finish].
@@ -36,7 +36,7 @@ class FakeEngine extends Fake implements LocalDownloadEngine {
     _updates.add(task);
   }
 
-  void fail(DownloadTask task, MTApiException error) =>
+  void fail(DownloadTask task, VhApiException error) =>
       _put(task.copyWith(phase: TaskPhase.failed, error: error));
 
   /// As if yt-dlp reported [progress] on it.

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/error_text.dart';
 import '../../shell/player_controls.dart';
@@ -88,10 +88,10 @@ class _SelectionFrameState extends ConsumerState<SelectionFrame> {
     if (chosen.length > 1) {
       // Over the bar it would hide the bar's last buttons while it shows.
       final bar = _bar.currentContext?.size?.height ?? 0;
-      showMTNotice(
+      showVhNotice(
         context,
-        message: context.mtl.desktopCopyOneClip,
-        raise: bar + MTSpace.lg,
+        message: context.vhl.desktopCopyOneClip,
+        raise: bar + VhSpace.lg,
       );
       return true;
     }
@@ -124,25 +124,25 @@ class _SelectionFrameState extends ConsumerState<SelectionFrame> {
         widget.child,
         if (_shown.isNotEmpty)
           PositionedDirectional(
-            start: MTSpace.xl,
-            end: MTSpace.xl,
-            bottom: MTSpace.lg,
+            start: VhSpace.xl,
+            end: VhSpace.xl,
+            bottom: VhSpace.lg,
             child: IgnorePointer(
               ignoring: !shown,
               child: AnimatedSlide(
                 offset: shown ? Offset.zero : const Offset(0, 0.25),
-                duration: mtMotionDuration(
+                duration: vhMotionDuration(
                   context,
-                  shown ? MTMotion.page : MTMotion.fast,
+                  shown ? VhMotion.page : VhMotion.fast,
                 ),
-                curve: shown ? MTMotion.entrance : MTMotion.exit,
+                curve: shown ? VhMotion.entrance : VhMotion.exit,
                 child: AnimatedOpacity(
                   opacity: shown ? 1 : 0,
-                  duration: mtMotionDuration(
+                  duration: vhMotionDuration(
                     context,
-                    shown ? MTMotion.page : MTMotion.fast,
+                    shown ? VhMotion.page : VhMotion.fast,
                   ),
-                  curve: shown ? MTMotion.entrance : MTMotion.exit,
+                  curve: shown ? VhMotion.entrance : VhMotion.exit,
                   onEnd: () {
                     if (!shown && mounted) setState(() => _shown = const []);
                   },
@@ -166,8 +166,8 @@ class _Bar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final text = Theme.of(context).textTheme;
     final selection = ref.read(librarySelectionProvider.notifier);
     final withFile = items.where((i) => i.isOffline).toList();
@@ -176,27 +176,27 @@ class _Bar extends ConsumerWidget {
       elevation: 6,
       shadowColor: p.ink.withValues(alpha: 0.2),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(MTCorners.desktop.card),
-        side: BorderSide(color: p.line2, width: MTThemeX.of(context).hairline),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.card),
+        side: BorderSide(color: p.line2, width: VhThemeX.of(context).hairline),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: MTSpace.md,
-          vertical: MTSpace.xs,
+          horizontal: VhSpace.md,
+          vertical: VhSpace.xs,
         ),
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: MTSpace.xs,
+          spacing: VhSpace.xs,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.only(end: MTSpace.sm),
+              padding: const EdgeInsetsDirectional.only(end: VhSpace.sm),
               child: Text(
                 l.desktopSelectedCount(items.length),
                 style: text.labelLarge?.copyWith(color: p.ink),
               ),
             ),
-            EmberPlayerControl(
-              icon: MTIcons.play,
+            DesktopPlayerControl(
+              icon: VhIcons.play,
               label: l.play,
               onTap: () => unawaited(
                 openFromList(ref, GoRouter.of(context), [
@@ -204,8 +204,8 @@ class _Bar extends ConsumerWidget {
                 ], 0),
               ),
             ),
-            EmberPlayerControl(
-              icon: MTIcons.queue,
+            DesktopPlayerControl(
+              icon: VhIcons.queue,
               label: l.addToPlaylist,
               onTap: () => unawaited(
                 showAddAllToPlaylistDialog(context, [
@@ -213,8 +213,8 @@ class _Bar extends ConsumerWidget {
                 ]),
               ),
             ),
-            EmberPlayerControl(
-              icon: MTIcons.tags,
+            DesktopPlayerControl(
+              icon: VhIcons.tags,
               label: l.tags,
               onTap: () => unawaited(
                 showTagsDialogFor(context, [
@@ -223,13 +223,13 @@ class _Bar extends ConsumerWidget {
               ),
             ),
             if (withFile.isNotEmpty)
-              EmberPlayerControl(
-                icon: MTIcons.trash,
+              DesktopPlayerControl(
+                icon: VhIcons.trash,
                 label: l.delete,
                 onTap: () => unawaited(_delete(context, ref, withFile)),
               ),
-            EmberPlayerControl(
-              icon: MTIcons.close,
+            DesktopPlayerControl(
+              icon: VhIcons.close,
               label: l.desktopClearSelection,
               shortcut: 'Esc',
               onTap: selection.clear,
@@ -246,8 +246,8 @@ class _Bar extends ConsumerWidget {
     WidgetRef ref,
     List<LibraryItem> withFile,
   ) async {
-    final l = context.mtl;
-    final sure = await showMTConfirm(
+    final l = context.vhl;
+    final sure = await showVhConfirm(
       context,
       title: l.delete,
       message: l.desktopDeleteSelectedConfirm(withFile.length),
@@ -264,17 +264,17 @@ class _Bar extends ConsumerWidget {
     } on Object catch (e) {
       // Those deleted before the failure are gone; the rest stay chosen.
       if (context.mounted) {
-        showMTNotice(
+        showVhNotice(
           context,
           message: errorText(l, e),
-          kind: MTNoticeKind.failed,
+          kind: VhNoticeKind.failed,
         );
       }
       return;
     }
     ref.read(librarySelectionProvider.notifier).clear();
     if (context.mounted) {
-      showMTNotice(context, message: l.deletedCount(withFile.length));
+      showVhNotice(context, message: l.deletedCount(withFile.length));
     }
   }
 }

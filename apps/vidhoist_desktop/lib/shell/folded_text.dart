@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// A help text kept to its first [lines], **with "More" to read the rest**.
 /// Under a setting, three hundred characters in a block of small grey type
@@ -21,7 +21,7 @@ class _FoldedTextState extends State<FoldedText> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
+    final l = context.vhl;
     return LayoutBuilder(
       builder: (context, box) {
         final measure = TextPainter(
@@ -45,7 +45,7 @@ class _FoldedTextState extends State<FoldedText> {
               overflow: _open || !long ? null : TextOverflow.ellipsis,
             ),
             if (long)
-              MTLinkButton(
+              VhLinkButton(
                 label: _open ? l.desktopLess : l.desktopMore,
                 onPressed: () => setState(() => _open = !_open),
               ),

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 import 'support/shell_harness.dart';
 
@@ -42,13 +42,13 @@ void main() {
     expect(find.textContaining('Play', findRichText: true), findsWidgets);
 
     for (final route in [
-      EmberRoutes.library,
-      EmberRoutes.playlists,
-      EmberRoutes.item(clip.canonicalUrl),
-      EmberSettingsPane.appearance.route,
-      EmberSettingsPane.downloads.route,
+      DesktopRoutes.library,
+      DesktopRoutes.playlists,
+      DesktopRoutes.item(clip.canonicalUrl),
+      DesktopSettingsPane.appearance.route,
+      DesktopSettingsPane.downloads.route,
     ]) {
-      GoRouter.of(tester.element(find.byType(EmberSidebar))).go(route);
+      GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(route);
       await tester.pumpAndSettle();
       expect(find.byType(OverlayPortal), findsNothing, reason: route);
       expect(find.byType(Tooltip), findsNothing, reason: route);

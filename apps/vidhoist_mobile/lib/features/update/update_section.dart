@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'update_sheet.dart';
 import 'update_state.dart';
@@ -13,8 +13,8 @@ class UpdateSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final state = ref.watch(updateControllerProvider);
     final controller = ref.read(updateControllerProvider.notifier);
@@ -25,8 +25,8 @@ class UpdateSection extends ConsumerWidget {
       children: [
         ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: MTIcon(
-            hasUpdate ? MTIcons.saveTo : MTIcons.refresh,
+          leading: VhIcon(
+            hasUpdate ? VhIcons.saveTo : VhIcons.refresh,
             // **The accent colour when an update exists**, read from the
             // palette so
             // Super's ember never leaks into Lite's petrol bay.
@@ -46,8 +46,8 @@ class UpdateSection extends ConsumerWidget {
             style: text.bodySmall!.copyWith(color: p.ink3),
           ),
           trailing: state.phase == UpdatePhase.checking
-              ? const MTSpinner(size: 18)
-              : MTIcon(hasUpdate ? MTIcons.forward : MTIcons.refresh),
+              ? const VhSpinner(size: 18)
+              : VhIcon(hasUpdate ? VhIcons.forward : VhIcons.refresh),
           onTap: state.busy
               ? null
               : () async {
@@ -64,16 +64,16 @@ class UpdateSection extends ConsumerWidget {
                   if (after.release != null) {
                     showUpdateSheet(context);
                   } else if (after.failure == UpdateFailure.check) {
-                    showMTSnack(
+                    showVhSnack(
                       context,
                       l10n.updateCheckFailed,
-                      type: MTSnackType.error,
+                      type: VhSnackType.error,
                     );
                   } else if (after.upToDate) {
-                    showMTSnack(
+                    showVhSnack(
                       context,
                       l10n.updateUpToDate,
-                      type: MTSnackType.success,
+                      type: VhSnackType.success,
                     );
                   }
                 },
@@ -82,9 +82,9 @@ class UpdateSection extends ConsumerWidget {
         // after the update, or never saw it.
         ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: MTIcon(MTIcons.sparkle, color: p.ink2),
+          leading: VhIcon(VhIcons.sparkle, color: p.ink2),
           title: Text(l10n.whatsNewThisVersion),
-          trailing: const MTIcon(MTIcons.forward, matchTextDirection: true),
+          trailing: const VhIcon(VhIcons.forward, matchTextDirection: true),
           onTap: () => showWhatsNewNow(context, ref),
         ),
         SwitchListTile(
@@ -99,13 +99,13 @@ class UpdateSection extends ConsumerWidget {
   }
 
   String _subtitle(BuildContext context, UpdateState state) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final release = state.release;
     if (release != null) return release.version.toString();
     if (state.phase == UpdatePhase.checking) return l10n.updateChecking;
     final at = state.checkedAt;
     return l10n.lastCheckedAt(
-      at == null ? l10n.updateNever : mtTimeAgo(context, at),
+      at == null ? l10n.updateNever : vhTimeAgo(context, at),
     );
   }
 }

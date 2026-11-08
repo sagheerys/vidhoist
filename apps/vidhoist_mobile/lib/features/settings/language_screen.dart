@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 
@@ -14,7 +14,7 @@ import '../../di.dart';
 ///
 /// "Follow the system" comes first and carries no language code: it is
 /// **the absence of a choice**, not a particular language. The languages
-/// are read from [MTLocalizations.supportedLocales] rather than a
+/// are read from [VhLocalizations.supportedLocales] rather than a
 /// hand-written list, so adding an `app_xx.arb` makes its language appear
 /// here automatically.
 class LanguageScreen extends ConsumerWidget {
@@ -22,8 +22,8 @@ class LanguageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final selected = ref.watch(settingsProvider).localeCode;
     final notifier = ref.read(settingsProvider.notifier);
 
@@ -37,20 +37,20 @@ class LanguageScreen extends ConsumerWidget {
       subtitle: subtitle == null
           ? null
           : Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-      trailing: checked ? MTIcon(MTIcons.check, color: p.ink) : null,
+      trailing: checked ? VhIcon(VhIcons.check, color: p.ink) : null,
       onTap: onTap,
     );
 
     final codes = [
-      for (final locale in MTLocalizations.supportedLocales)
+      for (final locale in VhLocalizations.supportedLocales)
         locale.languageCode,
     ]..sort();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.language)),
-      body: MTReadableWidth(
+      body: VhReadableWidth(
         child: ListView(
-          padding: const EdgeInsets.only(bottom: MTSpace.xxl),
+          padding: const EdgeInsets.only(bottom: VhSpace.xxl),
           children: [
             tile(
               title: l10n.languageSystem,
@@ -61,7 +61,7 @@ class LanguageScreen extends ConsumerWidget {
             const Divider(height: 1),
             for (final code in codes)
               tile(
-                title: mtLanguageName(code),
+                title: vhLanguageName(code),
                 checked: selected == code,
                 onTap: () => notifier.setLocale(code),
               ),

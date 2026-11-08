@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../router.dart';
 import '../lists/list_dialogs.dart';
@@ -36,31 +36,31 @@ class ClipActionRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final actions = ref.read(clipActionsProvider);
     final audioOnly = ref.watch(audioOnlyProvider);
     final theater = ref.watch(theaterProvider);
     final favorite = entry?.favorite ?? false;
     final url = item.canonicalUrl;
     return Wrap(
-      spacing: MTSpace.sm,
-      runSpacing: MTSpace.sm,
+      spacing: VhSpace.sm,
+      runSpacing: VhSpace.sm,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         RoundAction(
           label: favorite ? l.removeFromFavorites : l.addToFavorites,
-          icon: favorite ? MTIcons.favoriteOn : MTIcons.favorite,
+          icon: favorite ? VhIcons.favoriteOn : VhIcons.favorite,
           on: favorite,
           onTap: () => unawaited(actions.toggleFavorite(url)),
         ),
         RoundAction(
           label: l.tags,
-          icon: MTIcons.tags,
+          icon: VhIcons.tags,
           onTap: () => unawaited(showTagsDialog(context, url)),
         ),
         RoundAction(
           label: l.addToPlaylist,
-          icon: MTIcons.queue,
+          icon: VhIcons.queue,
           onTap: () => unawaited(showAddToPlaylistDialog(context, item)),
         ),
         WatchGroup(
@@ -68,7 +68,7 @@ class ClipActionRow extends ConsumerWidget {
             if (isCurrent && !item.isAudio)
               WatchChoice(
                 label: l.audioOnly,
-                icon: MTIcons.headphones,
+                icon: VhIcons.headphones,
                 on: audioOnly,
                 onTap: () => unawaited(
                   ref.read(audioOnlyProvider.notifier).set(!audioOnly),
@@ -77,28 +77,28 @@ class ClipActionRow extends ConsumerWidget {
             if (!item.isAudio) ...[
               WatchChoice(
                 label: l.desktopTheater,
-                icon: MTIcons.theater,
+                icon: VhIcons.theater,
                 on: theater,
                 onTap: () =>
                     ref.read(theaterProvider.notifier).state = !theater,
               ),
               WatchChoice(
                 label: l.enterFullscreen,
-                icon: MTIcons.fullscreen,
+                icon: VhIcons.fullscreen,
                 onTap: onFullScreen,
               ),
             ],
             WatchChoice(
               label: l.desktopReadingRoom,
-              icon: MTIcons.reading,
-              onTap: () => GoRouter.of(context).go(EmberRoutes.reading(url)),
+              icon: VhIcons.reading,
+              onTap: () => GoRouter.of(context).go(DesktopRoutes.reading(url)),
             ),
           ],
         ),
         Builder(
           builder: (button) => RoundAction(
             label: l.desktopMore,
-            icon: MTIcons.more,
+            icon: VhIcons.more,
             onTap: () {
               final box = button.findRenderObject()! as RenderBox;
               unawaited(
@@ -129,14 +129,14 @@ class RoundAction extends StatelessWidget {
   });
 
   final String label;
-  final MTIconData icon;
+  final VhIconData icon;
   final VoidCallback onTap;
   final bool on;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    return MTShortcutTooltip(
+    final p = VhThemeX.of(context).palette;
+    return VhShortcutTooltip(
       message: label,
       child: Semantics(
         button: true,
@@ -148,18 +148,18 @@ class RoundAction extends StatelessWidget {
           shape: CircleBorder(
             side: BorderSide(
               color: p.line2,
-              width: MTThemeX.of(context).hairline,
+              width: VhThemeX.of(context).hairline,
             ),
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: onTap,
             child: SizedBox.square(
-              dimension: MTDensity.desktop.iconButton,
+              dimension: VhDensity.desktop.iconButton,
               child: Center(
-                child: MTIconSwap(
+                child: VhIconSwap(
                   icon: icon,
-                  size: MTDensity.desktop.icon,
+                  size: VhDensity.desktop.icon,
                   color: on ? p.favorite : p.ink2,
                 ),
               ),

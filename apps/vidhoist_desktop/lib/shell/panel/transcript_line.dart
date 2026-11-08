@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// One line of the side panel's transcript: its time and its words, lit
 /// while it is being said, with the words the find bar found marked.
@@ -27,9 +27,9 @@ class TranscriptLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final corner = BorderRadius.circular(MTCorners.desktop.chip);
+    final corner = BorderRadius.circular(VhCorners.desktop.chip);
     final words = line.text.trim();
     final style = text.bodySmall?.copyWith(
       color: current ? p.ink : p.ink2,
@@ -42,10 +42,10 @@ class TranscriptLine extends StatelessWidget {
         onTap: onTap,
         borderRadius: corner,
         child: AnimatedContainer(
-          duration: mtMotionDuration(context, MTMotion.fast),
+          duration: vhMotionDuration(context, VhMotion.fast),
           padding: const EdgeInsets.symmetric(
-            horizontal: MTSpace.sm,
-            vertical: MTSpace.xs,
+            horizontal: VhSpace.sm,
+            vertical: VhSpace.xs,
           ),
           decoration: BoxDecoration(
             color: current ? p.accentSoft : null,
@@ -55,9 +55,9 @@ class TranscriptLine extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: MTSpace.xxl * 2,
+                width: VhSpace.xxl * 2,
                 child: Text(
-                  mtFormatDuration(line.start),
+                  vhFormatDuration(line.start),
                   // Grey down the list, the accent only beside the line
                   // being heard, as in the reading room.
                   style: text.labelSmall?.tabular.copyWith(
@@ -70,19 +70,19 @@ class TranscriptLine extends StatelessWidget {
                 // The words take their new colour and weight at the pace
                 // the background does, so the line does not blink.
                 child: AnimatedDefaultTextStyle(
-                  duration: mtMotionDuration(context, MTMotion.fast),
+                  duration: vhMotionDuration(context, VhMotion.fast),
                   style: style ?? const TextStyle(),
                   child: marks.isEmpty
                       ? Text(
                           words,
-                          textDirection: mtTextDirectionOf(
+                          textDirection: vhTextDirectionOf(
                             words,
                             Directionality.of(context),
                           ),
                         )
                       : Text.rich(
                           TextSpan(children: _spans(words, p)),
-                          textDirection: mtTextDirectionOf(
+                          textDirection: vhTextDirectionOf(
                             words,
                             Directionality.of(context),
                           ),
@@ -96,7 +96,7 @@ class TranscriptLine extends StatelessWidget {
     );
   }
 
-  List<TextSpan> _spans(String words, MTPalette p) {
+  List<TextSpan> _spans(String words, VhPalette p) {
     final spans = <TextSpan>[];
     var at = 0;
     for (final mark in marks) {

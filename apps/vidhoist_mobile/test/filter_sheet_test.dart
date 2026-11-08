@@ -7,13 +7,13 @@ import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/library_chips.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/sort_sheet.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 import 'widget_test.dart' show sample;
 
-import 'wahaj_finder.dart';
+import 'icon_finder.dart';
 
 /// **One chip row above the list** (mobile plan 2026-10-31): the platform
 /// row moved into the sort sheet, and a chosen platform shows in the first
@@ -24,7 +24,7 @@ void main() {
   List<Override> overrides() => [
     keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
     secretStoreProvider.overrideWithValue(MemorySecretStore()),
-    initialSettingsProvider.overrideWithValue(const LiteSettings()),
+    initialSettingsProvider.overrideWithValue(const PhoneSettings()),
     localMediaProvider.overrideWith(
       (ref) async => [
         sample('a'),
@@ -37,9 +37,9 @@ void main() {
   Widget app(Widget below) => ProviderScope(
     overrides: overrides(),
     child: MaterialApp(
-      theme: mtTheme(MTVariant.lite, Brightness.light),
-      localizationsDelegates: MTLocalizations.localizationsDelegates,
-      supportedLocales: MTLocalizations.supportedLocales,
+      theme: vhTheme(VhVariant.phone, Brightness.light),
+      localizationsDelegates: VhLocalizations.localizationsDelegates,
+      supportedLocales: VhLocalizations.supportedLocales,
       home: Scaffold(
         body: Consumer(
           builder: (context, ref, _) {
@@ -87,7 +87,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.widgetWithText(InputChip, 'YouTube'), findsOneWidget);
 
-    await tester.tap(byWahaj(MTIcons.close));
+    await tester.tap(byVhIcon(VhIcons.close));
     await tester.pumpAndSettle();
     expect(container.read(libraryViewProvider).platform, isNull);
     expect(find.byType(InputChip), findsNothing);
@@ -98,7 +98,7 @@ void main() {
     await tester.pumpWidget(
       app(
         Consumer(
-          builder: (context, ref, _) => MTFilterButton(
+          builder: (context, ref, _) => VhFilterButton(
             tooltip: 'Sort and platform',
             active: ref.watch(
               libraryViewProvider.select((o) => o.platform != null),
@@ -142,9 +142,9 @@ void main() {
       () => ProviderScope(
         overrides: overrides(),
         child: MaterialApp(
-          theme: mtTheme(MTVariant.lite, Brightness.light),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
           home: const _OpensSheet(),
         ),
       ),

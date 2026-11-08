@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 
@@ -18,7 +18,7 @@ class _NoSecrets implements SecretStore {
 void main() {
   test('IPv4 and subtitles are on until turned off, and stay as set', () async {
     final store = MemoryKeyValueStore();
-    final fresh = await LiteSettings.load(store);
+    final fresh = await PhoneSettings.load(store);
     expect(fresh.forceIpv4, isTrue);
     expect(fresh.subtitles, isTrue);
 
@@ -34,16 +34,16 @@ void main() {
     await c.read(settingsProvider.notifier).setSubtitles(false);
     expect(c.read(settingsProvider).forceIpv4, isFalse);
 
-    final again = await LiteSettings.load(store);
+    final again = await PhoneSettings.load(store);
     expect(again.forceIpv4, isFalse);
     expect(again.subtitles, isFalse);
   });
 
   test('subtitles ask for Arabic and English, or nothing', () {
     expect(
-      const LiteSettings().subtitleLanguages,
+      const PhoneSettings().subtitleLanguages,
       SubtitleLanguages.patterns(['ar', 'en']),
     );
-    expect(const LiteSettings(subtitles: false).subtitleLanguages, isEmpty);
+    expect(const PhoneSettings(subtitles: false).subtitleLanguages, isEmpty);
   });
 }

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../data/lists_data.dart';
@@ -32,10 +32,10 @@ class ListsPage extends ConsumerWidget {
     if (name == null || !context.mounted) return;
     await ref.read(listActionsProvider).create(name);
     if (context.mounted) {
-      showMTNotice(
+      showVhNotice(
         context,
-        message: context.mtl.playlistCreated,
-        kind: MTNoticeKind.done,
+        message: context.vhl.playlistCreated,
+        kind: VhNoticeKind.done,
       );
     }
   }
@@ -52,17 +52,22 @@ class ListsPage extends ConsumerWidget {
     SavedPlaylist list,
     Offset at,
   ) async {
-    final l = context.mtl;
+    final l = context.vhl;
     final actions = ref.read(listActionsProvider);
     final choice = await showEmberMenu(context, at, [
-      EmberMenuEntry(
+      DesktopMenuEntry(
         _ListChoice.pin,
         null,
         list.pinned ? l.unpinPlaylist : l.pinPlaylist,
       ),
-      EmberMenuEntry(_ListChoice.rename, null, l.rename),
-      const EmberMenuEntry.divider(),
-      EmberMenuEntry(_ListChoice.delete, MTIcons.trash, l.delete, danger: true),
+      DesktopMenuEntry(_ListChoice.rename, null, l.rename),
+      const DesktopMenuEntry.divider(),
+      DesktopMenuEntry(
+        _ListChoice.delete,
+        VhIcons.trash,
+        l.delete,
+        danger: true,
+      ),
     ]);
     if (choice == null || !context.mounted) return;
     switch (choice) {
@@ -75,15 +80,15 @@ class ListsPage extends ConsumerWidget {
         if (!await confirmDeletePlaylist(context, list.name)) return;
         await actions.delete(list.id);
         if (context.mounted) {
-          showMTNotice(context, message: l.playlistDeleted);
+          showVhNotice(context, message: l.playlistDeleted);
         }
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final router = GoRouter.of(context);
     final lists = ref.watch(playlistsProvider);
@@ -93,8 +98,8 @@ class ListsPage extends ConsumerWidget {
     final covers = {for (final i in library) i.canonicalUrl: i.thumbnail};
 
     Widget section(String title, {String? trailing, Widget? action}) => Padding(
-      padding: const EdgeInsets.only(top: MTSpace.xl, bottom: MTSpace.md),
-      child: EmberSectionHeader(
+      padding: const EdgeInsets.only(top: VhSpace.xl, bottom: VhSpace.md),
+      child: DesktopSectionHeader(
         title: title,
         trailing: trailing,
         action: action,
@@ -104,10 +109,10 @@ class ListsPage extends ConsumerWidget {
     final saved = lists.valueOrNull ?? const <SavedPlaylist>[];
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        MTSpace.xl,
-        MTSpace.sm,
-        MTSpace.xl,
-        MTSpace.xl,
+        VhSpace.xl,
+        VhSpace.sm,
+        VhSpace.xl,
+        VhSpace.xl,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -118,9 +123,9 @@ class ListsPage extends ConsumerWidget {
               Flexible(
                 child: Align(
                   alignment: AlignmentDirectional.centerEnd,
-                  child: EmberPill(
+                  child: DesktopPill(
                     label: l.newPlaylistAction,
-                    icon: MTIcons.plus,
+                    icon: VhIcons.plus,
                     selected: false,
                     onTap: () => unawaited(_create(context, ref)),
                   ),
@@ -130,8 +135,8 @@ class ListsPage extends ConsumerWidget {
           ),
           section(l.smartPlaylists),
           Wrap(
-            spacing: MTSpace.md,
-            runSpacing: MTSpace.md,
+            spacing: VhSpace.md,
+            runSpacing: VhSpace.md,
             children: [
               for (final list in smart)
                 ListCard(
@@ -139,13 +144,13 @@ class ListsPage extends ConsumerWidget {
                     SmartListKind.favorites => l.favorites,
                     SmartListKind.latest => l.latestAdditions,
                   },
-                  subtitle: mtMetaLine([
+                  subtitle: vhMetaLine([
                     l.queueItemsCount(list.items.length),
                     l.autoBuilt,
                   ]),
                   icon: switch (list.kind) {
-                    SmartListKind.favorites => MTIcons.favorite,
-                    SmartListKind.latest => MTIcons.library,
+                    SmartListKind.favorites => VhIcons.favorite,
+                    SmartListKind.latest => VhIcons.library,
                   },
                   covers: [for (final i in list.items.take(4)) i.thumbnail],
                   // The phone plays a smart list at a tap; it has no page.
@@ -175,8 +180,8 @@ class ListsPage extends ConsumerWidget {
                     style: text.bodySmall?.copyWith(color: p.ink3),
                   ),
                 ),
-                const SizedBox(width: MTSpace.sm),
-                MTLinkButton(
+                const SizedBox(width: VhSpace.sm),
+                VhLinkButton(
                   label: l.newPlaylistAction,
                   onPressed: () => unawaited(_create(context, ref)),
                 ),
@@ -184,8 +189,8 @@ class ListsPage extends ConsumerWidget {
             )
           else
             Wrap(
-              spacing: MTSpace.md,
-              runSpacing: MTSpace.md,
+              spacing: VhSpace.md,
+              runSpacing: VhSpace.md,
               children: [
                 for (final list in saved)
                   ListCard(
@@ -197,7 +202,7 @@ class ListsPage extends ConsumerWidget {
                       for (final e in list.items.take(4))
                         covers[e.canonicalUrl] ?? e.cachedThumb,
                     ],
-                    onOpen: () => router.go(EmberRoutes.playlist(list.id)),
+                    onOpen: () => router.go(DesktopRoutes.playlist(list.id)),
                     onPlay: list.items.isEmpty
                         ? null
                         : () => unawaited(_play(context, ref, list.id)),
@@ -209,8 +214,8 @@ class ListsPage extends ConsumerWidget {
             l.yourTags,
             trailing: tags.isEmpty ? null : l.tagsOpenFiltered,
             action: Padding(
-              padding: const EdgeInsetsDirectional.only(start: MTSpace.md),
-              child: MTLinkButton(
+              padding: const EdgeInsetsDirectional.only(start: VhSpace.md),
+              child: VhLinkButton(
                 label: l.manageTags,
                 onPressed: () => unawaited(showManageTagsDialog(context)),
               ),
@@ -223,16 +228,16 @@ class ListsPage extends ConsumerWidget {
             )
           else
             Wrap(
-              spacing: MTSpace.xs,
-              runSpacing: MTSpace.xs,
+              spacing: VhSpace.xs,
+              runSpacing: VhSpace.xs,
               children: [
                 for (final tag in (tags.keys.toList()..sort()))
-                  EmberPill(
-                    label: '${mtName('# $tag')}  ${tags[tag]}',
+                  DesktopPill(
+                    label: '${vhName('# $tag')}  ${tags[tag]}',
                     selected: false,
                     onTap: () {
                       ref.read(libraryViewProvider.notifier).showTag(tag);
-                      router.go(EmberRoutes.library);
+                      router.go(DesktopRoutes.library);
                     },
                   ),
               ],

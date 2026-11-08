@@ -4,7 +4,7 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/downloads_library/library_providers.dart';
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/playlists/playlists_providers.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// **An open playlist shows what was just added or removed** (field report
 /// 2026-09-25): the same fault, and the same fix, as in Super.

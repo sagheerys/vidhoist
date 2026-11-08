@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import '../../di.dart';
 import 'caption_style.dart';
@@ -45,23 +45,23 @@ Future<int> deleteSidecarSubtitles(String mediaPath) async {
 /// Every language of [mediaPath]'s subtitles as the player draws them,
 /// [preferred] base languages first, then the rest as found. Empty when
 /// there are none.
-Future<Map<String, List<MTCaptionLine>>> readSidecarSubtitles(
+Future<Map<String, List<VhCaptionLine>>> readSidecarSubtitles(
   String mediaPath, {
   List<String> preferred = const [],
 }) async {
   final stem = _stem(File(mediaPath).uri.pathSegments.last);
-  final tracks = <String, List<MTCaptionLine>>{};
+  final tracks = <String, List<VhCaptionLine>>{};
   for (final file in sidecarSubtitleFiles(mediaPath)) {
     try {
       final lines = [
         for (final s in SubtitleParser.parse(await file.readAsString()))
-          MTCaptionLine(
+          VhCaptionLine(
             start: s.start,
             end: s.end,
             text: s.text,
             words: s.words == null
                 ? null
-                : [for (final w in s.words!) MTCaptionWord(w.start, w.text)],
+                : [for (final w in s.words!) VhCaptionWord(w.start, w.text)],
           ),
       ];
       if (lines.isNotEmpty) tracks[_languageOf(file, stem)!] = lines;
@@ -81,7 +81,7 @@ Future<Map<String, List<MTCaptionLine>>> readSidecarSubtitles(
       final byRank = rank(a).compareTo(rank(b));
       return byRank != 0 ? byRank : a.length.compareTo(b.length);
     });
-  final kept = <String, List<MTCaptionLine>>{};
+  final kept = <String, List<VhCaptionLine>>{};
   for (final language in order) {
     final lines = tracks[language]!;
     if (!kept.values.any((other) => _sameLines(other, lines))) {
@@ -94,7 +94,7 @@ Future<Map<String, List<MTCaptionLine>>> readSidecarSubtitles(
 /// A clip spoken in Arabic comes with `ar` and `ar-orig` byte for byte the
 /// same (the owner's phone, 2026-11-07); offering both put "AR" in the
 /// switch twice.
-bool _sameLines(List<MTCaptionLine> a, List<MTCaptionLine> b) {
+bool _sameLines(List<VhCaptionLine> a, List<VhCaptionLine> b) {
   if (a.length != b.length) return false;
   for (var i = 0; i < a.length; i++) {
     if (a[i].start != b[i].start || a[i].text != b[i].text) return false;
@@ -109,15 +109,15 @@ bool _sameLines(List<MTCaptionLine> a, List<MTCaptionLine> b) {
 final subtitleCacheProvider =
     NotifierProvider<
       SubtitleCache,
-      Map<String, Map<String, List<MTCaptionLine>>>
+      Map<String, Map<String, List<VhCaptionLine>>>
     >(SubtitleCache.new);
 
 class SubtitleCache
-    extends Notifier<Map<String, Map<String, List<MTCaptionLine>>>> {
+    extends Notifier<Map<String, Map<String, List<VhCaptionLine>>>> {
   final _asked = <String>{};
 
   @override
-  Map<String, Map<String, List<MTCaptionLine>>> build() => const {};
+  Map<String, Map<String, List<VhCaptionLine>>> build() => const {};
 
   /// Reads [path]'s subtitles once; asking again costs nothing.
   void want(String path) {
@@ -153,18 +153,18 @@ class SubtitleChoice {
 /// choices and the transcript of [session]'s clip.
 ///
 /// [subtitles] is the [subtitleCacheProvider] map the player watched.
-MTCaptions? sidecarCaptionsFor(
+VhCaptions? sidecarCaptionsFor(
   WidgetRef ref,
-  Map<String, Map<String, List<MTCaptionLine>>> subtitles,
+  Map<String, Map<String, List<VhCaptionLine>>> subtitles,
   PlaylistItem item, {
-  MTVideoSession? session,
+  VhVideoSession? session,
 }) {
   final tracks = sidecarTracksFor(ref, subtitles, item);
   if (tracks == null) return null;
   final choice = ref.read(subtitleChoiceProvider);
   final settings = ref.read(settingsProvider);
-  late final MTCaptions captions;
-  captions = MTCaptions(
+  late final VhCaptions captions;
+  captions = VhCaptions(
     lines: tracks.values.first,
     tracks: tracks.length > 1 ? tracks : const {},
     shown: choice.shown,
@@ -193,9 +193,9 @@ MTCaptions? sidecarCaptionsFor(
 
 /// [item]'s subtitles by language, the reader's first: null while they
 /// are read and for a clip with none.
-Map<String, List<MTCaptionLine>>? sidecarTracksFor(
+Map<String, List<VhCaptionLine>>? sidecarTracksFor(
   WidgetRef ref,
-  Map<String, Map<String, List<MTCaptionLine>>> subtitles,
+  Map<String, Map<String, List<VhCaptionLine>>> subtitles,
   PlaylistItem item,
 ) {
   final path = item.localPath;

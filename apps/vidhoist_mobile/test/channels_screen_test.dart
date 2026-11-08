@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/channels/channel_actions.dart';
 import 'package:vidhoist_mobile/features/channels/channel_art.dart';
@@ -64,10 +64,10 @@ void main() {
         secretStoreProvider.overrideWithValue(MemorySecretStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
         initialSettingsProvider.overrideWithValue(
-          const LiteSettings(quality: Quality.q720),
+          const PhoneSettings(quality: Quality.q720),
         ),
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/vh_channels.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/vh_channels.log'),
         ),
         downloadBackendProvider.overrideWithValue(backend),
         downloadEngineProvider.overrideWithValue(engine),
@@ -83,10 +83,10 @@ void main() {
       UncontrolledProviderScope(
         container: c,
         child: MaterialApp(
-          theme: mtTheme(MTVariant.lite, Brightness.light),
+          theme: vhTheme(VhVariant.phone, Brightness.light),
           locale: Locale(lang),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
           home: const ChannelsScreen(),
         ),
       );
@@ -294,10 +294,10 @@ void main() {
         () => UncontrolledProviderScope(
           container: c,
           child: MaterialApp(
-            theme: mtTheme(MTVariant.lite, Brightness.light),
+            theme: vhTheme(VhVariant.phone, Brightness.light),
             locale: Locale(lang),
-            localizationsDelegates: MTLocalizations.localizationsDelegates,
-            supportedLocales: MTLocalizations.supportedLocales,
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
             home: _OpensSheet(channel: sub),
           ),
         ),
@@ -312,10 +312,10 @@ void main() {
         () => UncontrolledProviderScope(
           container: c,
           child: MaterialApp(
-            theme: mtTheme(MTVariant.lite, Brightness.light),
+            theme: vhTheme(VhVariant.phone, Brightness.light),
             locale: Locale(lang),
-            localizationsDelegates: MTLocalizations.localizationsDelegates,
-            supportedLocales: MTLocalizations.supportedLocales,
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
             home: const _OpensSheet(),
           ),
         ),

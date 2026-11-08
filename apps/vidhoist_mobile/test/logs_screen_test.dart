@@ -6,11 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/settings/logs_screen.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The log in memory: a real file's reads run outside the test's clock.
-class _MemoryLogger extends MTLogger {
+class _MemoryLogger extends VhLogger {
   _MemoryLogger() : super(filePath: '');
 
   final List<String> lines = [];
@@ -53,13 +53,13 @@ void main() {
           keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
           secretStoreProvider.overrideWithValue(MemorySecretStore()),
           prefsMutexProvider.overrideWithValue(PrefsMutex()),
-          initialSettingsProvider.overrideWithValue(const LiteSettings()),
+          initialSettingsProvider.overrideWithValue(const PhoneSettings()),
           loggerProvider.overrideWithValue(logger),
         ],
         child: MaterialApp(
-          theme: mtTheme(MTVariant.lite, Brightness.light),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
           home: const LogsScreen(),
         ),
       ),
@@ -69,7 +69,7 @@ void main() {
 
   Future<void> write(WidgetTester tester, String line) async {
     await logger.log(line);
-    await tester.pump(MTMotion.medium);
+    await tester.pump(VhMotion.medium);
     await tester.pumpAndSettle();
   }
 

@@ -20,7 +20,7 @@ void main() {
   test('**the guard**: the Start menu shortcut carries the identity the '
       'app gives itself', () {
     final name = define('AppName');
-    expect(name, EmberIdentity.displayName);
+    expect(name, DesktopIdentity.displayName);
     // local_notifier looks for this shortcut, by this name, in the user's
     // Programs folder, and adopts it when its identity matches.
     expect(

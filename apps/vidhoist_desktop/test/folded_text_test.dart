@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/folded_text.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// Long help under a setting keeps to two lines with "More"; a short one
 /// shows no link at all.
 void main() {
   Widget host(String text) => MaterialApp(
-    localizationsDelegates: MTLocalizations.localizationsDelegates,
-    supportedLocales: MTLocalizations.supportedLocales,
-    theme: mtDesktopTheme(MTVariant.superApp, Brightness.light),
+    localizationsDelegates: VhLocalizations.localizationsDelegates,
+    supportedLocales: VhLocalizations.supportedLocales,
+    theme: vhDesktopTheme(VhVariant.desktop, Brightness.light),
     // In a scrolling page, as every settings pane is.
     home: Scaffold(
       body: SingleChildScrollView(

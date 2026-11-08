@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/copied_links.dart';
 import 'package:vidhoist_desktop/data/desktop_habits.dart';
 import 'package:vidhoist_desktop/data/notices.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 import 'support/shell_harness.dart';
 
@@ -23,10 +23,10 @@ class _Clipboard implements ClipboardPort {
 }
 
 class _Notices implements NoticePort {
-  final shown = <EmberNotice>[];
+  final shown = <DesktopNotice>[];
 
   @override
-  Future<void> show(EmberNotice notice) async => shown.add(notice);
+  Future<void> show(DesktopNotice notice) async => shown.add(notice);
 }
 
 void main() {

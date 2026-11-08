@@ -1,5 +1,5 @@
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 /// The forms a clip's transcript is saved in, from the reading room.
 enum ReadingExport {
@@ -89,7 +89,7 @@ String markdownOf({
     out
       ..writeln()
       ..writeln(
-        '[${mtFormatDuration(at)}](${timedLink(canonicalUrl, at)}) '
+        '[${vhFormatDuration(at)}](${timedLink(canonicalUrl, at)}) '
         '${_plain(paragraph.text)}',
       );
   }

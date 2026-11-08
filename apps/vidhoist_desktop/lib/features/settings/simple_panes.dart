@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/choices_data.dart';
 import '../../data/desktop_habits.dart';
@@ -38,19 +38,19 @@ class SettingLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             color: p.line,
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: MTSpace.md),
+        padding: const EdgeInsets.symmetric(vertical: VhSpace.md),
         child: LayoutBuilder(
           builder: (context, box) => Row(
             children: [
@@ -74,7 +74,7 @@ class SettingLine extends StatelessWidget {
                 ),
               ),
               if (trailing case final trailing?) ...[
-                const SizedBox(width: MTSpace.lg),
+                const SizedBox(width: VhSpace.lg),
                 // At the far end, as wide as it needs up to its share: a
                 // long label at a large text size wraps instead of
                 // spilling.
@@ -115,7 +115,7 @@ class SwitchLine extends StatelessWidget {
     child: SettingLine(
       title: title,
       hint: hint,
-      trailing: MTSwitch(value: value, onChanged: onChanged),
+      trailing: VhSwitch(value: value, onChanged: onChanged),
     ),
   );
 }
@@ -127,7 +127,7 @@ class DownloadsPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final quality = ref.watch(defaultQualityProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -137,7 +137,7 @@ class DownloadsPane extends ConsumerWidget {
           hint: l.desktopDefaultQualityHint,
           children: [
             for (final (choice, label) in qualityLabels(l))
-              EmberPill(
+              DesktopPill(
                 label: label,
                 selected: quality == choice,
                 onTap: () => unawaited(
@@ -159,7 +159,7 @@ class DownloadsPane extends ConsumerWidget {
 }
 
 /// The qualities in the order offered, with their names.
-List<(Quality, String)> qualityLabels(MTLocalizations l) => [
+List<(Quality, String)> qualityLabels(VhLocalizations l) => [
   (Quality.best, l.qualityBest),
   (Quality.q1080, l.quality1080),
   (Quality.q720, l.quality720),
@@ -174,7 +174,7 @@ class DesktopPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final hints = ref.watch(hintsProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -228,7 +228,7 @@ class DesktopPane extends ConsumerWidget {
         if (hints.on && hints.seen.isNotEmpty)
           Align(
             alignment: AlignmentDirectional.centerEnd,
-            child: MTLinkButton(
+            child: VhLinkButton(
               label: l.desktopHintsAgain,
               onPressed: () =>
                   unawaited(ref.read(hintsProvider.notifier).showAgain()),
@@ -246,5 +246,5 @@ Future<void> _ask(
   String refused,
 ) async {
   if (await asked || !context.mounted) return;
-  showMTNotice(context, message: refused, kind: MTNoticeKind.failed);
+  showVhNotice(context, message: refused, kind: VhNoticeKind.failed);
 }

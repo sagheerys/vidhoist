@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mt_core/mt_core.dart' show SavedPlaylist;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart' show SavedPlaylist;
+import 'package:vh_ui/vh_ui.dart';
 
 import '../data/saved_searches.dart';
 import '../features/folders/folder_tree.dart';
@@ -12,8 +12,8 @@ import 'sidebar_items.dart';
 /// The sidebar: adding a link on top, the places, then settings at the
 /// foot. 240 wide with labels, or 72 with icons alone and the labels in
 /// tooltips.
-class EmberSidebar extends StatelessWidget {
-  const EmberSidebar({
+class DesktopSidebar extends StatelessWidget {
+  const DesktopSidebar({
     super.key,
     required this.narrow,
     required this.current,
@@ -36,7 +36,7 @@ class EmberSidebar extends StatelessWidget {
   final void Function(SavedSearch search, Offset at)? onSavedSearchMenu;
 
   final bool narrow;
-  final EmberPlace current;
+  final DesktopPlace current;
   final ValueChanged<String> onGo;
 
   /// null until the add dialog exists; the button stays, dimmed.
@@ -57,8 +57,8 @@ class EmberSidebar extends StatelessWidget {
   final ValueChanged<String>? onFolder;
 
   /// The places' width inside the wide sidebar's padding.
-  static const _wideInside = EmberShellSize.sidebarWide - 2 * _pad;
-  static const _pad = MTSpace.md;
+  static const _wideInside = DesktopShellSize.sidebarWide - 2 * _pad;
+  static const _pad = VhSpace.md;
 
   /// The hairline at its edge, which the container keeps out of the places
   /// too, and a little more for rounding.
@@ -66,15 +66,17 @@ class EmberSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return AnimatedContainer(
-      duration: mtMotionDuration(context, MTMotion.medium),
-      curve: MTMotion.ease,
-      width: narrow ? EmberShellSize.sidebarNarrow : EmberShellSize.sidebarWide,
+      duration: vhMotionDuration(context, VhMotion.medium),
+      curve: VhMotion.ease,
+      width: narrow
+          ? DesktopShellSize.sidebarNarrow
+          : DesktopShellSize.sidebarWide,
       decoration: BoxDecoration(
         color: p.bg,
         border: BorderDirectional(
-          end: BorderSide(color: p.line, width: MTThemeX.of(context).hairline),
+          end: BorderSide(color: p.line, width: VhThemeX.of(context).hairline),
         ),
       ),
       padding: const EdgeInsets.all(_pad),
@@ -90,9 +92,9 @@ class EmberSidebar extends StatelessWidget {
   }
 
   Widget _places(BuildContext context, bool narrow) {
-    final l = context.mtl;
+    final l = context.vhl;
     final onPinned = pinned.any((list) => list.id == currentList);
-    Widget item(EmberPlace place, MTIconData icon, String label, String to) =>
+    Widget item(DesktopPlace place, VhIconData icon, String label, String to) =>
         SidebarItem(
           icon: icon,
           label: label,
@@ -105,34 +107,34 @@ class EmberSidebar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SidebarAddButton(narrow: narrow, label: l.addLinkFab, onTap: onAdd),
-        const SizedBox(height: MTSpace.lg),
+        const SizedBox(height: VhSpace.lg),
         // The places scroll, so pinned lists never push settings off a
         // short window.
         Expanded(
           child: ListView(
             children: [
               item(
-                EmberPlace.library,
-                MTIcons.library,
+                DesktopPlace.library,
+                VhIcons.library,
                 l.navLibrary,
-                EmberRoutes.library,
+                DesktopRoutes.library,
               ),
               item(
-                EmberPlace.favorites,
-                MTIcons.favorite,
+                DesktopPlace.favorites,
+                VhIcons.favorite,
                 l.favorites,
-                EmberRoutes.favorites,
+                DesktopRoutes.favorites,
               ),
               item(
-                EmberPlace.search,
-                MTIcons.search,
+                DesktopPlace.search,
+                VhIcons.search,
                 l.desktopSearch,
-                EmberRoutes.search,
+                DesktopRoutes.search,
               ),
               for (final search in searches)
                 SidebarItem(
                   key: ValueKey('search-${search.id}'),
-                  icon: MTIcons.search,
+                  icon: VhIcons.search,
                   label: search.name,
                   narrow: narrow,
                   indent: true,
@@ -142,39 +144,39 @@ class EmberSidebar extends StatelessWidget {
                       ? null
                       : (at) => onSavedSearchMenu!(search, at),
                 ),
-              const SizedBox(height: MTSpace.lg),
+              const SizedBox(height: VhSpace.lg),
               item(
-                EmberPlace.playlists,
-                MTIcons.queue,
+                DesktopPlace.playlists,
+                VhIcons.queue,
                 l.navPlaylists,
-                EmberRoutes.playlists,
+                DesktopRoutes.playlists,
               ),
               for (final list in pinned)
                 SidebarItem(
                   key: ValueKey('pinned-${list.id}'),
-                  icon: MTIcons.queue,
+                  icon: VhIcons.queue,
                   label: list.name,
                   narrow: narrow,
                   indent: true,
                   selected: list.id == currentList,
-                  onTap: () => onGo(EmberRoutes.playlist(list.id)),
+                  onTap: () => onGo(DesktopRoutes.playlist(list.id)),
                 ),
               item(
-                EmberPlace.channels,
-                MTIcons.subscriptions,
+                DesktopPlace.channels,
+                VhIcons.subscriptions,
                 l.desktopChannels,
-                EmberRoutes.channels,
+                DesktopRoutes.channels,
               ),
               if (folders.isNotEmpty && onFolder != null) ...[
-                const SizedBox(height: MTSpace.lg),
+                const SizedBox(height: VhSpace.lg),
                 for (final folder in folders)
                   // Narrow, only the top level: icons alone cannot show
                   // nesting.
                   if (!narrow || folder.depth == 0)
                     SidebarItem(
                       key: ValueKey('folder-${folder.path}'),
-                      icon: MTIcons.folder,
-                      label: mtName(folder.path.split('/').last),
+                      icon: VhIcons.folder,
+                      label: vhName(folder.path.split('/').last),
                       trailing: '${folder.count}',
                       narrow: narrow,
                       depth: folder.depth,
@@ -188,10 +190,10 @@ class EmberSidebar extends StatelessWidget {
         SidebarEngineLine(narrow: narrow),
         // Its toggle is in the title bar, above it.
         item(
-          EmberPlace.settings,
-          MTIcons.settings,
+          DesktopPlace.settings,
+          VhIcons.settings,
           l.navSettings,
-          EmberRoutes.settings,
+          DesktopRoutes.settings,
         ),
       ],
     );

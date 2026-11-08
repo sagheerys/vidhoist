@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:vidhoist_desktop/platform/media_kit_port.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 
 /// The session player over the **real** media_kit engine, which a widget
 /// test cannot load. Run on Windows:
@@ -79,7 +79,7 @@ void main() {
     final port = MediaKitPort.create();
     final store = MemoryKeyValueStore();
     final mutex = PrefsMutex();
-    final player = MTSessionPlayer(
+    final player = VhSessionPlayer(
       port: port,
       resolver: PlaybackSourceResolver(endpoint: ServerStreamEndpoint.none),
       positions: PlaybackPositionStore(store: store, mutex: mutex),

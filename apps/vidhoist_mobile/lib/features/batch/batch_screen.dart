@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../shared/error_text.dart';
@@ -37,21 +37,21 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
   }
 
   void _downloadSingle() {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final count = ref.read(batchSubmitterProvider).submit([
       _singleVideoUrl!,
     ], ref.read(settingsProvider).quality);
     if (count == 0) {
-      showMTSnack(context, l10n.noServerTitle, type: MTSnackType.error);
+      showVhSnack(context, l10n.noServerTitle, type: VhSnackType.error);
       return;
     }
     context.go('/');
-    showMTSnack(context, l10n.addedNToServer(1), type: MTSnackType.success);
+    showVhSnack(context, l10n.addedNToServer(1), type: VhSnackType.success);
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final preview = ref.watch(playlistPreviewProvider(widget.playlistUrl));
     final kind = PlaylistDetector.detect(widget.playlistUrl);
 
@@ -75,17 +75,17 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
           ? null
           : FloatingActionButton.extended(
               onPressed: _submit,
-              icon: const MTIcon(MTIcons.download),
+              icon: const VhIcon(VhIcons.download),
               label: Text(l10n.batchDownloadSelected),
             ),
-      body: MTReadableWidth(
+      body: VhReadableWidth(
         child: preview.when(
           loading: () => Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const MTSpinner(),
-                const SizedBox(height: MTSpace.md),
+                const VhSpinner(),
+                const SizedBox(height: VhSpace.md),
                 Text(
                   l10n.batchLoading,
                   style: Theme.of(context).textTheme.bodySmall,
@@ -93,7 +93,7 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
               ],
             ),
           ),
-          error: (e, _) => MTEmptyState(
+          error: (e, _) => VhEmptyState(
             title: l10n.failedToLoadPlaylist,
             message: errorText(l10n, e),
             actionLabel: l10n.retry,
@@ -101,7 +101,7 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
                 ref.invalidate(playlistPreviewProvider(widget.playlistUrl)),
           ),
           data: (data) => data == null || data.tracks.isEmpty
-              ? MTEmptyState(
+              ? VhEmptyState(
                   title: l10n.failedToLoadPlaylist,
                   message: l10n.couldNotLoadPlaylist,
                 )
@@ -113,9 +113,9 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
 
   /// Rule 3, step 2: enqueue the selection, then return to the main screen.
   void _submit() {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     if (_selected.isEmpty) {
-      showMTSnack(context, l10n.batchNothingSelected, type: MTSnackType.error);
+      showVhSnack(context, l10n.batchNothingSelected, type: VhSnackType.error);
       return;
     }
     final count = ref
@@ -126,11 +126,11 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
           groupName: _playlistName,
         );
     if (count == 0) {
-      showMTSnack(context, l10n.noServerTitle, type: MTSnackType.error);
+      showVhSnack(context, l10n.noServerTitle, type: VhSnackType.error);
       return;
     }
     context.go('/');
-    showMTSnack(context, l10n.addedNToServer(count), type: MTSnackType.success);
+    showVhSnack(context, l10n.addedNToServer(count), type: VhSnackType.success);
   }
 
   Widget _content(PlaylistPreview preview, PlaylistKind kind) {
@@ -176,10 +176,10 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.fromLTRB(
-              MTSpace.pagePad,
+              VhSpace.pagePad,
               0,
-              MTSpace.pagePad,
-              MTSpace.xxl,
+              VhSpace.pagePad,
+              VhSpace.xxl,
             ),
             itemCount: preview.tracks.length,
             itemBuilder: (context, index) {
@@ -199,11 +199,11 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
                 ),
                 subtitle: track.duration == null
                     ? null
-                    : Text(mtFormatDuration(track.duration!)),
+                    : Text(vhFormatDuration(track.duration!)),
                 secondary: track.thumbnail == null
                     ? null
                     : ClipRRect(
-                        borderRadius: BorderRadius.circular(MTRadius.thumb - 2),
+                        borderRadius: BorderRadius.circular(VhRadius.thumb - 2),
                         child: CachedNetworkImage(
                           imageUrl: track.thumbnail!,
                           width: 64,
@@ -221,9 +221,9 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
   }
 }
 
-/// A local copy of the formatting; mt_media provides widgets only and we do
+/// A local copy of the formatting; vh_media provides widgets only and we do
 /// not import its screens here.
-String mtFormatDuration(Duration d) {
+String vhFormatDuration(Duration d) {
   final minutes = d.inMinutes.remainder(60).toString().padLeft(2, '0');
   final seconds = d.inSeconds.remainder(60).toString().padLeft(2, '0');
   return d.inHours > 0 ? '${d.inHours}:$minutes:$seconds' : '$minutes:$seconds';
@@ -246,20 +246,20 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        MTSpace.pagePad,
-        MTSpace.sm,
-        MTSpace.pagePad,
-        MTSpace.sm,
+        VhSpace.pagePad,
+        VhSpace.sm,
+        VhSpace.pagePad,
+        VhSpace.sm,
       ),
       child: Row(
         children: [
           if (preview.coverUrl != null)
             ClipRRect(
-              borderRadius: BorderRadius.circular(MTRadius.thumb),
+              borderRadius: BorderRadius.circular(VhRadius.thumb),
               child: CachedNetworkImage(
                 imageUrl: preview.coverUrl!,
                 width: 68,
@@ -268,7 +268,7 @@ class _Header extends StatelessWidget {
                 errorWidget: (_, _, _) => const SizedBox.shrink(),
               ),
             ),
-          const SizedBox(width: MTSpace.md),
+          const SizedBox(width: VhSpace.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,10 +280,10 @@ class _Header extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                const SizedBox(height: MTSpace.xxs),
+                const SizedBox(height: VhSpace.xxs),
                 Text(
                   '${l10n.batchSelectedOf(selectedCount, preview.tracks.length)}'
-                  ' · ${mtFormatDuration(totalDuration)}',
+                  ' · ${vhFormatDuration(totalDuration)}',
                   style: Theme.of(context).textTheme.bodySmall!
                       .copyWith(color: p.ink3),
                 ),
@@ -319,7 +319,7 @@ class _QualityRow extends StatelessWidget {
       height: 46,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: MTSpace.pagePad),
+        padding: const EdgeInsets.symmetric(horizontal: VhSpace.pagePad),
         children: [
           for (final option in options) ...[
             ChoiceChip(
@@ -328,7 +328,7 @@ class _QualityRow extends StatelessWidget {
               showCheckmark: false,
               onSelected: (_) => onChanged(option),
             ),
-            const SizedBox(width: MTSpace.xs),
+            const SizedBox(width: VhSpace.xs),
           ],
         ],
       ),

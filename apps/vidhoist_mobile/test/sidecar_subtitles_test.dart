@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:vidhoist_mobile/features/player/sidecar_subtitles.dart';
@@ -97,7 +97,7 @@ void main() {
     final c = ProviderContainer(
       overrides: [
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
-        initialSettingsProvider.overrideWithValue(const LiteSettings()),
+        initialSettingsProvider.overrideWithValue(const PhoneSettings()),
       ],
     );
     addTearDown(c.dispose);

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 /// What a clip dragged out of the window becomes where it lands: its file
 /// on this computer, handed over as it is.

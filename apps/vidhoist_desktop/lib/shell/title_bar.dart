@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../identity.dart';
 import 'caption_button.dart';
-import 'ember_mark.dart';
+import 'desktop_mark.dart';
 import 'focus_regions.dart';
 import 'shell_metrics.dart';
 import 'window_controls.dart';
@@ -18,8 +18,8 @@ import 'window_controls.dart';
 /// moves the window** and a double click on it maximizes: the ground lies
 /// under the controls, so a click on a control never waits to learn
 /// whether it was the first of two.
-class EmberTitleBar extends StatelessWidget {
-  const EmberTitleBar({
+class DesktopTitleBar extends StatelessWidget {
+  const DesktopTitleBar({
     super.key,
     required this.controls,
     this.startWidth,
@@ -32,7 +32,7 @@ class EmberTitleBar extends StatelessWidget {
   /// The start column's width from which the mark and the name fit beside
   /// the sidebar's toggle.
   static const double _nameRoom =
-      EmberShellSize.sidebarNarrow + MTSpace.xxl * 2;
+      DesktopShellSize.sidebarNarrow + VhSpace.xxl * 2;
 
   /// The width of the sidebar below, so the toggle and the name stand over
   /// it and [tools] start where the content does. null sizes them to fit.
@@ -47,14 +47,14 @@ class EmberTitleBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final named =
-        (startWidth ?? double.infinity) > EmberShellSize.sidebarNarrow;
+        (startWidth ?? double.infinity) > DesktopShellSize.sidebarNarrow;
     return ColoredBox(
       color: p.bg,
       child: SizedBox(
-        height: EmberShellSize.titleBar,
+        height: DesktopShellSize.titleBar,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -69,8 +69,8 @@ class EmberTitleBar extends StatelessWidget {
                 // a column that snapped while the sidebar moved under it
                 // read as two things out of step.
                 AnimatedContainer(
-                  duration: mtMotionDuration(context, MTMotion.medium),
-                  curve: MTMotion.ease,
+                  duration: vhMotionDuration(context, VhMotion.medium),
+                  curve: VhMotion.ease,
                   width: startWidth,
                   // The name comes in once the moving column has room for
                   // it, not on the first frame of a widening, where it
@@ -78,7 +78,7 @@ class EmberTitleBar extends StatelessWidget {
                   child: LayoutBuilder(
                     builder: (context, box) {
                       final room =
-                          named && box.maxWidth >= EmberTitleBar._nameRoom;
+                          named && box.maxWidth >= DesktopTitleBar._nameRoom;
                       return Row(
                         mainAxisSize: startWidth == null
                             ? MainAxisSize.min
@@ -88,7 +88,7 @@ class EmberTitleBar extends StatelessWidget {
                             : MainAxisAlignment.center,
                         children: [
                           if (room || sidebarToggle == null)
-                            const SizedBox(width: MTSpace.md),
+                            const SizedBox(width: VhSpace.md),
                           ?sidebarToggle,
                           if (room || sidebarToggle == null)
                             Flexible(child: _Name(named: room)),
@@ -99,11 +99,11 @@ class EmberTitleBar extends StatelessWidget {
                 ),
                 Expanded(child: tools ?? const SizedBox.shrink()),
                 inRegion(
-                  EmberRegion.titleBar,
+                  DesktopRegion.titleBar,
                   Row(
                     children: [
                       CaptionButton(
-                        icon: MTIcons.winMin,
+                        icon: VhIcons.winMin,
                         label: l.desktopWindowMinimize,
                         onTap: controls.minimize,
                       ),
@@ -117,7 +117,7 @@ class EmberTitleBar extends StatelessWidget {
                         ),
                       ),
                       CaptionButton(
-                        icon: MTIcons.winClose,
+                        icon: VhIcons.winClose,
                         label: l.desktopWindowClose,
                         onTap: controls.close,
                         danger: true,
@@ -143,27 +143,27 @@ class _Name extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return IgnorePointer(
       child: inRegion(
-        EmberRegion.titleBar,
+        DesktopRegion.titleBar,
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(width: MTSpace.xs),
-            const EmberMark(size: MTSpace.xl),
+            const SizedBox(width: VhSpace.xs),
+            const DesktopMark(size: VhSpace.xl),
             if (named) ...[
-              const SizedBox(width: MTSpace.xs),
+              const SizedBox(width: VhSpace.xs),
               Flexible(
                 child: Text(
-                  EmberIdentity.displayName,
+                  DesktopIdentity.displayName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: MTType.display,
-                    package: MTType.package,
+                    fontFamily: VhType.display,
+                    package: VhType.package,
                     fontWeight: FontWeight.w500,
-                    fontSize: MTTypeScale.desktop.secondary,
+                    fontSize: VhTypeScale.desktop.secondary,
                     color: p.ink2,
                   ),
                 ),
@@ -192,7 +192,7 @@ class _MaximizeButton extends StatelessWidget {
       child: ValueListenableBuilder<bool>(
         valueListenable: controls.maximizeHovered,
         builder: (context, hovered, _) => CaptionButton(
-          icon: MTIcons.winMax,
+          icon: VhIcons.winMax,
           label: label,
           onTap: controls.toggleMaximize,
           forceHover: hovered,

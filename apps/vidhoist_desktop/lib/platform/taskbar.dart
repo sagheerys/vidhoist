@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:ffi/ffi.dart';
-import 'package:mt_ui/mt_ui.dart' show MTLocalizations;
+import 'package:vh_ui/vh_ui.dart' show VhLocalizations;
 import 'package:win32/win32.dart'
     show FindWindow, GetWindowLongPtr, GWL_EXSTYLE, NULL, WS_EX_LAYOUTRTL;
 import 'package:windows_taskbar/windows_taskbar.dart';
@@ -27,7 +27,7 @@ typedef TaskbarWords = ({
 class WindowsTaskbarSurface implements SystemMediaSurface, TaskbarPort {
   WindowsTaskbarSurface(this.words);
 
-  factory WindowsTaskbarSurface.saying(MTLocalizations l) =>
+  factory WindowsTaskbarSurface.saying(VhLocalizations l) =>
       WindowsTaskbarSurface((
         previous: l.previous,
         play: l.play,

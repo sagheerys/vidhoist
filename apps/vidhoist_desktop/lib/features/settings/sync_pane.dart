@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/folders_data.dart';
 import '../../data/sync_data.dart';
@@ -12,7 +12,7 @@ import '../../shell/folded_text.dart';
 
 /// A device as the user knows it: the kind, and the short part of its name
 /// that tells two phones apart.
-String syncDeviceName(MTLocalizations l, String id) {
+String syncDeviceName(VhLocalizations l, String id) {
   final dash = id.indexOf('-');
   final tail = dash < 0 ? id : id.substring(dash + 1);
   return id.startsWith('phone')
@@ -33,7 +33,7 @@ class SyncPane extends ConsumerWidget {
         .pick(initial: settings?.folder);
     if (picked == null) return;
     await ref.read(syncSettingsProvider.notifier).choose(picked);
-    await ref.read(emberSyncProvider).run();
+    await ref.read(desktopSyncProvider).run();
   }
 
   Future<void> _forget(
@@ -41,8 +41,8 @@ class SyncPane extends ConsumerWidget {
     WidgetRef ref,
     SyncDevice device,
   ) async {
-    final l = context.mtl;
-    final sure = await showMTConfirm(
+    final l = context.vhl;
+    final sure = await showVhConfirm(
       context,
       title: l.desktopSyncForget,
       message: l.desktopSyncForgetBody(syncDeviceName(l, device.id)),
@@ -50,13 +50,13 @@ class SyncPane extends ConsumerWidget {
       cancelLabel: l.cancel,
       destructive: true,
     );
-    if (sure) await ref.read(emberSyncProvider).forget(device);
+    if (sure) await ref.read(desktopSyncProvider).forget(device);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final settings = ref.watch(syncSettingsProvider).valueOrNull;
     final report = ref.watch(syncReportProvider);
@@ -69,23 +69,23 @@ class SyncPane extends ConsumerWidget {
           l.desktopSyncHint,
           style: text.bodyMedium?.copyWith(color: p.ink2),
         ),
-        const SizedBox(height: MTSpace.sm),
+        const SizedBox(height: VhSpace.sm),
         SettingLine(
           title: l.desktopSyncFolder,
           value: on ? settings!.folder : null,
           hint: on ? null : l.desktopSyncOff,
           trailing: Wrap(
-            spacing: MTSpace.sm,
-            runSpacing: MTSpace.xs,
+            spacing: VhSpace.sm,
+            runSpacing: VhSpace.xs,
             alignment: WrapAlignment.end,
             children: [
-              MTLinkButton(
+              VhLinkButton(
                 label: l.desktopSyncChoose,
-                icon: MTIcons.folder,
+                icon: VhIcons.folder,
                 onPressed: () => unawaited(_choose(ref)),
               ),
               if (on)
-                MTLinkButton(
+                VhLinkButton(
                   label: l.desktopSyncTurnOff,
                   onPressed: () => unawaited(
                     ref.read(syncSettingsProvider.notifier).turnOff(),
@@ -102,7 +102,7 @@ class SyncPane extends ConsumerWidget {
             hint: switch (report) {
               null => null,
               SyncReport(failed: true) => l.desktopSyncFailed,
-              final r => l.desktopSyncLast(mtTimeAgo(context, r.at)),
+              final r => l.desktopSyncLast(vhTimeAgo(context, r.at)),
             },
           ),
           if (report?.cameBack ?? false)
@@ -116,7 +116,7 @@ class SyncPane extends ConsumerWidget {
             SettingLine(
               title: l.desktopSyncFrom(
                 syncDeviceName(l, device.id),
-                mtTimeAgo(
+                vhTimeAgo(
                   context,
                   DateTime.fromMillisecondsSinceEpoch(
                     device.snapshot.writtenAt,
@@ -124,16 +124,16 @@ class SyncPane extends ConsumerWidget {
                 ),
               ),
               hint: device.isQuietAt(DateTime.now()) ? l.syncDeviceQuiet : null,
-              trailing: MTLinkButton(
+              trailing: VhLinkButton(
                 label: l.desktopSyncForget,
-                icon: MTIcons.trash,
+                icon: VhIcons.trash,
                 onPressed: () => unawaited(_forget(context, ref, device)),
               ),
             ),
         ],
-        const SizedBox(height: MTSpace.md),
+        const SizedBox(height: VhSpace.md),
         Text(l.desktopSyncGuide, style: note),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         Text(l.desktopSyncNotBackup, style: note),
       ],
     );

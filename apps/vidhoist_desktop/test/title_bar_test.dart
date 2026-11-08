@@ -6,14 +6,14 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/settings/about_pane.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/content_bar.dart';
-import 'package:vidhoist_desktop/shell/ember_mark.dart';
+import 'package:vidhoist_desktop/shell/desktop_mark.dart';
 import 'package:vidhoist_desktop/shell/right_panel.dart';
 import 'package:vidhoist_desktop/shell/shell_metrics.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/sidebar_items.dart';
 import 'package:vidhoist_desktop/shell/title_bar.dart';
 import 'package:vidhoist_desktop/shell/ui_zoom.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -35,7 +35,7 @@ void main() {
   }
 
   Finder tip(String en, String ar) => find.byWidgetPredicate(
-    (w) => w is MTShortcutTooltip && (w.message == en || w.message == ar),
+    (w) => w is VhShortcutTooltip && (w.message == en || w.message == ar),
   );
   final panelButton = tip('Hide side panel', 'إخفاء اللوحة الجانبية');
 
@@ -45,29 +45,29 @@ void main() {
     testWidgets('**the guard**: one bar: the tools sit in the title bar, and '
         'the sidebar starts right under it$lang', (tester) async {
       await open(tester, arabic: arabic);
-      final bar = find.byType(EmberTitleBar);
+      final bar = find.byType(DesktopTitleBar);
       expect(
-        find.descendant(of: bar, matching: find.byType(EmberContentBar)),
+        find.descendant(of: bar, matching: find.byType(DesktopContentBar)),
         findsOneWidget,
       );
       expect(
         find.descendant(of: bar, matching: find.byType(DownloadsButton)),
         findsOneWidget,
       );
-      expect(tester.getSize(bar).height, EmberShellSize.titleBar);
+      expect(tester.getSize(bar).height, DesktopShellSize.titleBar);
       expect(
-        tester.getTopLeft(find.byType(EmberSidebar)).dy,
-        EmberShellSize.titleBar,
+        tester.getTopLeft(find.byType(DesktopSidebar)).dy,
+        DesktopShellSize.titleBar,
       );
     });
 
     testWidgets('**the guard**: the sidebar toggle stands over the sidebar, '
         "the panel's button over the panel$lang", (tester) async {
       await open(tester, arabic: arabic);
-      final sidebar = tester.getRect(find.byType(EmberSidebar));
+      final sidebar = tester.getRect(find.byType(DesktopSidebar));
       final toggle = tester.getCenter(find.byType(SidebarToggle));
       expect(toggle.dx, inInclusiveRange(sidebar.left, sidebar.right));
-      final panel = tester.getRect(find.byType(EmberRightPanel));
+      final panel = tester.getRect(find.byType(DesktopRightPanel));
       final button = tester.getCenter(panelButton);
       expect(button.dx, inInclusiveRange(panel.left, panel.right));
     });
@@ -95,7 +95,7 @@ void main() {
         arabic
             ? (downloads.right + search.left) / 2
             : (search.right + downloads.left) / 2,
-        EmberShellSize.titleBar / 2,
+        DesktopShellSize.titleBar / 2,
       );
       await tester.dragFrom(bare, const Offset(40, 0));
       await tester.pumpAndSettle();
@@ -119,7 +119,7 @@ void main() {
         isFalse,
       );
       await tester.pumpAndSettle();
-      expect(find.byType(EmberRightPanel), findsNothing);
+      expect(find.byType(DesktopRightPanel), findsNothing);
       expect(h.controls.calls, isEmpty);
     });
   }
@@ -130,23 +130,23 @@ void main() {
   ) async {
     await open(tester);
     final inBar = find.descendant(
-      of: find.byType(EmberTitleBar),
-      matching: find.byType(EmberMark),
+      of: find.byType(DesktopTitleBar),
+      matching: find.byType(DesktopMark),
     );
     expect(inBar, findsOneWidget);
-    expect(tester.getSize(inBar).width, lessThan(EmberMark.smallBelow));
+    expect(tester.getSize(inBar).width, lessThan(DesktopMark.smallBelow));
 
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberSettingsPane.about.route);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopSettingsPane.about.route);
     await tester.pumpAndSettle();
     final inAbout = find.descendant(
       of: find.byType(AboutPane),
-      matching: find.byType(EmberMark),
+      matching: find.byType(DesktopMark),
     );
     expect(inAbout, findsOneWidget);
     expect(
       tester.getSize(inAbout).width,
-      greaterThanOrEqualTo(EmberMark.smallBelow),
+      greaterThanOrEqualTo(DesktopMark.smallBelow),
     );
   });
 
@@ -159,7 +159,7 @@ void main() {
     expect(find.text('Search titles and what was said…'), findsNothing);
     final button = tip('Search', 'البحث');
     expect(
-      find.descendant(of: find.byType(EmberContentBar), matching: button),
+      find.descendant(of: find.byType(DesktopContentBar), matching: button),
       findsOneWidget,
     );
   });

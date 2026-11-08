@@ -14,7 +14,7 @@ class WindowsNotices implements NoticePort {
   /// without them.
   static Future<WindowsNotices?> start() async {
     try {
-      await localNotifier.setup(appName: EmberIdentity.displayName);
+      await localNotifier.setup(appName: DesktopIdentity.displayName);
       return WindowsNotices._();
     } on Object {
       return null;
@@ -22,7 +22,7 @@ class WindowsNotices implements NoticePort {
   }
 
   @override
-  Future<void> show(EmberNotice notice) async {
+  Future<void> show(DesktopNotice notice) async {
     final shown = LocalNotification(
       title: notice.title,
       body: notice.body,

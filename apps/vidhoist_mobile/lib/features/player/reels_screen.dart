@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../downloads_library/library_actions.dart';
@@ -29,7 +29,7 @@ class _ReelsScreenState extends ConsumerState<ReelsScreen> {
   /// `dispose()`, and the tree is **deactivated** by then: `ref.read`
   /// throws there, and the throw used to abort the rest of `dispose()`,
   /// leaving a clip playing with no owner.
-  late final MTAudioHandler _audio = ref.read(audioHandlerProvider);
+  late final VhAudioHandler _audio = ref.read(audioHandlerProvider);
 
   /// The last "stopper" we handed to the background player, to tell our
   /// registration apart from anyone else's.
@@ -50,12 +50,12 @@ class _ReelsScreenState extends ConsumerState<ReelsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final request = ref.watch(playbackRequestProvider);
     if (request == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: MTEmptyState(
+        body: VhEmptyState(
           title: l10n.shortsFilter,
           message: l10n.noPlayableSource,
         ),
@@ -74,14 +74,14 @@ class _ReelsScreenState extends ConsumerState<ReelsScreen> {
     if (lane.isEmpty || laneIndex < 0) {
       return Scaffold(
         appBar: AppBar(),
-        body: MTEmptyState(
+        body: VhEmptyState(
           title: l10n.shortsFilter,
           message: l10n.noResultsMessage,
         ),
       );
     }
 
-    return MTReelsPlayer(
+    return VhReelsPlayer(
       lane: lane,
       resolver: ref.watch(playbackResolverProvider),
       startIndex: laneIndex,
@@ -89,7 +89,7 @@ class _ReelsScreenState extends ConsumerState<ReelsScreen> {
       // While the reel is alive, starting audio from the
       // notification silences it first.
       onLive: _setLive,
-      subtitleBuilder: (context, item) => mtMetaLine([
+      subtitleBuilder: (context, item) => vhMetaLine([
         platformOfKey(item.canonicalUrl).label,
         // **Belonging under the title** (field report 2026-09-04): which
         // playlist. The information was in the store and appeared in no
@@ -106,22 +106,22 @@ class _ReelsScreenState extends ConsumerState<ReelsScreen> {
       actionsBuilder: (item) {
         final match = _libraryItemOf(item);
         return [
-          MTPlayerAction(
-            icon: MTIcons.info,
+          VhPlayerAction(
+            icon: VhIcons.info,
             label: l10n.details,
             onTap: () {
               if (match != null) showItemDetailsSheet(context, match);
             },
           ),
-          MTPlayerAction(
-            icon: MTIcons.queueAdd,
+          VhPlayerAction(
+            icon: VhIcons.queueAdd,
             label: l10n.addTo,
             onTap: () {
               if (match != null) showAddToSheet(context, ref, match);
             },
           ),
-          MTPlayerAction(
-            icon: MTIcons.share,
+          VhPlayerAction(
+            icon: VhIcons.share,
             label: l10n.share,
             onTap: () => _share(item),
           ),

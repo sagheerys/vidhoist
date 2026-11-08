@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// A help button for a complex field, opening a dialog with an explanation
 /// from the arb files.
@@ -11,12 +11,12 @@ class HelpButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return IconButton(
       visualDensity: VisualDensity.compact,
-      tooltip: context.mtl.helpAboutField,
-      icon: MTIcon(MTIcons.help, size: 18, color: p.ink3),
-      onPressed: () => showMTDialog<void>(
+      tooltip: context.vhl.helpAboutField,
+      icon: VhIcon(VhIcons.help, size: 18, color: p.ink3),
+      onPressed: () => showVhDialog<void>(
         context: context,
         builder: (dialogContext) => AlertDialog(
           title: Text(
@@ -57,7 +57,7 @@ class HelpButtonGap extends StatelessWidget {
     child: IconButton(
       visualDensity: VisualDensity.compact,
       onPressed: null,
-      icon: MTIcon(MTIcons.help, size: 18),
+      icon: VhIcon(VhIcons.help, size: 18),
     ),
   );
 }

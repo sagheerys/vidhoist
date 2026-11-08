@@ -11,9 +11,9 @@ import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/clip/clip_actions.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/features/library/artwork.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart' show cachedCoverFetcher;
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart' show cachedCoverFetcher;
 
 import 'support/shell_harness.dart';
 
@@ -181,7 +181,7 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     final container = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
+      tester.element(find.byType(DesktopSidebar)),
     );
     final file = File('${dir.path}/kept.jpg');
     await tester.runAsync(() async {

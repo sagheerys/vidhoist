@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_desktop/data/appearance_data.dart';
 import 'package:vidhoist_desktop/data/downloads_data.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
@@ -235,7 +235,7 @@ void main() {
       }
       expect(
         backend.requests.single.folder,
-        '${downloads.path}\\${EmberIdentity.displayName}',
+        '${downloads.path}\\${DesktopIdentity.displayName}',
       );
     });
   });

@@ -5,11 +5,11 @@ environment:
   sdk: ^3.13.0
 
 workspace:
-  - packages/mt_core
-  - packages/mt_transcripts
-  - packages/mt_media
-  - packages/mt_ui
-  - packages/mt_ytdlp
+  - packages/vh_core
+  - packages/vh_transcripts
+  - packages/vh_media
+  - packages/vh_ui
+  - packages/vh_ytdlp
   - apps/vidhoist_mobile
   - apps/vidhoist_desktop
 

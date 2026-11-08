@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// What the window shows while links are dragged over it: a dashed frame
 /// in the action colour around the content, on a soft wash, saying what
@@ -12,10 +12,10 @@ class DropFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final radius = MTCorners.desktop.card;
+    final p = VhThemeX.of(context).palette;
+    final radius = VhCorners.desktop.card;
     return Padding(
-      padding: const EdgeInsets.all(MTSpace.lg),
+      padding: const EdgeInsets.all(VhSpace.lg),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: dropWash(p),
@@ -41,7 +41,7 @@ class DropFrame extends StatelessWidget {
 /// then let through a little. The night's soft accent is itself see-through,
 /// so giving it an opacity of its own, as the day's takes, turned the whole
 /// window a glaring orange with the words lost in it.
-Color dropWash(MTPalette p) =>
+Color dropWash(VhPalette p) =>
     Color.alphaBlend(p.accentSoft, p.bg).withValues(alpha: 0.9);
 
 /// A rounded edge dashed [dash] on [gap].

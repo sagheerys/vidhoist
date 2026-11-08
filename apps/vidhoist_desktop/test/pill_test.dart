@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/pill.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 class _Host extends StatefulWidget {
   const _Host();
@@ -18,7 +18,7 @@ class _HostState extends State<_Host> {
   bool selected = false;
 
   @override
-  Widget build(BuildContext context) => EmberPill(
+  Widget build(BuildContext context) => DesktopPill(
     label: 'YouTube · 119',
     selected: selected,
     onTap: () => setState(() => selected = !selected),
@@ -33,9 +33,9 @@ void main() {
       // click stayed over the newly chosen pill and hid its cream label.
       const boundary = Key('pill');
       await tester.pumpWidget(
-        MTDesktopApp(
+        VhDesktopApp(
           child: MaterialApp(
-            theme: mtDesktopTheme(MTVariant.superApp, Brightness.light),
+            theme: vhDesktopTheme(VhVariant.desktop, Brightness.light),
             home: const Scaffold(
               body: Center(
                 child: RepaintBoundary(key: boundary, child: _Host()),
@@ -46,7 +46,7 @@ void main() {
       );
       final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
       await mouse.addPointer(location: Offset.zero);
-      final at = tester.getCenter(find.byType(EmberPill));
+      final at = tester.getCenter(find.byType(DesktopPill));
       await mouse.moveTo(at);
       await tester.pumpAndSettle();
       await mouse.down(at);

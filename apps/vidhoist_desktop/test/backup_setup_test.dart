@@ -8,8 +8,8 @@ import 'package:vidhoist_desktop/data/library_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/settings/backup_actions.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 const _a = 'https://www.youtube.com/watch?v=aaaaaaaaaaa';
 
@@ -22,7 +22,7 @@ Future<String> _phoneBackup() async {
     store: store,
     mutex: mutex,
     clock: () => DateTime.utc(2026, 10, 20),
-  ).toggleTag(_a, MTConstants.favoritesSystemTag);
+  ).toggleTag(_a, VhConstants.favoritesSystemTag);
   await store.setString('active_url', 'http://192.168.1.10:8081');
   return BackupService(
     store: store,
@@ -89,7 +89,7 @@ void main() {
       expect(outcome, isA<MergedBackup>());
       expect((await tags.tagsOf(_a)).toSet(), {
         'mine',
-        MTConstants.favoritesSystemTag,
+        VhConstants.favoritesSystemTag,
       });
       expect(await store.getString('active_url'), isNull);
     });

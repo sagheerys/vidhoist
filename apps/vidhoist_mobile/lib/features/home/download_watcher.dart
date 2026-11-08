@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../downloads_library/library_providers.dart';
@@ -42,8 +42,8 @@ final downloadWatcherProvider = Provider<void>((ref) {
   /// one arrive after a newer one and put the percentage back.
   Future<void> chain = Future.value();
 
-  MTLocalizations l10n() =>
-      mtLocalizationsFor(ref.read(settingsProvider).localeCode);
+  VhLocalizations l10n() =>
+      vhLocalizationsFor(ref.read(settingsProvider).localeCode);
 
   int idOf(DownloadTask task) => task.id.hashCode & 0x7fffffff;
 

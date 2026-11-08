@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/shell_metrics.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// The name of a new folder, nested when typed with a slash. It is made on
 /// the server by the first download saved into it.
@@ -40,11 +40,11 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
+    final l = context.vhl;
     return AlertDialog(
       title: Text(l.newFolder),
       content: SizedBox(
-        width: EmberShellSize.smallDialog,
+        width: DesktopShellSize.smallDialog,
         child: TextField(
           controller: _controller,
           autofocus: true,
@@ -73,13 +73,13 @@ Future<void> showFolderHelp(BuildContext context, String title, String body) =>
       builder: (context) => AlertDialog(
         title: Text(title),
         content: SizedBox(
-          width: EmberShellSize.formDialog,
+          width: DesktopShellSize.formDialog,
           child: SingleChildScrollView(child: Text(body)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.mtl.done),
+            child: Text(context.vhl.done),
           ),
         ],
       ),
@@ -96,16 +96,16 @@ class FolderHelp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final mark = Directionality.of(context) == TextDirection.rtl ? '؟' : '?';
-    return MTShortcutTooltip(
+    return VhShortcutTooltip(
       message: label,
       child: Material(
         shape: CircleBorder(
           side: BorderSide(
             color: p.line2,
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
         ),
         color: Colors.transparent,
@@ -117,7 +117,7 @@ class FolderHelp extends StatelessWidget {
             customBorder: const CircleBorder(),
             onTap: onTap,
             child: SizedBox.square(
-              dimension: MTSpace.xl,
+              dimension: VhSpace.xl,
               child: Center(
                 child: Text(
                   mark,

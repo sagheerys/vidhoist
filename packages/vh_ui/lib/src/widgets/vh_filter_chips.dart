@@ -1,0 +1,144 @@
+import 'package:flutter/material.dart';
+
+import '../l10n/l10n.dart';
+import '../theme/vh_theme.dart';
+import '../tokens/tokens.dart';
+
+import '../icons/vh_icon.dart';
+import '../icons/vh_icon_data.dart';
+import '../icons/vh_icons.dart';
+
+/// One active filter at the head of the chip row, with its way out.
+///
+/// The filters a sheet holds (platform, folder, tags) would otherwise be
+/// invisible once the sheet closes, and the library would simply look half
+/// empty. A name from the server can be long; the row scrolls, but one chip
+/// must not own all of it.
+class VhActiveFilterChip extends StatelessWidget {
+  const VhActiveFilterChip({
+    super.key,
+    required this.label,
+    required this.onDeleted,
+    this.icon,
+    this.onPressed,
+    this.struck = false,
+  });
+
+  final String label;
+  final VhIconData? icon;
+  final VoidCallback onDeleted;
+
+  /// Usually reopens the sheet the filter was chosen in.
+  final VoidCallback? onPressed;
+
+  /// An excluded tag: drawn struck through, so subtraction never reads as
+  /// addition at a glance.
+  final bool struck;
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = VhThemeX.of(context).palette.bg;
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: VhSpace.xs),
+      child: InputChip(
+        avatar: icon == null ? null : VhIcon(icon!, size: 15, color: bg),
+        label: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 150),
+          child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
+        selected: true,
+        showCheckmark: false,
+        onDeleted: onDeleted,
+        deleteIcon: const VhIcon(VhIcons.close, size: 16),
+        deleteIconColor: bg,
+        onPressed: onPressed,
+        labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+          color: bg,
+          decoration: struck ? TextDecoration.lineThrough : null,
+          decorationColor: bg,
+        ),
+      ),
+    );
+  }
+}
+
+/// The header button that opens the sort and filter sheet, with a dot while
+/// a filter chosen inside it is on: the chip row shows which, and the dot
+/// says where to change it.
+class VhFilterButton extends StatelessWidget {
+  const VhFilterButton({
+    super.key,
+    required this.tooltip,
+    required this.active,
+    required this.onPressed,
+  });
+
+  final String tooltip;
+  final bool active;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    return IconButton(
+      tooltip: active ? '$tooltip · ${context.vhl.filtersOn}' : tooltip,
+      onPressed: onPressed,
+      icon: Badge(
+        isLabelVisible: active,
+        smallSize: 7,
+        backgroundColor: p.accent,
+        child: const VhIcon(VhIcons.sort),
+      ),
+    );
+  }
+}
+
+/// A chip arriving in a row, such as a tag chosen in the filter sheet:
+/// **it widens from nothing** and the chips after it make room, rather than
+/// the row jumping by a chip's width. Give it a key per chip, so the chips
+/// already there do not arrive again.
+class VhGrowIn extends StatefulWidget {
+  const VhGrowIn({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  State<VhGrowIn> createState() => _VhGrowInState();
+}
+
+class _VhGrowInState extends State<VhGrowIn>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _grow = AnimationController(
+    vsync: this,
+    duration: VhMotion.medium,
+  );
+  late final Animation<double> _curved = CurvedAnimation(
+    parent: _grow,
+    curve: VhMotion.entrance,
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_grow.isAnimating || _grow.isCompleted) return;
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _grow.value = 1;
+    } else {
+      _grow.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _grow.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => SizeTransition(
+    sizeFactor: _curved,
+    axis: Axis.horizontal,
+    alignment: AlignmentDirectional.centerStart,
+    child: FadeTransition(opacity: _curved, child: widget.child),
+  );
+}

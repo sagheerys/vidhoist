@@ -10,9 +10,9 @@ import 'package:vidhoist_desktop/data/folders_data.dart';
 import 'package:vidhoist_desktop/data/library_data.dart';
 import 'package:vidhoist_desktop/features/library/choose_mark.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -171,7 +171,7 @@ void main() {
       matching: find.byType(Material),
     );
     expect(
-      tester.getRect(find.byType(MTNotice)).bottom,
+      tester.getRect(find.byType(VhNotice)).bottom,
       lessThanOrEqualTo(tester.getRect(bar.first).top),
     );
   });
@@ -184,12 +184,12 @@ void main() {
     await press(tester, LogicalKeyboardKey.keyF);
     await press(tester, LogicalKeyboardKey.enter);
     final container = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
+      tester.element(find.byType(DesktopSidebar)),
     );
     final tags = await container
         .read(tagsIndexProvider)
         .tagsOf(items[1].canonicalUrl);
-    expect(tags, isNot(contains(MTConstants.favoritesSystemTag)));
+    expect(tags, isNot(contains(VhConstants.favoritesSystemTag)));
     expect(find.text('Amber Skies'), findsOneWidget);
   });
 

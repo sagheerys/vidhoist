@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// Whether the arrow may move at all. Always so in the app; tests of the
 /// rest of the window turn it off, since a loop that runs while anything
@@ -11,7 +11,7 @@ final downloadMotionProvider = Provider<bool>((ref) => true);
 /// phone: a count alone said how many, not that anything was happening.
 ///
 /// The arrow drops into the tray and fades, then comes back from above, on
-/// the phone's own calm loop ([mtDownloadDrop]); the tray stays put. At
+/// the phone's own calm loop ([vhDownloadDrop]); the tray stays put. At
 /// zero, or when Windows asks for no animations, it stands still, so the
 /// motion itself is the news.
 class DownloadGlyph extends StatefulWidget {
@@ -37,7 +37,7 @@ class _DownloadGlyphState extends State<DownloadGlyph>
     with SingleTickerProviderStateMixin {
   late final AnimationController _loop = AnimationController(
     vsync: this,
-    duration: MTDownloadsIcon.period,
+    duration: VhDownloadsIcon.period,
   );
   bool _still = false;
 
@@ -74,9 +74,9 @@ class _DownloadGlyphState extends State<DownloadGlyph>
 
   @override
   Widget build(BuildContext context) {
-    final glyph = MTIcon(
-      MTIcons.download,
-      size: MTDensity.desktop.icon,
+    final glyph = VhIcon(
+      VhIcons.download,
+      size: VhDensity.desktop.icon,
       color: widget.color,
     );
     return Stack(
@@ -87,11 +87,11 @@ class _DownloadGlyphState extends State<DownloadGlyph>
           child: AnimatedBuilder(
             animation: _loop,
             builder: (context, child) {
-              final (offset, opacity) = mtDownloadDrop(_loop.value);
+              final (offset, opacity) = vhDownloadDrop(_loop.value);
               return Opacity(
                 opacity: opacity,
                 child: Transform.translate(
-                  offset: Offset(0, offset * MTDownloadsIcon.drop),
+                  offset: Offset(0, offset * VhDownloadsIcon.drop),
                   child: child,
                 ),
               );

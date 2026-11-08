@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import '../di.dart';
 
 /// The two tips the app gives on its own, each once in a lifetime.
-enum EmberHint {
+enum DesktopHint {
   /// The keyboard shortcuts, as the first clip plays.
   shortcuts,
 
@@ -17,7 +17,7 @@ class HintsState {
   const HintsState({this.on = true, this.seen = const {}});
 
   final bool on;
-  final Set<EmberHint> seen;
+  final Set<DesktopHint> seen;
 }
 
 final hintsProvider = NotifierProvider<Hints, HintsState>(Hints.new);
@@ -54,7 +54,7 @@ class Hints extends Notifier<HintsState> {
     state = HintsState(
       on: await store.getBool(onKey) ?? true,
       seen: {
-        for (final hint in EmberHint.values)
+        for (final hint in DesktopHint.values)
           if (names.contains(hint.name)) hint,
       },
     );
@@ -64,25 +64,25 @@ class Hints extends Notifier<HintsState> {
   /// Whether [hint] may show now. The tray's comes as the window goes, so
   /// it interrupts nothing and the session's one interruption does not
   /// hold it back.
-  bool wants(EmberHint hint) =>
+  bool wants(DesktopHint hint) =>
       _loaded &&
       state.on &&
       !state.seen.contains(hint) &&
-      (hint == EmberHint.tray || !_interrupted);
+      (hint == DesktopHint.tray || !_interrupted);
 
   /// The session has already asked for the user's attention once.
   void interrupted() => _interrupted = true;
 
   /// [hint] was shown: never again, and nothing more in the window this
   /// session.
-  Future<void> shown(EmberHint hint) async {
-    if (hint != EmberHint.tray) _interrupted = true;
+  Future<void> shown(DesktopHint hint) async {
+    if (hint != DesktopHint.tray) _interrupted = true;
     await _ready;
     await _see({...state.seen, hint});
   }
 
   /// The user found the thing by themselves: no tip for it.
-  Future<void> learned(EmberHint hint) async {
+  Future<void> learned(DesktopHint hint) async {
     await _ready;
     if (state.seen.contains(hint)) return;
     await _see({...state.seen, hint});
@@ -101,7 +101,7 @@ class Hints extends Notifier<HintsState> {
     await _see(const {});
   }
 
-  Future<void> _see(Set<EmberHint> seen) async {
+  Future<void> _see(Set<DesktopHint> seen) async {
     state = HintsState(on: state.on, seen: seen);
     final store = ref.read(keyValueStoreProvider);
     await ref

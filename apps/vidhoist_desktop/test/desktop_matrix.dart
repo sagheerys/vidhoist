@@ -10,32 +10,32 @@ import 'package:flutter_test/flutter_test.dart';
 /// release build that is not the yellow and black stripe but text cut off
 /// without a word, so it is caught here from Flutter's own engine, in both
 /// reading directions.
-class EmberWindowSize {
-  const EmberWindowSize(this.name, this.size);
+class DesktopWindowSize {
+  const DesktopWindowSize(this.name, this.size);
 
   final String name;
   final Size size;
 
   /// Sizes in logical pixels, which is what a window reports at any
   /// Windows display scale.
-  static const List<EmberWindowSize> all = [
+  static const List<DesktopWindowSize> all = [
     // The smallest window Ember allows; the side panel becomes a layer.
-    EmberWindowSize('smallest 960x600', Size(960, 600)),
+    DesktopWindowSize('smallest 960x600', Size(960, 600)),
     // The first width with the panel beside the content, sidebar narrow.
-    EmberWindowSize('panel beside 1100x700', Size(1100, 700)),
+    DesktopWindowSize('panel beside 1100x700', Size(1100, 700)),
     // The first width with all three columns, and the first window size.
-    EmberWindowSize('three columns 1280x800', Size(1280, 800)),
-    EmberWindowSize('laptop 1440x900', Size(1440, 900)),
-    EmberWindowSize('full HD 1920x1080', Size(1920, 1080)),
-    EmberWindowSize('large screen 2560x1440', Size(2560, 1440)),
+    DesktopWindowSize('three columns 1280x800', Size(1280, 800)),
+    DesktopWindowSize('laptop 1440x900', Size(1440, 900)),
+    DesktopWindowSize('full HD 1920x1080', Size(1920, 1080)),
+    DesktopWindowSize('large screen 2560x1440', Size(2560, 1440)),
   ];
 }
 
 /// Text sizes: normal, a common choice for eyesight, and double.
-const List<double> emberTextScales = [1.0, 1.3, 2.0];
+const List<double> desktopTextScales = [1.0, 1.3, 2.0];
 
 /// Both reading directions the app ships in.
-const List<Locale> emberLocales = [Locale('en'), Locale('ar')];
+const List<Locale> desktopLocales = [Locale('en'), Locale('ar')];
 
 /// Builds [build] at every window size, language and text size, runs
 /// [then] to bring the screen into the state under test, and fails at the
@@ -48,13 +48,13 @@ Future<void> expectNoOverflow(
   WidgetTester tester,
   Widget Function() build, {
   Future<void> Function(WidgetTester tester)? then,
-  List<EmberWindowSize> windows = EmberWindowSize.all,
-  List<double> scales = emberTextScales,
+  List<DesktopWindowSize> windows = DesktopWindowSize.all,
+  List<double> scales = desktopTextScales,
 }) async {
   addTearDown(tester.view.reset);
   addTearDown(tester.platformDispatcher.clearAllTestValues);
   for (final window in windows) {
-    for (final locale in emberLocales) {
+    for (final locale in desktopLocales) {
       for (final scale in scales) {
         final where = '${window.name}, ${locale.languageCode}, text x$scale';
         tester.view.devicePixelRatio = 1;

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/library/choose_mark.dart';
 import 'package:vidhoist_desktop/features/library/selection.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -33,7 +33,7 @@ void main() {
   }
 
   Finder card(String title) => find
-      .descendant(of: find.byType(MTMediaGridCard), matching: find.text(title))
+      .descendant(of: find.byType(VhMediaGridCard), matching: find.text(title))
       .first;
 
   Future<void> click(WidgetTester tester, String title) async {

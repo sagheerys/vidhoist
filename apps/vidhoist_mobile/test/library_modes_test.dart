@@ -5,7 +5,7 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/downloads_library/artwork_view.dart';
 import 'package:vidhoist_mobile/features/downloads_library/library_providers.dart';
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// The counterpart of `apps/vidhoist_super/test/library_modes_test.dart`: the
 /// fourth view mode reached both apps together (requested 2026-09-08), so
@@ -62,7 +62,7 @@ void main() {
         ),
       ),
     );
-    expect(mtDecodeWidth(ctx, 98, 62), (62 * 16 / 9 * 2).ceil());
-    expect(mtDecodeWidth(ctx, 210), 420);
+    expect(vhDecodeWidth(ctx, 98, 62), (62 * 16 / 9 * 2).ceil());
+    expect(vhDecodeWidth(ctx, 210), 420);
   });
 }

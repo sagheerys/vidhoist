@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../library/artwork.dart';
 import 'link_preview.dart';
@@ -17,16 +17,16 @@ class LinkPreviewCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final asked = ref.watch(linkPreviewProvider(url));
-    if (asked.isLoading) return const MTFilmStrip();
+    if (asked.isLoading) return const VhFilmStrip();
     final preview = asked.valueOrNull;
     if (preview == null) return const SizedBox.shrink();
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MTMediaThumb(
+        VhMediaThumb(
           width: _thumbWidth,
           height: _thumbWidth * 9 / 16,
           child: artworkFor(
@@ -36,7 +36,7 @@ class LinkPreviewCard extends ConsumerWidget {
             width: _thumbWidth,
           ),
         ),
-        const SizedBox(width: MTSpace.md),
+        const SizedBox(width: VhSpace.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +45,7 @@ class LinkPreviewCard extends ConsumerWidget {
                 preview.title,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                textDirection: mtTextDirectionOf(
+                textDirection: vhTextDirectionOf(
                   preview.title,
                   Directionality.of(context),
                 ),

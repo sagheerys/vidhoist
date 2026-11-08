@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:vidhoist_desktop/platform/media_kit_port.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 
 /// **"It reaches a quarter and starts over until it stops"**, seen on
 /// another computer. Two causes: every error line mpv logs reached the
@@ -172,12 +172,12 @@ void main() {
   });
 
   group('with the session player on top', () {
-    late MTSessionPlayer session;
+    late VhSessionPlayer session;
 
     setUp(() {
       final store = MemoryKeyValueStore();
       final mutex = PrefsMutex();
-      session = MTSessionPlayer(
+      session = VhSessionPlayer(
         port: port,
         resolver: PlaybackSourceResolver(
           endpoint: ServerStreamEndpoint(

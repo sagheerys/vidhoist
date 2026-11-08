@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import '../di.dart';
 import 'folders_data.dart';
@@ -37,7 +37,7 @@ class NotABackup extends ImportOutcome {
   const NotABackup();
 }
 
-final backupsProvider = Provider<EmberBackups>(EmberBackups.new);
+final backupsProvider = Provider<DesktopBackups>(DesktopBackups.new);
 
 /// One dated copy at each start (the rotation skips it when nothing
 /// changed, and keeps one an hour): the phone backs up on every change,
@@ -49,8 +49,8 @@ final startupBackupProvider = FutureProvider<void>(
 
 /// This computer's backups (the phone's own format and rotation: the last
 /// seven, an hour apart), importing a phone's, and exporting for it.
-class EmberBackups {
-  EmberBackups(this._ref);
+class DesktopBackups {
+  DesktopBackups(this._ref);
 
   final Ref _ref;
 

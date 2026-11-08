@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'caption_style.dart';
 import 'transcript_line_tile.dart';
@@ -27,7 +27,7 @@ class TranscriptPane extends StatefulWidget {
   });
 
   /// Every language the clip has, by code, the reader's first.
-  final Map<String, List<MTCaptionLine>> tracks;
+  final Map<String, List<VhCaptionLine>> tracks;
   final ValueNotifier<String?> language;
   final ValueListenable<Duration> position;
   final ValueChanged<Duration> onSeek;
@@ -120,9 +120,9 @@ class _TranscriptPaneState extends State<TranscriptPane> {
           target,
           alignment: 0.3,
           duration: animate
-              ? mtMotionDuration(context, MTMotion.medium)
+              ? vhMotionDuration(context, VhMotion.medium)
               : Duration.zero,
-          curve: MTMotion.ease,
+          curve: VhMotion.ease,
         ),
       );
     });
@@ -137,7 +137,7 @@ class _TranscriptPaneState extends State<TranscriptPane> {
         _header(context),
         _searchField(context),
         _underSearch(context),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         Expanded(
           child: NotificationListener<UserScrollNotification>(
             onNotification: (n) {
@@ -150,10 +150,10 @@ class _TranscriptPaneState extends State<TranscriptPane> {
             // a place to scroll to; a transcript is a few hundred lines.
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(
-                MTSpace.sm,
+                VhSpace.sm,
                 0,
-                MTSpace.sm,
-                MTSpace.lg,
+                VhSpace.sm,
+                VhSpace.lg,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -186,15 +186,15 @@ class _TranscriptPaneState extends State<TranscriptPane> {
 
   /// The title, and the languages when there are several.
   Widget _header(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: MTSpace.lg),
+    padding: const EdgeInsets.symmetric(horizontal: VhSpace.lg),
     child: Wrap(
       alignment: WrapAlignment.spaceBetween,
       crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: MTSpace.sm,
-      runSpacing: MTSpace.xs,
+      spacing: VhSpace.sm,
+      runSpacing: VhSpace.xs,
       children: [
         Text(
-          context.mtl.mobileTranscript,
+          context.vhl.mobileTranscript,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         if (widget.tracks.length > 1)
@@ -209,16 +209,16 @@ class _TranscriptPaneState extends State<TranscriptPane> {
   );
 
   Widget _searchField(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(MTSpace.lg, MTSpace.sm, MTSpace.lg, 0),
+    padding: const EdgeInsets.fromLTRB(VhSpace.lg, VhSpace.sm, VhSpace.lg, 0),
     child: TextField(
       controller: _query,
       onChanged: _search,
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
-        hintText: context.mtl.desktopReadingFind,
+        hintText: context.vhl.desktopReadingFind,
         prefixIcon: const Padding(
-          padding: EdgeInsets.all(MTSpace.sm),
-          child: MTIcon(MTIcons.search),
+          padding: EdgeInsets.all(VhSpace.sm),
+          child: VhIcon(VhIcons.search),
         ),
         isDense: true,
       ),
@@ -228,15 +228,15 @@ class _TranscriptPaneState extends State<TranscriptPane> {
   /// While searching: where the search is and the steps between results.
   /// Otherwise: what a tap on a line does.
   Widget _underSearch(BuildContext context) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     if (_query.text.trim().isEmpty) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(
-          MTSpace.lg,
-          MTSpace.xs,
-          MTSpace.lg,
+          VhSpace.lg,
+          VhSpace.xs,
+          VhSpace.lg,
           0,
         ),
         child: Text(
@@ -246,12 +246,12 @@ class _TranscriptPaneState extends State<TranscriptPane> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: MTSpace.md),
+      padding: const EdgeInsets.symmetric(horizontal: VhSpace.md),
       child: Row(
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsetsDirectional.only(start: MTSpace.sm),
+              padding: const EdgeInsetsDirectional.only(start: VhSpace.sm),
               child: Text(
                 _hits.isEmpty
                     ? l10n.noResults
@@ -263,12 +263,12 @@ class _TranscriptPaneState extends State<TranscriptPane> {
           IconButton(
             tooltip: l10n.desktopReadingPreviousMatch,
             onPressed: _hits.isEmpty ? null : () => _step(-1),
-            icon: const MTIcon(MTIcons.chevronUp),
+            icon: const VhIcon(VhIcons.chevronUp),
           ),
           IconButton(
             tooltip: l10n.desktopReadingNextMatch,
             onPressed: _hits.isEmpty ? null : () => _step(1),
-            icon: const MTIcon(MTIcons.chevronDown),
+            icon: const VhIcon(VhIcons.chevronDown),
           ),
         ],
       ),

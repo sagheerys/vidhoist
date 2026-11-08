@@ -1,4 +1,4 @@
-"""Generates packages/mt_ui/lib/src/icons/mt_icons.dart from wahaj_icons.py.
+"""Generates packages/vh_ui/lib/src/icons/mt_icons.dart from wahaj_icons.py.
 
     python tool/icons/make_mt_icons.py
 
@@ -21,7 +21,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import wahaj_icons as w  # noqa: E402
 
-OUT = HERE.parent.parent / "packages/mt_ui/lib/src/icons/mt_icons.dart"
+OUT = HERE.parent.parent / "packages/vh_ui/lib/src/icons/mt_icons.dart"
 
 # Alternatives that were drawn for comparison and not chosen.
 SKIP = {"settings_8", "sliders", "knob", "download_line"}
@@ -190,7 +190,7 @@ def main():
         "import 'mt_icon_data.dart';",
         "",
         "/// The Wahaj icon set.",
-        "abstract final class MTIcons {",
+        "abstract final class VhIcons {",
     ]
     for key, body in w.ICONS.items():
         if key in SKIP:
@@ -198,7 +198,7 @@ def main():
         if key in w.DOCS:
             lines.append("")
             lines += [f"  /// {line}" for line in w.DOCS[key].splitlines()]
-        lines.append(f"  static const {camel(key)} = MTIconData('{key}', r'''{to_svg(body)}''');")
+        lines.append(f"  static const {camel(key)} = VhIconData('{key}', r'''{to_svg(body)}''');")
     lines.append("")
     names = ", ".join(camel(k) for k in w.ICONS if k not in SKIP)
     lines.append(f"  static const all = [{names}];")

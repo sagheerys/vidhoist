@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
-import 'ember_slider.dart';
+import 'desktop_slider.dart';
 import 'keyboard.dart' show seekStep;
 
 /// Elapsed time, the bar, and the length on one line, under the transport.
@@ -12,8 +12,8 @@ import 'keyboard.dart' show seekStep;
 /// Over the picture ([onPicture]) the bar has the width to itself and the
 /// times sit beneath as "0:40 / 3:10", beside [trailing]: a short's narrow
 /// column has no room for both on one line.
-class EmberSeekBar extends StatefulWidget {
-  const EmberSeekBar({
+class DesktopSeekBar extends StatefulWidget {
+  const DesktopSeekBar({
     super.key,
     required this.player,
     required this.duration,
@@ -22,7 +22,7 @@ class EmberSeekBar extends StatefulWidget {
     this.trailing,
   });
 
-  final MTPlayer player;
+  final VhPlayer player;
   final Duration? duration;
 
   /// Light on the picture's own shade, which is dark in either theme.
@@ -36,21 +36,21 @@ class EmberSeekBar extends StatefulWidget {
   final Widget? trailing;
 
   @override
-  State<EmberSeekBar> createState() => _EmberSeekBarState();
+  State<DesktopSeekBar> createState() => _DesktopSeekBarState();
 }
 
-class _EmberSeekBarState extends State<EmberSeekBar> {
+class _DesktopSeekBarState extends State<DesktopSeekBar> {
   double? _dragMs;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final total = widget.duration ?? Duration.zero;
     final maxMs = total.inMilliseconds.toDouble();
     final picture = widget.onPicture;
     final time = Theme.of(context).textTheme.labelSmall?.tabular
         .copyWith(color: picture ? Colors.white70 : p.ink3);
-    final length = maxMs > 0 ? mtFormatDuration(total) : '--:--';
+    final length = maxMs > 0 ? vhFormatDuration(total) : '--:--';
     return StreamBuilder<Duration>(
       stream: widget.player.positionStream,
       initialData: widget.player.position,
@@ -60,15 +60,15 @@ class _EmberSeekBarState extends State<EmberSeekBar> {
           0.0,
           maxMs > 0 ? maxMs : 0.0,
         );
-        final elapsed = mtFormatDuration(
+        final elapsed = vhFormatDuration(
           Duration(milliseconds: shownMs.round()),
         );
-        final bar = EmberSlider(
+        final bar = DesktopSlider(
           value: shownMs,
           max: maxMs,
-          label: context.mtl.desktopSeekBar,
+          label: context.vhl.desktopSeekBar,
           // Read as the time it shows, not a bare percentage.
-          describe: (v) => mtFormatDuration(Duration(milliseconds: v.round())),
+          describe: (v) => vhFormatDuration(Duration(milliseconds: v.round())),
           step: seekStep.inMilliseconds.toDouble(),
           inactive: picture ? Colors.white24 : null,
           onChanged: maxMs > 0 ? (v) => setState(() => _dragMs = v) : null,

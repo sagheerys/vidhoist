@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import '../di.dart';
 import '../identity.dart';
@@ -137,5 +137,7 @@ final downloadFolderProvider = FutureProvider<String?>((ref) async {
   final chosen = ref.watch(folderSettingsProvider.select((s) => s.download));
   if (chosen != null) return chosen;
   final downloads = await ref.watch(desktopFoldersProvider).downloads();
-  return downloads == null ? null : '$downloads\\${EmberIdentity.displayName}';
+  return downloads == null
+      ? null
+      : '$downloads\\${DesktopIdentity.displayName}';
 });

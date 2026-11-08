@@ -3,7 +3,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
-import 'package:mt_core/mt_core.dart' show ArtworkIndex;
+import 'package:vh_core/vh_core.dart' show ArtworkIndex;
 
 /// The widest a kept cover is. A phone video's frame is 1080x1920 or more,
 /// and decoding hundreds of those while the library scrolls made it crawl

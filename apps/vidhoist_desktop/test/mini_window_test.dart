@@ -7,7 +7,7 @@ import 'package:vidhoist_desktop/features/clip/clip_page.dart';
 import 'package:vidhoist_desktop/features/library/library_page.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/mini_window.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'support/shell_harness.dart';
 
@@ -58,7 +58,7 @@ void main() {
     final h = await open(tester, playing: song);
     await ctrl(tester, LogicalKeyboardKey.keyM);
     expect(h.controls.calls, contains('mini 360x96'));
-    expect(find.byType(EmberMiniWindow), findsOneWidget);
+    expect(find.byType(DesktopMiniWindow), findsOneWidget);
     expect(find.byType(LibraryPage), findsNothing);
 
     await ctrl(tester, LogicalKeyboardKey.keyM);
@@ -78,16 +78,16 @@ void main() {
     await ctrl(tester, LogicalKeyboardKey.keyM);
     // Search wants the full window.
     await ctrl(tester, LogicalKeyboardKey.keyF);
-    expect(find.byType(EmberMiniWindow), findsOneWidget);
+    expect(find.byType(DesktopMiniWindow), findsOneWidget);
     expect(find.byType(TextField), findsNothing);
     await tester.sendKeyEvent(LogicalKeyboardKey.escape);
     await tester.pumpAndSettle();
     expect(h.controls.calls.last, 'mini off');
 
     await ctrl(tester, LogicalKeyboardKey.keyM);
-    await tester.tap(find.byType(EmberMiniWindow));
+    await tester.tap(find.byType(DesktopMiniWindow));
     await tester.pump(kDoubleTapMinTime);
-    await tester.tap(find.byType(EmberMiniWindow));
+    await tester.tap(find.byType(DesktopMiniWindow));
     await tester.pumpAndSettle();
     expect(h.controls.calls.last, 'mini off');
   });
@@ -126,8 +126,8 @@ void main() {
 
   for (final arabic in [false, true]) {
     for (final (item, size) in [
-      (song, EmberMiniSize.audio),
-      (video, EmberMiniSize.video),
+      (song, DesktopMiniSize.audio),
+      (video, DesktopMiniSize.video),
     ]) {
       testWidgets(
         'the card fits its window, ${item.isAudio ? 'sound' : 'picture'}'
@@ -157,7 +157,7 @@ void main() {
     );
     final h = await open(tester, playing: video);
     GoRouter.of(tester.element(find.byType(LibraryPage)))
-        .go(EmberRoutes.item(video.canonicalUrl));
+        .go(DesktopRoutes.item(video.canonicalUrl));
     await tester.pumpAndSettle();
     await ctrl(tester, LogicalKeyboardKey.keyM);
     // The card's next: the player moves on while the page is not there.

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../downloads_library/cover_keeping.dart';
@@ -68,7 +68,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     if (ref.read(updateControllerProvider).phase != UpdatePhase.available) {
       return;
     }
-    if (MTRouteDepth.depth.value != 0) return;
+    if (VhRouteDepth.depth.value != 0) return;
     _updatePrompted = true;
     unawaited(ref.read(loggerProvider).log('update sheet shown', tag: 'ui'));
     showUpdateSheet(context);
@@ -218,10 +218,10 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
         engine.submit(url, quality, isBatchMember: true);
       }
     }
-    showMTSnack(
+    showVhSnack(
       context,
-      context.mtl.downloadStarted,
-      type: MTSnackType.success,
+      context.vhl.downloadStarted,
+      type: VhSnackType.success,
     );
   }
 
@@ -257,7 +257,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final branch = widget.navigationShell.currentIndex;
     final clipboardUrl = ref.watch(clipboardUrlProvider);
 
@@ -286,7 +286,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     _watchEnrichment();
 
     final handler = ref.watch(audioHandlerProvider);
-    final roomForPanel = MTAdaptiveScaffold.hasEndPane(context);
+    final roomForPanel = VhAdaptiveScaffold.hasEndPane(context);
     return StreamBuilder(
       stream: handler.mediaItem,
       builder: (context, playing) {
@@ -297,9 +297,9 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
             playing.data != null &&
             !_panelFolded &&
             roomForPanel;
-        return MTAdaptiveScaffold(
+        return VhAdaptiveScaffold(
           endPane: panel
-              ? MTNowPlayingPanel(
+              ? VhNowPlayingPanel(
                   handler: handler,
                   artwork: artworkBuilderFor(ref),
                   cover: coverBuilderFor(ref),
@@ -314,12 +314,12 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
           body: widget.navigationShell,
           floatingActionButtonAnimator:
               FloatingActionButtonAnimator.noAnimation,
-          floatingActionButton: MTHiddenUnderRoutes(
+          floatingActionButton: VhHiddenUnderRoutes(
             // It hides under any sheet or dialog: it used to cover the "about
             // this clip" link and crowd the bottom sheets' actions (field
             // report 2026-09-02).
             visible: branch != 2,
-            child: MTFab(
+            child: VhFab(
               label: clipboardUrl == null
                   ? l10n.addLinkFab
                   : l10n.clipboardLinkReady,
@@ -338,7 +338,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
             if (branch != 2 &&
                 clipboardUrl != null &&
                 clipboardUrl != _dismissedClipboardUrl)
-              MTClipboardBanner(
+              VhClipboardBanner(
                 url: clipboardUrl,
                 title: l10n.clipboardFound,
                 downloadLabel: l10n.downloadNow,
@@ -362,7 +362,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
                     openAddSheet(context, ref, initialUrl: clipboardUrl),
                 onDismiss: _dismissClipboard,
               ),
-            MTMiniPlayer(
+            VhMiniPlayer(
               hidden: branch == 2 || panel,
               handler: handler,
               // A square thumbnail, so the wide YouTube picture: the
@@ -379,20 +379,20 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     );
   }
 
-  List<MTNavItem> _navItems(MTLocalizations l10n) => [
-    MTNavItem(
-      icon: MTIcons.download,
-      selectedIcon: MTIcons.download,
+  List<VhNavItem> _navItems(VhLocalizations l10n) => [
+    VhNavItem(
+      icon: VhIcons.download,
+      selectedIcon: VhIcons.download,
       label: l10n.navMyDownloads,
     ),
-    MTNavItem(
-      icon: MTIcons.queue,
-      selectedIcon: MTIcons.queue,
+    VhNavItem(
+      icon: VhIcons.queue,
+      selectedIcon: VhIcons.queue,
       label: l10n.navPlaylists,
     ),
-    MTNavItem(
-      icon: MTIcons.settings,
-      selectedIcon: MTIcons.settings,
+    VhNavItem(
+      icon: VhIcons.settings,
+      selectedIcon: VhIcons.settings,
       label: l10n.navSettings,
     ),
   ];

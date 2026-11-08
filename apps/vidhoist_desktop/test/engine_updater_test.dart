@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_desktop/platform/engine_locator.dart';
 import 'package:vidhoist_desktop/platform/engine_pins.dart';
 import 'package:vidhoist_desktop/platform/engine_updater.dart';

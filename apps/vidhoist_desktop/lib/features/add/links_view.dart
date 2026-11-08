@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/downloads_data.dart';
 import '../../shell/error_text.dart';
@@ -54,8 +54,8 @@ class LinksView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final engine = ref.watch(downloadEngineProvider);
     return StreamBuilder<DownloadTask>(
@@ -69,13 +69,13 @@ class LinksView extends ConsumerWidget {
           ),
           if (read.dropped > 0)
             Padding(
-              padding: const EdgeInsets.only(top: MTSpace.xxs),
+              padding: const EdgeInsets.only(top: VhSpace.xxs),
               child: Text(
-                l.desktopLinksDropped(read.dropped, MTConstants.maxLinksPerAdd),
+                l.desktopLinksDropped(read.dropped, VhConstants.maxLinksPerAdd),
                 style: text.bodySmall?.copyWith(color: p.err),
               ),
             ),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: _listHeight),
             child: ListView(
@@ -130,12 +130,12 @@ class _Line extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final failed = task?.phase == TaskPhase.failed;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: MTSpace.xxs),
+      padding: const EdgeInsets.symmetric(vertical: VhSpace.xxs),
       child: Row(
         children: [
           SizedBox(
@@ -175,20 +175,20 @@ class _Line extends StatelessWidget {
             ),
           ),
           if (line.state == LinkState.playlist)
-            MTLinkButton(
+            VhLinkButton(
               label: l.batchTitle,
               onPressed: () => unawaited(showBatchDialog(context, line.url)),
             )
           else if (failed && onRetry != null)
-            MTLinkButton(label: l.retry, onPressed: onRetry)
+            VhLinkButton(label: l.retry, onPressed: onRetry)
           else if (!sent)
-            MTShortcutTooltip(
+            VhShortcutTooltip(
               message: l.remove,
               child: IconButton(
                 onPressed: onRemove,
-                icon: MTIcon(
-                  MTIcons.close,
-                  size: MTSpace.md,
+                icon: VhIcon(
+                  VhIcons.close,
+                  size: VhSpace.md,
                   color: p.ink3,
                   semanticLabel: l.remove,
                 ),
@@ -203,7 +203,7 @@ class _Line extends StatelessWidget {
 }
 
 /// How a sent link is going, in a word, or why it failed.
-String taskLine(MTLocalizations l, DownloadTask task) => switch (task.phase) {
+String taskLine(VhLocalizations l, DownloadTask task) => switch (task.phase) {
   TaskPhase.queued => l.queuedSection,
   TaskPhase.preparing => l.enginePreparing,
   TaskPhase.downloading => l.engineDownloadingProgress(
@@ -228,8 +228,8 @@ class LinkStateLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final (label, color) = switch (line.state) {
       LinkState.ready => (l.desktopLinkReady, p.accentInk),
       LinkState.inLibrary => (l.desktopLinkInLibrary, p.ink3),

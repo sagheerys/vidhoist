@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'transcript_pane.dart';
 
@@ -13,10 +13,10 @@ import 'transcript_pane.dart';
 /// clip changes, as its lines were the old clip's.
 Future<void> showTranscriptSheet(
   BuildContext context, {
-  required MTVideoSession session,
-  required Map<String, List<MTCaptionLine>> tracks,
+  required VhVideoSession session,
+  required Map<String, List<VhCaptionLine>> tracks,
   required ValueNotifier<String?> language,
-}) => showMTSheet<void>(
+}) => showVhSheet<void>(
   context: context,
   isScrollControlled: true,
   useSafeArea: true,
@@ -50,8 +50,8 @@ class _SessionTranscript extends StatefulWidget {
     required this.language,
   });
 
-  final MTVideoSession session;
-  final Map<String, List<MTCaptionLine>> tracks;
+  final VhVideoSession session;
+  final Map<String, List<VhCaptionLine>> tracks;
   final ValueNotifier<String?> language;
 
   @override

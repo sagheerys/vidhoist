@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import 'sync_data.dart';
 
@@ -32,7 +32,7 @@ const syncSettle = Duration(seconds: 2);
 final syncRunnerProvider = Provider<void>((ref) {
   final settings = ref.watch(syncSettingsProvider).valueOrNull;
   if (settings == null || !settings.on) return;
-  final sync = ref.read(emberSyncProvider);
+  final sync = ref.read(desktopSyncProvider);
   final storage = IoSyncStorage(settings.folder!);
   final root = storage.root;
   final mine = storage.pathOf([settings.deviceId!]).toLowerCase();

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/vh_media.dart';
 
 /// A cover kept on this computer for the clip at [canonicalUrl], whose
 /// queue entry names [artwork] (often nothing: the library has it), as a
@@ -46,7 +46,7 @@ class SystemNowPlaying {
   final bool canPrevious;
 
   /// Nothing to show while the queue is empty.
-  static SystemNowPlaying? of(MTPlayerState state) {
+  static SystemNowPlaying? of(VhPlayerState state) {
     final item = state.current;
     if (item == null) return null;
     return SystemNowPlaying(
@@ -173,9 +173,9 @@ class SystemMediaBridge {
     _show(player.state);
   }
 
-  final MTPlayer player;
+  final VhPlayer player;
   final List<SystemMediaSurface> surfaces;
-  late final StreamSubscription<MTPlayerState> _states;
+  late final StreamSubscription<VhPlayerState> _states;
   final _presses = <StreamSubscription<SystemMediaButton>>[];
   SystemNowPlaying? _shown;
   var _first = true;
@@ -188,7 +188,7 @@ class SystemMediaBridge {
   ({String clip, String file})? _cover;
   String? _finding;
 
-  void _show(MTPlayerState state) {
+  void _show(VhPlayerState state) {
     var now = SystemNowPlaying.of(state);
     if (now case SystemNowPlaying(thumbnail: null, canonicalUrl: final url?)) {
       if (_cover?.clip == url) {

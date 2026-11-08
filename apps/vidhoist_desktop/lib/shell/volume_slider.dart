@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../data/volume.dart';
-import 'ember_slider.dart';
+import 'desktop_slider.dart';
 
 /// The player bar's volume: the speaker and a short slider. ↑ and ↓ move
 /// the same level, so either way it is kept between runs.
-class EmberVolumeSlider extends ConsumerWidget {
-  const EmberVolumeSlider({super.key, this.onPicture = false});
+class DesktopVolumeSlider extends ConsumerWidget {
+  const DesktopVolumeSlider({super.key, this.onPicture = false});
 
   /// Light on the picture's dark shade, in full screen.
   final bool onPicture;
@@ -19,18 +19,18 @@ class EmberVolumeSlider extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final level = ref.watch(volumeProvider);
-    return MTShortcutTooltip(
+    return VhShortcutTooltip(
       message: l.desktopVolume,
       shortcut: '↑ ↓',
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          MTIcon(
-            MTIcons.volume,
-            size: MTDensity.desktop.icon,
+          VhIcon(
+            VhIcons.volume,
+            size: VhDensity.desktop.icon,
             color: onPicture
                 ? (level == 0 ? Colors.white54 : Colors.white)
                 : (level == 0 ? p.ink3 : p.ink2),
@@ -41,7 +41,7 @@ class EmberVolumeSlider extends ConsumerWidget {
             textDirection: TextDirection.ltr,
             child: SizedBox(
               width: width,
-              child: EmberSlider(
+              child: DesktopSlider(
                 value: level,
                 max: 100,
                 label: l.desktopVolume,

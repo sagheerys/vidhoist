@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/clip/video_controls.dart';
 import 'package:vidhoist_desktop/router.dart';
-import 'package:vidhoist_desktop/shell/ember_slider.dart';
+import 'package:vidhoist_desktop/shell/desktop_slider.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 import 'support/shell_harness.dart';
 
@@ -15,7 +15,7 @@ import 'support/shell_harness.dart';
 /// on Windows that overlay's accessibility node reached the engine with
 /// no parent: the accessibility bridge took it for the root, failed every
 /// update after, and crashed the app some seconds into a session. The
-/// app's sliders are [EmberSlider], which has no overlay.
+/// app's sliders are [DesktopSlider], which has no overlay.
 void main() {
   test('**the guard**: no Material Slider in lib', () {
     final offenders = [
@@ -43,11 +43,11 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     h.player.showPlaying([toPlaylistItem(clip)], playing: false);
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.item(url));
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.item(url));
     await tester.pumpAndSettle();
     expect(find.byType(ClipVideoControls), findsOneWidget);
-    expect(find.byType(EmberSlider), findsNWidgets(3));
+    expect(find.byType(DesktopSlider), findsNWidgets(3));
     expect(find.byType(Slider), findsNothing);
   });
 }

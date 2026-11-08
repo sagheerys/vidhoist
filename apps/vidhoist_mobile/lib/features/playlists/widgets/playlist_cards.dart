@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// A manual playlist card: a mosaic cover of up to four thumbnails, plus a
 /// play button and a pin badge.
@@ -24,21 +24,21 @@ class PlaylistCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final l10n = context.mtl;
+    final l10n = context.vhl;
 
     return Material(
       color: p.card,
-      borderRadius: BorderRadius.circular(MTRadius.cardLg),
+      borderRadius: BorderRadius.circular(VhRadius.cardLg),
       child: InkWell(
         onTap: onTap,
         onLongPress: onLongPress,
-        borderRadius: BorderRadius.circular(MTRadius.cardLg),
+        borderRadius: BorderRadius.circular(VhRadius.cardLg),
         child: Container(
-          padding: const EdgeInsets.all(MTSpace.xs + 2),
+          padding: const EdgeInsets.all(VhSpace.xs + 2),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(MTRadius.cardLg),
+            borderRadius: BorderRadius.circular(VhRadius.cardLg),
             border: Border.all(
               color: playlist.pinned ? p.accent.withValues(alpha: 0.4) : p.line,
             ),
@@ -56,7 +56,7 @@ class PlaylistCard extends StatelessWidget {
                   onPlay: onPlay,
                 ),
               ),
-              const SizedBox(height: MTSpace.xs + 1),
+              const SizedBox(height: VhSpace.xs + 1),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: Text(
@@ -72,7 +72,7 @@ class PlaylistCard extends StatelessWidget {
                   [
                     l10n.queueItemsCount(playlist.items.length),
                     if (playlist.lastPlayedAt != null)
-                      mtTimeAgo(context, playlist.lastPlayedAt!),
+                      vhTimeAgo(context, playlist.lastPlayedAt!),
                   ].join(' · '),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -112,10 +112,10 @@ class _Cover extends StatelessWidget {
   /// image takes its natural height and centres itself, a thin strip in the
   /// middle of an empty card. `BoxFit.cover` does not help, because nothing
   /// is asking it to fill the height.
-  Widget _mosaic(BuildContext context, MTPalette p) {
+  Widget _mosaic(BuildContext context, VhPalette p) {
     Widget cell(Widget? child) => ColoredBox(
       color: p.cardAlt,
-      child: child ?? MTIcon(MTIcons.queue, size: 18, color: p.ink3),
+      child: child ?? VhIcon(VhIcons.queue, size: 18, color: p.ink3),
     );
     Widget stretchRow(List<Widget> children) => Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -144,12 +144,12 @@ class _Cover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return Stack(
       fit: StackFit.expand,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(MTRadius.thumb),
+          borderRadius: BorderRadius.circular(VhRadius.thumb),
           child: _mosaic(context, p),
         ),
         if (pinned)
@@ -158,12 +158,12 @@ class _Cover extends StatelessWidget {
             start: 6,
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: MTSpace.xs,
+                horizontal: VhSpace.xs,
                 vertical: 3,
               ),
               decoration: BoxDecoration(
                 color: p.ink.withValues(alpha: 0.85),
-                borderRadius: BorderRadius.circular(MTRadius.badge + 1),
+                borderRadius: BorderRadius.circular(VhRadius.badge + 1),
               ),
               child: Text(
                 '📌 $pinnedLabel',
@@ -177,14 +177,14 @@ class _Cover extends StatelessWidget {
           end: 6,
           child: Material(
             color: p.ink.withValues(alpha: 0.85),
-            borderRadius: BorderRadius.circular(MTRadius.chip),
+            borderRadius: BorderRadius.circular(VhRadius.chip),
             child: InkWell(
               onTap: onPlay,
-              borderRadius: BorderRadius.circular(MTRadius.chip),
+              borderRadius: BorderRadius.circular(VhRadius.chip),
               child: SizedBox(
                 width: 28,
                 height: 28,
-                child: MTIcon(MTIcons.playFill, size: 16, color: p.bg),
+                child: VhIcon(VhIcons.playFill, size: 16, color: p.bg),
               ),
             ),
           ),

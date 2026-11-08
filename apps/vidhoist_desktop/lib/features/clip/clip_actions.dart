@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
 
 import '../../shell/open_web_link.dart';
 
@@ -22,7 +22,7 @@ class ClipActions {
   Future<void> toggleFavorite(String canonicalUrl) async {
     await _ref
         .read(tagsIndexProvider)
-        .toggleTag(canonicalUrl, MTConstants.favoritesSystemTag);
+        .toggleTag(canonicalUrl, VhConstants.favoritesSystemTag);
     _ref.invalidate(libraryItemsProvider);
   }
 

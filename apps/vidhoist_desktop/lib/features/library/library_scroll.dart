@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 /// Where each view of the library was left, for this session only.
 ///

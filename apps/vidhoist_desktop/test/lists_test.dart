@@ -14,9 +14,9 @@ import 'package:vidhoist_desktop/features/lists/playlist_line.dart';
 import 'package:vidhoist_desktop/features/lists/playlist_page.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -65,7 +65,7 @@ void main() {
   Future<ShellHarness> open(
     WidgetTester tester, {
     List<Map<String, Object?>> lists = const [],
-    String at = EmberRoutes.playlists,
+    String at = DesktopRoutes.playlists,
     Size window = const Size(1440, 900),
   }) async {
     ShellHarness.useWindow(tester, window);
@@ -74,14 +74,14 @@ void main() {
     await h.store.setString(
       'tags_index',
       jsonEncode({
-        _a: ['homelab', MTConstants.favoritesSystemTag],
+        _a: ['homelab', VhConstants.favoritesSystemTag],
         _b: ['homelab'],
       }),
     );
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    if (at != EmberRoutes.library) {
-      GoRouter.of(tester.element(find.byType(EmberSidebar))).go(at);
+    if (at != DesktopRoutes.library) {
+      GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(at);
       await tester.pumpAndSettle();
     }
     return h;
@@ -104,8 +104,8 @@ void main() {
     expect(find.text('Evening'), findsOneWidget);
     expect(find.textContaining('2 items'), findsOneWidget);
     // Favourites are a tag underneath, but never offered as one.
-    expect(find.text('${mtName('# homelab')}  2'), findsOneWidget);
-    expect(find.textContaining(MTConstants.favoritesSystemTag), findsNothing);
+    expect(find.text('${vhName('# homelab')}  2'), findsOneWidget);
+    expect(find.textContaining(VhConstants.favoritesSystemTag), findsNothing);
   });
 
   testWidgets('a smart list plays at a click, as on the phone', (tester) async {
@@ -128,10 +128,10 @@ void main() {
 
   testWidgets('a tag opens the library filtered by it', (tester) async {
     await open(tester);
-    await tester.tap(find.text('${mtName('# homelab')}  2'));
+    await tester.tap(find.text('${vhName('# homelab')}  2'));
     await tester.pumpAndSettle();
     final container = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
+      tester.element(find.byType(DesktopSidebar)),
     );
     expect(container.read(libraryViewProvider).tags, {'homelab'});
     expect(find.byType(ListsPage), findsNothing);
@@ -158,7 +158,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(await tags.urlsWithTag('lab'), isEmpty);
     // The heart is not a tag the user manages, and stays.
-    expect(await tags.tagsOf(_a), [MTConstants.favoritesSystemTag]);
+    expect(await tags.tagsOf(_a), [VhConstants.favoritesSystemTag]);
   });
 
   group('a list page', () {
@@ -266,7 +266,7 @@ void main() {
         ],
         at: '/playlists/p1',
       );
-      final sidebar = find.byType(EmberSidebar);
+      final sidebar = find.byType(DesktopSidebar);
       expect(
         find.descendant(of: sidebar, matching: find.text('Evening')),
         findsNothing,
@@ -278,7 +278,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        tester.widget<EmberSidebar>(sidebar).currentList,
+        tester.widget<DesktopSidebar>(sidebar).currentList,
         'p1',
         reason: 'the open list is the one marked',
       );
@@ -292,7 +292,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         find.descendant(
-          of: find.byType(MTConfirmDialog),
+          of: find.byType(VhConfirmDialog),
           matching: find.textContaining('Evening'),
         ),
         findsOneWidget,
@@ -333,7 +333,7 @@ void main() {
       lists: [
         _saved('p1', 'Evening', [_b]),
       ],
-      at: EmberRoutes.item(_a),
+      at: DesktopRoutes.item(_a),
     );
     expect(find.byType(ClipPage), findsOneWidget);
     await tester.tap(
@@ -363,10 +363,10 @@ void main() {
       lists: [
         _saved('p1', 'Evening', [_a, _b]),
       ],
-      at: EmberRoutes.item(_b),
+      at: DesktopRoutes.item(_b),
     );
     final container = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
+      tester.element(find.byType(DesktopSidebar)),
     );
     await tester.runAsync(
       () => container

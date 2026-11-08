@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'ui_zoom.dart';
 
@@ -15,8 +15,8 @@ import 'ui_zoom.dart';
 /// Also owns Ctrl+= / Ctrl+- / Ctrl+0, as in a browser, says once when
 /// Ember had to choose a smaller size for this screen, and draws the
 /// keyboard focus ring over everything.
-class EmberZoomFrame extends ConsumerStatefulWidget {
-  const EmberZoomFrame({
+class DesktopZoomFrame extends ConsumerStatefulWidget {
+  const DesktopZoomFrame({
     super.key,
     required this.child,
     required this.onChangeZoom,
@@ -28,10 +28,10 @@ class EmberZoomFrame extends ConsumerStatefulWidget {
   final VoidCallback onChangeZoom;
 
   @override
-  ConsumerState<EmberZoomFrame> createState() => _EmberZoomFrameState();
+  ConsumerState<DesktopZoomFrame> createState() => _DesktopZoomFrameState();
 }
 
-class _EmberZoomFrameState extends ConsumerState<EmberZoomFrame> {
+class _DesktopZoomFrameState extends ConsumerState<DesktopZoomFrame> {
   @override
   void initState() {
     super.initState();
@@ -53,8 +53,8 @@ class _EmberZoomFrameState extends ConsumerState<EmberZoomFrame> {
   void _sayLowered() {
     final zoom = ref.read(uiZoomProvider);
     if (!mounted || !zoom.lowered) return;
-    final l = context.mtl;
-    showMTNotice(
+    final l = context.vhl;
+    showVhNotice(
       context,
       message: l.desktopZoomLowered(zoom.percent),
       actionLabel: l.desktopZoomChange,
@@ -88,7 +88,7 @@ class _EmberZoomFrameState extends ConsumerState<EmberZoomFrame> {
     final scale = ref.watch(uiZoomProvider).value;
     // The focus ring sits outside the zoom: focus reports where a control
     // is in the window's own coordinates.
-    return MTFocusRingLayer(child: _zoomed(context, scale));
+    return VhFocusRingLayer(child: _zoomed(context, scale));
   }
 
   Widget _zoomed(BuildContext context, double scale) {

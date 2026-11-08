@@ -19,30 +19,30 @@ import 'package:vidhoist_desktop/shell/shell_state.dart';
 import 'package:vidhoist_desktop/shell/ui_zoom.dart';
 import 'package:vidhoist_desktop/shell/video_surface.dart';
 import 'package:vidhoist_desktop/shell/window_controls.dart';
-import 'package:mt_ui/mt_ui.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'fake_engine.dart';
 
 export 'fake_engine.dart';
 
 /// A player that records the commands it gets and plays nothing.
-class FakePlayer implements MTPlayer {
-  final _states = StreamController<MTPlayerState>.broadcast();
+class FakePlayer implements VhPlayer {
+  final _states = StreamController<VhPlayerState>.broadcast();
   final _positions = StreamController<Duration>.broadcast();
   final List<String> calls = [];
 
   @override
-  MTPlayerState state = const MTPlayerState();
+  VhPlayerState state = const VhPlayerState();
   @override
   Duration position = Duration.zero;
 
   /// Puts [items] in the queue as if they were playing.
   void showPlaying(List<PlaylistItem> items, {bool playing = true}) {
-    state = MTPlayerState(
+    state = VhPlayerState(
       items: items,
       ordered: items,
       index: 0,
@@ -65,7 +65,7 @@ class FakePlayer implements MTPlayer {
   Future<void> _note(String call) async => calls.add(call);
 
   @override
-  Stream<MTPlayerState> get states => _states.stream;
+  Stream<VhPlayerState> get states => _states.stream;
   @override
   Stream<Duration> get positionStream => _positions.stream;
   @override
@@ -216,7 +216,7 @@ class ShellHarness {
         )),
       ...overrides,
     ],
-    child: const EmberApp(),
+    child: const DesktopApp(),
   );
 
   /// Sizes the test window as a Windows window of [size] logical pixels.
@@ -245,7 +245,7 @@ PlaylistItem clip(String title) => PlaylistItem(
 /// A control by the label it shows on hover, which is also what a screen
 /// reader says for it.
 Finder byLabel(String label) => find.byWidgetPredicate(
-  (w) => w is MTShortcutTooltip && w.message == label,
+  (w) => w is VhShortcutTooltip && w.message == label,
   description: 'control "$label"',
 );
 

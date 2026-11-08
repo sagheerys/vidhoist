@@ -1,10 +1,10 @@
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// The media folder (§5.3), fixed for good with the first release (ADR
 /// 0002). Its contents are registered in MediaStore so they appear in the
 /// phone's gallery. Not the parent app's `Vidhoist_Lite`: a phone carrying
 /// both would mix the two libraries.
-const liteMediaDir = '/storage/emulated/0/Download/Vidhoist';
+const phoneMediaDir = '/storage/emulated/0/Download/Vidhoist';
 
 const _audioExtensions = {'mp3', 'm4a', 'aac', 'ogg', 'opus', 'wav', 'flac'};
 const _videoExtensions = {'mp4', 'webm', 'mkv', 'mov', 'avi', '3gp', 'm4v'};

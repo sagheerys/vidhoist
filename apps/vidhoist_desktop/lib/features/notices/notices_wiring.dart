@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/choices_data.dart';
 import '../../data/downloads_data.dart';
@@ -62,13 +62,13 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
     }
   }
 
-  EmberNotice? _forTask(DownloadTask task) {
+  DesktopNotice? _forTask(DownloadTask task) {
     if (!mounted) return null;
-    final l = context.mtl;
+    final l = context.vhl;
     final name = task.title ?? task.inputUrl;
     final url = task.canonicalUrl;
     if (task.phase == TaskPhase.failed) {
-      return EmberNotice(
+      return DesktopNotice(
         title: l.downloadFailed,
         // The reason in the notice itself: "failed" alone leaves a dropped
         // network, a refused link and a full disk to guesswork.
@@ -76,7 +76,7 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
             '$name · ${task.error == null ? l.failed : errorText(l, task.error!)}',
       );
     }
-    return EmberNotice(
+    return DesktopNotice(
       title: l.downloadComplete,
       body: name,
       actions: [
@@ -87,7 +87,7 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
     );
   }
 
-  Future<void> _show(EmberNotice? notice) async {
+  Future<void> _show(DesktopNotice? notice) async {
     if (notice == null) return;
     if (await ref.read(windowInFrontProvider)()) return;
     await ref.read(noticePortProvider).show(notice);
@@ -95,7 +95,7 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
 
   Future<void> _open(String canonicalUrl) async {
     await ref.read(bringWindowBackProvider)();
-    if (mounted) GoRouter.of(context).go(EmberRoutes.item(canonicalUrl));
+    if (mounted) GoRouter.of(context).go(DesktopRoutes.item(canonicalUrl));
   }
 
   Future<void> _play(String canonicalUrl) async {

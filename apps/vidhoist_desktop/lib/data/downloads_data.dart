@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import '../di.dart';
 import '../identity.dart';
@@ -120,7 +120,7 @@ void _log(Ref ref, String message) {
 String taskFolder(Ref ref, DownloadTask task) {
   final root =
       ref.read(downloadFolderProvider).valueOrNull ??
-      fallbackDownloadFolder(EmberIdentity.displayName);
+      fallbackDownloadFolder(DesktopIdentity.displayName);
   return switch (task.folder) {
     final sub? when sub.isNotEmpty => '$root\\$sub',
     _ => root,

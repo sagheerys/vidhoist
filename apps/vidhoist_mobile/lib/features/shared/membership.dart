@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../playlists/playlists_providers.dart';
 
@@ -24,7 +24,7 @@ class ItemMembership {
 
   /// One line ready to show under the title, or `null` when it belongs
   /// nowhere.
-  String? line(MTLocalizations l10n) {
+  String? line(VhLocalizations l10n) {
     final parts = [
       if (playlists.isNotEmpty)
         '${l10n.inPlaylists}: ${playlists.join(l10n.listSeparator)}',

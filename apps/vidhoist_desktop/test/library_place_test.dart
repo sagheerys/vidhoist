@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/library/library_page.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/context_menu.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 import 'support/shell_harness.dart';
 
@@ -66,11 +66,11 @@ void main() {
       list(tester).jumpTo(2400);
       await tester.pumpAndSettle();
 
-      router(tester).go(EmberRoutes.item('https://youtu.be/clip0000030'));
+      router(tester).go(DesktopRoutes.item('https://youtu.be/clip0000030'));
       await tester.pumpAndSettle();
       expect(find.byType(LibraryPage), findsNothing);
       GoRouter.of(tester.element(find.byType(Navigator).last))
-          .go(EmberRoutes.library);
+          .go(DesktopRoutes.library);
       await tester.pumpAndSettle();
 
       expect(list(tester).pixels, 2400);
@@ -82,7 +82,7 @@ void main() {
       list(tester).jumpTo(2400);
       await tester.pumpAndSettle();
 
-      router(tester).go(EmberRoutes.favorites);
+      router(tester).go(DesktopRoutes.favorites);
       await tester.pumpAndSettle();
       expect(list(tester).pixels, 0);
     });
@@ -92,15 +92,15 @@ void main() {
     test('rows keep their height while the menu fits, and shorten, never '
         'under the floor, when it does not', () {
       final entries = [
-        for (var i = 0; i < 13; i++) EmberMenuEntry(i, null, '$i'),
-        const EmberMenuEntry<int>.divider(),
-        const EmberMenuEntry<int>.divider(),
+        for (var i = 0; i < 13; i++) DesktopMenuEntry(i, null, '$i'),
+        const DesktopMenuEntry<int>.divider(),
+        const DesktopMenuEntry<int>.divider(),
       ];
-      expect(emberMenuRowHeight(entries, 900), 36);
-      final short = emberMenuRowHeight(entries, 455);
+      expect(desktopMenuRowHeight(entries, 900), 36);
+      final short = desktopMenuRowHeight(entries, 455);
       expect(short, lessThan(36));
       expect(13 * short + 2 * 16 + 4 * 8, lessThanOrEqualTo(455));
-      expect(emberMenuRowHeight(entries, 200), emberMenuTightRow);
+      expect(desktopMenuRowHeight(entries, 200), desktopMenuTightRow);
     });
 
     testWidgets('**the guard**: in the smallest window, deleting is in '

@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// **The "follow the system language" guard (decision 2026-09-06): a door
 /// that opens.**
@@ -25,7 +25,7 @@ void main() {
         secretStoreProvider.overrideWithValue(MemorySecretStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
         initialSettingsProvider.overrideWithValue(
-          LiteSettings(localeCode: initialLocale),
+          PhoneSettings(localeCode: initialLocale),
         ),
       ],
     );
@@ -70,7 +70,7 @@ void main() {
   test(
     'loading from storage with no language key follows the system',
     () async {
-      final settings = await LiteSettings.load(MemoryKeyValueStore());
+      final settings = await PhoneSettings.load(MemoryKeyValueStore());
       expect(settings.localeCode, isNull);
     },
   );
@@ -88,16 +88,16 @@ void main() {
 
     final container = makeContainer(initialLocale: 'ar');
     addTearDown(container.dispose);
-    final l10n = await MTLocalizations.delegate.load(const Locale('ar'));
+    final l10n = await VhLocalizations.delegate.load(const Locale('ar'));
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
           locale: const Locale('ar'),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
-          theme: mtTheme(MTVariant.lite, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
           home: Scaffold(
             body: Center(
               child: SegmentedButton<String>(
@@ -106,8 +106,8 @@ void main() {
                     value: 'system',
                     label: Text(l10n.languageSystem),
                   ),
-                  ButtonSegment(value: 'ar', label: Text(mtLanguageName('ar'))),
-                  ButtonSegment(value: 'en', label: Text(mtLanguageName('en'))),
+                  ButtonSegment(value: 'ar', label: Text(vhLanguageName('ar'))),
+                  ButtonSegment(value: 'en', label: Text(vhLanguageName('en'))),
                 ],
                 selected: const {'ar'},
                 onSelectionChanged: (_) {},
@@ -121,7 +121,7 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text(l10n.languageSystem), findsOneWidget);
-    expect(find.text(mtLanguageName('ar')), findsOneWidget);
-    expect(find.text(mtLanguageName('en')), findsOneWidget);
+    expect(find.text(vhLanguageName('ar')), findsOneWidget);
+    expect(find.text(vhLanguageName('en')), findsOneWidget);
   });
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../downloads_library/artwork_view.dart';
@@ -22,7 +22,7 @@ class PlaylistDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final playlists = ref.watch(playlistsProvider).valueOrNull ?? const [];
     final playlist = playlists.where((p) => p.id == playlistId).firstOrNull;
     final itemsAsync = ref.watch(playlistViewProvider(playlistId));
@@ -30,7 +30,7 @@ class PlaylistDetailsScreen extends ConsumerWidget {
     if (playlist == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: MTEmptyState(
+        body: VhEmptyState(
           title: l10n.playlistDetails,
           message: l10n.noPlaylistsMessage,
         ),
@@ -44,11 +44,11 @@ class PlaylistDetailsScreen extends ConsumerWidget {
           IconButton(
             tooltip: l10n.rename,
             onPressed: () => showPlaylistActionsSheet(context, ref, playlist),
-            icon: const MTIcon(MTIcons.moreVert),
+            icon: const VhIcon(VhIcons.moreVert),
           ),
         ],
       ),
-      body: MTReadableWidth(
+      body: VhReadableWidth(
         child: itemsAsync.when(
           // **A reload keeps the list on screen** (field report 2026-09-25:
           // tapping a clip low in the list flashed and jumped to the top).
@@ -57,13 +57,13 @@ class PlaylistDetailsScreen extends ConsumerWidget {
           // once; without this the reload swapped the list
           // for a spinner and rebuilt it from the top.
           skipLoadingOnReload: true,
-          loading: () => const Center(child: MTSpinner()),
-          error: (_, _) => MTEmptyState(
+          loading: () => const Center(child: VhSpinner()),
+          error: (_, _) => VhEmptyState(
             title: l10n.tryAgain,
             message: l10n.emptyPlaylistMessage,
           ),
           data: (view) => view.items.isEmpty
-              ? MTEmptyState(
+              ? VhEmptyState(
                   title: l10n.emptyPlaylist,
                   message: l10n.emptyPlaylistMessage,
                 )
@@ -92,8 +92,8 @@ class _Actions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
 
     Future<void> start({bool shuffle = false, bool audioOnly = false}) async {
       // **A missing item never enters the queue**: its source fails and the
@@ -113,10 +113,10 @@ class _Actions extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        MTSpace.pagePad,
-        MTSpace.sm,
-        MTSpace.pagePad,
-        MTSpace.md,
+        VhSpace.pagePad,
+        VhSpace.sm,
+        VhSpace.pagePad,
+        VhSpace.md,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,35 +126,35 @@ class _Actions extends ConsumerWidget {
             [
               l10n.queueItemsCount(view.items.length),
               if (playlist.lastPlayedAt != null)
-                mtTimeAgo(context, playlist.lastPlayedAt!),
+                vhTimeAgo(context, playlist.lastPlayedAt!),
             ].join(' · '),
             style: Theme.of(context).textTheme.bodySmall!
                 .copyWith(color: p.ink3),
           ),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           Row(
             children: [
               Expanded(
                 child: FilledButton.icon(
                   onPressed: start,
-                  icon: const MTIcon(MTIcons.playFill, size: 18),
+                  icon: const VhIcon(VhIcons.playFill, size: 18),
                   label: Text(l10n.playAll),
                 ),
               ),
-              const SizedBox(width: MTSpace.xs),
+              const SizedBox(width: VhSpace.xs),
               IconButton.outlined(
                 tooltip: l10n.shuffle,
                 onPressed: () => start(shuffle: true),
-                icon: const MTIcon(MTIcons.shuffle, size: 19),
+                icon: const VhIcon(VhIcons.shuffle, size: 19),
               ),
-              const SizedBox(width: MTSpace.xs),
+              const SizedBox(width: VhSpace.xs),
               // The headphones button: the whole playlist as background audio
               // even when it contains video.
               IconButton.outlined(
                 tooltip: l10n.listenInBackground,
                 onPressed: () => start(audioOnly: true),
                 // In ink: the filled button beside it is the one action in colour.
-                icon: const MTIcon(MTIcons.headphones, size: 19),
+                icon: const VhIcon(VhIcons.headphones, size: 19),
               ),
             ],
           ),
@@ -204,9 +204,9 @@ class _ReorderableItems extends ConsumerWidget {
   ) {
     return ReorderableListView.builder(
       padding: const EdgeInsets.fromLTRB(
-        MTSpace.pagePad,
+        VhSpace.pagePad,
         0,
-        MTSpace.pagePad,
+        VhSpace.pagePad,
         140,
       ),
       itemCount: items.length,
@@ -229,12 +229,12 @@ class _ReorderableItems extends ConsumerWidget {
           // list reads what will play at a glance.
           child: Opacity(
             opacity: missing ? 0.5 : 1,
-            child: MTMediaCard(
+            child: VhMediaCard(
               key: ValueKey('card-${item.canonicalUrl}'),
               title: item.title,
               // A missing item says so itself rather than looking valid and
               // then failing.
-              subtitle: missing ? context.mtl.itemUnavailable : item.uploader,
+              subtitle: missing ? context.vhl.itemUnavailable : item.uploader,
               playing: !missing && item.canonicalUrl == playingKey,
               paused: !isPlaying,
               thumbnail: item.artworkUrl == null
@@ -243,10 +243,10 @@ class _ReorderableItems extends ConsumerWidget {
               platform: platformKindOf(platformOfKey(item.canonicalUrl)),
               compact: true,
               onTap: () => missing
-                  ? showMTSnack(
+                  ? showVhSnack(
                       context,
-                      context.mtl.itemUnavailable,
-                      type: MTSnackType.error,
+                      context.vhl.itemUnavailable,
+                      type: VhSnackType.error,
                     )
                   : _playFrom(context, ref, item),
             ),
@@ -254,11 +254,11 @@ class _ReorderableItems extends ConsumerWidget {
         );
       },
       footer: Padding(
-        padding: const EdgeInsets.only(top: MTSpace.md),
+        padding: const EdgeInsets.only(top: VhSpace.md),
         child: Text(
-          context.mtl.playlistEditHint,
+          context.vhl.playlistEditHint,
           style: Theme.of(context).textTheme.bodySmall!
-              .copyWith(color: MTThemeX.of(context).palette.ink3),
+              .copyWith(color: VhThemeX.of(context).palette.ink3),
         ),
       ),
     );
@@ -300,7 +300,7 @@ class _ReorderableItems extends ConsumerWidget {
     PlaylistItem item,
     int index,
   ) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final store = ref.read(playlistsStoreProvider);
     final entry = PlaylistEntry(
       canonicalUrl: item.canonicalUrl,
@@ -314,7 +314,7 @@ class _ReorderableItems extends ConsumerWidget {
     }
 
     store.removeItem(playlistId, item.canonicalUrl).then((_) => refresh());
-    showMTSnack(
+    showVhSnack(
       context,
       l10n.removedFromPlaylist,
       actionLabel: l10n.undo,
@@ -334,12 +334,12 @@ class _ReorderableItems extends ConsumerWidget {
 class _DismissBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return Container(
       alignment: AlignmentDirectional.centerEnd,
-      padding: const EdgeInsets.symmetric(horizontal: MTSpace.xl),
+      padding: const EdgeInsets.symmetric(horizontal: VhSpace.xl),
       color: p.err.withValues(alpha: 0.12),
-      child: MTIcon(MTIcons.trash, color: p.err),
+      child: VhIcon(VhIcons.trash, color: p.err),
     );
   }
 }

@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -55,8 +55,8 @@ void main() {
         h.player.showPlaying([toPlaylistItem(entry)], playing: false);
       }
       await tester.pumpAndSettle();
-      GoRouter.of(tester.element(find.byType(EmberSidebar)))
-          .go(EmberRoutes.item(_url));
+      GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+          .go(DesktopRoutes.item(_url));
       await tester.pumpAndSettle();
       return h;
     }
@@ -79,7 +79,7 @@ void main() {
       final h = await open(tester, minutes: 20, playing: true);
       h.player.reach(const Duration(seconds: 200));
       await tester.pumpAndSettle();
-      final soft = MTThemeX.of(tester.element(find.text('Chapters')))
+      final soft = VhThemeX.of(tester.element(find.text('Chapters')))
           .palette
           .accentSoft;
       Color? behind(String opening) => tester

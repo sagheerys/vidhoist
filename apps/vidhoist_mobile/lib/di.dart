@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'features/downloads_library/download_wiring.dart';
@@ -31,11 +31,11 @@ final secretStoreProvider = Provider<SecretStore>(
 final prefsMutexProvider = Provider((ref) => PrefsMutex());
 
 /// The initial snapshot loaded before runApp; overridden in main.
-final initialSettingsProvider = Provider<LiteSettings>(
+final initialSettingsProvider = Provider<PhoneSettings>(
   (ref) => throw UnimplementedError('overridden in main'),
 );
 
-final settingsProvider = NotifierProvider<SettingsNotifier, LiteSettings>(
+final settingsProvider = NotifierProvider<SettingsNotifier, PhoneSettings>(
   SettingsNotifier.new,
 );
 
@@ -206,7 +206,7 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
   var alive = true;
   final engine = LocalDownloadEngine(
     backend: ref.watch(downloadBackendProvider),
-    folderFor: (_) => liteMediaDir,
+    folderFor: (_) => phoneMediaDir,
     history: ref.watch(localHistoryProvider),
     pending: ref.watch(localPendingProvider),
     onCompleted: (task) {
@@ -286,11 +286,11 @@ final backupServiceProvider = Provider(
 );
 
 /// The diagnostic log; overridden in main with a path from path_provider.
-final loggerProvider = Provider<MTLogger>(
+final loggerProvider = Provider<VhLogger>(
   (ref) => throw UnimplementedError('overridden in main'),
 );
 
-// Playback (mt_media is reused in full).
+// Playback (vh_media is reused in full).
 
 final playbackPrefsProvider = Provider(
   (ref) => PlaybackPrefs(
@@ -330,6 +330,6 @@ final playbackResolverProvider = Provider<PlaybackSourceResolver>(
 
 /// The background audio handler; overridden in main after
 /// `AudioService.init`.
-final audioHandlerProvider = Provider<MTAudioHandler>(
+final audioHandlerProvider = Provider<VhAudioHandler>(
   (ref) => throw UnimplementedError('overridden in main'),
 );

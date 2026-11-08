@@ -6,7 +6,7 @@ measurements and the traps, and for what carried over from the Vidhoist days
 (the last section): the server contract that came before it was deleted in
 batch 6 (2026-11-06).
 Raw stdout and stderr of the Windows runs are kept as fixtures in
-`packages/mt_ytdlp/test/fixtures/windows/` (media links, the requester's IP
+`packages/vh_ytdlp/test/fixtures/windows/` (media links, the requester's IP
 and local paths replaced).
 
 ## Versions measured
@@ -164,12 +164,12 @@ yt-dlp --no-config -4 --newline --progress --no-colors
     but writes each option's values together, in the order the names first
     came, so a second `-f` lands next to the first and the last one wins;
     an option added without its value breaks the command line. The engine
-    builds the whole argument list itself (`mt_ytdlp`'s `CommandBuilder`)
+    builds the whole argument list itself (`vh_ytdlp`'s `CommandBuilder`)
     and hands it over with `addCommands`, which keeps the order.
 
 22. **A probe's `-J` output is as good as `--write-info-json` for this**:
     `--load-info-json probe-json.stdout.txt --simulate -f <selector>` picks
-    the formats without the network. The six selectors of `mt_ytdlp`'s
+    the formats without the network. The six selectors of `vh_ytdlp`'s
     `FormatSelector`, checked that way on the fixture: best 401+258 (AV1
     2160p, AAC), 1080 399+258, 360 396+258, compatible best 299+258 (H.264
     1080p60), compatible 720 298+258 (H.264 720p60), audio 258 (AAC).

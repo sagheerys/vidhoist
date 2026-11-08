@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../../di.dart';
 import '../../home/add_flow.dart';
@@ -11,7 +11,7 @@ import 'task_card_parts.dart';
 /// The "manage downloads" sheet: in progress, waiting, needs your
 /// attention, with cancel and retry.
 void showDownloadsSheet(BuildContext context) {
-  showMTSheet<void>(
+  showVhSheet<void>(
     context: context,
     useRootNavigator: true,
     isScrollControlled: true,
@@ -48,7 +48,7 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final tasks = ref.watch(engineTasksProvider).valueOrNull ?? const [];
     final engine = ref.read(downloadEngineProvider);
     final wifiPaused = ref.watch(wifiPausedProvider);
@@ -75,16 +75,16 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          MTSectionHeader(title: title, trailing: '${sectionTasks.length}'),
-          const SizedBox(height: MTSpace.sm),
+          VhSectionHeader(title: title, trailing: '${sectionTasks.length}'),
+          const SizedBox(height: VhSpace.sm),
           for (final (index, task) in sectionTasks.indexed) ...[
             if (_finishing.containsKey(task.id))
-              MTFoldAway(
+              VhFoldAway(
                 key: ValueKey('done-${task.id}'),
                 onGone: () => setState(() => _finishing.remove(task.id)),
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: MTSpace.xs),
-                  child: MTDownloadProgressCard(
+                  padding: const EdgeInsets.only(bottom: VhSpace.xs),
+                  child: VhDownloadProgressCard(
                     title: task.title ?? task.effectiveUrl,
                     thumbnail: taskThumbnail(task),
                     statusText: l10n.completed,
@@ -93,7 +93,7 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
                 ),
               )
             else
-              MTDownloadProgressCard(
+              VhDownloadProgressCard(
                 // A new task or a new phase starts its own count: the pull
                 // begins at 0 and must not run down from the server's 100%.
                 key: ValueKey('${task.id}-${task.phase.name}'),
@@ -147,9 +147,9 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
                   ),
                 ],
               ),
-            const SizedBox(height: MTSpace.xs),
+            const SizedBox(height: VhSpace.xs),
           ],
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
         ],
       );
     }
@@ -157,7 +157,7 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
     final shown = tasks.where(
       (t) => !t.isFinished || t.phase == TaskPhase.failed,
     );
-    final empty = MTEmptyState(
+    final empty = VhEmptyState(
       title: l10n.noDownloads,
       message: l10n.allDownloadsFinished,
     );
@@ -165,10 +165,10 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
     if (nothing && !_framed) {
       return Padding(
         padding: EdgeInsets.fromLTRB(
-          MTSpace.xl,
-          MTSpace.lg,
-          MTSpace.xl,
-          mtSheetBottomPad(context, MTSpace.xxl),
+          VhSpace.xl,
+          VhSpace.lg,
+          VhSpace.xl,
+          vhSheetBottomPad(context, VhSpace.xxl),
         ),
         // The column lets the centred state take its own height rather
         // than the whole screen.
@@ -191,10 +191,10 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
       maxChildSize: 0.85,
       builder: (context, scrollController) => Padding(
         padding: EdgeInsets.fromLTRB(
-          MTSpace.xl,
-          MTSpace.lg,
-          MTSpace.xl,
-          mtSheetBottomPad(context, MTSpace.xxl),
+          VhSpace.xl,
+          VhSpace.lg,
+          VhSpace.xl,
+          vhSheetBottomPad(context, VhSpace.xxl),
         ),
         // **The title is pinned and only the list scrolls** (field report
         // 2026-09-04): it used to be the first item in the `ListView`, so
@@ -208,7 +208,7 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
               l10n.activeDownloadsSheet,
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(height: MTSpace.lg),
+            const SizedBox(height: VhSpace.lg),
             Expanded(
               // The message scrolls rather than overflows when the sheet
               // is dragged low or the window is short (a tablet on its side),

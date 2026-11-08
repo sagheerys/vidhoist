@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import 'add_flow.dart';
 
 /// The quality name as the user sees it: what was **actually applied**
 /// rather than what was chosen.
-String qualityLabel(MTLocalizations l10n, Quality quality) => switch (quality) {
+String qualityLabel(VhLocalizations l10n, Quality quality) => switch (quality) {
   Quality.best => l10n.qualityBest,
   Quality.q1080 => l10n.quality1080,
   Quality.q720 => l10n.quality720,
@@ -57,17 +57,17 @@ bool startQuickDownload(
   final engine = ref.read(downloadEngineProvider);
   if (engine == null) return false;
 
-  final l10n = context.mtl;
+  final l10n = context.vhl;
   final messenger = ScaffoldMessenger.of(context);
   final chosen = ref.read(settingsProvider).quality;
   final effective = chosen.applyRule(url);
   final task = engine.submit(url, chosen);
   if (!announce) return true;
 
-  showMTSnackOn(
+  showVhSnackOn(
     messenger,
     l10n.downloadStartedQuality(qualityLabel(l10n, effective)),
-    type: MTSnackType.success,
+    type: VhSnackType.success,
     themeContext: context,
     actionLabel: l10n.changeQuality,
     onAction: () {

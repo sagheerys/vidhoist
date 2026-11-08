@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/channels_data.dart';
 import '../../di.dart';
@@ -32,29 +32,29 @@ class ChannelPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final asked = ref.watch(channelsProvider);
     final state = asked.valueOrNull;
     if (state == null) {
       return Center(
         child: asked.hasError
-            ? MTEmptyFrame(
+            ? VhEmptyFrame(
                 title: l.failed,
                 message: l.errorGeneric(asked.error.toString()),
                 actionLabel: l.retry,
                 onAction: () => ref.invalidate(channelsProvider),
               )
-            : const MTSpinner(),
+            : const VhSpinner(),
       );
     }
     final sub = state.byId(id);
     if (sub == null) {
       return Center(
-        child: MTEmptyFrame(
+        child: VhEmptyFrame(
           title: l.desktopChannels,
           message: l.subscriptionsEmptyBody,
           actionLabel: l.desktopChannels,
-          onAction: () => context.go(EmberRoutes.channels),
+          onAction: () => context.go(DesktopRoutes.channels),
         ),
       );
     }
@@ -67,10 +67,10 @@ class ChannelPage extends ConsumerWidget {
         slivers: [
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(
-              MTSpace.xl,
-              MTSpace.sm,
-              MTSpace.xl,
-              MTSpace.lg,
+              VhSpace.xl,
+              VhSpace.sm,
+              VhSpace.xl,
+              VhSpace.lg,
             ),
             sliver: SliverToBoxAdapter(
               child: _Head(
@@ -83,10 +83,10 @@ class ChannelPage extends ConsumerWidget {
           if (items.isNotEmpty)
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(
-                MTSpace.xl,
+                VhSpace.xl,
                 0,
-                MTSpace.xl,
-                MTSpace.xl,
+                VhSpace.xl,
+                VhSpace.xl,
               ),
               sliver: _Clips(items: items),
             ),
@@ -109,8 +109,8 @@ class _Head extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final interval = sub.checkIntervalMinutes < 60
         ? l.every30Minutes
@@ -146,18 +146,18 @@ class _Head extends ConsumerWidget {
             Flexible(
               child: Text(
                 sub.name,
-                textDirection: mtTextDirectionOf(
+                textDirection: vhTextDirectionOf(
                   sub.name,
                   Directionality.of(context),
                 ),
                 style: text.headlineSmall,
               ),
             ),
-            const SizedBox(width: MTSpace.md),
+            const SizedBox(width: VhSpace.md),
             ChannelState(enabled: sub.enabled),
           ],
         ),
-        const SizedBox(height: MTSpace.xxs),
+        const SizedBox(height: VhSpace.xxs),
         Text(
           sub.url,
           maxLines: 1,
@@ -165,23 +165,23 @@ class _Head extends ConsumerWidget {
           textDirection: TextDirection.ltr,
           style: text.bodySmall?.copyWith(color: p.ink3),
         ),
-        const SizedBox(height: MTSpace.xxs),
+        const SizedBox(height: VhSpace.xxs),
         Text(
           channelServerLine(context, sub),
           style: text.bodySmall?.copyWith(color: p.ink2),
         ),
         if (sub.error case final why? when why.isNotEmpty) ...[
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           Text(
             why,
             textDirection: TextDirection.ltr,
             style: text.bodySmall?.copyWith(color: p.err),
           ),
         ],
-        const SizedBox(height: MTSpace.md),
+        const SizedBox(height: VhSpace.md),
         Wrap(
-          spacing: MTSpace.xl,
-          runSpacing: MTSpace.sm,
+          spacing: VhSpace.xl,
+          runSpacing: VhSpace.sm,
           children: [
             for (final (label, value) in facts)
               Column(
@@ -194,46 +194,46 @@ class _Head extends ConsumerWidget {
               ),
           ],
         ),
-        const SizedBox(height: MTSpace.lg),
+        const SizedBox(height: VhSpace.lg),
         Wrap(
-          spacing: MTSpace.sm,
-          runSpacing: MTSpace.sm,
+          spacing: VhSpace.sm,
+          runSpacing: VhSpace.sm,
           children: [
-            EmberPill(
+            DesktopPill(
               label: l.checkNow,
               selected: false,
               onTap: () => unawaited(checkChannels(context, ref, only: sub)),
             ),
-            EmberPill(
+            DesktopPill(
               label: sub.enabled ? l.pauseSubscription : l.resumeSubscription,
               selected: !sub.enabled,
               onTap: () =>
                   unawaited(setChannelEnabled(context, ref, sub, !sub.enabled)),
             ),
-            EmberPill(
+            DesktopPill(
               label: l.editSubscription,
               selected: false,
               onTap: () => unawaited(showFollowDialog(context, editing: sub)),
             ),
-            EmberPill(
+            DesktopPill(
               label: l.openChannel,
-              icon: MTIcons.external,
+              icon: VhIcons.external,
               selected: false,
               onTap: () => unawaited(openChannelSite(sub)),
             ),
-            EmberPill(
+            DesktopPill(
               label: l.unfollow,
-              icon: MTIcons.trash,
+              icon: VhIcons.trash,
               selected: false,
               onTap: () => unawaited(_unfollow(context, ref)),
             ),
           ],
         ),
-        const SizedBox(height: MTSpace.xl),
-        EmberSectionHeader(
+        const SizedBox(height: VhSpace.xl),
+        DesktopSectionHeader(
           title: l.desktopChannelClips,
           trailing: switch (stats) {
-            final s? => mtMetaLine([
+            final s? => vhMetaLine([
               l.desktopInLibrary(s.count),
               if (s.unwatched > 0) l.desktopNotWatched(s.unwatched),
             ]),
@@ -247,7 +247,7 @@ class _Head extends ConsumerWidget {
         if (stats == null &&
             !namesChannels &&
             (sub.folder?.isEmpty ?? true)) ...[
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           Text(
             l.desktopNoChannelNames,
             style: text.bodySmall?.copyWith(color: p.ink3),
@@ -260,7 +260,7 @@ class _Head extends ConsumerWidget {
   Future<void> _unfollow(BuildContext context, WidgetRef ref) async {
     final router = GoRouter.of(context);
     if (await unfollowChannel(context, ref, sub)) {
-      router.go(EmberRoutes.channels);
+      router.go(DesktopRoutes.channels);
     }
   }
 }
@@ -276,14 +276,14 @@ class _Clips extends ConsumerWidget {
     final player = ref.watch(playerProvider);
     final chosen = ref.watch(librarySelectionProvider).urls;
     final order = [for (final i in items) i.canonicalUrl];
-    return StreamBuilder<MTPlayerState>(
+    return StreamBuilder<VhPlayerState>(
       stream: player.states,
       initialData: player.state,
       builder: (context, snap) {
         final state = snap.data ?? player.state;
         final current = state.current?.canonicalUrl;
-        return MTLibrarySliver(
-          layout: MTLibraryLayout.grid,
+        return VhLibrarySliver(
+          layout: VhLibraryLayout.grid,
           showLocation: true,
           itemCount: items.length,
           itemBuilder: (context, index, columns) {

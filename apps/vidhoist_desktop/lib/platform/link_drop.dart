@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 
 import '../shell/drop_frame.dart';
@@ -65,7 +65,7 @@ class _LinkDropAreaState extends State<LinkDropArea> {
     final file = File.fromUri(uri);
     final name = file.path.toLowerCase();
     final limit = name.endsWith('.txt')
-        ? MTConstants.maxTextFileBytes
+        ? VhConstants.maxTextFileBytes
         : name.endsWith('.json')
         ? _maxBackupBytes
         : 0;
@@ -107,7 +107,7 @@ class _LinkDropAreaState extends State<LinkDropArea> {
           if (_over)
             Positioned.fill(
               child: IgnorePointer(
-                child: DropFrame(label: context.mtl.desktopDropLinks),
+                child: DropFrame(label: context.vhl.desktopDropLinks),
               ),
             ),
         ],
@@ -116,7 +116,7 @@ class _LinkDropAreaState extends State<LinkDropArea> {
   }
 
   static bool _ownDrag(DropSession session) =>
-      session.items.any((item) => item.localData == emberDragMark);
+      session.items.any((item) => item.localData == desktopDragMark);
 
   /// A transcripts file of a large library runs to tens of megabytes.
   static const _maxBackupBytes = 64 * 1024 * 1024;

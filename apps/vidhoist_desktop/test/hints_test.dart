@@ -10,16 +10,16 @@ import 'package:vidhoist_desktop/features/welcome/startup_offers.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/hints_wiring.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
 
 import 'support/shell_harness.dart';
 
 class _Notices implements NoticePort {
-  final shown = <EmberNotice>[];
+  final shown = <DesktopNotice>[];
 
   @override
-  Future<void> show(EmberNotice notice) async => shown.add(notice);
+  Future<void> show(DesktopNotice notice) async => shown.add(notice);
 }
 
 final _clip = LibraryItem(
@@ -45,7 +45,7 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     final container = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
+      tester.element(find.byType(DesktopSidebar)),
     );
     return (h, container, notices);
   }
@@ -65,7 +65,7 @@ void main() {
     final (h, c, _) = await open(tester);
     await playFor(tester, h);
     expect(tip(), findsOneWidget);
-    expect(c.read(hintsProvider).seen, contains(EmberHint.shortcuts));
+    expect(c.read(hintsProvider).seen, contains(DesktopHint.shortcuts));
     expect(await h.store.getString(Hints.seenKey), 'shortcuts');
     await tester.pump(const Duration(seconds: 10));
     // Another session: the tips read again from what was kept.
@@ -86,7 +86,7 @@ void main() {
     await tester.pump();
     await playFor(tester, h);
     expect(tip(), findsNothing);
-    expect(c.read(hintsProvider).seen, contains(EmberHint.shortcuts));
+    expect(c.read(hintsProvider).seen, contains(DesktopHint.shortcuts));
   });
 
   testWidgets('**the guard**: none in a session that already interrupted', (
@@ -97,7 +97,7 @@ void main() {
     await playFor(tester, h);
     expect(tip(), findsNothing);
     // Not spent: another session may still show it.
-    expect(c.read(hintsProvider).seen, isNot(contains(EmberHint.shortcuts)));
+    expect(c.read(hintsProvider).seen, isNot(contains(DesktopHint.shortcuts)));
   });
 
   testWidgets('**the guard**: none with tips off, and the choice is kept', (
@@ -128,8 +128,8 @@ void main() {
   testWidgets('**the guard**: Discover lists the features from About, and '
       '"Try it" goes there', (tester) async {
     final (_, _, _) = await open(tester);
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberSettingsPane.about.route);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopSettingsPane.about.route);
     await tester.pumpAndSettle();
     await tester.tap(find.text('Show'));
     await tester.pumpAndSettle();
@@ -149,10 +149,10 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.byType(AlertDialog), findsNothing);
-    final router = GoRouter.of(tester.element(find.byType(EmberSidebar)));
+    final router = GoRouter.of(tester.element(find.byType(DesktopSidebar)));
     expect(
       router.routerDelegate.currentConfiguration.uri.path,
-      EmberRoutes.stats,
+      DesktopRoutes.stats,
     );
   });
 
@@ -165,9 +165,12 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     final c = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
+      tester.element(find.byType(DesktopSidebar)),
     );
-    expect(c.read(hintsProvider.notifier).wants(EmberHint.shortcuts), isFalse);
-    expect(c.read(hintsProvider.notifier).wants(EmberHint.tray), isTrue);
+    expect(
+      c.read(hintsProvider.notifier).wants(DesktopHint.shortcuts),
+      isFalse,
+    );
+    expect(c.read(hintsProvider.notifier).wants(DesktopHint.tray), isTrue);
   });
 }

@@ -1,4 +1,4 @@
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Opens [url] in the browser when it is a web page, and does nothing

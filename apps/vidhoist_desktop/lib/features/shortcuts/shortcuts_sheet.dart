@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/key_cap.dart';
 import '../../shell/shell_metrics.dart';
 import '../library/clip_keys.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// One line of the sheet: the keys as printed on the keyboard, and what
 /// they do.
@@ -12,7 +12,7 @@ typedef ShortcutLine = ({List<String> keys, String does});
 
 /// Every key the window answers, in four groups. Key names are the
 /// keyboard's own and read the same in either language.
-List<(String, List<ShortcutLine>)> shortcutGroups(MTLocalizations l) => [
+List<(String, List<ShortcutLine>)> shortcutGroups(VhLocalizations l) => [
   (
     l.desktopShortcutsPlayback,
     [
@@ -60,13 +60,13 @@ List<(String, List<ShortcutLine>)> shortcutGroups(MTLocalizations l) => [
 Future<void> showShortcutsSheet(BuildContext context) => showEmberDialog<void>(
   context: context,
   builder: (dialog) {
-    final l = dialog.mtl;
-    final p = MTThemeX.of(dialog).palette;
+    final l = dialog.vhl;
+    final p = VhThemeX.of(dialog).palette;
     final text = Theme.of(dialog).textTheme;
     return AlertDialog(
       title: Text(l.desktopShortcutsTitle),
       content: SizedBox(
-        width: EmberShellSize.formDialog,
+        width: DesktopShellSize.formDialog,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -74,8 +74,8 @@ Future<void> showShortcutsSheet(BuildContext context) => showEmberDialog<void>(
               for (final (group, lines) in shortcutGroups(l)) ...[
                 Padding(
                   padding: const EdgeInsets.only(
-                    top: MTSpace.md,
-                    bottom: MTSpace.xs,
+                    top: VhSpace.md,
+                    bottom: VhSpace.xs,
                   ),
                   child: Text(
                     group,
@@ -84,15 +84,15 @@ Future<void> showShortcutsSheet(BuildContext context) => showEmberDialog<void>(
                 ),
                 for (final line in lines)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: MTSpace.xxs),
+                    padding: const EdgeInsets.symmetric(vertical: VhSpace.xxs),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(line.does, style: text.bodyMedium),
                         ),
-                        const SizedBox(width: MTSpace.md),
+                        const SizedBox(width: VhSpace.md),
                         Wrap(
-                          spacing: MTSpace.xxs,
+                          spacing: VhSpace.xxs,
                           children: [
                             for (final key in line.keys) KeyCap(label: key),
                           ],

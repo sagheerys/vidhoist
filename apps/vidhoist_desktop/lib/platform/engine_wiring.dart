@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import '../data/engine_data.dart';
 import '../data/engine_fetch_data.dart';
@@ -17,7 +17,7 @@ import 'ytdlp_process.dart';
 List<Override> engineOverrides({
   required String roaming,
   required String local,
-  required MTLogger logger,
+  required VhLogger logger,
 }) {
   final locator = EngineLocator(
     ownFolder: '$roaming${Platform.pathSeparator}engine',

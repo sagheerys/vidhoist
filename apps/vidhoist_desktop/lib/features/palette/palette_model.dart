@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// One thing the palette can run: a place, a section, a list.
 class PaletteCommand {
@@ -12,7 +12,7 @@ class PaletteCommand {
   });
 
   final String label;
-  final MTIconData icon;
+  final VhIconData icon;
   final VoidCallback run;
 }
 

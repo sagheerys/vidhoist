@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../../router.dart';
@@ -36,16 +36,16 @@ Future<void> playNextOf(
 ) async {
   await ref.read(playerProvider).playNext(toPlaylistItem(item));
   if (!context.mounted) return;
-  showMTNotice(context, message: context.mtl.desktopPlaysNext);
+  showVhNotice(context, message: context.vhl.desktopPlaysNext);
 }
 
 void openReadingOf(BuildContext context, String url) =>
-    GoRouter.of(context).go(EmberRoutes.reading(url));
+    GoRouter.of(context).go(DesktopRoutes.reading(url));
 
 Future<void> copyLinkOf(BuildContext context, String url) async {
   await Clipboard.setData(ClipboardData(text: url));
   if (!context.mounted) return;
-  showMTNotice(context, message: context.mtl.desktopLinkCopied);
+  showVhNotice(context, message: context.vhl.desktopLinkCopied);
 }
 
 /// Which copy a key asks for: Ctrl C the link, Ctrl Shift C the file.

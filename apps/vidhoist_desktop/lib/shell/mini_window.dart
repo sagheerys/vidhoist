@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../di.dart';
 import '../router.dart';
@@ -15,7 +15,7 @@ import 'video_surface.dart';
 import 'window_controls.dart';
 
 /// The small card's two sizes: sound alone, and a picture at 16:9.
-abstract final class EmberMiniSize {
+abstract final class DesktopMiniSize {
   static const audio = Size(360, 96);
   static const video = Size(360, 203);
 }
@@ -39,23 +39,24 @@ void toggleMiniWindow(WidgetRef ref, GoRouter router) {
     final from = _miniFrom;
     _miniFrom = null;
     if (from != null && current != null && current.canonicalUrl != from) {
-      router.go(EmberRoutes.item(current.canonicalUrl));
+      router.go(DesktopRoutes.item(current.canonicalUrl));
     }
     return;
   }
   final path = router.routerDelegate.currentConfiguration.uri.path;
-  _miniFrom = current != null && path == EmberRoutes.item(current.canonicalUrl)
+  _miniFrom =
+      current != null && path == DesktopRoutes.item(current.canonicalUrl)
       ? current.canonicalUrl
       : null;
   final picture = miniShowsPicture(
     ref.read(playerProvider).state,
     audioOnly: ref.read(audioOnlyProvider),
   );
-  controls.setMini(picture ? EmberMiniSize.video : EmberMiniSize.audio);
+  controls.setMini(picture ? DesktopMiniSize.video : DesktopMiniSize.audio);
 }
 
 /// Whether the card shows a picture: a video playing with its picture on.
-bool miniShowsPicture(MTPlayerState state, {required bool audioOnly}) {
+bool miniShowsPicture(VhPlayerState state, {required bool audioOnly}) {
   final item = state.current;
   return item != null && !item.isAudio && !audioOnly;
 }
@@ -65,23 +66,23 @@ bool miniShowsPicture(MTPlayerState state, {required bool audioOnly}) {
 /// day, the card's by night). A video shows its picture. The card is
 /// carried by any press on it; a double click, Ctrl+M or Esc brings the
 /// full window back.
-class EmberMiniWindow extends ConsumerStatefulWidget {
-  const EmberMiniWindow({
+class DesktopMiniWindow extends ConsumerStatefulWidget {
+  const DesktopMiniWindow({
     super.key,
     required this.player,
     required this.controls,
     required this.onRestore,
   });
 
-  final MTPlayer player;
+  final VhPlayer player;
   final WindowControls controls;
   final VoidCallback onRestore;
 
   @override
-  ConsumerState<EmberMiniWindow> createState() => _EmberMiniWindowState();
+  ConsumerState<DesktopMiniWindow> createState() => _DesktopMiniWindowState();
 }
 
-class _EmberMiniWindowState extends ConsumerState<EmberMiniWindow> {
+class _DesktopMiniWindowState extends ConsumerState<DesktopMiniWindow> {
   /// The size last asked of the window, so it is asked again only when
   /// what plays turns from sound to picture or back.
   Size? _asked;
@@ -97,13 +98,13 @@ class _EmberMiniWindowState extends ConsumerState<EmberMiniWindow> {
   @override
   Widget build(BuildContext context) {
     final audioOnly = ref.watch(audioOnlyProvider);
-    return StreamBuilder<MTPlayerState>(
+    return StreamBuilder<VhPlayerState>(
       stream: widget.player.states,
       initialData: widget.player.state,
       builder: (context, snap) {
         final state = snap.data ?? widget.player.state;
         final picture = miniShowsPicture(state, audioOnly: audioOnly);
-        _fit(picture ? EmberMiniSize.video : EmberMiniSize.audio);
+        _fit(picture ? DesktopMiniSize.video : DesktopMiniSize.audio);
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onDoubleTap: widget.onRestore,
@@ -120,26 +121,26 @@ class _EmberMiniWindowState extends ConsumerState<EmberMiniWindow> {
 class _Sound extends ConsumerWidget {
   const _Sound({required this.state, required this.widget});
 
-  final MTPlayerState state;
-  final EmberMiniWindow widget;
+  final VhPlayerState state;
+  final DesktopMiniWindow widget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final item = state.current;
-    final side = EmberMiniSize.audio.height - MTSpace.xl;
+    final side = DesktopMiniSize.audio.height - VhSpace.xl;
     return ColoredBox(
       color: p.miniBg,
       child: Column(
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: MTSpace.sm),
+              padding: const EdgeInsets.symmetric(horizontal: VhSpace.sm),
               child: Row(
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(
-                      MTCorners.desktop.thumb,
+                      VhCorners.desktop.thumb,
                     ),
                     child: SizedBox.square(
                       dimension: side,
@@ -154,16 +155,16 @@ class _Sound extends ConsumerWidget {
                           ColoredBox(
                             color: p.miniInk.withValues(alpha: 0.12),
                             child: Center(
-                              child: MTIcon(
-                                MTIcons.headphones,
-                                size: MTSpace.xl,
+                              child: VhIcon(
+                                VhIcons.headphones,
+                                size: VhSpace.xl,
                                 color: p.miniInkMuted,
                               ),
                             ),
                           ),
                     ),
                   ),
-                  const SizedBox(width: MTSpace.sm),
+                  const SizedBox(width: VhSpace.sm),
                   Expanded(child: _Titles(item: item)),
                   _Buttons(state: state, widget: widget, ink: p.miniInk),
                 ],
@@ -180,13 +181,13 @@ class _Sound extends ConsumerWidget {
 class _Picture extends ConsumerWidget {
   const _Picture({required this.state, required this.widget});
 
-  final MTPlayerState state;
-  final EmberMiniWindow widget;
+  final VhPlayerState state;
+  final DesktopMiniWindow widget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ColoredBox(
-      color: MTPalette.fullscreenScrim,
+      color: VhPalette.fullscreenScrim,
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -203,12 +204,12 @@ class _Picture extends ConsumerWidget {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, MTPalette.fullscreenScrim],
+                      colors: [Colors.transparent, VhPalette.fullscreenScrim],
                     ),
                   ),
                   child: Padding(
                     padding: const EdgeInsetsDirectional.only(
-                      start: MTSpace.sm,
+                      start: VhSpace.sm,
                     ),
                     child: Row(
                       children: [
@@ -244,7 +245,7 @@ class _Titles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final ink = onPicture ? Colors.white : p.miniInk;
     final muted = onPicture ? Colors.white70 : p.miniInkMuted;
@@ -254,12 +255,12 @@ class _Titles extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          item?.title ?? context.mtl.desktopNothingPlaying,
+          item?.title ?? context.vhl.desktopNothingPlaying,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textDirection: item == null
               ? null
-              : mtTextDirectionOf(item.title, Directionality.of(context)),
+              : vhTextDirectionOf(item.title, Directionality.of(context)),
           style: text.titleSmall?.copyWith(color: ink),
         ),
         if (item?.uploader case final who?)
@@ -283,23 +284,23 @@ class _Buttons extends StatelessWidget {
     required this.ink,
   });
 
-  final MTPlayerState state;
-  final EmberMiniWindow widget;
+  final VhPlayerState state;
+  final DesktopMiniWindow widget;
   final Color ink;
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
+    final l = context.vhl;
     final player = widget.player;
     final live = !state.isEmpty;
-    Widget button(MTIconData icon, String label, VoidCallback? onTap) =>
-        MTShortcutTooltip(
+    Widget button(VhIconData icon, String label, VoidCallback? onTap) =>
+        VhShortcutTooltip(
           message: label,
           child: IconButton(
             onPressed: onTap,
-            icon: MTIcon(
+            icon: VhIcon(
               icon,
-              size: MTDensity.desktop.icon,
+              size: VhDensity.desktop.icon,
               color: onTap == null ? ink.withValues(alpha: 0.4) : ink,
               semanticLabel: label,
             ),
@@ -311,7 +312,7 @@ class _Buttons extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           button(
-            state.playing ? MTIcons.pause : MTIcons.playFill,
+            state.playing ? VhIcons.pause : VhIcons.playFill,
             state.playing ? l.pause : l.play,
             live
                 ? () =>
@@ -319,11 +320,11 @@ class _Buttons extends StatelessWidget {
                 : null,
           ),
           button(
-            MTIcons.next,
+            VhIcons.next,
             l.next,
             live ? () => unawaited(player.skipToNext()) : null,
           ),
-          button(MTIcons.fullscreen, l.desktopMiniRestore, widget.onRestore),
+          button(VhIcons.fullscreen, l.desktopMiniRestore, widget.onRestore),
         ],
       ),
     );
@@ -334,12 +335,12 @@ class _Buttons extends StatelessWidget {
 class _Progress extends StatelessWidget {
   const _Progress({required this.player, required this.state});
 
-  final MTPlayer player;
-  final MTPlayerState state;
+  final VhPlayer player;
+  final VhPlayerState state;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return StreamBuilder<Duration>(
       stream: player.positionStream,
       initialData: player.position,

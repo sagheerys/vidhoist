@@ -6,8 +6,8 @@ import 'package:vidhoist_desktop/features/library/library_heading.dart';
 import 'package:vidhoist_desktop/features/library/sort_button.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -58,7 +58,7 @@ void main() {
     expect(heading.top, lessThan(200));
     // The filters went with the scroll; the titles of the columns did not.
     expect(find.text('YouTube · 60').hitTestable(), findsNothing);
-    final titles = tester.getRect(find.byType(MTMediaRowHeader));
+    final titles = tester.getRect(find.byType(VhMediaRowHeader));
     expect(titles.top, moreOrLessEquals(heading.bottom, epsilon: 1));
     // Something is under it now, so its edge shows.
     expect(edgeOf(tester).a, greaterThan(0));
@@ -91,8 +91,8 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.windows;
     try {
       await library(tester);
-      GoRouter.of(tester.element(find.byType(EmberSidebar)))
-          .go(EmberRoutes.item(_many.first.canonicalUrl));
+      GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+          .go(DesktopRoutes.item(_many.first.canonicalUrl));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 60));
       // Windows' default zooms a snapshot of the page out of a scrim.

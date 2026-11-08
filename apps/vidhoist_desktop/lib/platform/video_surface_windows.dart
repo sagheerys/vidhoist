@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:mt_media/mt_media.dart' show MediaQuality;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart' show MediaQuality;
+import 'package:vh_ui/vh_ui.dart';
 
 import '../shell/video_surface.dart';
 
@@ -40,7 +40,7 @@ class MediaKitVideoSurface implements VideoSurface {
     controller: _controller,
     // Our own controls: the player bar, the page's actions and the keys.
     controls: NoVideoControls,
-    fill: MTPalette.fullscreenScrim,
+    fill: VhPalette.fullscreenScrim,
   );
 
   @override

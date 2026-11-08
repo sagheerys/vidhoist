@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shared/platform_label.dart';
 import '../library_providers.dart';
@@ -21,7 +21,7 @@ class _Chip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return ChoiceChip(
       label: Text(label),
       selected: selected,
@@ -41,7 +41,7 @@ class LibraryFilterChips extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final options = ref.watch(libraryViewProvider);
     final controller = ref.read(libraryViewProvider.notifier);
 
@@ -53,9 +53,9 @@ class LibraryFilterChips extends ConsumerWidget {
       child: Row(
         children: [
           if (options.platform case final platform?)
-            MTGrowIn(
+            VhGrowIn(
               key: const ValueKey('chip-platform'),
-              child: MTActiveFilterChip(
+              child: VhActiveFilterChip(
                 label: platformLabel(l10n, platform),
                 onDeleted: () => controller.setPlatform(null),
                 onPressed: () => showSortSheet(context, ref),
@@ -66,7 +66,7 @@ class LibraryFilterChips extends ConsumerWidget {
             selected: options.scope == LocalScope.all,
             onTap: () => controller.setScope(LocalScope.all),
           ),
-          const SizedBox(width: MTSpace.xs),
+          const SizedBox(width: VhSpace.xs),
           // The favourites chip is the first filter after "all", in ink
           // like every chosen chip: the crimson is for the heart itself.
           _Chip(
@@ -74,7 +74,7 @@ class LibraryFilterChips extends ConsumerWidget {
             selected: options.scope == LocalScope.favorites,
             onTap: () => controller.setScope(LocalScope.favorites),
           ),
-          const SizedBox(width: MTSpace.md),
+          const SizedBox(width: VhSpace.md),
           // **Shorts in sight rather than past the edge** (device check
           // 2026-09-05): it was last in the row, so it was invisible
           // without a horizontal scroll that nothing hinted at, with a
@@ -84,13 +84,13 @@ class LibraryFilterChips extends ConsumerWidget {
             selected: options.type == MediaTypeFilter.shorts,
             onTap: () => toggleType(MediaTypeFilter.shorts),
           ),
-          const SizedBox(width: MTSpace.xs),
+          const SizedBox(width: VhSpace.xs),
           _Chip(
             label: l10n.filterVideo,
             selected: options.type == MediaTypeFilter.video,
             onTap: () => toggleType(MediaTypeFilter.video),
           ),
-          const SizedBox(width: MTSpace.xs),
+          const SizedBox(width: VhSpace.xs),
           _Chip(
             label: l10n.filterAudio,
             selected: options.type == MediaTypeFilter.audio,
@@ -110,7 +110,7 @@ class PlatformFilterChips extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final counts = ref.watch(platformCountsProvider);
     if (counts.length < 2) return const SizedBox.shrink();
 
@@ -122,10 +122,10 @@ class PlatformFilterChips extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: MTSpace.xl),
-        MTSectionHeader(title: l10n.platform),
-        const SizedBox(height: MTSpace.md),
-        MTChipRow(
+        const SizedBox(height: VhSpace.xl),
+        VhSectionHeader(title: l10n.platform),
+        const SizedBox(height: VhSpace.md),
+        VhChipRow(
           children: [
             _Chip(
               label: l10n.allPlatforms,

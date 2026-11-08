@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../../di.dart';
 import 'help_button.dart';
@@ -18,7 +18,7 @@ class SettingsNavTile extends StatelessWidget {
     required this.route,
   });
 
-  final MTIconData icon;
+  final VhIconData icon;
   final String title;
   final String subtitle;
   final String route;
@@ -26,10 +26,10 @@ class SettingsNavTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListTile(
     contentPadding: EdgeInsets.zero,
-    leading: MTIcon(icon),
+    leading: VhIcon(icon),
     title: Text(title),
     subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-    trailing: const MTIcon(MTIcons.forward, matchTextDirection: true),
+    trailing: const VhIcon(VhIcons.forward, matchTextDirection: true),
     onTap: () => context.go(route),
   );
 }
@@ -65,7 +65,7 @@ class DownloadFields extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
     return Column(
@@ -75,8 +75,8 @@ class DownloadFields extends ConsumerWidget {
           children: [
             Expanded(
               child: DropdownMenu<Quality>(
-                trailingIcon: const MTIcon(MTIcons.chevronDown),
-                selectedTrailingIcon: const MTIcon(MTIcons.chevronUp),
+                trailingIcon: const VhIcon(VhIcons.chevronDown),
+                selectedTrailingIcon: const VhIcon(VhIcons.chevronUp),
                 initialSelection: settings.quality,
                 label: Text(l10n.defaultQuality),
                 expandedInsets: EdgeInsets.zero,
@@ -152,7 +152,7 @@ class PlaybackFields extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final settings = ref.watch(settingsProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -169,15 +169,15 @@ class PlaybackFields extends ConsumerWidget {
           value: settings.pictureInPicture,
           onChanged: ref.read(settingsProvider.notifier).setPictureInPicture,
         ),
-        const SizedBox(height: MTSpace.lg),
-        MTSectionHeader(title: l10n.subtitles),
-        const SizedBox(height: MTSpace.sm),
+        const SizedBox(height: VhSpace.lg),
+        VhSectionHeader(title: l10n.subtitles),
+        const SizedBox(height: VhSpace.sm),
         const CaptionStyleFields(),
-        const SizedBox(height: MTSpace.sm),
+        const SizedBox(height: VhSpace.sm),
         Text(
           l10n.mobileSubtitleStyleHelp,
           style: Theme.of(context).textTheme.bodySmall
-              ?.copyWith(color: MTThemeX.of(context).palette.ink3),
+              ?.copyWith(color: VhThemeX.of(context).palette.ink3),
         ),
       ],
     );
@@ -190,14 +190,14 @@ class AppearanceFields extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final settings = ref.watch(settingsProvider);
     final title = Theme.of(context).textTheme.titleSmall;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(l10n.theme, style: title),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         SegmentedButton<ThemeMode>(
           segments: [
             ButtonSegment(
@@ -211,9 +211,9 @@ class AppearanceFields extends ConsumerWidget {
           onSelectionChanged: (selection) =>
               ref.read(settingsProvider.notifier).setThemeMode(selection.first),
         ),
-        const SizedBox(height: MTSpace.lg),
+        const SizedBox(height: VhSpace.lg),
         Text(l10n.language, style: title),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         // **"System" is a choice, not an implicit state.** An empty value
         // did mean "follow the phone", but the switch displayed it as
         // "Arabic", so someone with an English device read an English
@@ -224,11 +224,11 @@ class AppearanceFields extends ConsumerWidget {
         // options, so three fit 360dp **and six break**, and the declared
         // plan is to support the common languages.
         SettingsNavTile(
-          icon: MTIcons.globe,
+          icon: VhIcons.globe,
           title: l10n.language,
           subtitle: settings.localeCode == null
               ? l10n.languageSystem
-              : mtLanguageName(settings.localeCode!),
+              : vhLanguageName(settings.localeCode!),
           route: '/settings/language',
         ),
       ],

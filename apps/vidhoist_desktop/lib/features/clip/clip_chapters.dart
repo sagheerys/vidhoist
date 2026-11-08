@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/transcripts_data.dart';
 import '../../di.dart';
@@ -25,7 +25,7 @@ class ClipChapters extends ConsumerStatefulWidget {
 }
 
 class _ClipChaptersState extends ConsumerState<ClipChapters> {
-  late final MTPlayer _player = ref.read(playerProvider);
+  late final VhPlayer _player = ref.read(playerProvider);
   StreamSubscription<Duration>? _positions;
 
   /// The chapters of the transcript last drawn, worked out once for it.
@@ -77,12 +77,12 @@ class _ClipChaptersState extends ConsumerState<ClipChapters> {
     }
     if (_chapters.isEmpty) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.only(top: MTSpace.xl),
+      padding: const EdgeInsets.only(top: VhSpace.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          EmberSectionHeader(title: context.mtl.desktopChapters),
-          const SizedBox(height: MTSpace.xs),
+          DesktopSectionHeader(title: context.vhl.desktopChapters),
+          const SizedBox(height: VhSpace.xs),
           for (final (i, chapter) in _chapters.indexed)
             _ChapterRow(
               chapter: chapter,
@@ -115,9 +115,9 @@ class _ChapterRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final corner = BorderRadius.circular(MTCorners.desktop.thumb);
+    final corner = BorderRadius.circular(VhCorners.desktop.thumb);
     return Semantics(
       button: true,
       selected: current,
@@ -129,25 +129,25 @@ class _ChapterRow extends StatelessWidget {
           borderRadius: corner,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: MTSpace.sm,
-              vertical: MTSpace.sm,
+              horizontal: VhSpace.sm,
+              vertical: VhSpace.sm,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  mtLtrRun(mtFormatDuration(chapter.start)),
+                  vhLtrRun(vhFormatDuration(chapter.start)),
                   style: text.labelLarge?.tabular.copyWith(
                     color: current ? p.accentInk : p.ink3,
                   ),
                 ),
-                const SizedBox(width: MTSpace.md),
+                const SizedBox(width: VhSpace.md),
                 Expanded(
                   child: Text(
                     chapter.opening,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    textDirection: mtTextDirectionOf(
+                    textDirection: vhTextDirectionOf(
                       chapter.opening,
                       Directionality.of(context),
                     ),

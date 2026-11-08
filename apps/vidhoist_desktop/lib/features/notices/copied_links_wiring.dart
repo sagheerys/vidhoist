@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/copied_links.dart';
 import '../../data/desktop_habits.dart';
@@ -64,7 +64,7 @@ class _CopiedLinksWiringState extends ConsumerState<CopiedLinksWiring> {
     );
     if (link == null || !mounted) return;
     _offered.add(link);
-    final l = context.mtl;
+    final l = context.vhl;
     void add() {
       unawaited(ref.read(bringWindowBackProvider)());
       ref.read(incomingLinksProvider).add(link);
@@ -73,7 +73,7 @@ class _CopiedLinksWiringState extends ConsumerState<CopiedLinksWiring> {
     await ref
         .read(noticePortProvider)
         .show(
-          EmberNotice(
+          DesktopNotice(
             title: l.desktopCopiedLinkTitle,
             body: link,
             actions: [(label: l.desktopCopiedLinkAdd, onPressed: add)],

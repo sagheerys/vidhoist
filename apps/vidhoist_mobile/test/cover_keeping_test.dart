@@ -9,7 +9,7 @@ import 'package:vidhoist_mobile/features/downloads_library/library_actions.dart'
 import 'package:vidhoist_mobile/features/downloads_library/library_providers.dart';
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// YouTube deletes a video's picture with the video, so a clip taken down
 /// at its source lost its card's face though the file was on the phone.
@@ -48,9 +48,9 @@ void main() {
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
         secretStoreProvider.overrideWithValue(MemorySecretStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
-        initialSettingsProvider.overrideWithValue(const LiteSettings()),
+        initialSettingsProvider.overrideWithValue(const PhoneSettings()),
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/mtf_lite.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/mtf_lite.log'),
         ),
         keptCoverFolderProvider.overrideWith(
           (ref) async => Directory('${temp.path}/kept'),

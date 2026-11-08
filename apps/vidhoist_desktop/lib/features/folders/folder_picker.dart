@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/downloads_data.dart';
 import '../../shell/shell_metrics.dart';
 import 'folder_widgets.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// The server folder line of a form: what is chosen, and a click to choose
 /// again. Shared by adding and following.
@@ -28,13 +28,13 @@ class FolderLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Material(
       color: p.cardAlt,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(MTCorners.desktop.field),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.field),
       ),
       clipBehavior: Clip.antiAlias,
       // A button to a screen reader, not two lines of text: it opens the
@@ -45,13 +45,13 @@ class FolderLine extends StatelessWidget {
           onTap: onPick,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: MTSpace.md,
-              vertical: MTSpace.sm,
+              horizontal: VhSpace.md,
+              vertical: VhSpace.sm,
             ),
             child: Row(
               children: [
-                MTIcon(MTIcons.folder, size: MTSpace.lg, color: p.ink2),
-                const SizedBox(width: MTSpace.sm),
+                VhIcon(VhIcons.folder, size: VhSpace.lg, color: p.ink2),
+                const SizedBox(width: VhSpace.sm),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +69,7 @@ class FolderLine extends StatelessWidget {
                     ],
                   ),
                 ),
-                MTIcon(MTIcons.chevronDown, size: MTSpace.lg, color: p.ink3),
+                VhIcon(VhIcons.chevronDown, size: VhSpace.lg, color: p.ink3),
               ],
             ),
           ),
@@ -80,11 +80,11 @@ class FolderLine extends StatelessWidget {
 }
 
 /// What [FolderLine] shows for [choice].
-String folderLabel(MTLocalizations l, FolderChoice choice) => choice.channelName
+String folderLabel(VhLocalizations l, FolderChoice choice) => choice.channelName
     ? l.channelNameFolder
     : choice.isTop
     ? l.noFolder
-    : mtName(choice.path);
+    : vhName(choice.path);
 
 /// Picks a folder below the download folder: the top, the channel's own
 /// name when following, any folder the library uses, or a new one, nested
@@ -116,13 +116,13 @@ class _FolderPicker extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final folders = pickableFolders(ref.watch(libraryFolderPathsProvider));
 
     Widget option({
-      required MTIconData icon,
+      required VhIconData icon,
       required String title,
       String? subtitle,
       required bool selected,
@@ -133,22 +133,22 @@ class _FolderPicker extends ConsumerWidget {
       selected: selected,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
         child: Padding(
           padding: EdgeInsetsDirectional.only(
-            start: MTSpace.sm + MTSpace.lg * depth,
-            end: MTSpace.sm,
-            top: MTSpace.xs,
-            bottom: MTSpace.xs,
+            start: VhSpace.sm + VhSpace.lg * depth,
+            end: VhSpace.sm,
+            top: VhSpace.xs,
+            bottom: VhSpace.xs,
           ),
           child: Row(
             children: [
-              MTIcon(
+              VhIcon(
                 icon,
-                size: MTSpace.lg,
+                size: VhSpace.lg,
                 color: selected ? p.accent : p.ink2,
               ),
-              const SizedBox(width: MTSpace.sm),
+              const SizedBox(width: VhSpace.sm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,7 +171,7 @@ class _FolderPicker extends ConsumerWidget {
                 ),
               ),
               if (selected)
-                MTIcon(MTIcons.check, size: MTSpace.lg, color: p.accent),
+                VhIcon(VhIcons.check, size: VhSpace.lg, color: p.accent),
             ],
           ),
         ),
@@ -200,7 +200,7 @@ class _FolderPicker extends ConsumerWidget {
         ],
       ),
       content: SizedBox(
-        width: EmberShellSize.smallDialog,
+        width: DesktopShellSize.smallDialog,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -212,7 +212,7 @@ class _FolderPicker extends ConsumerWidget {
                   children: [
                     if (offerTop)
                       option(
-                        icon: MTIcons.library,
+                        icon: VhIcons.library,
                         title: l.noFolder,
                         subtitle: l.noFolderHint,
                         selected: current.isTop,
@@ -221,7 +221,7 @@ class _FolderPicker extends ConsumerWidget {
                       ),
                     if (offerChannelName)
                       option(
-                        icon: MTIcons.subscriptions,
+                        icon: VhIcons.subscriptions,
                         title: l.channelNameFolder,
                         selected: current.channelName,
                         onTap: () =>
@@ -229,15 +229,15 @@ class _FolderPicker extends ConsumerWidget {
                       ),
                     for (final path in folders)
                       option(
-                        icon: MTIcons.folder,
-                        title: mtName(path.split('/').last),
+                        icon: VhIcons.folder,
+                        title: vhName(path.split('/').last),
                         selected: !current.channelName && current.path == path,
                         depth: path.split('/').length - 1,
                         onTap: () =>
                             Navigator.of(context).pop(FolderChoice(path)),
                       ),
                     option(
-                      icon: MTIcons.plus,
+                      icon: VhIcons.plus,
                       title: l.newFolder,
                       selected: false,
                       onTap: () => unawaited(makeNew()),

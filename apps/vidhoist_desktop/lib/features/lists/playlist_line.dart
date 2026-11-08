@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/grip.dart';
 import '../../shell/now_playing_bars.dart';
@@ -36,23 +36,23 @@ class PlaylistLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final l = context.mtl;
+    final l = context.vhl;
     final subtitle = missing ? l.itemUnavailable : item.uploader;
     return Padding(
-      padding: const EdgeInsets.only(bottom: MTSpace.xxs),
+      padding: const EdgeInsets.only(bottom: VhSpace.xxs),
       child: Material(
-        color: current ? mtSelectedFill(p) : p.bg,
+        color: current ? vhSelectedFill(p) : p.bg,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+          borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              minHeight: MTDensity.desktop.row + MTSpace.md,
+              minHeight: VhDensity.desktop.row + VhSpace.md,
             ),
             child: Row(
               children: [
@@ -60,19 +60,19 @@ class PlaylistLine extends ConsumerWidget {
                   index: index,
                   child: MouseRegion(
                     cursor: SystemMouseCursors.grab,
-                    child: MTShortcutTooltip(
+                    child: VhShortcutTooltip(
                       message: l.desktopDragToReorder,
                       child: SizedBox(
-                        width: MTSpace.xxl,
-                        height: MTDensity.desktop.row,
-                        child: const EmberGrip(),
+                        width: VhSpace.xxl,
+                        height: VhDensity.desktop.row,
+                        child: const DesktopGrip(),
                       ),
                     ),
                   ),
                 ),
                 Opacity(
                   opacity: missing ? 0.5 : 1,
-                  child: MTMediaThumb(
+                  child: VhMediaThumb(
                     width: _thumbWidth,
                     height: _thumbWidth * 9 / 16,
                     audio: item.isAudio,
@@ -85,7 +85,7 @@ class PlaylistLine extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: MTSpace.sm),
+                const SizedBox(width: VhSpace.sm),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +95,7 @@ class PlaylistLine extends ConsumerWidget {
                         item.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        textDirection: mtTextDirectionOf(
+                        textDirection: vhTextDirectionOf(
                           item.title,
                           Directionality.of(context),
                         ),
@@ -120,27 +120,27 @@ class PlaylistLine extends ConsumerWidget {
                 if (current)
                   Padding(
                     padding: const EdgeInsetsDirectional.only(
-                      start: MTSpace.sm,
+                      start: VhSpace.sm,
                     ),
                     child: NowPlayingBars(playing: playing),
                   ),
                 if (item.duration case final length?)
                   Padding(
                     padding: const EdgeInsetsDirectional.only(
-                      start: MTSpace.xs,
+                      start: VhSpace.xs,
                     ),
                     child: Text(
-                      mtFormatDuration(length),
+                      vhFormatDuration(length),
                       style: text.labelSmall?.tabular.copyWith(color: p.ink3),
                     ),
                   ),
-                MTShortcutTooltip(
+                VhShortcutTooltip(
                   message: l.desktopRemoveFromList,
                   child: IconButton(
                     onPressed: onRemove,
-                    icon: MTIcon(
-                      MTIcons.close,
-                      size: MTSpace.md,
+                    icon: VhIcon(
+                      VhIcons.close,
+                      size: VhSpace.md,
                       color: p.ink3,
                       semanticLabel: l.desktopRemoveFromList,
                     ),

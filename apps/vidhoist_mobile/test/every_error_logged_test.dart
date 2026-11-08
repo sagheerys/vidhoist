@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/shared/error_report.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The log held in memory, so the test needs no disk.
-class _Lines extends MTLogger {
+class _Lines extends VhLogger {
   _Lines() : super(filePath: '');
 
   final lines = <String>[];
@@ -32,13 +32,13 @@ void main() {
     logEveryError(logger);
     addTearDown(() {
       FlutterError.onError = testHandler;
-      mtErrorSnackLog = null;
+      vhErrorSnackLog = null;
     });
 
     late BuildContext context;
     await tester.pumpWidget(
       MaterialApp(
-        theme: mtTheme(MTVariant.superApp, Brightness.light),
+        theme: vhTheme(VhVariant.desktop, Brightness.light),
         home: Scaffold(
           body: Builder(
             builder: (c) {
@@ -49,7 +49,7 @@ void main() {
         ),
       ),
     );
-    showMTSnack(context, 'could not delete', type: MTSnackType.error);
+    showVhSnack(context, 'could not delete', type: VhSnackType.error);
     FlutterError.reportError(
       FlutterErrorDetails(exception: StateError('broken layout')),
     );

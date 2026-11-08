@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../downloads_library/local_item.dart';
@@ -16,7 +16,7 @@ void showAddToPlaylistSheet(
   List<LocalItem> items,
 ) {
   if (items.isEmpty) return;
-  showMTSheet<void>(
+  showVhSheet<void>(
     context: context,
     useRootNavigator: true,
     isScrollControlled: true,
@@ -31,12 +31,12 @@ class _AddToPlaylistSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final playlists = ref.watch(playlistsProvider);
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(MTSpace.pagePad),
+        padding: const EdgeInsets.all(VhSpace.pagePad),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.sizeOf(context).height * 0.7,
@@ -45,14 +45,14 @@ class _AddToPlaylistSheet extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              MTSectionHeader(
+              VhSectionHeader(
                 title: l10n.addToPlaylist,
                 trailing: l10n.queueItemsCount(items.length),
               ),
-              const SizedBox(height: MTSpace.sm),
+              const SizedBox(height: VhSpace.sm),
               Flexible(
                 child: playlists.when(
-                  loading: () => const Center(child: MTSpinner()),
+                  loading: () => const Center(child: VhSpinner()),
                   error: (_, _) => Text(l10n.tryAgain),
                   data: (all) => ListView(
                     shrinkWrap: true,
@@ -60,7 +60,7 @@ class _AddToPlaylistSheet extends ConsumerWidget {
                       for (final playlist in all) _tile(context, ref, playlist),
                       if (all.isEmpty)
                         Padding(
-                          padding: const EdgeInsets.all(MTSpace.lg),
+                          padding: const EdgeInsets.all(VhSpace.lg),
                           child: Text(
                             l10n.noPlaylistsMessage,
                             textAlign: TextAlign.center,
@@ -71,10 +71,10 @@ class _AddToPlaylistSheet extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: MTSpace.sm),
+              const SizedBox(height: VhSpace.sm),
               OutlinedButton.icon(
                 onPressed: () => _createAndAdd(context, ref),
-                icon: const MTIcon(MTIcons.plus, size: 18),
+                icon: const VhIcon(VhIcons.plus, size: 18),
                 label: Text(l10n.newPlaylistAction),
               ),
             ],
@@ -89,8 +89,8 @@ class _AddToPlaylistSheet extends ConsumerWidget {
   /// put the clip a moment ago short of opening each one. The store already
   /// prevented duplicates; what was missing was saying so.
   Widget _tile(BuildContext context, WidgetRef ref, SavedPlaylist playlist) {
-    final l10n = context.mtl;
-    final palette = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final palette = VhThemeX.of(context).palette;
     final present = {for (final entry in playlist.items) entry.canonicalUrl};
     // The criterion: **all** of the selection is present. Otherwise the tap
     // still has something to add.
@@ -99,8 +99,8 @@ class _AddToPlaylistSheet extends ConsumerWidget {
     );
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: MTIcon(
-        playlist.pinned ? MTIcons.pinOn : MTIcons.queue,
+      leading: VhIcon(
+        playlist.pinned ? VhIcons.pinOn : VhIcons.queue,
         color: palette.ink2,
       ),
       title: Text(playlist.name),
@@ -109,7 +109,7 @@ class _AddToPlaylistSheet extends ConsumerWidget {
             ? l10n.alreadyInPlaylist
             : l10n.queueItemsCount(playlist.items.length),
       ),
-      trailing: already ? MTIcon(MTIcons.check, color: palette.accent) : null,
+      trailing: already ? VhIcon(VhIcons.check, color: palette.accent) : null,
       onTap: () => _add(context, ref, playlist, already: already),
     );
   }
@@ -127,14 +127,14 @@ class _AddToPlaylistSheet extends ConsumerWidget {
     ref.invalidate(playlistsProvider);
     ref.invalidate(playlistItemsProvider(playlist.id));
     if (context.mounted) {
-      showMTSnack(
+      showVhSnack(
         context,
         already
-            ? context.mtl.alreadyInPlaylist
+            ? context.vhl.alreadyInPlaylist
             : (items.length == 1
-                  ? context.mtl.videoAdded
-                  : context.mtl.addedToPlaylistCount(items.length)),
-        type: MTSnackType.success,
+                  ? context.vhl.videoAdded
+                  : context.vhl.addedToPlaylistCount(items.length)),
+        type: VhSnackType.success,
       );
     }
   }
@@ -148,10 +148,10 @@ class _AddToPlaylistSheet extends ConsumerWidget {
     ref.invalidate(playlistsProvider);
     if (context.mounted) {
       Navigator.pop(context);
-      showMTSnack(
+      showVhSnack(
         context,
-        context.mtl.playlistCreated,
-        type: MTSnackType.success,
+        context.vhl.playlistCreated,
+        type: VhSnackType.success,
       );
     }
     // A new playlist can be opened straight from the tab; there is no

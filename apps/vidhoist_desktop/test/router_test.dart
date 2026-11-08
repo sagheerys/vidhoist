@@ -18,7 +18,7 @@ void main() {
   tearDown(() => router.dispose());
 
   testWidgets('the app opens on the library', (tester) async {
-    await tester.pumpWidget(ProviderScope(child: EmberApp(router: router)));
+    await tester.pumpWidget(ProviderScope(child: DesktopApp(router: router)));
     await tester.pumpAndSettle();
     expect(
       tester.widget<PendingPlace>(find.byType(PendingPlace)).place,
@@ -27,23 +27,23 @@ void main() {
   });
 
   testWidgets('every place has its address', (tester) async {
-    await tester.pumpWidget(ProviderScope(child: EmberApp(router: router)));
+    await tester.pumpWidget(ProviderScope(child: DesktopApp(router: router)));
     for (final (path, place) in [
       ('/', 'library'),
       // **The guard**: no blank page for search; it is the palette.
-      (EmberRoutes.search, 'library'),
-      (EmberRoutes.playlists, 'playlists'),
-      (EmberRoutes.channels, 'channels'),
-      (EmberRoutes.settings, 'settings'),
-      (EmberRoutes.library, 'library'),
+      (DesktopRoutes.search, 'library'),
+      (DesktopRoutes.playlists, 'playlists'),
+      (DesktopRoutes.channels, 'channels'),
+      (DesktopRoutes.settings, 'settings'),
+      (DesktopRoutes.library, 'library'),
     ]) {
       expect((await go(tester, path)).place, place, reason: path);
     }
   });
 
   testWidgets('each settings section opens by its own address', (tester) async {
-    await tester.pumpWidget(ProviderScope(child: EmberApp(router: router)));
-    for (final pane in EmberSettingsPane.values) {
+    await tester.pumpWidget(ProviderScope(child: DesktopApp(router: router)));
+    for (final pane in DesktopSettingsPane.values) {
       final shown = await go(tester, pane.route);
       expect((shown.place, shown.argument), ('settings', pane.name));
     }
@@ -52,17 +52,17 @@ void main() {
   testWidgets("a clip's canonical URL survives the trip through its address", (
     tester,
   ) async {
-    await tester.pumpWidget(ProviderScope(child: EmberApp(router: router)));
+    await tester.pumpWidget(ProviderScope(child: DesktopApp(router: router)));
     const url = 'https://www.youtube.com/watch?v=a1/b&t=30#x';
-    final shown = await go(tester, EmberRoutes.item(url));
+    final shown = await go(tester, DesktopRoutes.item(url));
     expect((shown.place, shown.argument), ('item', url));
   });
 
   testWidgets('**the guard**: one clip to another is a change of page, '
       'and moves', (tester) async {
-    await tester.pumpWidget(ProviderScope(child: EmberApp(router: router)));
-    await go(tester, EmberRoutes.item('https://x/a'));
-    router.go(EmberRoutes.item('https://x/b'));
+    await tester.pumpWidget(ProviderScope(child: DesktopApp(router: router)));
+    await go(tester, DesktopRoutes.item('https://x/a'));
+    router.go(DesktopRoutes.item('https://x/b'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 60));
     // Both pages are on screen while one gives way to the other.
@@ -74,7 +74,7 @@ void main() {
   testWidgets('an address that names no place lands on the library', (
     tester,
   ) async {
-    await tester.pumpWidget(ProviderScope(child: EmberApp(router: router)));
+    await tester.pumpWidget(ProviderScope(child: DesktopApp(router: router)));
     expect((await go(tester, '/nowhere/at/all')).place, 'library');
     expect((await go(tester, '/settings/no-such-pane')).place, 'library');
   });
@@ -91,11 +91,11 @@ void main() {
       shell: (_, _, child) =>
           _CountingShell(onCreate: () => created++, child: child),
     );
-    await tester.pumpWidget(ProviderScope(child: EmberApp(router: router)));
-    await go(tester, EmberRoutes.search);
-    await go(tester, EmberRoutes.item('https://x/y'));
-    await go(tester, EmberSettingsPane.appearance.route);
-    await go(tester, EmberRoutes.library);
+    await tester.pumpWidget(ProviderScope(child: DesktopApp(router: router)));
+    await go(tester, DesktopRoutes.search);
+    await go(tester, DesktopRoutes.item('https://x/y'));
+    await go(tester, DesktopSettingsPane.appearance.route);
+    await go(tester, DesktopRoutes.library);
     expect(created, 1);
   });
 }

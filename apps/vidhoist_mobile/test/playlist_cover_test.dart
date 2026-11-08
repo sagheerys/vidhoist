@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/playlists/widgets/playlist_cards.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// **Requested 2026-09-08**: a playlist cover was always two cells, so a
 /// playlist of twenty items was represented by two covers. Now it goes up
@@ -20,9 +20,9 @@ void main() {
   );
 
   Widget cardWith(int covers) => MaterialApp(
-    theme: mtTheme(MTVariant.lite, Brightness.light),
-    localizationsDelegates: MTLocalizations.localizationsDelegates,
-    supportedLocales: MTLocalizations.supportedLocales,
+    theme: vhTheme(VhVariant.phone, Brightness.light),
+    localizationsDelegates: VhLocalizations.localizationsDelegates,
+    supportedLocales: VhLocalizations.supportedLocales,
     home: Scaffold(
       body: SizedBox(
         width: 180,

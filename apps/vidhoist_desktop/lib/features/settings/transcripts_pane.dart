@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/folders_data.dart';
 import '../../data/subtitles_data.dart';
@@ -31,8 +31,8 @@ class TranscriptsPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final summary = ref.watch(transcriptsSummaryProvider).valueOrNull;
     final none = summary == null || summary.$1 == 0;
@@ -43,46 +43,47 @@ class TranscriptsPane extends ConsumerWidget {
           l.desktopTranscriptsHelp,
           style: text.bodyMedium?.copyWith(color: p.ink2),
         ),
-        const SizedBox(height: MTSpace.md),
+        const SizedBox(height: VhSpace.md),
         ValueListenableBuilder<bool>(
-          valueListenable: ref.watch(emberSubtitlesProvider).shown,
+          valueListenable: ref.watch(desktopSubtitlesProvider).shown,
           builder: (context, on, _) => SwitchLine(
             title: l.subtitlesShow,
             hint: l.subtitlesShowHelp,
             value: on,
-            onChanged: (v) => ref.read(emberSubtitlesProvider).shown.value = v,
+            onChanged: (v) =>
+                ref.read(desktopSubtitlesProvider).shown.value = v,
           ),
         ),
         const CaptionStyleChoices(),
         SettingLine(
           title: l.transcriptsClips(summary?.$1 ?? 0),
-          value: summary == null || none ? null : mtFormatSize(summary.$2),
+          value: summary == null || none ? null : vhFormatSize(summary.$2),
         ),
         Wrap(
-          spacing: MTSpace.md,
-          runSpacing: MTSpace.xs,
+          spacing: VhSpace.md,
+          runSpacing: VhSpace.xs,
           children: [
-            MTLinkButton(
+            VhLinkButton(
               label: l.transcriptsExport,
-              icon: MTIcons.saveTo,
+              icon: VhIcons.saveTo,
               onPressed: none ? null : () => unawaited(_export(context, ref)),
             ),
-            MTLinkButton(
+            VhLinkButton(
               label: l.transcriptsImport,
-              icon: MTIcons.download,
+              icon: VhIcons.download,
               onPressed: () => unawaited(_import(context, ref)),
             ),
-            MTLinkButton(
+            VhLinkButton(
               label: l.transcriptsDeleteAll,
               danger: true,
-              icon: MTIcons.trash,
+              icon: VhIcons.trash,
               onPressed: none
                   ? null
                   : () => unawaited(_deleteAll(context, ref)),
             ),
           ],
         ),
-        const SizedBox(height: MTSpace.xs),
+        const SizedBox(height: VhSpace.xs),
         // Each note opens with its button's name: two loose lines under
         // three buttons left which said what to guess.
         for (final (name, hint) in [
@@ -118,8 +119,8 @@ class TranscriptsPane extends ConsumerWidget {
       text: TranscriptBundle.encode(all),
     );
     if (saved == null || !context.mounted) return;
-    final l = context.mtl;
-    showMTNotice(
+    final l = context.vhl;
+    showVhNotice(
       context,
       message: l.desktopExported(name),
       actionLabel: l.desktopShowInFolder,
@@ -133,8 +134,8 @@ class TranscriptsPane extends ConsumerWidget {
   }
 
   Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
-    final l = context.mtl;
-    final sure = await showMTConfirm(
+    final l = context.vhl;
+    final sure = await showVhConfirm(
       context,
       title: l.transcriptsDeleteTitle,
       message: l.desktopTranscriptsDeleteBody,

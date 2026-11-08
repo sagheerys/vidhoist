@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../downloads_library/artwork_view.dart';
 import '../downloads_library/library_providers.dart';
@@ -21,7 +21,7 @@ class PlaylistsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final smart = ref.watch(smartListsProvider);
     final playlists = ref.watch(playlistsProvider);
 
@@ -32,34 +32,34 @@ class PlaylistsScreen extends ConsumerWidget {
           IconButton(
             tooltip: l10n.createPlaylist,
             onPressed: () => showCreatePlaylistDialog(context, ref),
-            icon: const MTIcon(MTIcons.plus),
+            icon: const VhIcon(VhIcons.plus),
           ),
         ],
       ),
-      body: MTReadableWidth(
+      body: VhReadableWidth(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(
-            MTSpace.pagePad,
+            VhSpace.pagePad,
             0,
-            MTSpace.pagePad,
+            VhSpace.pagePad,
             140,
           ),
           children: [
-            MTSectionHeader(title: l10n.smartPlaylists),
-            const SizedBox(height: MTSpace.sm),
+            VhSectionHeader(title: l10n.smartPlaylists),
+            const SizedBox(height: VhSpace.sm),
             SmartListRows(
               lists: smart,
               onPlay: (list) => _playSmart(context, ref, list),
             ),
-            const SizedBox(height: MTSpace.xl),
-            MTSectionHeader(
+            const SizedBox(height: VhSpace.xl),
+            VhSectionHeader(
               title: l10n.yourPlaylists,
               trailing: '${l10n.sortedByLastPlayed} ↓',
             ),
-            const SizedBox(height: MTSpace.sm),
+            const SizedBox(height: VhSpace.sm),
             playlists.when(
-              loading: () => const Center(child: MTSpinner()),
-              error: (_, _) => MTEmptyState(
+              loading: () => const Center(child: VhSpinner()),
+              error: (_, _) => VhEmptyState(
                 title: l10n.tryAgain,
                 message: l10n.noPlaylistsMessage,
               ),
@@ -90,7 +90,7 @@ class _Grid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final library = ref.watch(localMediaProvider).valueOrNull ?? const [];
     final byKey = {for (final item in library) item.key: item};
 
@@ -108,12 +108,12 @@ class _Grid extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: MTSpace.sm),
+            padding: const EdgeInsets.only(bottom: VhSpace.sm),
             child: Text(
               l10n.noPlaylistsMessage,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall!
-                  .copyWith(color: MTThemeX.of(context).palette.ink3),
+                  .copyWith(color: VhThemeX.of(context).palette.ink3),
             ),
           ),
           SizedBox(
@@ -129,11 +129,11 @@ class _Grid extends ConsumerWidget {
 
     return GridView.extent(
       // Two up on every phone; a wide window adds columns.
-      maxCrossAxisExtent: MTBreakpoint.gridTile,
+      maxCrossAxisExtent: VhBreakpoint.gridTile,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: MTSpace.md - 1,
-      crossAxisSpacing: MTSpace.md - 1,
+      mainAxisSpacing: VhSpace.md - 1,
+      crossAxisSpacing: VhSpace.md - 1,
       childAspectRatio: 0.78,
       children: [
         for (final playlist in playlists)
@@ -166,7 +166,7 @@ class _Grid extends ConsumerWidget {
           .read(playlistPlayerProvider)
           .play(items, playlistId: playlist.id, playlistName: playlist.name);
       if (visual && context.mounted) context.push('/player');
-    } on MTApiException catch (e) {
+    } on VhApiException catch (e) {
       if (context.mounted) {
         showErrorSnack(context, ref, e, tag: 'playlist');
       }
@@ -182,13 +182,13 @@ class _NewPlaylistTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(MTRadius.cardLg),
+      borderRadius: BorderRadius.circular(VhRadius.cardLg),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(MTRadius.cardLg),
+          borderRadius: BorderRadius.circular(VhRadius.cardLg),
           border: Border.all(color: p.line2, width: 1.5),
         ),
         child: Column(
@@ -199,11 +199,11 @@ class _NewPlaylistTile extends StatelessWidget {
               height: 34,
               decoration: BoxDecoration(
                 color: p.accentSoft,
-                borderRadius: BorderRadius.circular(MTRadius.field - 1),
+                borderRadius: BorderRadius.circular(VhRadius.field - 1),
               ),
-              child: MTIcon(MTIcons.plus, size: 17, color: p.accentInk),
+              child: VhIcon(VhIcons.plus, size: 17, color: p.accentInk),
             ),
-            const SizedBox(height: MTSpace.xs),
+            const SizedBox(height: VhSpace.xs),
             Text(
               label,
               style: Theme.of(context).textTheme.labelSmall!

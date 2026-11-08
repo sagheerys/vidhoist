@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../data/engine_data.dart';
 import '../data/engine_fetch_data.dart';
@@ -20,7 +20,7 @@ String enginePartName(EnginePart part) => switch (part) {
 };
 
 /// What an engine update came to, in a sentence.
-String updateOutcomeText(MTLocalizations l, UpdateOutcome outcome) {
+String updateOutcomeText(VhLocalizations l, UpdateOutcome outcome) {
   if (outcome.updated) {
     return l.desktopEngineUpdated(outcome.version?.toString() ?? '?');
   }
@@ -42,8 +42,8 @@ class SidebarEngineLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final text = Theme.of(context).textTheme;
     final paths = ref.watch(enginePathsProvider);
     final version = ref.watch(engineVersionProvider).valueOrNull?.ytDlp;
@@ -64,51 +64,51 @@ class SidebarEngineLine extends ConsumerWidget {
       label,
     ].join(' · ');
     final mark = paths.ready
-        ? MTIcon(
-            MTIcons.bolt,
+        ? VhIcon(
+            VhIcons.bolt,
             key: const ValueKey('engine-quiet'),
-            size: MTSpace.md,
+            size: VhSpace.md,
             color: p.ink3,
           )
         : Container(
             key: const ValueKey('engine-dot'),
-            width: MTSpace.xs,
-            height: MTSpace.xs,
+            width: VhSpace.xs,
+            height: VhSpace.xs,
             decoration: BoxDecoration(color: p.err, shape: BoxShape.circle),
           );
-    return MTShortcutTooltip(
+    return VhShortcutTooltip(
       message: status,
       child: Semantics(
         button: true,
         label: '${l.desktopEngine}: $status',
         excludeSemantics: true,
         child: InkWell(
-          borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+          borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
           onTapUp: (tap) => unawaited(_menu(context, ref, tap.globalPosition)),
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: MTSpace.sm,
-              vertical: MTSpace.xs,
+              horizontal: VhSpace.sm,
+              vertical: VhSpace.xs,
             ),
             child: narrow
                 ? Center(child: mark)
                 : Row(
                     children: [
                       mark,
-                      const SizedBox(width: MTSpace.sm),
+                      const SizedBox(width: VhSpace.sm),
                       Expanded(
                         child: Text(
                           // A version reads left to right in either
                           // language.
                           fetching.isEmpty && paths.ready
-                              ? mtLtrRun(label)
+                              ? vhLtrRun(label)
                               : label,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: text.labelSmall?.copyWith(color: p.ink2),
                         ),
                       ),
-                      MTIcon(MTIcons.moreVert, size: MTSpace.md, color: p.ink3),
+                      VhIcon(VhIcons.moreVert, size: VhSpace.md, color: p.ink3),
                     ],
                   ),
           ),
@@ -118,35 +118,35 @@ class SidebarEngineLine extends ConsumerWidget {
   }
 
   Future<void> _menu(BuildContext context, WidgetRef ref, Offset at) async {
-    final l = context.mtl;
+    final l = context.vhl;
     final ipv4 = ref.read(engineOptionsProvider).forceIpv4;
     final chosen = await showEmberMenu<String>(context, at, [
-      EmberMenuEntry('update', MTIcons.refresh, l.desktopEngineUpdate),
-      EmberMenuEntry(
+      DesktopMenuEntry('update', VhIcons.refresh, l.desktopEngineUpdate),
+      DesktopMenuEntry(
         'ipv4',
-        ipv4 ? MTIcons.check : MTIcons.globe,
+        ipv4 ? VhIcons.check : VhIcons.globe,
         l.desktopEngineIpv4,
       ),
-      const EmberMenuEntry.divider(),
-      EmberMenuEntry('settings', MTIcons.settings, l.desktopEngine),
+      const DesktopMenuEntry.divider(),
+      DesktopMenuEntry('settings', VhIcons.settings, l.desktopEngine),
     ]);
     if (!context.mounted) return;
     switch (chosen) {
       case 'update':
         final outcome = await ref.read(engineUpdateProvider.notifier).update();
         if (outcome != null && context.mounted) {
-          showMTNotice(
+          showVhNotice(
             context,
-            message: updateOutcomeText(context.mtl, outcome),
+            message: updateOutcomeText(context.vhl, outcome),
             kind: outcome.error == null
-                ? MTNoticeKind.done
-                : MTNoticeKind.failed,
+                ? VhNoticeKind.done
+                : VhNoticeKind.failed,
           );
         }
       case 'ipv4':
         await ref.read(engineOptionsProvider.notifier).setForceIpv4(!ipv4);
       case 'settings':
-        context.go(EmberSettingsPane.engine.route);
+        context.go(DesktopSettingsPane.engine.route);
     }
   }
 }

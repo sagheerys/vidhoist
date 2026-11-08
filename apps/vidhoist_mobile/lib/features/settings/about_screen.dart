@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,22 +24,22 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.about)),
-      body: MTReadableWidth(
+      body: VhReadableWidth(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(
-            MTSpace.pagePad,
+            VhSpace.pagePad,
             0,
-            MTSpace.pagePad,
-            MTSpace.xxl,
+            VhSpace.pagePad,
+            VhSpace.xxl,
           ),
           children: [
-            const SizedBox(height: MTSpace.lg),
+            const SizedBox(height: VhSpace.lg),
             Center(
               child: Column(
                 children: [
@@ -53,9 +53,9 @@ class AboutScreen extends StatelessWidget {
                     cacheWidth: (76 * MediaQuery.devicePixelRatioOf(context))
                         .round(),
                   ),
-                  const SizedBox(height: MTSpace.md),
+                  const SizedBox(height: VhSpace.md),
                   Text(l10n.appTitle, style: text.headlineMedium),
-                  const SizedBox(height: MTSpace.xxs),
+                  const SizedBox(height: VhSpace.xxs),
                   // **Without the build number**: `2.0.0+1` is Flutter's
                   // notation, and `+1` is an internal Android counter that
                   // means nothing to the user (field report).
@@ -68,7 +68,7 @@ class AboutScreen extends StatelessWidget {
                       style: text.bodySmall!.copyWith(color: p.ink3),
                     ),
                   ),
-                  const SizedBox(height: MTSpace.xxs),
+                  const SizedBox(height: VhSpace.xxs),
                   Text(
                     l10n.licensedUnder,
                     style: text.labelSmall!.copyWith(color: p.ink3),
@@ -76,39 +76,39 @@ class AboutScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: MTSpace.xxl),
-            MTSectionHeader(title: l10n.developer),
+            const SizedBox(height: VhSpace.xxl),
+            VhSectionHeader(title: l10n.developer),
             _LinkTile(
-              icon: MTIcons.code,
+              icon: VhIcons.code,
               title: l10n.developerName,
               subtitle: 'github.com/sagheerys',
               url: _github,
             ),
             _LinkTile(
-              icon: MTIcons.mail,
+              icon: VhIcons.mail,
               title: 'X',
               subtitle: 'x.com/Sagheer700',
               url: _x,
             ),
             _LinkTile(
-              icon: MTIcons.bug,
+              icon: VhIcons.bug,
               title: l10n.reportBug,
               subtitle: 'vidhoist-mobile/issues',
               url: _issues,
             ),
-            const SizedBox(height: MTSpace.xl),
-            MTSectionHeader(title: l10n.sourceCode),
+            const SizedBox(height: VhSpace.xl),
+            VhSectionHeader(title: l10n.sourceCode),
             _LinkTile(
-              icon: MTIcons.folder,
+              icon: VhIcons.folder,
               title: l10n.sourceCode,
               subtitle: 'sagheerys/vidhoist-mobile',
               url: _repo,
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: MTIcon(MTIcons.list, color: p.ink2),
+              leading: VhIcon(VhIcons.list, color: p.ink2),
               title: Text(l10n.licenses),
-              trailing: const MTIcon(MTIcons.forward, matchTextDirection: true),
+              trailing: const VhIcon(VhIcons.forward, matchTextDirection: true),
               onTap: () => showLicensePage(
                 context: context,
                 applicationName: l10n.appTitle,
@@ -117,25 +117,25 @@ class AboutScreen extends StatelessWidget {
                 applicationLegalese: '${l10n.copyright}\n${l10n.licensedUnder}',
               ),
             ),
-            const SizedBox(height: MTSpace.xl),
-            MTSectionHeader(title: l10n.builtWith),
+            const SizedBox(height: VhSpace.xl),
+            VhSectionHeader(title: l10n.builtWith),
             _LinkTile(
-              icon: MTIcons.server,
+              icon: VhIcons.server,
               title: 'Vidhoist',
               subtitle: l10n.vidhoistCredit,
               url: _vidhoist,
               ltrSubtitle: false,
             ),
             _LinkTile(
-              icon: MTIcons.offline,
+              icon: VhIcons.offline,
               title: 'yt-dlp',
               subtitle: l10n.ytdlpCredit,
               url: _ytdlp,
               ltrSubtitle: false,
             ),
-            const SizedBox(height: MTSpace.xl),
-            MTSectionHeader(title: l10n.disclaimer),
-            const SizedBox(height: MTSpace.sm),
+            const SizedBox(height: VhSpace.xl),
+            VhSectionHeader(title: l10n.disclaimer),
+            const SizedBox(height: VhSpace.sm),
             // The disclaimer of affiliation comes first: the name says what
             // the app connects to, not who made it.
             Text(
@@ -145,17 +145,17 @@ class AboutScreen extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: MTSpace.sm),
+            const SizedBox(height: VhSpace.sm),
             Text(
               l10n.disclaimerText,
               style: text.bodySmall!.copyWith(color: p.ink2),
             ),
-            const SizedBox(height: MTSpace.sm),
+            const SizedBox(height: VhSpace.sm),
             Text(
               l10n.noWarranty,
               style: text.bodySmall!.copyWith(color: p.ink3),
             ),
-            const SizedBox(height: MTSpace.xl),
+            const SizedBox(height: VhSpace.xl),
             Center(
               child: Text(
                 l10n.copyright,
@@ -178,7 +178,7 @@ class _LinkTile extends StatelessWidget {
     this.ltrSubtitle = true,
   });
 
-  final MTIconData icon;
+  final VhIconData icon;
   final String title;
   final String subtitle;
   final String url;
@@ -189,17 +189,17 @@ class _LinkTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: MTIcon(icon, color: p.ink2),
+      leading: VhIcon(icon, color: p.ink2),
       title: Text(title),
       subtitle: Text(
         subtitle,
         textDirection: ltrSubtitle ? TextDirection.ltr : null,
         style: Theme.of(context).textTheme.bodySmall,
       ),
-      trailing: const MTIcon(MTIcons.external, size: 17),
+      trailing: const VhIcon(VhIcons.external, size: 17),
       onTap: () =>
           launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
     );

@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/item_actions_sheet.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
@@ -34,10 +34,10 @@ void main() {
               prefsMutexProvider.overrideWithValue(PrefsMutex()),
             ],
             child: MaterialApp(
-              theme: mtTheme(MTVariant.lite, Brightness.light),
+              theme: vhTheme(VhVariant.phone, Brightness.light),
               locale: locale,
-              localizationsDelegates: MTLocalizations.localizationsDelegates,
-              supportedLocales: MTLocalizations.supportedLocales,
+              localizationsDelegates: VhLocalizations.localizationsDelegates,
+              supportedLocales: VhLocalizations.supportedLocales,
               home: Scaffold(
                 body: _OpensMenu(
                   key: UniqueKey(),

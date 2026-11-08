@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../data/library_data.dart';
 import '../features/clip/clip_actions.dart';
@@ -14,19 +14,23 @@ import 'shell_metrics.dart';
 /// The player bar's start: the clip's cover, what plays and its channel,
 /// and its heart. A click opens the clip's page, the way back to its
 /// picture from anywhere.
-class EmberNowPlaying extends ConsumerWidget {
-  const EmberNowPlaying({super.key, required this.state, required this.onOpen});
+class DesktopNowPlaying extends ConsumerWidget {
+  const DesktopNowPlaying({
+    super.key,
+    required this.state,
+    required this.onOpen,
+  });
 
-  final MTPlayerState state;
+  final VhPlayerState state;
   final ValueChanged<String> onOpen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final text = Theme.of(context).textTheme;
     final item = state.current;
-    final side = EmberShellSize.playerBar - MTSpace.xxl;
+    final side = DesktopShellSize.playerBar - VhSpace.xxl;
     // The library's entry, for the cover found later and the heart.
     final entry = item == null
         ? null
@@ -44,7 +48,7 @@ class EmberNowPlaying extends ConsumerWidget {
     final details = Row(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(MTCorners.desktop.thumb),
+          borderRadius: BorderRadius.circular(VhCorners.desktop.thumb),
           child: Container(
             width: side,
             height: side,
@@ -52,10 +56,10 @@ class EmberNowPlaying extends ConsumerWidget {
             alignment: Alignment.center,
             child:
                 art ??
-                MTIcon(MTIcons.headphones, size: MTSpace.xl, color: p.ink3),
+                VhIcon(VhIcons.headphones, size: VhSpace.xl, color: p.ink3),
           ),
         ),
-        const SizedBox(width: MTSpace.md),
+        const SizedBox(width: VhSpace.md),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -69,7 +73,7 @@ class EmberNowPlaying extends ConsumerWidget {
                 // short in an Arabic window loses its end, not its start.
                 textDirection: item == null
                     ? null
-                    : mtTextDirectionOf(item.title, Directionality.of(context)),
+                    : vhTextDirectionOf(item.title, Directionality.of(context)),
                 style: text.titleSmall?.copyWith(
                   color: item == null ? p.ink3 : p.ink,
                 ),
@@ -96,15 +100,15 @@ class EmberNowPlaying extends ConsumerWidget {
             button: true,
             child: InkWell(
               onTap: () => onOpen(item.canonicalUrl),
-              borderRadius: BorderRadius.circular(MTCorners.desktop.thumb),
+              borderRadius: BorderRadius.circular(VhCorners.desktop.thumb),
               child: details,
             ),
           ),
         ),
         // Only for what the library holds: a heart needs an entry to keep.
         if (entry != null)
-          EmberPlayerControl(
-            icon: favorite ? MTIcons.favoriteOn : MTIcons.favorite,
+          DesktopPlayerControl(
+            icon: favorite ? VhIcons.favoriteOn : VhIcons.favorite,
             label: favorite ? l.removeFromFavorites : l.addToFavorites,
             selected: favorite,
             color: p.favorite,

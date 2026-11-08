@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../data/hints_data.dart';
 import '../data/subtitles_data.dart';
@@ -17,7 +17,7 @@ import 'player_bar.dart';
 import 'shell_state.dart';
 
 /// The window's keys, each with what it does.
-enum EmberKey {
+enum DesktopKey {
   playPause,
   back,
   forward,
@@ -53,7 +53,7 @@ enum EmberKey {
 
 /// Which of the window's keys [event] is, if any. Letters go by the key's
 /// place on the keyboard, so R and F work with an Arabic layout too.
-EmberKey? emberKeyFor(
+DesktopKey? desktopKeyFor(
   KeyEvent event, {
   required bool control,
   required bool shift,
@@ -63,27 +63,27 @@ EmberKey? emberKeyFor(
   if (control) {
     if (shift) return null;
     return switch (physical) {
-      PhysicalKeyboardKey.keyF => EmberKey.search,
-      PhysicalKeyboardKey.keyM => EmberKey.mini,
+      PhysicalKeyboardKey.keyF => DesktopKey.search,
+      PhysicalKeyboardKey.keyM => DesktopKey.mini,
       _ => null,
     };
   }
   if (shift) {
     // "?" is Shift and the slash key; an Arabic layout types its own
     // question mark there, so the key is read, not the character.
-    return physical == PhysicalKeyboardKey.slash ? EmberKey.shortcuts : null;
+    return physical == PhysicalKeyboardKey.slash ? DesktopKey.shortcuts : null;
   }
   return switch (logical) {
-    LogicalKeyboardKey.space => EmberKey.playPause,
-    LogicalKeyboardKey.arrowLeft => EmberKey.back,
-    LogicalKeyboardKey.arrowRight => EmberKey.forward,
-    LogicalKeyboardKey.arrowUp => EmberKey.up,
-    LogicalKeyboardKey.arrowDown => EmberKey.down,
-    LogicalKeyboardKey.f11 => EmberKey.fullScreen,
-    LogicalKeyboardKey.escape => EmberKey.leaveFullScreen,
+    LogicalKeyboardKey.space => DesktopKey.playPause,
+    LogicalKeyboardKey.arrowLeft => DesktopKey.back,
+    LogicalKeyboardKey.arrowRight => DesktopKey.forward,
+    LogicalKeyboardKey.arrowUp => DesktopKey.up,
+    LogicalKeyboardKey.arrowDown => DesktopKey.down,
+    LogicalKeyboardKey.f11 => DesktopKey.fullScreen,
+    LogicalKeyboardKey.escape => DesktopKey.leaveFullScreen,
     _ => switch (physical) {
-      PhysicalKeyboardKey.keyR => EmberKey.repeat,
-      PhysicalKeyboardKey.keyC => EmberKey.captions,
+      PhysicalKeyboardKey.keyR => DesktopKey.repeat,
+      PhysicalKeyboardKey.keyC => DesktopKey.captions,
       _ => null,
     },
   };
@@ -100,8 +100,8 @@ const seekStep = Duration(seconds: 10);
 /// for Space on a focused button, and for the arrows while a control holds
 /// focus (the keyboard is walking the window). Seeking, the volume and
 /// play/pause wait for a clip: with none, the keys go on as usual.
-class EmberKeyboard extends ConsumerStatefulWidget {
-  const EmberKeyboard({
+class DesktopKeyboard extends ConsumerStatefulWidget {
+  const DesktopKeyboard({
     super.key,
     required this.onSearch,
     required this.onMini,
@@ -120,10 +120,10 @@ class EmberKeyboard extends ConsumerStatefulWidget {
   final Widget child;
 
   @override
-  ConsumerState<EmberKeyboard> createState() => _EmberKeyboardState();
+  ConsumerState<DesktopKeyboard> createState() => _DesktopKeyboardState();
 }
 
-class _EmberKeyboardState extends ConsumerState<EmberKeyboard> {
+class _DesktopKeyboardState extends ConsumerState<DesktopKeyboard> {
   @override
   void initState() {
     super.initState();
@@ -148,7 +148,7 @@ class _EmberKeyboardState extends ConsumerState<EmberKeyboard> {
     if (ModalRoute.of(context)?.isCurrent == false) return false;
     final keyboard = HardwareKeyboard.instance;
     if (keyboard.isAltPressed || keyboard.isMetaPressed) return false;
-    final key = emberKeyFor(
+    final key = desktopKeyFor(
       event,
       control: keyboard.isControlPressed,
       shift: keyboard.isShiftPressed,
@@ -157,7 +157,7 @@ class _EmberKeyboardState extends ConsumerState<EmberKeyboard> {
     if (event is KeyRepeatEvent && !key.repeats) return false;
     final focused = FocusManager.instance.primaryFocus?.context;
     if (key.plain && _typing(focused)) return false;
-    if (key == EmberKey.playPause && _pressable(focused)) return false;
+    if (key == DesktopKey.playPause && _pressable(focused)) return false;
     if (key.arrow && _onControl()) return false;
     return _run(key);
   }
@@ -182,7 +182,7 @@ class _EmberKeyboardState extends ConsumerState<EmberKeyboard> {
               ?.isEnabled(const ActivateIntent()) ??
           false);
 
-  bool _run(EmberKey pressed) {
+  bool _run(DesktopKey pressed) {
     var key = pressed;
     final player = ref.read(playerProvider);
     final state = player.state;
@@ -190,60 +190,62 @@ class _EmberKeyboardState extends ConsumerState<EmberKeyboard> {
     final controls = ref.read(windowControlsProvider);
     if (controls.mini.value) {
       if (!key.inMini) return false;
-      if (key == EmberKey.leaveFullScreen) key = EmberKey.mini;
+      if (key == DesktopKey.leaveFullScreen) key = DesktopKey.mini;
     }
     switch (key) {
-      case EmberKey.playPause when loaded:
+      case DesktopKey.playPause when loaded:
         unawaited(state.playing ? player.pause() : player.play());
-      case EmberKey.back when loaded:
+      case DesktopKey.back when loaded:
         final to = player.position - seekStep;
         unawaited(player.seek(to.isNegative ? Duration.zero : to));
-      case EmberKey.forward when loaded:
+      case DesktopKey.forward when loaded:
         unawaited(player.seek(player.position + seekStep));
-      case EmberKey.up || EmberKey.down when widget.inShortsLane():
+      case DesktopKey.up || DesktopKey.down when widget.inShortsLane():
         unawaited(
-          key == EmberKey.down ? player.skipToNext() : player.skipToPrevious(),
+          key == DesktopKey.down
+              ? player.skipToNext()
+              : player.skipToPrevious(),
         );
-      case EmberKey.up || EmberKey.down when loaded:
-        unawaited(_nudgeVolume(key == EmberKey.up ? 1 : -1));
-      case EmberKey.repeat:
+      case DesktopKey.up || DesktopKey.down when loaded:
+        unawaited(_nudgeVolume(key == DesktopKey.up ? 1 : -1));
+      case DesktopKey.repeat:
         final mode = nextPlayMode(state.mode);
         unawaited(player.setPlayMode(mode));
-        showMTNotice(context, message: _modeName(context.mtl, mode));
-      case EmberKey.captions when loaded:
-        ref.read(emberSubtitlesProvider).toggle();
-      case EmberKey.search:
+        showVhNotice(context, message: _modeName(context.vhl, mode));
+      case DesktopKey.captions when loaded:
+        ref.read(desktopSubtitlesProvider).toggle();
+      case DesktopKey.search:
         widget.onSearch();
-      case EmberKey.fullScreen:
+      case DesktopKey.fullScreen:
         controls.setFullScreen(!controls.fullScreen.value);
-      case EmberKey.leaveFullScreen when controls.fullScreen.value:
+      case DesktopKey.leaveFullScreen when controls.fullScreen.value:
         controls.setFullScreen(false);
       // Out of full screen first, then out of the room.
-      case EmberKey.leaveFullScreen when ref.read(listeningProvider):
+      case DesktopKey.leaveFullScreen when ref.read(listeningProvider):
         ref.read(listeningProvider.notifier).state = false;
-      case EmberKey.shortcuts:
+      case DesktopKey.shortcuts:
         unawaited(showShortcutsSheet(context));
-      case EmberKey.mini:
+      case DesktopKey.mini:
         widget.onMini();
       default:
         return false;
     }
     // Someone using the keys needs no tip about them.
-    unawaited(ref.read(hintsProvider.notifier).learned(EmberHint.shortcuts));
+    unawaited(ref.read(hintsProvider.notifier).learned(DesktopHint.shortcuts));
     return true;
   }
 
   Future<void> _nudgeVolume(int direction) async {
     await ref.read(volumeProvider.notifier).nudge(direction);
     if (!mounted) return;
-    showMTNotice(
+    showVhNotice(
       context,
-      message: context.mtl.desktopVolumeLevel(ref.read(volumeProvider).round()),
+      message: context.vhl.desktopVolumeLevel(ref.read(volumeProvider).round()),
       duration: const Duration(seconds: 1),
     );
   }
 
-  static String _modeName(MTLocalizations l, PlayMode mode) => switch (mode) {
+  static String _modeName(VhLocalizations l, PlayMode mode) => switch (mode) {
     PlayMode.autoNext => l.modeAutoNext,
     PlayMode.repeatAll => l.modeRepeatAll,
     PlayMode.repeatOne => l.modeRepeatOne,

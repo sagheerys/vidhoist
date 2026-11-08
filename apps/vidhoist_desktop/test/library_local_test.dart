@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -26,7 +26,7 @@ void main() {
       ShellHarness(library: const [], withEngine: true).app(),
     );
     await tester.pumpAndSettle();
-    final l = lookupMTLocalizations(const Locale('en'));
+    final l = lookupVhLocalizations(const Locale('en'));
     expect(find.text(l.desktopEmptyLibraryLocal), findsOneWidget);
   });
 }

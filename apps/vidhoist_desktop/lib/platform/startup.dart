@@ -9,7 +9,7 @@ import '../identity.dart';
 class WindowsStartup {
   WindowsStartup() {
     launchAtStartup.setup(
-      appName: EmberIdentity.displayName,
+      appName: DesktopIdentity.displayName,
       appPath: Platform.resolvedExecutable,
       args: const [arg],
     );

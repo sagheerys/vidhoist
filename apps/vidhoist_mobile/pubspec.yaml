@@ -10,15 +10,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  mt_core:
-    path: ../../packages/mt_core
-  mt_media:
-    path: ../../packages/mt_media
-  mt_ui:
-    path: ../../packages/mt_ui
+  vh_core:
+    path: ../../packages/vh_core
+  vh_media:
+    path: ../../packages/vh_media
+  vh_ui:
+    path: ../../packages/vh_ui
   # The subtitles yt-dlp writes beside a download, read for the player.
-  mt_transcripts:
-    path: ../../packages/mt_transcripts
+  vh_transcripts:
+    path: ../../packages/vh_transcripts
   audio_service: ^0.18.15
   cached_network_image: ^3.4.1
   # The "Wi-Fi only" gate before a pull, and retrying when the network comes

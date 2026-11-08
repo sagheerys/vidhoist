@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// Which columns the user folded away, kept per computer like the window
 /// itself: a wide monitor and a laptop want different answers.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../channels/channels_state.dart';
@@ -34,7 +34,7 @@ class SettingsEntry {
   const SettingsEntry(this.pane, this.icon, this.title, this.value);
 
   final SettingsPane pane;
-  final MTIconData icon;
+  final VhIconData icon;
   final String title;
 
   /// The setting as it stands, not a description of the section.
@@ -47,7 +47,7 @@ List<(String, List<SettingsEntry>)> settingsGroups(
   BuildContext context,
   WidgetRef ref,
 ) {
-  final l10n = context.mtl;
+  final l10n = context.vhl;
   final v = _Values(context, ref);
   return [
     (
@@ -55,13 +55,13 @@ List<(String, List<SettingsEntry>)> settingsGroups(
       [
         SettingsEntry(
           SettingsPane.engine,
-          MTIcons.bolt,
+          VhIcons.bolt,
           l10n.mobileSettingsEngine,
           v.engine(),
         ),
         SettingsEntry(
           SettingsPane.channels,
-          MTIcons.subscriptions,
+          VhIcons.subscriptions,
           l10n.desktopChannels,
           v.channels(),
         ),
@@ -72,19 +72,19 @@ List<(String, List<SettingsEntry>)> settingsGroups(
       [
         SettingsEntry(
           SettingsPane.downloads,
-          MTIcons.download,
+          VhIcons.download,
           l10n.settingsDownloads,
           v.downloads(),
         ),
         SettingsEntry(
           SettingsPane.playback,
-          MTIcons.playback,
+          VhIcons.playback,
           l10n.settingsPlayback,
           v.playback(),
         ),
         SettingsEntry(
           SettingsPane.appearance,
-          MTIcons.appearance,
+          VhIcons.appearance,
           l10n.appearanceAndLanguage,
           v.appearance(),
         ),
@@ -95,25 +95,25 @@ List<(String, List<SettingsEntry>)> settingsGroups(
       [
         SettingsEntry(
           SettingsPane.backup,
-          MTIcons.backup,
+          VhIcons.backup,
           l10n.settingsBackup,
           v.backup(),
         ),
         SettingsEntry(
           SettingsPane.updates,
-          MTIcons.saveTo,
+          VhIcons.saveTo,
           l10n.updates,
           v.updates(),
         ),
         SettingsEntry(
           SettingsPane.logs,
-          MTIcons.list,
+          VhIcons.list,
           l10n.diagnosticLogs,
           l10n.diagnosticLogsSubtitle,
         ),
         SettingsEntry(
           SettingsPane.about,
-          MTIcons.info,
+          VhIcons.info,
           l10n.aboutApp,
           v.about(),
         ),
@@ -127,13 +127,13 @@ List<(String, List<SettingsEntry>)> settingsGroups(
 /// blank or a guess.
 class _Values {
   _Values(this.context, this.ref)
-    : l10n = context.mtl,
+    : l10n = context.vhl,
       s = ref.watch(settingsProvider);
 
   final BuildContext context;
   final WidgetRef ref;
-  final MTLocalizations l10n;
-  final LiteSettings s;
+  final VhLocalizations l10n;
+  final PhoneSettings s;
 
   String engine() => engineSummary(
     l10n,
@@ -147,7 +147,7 @@ class _Values {
     _ => l10n.mobileChannelsHint,
   };
 
-  String downloads() => mtMetaLine([
+  String downloads() => vhMetaLine([
     switch (s.quality) {
       Quality.best => l10n.qualityBest,
       Quality.q1080 => l10n.quality1080,
@@ -164,7 +164,7 @@ class _Values {
       ? l10n.settingsValueCompatOn
       : l10n.settingsValueCompatOff;
 
-  String appearance() => mtMetaLine([
+  String appearance() => vhMetaLine([
     switch (s.themeMode) {
       ThemeMode.system => l10n.themeSystem,
       ThemeMode.light => l10n.themeLight,
@@ -172,13 +172,13 @@ class _Values {
     },
     // Following the phone, it names the language in use: "System" twice
     // over said nothing.
-    mtLanguageName(
+    vhLanguageName(
       s.localeCode ?? Localizations.localeOf(context).languageCode,
     ),
   ]);
 
   String backup() => switch (ref.watch(latestBackupProvider).valueOrNull) {
-    final at? => l10n.lastBackup(mtTimeAgo(context, at)),
+    final at? => l10n.lastBackup(vhTimeAgo(context, at)),
     null => l10n.backupSettingsSubtitle,
   };
 
@@ -187,7 +187,7 @@ class _Values {
     if (state.release case final release?) {
       return l10n.updateVersionAvailable(release.version.toString());
     }
-    return mtMetaLine([
+    return vhMetaLine([
       ref.watch(installedVersionProvider).valueOrNull?.$1,
       if (state.autoCheck) l10n.autoCheckUpdates,
     ]);
@@ -195,6 +195,6 @@ class _Values {
 
   String about() => switch (ref.watch(installedVersionProvider).valueOrNull) {
     (final version, _) => '${l10n.version} $version',
-    null => l10n.aboutDescriptionLite,
+    null => l10n.aboutDescriptionPhone,
   };
 }

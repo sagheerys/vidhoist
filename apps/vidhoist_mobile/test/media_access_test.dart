@@ -7,7 +7,7 @@ import 'package:vidhoist_mobile/features/downloads_library/library_providers.dar
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/media_access.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/media_access_view.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'device_matrix.dart';
@@ -184,9 +184,9 @@ void main() {
       ],
       child: MaterialApp(
         locale: locale,
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
-        theme: mtTheme(MTVariant.lite, Brightness.light),
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
+        theme: vhTheme(VhVariant.phone, Brightness.light),
         home: const Scaffold(
           body: SingleChildScrollView(child: MediaAccessView()),
         ),
@@ -208,7 +208,7 @@ void main() {
       );
       await tester.pump();
 
-      final l10n = await MTLocalizations.delegate.load(const Locale('ar'));
+      final l10n = await VhLocalizations.delegate.load(const Locale('ar'));
       expect(find.text(l10n.mediaAccessTitle), findsOneWidget);
       expect(find.text(l10n.mediaAccessMessage), findsOneWidget);
 
@@ -235,7 +235,7 @@ void main() {
         ),
       );
       await tester.pump();
-      final l10n = await MTLocalizations.delegate.load(const Locale('ar'));
+      final l10n = await VhLocalizations.delegate.load(const Locale('ar'));
 
       await tester.tap(find.text(l10n.mediaAccessGrant));
       await tester.pumpAndSettle();

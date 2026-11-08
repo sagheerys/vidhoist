@@ -1,5 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A [KeyValueStore] over SharedPreferences: the only access to storage

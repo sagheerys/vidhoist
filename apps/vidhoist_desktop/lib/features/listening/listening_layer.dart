@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../../shell/focus_regions.dart';
@@ -32,7 +32,7 @@ class ListeningLayer extends ConsumerStatefulWidget {
 }
 
 class _ListeningLayerState extends ConsumerState<ListeningLayer> {
-  late final MTPlayer _player = ref.read(playerProvider);
+  late final VhPlayer _player = ref.read(playerProvider);
 
   /// Only a change of clip matters here, not every pause or seek.
   late final Stream<PlaylistItem?> _currents = _player.states
@@ -58,7 +58,7 @@ class _ListeningLayerState extends ConsumerState<ListeningLayer> {
   Widget build(BuildContext context) {
     final asked = widget.full || ref.watch(listeningProvider);
     final audioOnly = ref.watch(audioOnlyProvider);
-    final fade = mtMotionDuration(context, MTMotion.medium);
+    final fade = vhMotionDuration(context, VhMotion.medium);
     return StreamBuilder<PlaylistItem?>(
       stream: _currents,
       initialData: _player.state.current,
@@ -91,7 +91,7 @@ class _ListeningLayerState extends ConsumerState<ListeningLayer> {
                     duration: fade,
                     child: open
                         ? inRegion(
-                            EmberRegion.content,
+                            DesktopRegion.content,
                             ListeningRoom(
                               key: ValueKey(item!.canonicalUrl),
                               item: item,
@@ -142,7 +142,7 @@ class _DimmedState extends State<_Dimmed> {
       onFocusChange: (on) => setState(() => _focused = on),
       child: AnimatedOpacity(
         opacity: widget.dim && !_hovered && !_focused ? _faint : 1,
-        duration: mtMotionDuration(context, MTMotion.medium),
+        duration: vhMotionDuration(context, VhMotion.medium),
         child: widget.child,
       ),
     ),

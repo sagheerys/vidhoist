@@ -1,9 +1,9 @@
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The core's classified failures in the user's language, as the phone
 /// apps word them. The one place an error becomes a sentence.
-String errorText(MTLocalizations l, Object error) => switch (error) {
+String errorText(VhLocalizations l, Object error) => switch (error) {
   NetworkException() => l.errNetwork,
   PlatformBlockedException() => l.errPlatformBlockedCookies,
   EngineFailureException(:final kind, :final detail) => engineErrorText(
@@ -20,7 +20,7 @@ String errorText(MTLocalizations l, Object error) => switch (error) {
 /// sentence isolated so its English is not cut and reordered inside an
 /// Arabic line.
 String engineErrorText(
-  MTLocalizations l,
+  VhLocalizations l,
   YtDlpErrorKind kind,
   String? detail,
 ) => switch (kind) {
@@ -35,9 +35,9 @@ String engineErrorText(
   // and are worded there; here only if a caller passes them directly.
   YtDlpErrorKind.network => l.errNetwork,
   YtDlpErrorKind.signInRequired => l.engineErrFailed(
-    mtName(ErrorClassifier.reason(detail ?? '')),
+    vhName(ErrorClassifier.reason(detail ?? '')),
   ),
   YtDlpErrorKind.failed => l.engineErrFailed(
-    mtName(ErrorClassifier.reason(detail ?? '')),
+    vhName(ErrorClassifier.reason(detail ?? '')),
   ),
 };

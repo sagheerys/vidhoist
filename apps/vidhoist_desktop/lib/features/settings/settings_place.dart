@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/later_features.dart';
 import '../../router.dart';
@@ -22,12 +22,12 @@ import 'updates_pane.dart';
 
 /// Settings in two panes, the tablet's layout: the sections on one side,
 /// the chosen one open on the other. Each section has its own address
-/// ([EmberSettingsPane.route]), so a message can open the page that fixes
+/// ([DesktopSettingsPane.route]), so a message can open the page that fixes
 /// it.
 class SettingsPlace extends ConsumerWidget {
   const SettingsPlace({super.key, required this.pane});
 
-  final EmberSettingsPane pane;
+  final DesktopSettingsPane pane;
 
   static const double listWidth = 260;
 
@@ -37,8 +37,8 @@ class SettingsPlace extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final text = Theme.of(context).textTheme;
     // Sync waits behind its switch, until the phone app has it.
     final later = ref.watch(laterFeaturesProvider);
@@ -46,29 +46,29 @@ class SettingsPlace extends ConsumerWidget {
       (
         l.desktopEngine,
         [
-          EmberSettingsPane.engine,
-          EmberSettingsPane.cookies,
-          EmberSettingsPane.subscriptions,
+          DesktopSettingsPane.engine,
+          DesktopSettingsPane.cookies,
+          DesktopSettingsPane.subscriptions,
         ],
       ),
       (
         l.settingsGroupApp,
         const [
-          EmberSettingsPane.downloads,
-          EmberSettingsPane.folders,
-          EmberSettingsPane.appearance,
-          EmberSettingsPane.desktop,
-          EmberSettingsPane.transcripts,
+          DesktopSettingsPane.downloads,
+          DesktopSettingsPane.folders,
+          DesktopSettingsPane.appearance,
+          DesktopSettingsPane.desktop,
+          DesktopSettingsPane.transcripts,
         ],
       ),
       (
         l.settingsGroupData,
         [
-          EmberSettingsPane.backup,
-          if (later) EmberSettingsPane.sync,
-          EmberSettingsPane.updates,
-          EmberSettingsPane.logs,
-          EmberSettingsPane.about,
+          DesktopSettingsPane.backup,
+          if (later) DesktopSettingsPane.sync,
+          DesktopSettingsPane.updates,
+          DesktopSettingsPane.logs,
+          DesktopSettingsPane.about,
         ],
       ),
     ];
@@ -83,17 +83,17 @@ class SettingsPlace extends ConsumerWidget {
           child: KeepChosenInView(
             chosen: pane,
             isChosen: (w) => w is PaneEntry && w.selected,
-            padding: const EdgeInsets.all(MTSpace.md),
+            padding: const EdgeInsets.all(VhSpace.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 for (final (title, panes) in groups) ...[
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(
-                      MTSpace.sm,
-                      MTSpace.md,
-                      MTSpace.sm,
-                      MTSpace.xs,
+                      VhSpace.sm,
+                      VhSpace.md,
+                      VhSpace.sm,
+                      VhSpace.xs,
                     ),
                     child: Text(
                       title,
@@ -118,10 +118,10 @@ class SettingsPlace extends ConsumerWidget {
           // little as it fades in, the old one fades out quickly, and the
           // list beside stays still.
           child: AnimatedSwitcher(
-            duration: mtMotionDuration(context, MTMotion.medium),
-            reverseDuration: mtMotionDuration(context, MTMotion.fast),
-            switchInCurve: MTMotion.entrance,
-            switchOutCurve: MTMotion.exit,
+            duration: vhMotionDuration(context, VhMotion.medium),
+            reverseDuration: vhMotionDuration(context, VhMotion.fast),
+            switchInCurve: VhMotion.entrance,
+            switchOutCurve: VhMotion.exit,
             transitionBuilder: (child, motion) => FadeTransition(
               opacity: motion,
               child: SlideTransition(
@@ -138,7 +138,7 @@ class SettingsPlace extends ConsumerWidget {
             ),
             child: ListView(
               key: ValueKey(pane),
-              padding: const EdgeInsets.all(MTSpace.xl),
+              padding: const EdgeInsets.all(VhSpace.xl),
               children: [
                 Align(
                   alignment: AlignmentDirectional.topStart,
@@ -146,9 +146,9 @@ class SettingsPlace extends ConsumerWidget {
                     // The appearance pane holds a preview beside its
                     // choices, so it is given the room for both.
                     constraints: BoxConstraints(
-                      maxWidth: pane == EmberSettingsPane.appearance
+                      maxWidth: pane == DesktopSettingsPane.appearance
                           ? AppearancePane.maxWidth
-                          : MTBreakpoint.readable,
+                          : VhBreakpoint.readable,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -157,24 +157,25 @@ class SettingsPlace extends ConsumerWidget {
                           paneTitle(l, pane),
                           style: text.headlineSmall?.copyWith(color: p.ink),
                         ),
-                        const SizedBox(height: MTSpace.lg),
+                        const SizedBox(height: VhSpace.lg),
                         switch (pane) {
-                          EmberSettingsPane.downloads => const DownloadsPane(),
-                          EmberSettingsPane.folders => const FoldersPane(),
-                          EmberSettingsPane.desktop => const DesktopPane(),
-                          EmberSettingsPane.backup => const BackupPane(),
-                          EmberSettingsPane.cookies => const CookiesPane(),
-                          EmberSettingsPane.sync => const SyncPane(),
-                          EmberSettingsPane.subscriptions =>
+                          DesktopSettingsPane.downloads =>
+                            const DownloadsPane(),
+                          DesktopSettingsPane.folders => const FoldersPane(),
+                          DesktopSettingsPane.desktop => const DesktopPane(),
+                          DesktopSettingsPane.backup => const BackupPane(),
+                          DesktopSettingsPane.cookies => const CookiesPane(),
+                          DesktopSettingsPane.sync => const SyncPane(),
+                          DesktopSettingsPane.subscriptions =>
                             const SubscriptionsPane(),
-                          EmberSettingsPane.appearance =>
+                          DesktopSettingsPane.appearance =>
                             const AppearancePane(),
-                          EmberSettingsPane.transcripts =>
+                          DesktopSettingsPane.transcripts =>
                             const TranscriptsPane(),
-                          EmberSettingsPane.updates => const UpdatesPane(),
-                          EmberSettingsPane.logs => const LogsPane(),
-                          EmberSettingsPane.about => const AboutPane(),
-                          EmberSettingsPane.engine => const EnginePane(),
+                          DesktopSettingsPane.updates => const UpdatesPane(),
+                          DesktopSettingsPane.logs => const LogsPane(),
+                          DesktopSettingsPane.about => const AboutPane(),
+                          DesktopSettingsPane.engine => const EnginePane(),
                         },
                       ],
                     ),
@@ -189,18 +190,18 @@ class SettingsPlace extends ConsumerWidget {
   }
 }
 
-String paneTitle(MTLocalizations l, EmberSettingsPane pane) => switch (pane) {
-  EmberSettingsPane.subscriptions => l.subscriptions,
-  EmberSettingsPane.cookies => l.cookies,
-  EmberSettingsPane.downloads => l.settingsDownloads,
-  EmberSettingsPane.folders => l.desktopFolders,
-  EmberSettingsPane.appearance => l.appearanceAndLanguage,
-  EmberSettingsPane.desktop => l.desktopDesktopSection,
-  EmberSettingsPane.transcripts => l.settingsTranscripts,
-  EmberSettingsPane.backup => l.settingsBackup,
-  EmberSettingsPane.sync => l.desktopSync,
-  EmberSettingsPane.updates => l.updates,
-  EmberSettingsPane.logs => l.diagnosticLogs,
-  EmberSettingsPane.about => l.about,
-  EmberSettingsPane.engine => l.desktopEngine,
+String paneTitle(VhLocalizations l, DesktopSettingsPane pane) => switch (pane) {
+  DesktopSettingsPane.subscriptions => l.subscriptions,
+  DesktopSettingsPane.cookies => l.cookies,
+  DesktopSettingsPane.downloads => l.settingsDownloads,
+  DesktopSettingsPane.folders => l.desktopFolders,
+  DesktopSettingsPane.appearance => l.appearanceAndLanguage,
+  DesktopSettingsPane.desktop => l.desktopDesktopSection,
+  DesktopSettingsPane.transcripts => l.settingsTranscripts,
+  DesktopSettingsPane.backup => l.settingsBackup,
+  DesktopSettingsPane.sync => l.desktopSync,
+  DesktopSettingsPane.updates => l.updates,
+  DesktopSettingsPane.logs => l.diagnosticLogs,
+  DesktopSettingsPane.about => l.about,
+  DesktopSettingsPane.engine => l.desktopEngine,
 };

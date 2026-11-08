@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'panel/details_view.dart';
 import 'panel/queue_view.dart';
@@ -13,8 +13,8 @@ enum PanelTab { transcript, upNext, details }
 
 /// The side panel: the transcript following playback, what comes next,
 /// and the clip's details.
-class EmberRightPanel extends StatelessWidget {
-  const EmberRightPanel({
+class DesktopRightPanel extends StatelessWidget {
+  const DesktopRightPanel({
     super.key,
     required this.tab,
     required this.onTab,
@@ -24,26 +24,26 @@ class EmberRightPanel extends StatelessWidget {
 
   final PanelTab tab;
   final ValueChanged<PanelTab> onTab;
-  final MTPlayerState state;
-  final MTPlayer player;
+  final VhPlayerState state;
+  final VhPlayer player;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final current = state.current;
     return Container(
-      width: EmberShellSize.panel,
+      width: DesktopShellSize.panel,
       decoration: BoxDecoration(
         color: p.bg,
         border: BorderDirectional(
           start: BorderSide(
             color: p.line,
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
         ),
       ),
-      padding: const EdgeInsets.all(MTSpace.lg),
+      padding: const EdgeInsets.all(VhSpace.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -56,12 +56,12 @@ class EmberRightPanel extends StatelessWidget {
             chosen: tab,
             onChoose: onTab,
           ),
-          const SizedBox(height: MTSpace.lg),
+          const SizedBox(height: VhSpace.lg),
           if (current == null)
             Expanded(
               child: Center(
                 child: SingleChildScrollView(
-                  child: MTEmptyFrame(
+                  child: VhEmptyFrame(
                     title: l.desktopNothingPlaying,
                     message: l.desktopNothingPlayingHint,
                   ),
@@ -73,7 +73,7 @@ class EmberRightPanel extends StatelessWidget {
               builder: (context) {
                 // Its own direction, the interface's side: a Latin title
                 // in the Arabic panel sat on the far side otherwise.
-                final (direction, align) = mtForeignLine(
+                final (direction, align) = vhForeignLine(
                   context,
                   current.title,
                 );
@@ -87,14 +87,14 @@ class EmberRightPanel extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: MTSpace.md),
+            const SizedBox(height: VhSpace.md),
             Expanded(
               // One face gives way to the next with a short cross-fade and a
               // rise of a few points, not a cut.
               child: AnimatedSwitcher(
-                duration: mtMotionDuration(context, MTMotion.fast),
-                switchInCurve: MTMotion.entrance,
-                switchOutCurve: MTMotion.exit,
+                duration: vhMotionDuration(context, VhMotion.fast),
+                switchInCurve: VhMotion.entrance,
+                switchOutCurve: VhMotion.exit,
                 transitionBuilder: (child, motion) => FadeTransition(
                   opacity: motion,
                   child: SlideTransition(

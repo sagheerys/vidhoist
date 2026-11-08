@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/folders_data.dart';
 import '../../di.dart';
@@ -29,7 +29,7 @@ class _LogsPaneState extends ConsumerState<LogsPane> {
   String _query = '';
   StreamSubscription<void>? _changes;
 
-  MTLogger get _logger => ref.read(loggerProvider);
+  VhLogger get _logger => ref.read(loggerProvider);
 
   @override
   void initState() {
@@ -64,18 +64,18 @@ class _LogsPaneState extends ConsumerState<LogsPane> {
           text: await _logger.readForShare(),
         );
     if (path != null && mounted) {
-      showMTNotice(context, message: context.mtl.desktopSavedIn(path));
+      showVhNotice(context, message: context.vhl.desktopSavedIn(path));
     }
   }
 
   Future<void> _copy() async {
     await Clipboard.setData(ClipboardData(text: await _logger.readForShare()));
-    if (mounted) showMTNotice(context, message: context.mtl.desktopLogsCopied);
+    if (mounted) showVhNotice(context, message: context.vhl.desktopLogsCopied);
   }
 
   Future<void> _clear() async {
-    final l = context.mtl;
-    final sure = await showMTConfirm(
+    final l = context.vhl;
+    final sure = await showVhConfirm(
       context,
       title: l.clearLogs,
       message: l.clearLogsConfirm,
@@ -88,8 +88,8 @@ class _LogsPaneState extends ConsumerState<LogsPane> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final query = _query.trim().toLowerCase();
     final matching = [
@@ -104,29 +104,29 @@ class _LogsPaneState extends ConsumerState<LogsPane> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Wrap(
-          spacing: MTSpace.md,
-          runSpacing: MTSpace.xs,
+          spacing: VhSpace.md,
+          runSpacing: VhSpace.xs,
           children: [
-            MTLinkButton(
+            VhLinkButton(
               label: l.desktopLogsSave,
-              icon: MTIcons.saveTo,
+              icon: VhIcons.saveTo,
               onPressed: some ? () => unawaited(_save()) : null,
             ),
-            MTLinkButton(
+            VhLinkButton(
               label: l.desktopLogsCopy,
-              icon: MTIcons.copy,
+              icon: VhIcons.copy,
               onPressed: some ? () => unawaited(_copy()) : null,
             ),
-            MTLinkButton(
+            VhLinkButton(
               label: l.clearLogs,
               danger: true,
-              icon: MTIcons.trash,
+              icon: VhIcons.trash,
               onPressed: some ? () => unawaited(_clear()) : null,
             ),
           ],
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: MTSpace.xs),
+          padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
           child: Text(
             l.logsSanitizedNote,
             style: text.labelSmall?.copyWith(color: p.ink3),
@@ -139,7 +139,7 @@ class _LogsPaneState extends ConsumerState<LogsPane> {
             prefixIcon: searchLens(p),
           ),
         ),
-        const SizedBox(height: MTSpace.md),
+        const SizedBox(height: VhSpace.md),
         if (visible.isEmpty)
           Text(
             some ? l.noResults : l.logsEmpty,

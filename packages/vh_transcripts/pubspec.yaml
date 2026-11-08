@@ -1,0 +1,16 @@
+name: vh_transcripts
+description: "Transcripts: subtitle parsing, Arabic-aware search, a file store, and fetching subtitles with yt-dlp for clips already in the library — pure Dart, no Flutter."
+version: 0.1.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  vh_core:
+    path: ../vh_core
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6

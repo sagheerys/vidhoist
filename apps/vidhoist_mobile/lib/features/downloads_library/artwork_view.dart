@@ -3,8 +3,8 @@ import 'dart:math' show max;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mt_core/mt_core.dart' show youtubeWideCover;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart' show youtubeWideCover;
+import 'package:vh_ui/vh_ui.dart';
 
 /// In Lite an artwork index value may be a **generated local file path**, a
 /// frame capture or an embedded audio cover (see `MediaProbe.kt`), or a
@@ -19,7 +19,7 @@ import 'package:mt_ui/mt_ui.dart';
 /// occupies about 3.5MB in the image cache however small the box it is
 /// drawn in, and forty visible cards mean tens of megabytes for nothing.
 /// Decoding at display size cuts that to a fraction. Compute it with
-/// [mtDecodeWidth] rather than by hand.
+/// [vhDecodeWidth] rather than by hand.
 Widget? artworkFor(
   String? value, {
   BoxFit fit = BoxFit.cover,
@@ -30,8 +30,8 @@ Widget? artworkFor(
     return CachedNetworkImage(
       // At the app's pace, not the package's half second in and a whole
       // one out; and at once when the system asks for no motion.
-      fadeInDuration: MTMotion.page,
-      fadeOutDuration: MTMotion.fast,
+      fadeInDuration: VhMotion.page,
+      fadeOutDuration: VhMotion.fast,
       imageUrl: value,
       fit: fit,
       memCacheWidth: decodeWidth,
@@ -49,8 +49,8 @@ Widget? artworkFor(
         ? child
         : AnimatedOpacity(
             opacity: frame == null ? 0 : 1,
-            duration: mtMotionDuration(context, MTMotion.page),
-            curve: MTMotion.entrance,
+            duration: vhMotionDuration(context, VhMotion.page),
+            curve: VhMotion.entrance,
             child: child,
           ),
     // The cache was cleared or the file deleted, so the card shows no cover
@@ -90,7 +90,7 @@ Widget? coverArtworkFor(String? value, {String? canonicalUrl}) {
 /// the width. Decoding at 98 gave an image 55 tall which was then
 /// stretched to 62: blur we added ourselves. The safe bound is the larger
 /// of the width and `height x 16/9`.
-int mtDecodeWidth(BuildContext context, double width, [double? height]) {
+int vhDecodeWidth(BuildContext context, double width, [double? height]) {
   final needed = height == null ? width : max(width, height * 16 / 9);
   return (needed * MediaQuery.devicePixelRatioOf(context)).ceil();
 }

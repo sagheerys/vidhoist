@@ -9,8 +9,8 @@ import 'package:vidhoist_desktop/features/reading/reading_export.dart';
 import 'package:vidhoist_desktop/features/reading/reading_pdf.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import 'support/shell_harness.dart';
@@ -167,8 +167,8 @@ void main() {
     );
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.reading(_url));
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.reading(_url));
     await tester.pumpAndSettle();
 
     Future<void> export(String form) async {

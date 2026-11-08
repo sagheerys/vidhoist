@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show ValueChanged;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart' show MTTableColumn, MTTableSort;
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart' show VhTableColumn, VhTableSort;
 
 import '../../data/library_data.dart';
 import '../../di.dart';
@@ -12,7 +12,7 @@ import '../../di.dart';
 /// The three ways the Windows library lays itself out: the tablet's three,
 /// with the list as a table. The phone's one-column cards have no use on a
 /// wide window.
-const emberLibraryModes = [
+const desktopLibraryModes = [
   LibraryViewMode.grid,
   LibraryViewMode.list,
   LibraryViewMode.compact,
@@ -20,7 +20,7 @@ const emberLibraryModes = [
 
 /// The library's filters and layout. The sort order and the layout are
 /// saved under the phone's keys, in this computer's own storage.
-class EmberLibraryNotifier extends Notifier<LibraryViewOptions> {
+class DesktopLibraryNotifier extends Notifier<LibraryViewOptions> {
   static const sortKey = 'video_sort_option';
   static const modeKey = 'library_view_mode';
 
@@ -43,7 +43,7 @@ class EmberLibraryNotifier extends Notifier<LibraryViewOptions> {
   /// A layout saved by a build that had more of them reads as the grid.
   static LibraryViewMode? _ember(LibraryViewMode? mode) => mode == null
       ? null
-      : emberLibraryModes.contains(mode)
+      : desktopLibraryModes.contains(mode)
       ? mode
       : LibraryViewMode.grid;
 
@@ -105,8 +105,8 @@ class EmberLibraryNotifier extends Notifier<LibraryViewOptions> {
 }
 
 final libraryViewProvider =
-    NotifierProvider<EmberLibraryNotifier, LibraryViewOptions>(
-      EmberLibraryNotifier.new,
+    NotifierProvider<DesktopLibraryNotifier, LibraryViewOptions>(
+      DesktopLibraryNotifier.new,
     );
 
 /// The library as shown for a place: everything, favourites or offline.
@@ -165,26 +165,26 @@ final libraryTagsProvider = Provider<List<String>>((ref) {
 /// The table header's sorting, in terms of the saved sort order: each
 /// column has its two directions, and a click on a new column starts with
 /// the one people usually want (A to Z, largest, newest).
-MTTableSort tableSortFor(LibrarySort sort, ValueChanged<LibrarySort> onSort) {
+VhTableSort tableSortFor(LibrarySort sort, ValueChanged<LibrarySort> onSort) {
   final (column, ascending) = switch (sort) {
-    LibrarySort.nameAZ => (MTTableColumn.title, true),
-    LibrarySort.nameZA => (MTTableColumn.title, false),
-    LibrarySort.smallest => (MTTableColumn.size, true),
-    LibrarySort.largest => (MTTableColumn.size, false),
-    LibrarySort.oldest => (MTTableColumn.added, true),
-    LibrarySort.newest => (MTTableColumn.added, false),
+    LibrarySort.nameAZ => (VhTableColumn.title, true),
+    LibrarySort.nameZA => (VhTableColumn.title, false),
+    LibrarySort.smallest => (VhTableColumn.size, true),
+    LibrarySort.largest => (VhTableColumn.size, false),
+    LibrarySort.oldest => (VhTableColumn.added, true),
+    LibrarySort.newest => (VhTableColumn.added, false),
   };
-  return MTTableSort(
+  return VhTableSort(
     column: column,
     ascending: ascending,
     onSort: (picked) => onSort(switch (picked) {
-      MTTableColumn.title =>
+      VhTableColumn.title =>
         sort == LibrarySort.nameAZ ? LibrarySort.nameZA : LibrarySort.nameAZ,
-      MTTableColumn.size =>
+      VhTableColumn.size =>
         sort == LibrarySort.largest
             ? LibrarySort.smallest
             : LibrarySort.largest,
-      MTTableColumn.added =>
+      VhTableColumn.added =>
         sort == LibrarySort.newest ? LibrarySort.oldest : LibrarySort.newest,
     }),
   );

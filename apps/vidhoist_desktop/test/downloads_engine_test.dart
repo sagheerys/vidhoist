@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/taskbar_data.dart';
 import 'package:vidhoist_desktop/features/add/links_view.dart';
 import 'package:vidhoist_desktop/features/downloads/downloads_button.dart';
@@ -17,7 +17,7 @@ import 'support/shell_harness.dart';
 /// paused clip not counted as under way, on the button or the taskbar.
 void main() {
   const reel = 'https://www.instagram.com/reel/abc/';
-  final l = lookupMTLocalizations(const Locale('en'));
+  final l = lookupVhLocalizations(const Locale('en'));
 
   group('each phase in its own words', () {
     DownloadTask at(TaskPhase phase, {double progress = 0}) => DownloadTask(
@@ -145,8 +145,8 @@ void main() {
           await openPanel(tester);
         },
         windows: const [
-          EmberWindowSize('smallest 960x600', Size(960, 600)),
-          EmberWindowSize('laptop 1440x900', Size(1440, 900)),
+          DesktopWindowSize('smallest 960x600', Size(960, 600)),
+          DesktopWindowSize('laptop 1440x900', Size(1440, 900)),
         ],
       );
     });

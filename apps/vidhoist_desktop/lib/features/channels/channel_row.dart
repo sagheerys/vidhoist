@@ -4,8 +4,8 @@ import '../../shell/context_menu.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../library/artwork.dart';
 import 'channel_commands.dart';
@@ -32,16 +32,16 @@ class ChannelRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final radius = BorderRadius.circular(MTCorners.desktop.card);
+    final radius = BorderRadius.circular(VhCorners.desktop.card);
     final meta = switch (stats) {
-      final s? => mtMetaLine([
+      final s? => vhMetaLine([
         l.desktopInLibrary(s.count),
         if (s.unwatched > 0) l.desktopNotWatched(s.unwatched),
         if (s.lastArrival case final at?)
-          l.desktopLastArrival(mtTimeAgo(context, at)),
+          l.desktopLastArrival(vhTimeAgo(context, at)),
       ]),
       null => channelServerLine(context, sub),
     };
@@ -55,7 +55,7 @@ class ChannelRow extends ConsumerWidget {
           border: Border(
             bottom: BorderSide(
               color: p.line,
-              width: MTThemeX.of(context).hairline,
+              width: VhThemeX.of(context).hairline,
             ),
           ),
         ),
@@ -71,18 +71,18 @@ class ChannelRow extends ConsumerWidget {
               decoration: sub.hasError
                   ? BoxDecoration(
                       border: BorderDirectional(
-                        start: BorderSide(color: p.err, width: MTSpace.xxs),
+                        start: BorderSide(color: p.err, width: VhSpace.xxs),
                       ),
                     )
                   : null,
-              padding: const EdgeInsets.all(MTSpace.md),
+              padding: const EdgeInsets.all(VhSpace.md),
               child: Row(
                 children: [
                   Opacity(
                     opacity: sub.enabled ? 1 : 0.55,
                     child: _Covers(name: sub.name, covers: stats?.covers ?? []),
                   ),
-                  const SizedBox(width: MTSpace.md),
+                  const SizedBox(width: VhSpace.md),
                   Expanded(
                     child: Opacity(
                       opacity: sub.enabled ? 1 : 0.55,
@@ -93,13 +93,13 @@ class ChannelRow extends ConsumerWidget {
                             sub.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            textDirection: mtTextDirectionOf(
+                            textDirection: vhTextDirectionOf(
                               sub.name,
                               Directionality.of(context),
                             ),
                             style: text.titleSmall?.copyWith(color: p.ink),
                           ),
-                          const SizedBox(height: MTSpace.xxs),
+                          const SizedBox(height: VhSpace.xxs),
                           Text(
                             meta,
                             maxLines: 2,
@@ -118,10 +118,10 @@ class ChannelRow extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: MTSpace.md),
+                  const SizedBox(width: VhSpace.md),
                   ChannelState(enabled: sub.enabled),
-                  const SizedBox(width: MTSpace.sm),
-                  MTSwitch(
+                  const SizedBox(width: VhSpace.sm),
+                  VhSwitch(
                     value: sub.enabled,
                     semanticLabel: sub.enabled
                         ? l.pauseSubscription
@@ -142,10 +142,10 @@ class ChannelRow extends ConsumerWidget {
 /// When the server last looked and how much it has seen, which is what it
 /// walked past, not what it downloaded.
 String channelServerLine(BuildContext context, ChannelSubscription sub) {
-  final l = context.mtl;
-  return mtMetaLine([
+  final l = context.vhl;
+  return vhMetaLine([
     switch (sub.lastChecked) {
-      final at? => l.lastCheckedAt(mtTimeAgo(context, at)),
+      final at? => l.lastCheckedAt(vhTimeAgo(context, at)),
       null => l.neverChecked,
     },
     l.knownVideos(sub.seenCount),
@@ -165,9 +165,9 @@ class ChannelState extends StatelessWidget {
   Widget build(BuildContext context) {
     if (enabled) return const SizedBox.shrink();
     return Text(
-      context.mtl.subscriptionPaused,
+      context.vhl.subscriptionPaused,
       style: Theme.of(context).textTheme.labelSmall
-          ?.copyWith(color: MTThemeX.of(context).palette.ink3),
+          ?.copyWith(color: VhThemeX.of(context).palette.ink3),
     );
   }
 }
@@ -185,7 +185,7 @@ class _Covers extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final drawn = [
       for (final c in covers)
         if (c != null && c.isNotEmpty) c,
@@ -200,7 +200,7 @@ class _Covers extends ConsumerWidget {
         // circle on every row is one of the marks of a generated list.
         decoration: BoxDecoration(
           color: p.cardAlt,
-          borderRadius: BorderRadius.circular(MTCorners.desktop.thumb),
+          borderRadius: BorderRadius.circular(VhCorners.desktop.thumb),
         ),
         child: Text(
           initial.toUpperCase(),
@@ -209,7 +209,7 @@ class _Covers extends ConsumerWidget {
         ),
       );
     }
-    const step = MTSpace.md;
+    const step = VhSpace.md;
     return SizedBox(
       width: _width + step * (drawn.length - 1),
       height: _width,
@@ -219,7 +219,7 @@ class _Covers extends ConsumerWidget {
           for (var i = drawn.length - 1; i >= 0; i--)
             PositionedDirectional(
               start: step * i,
-              child: MTMediaThumb(
+              child: VhMediaThumb(
                 width: _width,
                 height: _height,
                 child: artworkFor(ref, context, drawn[i], width: _width),

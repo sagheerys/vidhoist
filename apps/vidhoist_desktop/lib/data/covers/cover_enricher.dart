@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
 
 import 'cover_shrink.dart';
 import 'mp4_cover.dart';

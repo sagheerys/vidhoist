@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/downloads_data.dart';
 import '../../shell/section_header.dart';
@@ -16,15 +16,15 @@ import 'panel_line.dart';
 Future<void> showDownloadsPanel(BuildContext context) => showGeneralDialog(
   context: context,
   barrierDismissible: true,
-  barrierLabel: context.mtl.desktopDownloads,
+  barrierLabel: context.vhl.desktopDownloads,
   barrierColor: Colors.transparent,
-  transitionDuration: mtMotionDuration(context, MTMotion.page),
+  transitionDuration: vhMotionDuration(context, VhMotion.page),
   // It grows from the button's corner as it fades in, as a menu does.
   transitionBuilder: (context, animation, _, child) {
     final eased = CurvedAnimation(
       parent: animation,
-      curve: MTMotion.entrance,
-      reverseCurve: MTMotion.exit,
+      curve: VhMotion.entrance,
+      reverseCurve: VhMotion.exit,
     );
     return FadeTransition(
       opacity: eased,
@@ -47,8 +47,8 @@ class DownloadsPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final engine = ref.watch(downloadEngineProvider);
     final tasks = ref.watch(engineTasksProvider).valueOrNull ?? const [];
@@ -76,38 +76,38 @@ class DownloadsPanel extends ConsumerWidget {
         alignment: AlignmentDirectional.topEnd,
         child: Padding(
           padding: const EdgeInsetsDirectional.only(
-            top: MTSpace.xxl + MTSpace.xl,
-            end: MTSpace.xl,
-            bottom: MTSpace.xl,
-            start: MTSpace.xl,
+            top: VhSpace.xxl + VhSpace.xl,
+            end: VhSpace.xl,
+            bottom: VhSpace.xl,
+            start: VhSpace.xl,
           ),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: width),
             child: Material(
               color: p.card,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(MTCorners.desktop.card),
+                borderRadius: BorderRadius.circular(VhCorners.desktop.card),
                 side: BorderSide(
                   color: p.line2,
-                  width: MTThemeX.of(context).hairline,
+                  width: VhThemeX.of(context).hairline,
                 ),
               ),
               clipBehavior: Clip.antiAlias,
               child: ListView(
                 shrinkWrap: true,
-                padding: const EdgeInsets.all(MTSpace.md),
+                padding: const EdgeInsets.all(VhSpace.md),
                 children: [
                   Text(l.desktopDownloads, style: text.titleMedium),
                   if (empty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: MTSpace.lg),
+                      padding: const EdgeInsets.symmetric(vertical: VhSpace.lg),
                       child: Text(
                         l.desktopDownloadsEmpty,
                         style: text.bodyMedium?.copyWith(color: p.ink2),
                       ),
                     ),
                   if (working.isNotEmpty) ...[
-                    EmberSectionHeader(title: l.desktopDownloadsRunning),
+                    DesktopSectionHeader(title: l.desktopDownloadsRunning),
                     for (final t in working)
                       _TaskLine(
                         task: t,
@@ -120,7 +120,7 @@ class DownloadsPanel extends ConsumerWidget {
                       ),
                   ],
                   if (paused.isNotEmpty) ...[
-                    EmberSectionHeader(title: l.enginePaused),
+                    DesktopSectionHeader(title: l.enginePaused),
                     for (final t in paused)
                       _TaskLine(
                         task: t,
@@ -129,12 +129,12 @@ class DownloadsPanel extends ConsumerWidget {
                       ),
                   ],
                   if (waiting.isNotEmpty) ...[
-                    EmberSectionHeader(title: l.queuedSection),
+                    DesktopSectionHeader(title: l.queuedSection),
                     for (final t in waiting)
                       _TaskLine(task: t, onCancel: () => engine?.cancel(t.id)),
                   ],
                   if (failed.isNotEmpty) ...[
-                    EmberSectionHeader(title: l.needsAttention),
+                    DesktopSectionHeader(title: l.needsAttention),
                     for (final t in failed)
                       _TaskLine(
                         task: t,
@@ -183,7 +183,7 @@ class _TaskLine extends StatelessWidget {
     return PanelLine(
       title: task.title ?? task.effectiveUrl,
       thumbnail: task.thumbnail,
-      status: taskLine(context.mtl, task),
+      status: taskLine(context.vhl, task),
       error: failed,
       // Waiting is not working: only a clip being fetched moves, and a
       // paused one keeps its bar where it stopped.
@@ -194,11 +194,11 @@ class _TaskLine extends StatelessWidget {
       },
       actions: [
         if (onRetry case final retry?)
-          MTLinkButton(label: context.mtl.retry, onPressed: retry),
+          VhLinkButton(label: context.vhl.retry, onPressed: retry),
         if (onPause case final pause?)
-          MTLinkButton(label: context.mtl.pause, onPressed: pause),
+          VhLinkButton(label: context.vhl.pause, onPressed: pause),
         if (onResume case final resume?)
-          MTLinkButton(label: context.mtl.engineResume, onPressed: resume),
+          VhLinkButton(label: context.vhl.engineResume, onPressed: resume),
       ],
       onClose: onCancel,
     );

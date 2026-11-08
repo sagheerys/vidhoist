@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// **How the last run ended**, written to the log as this one starts.
 ///
@@ -20,7 +20,7 @@ class RunNote {
   /// The runner writes one short line; anything longer is not its own.
   static const _longestNote = 300;
 
-  final MTLogger logger;
+  final VhLogger logger;
   final File _open;
   final File _crash;
 

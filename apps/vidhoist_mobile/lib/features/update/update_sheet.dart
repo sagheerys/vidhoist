@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'update_state.dart';
 
 /// The update sheet: what is new, then one prominent action according to
 /// the phase.
 void showUpdateSheet(BuildContext context) {
-  showMTSheet<void>(
+  showVhSheet<void>(
     context: context,
     useRootNavigator: true,
     isScrollControlled: true,
@@ -20,8 +20,8 @@ class UpdateSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final state = ref.watch(updateControllerProvider);
     final release = state.release;
@@ -40,10 +40,10 @@ class UpdateSheet extends ConsumerWidget {
         // The sheet always reaches the screen edge, and the three
         // navigation buttons eat about 48dp.
         padding: EdgeInsets.fromLTRB(
-          MTSpace.xl,
-          MTSpace.lg,
-          MTSpace.xl,
-          mtSheetBottomPad(context, MTSpace.xxl),
+          VhSpace.xl,
+          VhSpace.lg,
+          VhSpace.xl,
+          vhSheetBottomPad(context, VhSpace.xxl),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -61,8 +61,8 @@ class UpdateSheet extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        MTIcon(MTIcons.saveTo, color: p.accent),
-                        const SizedBox(width: MTSpace.sm),
+                        VhIcon(VhIcons.saveTo, color: p.accent),
+                        const SizedBox(width: VhSpace.sm),
                         Expanded(
                           child: Text(
                             l10n.updateAvailable,
@@ -71,27 +71,27 @@ class UpdateSheet extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: MTSpace.xs),
+                    const SizedBox(height: VhSpace.xs),
                     Text(
                       l10n.updateVersionAvailable(release.version.toString()),
                       style: text.bodyMedium!.copyWith(color: p.ink2),
                     ),
                     if (release.sizeMb != null) ...[
-                      const SizedBox(height: MTSpace.xxs),
+                      const SizedBox(height: VhSpace.xxs),
                       Text(
                         l10n.updateSizeMb(release.sizeMb!.toStringAsFixed(1)),
                         style: text.bodySmall!.copyWith(color: p.ink3),
                       ),
                     ],
                     if (release.notes.trim().isNotEmpty) ...[
-                      const SizedBox(height: MTSpace.lg),
-                      MTSectionHeader(title: l10n.updateWhatsNew),
-                      const SizedBox(height: MTSpace.xs),
+                      const SizedBox(height: VhSpace.lg),
+                      VhSectionHeader(title: l10n.updateWhatsNew),
+                      const SizedBox(height: VhSpace.xs),
                       // **The notes come from the release page, which is
                       // Markdown** — printed raw they showed their own
                       // stars and dashes in the one place the app asks to
                       // be trusted with an install.
-                      MTMarkdownText(
+                      VhMarkdownText(
                         source: release.notes.trim(),
                         style: text.bodySmall!.copyWith(color: p.ink2),
                       ),
@@ -100,7 +100,7 @@ class UpdateSheet extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(height: MTSpace.xl),
+            const SizedBox(height: VhSpace.xl),
             _Actions(state: state),
           ],
         ),
@@ -117,8 +117,8 @@ class _Actions extends ConsumerWidget {
   /// The "install unknown apps" permission is missing: explain it, then
   /// open where it lives.
   Future<void> _askPermission(BuildContext context, WidgetRef ref) async {
-    final l10n = context.mtl;
-    final go = await showMTDialog<bool>(
+    final l10n = context.vhl;
+    final go = await showVhDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.updateAllowInstallTitle),
@@ -147,8 +147,8 @@ class _Actions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final controller = ref.read(updateControllerProvider.notifier);
 
@@ -160,9 +160,9 @@ class _Actions extends ConsumerWidget {
             l10n.updateDownloading,
             style: text.bodySmall!.copyWith(color: p.ink2),
           ),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           ClipRRect(
-            borderRadius: BorderRadius.circular(MTRadius.pill),
+            borderRadius: BorderRadius.circular(VhRadius.pill),
             child: LinearProgressIndicator(
               value: state.progress,
               minHeight: 7,
@@ -175,7 +175,7 @@ class _Actions extends ConsumerWidget {
               valueColor: AlwaysStoppedAnimation(p.accent),
             ),
           ),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           TextButton(
             onPressed: controller.cancelDownload,
             child: Text(l10n.cancel),
@@ -190,10 +190,10 @@ class _Actions extends ConsumerWidget {
         children: [
           FilledButton.icon(
             onPressed: () => _install(context, ref),
-            icon: const MTIcon(MTIcons.offline, size: 18),
+            icon: const VhIcon(VhIcons.offline, size: 18),
             label: Text(l10n.updateInstall),
           ),
-          const SizedBox(height: MTSpace.xs),
+          const SizedBox(height: VhSpace.xs),
           Text(
             l10n.updateReady,
             textAlign: TextAlign.center,
@@ -211,21 +211,21 @@ class _Actions extends ConsumerWidget {
             l10n.updateDownloadFailed,
             style: text.bodySmall!.copyWith(color: p.err),
           ),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
         ],
         if (state.failure == UpdateFailure.install) ...[
           Text(
             l10n.updateFailedToStart,
             style: text.bodySmall!.copyWith(color: p.err),
           ),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
         ],
         FilledButton.icon(
           onPressed: controller.download,
-          icon: const MTIcon(MTIcons.download, size: 18),
+          icon: const VhIcon(VhIcons.download, size: 18),
           label: Text(l10n.updateNow),
         ),
-        const SizedBox(height: MTSpace.xxs),
+        const SizedBox(height: VhSpace.xxs),
         // **`Wrap`, not `Row`** (device matrix 2026-09-09): "later" plus
         // "skip this version" overflow a 320-point screen by 52 pixels, and
         // the yellow overflow stripe shows on the user's device, never on

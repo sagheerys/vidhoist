@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_mobile/features/player/transcript_pane.dart';
 
 import 'device_matrix.dart';
@@ -10,7 +10,7 @@ import 'device_matrix.dart';
 /// the one being said lit and followed, a search that folds Arabic, and a
 /// tap that plays from a line.
 void main() {
-  MTCaptionLine line(int second, String text) => MTCaptionLine(
+  VhCaptionLine line(int second, String text) => VhCaptionLine(
     start: Duration(seconds: second),
     end: Duration(seconds: second + 2),
     text: text,
@@ -35,14 +35,14 @@ void main() {
   });
 
   Widget app({
-    Map<String, List<MTCaptionLine>>? tracks,
+    Map<String, List<VhCaptionLine>>? tracks,
     String lang = 'ar',
     Brightness brightness = Brightness.light,
   }) => MaterialApp(
-    theme: mtTheme(MTVariant.superApp, brightness),
+    theme: vhTheme(VhVariant.desktop, brightness),
     locale: Locale(lang),
-    localizationsDelegates: MTLocalizations.localizationsDelegates,
-    supportedLocales: MTLocalizations.supportedLocales,
+    localizationsDelegates: VhLocalizations.localizationsDelegates,
+    supportedLocales: VhLocalizations.supportedLocales,
     home: Scaffold(
       body: TranscriptPane(
         tracks: tracks ?? {'ar': arabic},

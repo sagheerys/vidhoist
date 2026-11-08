@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/downloads/done_check.dart';
-import 'package:vidhoist_desktop/shell/ember_dialog.dart';
+import 'package:vidhoist_desktop/shell/desktop_dialog.dart';
 import 'package:vidhoist_desktop/shell/panel_reveal.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The motion that replaced cuts: the side panel, the dialogs and the
 /// arrival check. Each moves, and each stands still for anyone who turned
@@ -11,11 +11,11 @@ import 'package:mt_ui/mt_ui.dart';
 void main() {
   // One theme for every pump, or the app's own theme would animate between
   // two equal copies and read as motion.
-  final theme = mtDesktopTheme(MTVariant.superApp, Brightness.light);
+  final theme = vhDesktopTheme(VhVariant.desktop, Brightness.light);
 
   Widget host(Widget child, {bool still = false}) => MaterialApp(
-    localizationsDelegates: MTLocalizations.localizationsDelegates,
-    supportedLocales: MTLocalizations.supportedLocales,
+    localizationsDelegates: VhLocalizations.localizationsDelegates,
+    supportedLocales: VhLocalizations.supportedLocales,
     theme: theme,
     home: MediaQuery(
       data: MediaQueryData(disableAnimations: still),

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 void main() {
   late Directory dir;

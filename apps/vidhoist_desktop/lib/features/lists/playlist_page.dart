@@ -4,8 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/lists_data.dart';
 import '../../di.dart';
@@ -24,31 +24,31 @@ class PlaylistPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final asked = ref.watch(playlistViewProvider(id));
     final view = asked.valueOrNull;
     Widget centered(Widget child) => Center(
-      child: Padding(padding: const EdgeInsets.all(MTSpace.xl), child: child),
+      child: Padding(padding: const EdgeInsets.all(VhSpace.xl), child: child),
     );
     if (view == null) {
       return centered(
         asked.hasError
-            ? MTEmptyFrame(
+            ? VhEmptyFrame(
                 title: l.emptyPlaylist,
                 message: l.errorGeneric(asked.error.toString()),
                 actionLabel: l.tryAgain,
                 onAction: () => ref.invalidate(playlistsProvider),
               )
-            : const MTSpinner(),
+            : const VhSpinner(),
       );
     }
     if (view.playlist == null) {
       return centered(
-        MTEmptyFrame(
+        VhEmptyFrame(
           title: l.playlistDetails,
           message: l.noPlaylistsMessage,
           actionLabel: l.navPlaylists,
-          onAction: () => context.go(EmberRoutes.playlists),
+          onAction: () => context.go(DesktopRoutes.playlists),
         ),
       );
     }
@@ -58,10 +58,10 @@ class PlaylistPage extends ConsumerWidget {
         // The readable width, centred, as every list of rows on a wide
         // window.
         final side = math.max(
-          MTSpace.xl,
-          (box.maxWidth - MTBreakpoint.readable) / 2,
+          VhSpace.xl,
+          (box.maxWidth - VhBreakpoint.readable) / 2,
         );
-        return StreamBuilder<MTPlayerState>(
+        return StreamBuilder<VhPlayerState>(
           stream: player.states,
           initialData: player.state,
           builder: (context, snap) =>
@@ -77,14 +77,14 @@ class _Lines extends ConsumerWidget {
 
   final PlaylistView view;
   final double side;
-  final MTPlayerState state;
+  final VhPlayerState state;
 
   void _remove(BuildContext context, WidgetRef ref, PlaylistItem item, int i) {
-    final l = context.mtl;
+    final l = context.vhl;
     final actions = ref.read(listActionsProvider);
     final id = view.playlist!.id;
     unawaited(actions.remove(id, item));
-    showMTNotice(
+    showVhNotice(
       context,
       message: l.removedFromPlaylist,
       actionLabel: l.undo,
@@ -94,7 +94,7 @@ class _Lines extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final router = GoRouter.of(context);
     final actions = ref.read(listActionsProvider);
     final current = state.current?.canonicalUrl;
@@ -103,7 +103,7 @@ class _Lines extends ConsumerWidget {
       // The grip is drawn, not Material's icon, and only it starts a drag,
       // so a click on the line still plays.
       buildDefaultDragHandles: false,
-      padding: EdgeInsets.fromLTRB(side, MTSpace.sm, side, MTSpace.xl),
+      padding: EdgeInsets.fromLTRB(side, VhSpace.sm, side, VhSpace.xl),
       header: _Header(view: view),
       itemCount: items.length,
       onReorderItem: (from, to) =>
@@ -120,10 +120,10 @@ class _Lines extends ConsumerWidget {
           playing: state.playing,
           onTap: () {
             if (missing) {
-              showMTNotice(
+              showVhNotice(
                 context,
                 message: l.itemUnavailable,
-                kind: MTNoticeKind.failed,
+                kind: VhNoticeKind.failed,
               );
               return;
             }
@@ -147,8 +147,8 @@ class _Header extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final router = GoRouter.of(context);
     final actions = ref.read(listActionsProvider);
@@ -164,94 +164,94 @@ class _Header extends ConsumerWidget {
       if (!await confirmDeletePlaylist(context, list.name)) return;
       await actions.delete(list.id);
       if (!context.mounted) return;
-      showMTNotice(context, message: l.playlistDeleted);
-      router.go(EmberRoutes.playlists);
+      showVhNotice(context, message: l.playlistDeleted);
+      router.go(DesktopRoutes.playlists);
     }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: MTSpace.lg),
+      padding: const EdgeInsets.only(bottom: VhSpace.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             list.name,
-            textDirection: mtTextDirectionOf(
+            textDirection: vhTextDirectionOf(
               list.name,
               Directionality.of(context),
             ),
             style: text.headlineSmall,
           ),
-          const SizedBox(height: MTSpace.xxs),
+          const SizedBox(height: VhSpace.xxs),
           Text(
-            mtMetaLine([
+            vhMetaLine([
               l.queueItemsCount(list.items.length),
               if (list.pinned) l.desktopPinned,
             ]),
             style: text.bodySmall?.copyWith(color: p.ink3),
           ),
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
           Wrap(
-            spacing: MTSpace.sm,
-            runSpacing: MTSpace.sm,
+            spacing: VhSpace.sm,
+            runSpacing: VhSpace.sm,
             children: [
               if (playable) ...[
-                EmberPill(
+                DesktopPill(
                   label: l.playAll,
-                  icon: MTIcons.playFill,
+                  icon: VhIcons.playFill,
                   selected: false,
                   onTap: () => unawaited(actions.play(router, view)),
                 ),
-                EmberPill(
+                DesktopPill(
                   label: l.shuffle,
-                  icon: MTIcons.shuffle,
+                  icon: VhIcons.shuffle,
                   selected: false,
                   onTap: () =>
                       unawaited(actions.play(router, view, shuffle: true)),
                 ),
-                EmberPill(
+                DesktopPill(
                   // The phone's headphones; a computer has no background
                   // to send it to, so it says what it does.
                   label: l.audioOnly,
-                  icon: MTIcons.headphones,
+                  icon: VhIcons.headphones,
                   selected: false,
                   onTap: () =>
                       unawaited(actions.play(router, view, audioOnly: true)),
                 ),
               ],
-              EmberPill(
+              DesktopPill(
                 label: list.pinned ? l.unpinPlaylist : l.pinPlaylist,
                 selected: list.pinned,
                 onTap: () =>
                     unawaited(actions.setPinned(list.id, !list.pinned)),
               ),
-              EmberPill(
+              DesktopPill(
                 label: l.rename,
                 selected: false,
                 onTap: () => unawaited(rename()),
               ),
               if (view.missing.isNotEmpty)
-                EmberPill(
+                DesktopPill(
                   label: l.removeUnavailable(view.missing.length),
                   selected: false,
                   onTap: () =>
                       unawaited(actions.removeMissing(list.id, view.missing)),
                 ),
-              EmberPill(
+              DesktopPill(
                 label: l.delete,
-                icon: MTIcons.trash,
+                icon: VhIcons.trash,
                 selected: false,
                 onTap: () => unawaited(delete()),
               ),
             ],
           ),
           if (list.items.isEmpty) ...[
-            const SizedBox(height: MTSpace.xxl),
+            const SizedBox(height: VhSpace.xxl),
             Center(
-              child: MTEmptyFrame(
+              child: VhEmptyFrame(
                 title: l.emptyPlaylist,
                 message: l.emptyPlaylistMessage,
                 actionLabel: l.navLibrary,
-                onAction: () => router.go(EmberRoutes.library),
+                onAction: () => router.go(DesktopRoutes.library),
               ),
             ),
           ],

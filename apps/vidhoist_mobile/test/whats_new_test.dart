@@ -8,13 +8,13 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/update/update_section.dart';
 import 'package:vidhoist_mobile/features/update/update_state.dart';
 import 'package:vidhoist_mobile/features/update/whats_new_prompt.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'device_matrix.dart';
 
-/// "What's new" once after an update: the decision is tested in mt_core,
+/// "What's new" once after an update: the decision is tested in vh_core,
 /// and what is tested here belongs to the app: the notes are kept at the
 /// check, the sheet speaks the reader's language, and it waits for the
 /// screen to be free.
@@ -60,7 +60,7 @@ void main() {
         keyValueStoreProvider.overrideWithValue(store),
         // The prompt notes in the log when it opens.
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/mtf_test.log'),
         ),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
         installedVersionProvider.overrideWith((ref) async => (version, true)),
@@ -103,10 +103,10 @@ void main() {
         UncontrolledProviderScope(
           container: c,
           child: MaterialApp(
-            theme: mtTheme(MTVariant.lite, Brightness.light),
+            theme: vhTheme(VhVariant.phone, Brightness.light),
             locale: locale,
-            localizationsDelegates: MTLocalizations.localizationsDelegates,
-            supportedLocales: MTLocalizations.supportedLocales,
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
             home: Consumer(
               builder: (context, ref, _) => Scaffold(
                 body: TextButton(
@@ -163,9 +163,9 @@ void main() {
         UncontrolledProviderScope(
           container: c,
           child: MaterialApp(
-            theme: mtTheme(MTVariant.lite, Brightness.light),
-            localizationsDelegates: MTLocalizations.localizationsDelegates,
-            supportedLocales: MTLocalizations.supportedLocales,
+            theme: vhTheme(VhVariant.phone, Brightness.light),
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
             home: Consumer(
               builder: (context, ref, _) => Scaffold(
                 body: TextButton(
@@ -184,7 +184,7 @@ void main() {
       );
       await tester.tap(find.text('both'));
       await tester.pumpAndSettle();
-      expect(find.byType(MTWhatsNewSheet), findsOneWidget);
+      expect(find.byType(VhWhatsNewSheet), findsOneWidget);
       expect(outcomes, contains(WhatsNewOutcome.shown));
     });
 
@@ -204,13 +204,13 @@ void main() {
         'its one showing', (tester) async {
       final c = await updatedFrom221();
       await tester.pumpWidget(host(c));
-      MTRouteDepth.depth.value = 1;
-      addTearDown(() => MTRouteDepth.depth.value = 0);
+      VhRouteDepth.depth.value = 1;
+      addTearDown(() => VhRouteDepth.depth.value = 0);
       await launch(tester);
       expect(outcome, WhatsNewOutcome.later);
       expect(await prefsOf(c).lastSeenVersion(), '2.2.1');
 
-      MTRouteDepth.depth.value = 0;
+      VhRouteDepth.depth.value = 0;
       await launch(tester);
       expect(outcome, WhatsNewOutcome.shown);
     });
@@ -222,9 +222,9 @@ void main() {
         UncontrolledProviderScope(
           container: c,
           child: MaterialApp(
-            localizationsDelegates: MTLocalizations.localizationsDelegates,
-            supportedLocales: MTLocalizations.supportedLocales,
-            theme: mtTheme(MTVariant.lite, Brightness.light),
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
+            theme: vhTheme(VhVariant.phone, Brightness.light),
             home: const Scaffold(
               body: SingleChildScrollView(child: UpdateSection()),
             ),
@@ -245,7 +245,7 @@ void main() {
       await prefsOf(c).setLastSeenVersion('2.2.1');
       await tester.pumpWidget(host(c));
       await launch(tester);
-      final l10n = tester.element(find.byType(MTWhatsNewSheet)).mtl;
+      final l10n = tester.element(find.byType(VhWhatsNewSheet)).vhl;
       expect(find.text(l10n.whatsNewUnavailable), findsOneWidget);
       expect(find.text(l10n.whatsNewReleasePage), findsOneWidget);
     });
@@ -262,12 +262,12 @@ void main() {
       await expectNoOverflow(
         tester,
         () => MaterialApp(
-          theme: mtTheme(MTVariant.lite, Brightness.light),
+          theme: vhTheme(VhVariant.phone, Brightness.light),
           locale: const Locale('ar'),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
           home: Scaffold(
-            body: MTWhatsNewSheet(
+            body: VhWhatsNewSheet(
               version: '2.3.0',
               notes: notes,
               onOpenPage: () {},

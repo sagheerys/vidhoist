@@ -8,8 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/data/desktop_habits.dart';
 import 'package:vidhoist_desktop/platform/startup.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -34,19 +34,19 @@ void main() {
     final h = ShellHarness(library: const [], overrides: overrides);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
         .go('/settings/desktop');
     await tester.pumpAndSettle();
     return h;
   }
 
-  MTSwitch switchOf(WidgetTester tester, String title) =>
-      tester.widget<MTSwitch>(
+  VhSwitch switchOf(WidgetTester tester, String title) =>
+      tester.widget<VhSwitch>(
         find.descendant(
           of: find
               .ancestor(of: find.text(title), matching: find.byType(Row))
               .first,
-          matching: find.byType(MTSwitch),
+          matching: find.byType(VhSwitch),
         ),
       );
 
@@ -56,7 +56,7 @@ void main() {
         of: find
             .ancestor(of: find.text(title), matching: find.byType(Row))
             .first,
-        matching: find.byType(MTSwitch),
+        matching: find.byType(VhSwitch),
       ),
     );
     await tester.pumpAndSettle();

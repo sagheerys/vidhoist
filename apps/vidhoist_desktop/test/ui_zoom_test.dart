@@ -3,13 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/platform/window_placement.dart';
 import 'package:vidhoist_desktop/router.dart';
-import 'package:vidhoist_desktop/shell/ember_shell.dart';
+import 'package:vidhoist_desktop/shell/desktop_shell.dart';
 import 'package:vidhoist_desktop/shell/player_bar.dart';
 import 'package:vidhoist_desktop/shell/shell_metrics.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/ui_zoom.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -91,7 +91,8 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    Size shell(WidgetTester tester) => tester.getSize(find.byType(EmberShell));
+    Size shell(WidgetTester tester) =>
+        tester.getSize(find.byType(DesktopShell));
 
     testWidgets('at 100% nothing changes', (tester) async {
       await open(tester);
@@ -106,8 +107,8 @@ void main() {
       // The column rules read the width after the zoom: 1152 narrows the
       // sidebar, where 1440 would not.
       expect(
-        tester.getSize(find.byType(EmberSidebar)).width,
-        EmberShellSize.sidebarNarrow,
+        tester.getSize(find.byType(DesktopSidebar)).width,
+        DesktopShellSize.sidebarNarrow,
       );
     });
 
@@ -130,10 +131,10 @@ void main() {
 
     testWidgets('changing the size keeps the app as it was', (tester) async {
       await open(tester);
-      final before = tester.state(find.byType(EmberShell));
+      final before = tester.state(find.byType(DesktopShell));
       await ctrl(tester, LogicalKeyboardKey.equal);
       await ctrl(tester, LogicalKeyboardKey.digit0);
-      expect(tester.state(find.byType(EmberShell)), same(before));
+      expect(tester.state(find.byType(DesktopShell)), same(before));
     });
 
     testWidgets('**the guard**: at 125% the focus ring lands on its control', (
@@ -145,8 +146,8 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.tab);
       await tester.pumpAndSettle();
       final focused = FocusManager.instance.primaryFocus!.rect;
-      final ring = tester.getRect(find.byKey(MTFocusRingLayer.ringKey));
-      expect(ring, focused.inflate(MTDensity.desktop.focusRing));
+      final ring = tester.getRect(find.byKey(VhFocusRingLayer.ringKey));
+      expect(ring, focused.inflate(VhDensity.desktop.focusRing));
     });
 
     testWidgets('the shortcuts go by key, so an Arabic keyboard works', (
@@ -201,8 +202,8 @@ void main() {
       await tester.tap(find.text('Change'));
       await tester.pumpAndSettle();
       expect(
-        tester.widget<EmberSidebar>(find.byType(EmberSidebar)).current,
-        EmberPlace.settings,
+        tester.widget<DesktopSidebar>(find.byType(DesktopSidebar)).current,
+        DesktopPlace.settings,
       );
     });
 
@@ -221,7 +222,7 @@ void main() {
       );
       // The reason for it all: the player bar stays above the taskbar.
       expect(
-        tester.getRect(find.byType(EmberPlayerBar)).bottom,
+        tester.getRect(find.byType(DesktopPlayerBar)).bottom,
         lessThanOrEqualTo(_laptop.height),
       );
     });

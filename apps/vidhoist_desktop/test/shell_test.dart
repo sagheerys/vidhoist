@@ -10,7 +10,7 @@ import 'package:vidhoist_desktop/shell/shell_metrics.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/title_bar.dart';
 
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import 'support/shell_harness.dart';
 
@@ -34,17 +34,20 @@ void main() {
   testWidgets('at 1440 the three columns stand side by side', (tester) async {
     await open(tester, const Size(1440, 900));
     expect(
-      width(tester, find.byType(EmberSidebar)),
-      EmberShellSize.sidebarWide,
-    );
-    expect(width(tester, find.byType(EmberRightPanel)), EmberShellSize.panel);
-    expect(
-      tester.getSize(find.byType(EmberPlayerBar)).height,
-      EmberShellSize.playerBar,
+      width(tester, find.byType(DesktopSidebar)),
+      DesktopShellSize.sidebarWide,
     );
     expect(
-      tester.getSize(find.byType(EmberTitleBar)).height,
-      EmberShellSize.titleBar,
+      width(tester, find.byType(DesktopRightPanel)),
+      DesktopShellSize.panel,
+    );
+    expect(
+      tester.getSize(find.byType(DesktopPlayerBar)).height,
+      DesktopShellSize.playerBar,
+    );
+    expect(
+      tester.getSize(find.byType(DesktopTitleBar)).height,
+      DesktopShellSize.titleBar,
     );
   });
 
@@ -53,27 +56,27 @@ void main() {
   ) async {
     await open(tester, const Size(1200, 800));
     expect(
-      width(tester, find.byType(EmberSidebar)),
-      EmberShellSize.sidebarNarrow,
+      width(tester, find.byType(DesktopSidebar)),
+      DesktopShellSize.sidebarNarrow,
     );
-    expect(find.byType(EmberRightPanel), findsOneWidget);
+    expect(find.byType(DesktopRightPanel), findsOneWidget);
   });
 
   testWidgets('at 1000 the panel is a layer, opened and closed by its button', (
     tester,
   ) async {
     final h = await open(tester, const Size(1000, 700));
-    expect(find.byType(EmberRightPanel), findsNothing);
+    expect(find.byType(DesktopRightPanel), findsNothing);
 
     await tester.tap(byLabel('Show side panel'));
     await tester.pumpAndSettle();
-    expect(find.byType(EmberRightPanel), findsOneWidget);
+    expect(find.byType(DesktopRightPanel), findsOneWidget);
     // A layer, so the user's saved choice is untouched.
     expect(await h.store.getString(ShellLayoutStore.key), isNull);
 
     await tester.tap(byLabel('Hide side panel'));
     await tester.pumpAndSettle();
-    expect(find.byType(EmberRightPanel), findsNothing);
+    expect(find.byType(DesktopRightPanel), findsNothing);
   });
 
   testWidgets('folding a column is saved for the next start', (tester) async {
@@ -81,10 +84,10 @@ void main() {
     await tester.tap(byLabel('Hide side panel'));
     await tester.tap(find.byType(SidebarToggle));
     await tester.pumpAndSettle();
-    expect(find.byType(EmberRightPanel), findsNothing);
+    expect(find.byType(DesktopRightPanel), findsNothing);
     expect(
-      width(tester, find.byType(EmberSidebar)),
-      EmberShellSize.sidebarNarrow,
+      width(tester, find.byType(DesktopSidebar)),
+      DesktopShellSize.sidebarNarrow,
     );
     final saved = await ShellLayoutStore(
       store: h.store,
@@ -97,17 +100,17 @@ void main() {
     tester,
   ) async {
     await open(tester, const Size(1440, 900));
-    EmberPlace current() =>
-        tester.widget<EmberSidebar>(find.byType(EmberSidebar)).current;
+    DesktopPlace current() =>
+        tester.widget<DesktopSidebar>(find.byType(DesktopSidebar)).current;
     for (final (label, place) in [
-      ('Favorites', EmberPlace.favorites),
-      ('Playlists', EmberPlace.playlists),
-      ('Settings', EmberPlace.settings),
-      ('Library', EmberPlace.library),
+      ('Favorites', DesktopPlace.favorites),
+      ('Playlists', DesktopPlace.playlists),
+      ('Settings', DesktopPlace.settings),
+      ('Library', DesktopPlace.library),
     ]) {
       await tester.tap(
         find.descendant(
-          of: find.byType(EmberSidebar),
+          of: find.byType(DesktopSidebar),
           matching: find.text(label),
         ),
       );
@@ -118,7 +121,7 @@ void main() {
     // Search is not a place: it opens the palette over the current one.
     await tester.tap(
       find.descendant(
-        of: find.byType(EmberSidebar),
+        of: find.byType(DesktopSidebar),
         matching: find.text('Search'),
       ),
     );
@@ -127,13 +130,13 @@ void main() {
       find.text('Search titles and what was said, or type > for commands'),
       findsOneWidget,
     );
-    expect(current(), EmberPlace.library);
+    expect(current(), DesktopPlace.library);
   });
 
   testWidgets('back and forward walk the places visited', (tester) async {
     await open(tester, const Size(1440, 900));
-    EmberPlace current() =>
-        tester.widget<EmberSidebar>(find.byType(EmberSidebar)).current;
+    DesktopPlace current() =>
+        tester.widget<DesktopSidebar>(find.byType(DesktopSidebar)).current;
     await tester.tap(find.text('Playlists'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Settings'));
@@ -141,13 +144,13 @@ void main() {
 
     await tester.tap(byLabel('Back'));
     await tester.pumpAndSettle();
-    expect(current(), EmberPlace.playlists);
+    expect(current(), DesktopPlace.playlists);
     await tester.tap(byLabel('Back'));
     await tester.pumpAndSettle();
-    expect(current(), EmberPlace.library);
+    expect(current(), DesktopPlace.library);
     await tester.tap(byLabel('Forward'));
     await tester.pumpAndSettle();
-    expect(current(), EmberPlace.playlists);
+    expect(current(), DesktopPlace.playlists);
   });
 
   testWidgets('**the gate**: moving around never touches the playback', (
@@ -156,7 +159,7 @@ void main() {
     final h = await open(tester, const Size(1440, 900));
     h.player.showPlaying([clip('Night Drive'), clip('Blue Hour')]);
     await tester.pumpAndSettle();
-    final bar = tester.element(find.byType(EmberPlayerBar));
+    final bar = tester.element(find.byType(DesktopPlayerBar));
     for (final label in ['Playlists', 'Settings', 'Library']) {
       await tester.tap(find.text(label));
       await tester.pumpAndSettle();
@@ -165,10 +168,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(h.player.calls, isEmpty);
     // The same bar, never rebuilt from scratch, still showing the clip.
-    expect(tester.element(find.byType(EmberPlayerBar)), same(bar));
+    expect(tester.element(find.byType(DesktopPlayerBar)), same(bar));
     expect(
       find.descendant(
-        of: find.byType(EmberPlayerBar),
+        of: find.byType(DesktopPlayerBar),
         matching: find.text('Night Drive'),
       ),
       findsOneWidget,
@@ -211,16 +214,16 @@ void main() {
         const Size(1440, 900),
         layout: const ShellLayout(panelHidden: true),
       );
-      expect(find.byType(EmberRightPanel), findsNothing);
+      expect(find.byType(DesktopRightPanel), findsNothing);
       await tester.tap(
         find.descendant(
-          of: find.byType(EmberPlayerBar),
+          of: find.byType(DesktopPlayerBar),
           matching: byLabel('Queue'),
         ),
       );
       await tester.pumpAndSettle();
-      final panel = tester.widget<EmberRightPanel>(
-        find.byType(EmberRightPanel),
+      final panel = tester.widget<DesktopRightPanel>(
+        find.byType(DesktopRightPanel),
       );
       expect(panel.tab, PanelTab.upNext);
     },
@@ -252,8 +255,8 @@ void main() {
     tester,
   ) async {
     await open(tester, const Size(1440, 900), arabic: true);
-    final side = tester.getRect(find.byType(EmberSidebar));
-    final panel = tester.getRect(find.byType(EmberRightPanel));
+    final side = tester.getRect(find.byType(DesktopSidebar));
+    final panel = tester.getRect(find.byType(DesktopRightPanel));
     expect(side.left, greaterThan(panel.left));
     expect(side.right, 1440);
 

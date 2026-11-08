@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/hints_data.dart';
 import '../../data/update_data.dart';
@@ -21,12 +21,12 @@ Future<void> startupNotes(BuildContext context, WidgetRef ref) async {
   if (release == null || !context.mounted) return;
   ref.read(hintsProvider.notifier).interrupted();
   final router = GoRouter.of(context);
-  showMTNotice(
+  showVhNotice(
     context,
-    message: context.mtl.updateVersionAvailable(release.version.toString()),
-    icon: MTIcons.info,
-    actionLabel: context.mtl.updateWhatsNew,
-    onAction: () => router.go(EmberSettingsPane.updates.route),
+    message: context.vhl.updateVersionAvailable(release.version.toString()),
+    icon: VhIcons.info,
+    actionLabel: context.vhl.updateWhatsNew,
+    onAction: () => router.go(DesktopSettingsPane.updates.route),
     duration: const Duration(seconds: 10),
   );
 }
@@ -38,8 +38,8 @@ class UpdatesPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final state = ref.watch(updateProvider);
     final update = ref.read(updateProvider.notifier);
@@ -59,10 +59,10 @@ class UpdatesPane extends ConsumerWidget {
           value: version,
           hint: checked == null
               ? l.neverChecked
-              : l.lastCheckedAt(mtTimeAgo(context, checked)),
+              : l.lastCheckedAt(vhTimeAgo(context, checked)),
           trailing: state.phase == UpdatePhase.checking
               ? Text(l.updateChecking, style: text.bodyMedium)
-              : MTLinkButton(
+              : VhLinkButton(
                   label: l.checkNow,
                   onPressed: state.busy
                       ? null
@@ -70,13 +70,13 @@ class UpdatesPane extends ConsumerWidget {
                 ),
         ),
         if (state.upToDate)
-          _Line(l.updateUpToDate, color: p.ink2, icon: MTIcons.check),
-        if (failure != null) _Line(failure, color: p.err, icon: MTIcons.info),
+          _Line(l.updateUpToDate, color: p.ink2, icon: VhIcons.check),
+        if (failure != null) _Line(failure, color: p.err, icon: VhIcons.info),
         if (state.release case final release?) ...[
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
           _Release(release: release, state: state),
         ],
-        const SizedBox(height: MTSpace.md),
+        const SizedBox(height: VhSpace.md),
         SwitchLine(
           title: l.autoCheckUpdates,
           hint: l.autoCheckUpdatesHelp,
@@ -93,15 +93,15 @@ class _Line extends StatelessWidget {
 
   final String text;
   final Color color;
-  final MTIconData icon;
+  final VhIconData icon;
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: MTSpace.xs),
+    padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
     child: Row(
       children: [
-        MTIcon(icon, size: MTSpace.lg, color: color),
-        const SizedBox(width: MTSpace.sm),
+        VhIcon(icon, size: VhSpace.lg, color: color),
+        const SizedBox(width: VhSpace.sm),
         Expanded(
           child: Text(
             text,
@@ -123,12 +123,12 @@ class _Release extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final update = ref.read(updateProvider.notifier);
     final size = release.sizeMb;
-    final notes = mtReleaseNotesFor(
+    final notes = vhReleaseNotesFor(
       release.notes,
       arabic: Localizations.localeOf(context).languageCode == 'ar',
       app: 'ember',
@@ -138,10 +138,10 @@ class _Release extends ConsumerWidget {
       decoration: BoxDecoration(
         color: p.card,
         border: Border.all(color: p.line),
-        borderRadius: BorderRadius.circular(MTCorners.desktop.card),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.card),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(MTSpace.lg),
+        padding: const EdgeInsets.all(VhSpace.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -155,44 +155,44 @@ class _Release extends ConsumerWidget {
                 style: text.bodySmall?.copyWith(color: p.ink3),
               ),
             if (notes.isNotEmpty) ...[
-              const SizedBox(height: MTSpace.md),
+              const SizedBox(height: VhSpace.md),
               Text(
                 l.updateWhatsNew,
                 style: text.labelLarge?.copyWith(color: p.ink2),
               ),
-              const SizedBox(height: MTSpace.xs),
-              MTMarkdownText(source: notes),
+              const SizedBox(height: VhSpace.xs),
+              VhMarkdownText(source: notes),
             ],
-            const SizedBox(height: MTSpace.lg),
+            const SizedBox(height: VhSpace.lg),
             if (downloading) ...[
               Text(l.updateDownloading, style: text.bodyMedium),
-              const SizedBox(height: MTSpace.xs),
-              MTProgressBar(value: state.progress),
-              const SizedBox(height: MTSpace.sm),
+              const SizedBox(height: VhSpace.xs),
+              VhProgressBar(value: state.progress),
+              const SizedBox(height: VhSpace.sm),
               Align(
                 alignment: AlignmentDirectional.centerStart,
-                child: MTLinkButton(label: l.cancel, onPressed: update.cancel),
+                child: VhLinkButton(label: l.cancel, onPressed: update.cancel),
               ),
             ] else ...[
               Text(
                 l.desktopUpdateRestartHint,
                 style: text.bodySmall?.copyWith(color: p.ink3),
               ),
-              const SizedBox(height: MTSpace.sm),
+              const SizedBox(height: VhSpace.sm),
               Wrap(
-                spacing: MTSpace.sm,
-                runSpacing: MTSpace.sm,
+                spacing: VhSpace.sm,
+                runSpacing: VhSpace.sm,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   FilledButton(
                     onPressed: () => unawaited(update.install()),
                     child: Text(l.desktopUpdateInstall),
                   ),
-                  MTLinkButton(
+                  VhLinkButton(
                     label: l.updateSkipVersion,
                     onPressed: () => unawaited(update.skip()),
                   ),
-                  MTLinkButton(label: l.updateLater, onPressed: update.later),
+                  VhLinkButton(label: l.updateLater, onPressed: update.later),
                 ],
               ),
             ],

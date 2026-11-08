@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 LocalItem item(
   String name, {
@@ -12,8 +12,8 @@ LocalItem item(
   double? aspectRatio,
   String? title,
 }) => LocalItem(
-  key: url ?? '$liteMediaDir/$name',
-  path: '$liteMediaDir/$name',
+  key: url ?? '$phoneMediaDir/$name',
+  path: '$phoneMediaDir/$name',
   canonicalUrl: url,
   title: title ?? LocalItem.titleFromFilename(name),
   sizeBytes: size,

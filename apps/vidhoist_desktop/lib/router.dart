@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 /// The settings sections: the phone app's, plus the two only a computer
 /// has (the desktop habits, and the offline and download folders).
-enum EmberSettingsPane {
+enum DesktopSettingsPane {
   engine,
   subscriptions,
   cookies,
@@ -25,7 +25,7 @@ enum EmberSettingsPane {
 }
 
 /// The addresses of the app's places.
-abstract final class EmberRoutes {
+abstract final class DesktopRoutes {
   static const library = '/library';
 
   /// Favourites are the library seen through a filter, so the filter chip
@@ -56,7 +56,7 @@ abstract final class EmberRoutes {
 }
 
 /// The places the sidebar can show as current.
-enum EmberPlace {
+enum DesktopPlace {
   library,
   favorites,
   search,
@@ -67,26 +67,26 @@ enum EmberPlace {
 }
 
 /// Which place [location] is, for the sidebar's highlight.
-EmberPlace placeOf(Uri location) {
+DesktopPlace placeOf(Uri location) {
   final first = location.pathSegments.firstOrNull;
   return switch (first) {
     'library' => switch (location.queryParameters['only']) {
-      'favorites' => EmberPlace.favorites,
-      _ => EmberPlace.library,
+      'favorites' => DesktopPlace.favorites,
+      _ => DesktopPlace.library,
     },
-    'search' => EmberPlace.search,
-    'playlists' => EmberPlace.playlists,
-    'channels' => EmberPlace.channels,
-    'settings' => EmberPlace.settings,
+    'search' => DesktopPlace.search,
+    'playlists' => DesktopPlace.playlists,
+    'channels' => DesktopPlace.channels,
+    'settings' => DesktopPlace.settings,
     // The library seen as figures: its place stays lit.
-    'stats' => EmberPlace.library,
-    _ => EmberPlace.item,
+    'stats' => DesktopPlace.library,
+    _ => DesktopPlace.item,
   };
 }
 
 /// Builds the shell around every place; the drawn shell replaces the
 /// pass-through default.
-typedef EmberShellBuilder = Widget Function(
+typedef DesktopShellBuilder = Widget Function(
   BuildContext context,
   GoRouterState state,
   Widget child,
@@ -95,7 +95,7 @@ typedef EmberShellBuilder = Widget Function(
 Widget _bare(BuildContext context, GoRouterState state, Widget child) => child;
 
 /// Builds a place from its query argument.
-typedef EmberPlaceBuilder = Widget Function(String? argument);
+typedef DesktopPlaceBuilder = Widget Function(String? argument);
 
 Widget _pendingLibrary(String? only) => PendingPlace('library', argument: only);
 
@@ -117,27 +117,27 @@ Widget _pendingSettings(String? pane) =>
 /// The single route table. One router per app, built once, so the shell
 /// and the player under it live through every navigation.
 GoRouter buildEmberRouter({
-  String initialLocation = EmberRoutes.library,
-  EmberShellBuilder shell = _bare,
-  EmberPlaceBuilder library = _pendingLibrary,
-  EmberPlaceBuilder item = _pendingItem,
-  EmberPlaceBuilder reading = _pendingReading,
-  EmberPlaceBuilder playlists = _pendingPlaylists,
-  EmberPlaceBuilder channels = _pendingChannels,
-  EmberPlaceBuilder settings = _pendingSettings,
-  EmberPlaceBuilder stats = _pendingStats,
+  String initialLocation = DesktopRoutes.library,
+  DesktopShellBuilder shell = _bare,
+  DesktopPlaceBuilder library = _pendingLibrary,
+  DesktopPlaceBuilder item = _pendingItem,
+  DesktopPlaceBuilder reading = _pendingReading,
+  DesktopPlaceBuilder playlists = _pendingPlaylists,
+  DesktopPlaceBuilder channels = _pendingChannels,
+  DesktopPlaceBuilder settings = _pendingSettings,
+  DesktopPlaceBuilder stats = _pendingStats,
 }) => GoRouter(
   initialLocation: initialLocation,
   // An address that names no place (an old link, a typo in a protocol
   // link) lands on the library rather than an error page.
-  onException: (_, _, router) => router.go(EmberRoutes.library),
+  onException: (_, _, router) => router.go(DesktopRoutes.library),
   routes: [
-    GoRoute(path: '/', redirect: (_, _) => EmberRoutes.library),
+    GoRoute(path: '/', redirect: (_, _) => DesktopRoutes.library),
     ShellRoute(
       builder: shell,
       routes: [
         GoRoute(
-          path: EmberRoutes.library,
+          path: DesktopRoutes.library,
           pageBuilder: (_, state) => _ownPage(
             state.uri.queryParameters['only'] ?? '',
             library(state.uri.queryParameters['only']),
@@ -147,14 +147,14 @@ GoRouter buildEmberRouter({
         // address for it (a link from outside) lands on the library rather
         // than on a blank page.
         GoRoute(
-          path: EmberRoutes.search,
-          redirect: (_, _) => EmberRoutes.library,
+          path: DesktopRoutes.search,
+          redirect: (_, _) => DesktopRoutes.library,
         ),
         // A null argument is the place itself; an id is one list or one
         // channel in it.
         for (final (path, build) in [
-          (EmberRoutes.playlists, playlists),
-          (EmberRoutes.channels, channels),
+          (DesktopRoutes.playlists, playlists),
+          (DesktopRoutes.channels, channels),
         ])
           GoRoute(
             path: path,
@@ -180,25 +180,25 @@ GoRouter buildEmberRouter({
             reading(state.pathParameters['id']),
           ),
         ),
-        GoRoute(path: EmberRoutes.stats, builder: (_, _) => stats(null)),
+        GoRoute(path: DesktopRoutes.stats, builder: (_, _) => stats(null)),
         // **One page for every section**, under one key: moving between
         // sections updates the page in place, so the list of sections
         // stays still and only the open section changes (with its own
         // fade, see SettingsPlace). As routes nested in one another, each
         // section was a new page sliding in whole.
         GoRoute(
-          path: EmberRoutes.settings,
+          path: DesktopRoutes.settings,
           pageBuilder: (_, _) => _settingsPage(settings(null)),
         ),
         GoRoute(
-          path: '${EmberRoutes.settings}/:pane',
+          path: '${DesktopRoutes.settings}/:pane',
           // A section that does not exist names no place.
           redirect: (_, state) =>
-              EmberSettingsPane.values.asNameMap().containsKey(
+              DesktopSettingsPane.values.asNameMap().containsKey(
                 state.pathParameters['pane'],
               )
               ? null
-              : EmberRoutes.library,
+              : DesktopRoutes.library,
           pageBuilder: (_, state) =>
               _settingsPage(settings(state.pathParameters['pane'])),
         ),

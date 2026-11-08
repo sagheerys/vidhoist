@@ -1,0 +1,64 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:vh_ui/vh_ui.dart';
+
+/// What the app shows beside the video in full screen, for the item now
+/// playing: a feature this package does not know, such as a transcript.
+class VhVideoPanel {
+  const VhVideoPanel({
+    required this.icon,
+    required this.label,
+    required this.builder,
+  });
+
+  final VhIconData icon;
+  final String label;
+
+  /// The panel's content; [close] puts it away.
+  final Widget Function(BuildContext context, VoidCallback close) builder;
+}
+
+/// A panel sliding in from the end edge. Unlike the queue it leaves the
+/// video undimmed and playing beside it: what it holds is read along with
+/// the picture, not instead of it.
+class VhVideoEndPanel extends StatelessWidget {
+  const VhVideoEndPanel({super.key, required this.child});
+
+  final Widget child;
+
+  static const _widest = 420.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    final size = MediaQuery.sizeOf(context);
+    // Beside a landscape picture it takes under half; over a portrait one,
+    // full screen standing up, half would leave lines of two words.
+    final width = size.width < size.height
+        ? size.width * 0.85
+        : math.min(_widest, size.width * 0.45);
+    return PositionedDirectional(
+      end: 0,
+      top: 0,
+      bottom: 0,
+      width: width,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: width, end: 0),
+        duration: VhMotion.medium,
+        curve: VhMotion.ease,
+        builder: (context, offset, child) => Transform.translate(
+          offset: Offset(
+            Directionality.of(context) == TextDirection.rtl ? -offset : offset,
+            0,
+          ),
+          child: child,
+        ),
+        child: Material(
+          color: p.bg,
+          child: SafeArea(child: child),
+        ),
+      ),
+    );
+  }
+}

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../downloads_library/library_actions.dart';
 import '../downloads_library/local_item.dart';
@@ -15,7 +15,7 @@ import '../playlists/add_to_playlist_sheet.dart';
 ///
 /// **No tags in Lite**, deliberately: tags are a Super feature.
 void showAddToSheet(BuildContext context, WidgetRef ref, LocalItem item) {
-  showMTSheet<void>(
+  showVhSheet<void>(
     context: context,
     useRootNavigator: true,
     // The screen's context, not the sheet's: the later sheets open after
@@ -33,8 +33,8 @@ class _AddToSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
 
     return SafeArea(
       child: Column(
@@ -42,10 +42,10 @@ class _AddToSheet extends ConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(
-              MTSpace.xl,
-              MTSpace.lg,
-              MTSpace.xl,
-              MTSpace.sm,
+              VhSpace.xl,
+              VhSpace.lg,
+              VhSpace.xl,
+              VhSpace.sm,
             ),
             child: Text(
               item.title,
@@ -56,8 +56,8 @@ class _AddToSheet extends ConsumerWidget {
           ),
           const Divider(),
           ListTile(
-            leading: MTIcon(
-              item.favorite ? MTIcons.favoriteOn : MTIcons.favorite,
+            leading: VhIcon(
+              item.favorite ? VhIcons.favoriteOn : VhIcons.favorite,
               color: item.favorite ? p.favorite : p.ink2,
             ),
             title: Text(
@@ -70,14 +70,14 @@ class _AddToSheet extends ConsumerWidget {
                   .read(libraryActionsProvider)
                   .toggleFavorite(item.key);
               if (!host.mounted) return;
-              showMTSnack(
+              showVhSnack(
                 host,
                 added ? l10n.addedToFavorites : l10n.removedFromFavorites,
               );
             },
           ),
           ListTile(
-            leading: MTIcon(MTIcons.queueAdd, color: p.ink2),
+            leading: VhIcon(VhIcons.queueAdd, color: p.ink2),
             title: Text(
               l10n.addToPlaylist,
               style: Theme.of(context).textTheme.bodyMedium,
@@ -87,7 +87,7 @@ class _AddToSheet extends ConsumerWidget {
               showAddToPlaylistSheet(host, ref, [item]);
             },
           ),
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
         ],
       ),
     );

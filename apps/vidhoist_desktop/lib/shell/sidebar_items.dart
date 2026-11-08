@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'context_menu.dart';
 
@@ -18,10 +18,10 @@ class SidebarAddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final ink = onTap == null ? p.ink3 : p.onAccent;
-    final plus = MTIcon(MTIcons.plus, size: MTDensity.desktop.icon, color: ink);
-    return MTShortcutTooltip(
+    final plus = VhIcon(VhIcons.plus, size: VhDensity.desktop.icon, color: ink);
+    return VhShortcutTooltip(
       message: label,
       shortcut: 'Ctrl+V',
       // Its own name when narrow, where only the plus shows: the tooltip
@@ -36,8 +36,8 @@ class SidebarAddButton extends StatelessWidget {
   }
 
   Widget _face(BuildContext context, Color ink, Widget plus) {
-    final p = MTThemeX.of(context).palette;
-    final corners = MTCorners.desktop;
+    final p = VhThemeX.of(context).palette;
+    final corners = VhCorners.desktop;
     return Material(
       color: onTap == null ? p.cardAlt : p.accent,
       shape: RoundedRectangleBorder(
@@ -49,14 +49,14 @@ class SidebarAddButton extends StatelessWidget {
         // Not the theme's opaque hover fill, which would hide the ember.
         hoverColor: p.onAccent.withValues(alpha: 0.12),
         child: SizedBox(
-          height: MTDensity.desktop.row + MTSpace.xxs,
+          height: VhDensity.desktop.row + VhSpace.xxs,
           child: narrow
               ? Center(child: plus)
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     plus,
-                    const SizedBox(width: MTSpace.xs),
+                    const SizedBox(width: VhSpace.xs),
                     Flexible(
                       child: Text(
                         label,
@@ -102,33 +102,33 @@ class SidebarItem extends StatelessWidget {
   /// A count at the line's end.
   final String? trailing;
 
-  final MTIconData icon;
+  final VhIconData icon;
   final String label;
   final bool narrow;
   final bool selected;
   final VoidCallback onTap;
 
   /// The least width the full line (icon, label, count) is laid out in.
-  static const double _fullLine = MTSpace.xxl * 5;
+  static const double _fullLine = VhSpace.xxl * 5;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final ink = selected ? p.ink : p.ink2;
-    final glyph = MTIcon(icon, size: MTDensity.desktop.icon, color: ink);
+    final glyph = VhIcon(icon, size: VhDensity.desktop.icon, color: ink);
     final row = AnimatedContainer(
       // The fill eases from one choice to the next, as the border does.
-      duration: mtMotionDuration(context, MTMotion.fast),
+      duration: vhMotionDuration(context, VhMotion.fast),
       decoration: ShapeDecoration(
-        color: selected ? mtSelectedFill(p) : p.ink.withValues(alpha: 0),
+        color: selected ? vhSelectedFill(p) : p.ink.withValues(alpha: 0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+          borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
         ),
       ),
       child: Material(
         type: MaterialType.transparency,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+          borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -137,7 +137,7 @@ class SidebarItem extends StatelessWidget {
               ? null
               : (d) => onMenu!(d.globalPosition),
           child: SizedBox(
-            height: MTDensity.desktop.row,
+            height: VhDensity.desktop.row,
             // The icon alone too while the sidebar widens or narrows: its
             // width passes through sizes the full line does not fit in,
             // which overflowed for a few frames each time (logged).
@@ -148,17 +148,17 @@ class SidebarItem extends StatelessWidget {
                       children: [
                         SizedBox(
                           width: indent
-                              ? MTSpace.xl
-                              : MTSpace.sm + MTSpace.md * depth,
+                              ? VhSpace.xl
+                              : VhSpace.sm + VhSpace.md * depth,
                         ),
                         glyph,
-                        const SizedBox(width: MTSpace.sm),
+                        const SizedBox(width: VhSpace.sm),
                         Expanded(
                           // The label fades in as the sidebar widens past it,
                           // rather than popping in at the width it first fits.
                           child: TweenAnimationBuilder<double>(
                             tween: Tween(begin: 0, end: 1),
-                            duration: mtMotionDuration(context, MTMotion.fast),
+                            duration: vhMotionDuration(context, VhMotion.fast),
                             builder: (context, shown, child) =>
                                 Opacity(opacity: shown, child: child),
                             child: Text(
@@ -178,8 +178,8 @@ class SidebarItem extends StatelessWidget {
                         if (trailing case final count?)
                           Padding(
                             padding: const EdgeInsetsDirectional.only(
-                              start: MTSpace.xs,
-                              end: MTSpace.sm,
+                              start: VhSpace.xs,
+                              end: VhSpace.sm,
                             ),
                             child: Text(
                               count,
@@ -206,8 +206,8 @@ class SidebarItem extends StatelessWidget {
         // A hair of space above and below: the chosen place and the one
         // under the mouse are two marks, not one block.
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: MTSpace.xxs / 2),
-          child: narrow ? MTShortcutTooltip(message: label, child: row) : row,
+          padding: const EdgeInsets.symmetric(vertical: VhSpace.xxs / 2),
+          child: narrow ? VhShortcutTooltip(message: label, child: row) : row,
         ),
       ),
     );
@@ -225,14 +225,14 @@ class SidebarToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     final label = narrow ? l.desktopWidenSidebar : l.desktopNarrowSidebar;
     final glyph = Transform.flip(
       flipX: Directionality.of(context) == TextDirection.rtl,
-      child: MTIcon(
-        narrow ? MTIcons.sidebarOpen : MTIcons.sidebarClose,
-        size: MTDensity.desktop.icon,
+      child: VhIcon(
+        narrow ? VhIcons.sidebarOpen : VhIcons.sidebarClose,
+        size: VhDensity.desktop.icon,
         color: p.ink2,
       ),
     );
@@ -240,18 +240,18 @@ class SidebarToggle extends StatelessWidget {
       button: true,
       label: label,
       excludeSemantics: true,
-      child: MTShortcutTooltip(
+      child: VhShortcutTooltip(
         message: label,
         child: Material(
           color: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+            borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: onTap,
             child: SizedBox.square(
-              dimension: MTDensity.desktop.row,
+              dimension: VhDensity.desktop.row,
               child: Center(child: glyph),
             ),
           ),

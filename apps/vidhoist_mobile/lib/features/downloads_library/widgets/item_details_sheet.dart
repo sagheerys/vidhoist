@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shared/external_player.dart';
 import '../../shared/membership.dart';
@@ -14,7 +14,7 @@ import '../../shared/open_web_link.dart';
 /// Item details, opened from the actions sheet and from the reels player
 /// alike.
 void showItemDetailsSheet(BuildContext context, LocalItem item) {
-  showMTSheet<void>(
+  showVhSheet<void>(
     context: context,
     useRootNavigator: true,
     builder: (_) => _DetailsSheet(item: item),
@@ -30,12 +30,12 @@ class _DetailsSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final text = Theme.of(context).textTheme;
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
 
     Widget row(String label, String value) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: MTSpace.xs),
+      padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -51,31 +51,31 @@ class _DetailsSheet extends ConsumerWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
-          MTSpace.xl,
-          MTSpace.lg,
-          MTSpace.xl,
-          MTSpace.xl,
+          VhSpace.xl,
+          VhSpace.lg,
+          VhSpace.xl,
+          VhSpace.xl,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            MTSectionHeader(title: l10n.details),
-            const SizedBox(height: MTSpace.sm),
+            VhSectionHeader(title: l10n.details),
+            const SizedBox(height: VhSpace.sm),
             // The same correction as Super: two wrong labels, one of them a
             // hard-coded string.
             row(l10n.titleLabel, item.title),
-            row(l10n.fileSize, mtFormatSize(item.sizeBytes)),
+            row(l10n.fileSize, vhFormatSize(item.sizeBytes)),
             // **What the file actually is** (asked 2026-09-25), read from
             // its header.
-            MTQualityRows(
+            VhQualityRows(
               cacheKey: item.key,
               row: row,
               sizeBytes: item.sizeBytes,
               duration: item.duration,
               load: () => const MediaProbe().quality(item.path),
             ),
-            row(l10n.downloadDate, mtTimeAgo(context, item.modified)),
+            row(l10n.downloadDate, vhTimeAgo(context, item.modified)),
             row(l10n.platform, platformLabel(l10n, item.platform)),
             // **Where it belongs** (field report 2026-09-04): which
             // playlists is this clip in? The information was in the store
@@ -88,7 +88,7 @@ class _DetailsSheet extends ConsumerWidget {
               ],
               _ => const <Widget>[],
             },
-            const SizedBox(height: MTSpace.sm),
+            const SizedBox(height: VhSpace.sm),
             // **Two actions, not a third button in reels** (decision
             // 2026-09-05): the reels rail holds three buttons and a fourth
             // crowds them, and this sheet is opened from it by the
@@ -99,7 +99,7 @@ class _DetailsSheet extends ConsumerWidget {
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () => openWebLink(url),
-                      icon: const MTIcon(MTIcons.external, size: 16),
+                      icon: const VhIcon(VhIcons.external, size: 16),
                       label: Text(
                         l10n.openOriginalLink,
                         maxLines: 1,
@@ -108,7 +108,7 @@ class _DetailsSheet extends ConsumerWidget {
                     ),
                   ),
                 if (item.canonicalUrl != null)
-                  const SizedBox(width: MTSpace.sm),
+                  const SizedBox(width: VhSpace.sm),
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () async {
@@ -117,14 +117,14 @@ class _DetailsSheet extends ConsumerWidget {
                         audio: item.isAudio,
                       );
                       if (!opened && context.mounted) {
-                        showMTSnack(
+                        showVhSnack(
                           context,
                           l10n.noExternalPlayer,
-                          type: MTSnackType.error,
+                          type: VhSnackType.error,
                         );
                       }
                     },
-                    icon: const MTIcon(MTIcons.playback, size: 16),
+                    icon: const VhIcon(VhIcons.playback, size: 16),
                     // A short label: two buttons side by side leave no room
                     // for a long one on a phone (seen on the device).
                     label: Text(
@@ -144,10 +144,10 @@ class _DetailsSheet extends ConsumerWidget {
                   ClipboardData(text: item.canonicalUrl ?? item.path),
                 );
                 if (context.mounted) {
-                  showMTSnack(context, l10n.copiedToClipboard);
+                  showVhSnack(context, l10n.copiedToClipboard);
                 }
               },
-              icon: const MTIcon(MTIcons.copy, size: 16),
+              icon: const VhIcon(VhIcons.copy, size: 16),
               label: Text(
                 item.canonicalUrl ?? item.filename,
                 maxLines: 1,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The rounded choice used for the panel's tabs and the library's filter
 /// chips: a hairline outline, and filled with ink when chosen.
-class EmberPill extends StatelessWidget {
-  const EmberPill({
+class DesktopPill extends StatelessWidget {
+  const DesktopPill({
     super.key,
     required this.label,
     required this.selected,
@@ -19,7 +19,7 @@ class EmberPill extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback onTap;
-  final MTIconData? icon;
+  final VhIconData? icon;
 
   /// A number after the label, in grey and with no dot between: "YouTube
   /// 642", not "YouTube · 642".
@@ -37,20 +37,20 @@ class EmberPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final ink = selected ? p.bg : (struck ? p.err : p.ink2);
     return Semantics(
       selected: selected,
       button: true,
       child: AnimatedContainer(
         // The fill eases from one choice to the next, as the border does.
-        duration: mtMotionDuration(context, MTMotion.fast),
+        duration: vhMotionDuration(context, VhMotion.fast),
         decoration: ShapeDecoration(
           color: selected ? p.ink : p.ink.withValues(alpha: 0),
           shape: StadiumBorder(
             side: BorderSide(
               color: selected ? p.ink : (struck ? p.err : p.line2),
-              width: MTThemeX.of(context).hairline,
+              width: VhThemeX.of(context).hairline,
             ),
           ),
         ),
@@ -76,8 +76,8 @@ class EmberPill extends StatelessWidget {
             }),
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: MTSpace.md,
-                vertical: MTSpace.xs,
+                horizontal: VhSpace.md,
+                vertical: VhSpace.xs,
               ),
               // A label wider than the room it is given (a long tag, a large
               // font) shortens with an ellipsis; given unbounded room, in a
@@ -102,13 +102,13 @@ class EmberPill extends StatelessWidget {
                           flipX:
                               mirrored &&
                               Directionality.of(context) == TextDirection.rtl,
-                          child: MTIcon(glyph, size: MTSpace.md, color: ink),
+                          child: VhIcon(glyph, size: VhSpace.md, color: ink),
                         ),
-                        const SizedBox(width: MTSpace.xxs),
+                        const SizedBox(width: VhSpace.xxs),
                       ],
                       if (box.hasBoundedWidth) Flexible(child: text) else text,
                       if (count case final n?) ...[
-                        const SizedBox(width: MTSpace.xxs),
+                        const SizedBox(width: VhSpace.xxs),
                         Text(
                           '$n',
                           style: Theme.of(context).textTheme.labelMedium
@@ -117,10 +117,10 @@ class EmberPill extends StatelessWidget {
                         ),
                       ],
                       if (opensMenu) ...[
-                        const SizedBox(width: MTSpace.xxs),
-                        MTIcon(
-                          MTIcons.chevronDown,
-                          size: MTSpace.md,
+                        const SizedBox(width: VhSpace.xxs),
+                        VhIcon(
+                          VhIcons.chevronDown,
+                          size: VhSpace.md,
                           color: ink,
                         ),
                       ],

@@ -4,19 +4,19 @@ import 'package:vidhoist_mobile/features/downloads_library/library_providers.dar
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/library_cards.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'widget_test.dart' show host;
 
-import 'wahaj_finder.dart';
+import 'icon_finder.dart';
 
 /// **Favourites from the menu, not an empty heart on every card** (owner's
 /// decision 2026-11-01).
 void main() {
   LocalItem clip({bool favorite = false}) => LocalItem(
     key: 'https://youtu.be/a',
-    path: '$liteMediaDir/a.mp4',
+    path: '$phoneMediaDir/a.mp4',
     canonicalUrl: 'https://youtu.be/a',
     title: 'Clip',
     sizeBytes: 10,
@@ -31,7 +31,7 @@ void main() {
         overrides: [
           keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
           secretStoreProvider.overrideWithValue(MemorySecretStore()),
-          initialSettingsProvider.overrideWithValue(const LiteSettings()),
+          initialSettingsProvider.overrideWithValue(const PhoneSettings()),
           localMediaProvider.overrideWith((ref) async => [item]),
         ],
       ),
@@ -41,38 +41,38 @@ void main() {
 
   testWidgets('**the guard**: a card carries no heart to tap', (tester) async {
     await pump(tester, clip());
-    expect(byWahaj(MTIcons.favorite), findsNothing);
-    expect(find.byType(MTFavoriteMark), findsNothing);
+    expect(byVhIcon(VhIcons.favorite), findsNothing);
+    expect(find.byType(VhFavoriteMark), findsNothing);
   });
 
   testWidgets('a favourite card shows the small mark', (tester) async {
     await pump(tester, clip(favorite: true));
-    expect(find.byType(MTFavoriteMark), findsOneWidget);
+    expect(find.byType(VhFavoriteMark), findsOneWidget);
   });
 
   testWidgets('**the guard**: the item menu opens on the favourite row', (
     tester,
   ) async {
     await pump(tester, clip());
-    await tester.tap(byWahaj(MTIcons.moreVert));
+    await tester.tap(byVhIcon(VhIcons.moreVert));
     await tester.pumpAndSettle();
-    expect(find.byType(MTFavoriteTile), findsOneWidget);
+    expect(find.byType(VhFavoriteTile), findsOneWidget);
   });
 
   testWidgets('**the guard**: the delete confirmation shows the clip itself', (
     tester,
   ) async {
     await pump(tester, clip());
-    await tester.tap(byWahaj(MTIcons.moreVert));
+    await tester.tap(byVhIcon(VhIcons.moreVert));
     await tester.pumpAndSettle();
     final delete = find.text('حذف الفيديو');
     await tester.ensureVisible(delete);
     await tester.tap(delete);
     await tester.pumpAndSettle();
-    expect(find.byType(MTConfirmDialog), findsOneWidget);
+    expect(find.byType(VhConfirmDialog), findsOneWidget);
     expect(
       find.descendant(
-        of: find.byType(MTDialogClip),
+        of: find.byType(VhDialogClip),
         matching: find.textContaining('Clip'),
       ),
       findsOneWidget,

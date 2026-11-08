@@ -5,10 +5,10 @@ import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -72,10 +72,10 @@ import 'shell/video_surface.dart';
 /// `--ltr` for the other theme and direction.
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  registerMTIconLicenses();
+  registerVhIconLicenses();
   if (args.contains('--gallery')) {
     runApp(
-      EmberGalleryApp(
+      DesktopGalleryApp(
         night: args.contains('--night'),
         arabic: !args.contains('--ltr'),
       ),
@@ -92,11 +92,11 @@ Future<void> main(List<String> args) async {
   await claimSingleInstance(
     args,
     onSecondStart: (second) {
-      unawaited(EmberWindow.bringBack());
+      unawaited(DesktopWindow.bringBack());
       linksFromArgs(second).forEach(incoming.add);
     },
   );
-  initMTL10n();
+  initVhL10n();
   forgetStaleMediaKitNote();
   MediaKit.ensureInitialized();
 
@@ -105,8 +105,8 @@ Future<void> main(List<String> args) async {
   final mutex = PrefsMutex();
   final local = await getApplicationCacheDirectory();
   final roaming = await getApplicationSupportDirectory();
-  final logger = MTLogger(
-    filePath: '${local.path}/logs/${EmberIdentity.logFile}',
+  final logger = VhLogger(
+    filePath: '${local.path}/logs/${DesktopIdentity.logFile}',
   );
   logEveryError(logger);
   final runNote = RunNote(folder: '${local.path}/logs', logger: logger);
@@ -131,7 +131,7 @@ Future<void> main(List<String> args) async {
   final closing = <Future<void> Function()>[];
   // Off until chosen: closing the window closes the app.
   var toTray = await store.getBool(CloseToTray.key) ?? false;
-  final window = await EmberWindow.open(
+  final window = await DesktopWindow.open(
     placements: WindowPlacementStore(store: store, mutex: mutex),
     beforeClose: () async {
       await runNote.end();
@@ -170,8 +170,8 @@ Future<void> main(List<String> args) async {
     _ => stored,
   };
   final labLocale = labLocaleFrom(args);
-  final words = mtLocalizationsFor(labLocale ?? appearance.locale);
-  final tray = EmberTray(
+  final words = vhLocalizationsFor(labLocale ?? appearance.locale);
+  final tray = DesktopTray(
     words: (
       play: words.play,
       pause: words.pause,
@@ -179,7 +179,7 @@ Future<void> main(List<String> args) async {
       open: words.desktopTrayOpen,
       quit: words.desktopTrayQuit,
     ),
-    onOpen: () => unawaited(EmberWindow.bringBack()),
+    onOpen: () => unawaited(DesktopWindow.bringBack()),
     onQuit: window.quit,
   );
   await tray.setOn(toTray);
@@ -247,8 +247,8 @@ Future<void> main(List<String> args) async {
         systemMediaBridgeProvider.overrideWithValue(bridge),
         volumeControlProvider.overrideWithValue(volume),
         noticePortProvider.overrideWithValue(notices ?? const NoNotices()),
-        windowInFrontProvider.overrideWithValue(EmberWindow.inFront),
-        bringWindowBackProvider.overrideWithValue(EmberWindow.bringBack),
+        windowInFrontProvider.overrideWithValue(DesktopWindow.inFront),
+        bringWindowBackProvider.overrideWithValue(DesktopWindow.bringBack),
         initialStartWithWindowsProvider.overrideWithValue(startsWithWindows),
         startWithWindowsHookProvider.overrideWithValue(startup.set),
         initialGlobalPlayKeyProvider.overrideWithValue(playKeyOn),
@@ -278,7 +278,7 @@ Future<void> main(List<String> args) async {
         ),
         ...windowsFileOverrides(),
       ],
-      child: EmberApp(
+      child: DesktopApp(
         locale: labLocale == null ? null : Locale(labLocale),
         initialLocation: labRouteFrom(args),
       ),

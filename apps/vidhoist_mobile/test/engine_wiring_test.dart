@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/pending_recovery.dart';
@@ -19,7 +19,7 @@ void main() {
   late FakeBackend backend;
   late StreamController<List<ConnectivityResult>> network;
 
-  ProviderContainer build(LiteSettings settings, {bool onWifi = true}) {
+  ProviderContainer build(PhoneSettings settings, {bool onWifi = true}) {
     final gate = NetworkGate(
       changes: network.stream,
       check: () async => [
@@ -32,7 +32,7 @@ void main() {
         keyValueStoreProvider.overrideWithValue(store),
         initialSettingsProvider.overrideWithValue(settings),
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/vh_wiring.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/vh_wiring.log'),
         ),
         networkGateProvider.overrideWithValue(gate),
         downloadBackendProvider.overrideWithValue(backend),
@@ -59,11 +59,11 @@ void main() {
       'parent app\'s folder', () {
     // The fork kept Vidhoist Lite's folder; on a phone with both apps the two
     // libraries would have mixed.
-    expect(liteMediaDir, '/storage/emulated/0/Download/Vidhoist');
+    expect(phoneMediaDir, '/storage/emulated/0/Download/Vidhoist');
   });
 
   test('no server is needed: the engine is always there', () {
-    final c = build(const LiteSettings());
+    final c = build(const PhoneSettings());
     expect(c.read(downloadEngineProvider), isA<LocalDownloadEngine>());
   });
 
@@ -73,9 +73,9 @@ void main() {
     final c = ProviderContainer(
       overrides: [
         keyValueStoreProvider.overrideWithValue(store),
-        initialSettingsProvider.overrideWithValue(const LiteSettings()),
+        initialSettingsProvider.overrideWithValue(const PhoneSettings()),
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/vh_wiring.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/vh_wiring.log'),
         ),
         downloadBackendProvider.overrideWithValue(backend),
       ],
@@ -88,18 +88,18 @@ void main() {
   });
 
   test('the settings reach the download, into the media folder', () async {
-    final c = build(const LiteSettings(compatiblePlayback: true));
+    final c = build(const PhoneSettings(compatiblePlayback: true));
     final engine = c.read(downloadEngineProvider)!;
     final task = engine.submit('https://youtu.be/a', Quality.q720);
     await until(() => engine.taskById(task.id)!.isFinished);
     final request = backend.requests.single;
     expect(request.compatible, isTrue);
     expect(request.subtitleLanguages, SubtitleLanguages.patterns(['ar', 'en']));
-    expect(request.folder, liteMediaDir);
+    expect(request.folder, phoneMediaDir);
   });
 
   test('a finished download is recorded on the phone', () async {
-    final c = build(const LiteSettings());
+    final c = build(const PhoneSettings());
     final engine = c.read(downloadEngineProvider)!;
     final task = engine.submit('https://youtu.be/a', Quality.best);
     await until(() => engine.taskById(task.id)?.phase == TaskPhase.completed);
@@ -108,7 +108,7 @@ void main() {
   });
 
   test('"Wi-Fi only" on mobile data holds the start', () async {
-    final c = build(const LiteSettings(wifiOnly: true), onWifi: false);
+    final c = build(const PhoneSettings(wifiOnly: true), onWifi: false);
     await pumpEventQueue();
     final engine = c.read(downloadEngineProvider)!;
     final task = engine.submit('https://youtu.be/a', Quality.best);
@@ -123,7 +123,7 @@ void main() {
     await LocalPendingStore(store).put(
       DownloadTask(inputUrl: 'https://youtu.be/left', quality: Quality.best),
     );
-    final c = build(const LiteSettings());
+    final c = build(const PhoneSettings());
     await c.read(pendingRecoveryProvider)();
     final engine = c.read(downloadEngineProvider)!;
     await until(() => engine.tasks.every((t) => t.isFinished));

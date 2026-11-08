@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The side panel's three faces as one control: equal parts on a quiet
 /// ground, and **a card under the chosen one that slides to the next**,
@@ -20,25 +20,25 @@ class PanelTabs<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final index = faces.indexWhere((f) => f.$1 == chosen);
     final inner = BorderRadius.circular(
-      MTCorners.desktop.chip - MTSpace.xxs / 2,
+      VhCorners.desktop.chip - VhSpace.xxs / 2,
     );
     return DecoratedBox(
       decoration: BoxDecoration(
         color: p.cardAlt,
-        borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(MTSpace.xxs / 2),
+        padding: const EdgeInsets.all(VhSpace.xxs / 2),
         child: Stack(
           children: [
             Positioned.fill(
               child: AnimatedAlign(
-                duration: mtMotionDuration(context, MTMotion.page),
-                curve: MTMotion.entrance,
+                duration: vhMotionDuration(context, VhMotion.page),
+                curve: VhMotion.entrance,
                 alignment: AlignmentDirectional(
                   faces.length < 2 ? 0 : -1 + 2 * index / (faces.length - 1),
                   0,
@@ -66,7 +66,7 @@ class PanelTabs<T> extends StatelessWidget {
                         onTap: () => onChoose(face),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            vertical: MTSpace.xs,
+                            vertical: VhSpace.xs,
                           ),
                           child: Text(
                             label,

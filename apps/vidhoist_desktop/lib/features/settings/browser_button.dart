@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'simple_panes.dart';
@@ -20,7 +20,7 @@ const browserButtonCode =
 /// **The setup page**, written for the browser: the button ready to drag
 /// to the bookmarks bar, three steps, and the code to paste for a browser
 /// that will not take a dragged link. In the app's language and colours.
-String browserButtonPage(MTLocalizations l, MTPalette p, {required bool rtl}) {
+String browserButtonPage(VhLocalizations l, VhPalette p, {required bool rtl}) {
   String text(String value) => const HtmlEscape().convert(value);
   String hex(Color c) =>
       '#${(c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
@@ -35,21 +35,21 @@ String browserButtonPage(MTLocalizations l, MTPalette p, {required bool rtl}) {
 <style>
 body{margin:0;background:${hex(p.bg)};color:${hex(p.ink)};
 font:16px/1.7 Tajawal,"Segoe UI",Tahoma,sans-serif}
-main{max-width:640px;margin:${MTSpace.xxl * 2}px auto;padding:0 ${MTSpace.lg}px}
-h1{font-size:26px;margin:0 0 ${MTSpace.xl}px}
-ol{padding-inline-start:${MTSpace.xl}px}li{margin:0 0 ${MTSpace.md}px}
+main{max-width:640px;margin:${VhSpace.xxl * 2}px auto;padding:0 ${VhSpace.lg}px}
+h1{font-size:26px;margin:0 0 ${VhSpace.xl}px}
+ol{padding-inline-start:${VhSpace.xl}px}li{margin:0 0 ${VhSpace.md}px}
 kbd{direction:ltr;unicode-bidi:isolate;border:1px solid ${hex(p.line)};
-border-radius:${MTRadius.badge}px;padding:0 ${MTSpace.xxs}px;
+border-radius:${VhRadius.badge}px;padding:0 ${VhSpace.xxs}px;
 background:${hex(p.card)}}
-.button{display:inline-block;margin:${MTSpace.xs}px 0 ${MTSpace.xxs}px;
-padding:${MTSpace.sm}px ${MTSpace.xl}px;border-radius:999px;
+.button{display:inline-block;margin:${VhSpace.xs}px 0 ${VhSpace.xxs}px;
+padding:${VhSpace.sm}px ${VhSpace.xl}px;border-radius:999px;
 background:${hex(p.accent)};color:${hex(p.onAccent)};
 font-weight:700;text-decoration:none;cursor:grab}
 .hint{color:${hex(p.ink3)};font-size:14px}
 code{display:block;direction:ltr;text-align:left;word-break:break-all;
 background:${hex(p.card)};border:1px solid ${hex(p.line)};
-border-radius:${MTRadius.thumb}px;padding:${MTSpace.sm}px;
-margin-top:${MTSpace.xs}px;user-select:all}
+border-radius:${VhRadius.thumb}px;padding:${VhSpace.sm}px;
+margin-top:${VhSpace.xs}px;user-select:all}
 </style>
 </head>
 <body><main>
@@ -75,19 +75,19 @@ class BrowserButtonLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
+    final l = context.vhl;
     return SettingLine(
       title: l.desktopBrowserButton,
       hint: l.desktopBrowserButtonHint,
       trailing: Wrap(
         alignment: WrapAlignment.end,
-        spacing: MTSpace.sm,
+        spacing: VhSpace.sm,
         children: [
-          MTLinkButton(
+          VhLinkButton(
             label: l.desktopBrowserButtonOpen,
             onPressed: () => unawaited(_open(context)),
           ),
-          MTLinkButton(
+          VhLinkButton(
             label: l.desktopBrowserButtonCopy,
             onPressed: () => unawaited(_copy(context)),
           ),
@@ -97,10 +97,10 @@ class BrowserButtonLine extends StatelessWidget {
   }
 
   static Future<void> _open(BuildContext context) async {
-    final l = context.mtl;
+    final l = context.vhl;
     final page = browserButtonPage(
       l,
-      MTThemeX.of(context).palette,
+      VhThemeX.of(context).palette,
       rtl: Directionality.of(context) == TextDirection.rtl,
     );
     try {
@@ -113,16 +113,16 @@ class BrowserButtonLine extends StatelessWidget {
       // Said below, with the way that needs no page.
     }
     if (!context.mounted) return;
-    showMTNotice(
+    showVhNotice(
       context,
       message: l.desktopBrowserButtonFailed,
-      kind: MTNoticeKind.failed,
+      kind: VhNoticeKind.failed,
     );
   }
 
   static Future<void> _copy(BuildContext context) async {
-    final message = context.mtl.desktopBrowserButtonCopied;
+    final message = context.vhl.desktopBrowserButtonCopied;
     await Clipboard.setData(const ClipboardData(text: browserButtonCode));
-    if (context.mounted) showMTNotice(context, message: message);
+    if (context.mounted) showVhNotice(context, message: message);
   }
 }

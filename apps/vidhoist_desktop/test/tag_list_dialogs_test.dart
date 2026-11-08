@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/clip/clip_action_row.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -41,7 +41,7 @@ void main() {
       tester,
       find
           .descendant(
-            of: find.byType(MTMediaGridCard),
+            of: find.byType(VhMediaGridCard),
             matching: find.text('Homelab Hour'),
           )
           .first,
@@ -140,7 +140,7 @@ void main() {
       tester,
       tags: {
         'https://youtu.be/bbbbbbbbbbb': [
-          for (var i = 0; i < MTConstants.maxTags; i++) 't$i',
+          for (var i = 0; i < VhConstants.maxTags; i++) 't$i',
         ],
       },
     );
@@ -149,7 +149,7 @@ void main() {
     await tester.tap(find.text('Done'));
     await tester.pumpAndSettle();
     expect(
-      find.textContaining('up to ${MTConstants.maxTags} tags'),
+      find.textContaining('up to ${VhConstants.maxTags} tags'),
       findsOneWidget,
     );
     expect(find.text('Done'), findsOneWidget);

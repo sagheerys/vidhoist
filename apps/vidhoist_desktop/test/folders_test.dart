@@ -7,9 +7,9 @@ import 'package:vidhoist_desktop/features/folders/folder_tree.dart';
 import 'package:vidhoist_desktop/features/library/library_state.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/fake_channels.dart';
 import 'support/shell_harness.dart';
@@ -63,14 +63,14 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     if (at != null) {
-      GoRouter.of(tester.element(find.byType(EmberSidebar))).go(at);
+      GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(at);
       await tester.pumpAndSettle();
     }
     return channels;
   }
 
   Finder inSidebar(String text) => find.descendant(
-    of: find.byType(EmberSidebar),
+    of: find.byType(DesktopSidebar),
     matching: find.textContaining(text),
   );
 
@@ -81,7 +81,7 @@ void main() {
     await tester.tap(inSidebar('Ai'));
     await tester.pumpAndSettle();
     final container = ProviderScope.containerOf(
-      tester.element(find.byType(EmberSidebar)),
+      tester.element(find.byType(DesktopSidebar)),
     );
     expect(container.read(libraryViewProvider).folder, 'Ai');
     expect(find.text('Clip e'), findsNothing);
@@ -110,11 +110,11 @@ void main() {
   testWidgets(
     '**the guard**: following into its own folder names it after the channel',
     (tester) async {
-      final channels = await open(tester, at: EmberRoutes.channels);
+      final channels = await open(tester, at: DesktopRoutes.channels);
       await tester.tap(find.text('Follow a channel').first);
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField).first, 'https://x.y/@z');
-      await tester.tap(find.byType(MTSwitch));
+      await tester.tap(find.byType(VhSwitch));
       await tester.pumpAndSettle();
       expect(find.text('Named after the channel'), findsOneWidget);
       await tester.tap(find.widgetWithText(FilledButton, 'Follow'));
@@ -128,11 +128,11 @@ void main() {
   );
 
   testWidgets('a folder picked when following goes with it', (tester) async {
-    final channels = await open(tester, at: EmberRoutes.channels);
+    final channels = await open(tester, at: DesktopRoutes.channels);
     await tester.tap(find.text('Follow a channel').first);
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField).first, 'https://x.y/@z');
-    await tester.tap(find.byType(MTSwitch));
+    await tester.tap(find.byType(VhSwitch));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Named after the channel'));
     await tester.pumpAndSettle();
@@ -155,7 +155,7 @@ void main() {
     final channels = await open(
       tester,
       subs: [sub],
-      at: EmberRoutes.channel('s1'),
+      at: DesktopRoutes.channel('s1'),
     );
     await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();
@@ -165,7 +165,7 @@ void main() {
     // Off: new clips go back to the top.
     await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(MTSwitch).last);
+    await tester.tap(find.byType(VhSwitch).last);
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Save settings'));
     await tester.pumpAndSettle();

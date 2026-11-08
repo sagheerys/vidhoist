@@ -8,9 +8,9 @@ import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/player_bar.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/video_surface.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -33,14 +33,14 @@ void main() {
     await tester.pumpAndSettle();
     // Paused, so the page settles; the first of two clips in the player.
     h.player.showPlaying(_queue, playing: false);
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.item(_first.canonicalUrl));
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.item(_first.canonicalUrl));
     await tester.pumpAndSettle();
     return h;
   }
 
   void moveTo(FakePlayer player, int index) {
-    player.state = MTPlayerState(
+    player.state = VhPlayerState(
       items: _queue,
       ordered: _queue,
       index: index,
@@ -65,8 +65,8 @@ void main() {
     tester,
   ) async {
     final h = await watching(tester);
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.item(_second.canonicalUrl));
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.item(_second.canonicalUrl));
     await tester.pumpAndSettle();
     // The second plays and moves on; this page was not showing it.
     h.player.showPlaying([toPlaylistItem(_first)], playing: false);
@@ -105,7 +105,7 @@ void main() {
     final h = await watching(tester);
     h.controls.setFullScreen(true);
     await tester.pumpAndSettle();
-    expect(find.byType(EmberPlayerBar), findsNothing);
+    expect(find.byType(DesktopPlayerBar), findsNothing);
     final controls = find.byType(ClipVideoControls);
     for (final label in ['Previous', 'Play', 'Next']) {
       expect(
@@ -116,7 +116,7 @@ void main() {
     }
     h.controls.setFullScreen(false);
     await tester.pumpAndSettle();
-    expect(find.byType(EmberPlayerBar), findsOneWidget);
+    expect(find.byType(DesktopPlayerBar), findsOneWidget);
   });
 
   testWidgets('sound in full screen keeps the player bar, in the room', (
@@ -133,7 +133,7 @@ void main() {
     h.controls.setFullScreen(true);
     h.player.showPlaying([song], playing: false);
     await tester.pumpAndSettle();
-    expect(find.byType(EmberPlayerBar), findsOneWidget);
-    expect(find.byType(MTDesktopApp), findsOneWidget);
+    expect(find.byType(DesktopPlayerBar), findsOneWidget);
+    expect(find.byType(VhDesktopApp), findsOneWidget);
   });
 }

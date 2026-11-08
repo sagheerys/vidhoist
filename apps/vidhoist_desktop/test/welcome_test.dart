@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/appearance_data.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/engine_fetch_data.dart';
@@ -19,7 +19,7 @@ import 'support/shell_harness.dart';
 /// Discover: where downloads go, the language, and the engine, with
 /// ffmpeg and Deno offered at once. Once, and never again.
 void main() {
-  final l = lookupMTLocalizations(const Locale('en'));
+  final l = lookupVhLocalizations(const Locale('en'));
   late List<EnginePart> asked;
 
   setUp(() => asked = []);
@@ -101,7 +101,7 @@ void main() {
     final h = harness();
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    await tester.tap(find.text(mtLanguageName('ar')));
+    await tester.tap(find.text(vhLanguageName('ar')));
     await tester.pumpAndSettle();
     final element = tester.element(find.byType(WelcomeDialog));
     final container = ProviderScope.containerOf(element);
@@ -133,8 +133,8 @@ void main() {
           ],
         ).app(),
         windows: const [
-          EmberWindowSize('smallest 960x600', Size(960, 600)),
-          EmberWindowSize('laptop 1440x900', Size(1440, 900)),
+          DesktopWindowSize('smallest 960x600', Size(960, 600)),
+          DesktopWindowSize('laptop 1440x900', Size(1440, 900)),
         ],
       );
     });

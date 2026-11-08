@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
+
+import '../icon_finder.dart';
+
+/// **An empty square where a cover should be** (field report 2026-09-20:
+/// "an audio clip inside the video player's queue shows a black square").
+///
+/// The tile asked the app for a cover and drew its own icon only when the
+/// answer was null. But the app answers null only for an item with **no**
+/// cover at all; a cover that exists and then fails to load — a cleared
+/// cache, an extracted cover deleted with the file, a server thumbnail that
+/// 404s — comes back as an empty box, and an empty box on the dark queue
+/// sheet is a black square with nothing in it.
+PlaylistItem _item({required bool isAudio}) => PlaylistItem(
+  canonicalUrl: 'https://x/a',
+  title: 'clip',
+  serverFilename: 'a.mp4',
+  isAudio: isAudio,
+);
+
+void main() {
+  Future<void> pump(
+    WidgetTester tester, {
+    required VhArtworkBuilder? artwork,
+    bool isAudio = true,
+    bool dark = true,
+  }) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: vhTheme(VhVariant.desktop, Brightness.light),
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
+        home: Scaffold(
+          body: VhUpNextList(
+            items: [_item(isAudio: isAudio)],
+            currentIndex: 0,
+            dark: dark,
+            artwork: artwork,
+            onTap: (_) {},
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+  }
+
+  testWidgets('a cover that fails to load leaves the icon showing, not an '
+      'empty square', (tester) async {
+    // Exactly what `artworkFor` does when an image errors.
+    await pump(tester, artwork: (_, _) => const SizedBox.shrink());
+
+    expect(
+      byVhIcon(VhIcons.music),
+      findsOneWidget,
+      reason: 'قبل الإصلاح كان المربّع يخلو تماماً فيُقرأ أسود',
+    );
+  });
+
+  testWidgets('and so does no cover at all', (tester) async {
+    await pump(tester, artwork: (_, _) => null);
+    expect(byVhIcon(VhIcons.music), findsOneWidget);
+  });
+
+  testWidgets('with no builder at all', (tester) async {
+    await pump(tester, artwork: null);
+    expect(byVhIcon(VhIcons.music), findsOneWidget);
+  });
+
+  testWidgets('a video with no cover gets the video icon', (tester) async {
+    await pump(tester, artwork: null, isAudio: false);
+    expect(byVhIcon(VhIcons.video), findsOneWidget);
+    expect(byVhIcon(VhIcons.music), findsNothing);
+  });
+
+  testWidgets('a cover that does load covers the icon rather than sitting '
+      'beside it', (tester) async {
+    await pump(
+      tester,
+      artwork: (_, _) => const ColoredBox(color: Color(0xFF00FF00)),
+    );
+
+    final stack = tester.widget<Stack>(
+      find
+          .ancestor(
+            // The cover itself: pages draw their own ground as well.
+            of: find.byWidgetPredicate(
+              (w) => w is ColoredBox && w.color == const Color(0xFF00FF00),
+            ),
+            matching: find.byType(Stack),
+          )
+          .first,
+    );
+    // The cover is last, so it paints over the icon and fills the box.
+    expect(stack.children.last, isA<ColoredBox>());
+    expect(stack.fit, StackFit.expand);
+  });
+}

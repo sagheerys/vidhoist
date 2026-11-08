@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_ui/vh_ui.dart';
 
 import '../downloads_library/artwork_view.dart';
 
@@ -27,20 +27,20 @@ Widget? linkPreviewFor(WidgetRef ref, String text) {
   if (!url.startsWith('http') || PlaylistDetector.isPlaylist(url)) return null;
   if (!ClipPreviewResolver.supports(url)) return null;
   String? meta(ClipPreview preview) {
-    final line = mtMetaLine([
+    final line = vhMetaLine([
       preview.author,
-      if (preview.duration case final length?) mtFormatDuration(length),
+      if (preview.duration case final length?) vhFormatDuration(length),
     ]);
     return line.isEmpty ? null : line;
   }
 
   return switch (ref.watch(linkPreviewProvider(url))) {
-    AsyncData(value: final preview?) => MTLinkPreview(
+    AsyncData(value: final preview?) => VhLinkPreview(
       thumbnail: artworkFor(preview.thumbnail, decodeWidth: 200),
       title: preview.title,
       subtitle: meta(preview),
     ),
-    AsyncLoading() => const MTLinkPreview(loading: true),
+    AsyncLoading() => const VhLinkPreview(loading: true),
     _ => null,
   };
 }

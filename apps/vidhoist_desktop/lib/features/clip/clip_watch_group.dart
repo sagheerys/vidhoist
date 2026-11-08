@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// The ways of watching, side by side on one quiet ground. **Where their
 /// words do not fit** (a small window, a large text size) they show their
@@ -14,7 +14,7 @@ class WatchGroup extends StatelessWidget {
   double _fullWidth(BuildContext context) {
     final style = Theme.of(context).textTheme.labelMedium;
     final scaler = MediaQuery.textScalerOf(context);
-    var width = MTSpace.xxs;
+    var width = VhSpace.xxs;
     for (final choice in children) {
       final label = TextPainter(
         text: TextSpan(text: choice.label, style: style),
@@ -22,7 +22,7 @@ class WatchGroup extends StatelessWidget {
         textScaler: scaler,
         maxLines: 1,
       )..layout();
-      width += label.width + MTSpace.lg + MTSpace.xxs + MTSpace.sm * 2;
+      width += label.width + VhSpace.lg + VhSpace.xxs + VhSpace.sm * 2;
       label.dispose();
     }
     return width;
@@ -30,7 +30,7 @@ class WatchGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return LayoutBuilder(
       builder: (context, box) {
         final words = _fullWidth(context) <= box.maxWidth;
@@ -40,7 +40,7 @@ class WatchGroup extends StatelessWidget {
             shape: const StadiumBorder(),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(MTSpace.xxs / 2),
+            padding: const EdgeInsets.all(VhSpace.xxs / 2),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -74,14 +74,14 @@ class WatchChoice extends StatelessWidget {
   });
 
   final String label;
-  final MTIconData icon;
+  final VhIconData icon;
   final VoidCallback onTap;
   final bool on;
   final bool words;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final choice = Semantics(
       selected: on,
       button: true,
@@ -94,15 +94,15 @@ class WatchChoice extends StatelessWidget {
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: MTSpace.sm,
-              vertical: MTSpace.xs,
+              horizontal: VhSpace.sm,
+              vertical: VhSpace.xs,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                MTIcon(icon, size: MTSpace.lg, color: on ? p.ink : p.ink2),
+                VhIcon(icon, size: VhSpace.lg, color: on ? p.ink : p.ink2),
                 if (words) ...[
-                  const SizedBox(width: MTSpace.xxs),
+                  const SizedBox(width: VhSpace.xxs),
                   Text(
                     label,
                     maxLines: 1,
@@ -118,6 +118,6 @@ class WatchChoice extends StatelessWidget {
         ),
       ),
     );
-    return words ? choice : MTShortcutTooltip(message: label, child: choice);
+    return words ? choice : VhShortcutTooltip(message: label, child: choice);
   }
 }

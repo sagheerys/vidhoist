@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:tray_manager/tray_manager.dart';
 
 import '../data/system_media.dart';
@@ -19,8 +19,12 @@ typedef TrayWords = ({
 /// **The icon by the clock**, there while "keep playing in the tray" is on:
 /// a click opens the window, and its menu plays, pauses, skips, opens and
 /// quits. Its one-colour icon follows the taskbar's light or dark.
-class EmberTray with TrayListener implements SystemMediaSurface {
-  EmberTray({required this.words, required this.onOpen, required this.onQuit});
+class DesktopTray with TrayListener implements SystemMediaSurface {
+  DesktopTray({
+    required this.words,
+    required this.onOpen,
+    required this.onQuit,
+  });
 
   final TrayWords words;
   final VoidCallback onOpen;
@@ -32,7 +36,7 @@ class EmberTray with TrayListener implements SystemMediaSurface {
   /// The menu's lines, in the app's language and its direction.
   String _line(String text) => windowsMenuText(
     text,
-    rtl: mtTextDirectionOf(words.play, TextDirection.ltr) == TextDirection.rtl,
+    rtl: vhTextDirectionOf(words.play, TextDirection.ltr) == TextDirection.rtl,
   );
 
   static const _toggle = 'toggle';
@@ -77,8 +81,8 @@ class EmberTray with TrayListener implements SystemMediaSurface {
     try {
       await trayManager.setToolTip(
         now == null
-            ? EmberIdentity.displayName
-            : _line('${EmberIdentity.displayName} · ${now.title}'),
+            ? DesktopIdentity.displayName
+            : _line('${DesktopIdentity.displayName} · ${now.title}'),
       );
       await trayManager.setContextMenu(
         Menu(

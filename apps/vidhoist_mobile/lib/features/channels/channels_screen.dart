@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../shared/error_text.dart';
 import 'channel_card.dart';
@@ -33,26 +33,26 @@ class _ChannelsScreenState extends ConsumerState<ChannelsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final asked = ref.watch(channelsProvider);
     final subs = asked.valueOrNull;
     final Widget body;
     if (subs == null) {
       body = Center(
         child: asked.hasError
-            ? MTEmptyFrame(
+            ? VhEmptyFrame(
                 title: l10n.failed,
                 message: errorText(l10n, asked.error!),
                 actionLabel: l10n.retry,
                 onAction: () => ref.invalidate(channelsProvider),
               )
-            : const MTSpinner(),
+            : const VhSpinner(),
       );
     } else if (subs.isEmpty) {
       body = Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(MTSpace.pagePad),
-          child: MTEmptyFrame(
+          padding: const EdgeInsets.all(VhSpace.pagePad),
+          child: VhEmptyFrame(
             title: l10n.subscriptionsEmpty,
             message: l10n.mobileChannelsEmptyBody,
             actionLabel: l10n.followChannel,
@@ -61,11 +61,11 @@ class _ChannelsScreenState extends ConsumerState<ChannelsScreen> {
         ),
       );
     } else {
-      body = MTReadableWidth(
+      body = VhReadableWidth(
         child: ListView(
           padding: const EdgeInsets.only(
-            top: MTSpace.xs,
-            bottom: MTSpace.xxl * 3,
+            top: VhSpace.xs,
+            bottom: VhSpace.xxl * 3,
           ),
           children: [for (final sub in subs) ChannelCard(sub: sub)],
         ),
@@ -80,15 +80,15 @@ class _ChannelsScreenState extends ConsumerState<ChannelsScreen> {
               tooltip: l10n.desktopCheckAll,
               onPressed: _checking ? null : () => unawaited(_checkAll()),
               icon: _checking
-                  ? const MTSpinner(size: 18)
-                  : const MTIcon(MTIcons.refresh),
+                  ? const VhSpinner(size: 18)
+                  : const VhIcon(VhIcons.refresh),
             ),
         ],
       ),
       floatingActionButton: (subs?.isNotEmpty ?? false)
           ? FloatingActionButton.extended(
               onPressed: () => unawaited(showFollowSheet(context)),
-              icon: const MTIcon(MTIcons.plus),
+              icon: const VhIcon(VhIcons.plus),
               label: Text(l10n.followChannel),
             )
           : null,

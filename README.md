@@ -39,14 +39,14 @@ Flutter 3.47 or later (Dart ^3.13). From the repository root:
 
 ```bash
 flutter pub get
-cd packages/mt_ui && flutter gen-l10n && cd ../..
+cd packages/vh_ui && flutter gen-l10n && cd ../..
 flutter analyze --no-pub
 cd apps/vidhoist_mobile  && flutter build apk --debug
 cd apps/vidhoist_desktop && flutter build windows --debug
 ```
 
-Tests: `dart test` in `packages/mt_core` and `packages/mt_transcripts`;
-`flutter test --no-pub` in `packages/mt_media`, `packages/mt_ui`,
+Tests: `dart test` in `packages/vh_core` and `packages/vh_transcripts`;
+`flutter test --no-pub` in `packages/vh_media`, `packages/vh_ui`,
 `apps/vidhoist_mobile` and `apps/vidhoist_desktop`.
 
 Icons and brand files are generated, not drawn by hand:
@@ -58,10 +58,10 @@ in the Android app.
 ```
 apps/vidhoist_mobile     Android app
 apps/vidhoist_desktop    Windows app
-packages/mt_core         pure Dart: models, storage, download engine, backup, update
-packages/mt_media        players, mini player, media session
-packages/mt_ui           the Wahaj design system, tokens, icons, EN/AR strings
-packages/mt_transcripts  subtitles and transcript search
+packages/vh_core         pure Dart: models, storage, download engine, backup, update
+packages/vh_media        players, mini player, media session
+packages/vh_ui           the Wahaj design system, tokens, icons, EN/AR strings
+packages/vh_transcripts  subtitles and transcript search
 third_party/             two patched plugins, see PATCHES.md in each
 docs/                    architecture, blueprint, decisions (docs/adr)
 ```

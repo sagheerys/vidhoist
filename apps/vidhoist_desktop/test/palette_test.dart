@@ -9,10 +9,10 @@ import 'package:vidhoist_desktop/features/clip/clip_page.dart';
 import 'package:vidhoist_desktop/features/palette/palette_model.dart';
 import 'package:vidhoist_desktop/features/palette/palette_rows.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -59,7 +59,7 @@ TranscriptIndex _index() => TranscriptIndex()
 void main() {
   group('the ranking', () {
     PaletteCommand command(String label) =>
-        PaletteCommand(label: label, icon: MTIcons.library, run: () {});
+        PaletteCommand(label: label, icon: VhIcons.library, run: () {});
 
     test('a title is found without the hamza it is written with', () {
       final r = paletteResults(
@@ -145,7 +145,7 @@ void main() {
         find.descendant(of: find.byType(T), matching: find.text(text));
 
     ProviderContainer container(WidgetTester tester) =>
-        ProviderScope.containerOf(tester.element(find.byType(EmberSidebar)));
+        ProviderScope.containerOf(tester.element(find.byType(DesktopSidebar)));
 
     testWidgets('**the guard**: Ctrl+K opens it, the arrows choose, Enter '
         'opens the clip, Esc closes', (tester) async {
@@ -210,7 +210,7 @@ void main() {
       expect(
         find.descendant(
           of: find.byType(SaidRow),
-          matching: find.byType(MTMediaThumb),
+          matching: find.byType(VhMediaThumb),
         ),
         findsOneWidget,
       );
@@ -220,7 +220,7 @@ void main() {
       expect(
         find.descendant(
           of: find.byType(TitleRow),
-          matching: find.byType(MTMediaThumb),
+          matching: find.byType(VhMediaThumb),
         ),
         findsOneWidget,
       );
@@ -325,7 +325,7 @@ void main() {
         isNot(contains('youtu.be')),
       );
       final entry = find.descendant(
-        of: find.byType(EmberSidebar),
+        of: find.byType(DesktopSidebar),
         matching: find.text('snapshots'),
       );
       expect(entry, findsOneWidget);
@@ -345,7 +345,7 @@ void main() {
       await tester.tap(find.widgetWithText(FilledButton, 'Rename'));
       await tester.pumpAndSettle();
       final renamed = find.descendant(
-        of: find.byType(EmberSidebar),
+        of: find.byType(DesktopSidebar),
         matching: find.text('Backups'),
       );
       expect(renamed, findsOneWidget);

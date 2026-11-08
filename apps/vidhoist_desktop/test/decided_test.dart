@@ -10,13 +10,13 @@ import 'package:vidhoist_desktop/features/reading/reading_find.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/player_bar.dart';
 import 'package:vidhoist_desktop/shell/right_panel.dart';
-import 'package:vidhoist_desktop/shell/ember_slider.dart';
+import 'package:vidhoist_desktop/shell/desktop_slider.dart';
 import 'package:vidhoist_desktop/shell/engine_line.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/volume_slider.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'support/shell_harness.dart';
 
@@ -68,10 +68,10 @@ void main() {
   }
 
   ProviderContainer containerOf(WidgetTester tester) =>
-      ProviderScope.containerOf(tester.element(find.byType(EmberSidebar)));
+      ProviderScope.containerOf(tester.element(find.byType(DesktopSidebar)));
 
   void go(WidgetTester tester, String to) =>
-      GoRouter.of(tester.element(find.byType(EmberSidebar))).go(to);
+      GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(to);
 
   testWidgets('the player bar\'s heart marks what plays a favourite', (
     tester,
@@ -79,23 +79,23 @@ void main() {
     final h = await open(tester);
     await tester.tap(
       find.descendant(
-        of: find.byType(EmberPlayerBar),
+        of: find.byType(DesktopPlayerBar),
         matching: byLabel('Add to favorites'),
       ),
     );
     await tester.pumpAndSettle();
     final tags = await containerOf(tester).read(tagsIndexProvider).tagsOf(_url);
-    expect(tags, contains(MTConstants.favoritesSystemTag));
+    expect(tags, contains(VhConstants.favoritesSystemTag));
     expect(h.player.calls, isNot(contains('playItems')));
   });
 
   testWidgets('the volume slider sets the level and keeps it', (tester) async {
     final h = await open(tester);
     final slider = find.descendant(
-      of: find.byType(EmberVolumeSlider),
-      matching: find.byType(EmberSlider),
+      of: find.byType(DesktopVolumeSlider),
+      matching: find.byType(DesktopSlider),
     );
-    tester.widget<EmberSlider>(slider).onChanged!(30);
+    tester.widget<DesktopSlider>(slider).onChanged!(30);
     await tester.pumpAndSettle();
     expect(containerOf(tester).read(volumeProvider), 30);
     expect(await h.store.getInt(VolumeLevel.key), 30);
@@ -109,7 +109,7 @@ void main() {
     await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
     await tester.pumpAndSettle();
     final bar = find.descendant(
-      of: find.byType(EmberRightPanel),
+      of: find.byType(DesktopRightPanel),
       matching: find.byType(ReadingFindBar),
     );
     expect(bar, findsOneWidget);
@@ -135,7 +135,7 @@ void main() {
         ),
       ],
     );
-    go(tester, EmberRoutes.reading(_url));
+    go(tester, DesktopRoutes.reading(_url));
     await tester.pumpAndSettle();
     expect(find.textContaining('The pool keeps'), findsWidgets);
     await tester.tap(find.text('العربية'));

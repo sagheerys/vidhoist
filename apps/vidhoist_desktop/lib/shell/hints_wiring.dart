@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../data/desktop_habits.dart';
 import '../data/hints_data.dart';
@@ -32,7 +32,7 @@ class HintsWiring extends ConsumerStatefulWidget {
 }
 
 class _HintsWiringState extends ConsumerState<HintsWiring> {
-  StreamSubscription<MTPlayerState>? _states;
+  StreamSubscription<VhPlayerState>? _states;
   ValueListenable<int>? _closes;
   Timer? _soon;
 
@@ -54,9 +54,9 @@ class _HintsWiringState extends ConsumerState<HintsWiring> {
     super.dispose();
   }
 
-  void _onState(MTPlayerState state) {
+  void _onState(VhPlayerState state) {
     if (_soon != null || !state.playing || state.current == null) return;
-    if (!ref.read(hintsProvider.notifier).wants(EmberHint.shortcuts)) return;
+    if (!ref.read(hintsProvider.notifier).wants(DesktopHint.shortcuts)) return;
     _soon = Timer(HintsWiring.settle, _offerShortcuts);
   }
 
@@ -67,18 +67,18 @@ class _HintsWiringState extends ConsumerState<HintsWiring> {
     final controls = ref.read(windowControlsProvider);
     // Not over a picture filling the screen, nor in the small card, nor
     // once the clip has stopped: the next play is another moment.
-    if (!hints.wants(EmberHint.shortcuts) ||
+    if (!hints.wants(DesktopHint.shortcuts) ||
         controls.fullScreen.value ||
         controls.mini.value ||
         !ref.read(playerProvider).state.playing) {
       return;
     }
-    unawaited(hints.shown(EmberHint.shortcuts));
-    final l = context.mtl;
-    showMTNotice(
+    unawaited(hints.shown(DesktopHint.shortcuts));
+    final l = context.vhl;
+    showVhNotice(
       context,
       message: l.desktopHintShortcuts,
-      icon: MTIcons.info,
+      icon: VhIcons.info,
       actionLabel: l.desktopHintShortcutsAction,
       onAction: () {
         if (mounted) unawaited(showShortcutsSheet(context));
@@ -90,14 +90,14 @@ class _HintsWiringState extends ConsumerState<HintsWiring> {
   void _onClose() {
     if (!mounted || !ref.read(closeToTrayProvider)) return;
     final hints = ref.read(hintsProvider.notifier);
-    if (!hints.wants(EmberHint.tray)) return;
-    unawaited(hints.shown(EmberHint.tray));
-    final l = context.mtl;
+    if (!hints.wants(DesktopHint.tray)) return;
+    unawaited(hints.shown(DesktopHint.tray));
+    final l = context.vhl;
     unawaited(
       ref
           .read(noticePortProvider)
           .show(
-            EmberNotice(
+            DesktopNotice(
               title: l.desktopHintTrayTitle,
               body: l.desktopHintTrayBody,
             ),

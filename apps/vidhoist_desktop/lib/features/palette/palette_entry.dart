@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/lists_data.dart';
 import '../../data/saved_searches.dart';
@@ -23,36 +23,36 @@ Future<void> openPalette(
   required VoidCallback onAdd,
   String initial = '',
 }) {
-  final l = context.mtl;
+  final l = context.vhl;
   final router = GoRouter.of(context);
-  PaletteCommand go(String label, MTIconData icon, String to) =>
+  PaletteCommand go(String label, VhIconData icon, String to) =>
       PaletteCommand(label: label, icon: icon, run: () => router.go(to));
   final lists = ref.read(playlistsProvider).valueOrNull ?? const [];
   return showCommandPalette(
     context,
     initial: initial,
     commands: [
-      PaletteCommand(label: l.addLinkFab, icon: MTIcons.addlink, run: onAdd),
-      go(l.navLibrary, MTIcons.library, EmberRoutes.library),
-      go(l.favorites, MTIcons.favorite, EmberRoutes.favorites),
-      go(l.navPlaylists, MTIcons.queue, EmberRoutes.playlists),
-      go(l.desktopChannels, MTIcons.subscriptions, EmberRoutes.channels),
-      go(l.desktopStats, MTIcons.stats, EmberRoutes.stats),
+      PaletteCommand(label: l.addLinkFab, icon: VhIcons.addlink, run: onAdd),
+      go(l.navLibrary, VhIcons.library, DesktopRoutes.library),
+      go(l.favorites, VhIcons.favorite, DesktopRoutes.favorites),
+      go(l.navPlaylists, VhIcons.queue, DesktopRoutes.playlists),
+      go(l.desktopChannels, VhIcons.subscriptions, DesktopRoutes.channels),
+      go(l.desktopStats, VhIcons.stats, DesktopRoutes.stats),
       PaletteCommand(
         label: l.desktopDiscover,
-        icon: MTIcons.info,
+        icon: VhIcons.info,
         run: () => unawaited(showDiscoverDialog(context)),
       ),
       for (final list in lists)
         go(
-          l.desktopPaletteList(mtName(list.name)),
-          MTIcons.queue,
-          EmberRoutes.playlist(list.id),
+          l.desktopPaletteList(vhName(list.name)),
+          VhIcons.queue,
+          DesktopRoutes.playlist(list.id),
         ),
-      for (final pane in EmberSettingsPane.values)
+      for (final pane in DesktopSettingsPane.values)
         go(
           l.desktopPaletteSettings(paneTitle(l, pane)),
-          MTIcons.settings,
+          VhIcons.settings,
           pane.route,
         ),
     ],
@@ -69,16 +69,21 @@ Future<void> savedSearchMenu(
   SavedSearch search,
   Offset at,
 ) async {
-  final l = context.mtl;
+  final l = context.vhl;
   final action = await showEmberMenu(context, at, [
-    EmberMenuEntry(_SavedAction.rename, MTIcons.tags, l.rename),
-    EmberMenuEntry(_SavedAction.delete, MTIcons.trash, l.delete, danger: true),
+    DesktopMenuEntry(_SavedAction.rename, VhIcons.tags, l.rename),
+    DesktopMenuEntry(
+      _SavedAction.delete,
+      VhIcons.trash,
+      l.delete,
+      danger: true,
+    ),
   ]);
   if (!context.mounted || action == null) return;
   final searches = ref.read(savedSearchesProvider.notifier);
   switch (action) {
     case _SavedAction.rename:
-      final name = await promptMTText(
+      final name = await promptVhText(
         context,
         title: l.rename,
         confirmLabel: l.rename,
@@ -87,10 +92,10 @@ Future<void> savedSearchMenu(
       );
       if (name != null) await searches.rename(search.id, name);
     case _SavedAction.delete:
-      final sure = await showMTConfirm(
+      final sure = await showVhConfirm(
         context,
         title: l.delete,
-        message: l.desktopSavedSearchDelete(mtName(search.name)),
+        message: l.desktopSavedSearchDelete(vhName(search.name)),
         confirmLabel: l.delete,
         cancelLabel: l.cancel,
         destructive: true,

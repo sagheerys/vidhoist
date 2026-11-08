@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/downloads_sheet.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
-import 'wahaj_finder.dart';
+import 'icon_finder.dart';
 
 /// Field report 2026-10-15: when the last download finished, the open
 /// sheet leapt to the top of the screen to say there were none.
@@ -35,9 +35,9 @@ void main() {
           engineTasksProvider.overrideWith((ref) => tasks.stream),
         ],
         child: MaterialApp(
-          theme: mtTheme(MTVariant.lite, Brightness.light),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
           home: Scaffold(
             body: Builder(
               builder: (context) => TextButton(
@@ -84,7 +84,7 @@ void main() {
     final tasks = await open(tester, [running], size: const Size(948, 544));
     // Dragged as low as it goes before the last download finishes.
     await tester.drag(
-      find.byType(MTDownloadProgressCard),
+      find.byType(VhDownloadProgressCard),
       const Offset(0, 140),
     );
     await tester.pumpAndSettle();
@@ -120,11 +120,11 @@ void main() {
     tasks.add([running.copyWith(phase: TaskPhase.completed)]);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
-    expect(find.byType(MTDrawnCheck), findsOneWidget);
-    expect(byWahaj(MTIcons.close), findsNothing);
+    expect(find.byType(VhDrawnCheck), findsOneWidget);
+    expect(byVhIcon(VhIcons.close), findsNothing);
 
     await tester.pumpAndSettle();
-    expect(find.byType(MTDrawnCheck), findsNothing);
+    expect(find.byType(VhDrawnCheck), findsNothing);
     expect(find.text('No downloads'), findsOneWidget);
   });
 }

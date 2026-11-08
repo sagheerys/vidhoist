@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/player/caption_style.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
@@ -25,8 +25,8 @@ void main() {
         secretStoreProvider.overrideWithValue(MemorySecretStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
         initialSettingsProvider.overrideWithValue(
-          await tester.runAsync(() => LiteSettings.load(store)) ??
-              const LiteSettings(),
+          await tester.runAsync(() => PhoneSettings.load(store)) ??
+              const PhoneSettings(),
         ),
       ],
     );
@@ -38,32 +38,32 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
-          theme: mtTheme(MTVariant.superApp, Brightness.light),
+          theme: vhTheme(VhVariant.desktop, Brightness.light),
           locale: Locale(lang),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
           home: Scaffold(body: SingleChildScrollView(child: child)),
         ),
       );
 
   test('medium over a dark capsule until chosen otherwise', () {
-    const settings = LiteSettings();
+    const settings = PhoneSettings();
     expect(settings.captionScale, 1.0);
-    expect(settings.captionBackdrop, MTCaptionBackground.solid);
-    expect(LiteSettings.captionScales, hasLength(4));
+    expect(settings.captionBackdrop, VhCaptionBackground.solid);
+    expect(PhoneSettings.captionScales, hasLength(4));
     // Each size larger than the one before it.
-    for (var i = 1; i < LiteSettings.captionScales.length; i++) {
+    for (var i = 1; i < PhoneSettings.captionScales.length; i++) {
       expect(
-        LiteSettings.captionScales[i],
-        greaterThan(LiteSettings.captionScales[i - 1]),
+        PhoneSettings.captionScales[i],
+        greaterThan(PhoneSettings.captionScales[i - 1]),
       );
     }
   });
 
   test('a stored choice out of range falls back inside it', () {
-    const settings = LiteSettings(captionSize: 9, captionBackground: -3);
-    expect(settings.captionScale, LiteSettings.captionScales.last);
-    expect(settings.captionBackdrop, MTCaptionBackground.solid);
+    const settings = PhoneSettings(captionSize: 9, captionBackground: -3);
+    expect(settings.captionScale, PhoneSettings.captionScales.last);
+    expect(settings.captionBackdrop, VhCaptionBackground.solid);
   });
 
   testWidgets('**the guard**: the playback settings choose and keep them', (
@@ -80,11 +80,11 @@ void main() {
 
     final settings = container.read(settingsProvider);
     expect(settings.captionSize, 3);
-    expect(settings.captionBackdrop, MTCaptionBackground.none);
+    expect(settings.captionBackdrop, VhCaptionBackground.none);
     expect(await store.getInt('caption_size'), 3);
     expect(await store.getInt('caption_background'), 2);
 
-    final reloaded = await tester.runAsync(() => LiteSettings.load(store));
+    final reloaded = await tester.runAsync(() => PhoneSettings.load(store));
     expect(reloaded!.captionSize, 3);
     expect(reloaded.captionBackground, 2);
   });
@@ -102,20 +102,20 @@ void main() {
     final language = ValueNotifier<String?>(null);
     var transcript = 0;
     const ar = [
-      MTCaptionLine(
+      VhCaptionLine(
         start: Duration.zero,
         end: Duration(seconds: 2),
         text: 'مرحبا',
       ),
     ];
     const en = [
-      MTCaptionLine(
+      VhCaptionLine(
         start: Duration.zero,
         end: Duration(seconds: 2),
         text: 'hello',
       ),
     ];
-    final captions = MTCaptions(
+    final captions = VhCaptions(
       lines: ar,
       tracks: const {'ar': ar, 'en': en},
       language: language,
@@ -140,7 +140,7 @@ void main() {
   testWidgets('one language: no language choice', (tester) async {
     final container = await containerWith(tester, MemoryKeyValueStore());
     const en = [
-      MTCaptionLine(
+      VhCaptionLine(
         start: Duration.zero,
         end: Duration(seconds: 2),
         text: 'hello',
@@ -150,7 +150,7 @@ void main() {
       app(
         container,
         CaptionOptions(
-          captions: MTCaptions(lines: en, shown: ValueNotifier(true)),
+          captions: VhCaptions(lines: en, shown: ValueNotifier(true)),
           onTranscript: () {},
         ),
       ),
@@ -163,13 +163,13 @@ void main() {
       'languages', (tester) async {
     final container = await containerWith(tester, MemoryKeyValueStore());
     const en = [
-      MTCaptionLine(
+      VhCaptionLine(
         start: Duration.zero,
         end: Duration(seconds: 2),
         text: 'hello',
       ),
     ];
-    final captions = MTCaptions(
+    final captions = VhCaptions(
       lines: en,
       tracks: const {'en': en, 'ar': en},
       language: ValueNotifier(null),

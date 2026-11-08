@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,20 +23,20 @@ import 'features/player/square_art.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // **On a phone the app is portrait and only the player rotates**
-  // (decision 2026-09-05); `MTRotationScope` releases this lock while the
+  // (decision 2026-09-05); `VhRotationScope` releases this lock while the
   // video player is open. A tablet is left free.
-  MTOrientation.start();
-  initMTL10n();
+  VhOrientation.start();
+  initVhL10n();
 
   final prefs = await SharedPreferences.getInstance();
   final store = SharedPrefsKeyValueStore(prefs);
   const secrets = SecureSecretStore();
-  final initialSettings = await LiteSettings.load(store);
+  final initialSettings = await PhoneSettings.load(store);
 
   // One lock for all storage (rule 3), passed to everyone rather than
   // created twice. It was created above, before the seeding.
   final logsDir = await getApplicationSupportDirectory();
-  final logger = MTLogger(filePath: '${logsDir.path}/logs/vidhoist_mobile.log');
+  final logger = VhLogger(filePath: '${logsDir.path}/logs/vidhoist_mobile.log');
   logEveryError(logger);
 
   // One lock for all storage (rule 3), passed to everyone rather than
@@ -46,7 +46,7 @@ Future<void> main() async {
   // always ends at the local file.
   final resolver = PlaybackSourceResolver(endpoint: ServerStreamEndpoint.none);
   final handler = await AudioService.init(
-    builder: () => MTAudioHandler(
+    builder: () => VhAudioHandler(
       player: JustAudioPort(),
       resolver: resolver,
       positions: PlaybackPositionStore(store: store, mutex: mutex),
@@ -79,7 +79,7 @@ Future<void> main() async {
       // The cost, accepted by the owner: the notification stays while
       // paused (dismissible on Android 13+, sticky below it) and the wake
       // lock is held — which is why a paused session now stops itself after
-      // [MTAudioHandler.pausedAutoStop].
+      // [VhAudioHandler.pausedAutoStop].
       androidStopForegroundOnPause: false,
     ),
   );
@@ -95,7 +95,7 @@ Future<void> main() async {
   // its partial file. Startup never waits on a cleanup.
   unawaited(
     sweepPartialFiles(
-      liteMediaDir,
+      phoneMediaDir,
       olderThan: const Duration(days: 3),
     ).then((count) => count == 0 ? null : logger.log('swept $count partials')),
   );
@@ -112,7 +112,7 @@ Future<void> main() async {
         loggerProvider.overrideWithValue(logger),
         deviceAbisProvider.overrideWithValue(abis),
       ],
-      child: const LiteApp(),
+      child: const PhoneApp(),
     ),
   );
 }

@@ -7,9 +7,9 @@ import 'package:vidhoist_desktop/features/library/library_state.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/pill.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -72,7 +72,7 @@ void main() {
 
   testWidgets('the library opens in the grid, newest first', (tester) async {
     await open(tester, library: _library);
-    expect(find.byType(MTMediaGridCard), findsNWidgets(4));
+    expect(find.byType(VhMediaGridCard), findsNWidgets(4));
     final titles = [
       for (final t in ['Blue Hour', 'Amber Skies', 'Homelab Hour - Ep. 12'])
         tester.getTopLeft(titleOf(t)).dx,
@@ -91,17 +91,17 @@ void main() {
     await open(tester, library: _library);
     await tester.tap(find.text('Audio'));
     await tester.pumpAndSettle();
-    expect(find.byType(MTMediaGridCard), findsOneWidget);
+    expect(find.byType(VhMediaGridCard), findsOneWidget);
     expect(titleOf('Amber Skies'), findsOneWidget);
 
     await tester.tap(find.text('Shorts'));
     await tester.pumpAndSettle();
     expect(titleOf('Blue Hour'), findsOneWidget);
-    expect(find.byType(MTMediaGridCard), findsOneWidget);
+    expect(find.byType(VhMediaGridCard), findsOneWidget);
 
     await tester.tap(find.text('Shorts'));
     await tester.pumpAndSettle();
-    expect(find.byType(MTMediaGridCard), findsNWidgets(4));
+    expect(find.byType(VhMediaGridCard), findsNWidgets(4));
 
     // **The guard** (owner's choice, 2026-11-05): video leaves the shorts
     // to their own pill, so videos without the shorts can be had.
@@ -109,7 +109,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(titleOf('Blue Hour'), findsNothing);
     expect(titleOf('Amber Skies'), findsNothing);
-    expect(find.byType(MTMediaGridCard), findsNWidgets(2));
+    expect(find.byType(VhMediaGridCard), findsNWidgets(2));
   });
 
   testWidgets('the platforms are one pill whose menu carries live counts, '
@@ -122,21 +122,21 @@ void main() {
     final youtube = tester.getTopLeft(find.text('YouTube').last);
     final tiktok = tester.getTopLeft(find.text('TikTok').last);
     expect(youtube.dy, lessThan(tiktok.dy));
-    expect(find.text(mtLtrRun('3')), findsOneWidget);
+    expect(find.text(vhLtrRun('3')), findsOneWidget);
     await tester.tap(find.text('TikTok').last);
     await tester.pumpAndSettle();
-    expect(find.byType(MTMediaGridCard), findsOneWidget);
+    expect(find.byType(VhMediaGridCard), findsOneWidget);
     // The pill now names the platform chosen.
-    expect(find.widgetWithText(EmberPill, 'TikTok'), findsOneWidget);
+    expect(find.widgetWithText(DesktopPill, 'TikTok'), findsOneWidget);
   });
 
   testWidgets('a tag picked in the menu includes, then excludes, then lets '
       'go', (tester) async {
     await open(tester, library: _library);
     Future<void> pick() async {
-      await tester.tap(find.widgetWithText(EmberPill, 'Tags'));
+      await tester.tap(find.widgetWithText(DesktopPill, 'Tags'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text(mtName('#homelab')).last);
+      await tester.tap(find.text(vhName('#homelab')).last);
       await tester.pumpAndSettle();
       // The menu reopens for another pick; Escape closes it.
       await tester.sendKeyEvent(LogicalKeyboardKey.escape);
@@ -144,11 +144,11 @@ void main() {
     }
 
     await pick();
-    expect(find.byType(MTMediaGridCard), findsOneWidget);
+    expect(find.byType(VhMediaGridCard), findsOneWidget);
     await pick();
-    expect(find.byType(MTMediaGridCard), findsNWidgets(3));
+    expect(find.byType(VhMediaGridCard), findsNWidgets(3));
     await pick();
-    expect(find.byType(MTMediaGridCard), findsNWidgets(4));
+    expect(find.byType(VhMediaGridCard), findsNWidgets(4));
   });
 
   testWidgets('**the guard**: the counts follow the place; an empty '
@@ -161,8 +161,8 @@ void main() {
       ],
     );
     expect(find.text('Platform'), findsOneWidget);
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.favorites);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.favorites);
     await tester.pumpAndSettle();
     expect(find.text('Platform'), findsNothing);
   });
@@ -173,7 +173,7 @@ void main() {
     await open(tester, library: _library);
     expect(
       find.descendant(
-        of: find.byType(EmberSidebar),
+        of: find.byType(DesktopSidebar),
         matching: find.text('Offline'),
       ),
       findsNothing,
@@ -186,7 +186,7 @@ void main() {
     await open(tester, library: _library);
     await tester.tap(find.widgetWithText(InkWell, 'Favorites').first);
     await tester.pumpAndSettle();
-    expect(find.byType(MTMediaGridCard), findsOneWidget);
+    expect(find.byType(VhMediaGridCard), findsOneWidget);
     expect(find.text('Homelab Hour - Ep. 12'), findsWidgets);
   });
 
@@ -196,26 +196,26 @@ void main() {
     final h = await open(tester, library: _library);
     await tester.tap(find.bySemanticsLabel('Table'));
     await tester.pumpAndSettle();
-    expect(find.byType(MTMediaRow), findsNWidgets(4));
+    expect(find.byType(VhMediaRow), findsNWidgets(4));
     // **The guard**: no platform letters beside the titles.
-    expect(find.byType(MTPlatformChip), findsNothing);
+    expect(find.byType(VhPlatformChip), findsNothing);
     // **The guard**: the source column names the site, for every row, the
     // server's too; it used to stay empty.
     expect(
       find.descendant(
-        of: find.byType(MTMediaRow),
+        of: find.byType(VhMediaRow),
         matching: find.text('YouTube'),
       ),
       findsWidgets,
     );
-    expect(await h.store.getString(EmberLibraryNotifier.modeKey), 'list');
+    expect(await h.store.getString(DesktopLibraryNotifier.modeKey), 'list');
 
     await tester.tap(find.text('Size'));
     await tester.pumpAndSettle();
     double y(String t) => tester.getTopLeft(titleOf(t)).dy;
     expect(y('Blue Hour'), lessThan(y('Homelab Hour - Ep. 12')));
     expect(y('Homelab Hour - Ep. 12'), lessThan(y('Amber Skies')));
-    expect(await h.store.getString(EmberLibraryNotifier.sortKey), 'largest');
+    expect(await h.store.getString(DesktopLibraryNotifier.sortKey), 'largest');
 
     await tester.tap(find.text('Size'));
     await tester.pumpAndSettle();
@@ -231,7 +231,7 @@ void main() {
     await doubleClick(tester, titleOf('Amber Skies'));
     await tester.pumpAndSettle();
     expect(h.player.calls, ['loop false', 'playItems']);
-    expect(find.byType(MTMediaGridCard), findsNWidgets(4));
+    expect(find.byType(VhMediaGridCard), findsNWidgets(4));
   });
 
   testWidgets('**the guard**: favourites count their own', (tester) async {
@@ -243,8 +243,8 @@ void main() {
       ],
     );
     void go(String to) =>
-        GoRouter.of(tester.element(find.byType(EmberSidebar))).go(to);
-    go(EmberRoutes.favorites);
+        GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(to);
+    go(DesktopRoutes.favorites);
     await tester.pumpAndSettle();
     expect(find.textContaining('1 clip'), findsOneWidget);
   });
@@ -262,7 +262,7 @@ void main() {
     expect(find.text('Nothing matches these filters'), findsOneWidget);
     await tester.tap(find.text('Clear filters'));
     await tester.pumpAndSettle();
-    expect(find.byType(MTMediaGridCard), findsNWidgets(4));
+    expect(find.byType(VhMediaGridCard), findsNWidgets(4));
   });
 
   testWidgets('**the guard**: no cover is fetched with a credential', (

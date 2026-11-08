@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/subtitles_data.dart';
 import '../../shell/context_menu.dart';
@@ -14,11 +14,11 @@ import '../settings/appearance_pane.dart';
 /// The subtitles [item] has, as the player draws them: every language it
 /// comes in (the switch walks them), at the size and over the background
 /// chosen. Null for a clip with no transcript.
-MTCaptions? emberCaptionsFor(WidgetRef ref, PlaylistItem item) {
+VhCaptions? desktopCaptionsFor(WidgetRef ref, PlaylistItem item) {
   final tracks = ref.watch(captionTracksProvider(item.canonicalUrl));
   if (tracks == null) return null;
-  final subtitles = ref.watch(emberSubtitlesProvider);
-  return MTCaptions(
+  final subtitles = ref.watch(desktopSubtitlesProvider);
+  return VhCaptions(
     lines: tracks.values.first,
     tracks: tracks,
     language: subtitles.language,
@@ -32,14 +32,14 @@ MTCaptions? emberCaptionsFor(WidgetRef ref, PlaylistItem item) {
 /// on screen ("AR", "EN"; a click moves to the next) while they show and
 /// the clip has more than one, CC, and a menu of the size, the background
 /// and the language.
-class EmberCaptionButtons extends ConsumerWidget {
-  const EmberCaptionButtons({super.key, required this.item});
+class DesktopCaptionButtons extends ConsumerWidget {
+  const DesktopCaptionButtons({super.key, required this.item});
 
   final PlaylistItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final subtitles = ref.watch(emberSubtitlesProvider);
+    final subtitles = ref.watch(desktopSubtitlesProvider);
     return ListenableBuilder(
       listenable: Listenable.merge([
         subtitles.shown,
@@ -48,16 +48,16 @@ class EmberCaptionButtons extends ConsumerWidget {
         subtitles.background,
       ]),
       builder: (context, _) {
-        final captions = emberCaptionsFor(ref, item);
+        final captions = desktopCaptionsFor(ref, item);
         if (captions == null) return const SizedBox.shrink();
-        final l = context.mtl;
-        final accent = MTThemeX.of(context).palette.accent;
+        final l = context.vhl;
+        final accent = VhThemeX.of(context).palette.accent;
         final on = subtitles.shown.value;
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (on && captions.switchable)
-              MTShortcutTooltip(
+              VhShortcutTooltip(
                 message: l.subtitlesLanguage,
                 child: TextButton(
                   onPressed: captions.nextLanguage,
@@ -70,8 +70,8 @@ class EmberCaptionButtons extends ConsumerWidget {
                   ),
                 ),
               ),
-            EmberPlayerControl(
-              icon: MTIcons.captions,
+            DesktopPlayerControl(
+              icon: VhIcons.captions,
               label: on ? l.subtitlesHide : l.subtitlesShow,
               shortcut: 'C',
               selected: on,
@@ -80,8 +80,8 @@ class EmberCaptionButtons extends ConsumerWidget {
               onTap: subtitles.toggle,
             ),
             Builder(
-              builder: (button) => EmberPlayerControl(
-                icon: MTIcons.chevronDown,
+              builder: (button) => DesktopPlayerControl(
+                icon: VhIcons.chevronDown,
                 label: l.desktopSubtitleOptions,
                 ink: Colors.white,
                 onTap: () => unawaited(_menu(button, captions, subtitles)),
@@ -100,31 +100,31 @@ class EmberCaptionButtons extends ConsumerWidget {
   /// opened under the button.
   static Future<void> _menu(
     BuildContext button,
-    MTCaptions captions,
-    EmberSubtitles subtitles,
+    VhCaptions captions,
+    DesktopSubtitles subtitles,
   ) async {
-    final l = button.mtl;
+    final l = button.vhl;
     final box = button.findRenderObject()! as RenderBox;
     final at = box.localToGlobal(box.size.bottomCenter(Offset.zero));
-    MTIconData? tick(bool chosen) => chosen ? MTIcons.check : null;
+    VhIconData? tick(bool chosen) => chosen ? VhIcons.check : null;
     final choice = await showEmberMenu<String>(button, at, [
       for (final (i, size) in _sizes(l).indexed)
-        EmberMenuEntry(
+        DesktopMenuEntry(
           's$i',
           tick(subtitles.size.value == i),
           '${l.subtitlesSize} · $size',
         ),
-      const EmberMenuEntry.divider(),
+      const DesktopMenuEntry.divider(),
       for (final (i, kind) in _backgrounds(l).indexed)
-        EmberMenuEntry(
+        DesktopMenuEntry(
           'b$i',
           tick(subtitles.background.value == i),
           '${l.subtitlesBackground} · $kind',
         ),
       if (captions.tracks.length > 1) ...[
-        const EmberMenuEntry.divider(),
+        const DesktopMenuEntry.divider(),
         for (final code in captions.tracks.keys)
-          EmberMenuEntry(
+          DesktopMenuEntry(
             'l$code',
             tick(captions.current == code),
             '${l.subtitlesLanguage} · ${_code(code)}',
@@ -144,13 +144,13 @@ class EmberCaptionButtons extends ConsumerWidget {
   }
 }
 
-List<String> _sizes(MTLocalizations l) => [
+List<String> _sizes(VhLocalizations l) => [
   l.subtitlesSizeSmall,
   l.subtitlesSizeMedium,
   l.subtitlesSizeLarge,
 ];
 
-List<String> _backgrounds(MTLocalizations l) => [
+List<String> _backgrounds(VhLocalizations l) => [
   l.subtitlesBackgroundSolid,
   l.subtitlesBackgroundFaint,
   l.subtitlesBackgroundNone,
@@ -162,8 +162,8 @@ class CaptionStyleChoices extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final subtitles = ref.watch(emberSubtitlesProvider);
+    final l = context.vhl;
+    final subtitles = ref.watch(desktopSubtitlesProvider);
     return ListenableBuilder(
       listenable: Listenable.merge([subtitles.size, subtitles.background]),
       builder: (context, _) => Column(
@@ -173,7 +173,7 @@ class CaptionStyleChoices extends ConsumerWidget {
             title: l.subtitlesSize,
             children: [
               for (final (i, label) in _sizes(l).indexed)
-                EmberPill(
+                DesktopPill(
                   label: label,
                   selected: subtitles.size.value == i,
                   onTap: () => subtitles.size.value = i,
@@ -185,7 +185,7 @@ class CaptionStyleChoices extends ConsumerWidget {
             hint: l.subtitlesBackgroundHelp,
             children: [
               for (final (i, label) in _backgrounds(l).indexed)
-                EmberPill(
+                DesktopPill(
                   label: label,
                   selected: subtitles.background.value == i,
                   onTap: () => subtitles.background.value = i,

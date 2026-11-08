@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../di.dart';
@@ -25,10 +25,10 @@ class LibraryActions {
   /// backup automatically.
   Future<bool> toggleFavorite(String key) async {
     final tags = _ref.read(tagsIndexProvider);
-    await tags.toggleTag(key, MTConstants.favoritesSystemTag);
+    await tags.toggleTag(key, VhConstants.favoritesSystemTag);
     _ref.invalidate(localMediaProvider);
     await _ref.read(autoBackupProvider).requestBackup();
-    return (await tags.tagsOf(key)).contains(MTConstants.favoritesSystemTag);
+    return (await tags.tagsOf(key)).contains(VhConstants.favoritesSystemTag);
   }
 
   /// Deletes the files for good, cleans the indexes, and rescans the

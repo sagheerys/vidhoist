@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/engine/ytdlp_bridge.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
@@ -51,7 +51,7 @@ class _Bridge implements YtDlpBridge {
 void main() {
   late _Bridge bridge;
   late MemoryKeyValueStore store;
-  final logger = MTLogger(
+  final logger = VhLogger(
     filePath: '${Directory.systemTemp.path}/vh_engine_fields.log',
   );
 
@@ -66,21 +66,21 @@ void main() {
   }) => ProviderScope(
     overrides: [
       keyValueStoreProvider.overrideWithValue(store),
-      initialSettingsProvider.overrideWithValue(const LiteSettings()),
+      initialSettingsProvider.overrideWithValue(const PhoneSettings()),
       loggerProvider.overrideWithValue(logger),
       ytDlpBridgeProvider.overrideWithValue(bridge),
     ],
     child: MaterialApp(
-      theme: mtTheme(MTVariant.lite, brightness),
+      theme: vhTheme(VhVariant.phone, brightness),
       locale: locale,
-      localizationsDelegates: MTLocalizations.localizationsDelegates,
-      supportedLocales: MTLocalizations.supportedLocales,
+      localizationsDelegates: VhLocalizations.localizationsDelegates,
+      supportedLocales: VhLocalizations.supportedLocales,
       home: const Scaffold(body: SingleChildScrollView(child: EngineFields())),
     ),
   );
 
-  MTLocalizations l10n(WidgetTester tester) =>
-      tester.element(find.byType(EngineFields)).mtl;
+  VhLocalizations l10n(WidgetTester tester) =>
+      tester.element(find.byType(EngineFields)).vhl;
 
   testWidgets('the update button updates, and the version follows', (
     tester,

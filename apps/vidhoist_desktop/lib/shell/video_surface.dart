@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart' show MediaQuality;
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart' show MediaQuality;
+import 'package:vh_ui/vh_ui.dart';
 
 /// Where the playing clip's picture comes from. The pages know only this,
 /// so they can be pumped in a test with no engine; the media_kit surface
@@ -37,7 +37,7 @@ class InertVideoSurface implements VideoSurface {
 
   @override
   Widget build(BuildContext context) =>
-      const ColoredBox(key: pictureKey, color: MTPalette.fullscreenScrim);
+      const ColoredBox(key: pictureKey, color: VhPalette.fullscreenScrim);
 
   @override
   Future<void> setAudioOnly(bool on) async => calls.add('audioOnly $on');

@@ -1,4 +1,4 @@
-import 'package:mt_media/library.dart';
+import 'package:vh_media/library.dart';
 
 /// One folder line in the sidebar.
 typedef SidebarFolder = ({String path, int count, int depth});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../data/transcripts_data.dart';
 import '../router.dart';
@@ -23,8 +23,8 @@ import 'still_player.dart';
 // while the previewer runs in a browser.
 
 /// Day and night, in both reading directions.
-final class EmberPreview extends MultiPreview {
-  const EmberPreview(this.name, {this.size});
+final class DesktopPreview extends MultiPreview {
+  const DesktopPreview(this.name, {this.size});
 
   final String name;
   final Size? size;
@@ -60,19 +60,19 @@ class _InEmber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brightness = MediaQuery.platformBrightnessOf(context);
-    return MTDesktopApp(
+    return VhDesktopApp(
       child: ProviderScope(
         overrides: [
           transcriptForProvider.overrideWith((ref, key) async => _transcript),
         ],
         child: Theme(
-          data: mtDesktopTheme(MTVariant.superApp, brightness),
+          data: vhDesktopTheme(VhVariant.desktop, brightness),
           child: Localizations(
             locale: locale,
-            delegates: MTLocalizations.localizationsDelegates,
+            delegates: VhLocalizations.localizationsDelegates,
             child: Builder(
               builder: (context) => Material(
-                color: MTThemeX.of(context).palette.bg,
+                color: VhThemeX.of(context).palette.bg,
                 child: child,
               ),
             ),
@@ -128,7 +128,7 @@ final _transcript = Transcript(
   ],
 );
 
-final _playing = MTPlayerState(
+final _playing = VhPlayerState(
   items: _queue,
   ordered: _queue,
   index: 0,
@@ -139,23 +139,32 @@ final _playing = MTPlayerState(
 
 void _ignore([Object? _]) {}
 
-@EmberPreview('Title bar', size: Size(1280, EmberShellSize.titleBar))
-Widget titleBarPreview() => EmberTitleBar(
+@DesktopPreview('Title bar', size: Size(1280, DesktopShellSize.titleBar))
+Widget titleBarPreview() => DesktopTitleBar(
   controls: InertWindowControls(),
-  startWidth: EmberShellSize.sidebarWide,
+  startWidth: DesktopShellSize.sidebarWide,
   sidebarToggle: SidebarToggle(narrow: false, onTap: _ignore),
 );
 
-@EmberPreview('Sidebar, wide', size: Size(EmberShellSize.sidebarWide, 640))
+@DesktopPreview('Sidebar, wide', size: Size(DesktopShellSize.sidebarWide, 640))
 Widget sidebarPreview() =>
-    EmberSidebar(narrow: false, current: EmberPlace.library, onGo: _ignore);
+    DesktopSidebar(narrow: false, current: DesktopPlace.library, onGo: _ignore);
 
-@EmberPreview('Sidebar, narrow', size: Size(EmberShellSize.sidebarNarrow, 640))
-Widget sidebarNarrowPreview() =>
-    EmberSidebar(narrow: true, current: EmberPlace.favorites, onGo: _ignore);
+@DesktopPreview(
+  'Sidebar, narrow',
+  size: Size(DesktopShellSize.sidebarNarrow, 640),
+)
+Widget sidebarNarrowPreview() => DesktopSidebar(
+  narrow: true,
+  current: DesktopPlace.favorites,
+  onGo: _ignore,
+);
 
-@EmberPreview('Player bar, playing', size: Size(1280, EmberShellSize.playerBar))
-Widget playerBarPreview() => EmberPlayerBar(
+@DesktopPreview(
+  'Player bar, playing',
+  size: Size(1280, DesktopShellSize.playerBar),
+)
+Widget playerBarPreview() => DesktopPlayerBar(
   player: StillPlayer(_playing, const Duration(minutes: 7, seconds: 12)),
   onShowQueue: _ignore,
   onOpen: _ignore,
@@ -165,8 +174,11 @@ Widget playerBarPreview() => EmberPlayerBar(
   onListen: _ignore,
 );
 
-@EmberPreview('Player bar, idle', size: Size(1280, EmberShellSize.playerBar))
-Widget playerBarIdlePreview() => EmberPlayerBar(
+@DesktopPreview(
+  'Player bar, idle',
+  size: Size(1280, DesktopShellSize.playerBar),
+)
+Widget playerBarIdlePreview() => DesktopPlayerBar(
   player: StillPlayer(),
   onShowQueue: _ignore,
   onOpen: _ignore,
@@ -176,24 +188,27 @@ Widget playerBarIdlePreview() => EmberPlayerBar(
   onListen: _ignore,
 );
 
-Widget _panel(PanelTab tab, MTPlayerState state) => EmberRightPanel(
+Widget _panel(PanelTab tab, VhPlayerState state) => DesktopRightPanel(
   tab: tab,
   onTab: _ignore,
   state: state,
   player: StillPlayer(state, const Duration(seconds: 25)),
 );
 
-@EmberPreview('Panel, transcript', size: Size(EmberShellSize.panel, 640))
+@DesktopPreview('Panel, transcript', size: Size(DesktopShellSize.panel, 640))
 Widget panelTranscriptPreview() => _panel(PanelTab.transcript, _playing);
 
-@EmberPreview('Panel, up next', size: Size(EmberShellSize.panel, 640))
+@DesktopPreview('Panel, up next', size: Size(DesktopShellSize.panel, 640))
 Widget panelUpNextPreview() => _panel(PanelTab.upNext, _playing);
 
-@EmberPreview('Panel, details', size: Size(EmberShellSize.panel, 640))
+@DesktopPreview('Panel, details', size: Size(DesktopShellSize.panel, 640))
 Widget panelDetailsPreview() => _panel(PanelTab.details, _playing);
 
-@EmberPreview('Panel, nothing playing', size: Size(EmberShellSize.panel, 640))
-Widget panelIdlePreview() => _panel(PanelTab.transcript, const MTPlayerState());
+@DesktopPreview(
+  'Panel, nothing playing',
+  size: Size(DesktopShellSize.panel, 640),
+)
+Widget panelIdlePreview() => _panel(PanelTab.transcript, const VhPlayerState());
 
 /// Every preview above, for the test that keeps them building.
 final List<Widget Function()> shellPreviews = [

@@ -1,0 +1,193 @@
+import 'package:audio_service/audio_service.dart';
+import 'package:flutter/material.dart';
+import 'package:vh_ui/vh_ui.dart';
+
+import '../models/play_mode.dart';
+import '../playback/audio_handler.dart';
+
+/// The main control row: shuffle, previous, play and pause, next, mode.
+/// The play button is a rounded square in the accent colour, as in the
+/// Wahaj reference.
+class VhPlayerControlsRow extends StatelessWidget {
+  const VhPlayerControlsRow({
+    super.key,
+    required this.handler,
+    this.compact = false,
+  });
+
+  final VhAudioHandler handler;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final size = compact ? 58.0 : 72.0;
+
+    return StreamBuilder<PlaybackState>(
+      stream: handler.playbackState,
+      builder: (context, snapshot) {
+        final playing = snapshot.data?.playing ?? false;
+        // **The control bar does not mirror with the language** (field
+        // report 2026-09-02: "the skip buttons on the right and left are
+        // reversed"). In RTL the row mirrored the *positions* while the
+        // arrows stayed as they were, so "previous" sat on the right with
+        // its arrow pointing left. And mirroring the icons is no answer:
+        // `replay_10` and `forward_10` carry the number "10", which flips
+        // with them. Every reference player, YouTube and Spotify among
+        // them, pins this bar: transport glyphs are universal, not text
+        // read in a direction.
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                onPressed: () => handler.setShuffle(!handler.shuffleEnabled),
+                tooltip: l10n.shuffle,
+                icon: VhToggledIcon(
+                  icon: VhIcons.shuffle,
+                  on: handler.shuffleEnabled,
+                ),
+              ),
+              IconButton(
+                onPressed: handler.skipToPrevious,
+                tooltip: l10n.previous,
+                icon: VhIcon(VhIcons.prev, size: 32, color: p.ink2),
+              ),
+              _PlayButton(
+                size: size,
+                playing: playing,
+                palette: p,
+                label: playing ? l10n.pause : l10n.play,
+                onTap: playing ? handler.pause : handler.play,
+              ),
+              IconButton(
+                onPressed: handler.skipToNext,
+                tooltip: l10n.next,
+                icon: VhIcon(VhIcons.next, size: 32, color: p.ink2),
+              ),
+              _ModeButton(handler: handler, palette: p),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _PlayButton extends StatelessWidget {
+  const _PlayButton({
+    required this.size,
+    required this.playing,
+    required this.palette,
+    required this.label,
+    required this.onTap,
+  });
+
+  final double size;
+  final bool playing;
+  final VhPalette palette;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    label: label,
+    // A light shrink while pressed, and play and pause fade and expand
+    // (polish 2026-09-04).
+    child: VhPressable(
+      child: Material(
+        color: palette.accent,
+        borderRadius: BorderRadius.circular(size / 3),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(size / 3),
+          // No coloured shadow: the accent fill alone says "the action".
+          child: SizedBox(
+            width: size,
+            height: size,
+            child: Center(
+              child: VhIconSwap(
+                icon: playing ? VhIcons.pause : VhIcons.playFill,
+                size: size * 0.42,
+                color: palette.onAccent,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+class _ModeButton extends StatelessWidget {
+  const _ModeButton({required this.handler, required this.palette});
+
+  final VhAudioHandler handler;
+  final VhPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    final mode = handler.playMode;
+    return IconButton(
+      onPressed: () => handler.setPlayMode(mode.next),
+      tooltip: vhPlayModeLabel(context, mode),
+      icon: VhToggledIcon(
+        icon: vhPlayModeIcon(mode),
+        on: mode != PlayMode.autoNext,
+      ),
+    );
+  }
+}
+
+/// A switch-like control beside the transport: in ink with a dot under it
+/// while on, grey while off. The accent stays for play and progress, so
+/// "on" is told by the dot rather than a second orange glyph.
+class VhToggledIcon extends StatelessWidget {
+  const VhToggledIcon({super.key, required this.icon, required this.on});
+
+  final VhIconData icon;
+  final bool on;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // The glyph swaps and the dot grows in, rather than jumping
+        // from one mode to the next.
+        VhIconSwap(icon: icon, size: 21, color: on ? p.ink : p.ink3),
+        const SizedBox(height: 2),
+        AnimatedScale(
+          scale: on ? 1 : 0,
+          duration: vhMotionDuration(context, VhMotion.tap),
+          curve: on ? VhMotion.entrance : VhMotion.exit,
+          child: Container(
+            width: 4,
+            height: 4,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: p.ink),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Each mode its glyph, as in the Windows app: playing on through the
+/// queue is the loop switched off, which keeps it apart from the queue
+/// button beside it; whoever draws it marks the loop on or off.
+VhIconData vhPlayModeIcon(PlayMode mode) => switch (mode) {
+  PlayMode.repeatOne => VhIcons.repeatOne,
+  PlayMode.stopAtEnd => VhIcons.stopAfter,
+  PlayMode.autoNext || PlayMode.repeatAll => VhIcons.repeat,
+};
+
+String vhPlayModeLabel(BuildContext context, PlayMode mode) => switch (mode) {
+  PlayMode.autoNext => context.vhl.modeAutoNext,
+  PlayMode.repeatOne => context.vhl.modeRepeatOne,
+  PlayMode.repeatAll => context.vhl.modeRepeatAll,
+  PlayMode.stopAtEnd => context.vhl.modeStopAtEnd,
+};

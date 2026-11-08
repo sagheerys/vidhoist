@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../di.dart';
@@ -72,7 +72,7 @@ Future<WhatsNewOutcome> _maybeShow(BuildContext context, WidgetRef ref) async {
     return WhatsNewOutcome.nothing;
   }
   if (pending == null) return WhatsNewOutcome.nothing;
-  if (!context.mounted || MTRouteDepth.depth.value != 0) {
+  if (!context.mounted || VhRouteDepth.depth.value != 0) {
     return WhatsNewOutcome.later;
   }
   await ref.read(whatsNewServiceProvider).markSeen(pending.version);
@@ -105,10 +105,10 @@ Future<void> showWhatsNewNow(BuildContext context, WidgetRef ref) async {
 
 void _show(BuildContext context, WhatsNew notes) {
   final arabic = Localizations.localeOf(context).languageCode == 'ar';
-  showMTWhatsNewSheet(
+  showVhWhatsNewSheet(
     context,
     version: notes.version,
-    notes: mtReleaseNotesFor(notes.notes, arabic: arabic, app: 'lite'),
+    notes: vhReleaseNotesFor(notes.notes, arabic: arabic, app: 'lite'),
     onOpenPage: () => openWebLink(notes.pageUrl),
   );
 }

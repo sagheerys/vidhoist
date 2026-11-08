@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_mobile/features/engine/channel_backend.dart';
 import 'package:vidhoist_mobile/features/engine/ytdlp_bridge.dart';
 

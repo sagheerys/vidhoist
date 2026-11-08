@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/shared/error_text.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// **Lite keeps deferring to the server's owner, on purpose** (2026-09-20).
 ///
@@ -15,7 +15,7 @@ import 'package:mt_ui/mt_ui.dart';
 void main() {
   for (final locale in [const Locale('en'), const Locale('ar')]) {
     test('in ${locale.languageCode} it points at whoever runs the server', () {
-      final l10n = lookupMTLocalizations(locale);
+      final l10n = lookupVhLocalizations(locale);
       final text = errorText(l10n, const PlatformBlockedException('...'));
 
       expect(text, l10n.errPlatformBlocked);

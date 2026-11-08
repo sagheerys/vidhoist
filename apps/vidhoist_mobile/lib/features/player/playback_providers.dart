@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 
 import '../../di.dart';
 import '../downloads_library/artwork_view.dart';
@@ -31,8 +31,8 @@ final playbackRequestProvider = StateProvider<PlaybackRequest?>((ref) => null);
 /// The video session, built when the player opens and disposed when it is
 /// left. It records the dimensions of every clip it plays into
 /// `media_shape_index`, so knowledge of what counts as a short accumulates.
-final videoSessionProvider = Provider.autoDispose<MTVideoSession>((ref) {
-  final session = MTVideoSession(
+final videoSessionProvider = Provider.autoDispose<VhVideoSession>((ref) {
+  final session = VhVideoSession(
     resolver: ref.watch(playbackResolverProvider),
     positions: ref.watch(playbackPositionsProvider),
     prefs: ref.watch(playbackPrefsProvider),
@@ -82,11 +82,11 @@ PlaylistItem toPlaylistItem(LocalItem item) => PlaylistItem(
 /// The thumbnail builder for the players: platform covers saved in the
 /// artwork index, with no authentication headers, since none of them come
 /// from the family server.
-MTArtworkBuilder artworkBuilderFor(WidgetRef ref) =>
+VhArtworkBuilder artworkBuilderFor(WidgetRef ref) =>
     (context, item) => artworkFor(item.artworkUrl);
 
 /// The audio player's square cover; see [coverArtworkFor].
-MTArtworkBuilder coverBuilderFor(WidgetRef ref) =>
+VhArtworkBuilder coverBuilderFor(WidgetRef ref) =>
     (context, item) =>
         coverArtworkFor(item.artworkUrl, canonicalUrl: item.canonicalUrl);
 

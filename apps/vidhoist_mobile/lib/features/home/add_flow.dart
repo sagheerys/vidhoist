@@ -3,27 +3,27 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../shared/error_text.dart';
 import 'link_preview_view.dart';
 
-/// Converts the core's platform into its presentation type, since mt_ui
-/// does not know mt_core.
-MTPlatformKind platformKindOf(MediaPlatform platform) => switch (platform) {
-  MediaPlatform.youtube => MTPlatformKind.youtube,
-  MediaPlatform.tiktok => MTPlatformKind.tiktok,
-  MediaPlatform.instagram => MTPlatformKind.instagram,
-  MediaPlatform.soundcloud => MTPlatformKind.soundcloud,
-  MediaPlatform.x => MTPlatformKind.x,
-  MediaPlatform.facebook => MTPlatformKind.facebook,
-  MediaPlatform.vimeo => MTPlatformKind.vimeo,
-  MediaPlatform.twitch => MTPlatformKind.twitch,
-  MediaPlatform.reddit => MTPlatformKind.reddit,
-  MediaPlatform.dailymotion => MTPlatformKind.dailymotion,
-  MediaPlatform.other => MTPlatformKind.other,
+/// Converts the core's platform into its presentation type, since vh_ui
+/// does not know vh_core.
+VhPlatformKind platformKindOf(MediaPlatform platform) => switch (platform) {
+  MediaPlatform.youtube => VhPlatformKind.youtube,
+  MediaPlatform.tiktok => VhPlatformKind.tiktok,
+  MediaPlatform.instagram => VhPlatformKind.instagram,
+  MediaPlatform.soundcloud => VhPlatformKind.soundcloud,
+  MediaPlatform.x => VhPlatformKind.x,
+  MediaPlatform.facebook => VhPlatformKind.facebook,
+  MediaPlatform.vimeo => VhPlatformKind.vimeo,
+  MediaPlatform.twitch => VhPlatformKind.twitch,
+  MediaPlatform.reddit => VhPlatformKind.reddit,
+  MediaPlatform.dailymotion => VhPlatformKind.dailymotion,
+  MediaPlatform.other => VhPlatformKind.other,
 };
 
 /// The add dialog plus automatic routing: a playlist goes to `/batch`, a
@@ -33,11 +33,11 @@ Future<void> openAddSheet(
   WidgetRef ref, {
   String? initialUrl,
 }) async {
-  final l10n = context.mtl;
+  final l10n = context.vhl;
   final logger = ref.read(loggerProvider);
   final opened = DateTime.now();
   unawaited(logger.log('add sheet shown', tag: 'share'));
-  final submitted = await showMTSheet<bool>(
+  final submitted = await showVhSheet<bool>(
     context: context,
     useRootNavigator: true,
     isScrollControlled: true,
@@ -72,7 +72,7 @@ class _AddSheet extends ConsumerStatefulWidget {
   });
 
   final String? initialUrl;
-  final MTLocalizations l10n;
+  final VhLocalizations l10n;
 
   /// Captured from the hosting screen's context, so they stay valid after
   /// the sheet closes.
@@ -109,19 +109,19 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
     // The quality rule: heights for every platform but an audio-only one;
     // outside YouTube the engine falls back to best if the site has none.
     final qualities = [
-      MTQualityOption(value: 'best', label: l10n.qualityBest),
+      VhQualityOption(value: 'best', label: l10n.qualityBest),
       if (!platform.isAudioOnly) ...[
-        MTQualityOption(value: '1080', label: l10n.quality1080),
-        MTQualityOption(value: '720', label: l10n.quality720),
-        MTQualityOption(value: '480', label: l10n.quality480),
+        VhQualityOption(value: '1080', label: l10n.quality1080),
+        VhQualityOption(value: '720', label: l10n.quality720),
+        VhQualityOption(value: '480', label: l10n.quality480),
         // Lite alone: a family phone keeps what it downloads.
-        MTQualityOption(value: '360', label: l10n.quality360),
+        VhQualityOption(value: '360', label: l10n.quality360),
       ],
-      MTQualityOption(value: 'audio', label: l10n.audioOnly),
+      VhQualityOption(value: 'audio', label: l10n.audioOnly),
     ];
     if (!qualities.any((q) => q.value == _quality)) _quality = 'best';
 
-    return MTUrlInputSheet(
+    return VhUrlInputSheet(
       title: l10n.addUrl,
       urlHint: l10n.pasteUrlHint,
       controller: _controller,
@@ -141,7 +141,7 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
     final l10n = widget.l10n;
     final input = UrlKit.extractUrl(_controller.text);
     if (!input.startsWith('http')) {
-      showMTSnack(context, l10n.invalidUrl, type: MTSnackType.error);
+      showVhSnack(context, l10n.invalidUrl, type: VhSnackType.error);
       return;
     }
     Navigator.pop(context, true);
@@ -164,22 +164,22 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
     }
     final engine = ref.read(downloadEngineProvider);
     if (engine == null) {
-      showMTSnackOn(
+      showVhSnackOn(
         widget.messenger,
         l10n.noServerTitle,
-        type: MTSnackType.error,
+        type: VhSnackType.error,
       );
       return;
     }
     engine.submit(url, Quality.fromWire(_quality));
-    showMTSnackOn(
+    showVhSnackOn(
       widget.messenger,
       l10n.downloadStarted,
-      type: MTSnackType.success,
+      type: VhSnackType.success,
     );
   }
 }
 
 /// The error text for a failed task, used by the cards and the sheets.
-String taskErrorText(MTLocalizations l10n, DownloadTask task) =>
+String taskErrorText(VhLocalizations l10n, DownloadTask task) =>
     task.error == null ? l10n.failed : errorText(l10n, task.error!);

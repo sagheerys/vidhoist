@@ -6,8 +6,8 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../di.dart';
@@ -51,13 +51,13 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   }
 
   Future<void> _run(
-    Future<String> Function(MTLocalizations l10n) action,
+    Future<String> Function(VhLocalizations l10n) action,
   ) async {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     setState(() => _busy = true);
     try {
       final message = await action(l10n);
-      if (mounted) showMTSnack(context, message, type: MTSnackType.success);
+      if (mounted) showVhSnack(context, message, type: VhSnackType.success);
     } on BackupCancelledException {
       // A user cancelling is not an error.
     } catch (e) {
@@ -86,26 +86,26 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   /// dated name with the share chooser opening on it immediately, which is
   /// its only purpose. Conflating it with the automatic backup made "back
   /// up now" overwrite a file while suggesting it had exported it.
-  Future<String> _exportAndShare(MTLocalizations l10n) async {
+  Future<String> _exportAndShare(VhLocalizations l10n) async {
     final stamp = BackupRotation.stampOf(DateTime.now());
-    final file = File('$liteBackupDir/share_${liteBackupPrefix}_$stamp.json');
+    final file = File('$phoneBackupDir/share_${phoneBackupPrefix}_$stamp.json');
     await file.parent.create(recursive: true);
     await file.writeAsString(await _service.exportToString(), flush: true);
     await Share.shareXFiles([XFile(file.path)]);
-    return l10n.backupSuccess(mtLtrRun(file.path));
+    return l10n.backupSuccess(vhLtrRun(file.path));
   }
 
-  Future<String> _importPicked(MTLocalizations l10n) async {
+  Future<String> _importPicked(VhLocalizations l10n) async {
     final contents = await _pickFileContents();
     if (contents == null) throw const BackupCancelledException();
     return _applyRestore(l10n, await _service.importFromString(contents));
   }
 
-  Future<String> _restoreFrom(MTLocalizations l10n, BackupFile file) async =>
+  Future<String> _restoreFrom(VhLocalizations l10n, BackupFile file) async =>
       _applyRestore(l10n, await _backup.restore(file));
 
   Future<String> _applyRestore(
-    MTLocalizations l10n,
+    VhLocalizations l10n,
     ImportResult result,
   ) async {
     await _refreshEverything();
@@ -121,18 +121,18 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
 
     ListTile tile(
-      MTIconData icon,
+      VhIconData icon,
       String title,
       String subtitle,
       VoidCallback onTap,
     ) => ListTile(
       contentPadding: EdgeInsets.zero,
       enabled: !_busy,
-      leading: MTIcon(icon, color: p.ink2),
+      leading: VhIcon(icon, color: p.ink2),
       title: Text(title),
       subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
       onTap: onTap,
@@ -140,44 +140,44 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.backupSettings)),
-      body: MTReadableWidth(
+      body: VhReadableWidth(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(
-            MTSpace.pagePad,
+            VhSpace.pagePad,
             0,
-            MTSpace.pagePad,
-            MTSpace.xxl,
+            VhSpace.pagePad,
+            VhSpace.xxl,
           ),
           children: [
             // **No section header repeating the screen title** (review
             // 2026-09-05): the app bar says "back up all data" and directly
             // beneath it sat "backup and restore", two lines with one
             // meaning.
-            const SizedBox(height: MTSpace.md),
+            const SizedBox(height: VhSpace.md),
             BackupStatusLine(backups: _backups),
-            const SizedBox(height: MTSpace.md),
+            const SizedBox(height: VhSpace.md),
             tile(
-              MTIcons.share,
+              VhIcons.share,
               l10n.exportShare,
               l10n.exportShareSubtitle,
               () => _run(_exportAndShare),
             ),
             tile(
-              MTIcons.folder,
+              VhIcons.folder,
               l10n.pickAnotherFile,
               l10n.pickAnotherFileSubtitle,
               () => _run(_importPicked),
             ),
-            const SizedBox(height: MTSpace.lg),
+            const SizedBox(height: VhSpace.lg),
             // **The copies are shown rather than hidden behind a button**
             // (review 2026-09-05): two thirds of the screen was empty and the
             // only useful information, when each copy was made and how large
             // it is, sat behind a sheet with nothing to hint at it.
-            MTSectionHeader(title: l10n.restoreData),
-            const SizedBox(height: MTSpace.sm),
+            VhSectionHeader(title: l10n.restoreData),
+            const SizedBox(height: VhSpace.sm),
             if (_backups.isEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: MTSpace.md),
+                padding: const EdgeInsets.symmetric(vertical: VhSpace.md),
                 child: Text(
                   l10n.noBackupsYet,
                   style: Theme.of(context).textTheme.bodySmall!
@@ -189,11 +189,11 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   enabled: !_busy,
-                  leading: MTIcon(
-                    index == 0 ? MTIcons.clock : MTIcons.clock,
+                  leading: VhIcon(
+                    index == 0 ? VhIcons.clock : VhIcons.clock,
                     color: index == 0 ? p.accent : p.ink3,
                   ),
-                  title: Text(mtTimeAgo(context, file.at)),
+                  title: Text(vhTimeAgo(context, file.at)),
                   subtitle: Text(
                     '${(file.sizeBytes / 1024).toStringAsFixed(1)} KB',
                     style: Theme.of(context).textTheme.bodySmall,
@@ -205,7 +205,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
                     child: Text(l10n.restoreData),
                   ),
                 ),
-            const SizedBox(height: MTSpace.lg),
+            const SizedBox(height: VhSpace.lg),
             Text(
               l10n.backupNote,
               style: Theme.of(context).textTheme.bodySmall!

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../router.dart';
 import '../../shell/player_controls.dart';
@@ -50,22 +50,22 @@ class _PinnedLibraryHeadingState extends State<PinnedLibraryHeading> {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return AnimatedContainer(
-      duration: mtMotionDuration(context, MTMotion.tap),
-      curve: MTMotion.entrance,
+      duration: vhMotionDuration(context, VhMotion.tap),
+      curve: VhMotion.entrance,
       padding: const EdgeInsets.fromLTRB(
-        MTSpace.xl,
-        MTSpace.sm,
-        MTSpace.xl,
-        MTSpace.sm,
+        VhSpace.xl,
+        VhSpace.sm,
+        VhSpace.xl,
+        VhSpace.sm,
       ),
       decoration: BoxDecoration(
         color: p.bg,
         border: Border(
           bottom: BorderSide(
             color: _under ? p.line2 : p.line2.withValues(alpha: 0),
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
         ),
       ),
@@ -95,9 +95,9 @@ class LibraryHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final l = context.mtl;
+    final l = context.vhl;
     // The title and its counts wrap under each other when the window or
     // the font leaves no room; the layout choice keeps its place.
     return Row(
@@ -105,13 +105,13 @@ class LibraryHeading extends StatelessWidget {
       children: [
         Expanded(
           child: Wrap(
-            spacing: MTSpace.md,
+            spacing: VhSpace.md,
             crossAxisAlignment: WrapCrossAlignment.end,
             children: [
               Text(title, style: text.headlineSmall),
               if (counts case final line?) ...[
                 Padding(
-                  padding: const EdgeInsets.only(bottom: MTSpace.xxs),
+                  padding: const EdgeInsets.only(bottom: VhSpace.xxs),
                   child: Text(
                     line,
                     style: text.bodySmall?.copyWith(color: p.ink3),
@@ -125,19 +125,19 @@ class LibraryHeading extends StatelessWidget {
         // layouts, each a glyph with its name under the mouse.
         if (counts != null) ...[
           SortButton(sort: sort, onSort: onSort),
-          EmberPlayerControl(
-            icon: MTIcons.stats,
+          DesktopPlayerControl(
+            icon: VhIcons.stats,
             label: l.desktopStatsLink,
-            onTap: () => GoRouter.of(context).go(EmberRoutes.stats),
+            onTap: () => GoRouter.of(context).go(DesktopRoutes.stats),
           ),
-          const SizedBox(width: MTSpace.sm),
+          const SizedBox(width: VhSpace.sm),
         ],
         for (final (m, icon, label) in [
-          (LibraryViewMode.grid, MTIcons.grid, l.viewGrid),
-          (LibraryViewMode.list, MTIcons.table, l.desktopViewTable),
-          (LibraryViewMode.compact, MTIcons.list, l.desktopViewCompact),
+          (LibraryViewMode.grid, VhIcons.grid, l.viewGrid),
+          (LibraryViewMode.list, VhIcons.table, l.desktopViewTable),
+          (LibraryViewMode.compact, VhIcons.list, l.desktopViewCompact),
         ])
-          EmberPlayerControl(
+          DesktopPlayerControl(
             icon: icon,
             label: label,
             selected: mode == m,
@@ -169,12 +169,12 @@ class _SliverFadeOnChangeState extends State<SliverFadeOnChange>
     with SingleTickerProviderStateMixin {
   late final _controller = AnimationController(
     vsync: this,
-    duration: MTMotion.reveal,
+    duration: VhMotion.reveal,
     value: 1,
   );
   late final _opacity = CurvedAnimation(
     parent: _controller,
-    curve: MTMotion.entrance,
+    curve: VhMotion.entrance,
   );
 
   @override

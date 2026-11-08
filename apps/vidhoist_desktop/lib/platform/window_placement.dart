@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// Where the window was when it last moved or resized, kept per computer
 /// and never synced: another machine has other screens.

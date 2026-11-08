@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/video_surface.dart';
 
@@ -22,20 +22,20 @@ class ClipFacts extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final surface = ref.watch(videoSurfaceProvider);
     return ValueListenableBuilder<Size?>(
       valueListenable: surface.pictureSize,
       builder: (context, size, _) {
-        final line = mtMetaLine([
+        final line = vhMetaLine([
           if (picture && size != null)
-            mtLtrRun('${size.shortestSide.round()}p'),
+            vhLtrRun('${size.shortestSide.round()}p'),
           fileFormatOf(entry),
-          if (entry.sizeBytes case final bytes?) mtFormatSize(bytes),
+          if (entry.sizeBytes case final bytes?) vhFormatSize(bytes),
         ]);
         if (line.isEmpty) return const SizedBox.shrink();
         return Padding(
-          padding: const EdgeInsets.only(top: MTSpace.xxs),
+          padding: const EdgeInsets.only(top: VhSpace.xxs),
           child: Text(
             line,
             style: Theme.of(context).textTheme.bodySmall

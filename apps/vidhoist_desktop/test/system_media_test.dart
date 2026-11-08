@@ -9,9 +9,9 @@ import 'package:vidhoist_desktop/data/desktop_habits.dart';
 import 'package:vidhoist_desktop/data/system_media.dart';
 import 'package:vidhoist_desktop/data/taskbar_data.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'support/shell_harness.dart';
 
@@ -233,22 +233,22 @@ void main() {
       );
       await tester.pumpWidget(h.app());
       await tester.pumpAndSettle();
-      GoRouter.of(tester.element(find.byType(EmberSidebar)))
+      GoRouter.of(tester.element(find.byType(DesktopSidebar)))
           .go('/settings/desktop');
       await tester.pumpAndSettle();
       // The tray line is the first of the section.
-      final toggle = find.byType(MTSwitch).first;
+      final toggle = find.byType(VhSwitch).first;
       expect(
         find.text('Keep playing in the tray when the window closes'),
         findsOneWidget,
       );
-      expect(tester.widget<MTSwitch>(toggle).value, isFalse);
+      expect(tester.widget<VhSwitch>(toggle).value, isFalse);
       await tester.tap(toggle);
       await tester.pumpAndSettle();
       expect(told, [true]);
       expect(await h.store.getBool(CloseToTray.key), isTrue);
       expect(
-        ProviderScope.containerOf(tester.element(find.byType(EmberSidebar)))
+        ProviderScope.containerOf(tester.element(find.byType(DesktopSidebar)))
             .read(closeToTrayProvider),
         isTrue,
       );

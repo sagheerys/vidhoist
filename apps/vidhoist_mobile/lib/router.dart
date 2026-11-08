@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'di.dart';
 import 'features/audio/audio_screen.dart';
@@ -24,7 +24,7 @@ final router = GoRouter(
   // Tells the shell what has opened above it so it can hide the floating
   // add button, which used to be drawn over every bottom sheet and dialog,
   // covering their content (field report).
-  observers: [MTRouteDepth.instance],
+  observers: [VhRouteDepth.instance],
   // A first run readies the engine before anything else opens.
   redirect: (context, state) => welcomeRedirect(
     welcomed: ProviderScope.containerOf(
@@ -40,7 +40,7 @@ final router = GoRouter(
           ShellScreen(navigationShell: navigationShell),
       // The sections fade into one another rather than cut.
       navigatorContainerBuilder: (context, navigationShell, children) =>
-          MTTabStack(index: navigationShell.currentIndex, children: children),
+          VhTabStack(index: navigationShell.currentIndex, children: children),
       branches: [
         StatefulShellBranch(
           routes: [
@@ -108,9 +108,9 @@ final router = GoRouter(
         // shows the cover and the mini player behind it rather than a black
         // background (reported with a screenshot 2026-09-04).
         opaque: false,
-        transitionDuration: MTMotion.sheetPage,
-        reverseTransitionDuration: MTMotion.leave,
-        transitionsBuilder: mtSheetPageTransition,
+        transitionDuration: VhMotion.sheetPage,
+        reverseTransitionDuration: VhMotion.leave,
+        transitionsBuilder: vhSheetPageTransition,
       ),
     ),
   ],

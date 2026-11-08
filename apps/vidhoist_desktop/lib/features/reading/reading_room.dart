@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../data/transcripts_data.dart';
@@ -48,7 +48,7 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
   /// The narrowest the article gets to make room for the picture.
   static const double _narrowest = 520;
 
-  late final MTPlayer _player = ref.read(playerProvider);
+  late final VhPlayer _player = ref.read(playerProvider);
   late final ValueNotifier<VoidCallback?> _findHook = ref.read(
     readingFindProvider,
   );
@@ -112,7 +112,7 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
     if (range == null) return;
     final quote = quoteOf(_paragraphs, range.startOffset, range.endOffset);
     if (quote == null) return;
-    final l = context.mtl;
+    final l = context.vhl;
     unawaited(
       Clipboard.setData(
         ClipboardData(
@@ -126,13 +126,13 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
         ),
       ),
     );
-    showMTNotice(context, message: l.desktopQuoteCopied);
+    showVhNotice(context, message: l.desktopQuoteCopied);
   }
 
   @override
   Widget build(BuildContext context) {
     final library = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
-    return StreamBuilder<MTPlayerState>(
+    return StreamBuilder<VhPlayerState>(
       stream: _player.states,
       initialData: _player.state,
       builder: (context, snap) {
@@ -147,8 +147,8 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
             : null;
         if (item == null) {
           return Center(
-            child: MTEmptyFrame(
-              title: context.mtl.itemUnavailable,
+            child: VhEmptyFrame(
+              title: context.vhl.itemUnavailable,
               message: widget.canonicalUrl,
             ),
           );
@@ -160,7 +160,7 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
   }
 
   Widget _room(BuildContext context, PlaylistItem item, bool isCurrent) {
-    final l = context.mtl;
+    final l = context.vhl;
     final url = item.canonicalUrl;
     final kept =
         ref.watch(transcriptLanguagesProvider(url)).valueOrNull ?? const [];
@@ -182,7 +182,7 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
         // keeps a readable width; else above its title.
         final corner =
             box.maxWidth >=
-            _narrowest + EmberShellSize.readingVideo + 3 * MTSpace.xl;
+            _narrowest + DesktopShellSize.readingVideo + 3 * VhSpace.xl;
         final video = picture ? _Video(ref: ref) : null;
         final header = _Header(
           item: item,
@@ -192,8 +192,8 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
               ? const []
               : [
                   for (final t in kept)
-                    EmberPill(
-                      label: mtLanguageName(
+                    DesktopPill(
+                      label: vhLanguageName(
                         Transcript.baseLanguage(t.language),
                       ),
                       selected: t.language == transcript?.language,
@@ -213,7 +213,7 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
                   paragraphs: _paragraphs,
                 ),
           onBack: () =>
-              GoRouter.of(context).go(EmberRoutes.item(item.canonicalUrl)),
+              GoRouter.of(context).go(DesktopRoutes.item(item.canonicalUrl)),
         );
         return Column(
           children: [
@@ -234,13 +234,13 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
                   Expanded(
                     child: segments.isEmpty
                         ? SingleChildScrollView(
-                            padding: const EdgeInsets.all(MTSpace.xl),
-                            child: MTReadableWidth(
+                            padding: const EdgeInsets.all(VhSpace.xl),
+                            child: VhReadableWidth(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   header,
-                                  MTEmptyFrame(
+                                  VhEmptyFrame(
                                     title: l.desktopNoTranscriptTitle,
                                     message: l.desktopNoTranscriptMessage,
                                   ),
@@ -272,11 +272,11 @@ class _ReadingRoomState extends ConsumerState<ReadingRoom> {
                   if (corner && video != null)
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
-                        top: MTSpace.xl,
-                        end: MTSpace.xl,
+                        top: VhSpace.xl,
+                        end: VhSpace.xl,
                       ),
                       child: SizedBox(
-                        width: EmberShellSize.readingVideo,
+                        width: DesktopShellSize.readingVideo,
                         child: video,
                       ),
                     ),
@@ -298,11 +298,11 @@ class _Video extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ClipRRect(
-    borderRadius: BorderRadius.circular(MTCorners.desktop.card),
+    borderRadius: BorderRadius.circular(VhCorners.desktop.card),
     child: AspectRatio(
       aspectRatio: 16 / 9,
       child: ColoredBox(
-        color: MTPalette.fullscreenScrim,
+        color: VhPalette.fullscreenScrim,
         child: ref.watch(videoSurfaceProvider).build(context),
       ),
     ),
@@ -333,22 +333,22 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final meta = _metaOf(l, item);
     return Padding(
-      padding: const EdgeInsets.only(bottom: MTSpace.xl),
+      padding: const EdgeInsets.only(bottom: VhSpace.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Wrap(
-            spacing: MTSpace.sm,
-            runSpacing: MTSpace.sm,
+            spacing: VhSpace.sm,
+            runSpacing: VhSpace.sm,
             children: [
-              EmberPill(
+              DesktopPill(
                 label: l.desktopReadingBack,
-                icon: MTIcons.back,
+                icon: VhIcons.back,
                 mirrored: true,
                 selected: false,
                 onTap: onBack,
@@ -357,24 +357,27 @@ class _Header extends StatelessWidget {
               ...languages,
             ],
           ),
-          const SizedBox(height: MTSpace.lg),
+          const SizedBox(height: VhSpace.lg),
           if (video case final video?) ...[
             Center(
-              child: SizedBox(width: EmberShellSize.readingVideo, child: video),
+              child: SizedBox(
+                width: DesktopShellSize.readingVideo,
+                child: video,
+              ),
             ),
-            const SizedBox(height: MTSpace.lg),
+            const SizedBox(height: VhSpace.lg),
           ],
           Text(
             item.title,
-            textDirection: mtTextDirectionOf(
+            textDirection: vhTextDirectionOf(
               item.title,
               Directionality.of(context),
             ),
             style: text.headlineSmall?.copyWith(color: p.ink),
           ),
-          const SizedBox(height: MTSpace.xxs),
+          const SizedBox(height: VhSpace.xxs),
           Text(meta, style: text.bodySmall?.copyWith(color: p.ink3)),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           Text(
             l.desktopReadingHint,
             style: text.labelSmall?.copyWith(color: p.ink3),
@@ -386,8 +389,8 @@ class _Header extends StatelessWidget {
 }
 
 /// The line under the title: channel, site and length.
-String _metaOf(MTLocalizations l, PlaylistItem item) => mtMetaLine([
+String _metaOf(VhLocalizations l, PlaylistItem item) => vhMetaLine([
   ?item.uploader,
   platformLabel(l, MediaPlatform.detect(item.canonicalUrl)),
-  if (item.duration case final d?) mtFormatDuration(d),
+  if (item.duration case final d?) vhFormatDuration(d),
 ]);

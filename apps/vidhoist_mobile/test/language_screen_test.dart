@@ -4,12 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/settings/language_screen.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
-import 'wahaj_finder.dart';
+import 'icon_finder.dart';
 
 /// **Requested 2026-09-08**: the choice was a `SegmentedButton` with three
 /// segments, and it divides the width by their number, so three fit 360dp
@@ -23,7 +23,7 @@ void main() {
           secretStoreProvider.overrideWithValue(MemorySecretStore()),
           prefsMutexProvider.overrideWithValue(PrefsMutex()),
           initialSettingsProvider.overrideWithValue(
-            LiteSettings(localeCode: locale),
+            PhoneSettings(localeCode: locale),
           ),
         ],
       );
@@ -37,9 +37,9 @@ void main() {
         container: container,
         child: MaterialApp(
           locale: const Locale('ar'),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
-          theme: mtTheme(MTVariant.lite, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
           home: const LanguageScreen(),
         ),
       ),
@@ -56,9 +56,9 @@ void main() {
     // **The real guard**: the list is read from `supportedLocales` rather
     // than from three hand-written segments, so adding an `app_xx.arb`
     // appears automatically.
-    for (final locale in MTLocalizations.supportedLocales) {
+    for (final locale in VhLocalizations.supportedLocales) {
       expect(
-        find.text(mtLanguageName(locale.languageCode)),
+        find.text(vhLanguageName(locale.languageCode)),
         findsOneWidget,
         reason: locale.languageCode,
       );
@@ -71,7 +71,7 @@ void main() {
     tester,
   ) async {
     await pump(tester, null);
-    expect(byWahaj(MTIcons.check), findsOneWidget);
+    expect(byVhIcon(VhIcons.check), findsOneWidget);
   });
 
   testWidgets('choosing a language saves it, and the tick moves to it', (
@@ -84,7 +84,7 @@ void main() {
 
     expect(container.read(settingsProvider).localeCode, 'en');
     expect(
-      byWahaj(MTIcons.check),
+      byVhIcon(VhIcons.check),
       findsOneWidget,
       reason: 'علامة واحدة لا اثنتان',
     );
@@ -122,9 +122,9 @@ void main() {
         container: container,
         child: MaterialApp(
           locale: const Locale('ar'),
-          localizationsDelegates: MTLocalizations.localizationsDelegates,
-          supportedLocales: MTLocalizations.supportedLocales,
-          theme: mtTheme(MTVariant.lite, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
           home: const LanguageScreen(),
         ),
       ),

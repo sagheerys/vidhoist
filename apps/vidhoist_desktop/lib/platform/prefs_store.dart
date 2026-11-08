@@ -1,4 +1,4 @@
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A [KeyValueStore] over SharedPreferences, which on Windows is one JSON

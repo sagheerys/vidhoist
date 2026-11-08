@@ -12,8 +12,8 @@ import 'package:vidhoist_mobile/features/settings/settings_sections.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:vidhoist_mobile/features/settings/widgets/engine_fields.dart';
 import 'package:vidhoist_mobile/features/settings/widgets/settings_fields.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
@@ -22,7 +22,7 @@ import 'device_matrix.dart';
 /// page. On a tablet held sideways the same rows open in two panes
 /// (approved 2026-10-10).
 void main() {
-  Widget host({LiteSettings settings = const LiteSettings()}) {
+  Widget host({PhoneSettings settings = const PhoneSettings()}) {
     final container = ProviderContainer(
       overrides: [
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
@@ -31,7 +31,7 @@ void main() {
         initialSettingsProvider.overrideWithValue(settings),
         // The logs and backup pages read the log on opening.
         loggerProvider.overrideWithValue(
-          MTLogger(filePath: '${Directory.systemTemp.path}/mtf_settings.log'),
+          VhLogger(filePath: '${Directory.systemTemp.path}/mtf_settings.log'),
         ),
       ],
     );
@@ -54,9 +54,9 @@ void main() {
       container: container,
       child: MaterialApp.router(
         routerConfig: router,
-        localizationsDelegates: MTLocalizations.localizationsDelegates,
-        supportedLocales: MTLocalizations.supportedLocales,
-        theme: mtTheme(MTVariant.lite, Brightness.light),
+        localizationsDelegates: VhLocalizations.localizationsDelegates,
+        supportedLocales: VhLocalizations.supportedLocales,
+        theme: vhTheme(VhVariant.phone, Brightness.light),
       ),
     );
   }
@@ -64,7 +64,7 @@ void main() {
   Future<void> at(
     WidgetTester tester,
     Size size, {
-    LiteSettings settings = const LiteSettings(),
+    PhoneSettings settings = const PhoneSettings(),
   }) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = size;
@@ -73,8 +73,8 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  MTLocalizations l10nOf(WidgetTester tester) =>
-      tester.element(find.byType(SettingsScreen)).mtl;
+  VhLocalizations l10nOf(WidgetTester tester) =>
+      tester.element(find.byType(SettingsScreen)).vhl;
 
   testWidgets('a phone opens on the short home, not the long page', (
     tester,
@@ -82,13 +82,13 @@ void main() {
     await at(tester, const Size(411, 914));
     expect(find.byType(SettingsHub), findsNothing);
     expect(find.byType(EngineFields), findsNothing);
-    expect(find.byType(MTSettingsRow), findsWidgets);
+    expect(find.byType(VhSettingsRow), findsWidgets);
   });
 
   testWidgets('a tablet upright keeps the phone\'s home too', (tester) async {
     await at(tester, const Size(800, 1280));
     expect(find.byType(SettingsHub), findsNothing);
-    expect(find.byType(MTSettingsRow), findsWidgets);
+    expect(find.byType(VhSettingsRow), findsWidgets);
   });
 
   testWidgets('GUARD: every section has a row, and its row opens its page', (
@@ -110,14 +110,14 @@ void main() {
     };
     expect(titles.keys, SettingsPane.values, reason: 'a section without a row');
     expect(
-      find.byType(MTSettingsRow),
+      find.byType(VhSettingsRow),
       findsNWidgets(SettingsPane.values.length),
     );
 
     for (final MapEntry(key: pane, value: title) in titles.entries) {
       await tester.tap(
         find.descendant(
-          of: find.byType(MTSettingsRow),
+          of: find.byType(VhSettingsRow),
           matching: find.text(title),
         ),
       );
@@ -138,7 +138,7 @@ void main() {
     await at(
       tester,
       const Size(411, 2000),
-      settings: const LiteSettings(
+      settings: const PhoneSettings(
         quality: Quality.q720,
         wifiOnly: true,
         themeMode: ThemeMode.dark,
@@ -147,11 +147,11 @@ void main() {
     );
     final l10n = l10nOf(tester);
     expect(
-      find.text(mtMetaLine([l10n.quality720, l10n.settingsValueWifiOnly])),
+      find.text(vhMetaLine([l10n.quality720, l10n.settingsValueWifiOnly])),
       findsOneWidget,
     );
     expect(find.text(l10n.settingsValueCompatOff), findsOneWidget);
-    expect(find.text(mtMetaLine([l10n.themeDark, 'English'])), findsOneWidget);
+    expect(find.text(vhMetaLine([l10n.themeDark, 'English'])), findsOneWidget);
   });
 
   testWidgets('no server row any more: the engine is on the phone', (
@@ -206,9 +206,9 @@ void main() {
         return UncontrolledProviderScope(
           container: app.container,
           child: MaterialApp(
-            localizationsDelegates: MTLocalizations.localizationsDelegates,
-            supportedLocales: MTLocalizations.supportedLocales,
-            theme: mtTheme(MTVariant.lite, Brightness.light),
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
+            theme: vhTheme(VhVariant.phone, Brightness.light),
             home: SettingsPage(pane),
           ),
         );
@@ -227,7 +227,7 @@ void main() {
     await tester.pumpAndSettle();
     final gap =
         tester.getRect(list).bottom -
-        tester.getRect(find.byType(MTSettingsGroup).last).bottom;
-    expect(gap, lessThanOrEqualTo(MTSpace.xl + 1));
+        tester.getRect(find.byType(VhSettingsGroup).last).bottom;
+    expect(gap, lessThanOrEqualTo(VhSpace.xl + 1));
   });
 }

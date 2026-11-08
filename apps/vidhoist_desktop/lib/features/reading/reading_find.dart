@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/search_lens.dart';
 
@@ -33,24 +33,24 @@ class ReadingFindBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final typed = query.text.trim().isNotEmpty;
     Widget button(
-      MTIconData icon,
+      VhIconData icon,
       String label,
       VoidCallback? onTap, {
       bool up = false,
-    }) => MTShortcutTooltip(
+    }) => VhShortcutTooltip(
       message: label,
       child: IconButton(
         onPressed: onTap,
         icon: RotatedBox(
           quarterTurns: up ? 2 : 0,
-          child: MTIcon(
+          child: VhIcon(
             icon,
-            size: MTDensity.desktop.icon,
+            size: VhDensity.desktop.icon,
             semanticLabel: label,
           ),
         ),
@@ -62,14 +62,14 @@ class ReadingFindBar extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             color: p.line,
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
         ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: MTSpace.xl,
-          vertical: MTSpace.sm,
+          horizontal: VhSpace.xl,
+          vertical: VhSpace.sm,
         ),
         child: Row(
           children: [
@@ -100,7 +100,7 @@ class ReadingFindBar extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: MTSpace.md),
+            const SizedBox(width: VhSpace.md),
             // Read out as it changes, so a screen reader hears the count.
             Semantics(
               liveRegion: true,
@@ -114,17 +114,17 @@ class ReadingFindBar extends StatelessWidget {
               ),
             ),
             button(
-              MTIcons.chevronDown,
+              VhIcons.chevronDown,
               l.desktopReadingPreviousMatch,
               found > 1 ? () => onStep(-1) : null,
               up: true,
             ),
             button(
-              MTIcons.chevronDown,
+              VhIcons.chevronDown,
               l.desktopReadingNextMatch,
               found > 1 ? () => onStep(1) : null,
             ),
-            button(MTIcons.close, l.desktopReadingCloseFind, onClose),
+            button(VhIcons.close, l.desktopReadingCloseFind, onClose),
           ],
         ),
       ),

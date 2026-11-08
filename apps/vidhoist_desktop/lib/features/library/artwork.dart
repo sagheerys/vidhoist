@@ -7,8 +7,8 @@ import 'package:file/local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart' show youtubeWideCover;
-import 'package:mt_ui/mt_ui.dart' show MTMotion, mtMotionDuration;
+import 'package:vh_core/vh_core.dart' show youtubeWideCover;
+import 'package:vh_ui/vh_ui.dart' show VhMotion, vhMotionDuration;
 
 import '../../data/library_data.dart';
 
@@ -98,8 +98,8 @@ Widget? artworkFor(
       memCacheWidth: decode,
       // At the app's own pace, not the package's half-second in and full
       // second out.
-      fadeInDuration: mtMotionDuration(context, MTMotion.reveal),
-      fadeOutDuration: mtMotionDuration(context, MTMotion.fast),
+      fadeInDuration: vhMotionDuration(context, VhMotion.reveal),
+      fadeOutDuration: vhMotionDuration(context, VhMotion.fast),
       errorWidget: (_, _, _) => const SizedBox.shrink(),
     );
   }
@@ -113,8 +113,8 @@ Widget? artworkFor(
         ? child
         : AnimatedOpacity(
             opacity: frame == null ? 0 : 1,
-            duration: mtMotionDuration(context, MTMotion.reveal),
-            curve: MTMotion.entrance,
+            duration: vhMotionDuration(context, VhMotion.reveal),
+            curve: VhMotion.entrance,
             child: child,
           ),
     errorBuilder: (_, _, _) => const SizedBox.shrink(),
@@ -149,8 +149,8 @@ Widget? squareArtworkFor(
     fit: BoxFit.cover,
     memCacheWidth: (side * 16 / 9 * MediaQuery.devicePixelRatioOf(context))
         .round(),
-    fadeInDuration: mtMotionDuration(context, MTMotion.reveal),
-    fadeOutDuration: mtMotionDuration(context, MTMotion.fast),
+    fadeInDuration: vhMotionDuration(context, VhMotion.reveal),
+    fadeOutDuration: vhMotionDuration(context, VhMotion.fast),
     errorWidget: (_, _, _) => Transform.scale(
       scale: 4 / 3,
       child: SizedBox.square(

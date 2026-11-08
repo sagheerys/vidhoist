@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../shell/shell_metrics.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// One clip's tags: every tag in the library to tick or untick, and a
 /// field for a new one. Each change is written at once, as on the phone,
@@ -66,7 +66,7 @@ class _TagsDialogState extends ConsumerState<_TagsDialog> {
     setState(() {
       // The favourites mark is a tag underneath, but it has its own heart.
       _all =
-          counts.keys.where((t) => t != MTConstants.favoritesSystemTag).toList()
+          counts.keys.where((t) => t != VhConstants.favoritesSystemTag).toList()
             ..sort();
       _carried = carried;
     });
@@ -89,18 +89,18 @@ class _TagsDialogState extends ConsumerState<_TagsDialog> {
     await _load();
   }
 
-  /// The last new name hit [MTConstants.maxTags].
+  /// The last new name hit [VhConstants.maxTags].
   bool _full = false;
 
   /// False when the name was refused for the limit, so Done keeps the
   /// dialog open on the reason rather than close as if it were made.
   Future<bool> _add(String raw) async {
     final tag = raw.trim();
-    if (tag.isEmpty || tag == MTConstants.favoritesSystemTag) {
+    if (tag.isEmpty || tag == VhConstants.favoritesSystemTag) {
       _field.clear();
       return true;
     }
-    final full = !_all.contains(tag) && _all.length >= MTConstants.maxTags;
+    final full = !_all.contains(tag) && _all.length >= VhConstants.maxTags;
     setState(() => _full = full);
     if (full) return false;
     _field.clear();
@@ -118,13 +118,13 @@ class _TagsDialogState extends ConsumerState<_TagsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return AlertDialog(
       title: Text(l.tags),
       content: SizedBox(
-        width: EmberShellSize.smallDialog,
+        width: DesktopShellSize.smallDialog,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -133,26 +133,26 @@ class _TagsDialogState extends ConsumerState<_TagsDialog> {
               controller: _field,
               autofocus: true,
               inputFormatters: [
-                LengthLimitingTextInputFormatter(MTConstants.maxTagLength),
+                LengthLimitingTextInputFormatter(VhConstants.maxTagLength),
               ],
               decoration: InputDecoration(
                 hintText: l.newTagHint,
                 suffixIcon: IconButton(
                   tooltip: l.create,
-                  icon: MTIcon(MTIcons.plus, color: p.accentInk),
+                  icon: VhIcon(VhIcons.plus, color: p.accentInk),
                   onPressed: () => unawaited(_add(_field.text)),
                 ),
               ),
               onSubmitted: (v) => unawaited(_add(v)),
             ),
             if (_full) ...[
-              const SizedBox(height: MTSpace.xs),
+              const SizedBox(height: VhSpace.xs),
               Text(
-                l.tagLimitReached(MTConstants.maxTags),
+                l.tagLimitReached(VhConstants.maxTags),
                 style: text.bodySmall?.copyWith(color: p.err),
               ),
             ],
-            const SizedBox(height: MTSpace.sm),
+            const SizedBox(height: VhSpace.sm),
             Flexible(
               child: SingleChildScrollView(
                 child: Column(

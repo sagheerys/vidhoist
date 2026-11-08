@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../router.dart';
@@ -26,23 +26,23 @@ Future<void> showClipMenu(
   Offset globalPosition,
   PlaylistItem item,
 ) async {
-  final l = context.mtl;
+  final l = context.vhl;
   final listed = (ref.read(libraryItemsProvider).valueOrNull ?? const [])
       .where((i) => i.canonicalUrl == item.canonicalUrl)
       .firstOrNull;
   final choice = await showEmberMenu(context, globalPosition, [
-    EmberMenuEntry(_ClipChoice.addToList, MTIcons.queue, l.addToPlaylist),
-    EmberMenuEntry(_ClipChoice.copyLink, MTIcons.link, l.desktopCopyLink),
-    EmberMenuEntry(
+    DesktopMenuEntry(_ClipChoice.addToList, VhIcons.queue, l.addToPlaylist),
+    DesktopMenuEntry(_ClipChoice.copyLink, VhIcons.link, l.desktopCopyLink),
+    DesktopMenuEntry(
       _ClipChoice.openOriginal,
-      MTIcons.external,
+      VhIcons.external,
       l.openOriginalLink,
     ),
     if (listed != null && listed.isOffline) ...[
-      const EmberMenuEntry.divider(),
-      EmberMenuEntry(
+      const DesktopMenuEntry.divider(),
+      DesktopMenuEntry(
         _ClipChoice.delete,
-        MTIcons.trash,
+        VhIcons.trash,
         l.deleteVideo,
         danger: true,
       ),
@@ -55,14 +55,14 @@ Future<void> showClipMenu(
       await showAddToPlaylistDialog(context, item);
     case _ClipChoice.copyLink:
       await Clipboard.setData(ClipboardData(text: item.canonicalUrl));
-      if (context.mounted) showMTNotice(context, message: l.desktopLinkCopied);
+      if (context.mounted) showVhNotice(context, message: l.desktopLinkCopied);
     case _ClipChoice.openOriginal:
       await actions.openOriginal(item.canonicalUrl);
     case _ClipChoice.delete:
-      final sure = await showMTConfirm(
+      final sure = await showVhConfirm(
         context,
         title: l.deleteVideo,
-        message: l.deleteVideoConfirm(mtName(item.title)),
+        message: l.deleteVideoConfirm(vhName(item.title)),
         confirmLabel: l.delete,
         cancelLabel: l.cancel,
         destructive: true,
@@ -74,17 +74,17 @@ Future<void> showClipMenu(
       } on Object catch (e) {
         // Windows refused (a file held open): say why, and stay.
         if (context.mounted) {
-          showMTNotice(
+          showVhNotice(
             context,
             message: errorText(l, e),
-            kind: MTNoticeKind.failed,
+            kind: VhNoticeKind.failed,
           );
         }
         return;
       }
       if (!context.mounted) return;
-      showMTNotice(context, message: l.deletedTitle(mtName(item.title)));
-      router.go(EmberRoutes.library);
+      showVhNotice(context, message: l.deletedTitle(vhName(item.title)));
+      router.go(DesktopRoutes.library);
   }
 }
 

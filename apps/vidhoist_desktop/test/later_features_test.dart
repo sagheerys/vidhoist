@@ -30,14 +30,14 @@ void main() {
     if (later) await h.store.setBool(LaterFeaturesNotifier.key, true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberSettingsPane.engine.route);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopSettingsPane.engine.route);
     await tester.pumpAndSettle();
     return h;
   }
 
   Finder inSidebar(String label) => find.descendant(
-    of: find.byType(EmberSidebar),
+    of: find.byType(DesktopSidebar),
     matching: find.text(label),
   );
 

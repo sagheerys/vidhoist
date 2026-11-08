@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// A key as the keyboard prints it ("Ctrl K", "Space"), in a hairline
 /// frame. Always left to right: keys read the same in either language.
@@ -10,21 +10,21 @@ class KeyCap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return Directionality(
       textDirection: TextDirection.ltr,
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(
             color: p.line2,
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
-          borderRadius: BorderRadius.circular(MTCorners.desktop.box),
+          borderRadius: BorderRadius.circular(VhCorners.desktop.box),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: MTSpace.xs,
-            vertical: MTSpace.xxs / 2,
+            horizontal: VhSpace.xs,
+            vertical: VhSpace.xxs / 2,
           ),
           child: Text(
             label,

@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/panel/queue_view.dart';
 import 'package:vidhoist_desktop/shell/panel/transcript_view.dart';
 import 'package:vidhoist_desktop/shell/right_panel.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'support/shell_harness.dart';
 
@@ -57,14 +57,14 @@ void main() {
   }
 
   Finder inPanel(Finder f) =>
-      find.descendant(of: find.byType(EmberRightPanel), matching: f);
+      find.descendant(of: find.byType(DesktopRightPanel), matching: f);
 
   /// The transcript line marked as the one being said.
   String? litLine(WidgetTester tester) {
     for (final element
         in find
             .descendant(
-              of: find.byType(EmberRightPanel),
+              of: find.byType(DesktopRightPanel),
               matching: find.byWidgetPredicate(
                 (w) => w is Semantics && w.properties.selected == true,
               ),
@@ -205,7 +205,7 @@ void main() {
           localPath: r'C:\Downloads\Homelab Hour [aaaaaaaaaaa].mkv',
           sizeBytes: 412 * 1024 * 1024,
           timestamp: DateTime(2026, 10, 20),
-          tags: const ['homelab', MTConstants.favoritesSystemTag],
+          tags: const ['homelab', VhConstants.favoritesSystemTag],
         ),
       ],
     );

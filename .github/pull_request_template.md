@@ -7,10 +7,10 @@
 ## Checklist
 
 - [ ] `flutter analyze --no-pub` is clean
-- [ ] All test suites pass (`mt_core`, `mt_transcripts`, `mt_media`, `mt_ui`, `vidhoist_mobile`, `vidhoist_desktop`)
+- [ ] All test suites pass (`vh_core`, `vh_transcripts`, `vh_media`, `vh_ui`, `vidhoist_mobile`, `vidhoist_desktop`)
 - [ ] New UI text lives in **both** `app_en.arb` and `app_ar.arb`, and `flutter gen-l10n` has been run
 - [ ] Colours and spacing come from the tokens, not from literals — and the screen was checked in **dark mode** as well as light
-- [ ] A change shared through `mt_core` / `mt_ui` / `mt_media` was checked in **both** apps
+- [ ] A change shared through `vh_core` / `vh_ui` / `vh_media` was checked in **both** apps
 - [ ] A fixed defect leaves behind a test that fails on the old code
 
 <!--

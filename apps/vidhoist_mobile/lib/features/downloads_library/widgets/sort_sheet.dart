@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../library_providers.dart';
 import '../local_item.dart';
@@ -9,7 +9,7 @@ import 'library_chips.dart';
 /// The sort and platform sheet: the sort and view mode, saved, and the
 /// platform filter, which used to be a second row above the list.
 void showSortSheet(BuildContext context, WidgetRef ref) {
-  showMTSheet<void>(
+  showVhSheet<void>(
     context: context,
     useRootNavigator: true,
     // Sized to its options rather than capped at 9/16 of the screen, and
@@ -25,7 +25,7 @@ class _SortSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final options = ref.watch(libraryViewProvider);
     final controller = ref.read(libraryViewProvider.notifier);
 
@@ -44,10 +44,10 @@ class _SortSheet extends ConsumerWidget {
         // (field
         // report 2026-09-04); a sheet always reaches the screen edge.
         padding: EdgeInsets.fromLTRB(
-          MTSpace.xl,
-          MTSpace.lg,
-          MTSpace.xl,
-          mtSheetBottomPad(context, MTSpace.xxl),
+          VhSpace.xl,
+          VhSpace.lg,
+          VhSpace.xl,
+          vhSheetBottomPad(context, VhSpace.xxl),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -57,12 +57,12 @@ class _SortSheet extends ConsumerWidget {
               l10n.sortAndPlatform,
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(height: MTSpace.lg),
-            MTSectionHeader(title: l10n.sortBy),
-            const SizedBox(height: MTSpace.md),
+            const SizedBox(height: VhSpace.lg),
+            VhSectionHeader(title: l10n.sortBy),
+            const SizedBox(height: VhSpace.md),
             Wrap(
-              spacing: MTSpace.xs,
-              runSpacing: MTSpace.xs,
+              spacing: VhSpace.xs,
+              runSpacing: VhSpace.xs,
               children: [
                 for (final MapEntry(:key, :value) in sortLabels.entries)
                   ChoiceChip(
@@ -72,14 +72,14 @@ class _SortSheet extends ConsumerWidget {
                     labelStyle: Theme.of(context).textTheme.labelMedium!
                         .copyWith(
                           color: options.sort == key
-                              ? MTThemeX.of(context).palette.bg
-                              : MTThemeX.of(context).palette.ink2,
+                              ? VhThemeX.of(context).palette.bg
+                              : VhThemeX.of(context).palette.ink2,
                         ),
                     onSelected: (_) => controller.setSort(key),
                   ),
               ],
             ),
-            const SizedBox(height: MTSpace.xl),
+            const SizedBox(height: VhSpace.xl),
             // **Four modes instead of overlapping flags**: compact and grid
             // were two
             // switches that could be on together meaninglessly, and a fourth
@@ -87,11 +87,11 @@ class _SortSheet extends ConsumerWidget {
             // have doubled the impossible states. One choice prevents them at
             // the
             // root.
-            MTSectionHeader(title: l10n.viewMode),
-            const SizedBox(height: MTSpace.md),
+            VhSectionHeader(title: l10n.viewMode),
+            const SizedBox(height: VhSpace.md),
             Wrap(
-              spacing: MTSpace.xs,
-              runSpacing: MTSpace.xs,
+              spacing: VhSpace.xs,
+              runSpacing: VhSpace.xs,
               children: [
                 for (final (label, mode) in <(String, LibraryViewMode)>[
                   (l10n.viewList, LibraryViewMode.list),
@@ -106,8 +106,8 @@ class _SortSheet extends ConsumerWidget {
                     labelStyle: Theme.of(context).textTheme.labelMedium!
                         .copyWith(
                           color: options.mode == mode
-                              ? MTThemeX.of(context).palette.bg
-                              : MTThemeX.of(context).palette.ink2,
+                              ? VhThemeX.of(context).palette.bg
+                              : VhThemeX.of(context).palette.ink2,
                         ),
                     onSelected: (_) => controller.setMode(mode),
                   ),

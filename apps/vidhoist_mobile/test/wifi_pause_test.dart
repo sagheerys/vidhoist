@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/home/network_gate.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
@@ -38,7 +38,7 @@ void main() {
       overrides: [
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
         initialSettingsProvider.overrideWithValue(
-          const LiteSettings(wifiOnly: true),
+          const PhoneSettings(wifiOnly: true),
         ),
         networkGateProvider.overrideWithValue(gate),
         downloadEngineProvider.overrideWithValue(engine),

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_mobile/features/engine/engine_preparer.dart';
 import 'package:vidhoist_mobile/features/engine/ytdlp_bridge.dart';
 

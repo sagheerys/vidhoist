@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../router.dart';
 import '../../shell/context_menu.dart';
@@ -25,7 +25,7 @@ class LibraryChips extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final options = ref.watch(libraryViewProvider);
     final view = ref.read(libraryViewProvider.notifier);
     final platforms = ref.watch(platformCountsProvider(scope));
@@ -41,25 +41,25 @@ class LibraryChips extends ConsumerWidget {
         view.setType(options.type == t ? MediaTypeFilter.all : t);
 
     return Wrap(
-      spacing: MTSpace.xs,
-      runSpacing: MTSpace.xs,
+      spacing: VhSpace.xs,
+      runSpacing: VhSpace.xs,
       children: [
-        EmberPill(
+        DesktopPill(
           label: l.filterAll,
           selected: noFilter && scope == LibraryScope.all,
           onTap: () {
             view.clearFilters();
-            if (scope != LibraryScope.all) context.go(EmberRoutes.library);
+            if (scope != LibraryScope.all) context.go(DesktopRoutes.library);
           },
         ),
-        EmberPill(
+        DesktopPill(
           label: l.favorites,
-          icon: MTIcons.favorite,
+          icon: VhIcons.favorite,
           selected: scope == LibraryScope.favorites,
           onTap: () => context.go(
             scope == LibraryScope.favorites
-                ? EmberRoutes.library
-                : EmberRoutes.favorites,
+                ? DesktopRoutes.library
+                : DesktopRoutes.favorites,
           ),
         ),
         for (final (t, label) in [
@@ -67,7 +67,7 @@ class LibraryChips extends ConsumerWidget {
           (MediaTypeFilter.audio, l.filterAudio),
           (MediaTypeFilter.shorts, l.shortsFilter),
         ])
-          EmberPill(
+          DesktopPill(
             label: label,
             selected: options.type == t,
             onTap: () => type(t),
@@ -75,16 +75,16 @@ class LibraryChips extends ConsumerWidget {
         // The folder chosen in the sidebar, here too so it can be seen
         // and taken off where the clips are.
         if (options.folder case final folder?)
-          EmberPill(
-            label: mtName(folder),
-            icon: MTIcons.folder,
+          DesktopPill(
+            label: vhName(folder),
+            icon: VhIcons.folder,
             selected: true,
             onTap: () => view.setFolder(null),
           ),
         // A single platform is no choice at all, as in Lite.
         if (platforms.length > 1 || options.platform != null)
           Builder(
-            builder: (chip) => EmberPill(
+            builder: (chip) => DesktopPill(
               label: switch (options.platform) {
                 final chosen? => platformLabel(l, chosen),
                 null => l.platform,
@@ -96,7 +96,7 @@ class LibraryChips extends ConsumerWidget {
           ),
         if (tags.isNotEmpty)
           Builder(
-            builder: (chip) => EmberPill(
+            builder: (chip) => DesktopPill(
               label: l.tags,
               count: switch (options.tags.length +
                   options.excludedTags.length) {
@@ -124,13 +124,13 @@ class LibraryChips extends ConsumerWidget {
     WidgetRef ref,
     List<MapEntry<MediaPlatform, int>> platforms,
   ) async {
-    final l = chip.mtl;
+    final l = chip.vhl;
     final chosen = ref.read(libraryViewProvider).platform;
     final picked = await showEmberMenu<MediaPlatform>(chip, _under(chip), [
       for (final MapEntry(key: platform, value: count) in platforms)
-        EmberMenuEntry(
+        DesktopMenuEntry(
           platform,
-          platform == chosen ? MTIcons.check : null,
+          platform == chosen ? VhIcons.check : null,
           platformLabel(l, platform),
           shortcut: '$count',
         ),
@@ -152,14 +152,14 @@ class LibraryChips extends ConsumerWidget {
       final options = ref.read(libraryViewProvider);
       final picked = await showEmberMenu<String>(chip, _under(chip), [
         for (final tag in tags)
-          EmberMenuEntry(
+          DesktopMenuEntry(
             tag,
             options.tags.contains(tag)
-                ? MTIcons.check
+                ? VhIcons.check
                 : options.excludedTags.contains(tag)
-                ? MTIcons.close
+                ? VhIcons.close
                 : null,
-            mtName('#$tag'),
+            vhName('#$tag'),
           ),
       ]);
       if (picked == null) return;

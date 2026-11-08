@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../library/artwork.dart';
 import 'done_check.dart';
@@ -40,18 +40,18 @@ class PanelLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final l = context.mtl;
+    final l = context.vhl;
     const coverHeight = coverWidth * 9 / 16;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: MTSpace.xs),
+      padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Which clip at a glance, before its title is read.
           ClipRRect(
-            borderRadius: BorderRadius.circular(MTCorners.desktop.thumb),
+            borderRadius: BorderRadius.circular(VhCorners.desktop.thumb),
             child: Container(
               width: coverWidth,
               height: coverHeight,
@@ -65,16 +65,16 @@ class PanelLine extends ConsumerWidget {
                     width: coverWidth,
                     height: coverHeight,
                   ) ??
-                  MTIcon(MTIcons.library, size: MTSpace.lg, color: p.ink3),
+                  VhIcon(VhIcons.library, size: VhSpace.lg, color: p.ink3),
             ),
           ),
-          const SizedBox(width: MTSpace.sm),
+          const SizedBox(width: VhSpace.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  mtName(title),
+                  vhName(title),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: text.bodyMedium,
@@ -84,7 +84,7 @@ class PanelLine extends ConsumerWidget {
                   children: [
                     if (done) ...[
                       const DoneCheck(),
-                      const SizedBox(width: MTSpace.xxs),
+                      const SizedBox(width: VhSpace.xxs),
                     ],
                     Flexible(
                       child: Text(
@@ -100,28 +100,28 @@ class PanelLine extends ConsumerWidget {
                 ),
                 if (progress case final value?)
                   Padding(
-                    padding: const EdgeInsets.only(top: MTSpace.xxs),
+                    padding: const EdgeInsets.only(top: VhSpace.xxs),
                     // Wahaj's line led by the ember, or the sliding
                     // perforations while the amount is unknown.
                     child: value < 0
-                        ? const MTFilmStrip()
-                        : MTProgressBar(value: value),
+                        ? const VhFilmStrip()
+                        : VhProgressBar(value: value),
                   ),
                 // Under the text, where a long label wraps instead of
                 // pushing the line past the panel at large text sizes.
                 if (actions.isNotEmpty)
-                  Wrap(spacing: MTSpace.xs, children: actions),
+                  Wrap(spacing: VhSpace.xs, children: actions),
               ],
             ),
           ),
           if (onClose case final close?)
-            MTShortcutTooltip(
+            VhShortcutTooltip(
               message: l.cancel,
               child: IconButton(
                 onPressed: close,
-                icon: MTIcon(
-                  MTIcons.close,
-                  size: MTSpace.md,
+                icon: VhIcon(
+                  VhIcons.close,
+                  size: VhSpace.md,
                   color: p.ink3,
                   semanticLabel: l.cancel,
                 ),

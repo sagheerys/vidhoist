@@ -10,7 +10,7 @@ import 'package:vidhoist_desktop/data/update_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/settings/about_pane.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import 'support/shell_harness.dart';
 
@@ -50,14 +50,14 @@ Future<void> settle(WidgetTester tester) async {
 
 void main() {
   late Directory root;
-  late MTLogger logger;
+  late VhLogger logger;
   late _Dialogs dialogs;
   final copied = <String>[];
   final asked = <Uri>[];
 
   setUp(() {
     root = Directory.systemTemp.createTempSync('ember_settings_');
-    logger = MTLogger(filePath: '${root.path}/ember.log');
+    logger = VhLogger(filePath: '${root.path}/ember.log');
     dialogs = _Dialogs();
     copied.clear();
     asked.clear();
@@ -115,7 +115,7 @@ void main() {
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
     if (to != null) {
-      GoRouter.of(tester.element(find.byType(EmberSidebar))).go(to);
+      GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(to);
       await tester.pumpAndSettle();
     }
     return h;

@@ -2,7 +2,7 @@
 /// release**: the data folder is derived from them, so a later rename
 /// would leave every user's settings, tags and playlists behind in the old
 /// folder.
-abstract final class EmberIdentity {
+abstract final class DesktopIdentity {
   /// The window title, the media flyout and the tray.
   ///
   /// It is also the data folder: `%APPDATA%\Vidhoist\` for settings

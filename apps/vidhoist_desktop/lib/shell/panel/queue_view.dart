@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../grip.dart';
 import '../now_playing_bars.dart';
@@ -12,8 +12,8 @@ import '../now_playing_bars.dart';
 class QueueView extends StatelessWidget {
   const QueueView({super.key, required this.state, required this.player});
 
-  final MTPlayerState state;
-  final MTPlayer player;
+  final VhPlayerState state;
+  final VhPlayer player;
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +46,12 @@ class QueueView extends StatelessWidget {
         ),
         if (at == ordered.length - 1)
           Padding(
-            padding: const EdgeInsets.only(top: MTSpace.sm),
+            padding: const EdgeInsets.only(top: VhSpace.sm),
             child: Text(
-              context.mtl.desktopQueueEnd,
+              context.vhl.desktopQueueEnd,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.labelSmall
-                  ?.copyWith(color: MTThemeX.of(context).palette.ink3),
+                  ?.copyWith(color: VhThemeX.of(context).palette.ink3),
             ),
           ),
       ],
@@ -77,13 +77,13 @@ class _QueueLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final l = context.mtl;
+    final l = context.vhl;
     return Material(
-      color: current ? mtSelectedFill(p) : p.bg,
+      color: current ? vhSelectedFill(p) : p.bg,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(MTCorners.desktop.chip),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -92,7 +92,7 @@ class _QueueLine extends StatelessWidget {
         // more than one row's worth.
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            minHeight: MTDensity.desktop.row + MTSpace.sm,
+            minHeight: VhDensity.desktop.row + VhSpace.sm,
           ),
           child: Row(
             children: [
@@ -100,12 +100,12 @@ class _QueueLine extends StatelessWidget {
                 index: index,
                 child: MouseRegion(
                   cursor: SystemMouseCursors.grab,
-                  child: MTShortcutTooltip(
+                  child: VhShortcutTooltip(
                     message: l.desktopDragToReorder,
                     child: SizedBox(
-                      width: MTSpace.xxl,
-                      height: MTDensity.desktop.row,
-                      child: const EmberGrip(),
+                      width: VhSpace.xxl,
+                      height: VhDensity.desktop.row,
+                      child: const DesktopGrip(),
                     ),
                   ),
                 ),
@@ -119,7 +119,7 @@ class _QueueLine extends StatelessWidget {
                       item.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      textDirection: mtTextDirectionOf(
+                      textDirection: vhTextDirectionOf(
                         item.title,
                         Directionality.of(context),
                       ),
@@ -141,17 +141,17 @@ class _QueueLine extends StatelessWidget {
               // At the line's end, after the title, as the phone marks it.
               if (current)
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(start: MTSpace.sm),
+                  padding: const EdgeInsetsDirectional.only(start: VhSpace.sm),
                   child: NowPlayingBars(playing: playing),
                 ),
               if (item.duration case final length?)
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
-                    start: MTSpace.xs,
-                    end: MTSpace.sm,
+                    start: VhSpace.xs,
+                    end: VhSpace.sm,
                   ),
                   child: Text(
-                    mtFormatDuration(length),
+                    vhFormatDuration(length),
                     style: text.labelSmall?.tabular.copyWith(color: p.ink3),
                   ),
                 ),

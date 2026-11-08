@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/listening/listening_lines.dart';
 import 'package:vidhoist_desktop/features/listening/listening_room.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -85,10 +85,10 @@ void main() {
     await tester.tap(roomButton);
     await tester.pumpAndSettle();
     expect(find.byType(ListeningRoom), findsOneWidget);
-    expect(find.byType(MTBreathingGlow), findsOneWidget);
-    expect(find.byType(MTTiltedArtwork), findsOneWidget);
+    expect(find.byType(VhBreathingGlow), findsOneWidget);
+    expect(find.byType(VhTiltedArtwork), findsOneWidget);
     expect(said('and the drone begins'), findsOneWidget);
-    expect(find.byType(EmberSidebar).hitTestable(), findsNothing);
+    expect(find.byType(DesktopSidebar).hitTestable(), findsNothing);
     await tester.tap(
       find.descendant(
         of: find.byType(ListeningRoom),
@@ -97,7 +97,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.byType(ListeningRoom), findsNothing);
-    expect(find.byType(EmberSidebar).hitTestable(), findsOneWidget);
+    expect(find.byType(DesktopSidebar).hitTestable(), findsOneWidget);
   });
 
   testWidgets('**the guard**: a picture has no room: no button, and F11 '
@@ -146,7 +146,7 @@ void main() {
     final h = await open(tester);
     await tester.tap(roomButton);
     await tester.pumpAndSettle();
-    final p = MTThemeX.of(tester.element(find.byType(ListeningRoom))).palette;
+    final p = VhThemeX.of(tester.element(find.byType(ListeningRoom))).palette;
     Color? ink(String line) => tester.widget<Text>(said(line)).style?.color;
     h.player.reach(const Duration(seconds: 5));
     await tester.pumpAndSettle();
@@ -195,7 +195,7 @@ void main() {
     ShellHarness.useWindow(tester, const Size(760, 700));
     await tester.pumpAndSettle();
     expect(find.byType(ListeningLines), findsOneWidget);
-    final cover = tester.getRect(find.byType(MTTiltedArtwork));
+    final cover = tester.getRect(find.byType(VhTiltedArtwork));
     final lines = tester.getRect(find.byType(ListeningLines));
     expect(cover.bottom, lessThanOrEqualTo(lines.top));
   });

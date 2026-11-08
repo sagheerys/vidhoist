@@ -2,23 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../home/quick_download.dart';
 import 'channel_actions.dart';
 import 'channel_avatar.dart';
 
 /// "Every hour", "Every 30 minutes": how often a channel is read.
-String channelIntervalLabel(MTLocalizations l10n, int minutes) =>
+String channelIntervalLabel(VhLocalizations l10n, int minutes) =>
     minutes < 60 ? l10n.every30Minutes : l10n.everyHours(minutes ~/ 60);
 
 /// Who follows it, how often it is read and at what quality.
 String channelMeta(BuildContext context, ChannelSubscription sub) {
-  final l10n = context.mtl;
-  return mtMetaLine([
+  final l10n = context.vhl;
+  return vhMetaLine([
     if (sub.followers case final n?)
-      l10n.channelFollowers(mtCompactCount(context, n)),
+      l10n.channelFollowers(vhCompactCount(context, n)),
     channelIntervalLabel(l10n, sub.checkIntervalMinutes),
     qualityLabel(l10n, Quality.fromWire(sub.quality ?? Quality.best.wire)),
   ]);
@@ -33,20 +33,20 @@ class ChannelCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final dim = sub.enabled ? 1.0 : 0.45;
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: MTSpace.pagePad,
-        vertical: MTSpace.xs,
+        horizontal: VhSpace.pagePad,
+        vertical: VhSpace.xs,
       ),
       child: Material(
         color: p.card,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(MTRadius.card),
-          side: BorderSide(color: p.line, width: MTThemeX.of(context).hairline),
+          borderRadius: BorderRadius.circular(VhRadius.card),
+          side: BorderSide(color: p.line, width: VhThemeX.of(context).hairline),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -54,20 +54,20 @@ class ChannelCard extends ConsumerWidget {
             InkWell(
               onTap: () => unawaited(showChannelActions(context, ref, sub)),
               child: Padding(
-                padding: const EdgeInsets.all(MTSpace.md),
+                padding: const EdgeInsets.all(VhSpace.md),
                 child: Row(
                   children: [
                     Opacity(
                       opacity: dim,
                       child: ChannelAvatar(sub: sub),
                     ),
-                    const SizedBox(width: MTSpace.md),
+                    const SizedBox(width: VhSpace.md),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            mtName(sub.name),
+                            vhName(sub.name),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: text.titleMedium?.copyWith(
@@ -85,7 +85,7 @@ class ChannelCard extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    MTIcon(MTIcons.moreVert, size: 18, color: p.ink3),
+                    VhIcon(VhIcons.moreVert, size: 18, color: p.ink3),
                   ],
                 ),
               ),
@@ -111,41 +111,41 @@ class ChannelStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final color = p.ink3;
     final line = sub.hasError
         ? l10n.channelCheckFailed
-        : mtMetaLine([
+        : vhMetaLine([
             if (!sub.enabled) l10n.subscriptionPaused,
             switch (sub.lastChecked) {
-              final at? => l10n.lastCheckedAt(mtTimeAgo(context, at)),
+              final at? => l10n.lastCheckedAt(vhTimeAgo(context, at)),
               null => l10n.neverChecked,
             },
-            if (sub.titleRegex case final filter?) mtLtrRun(filter),
+            if (sub.titleRegex case final filter?) vhLtrRun(filter),
           ]);
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: MTSpace.md,
-        vertical: MTSpace.sm,
+        horizontal: VhSpace.md,
+        vertical: VhSpace.sm,
       ),
       decoration: BoxDecoration(
         color: p.cardAlt,
         border: Border(
-          top: BorderSide(color: p.line, width: MTThemeX.of(context).hairline),
+          top: BorderSide(color: p.line, width: VhThemeX.of(context).hairline),
         ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MTIcon(
+          VhIcon(
             sub.hasError
-                ? MTIcons.alert
-                : (sub.enabled ? MTIcons.clock : MTIcons.pause),
+                ? VhIcons.alert
+                : (sub.enabled ? VhIcons.clock : VhIcons.pause),
             size: 14,
             color: color,
           ),
-          const SizedBox(width: MTSpace.xs),
+          const SizedBox(width: VhSpace.xs),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,7 +159,7 @@ class ChannelStatus extends StatelessWidget {
                 ),
                 if (detail && sub.hasError)
                   Text(
-                    mtLtrRun(sub.error!),
+                    vhLtrRun(sub.error!),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelSmall

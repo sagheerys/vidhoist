@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'media_kit_port.dart';
 
@@ -15,7 +15,7 @@ class DesktopPlayer {
     required PlaybackSourceResolver resolver,
     required KeyValueStore store,
     required PrefsMutex mutex,
-    MTLogger? logger,
+    VhLogger? logger,
   }) {
     // What the player did, in the diagnostic log: a clip that fails on
     // another computer can then be read there, in Settings.
@@ -29,7 +29,7 @@ class DesktopPlayer {
     final port = MediaKitPort.create(trace: trace);
     return DesktopPlayer._(
       port,
-      MTSessionPlayer(
+      VhSessionPlayer(
         port: port,
         resolver: resolver,
         positions: PlaybackPositionStore(
@@ -48,5 +48,5 @@ class DesktopPlayer {
   final MediaKitPort port;
 
   /// What the interface, the media keys and the tray talk to.
-  final MTPlayer session;
+  final VhPlayer session;
 }

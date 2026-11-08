@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../shell/context_menu.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/shell_metrics.dart';
 import '../library/artwork.dart';
@@ -21,7 +21,7 @@ class ListCard extends ConsumerWidget {
     this.onPlay,
     this.onMenu,
     this.pinned = false,
-    this.icon = MTIcons.queue,
+    this.icon = VhIcons.queue,
   });
 
   final String title;
@@ -35,20 +35,20 @@ class ListCard extends ConsumerWidget {
   final bool pinned;
 
   /// Drawn when the list has no cover to show.
-  final MTIconData icon;
+  final VhIconData icon;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final l = context.mtl;
-    final radius = BorderRadius.circular(MTCorners.desktop.card);
-    const width = EmberShellSize.listCard;
+    final l = context.vhl;
+    final radius = BorderRadius.circular(VhCorners.desktop.card);
+    const width = DesktopShellSize.listCard;
     return MenuKey(
       onMenu: onMenu,
       child: SizedBox(
         width: width,
-        child: MTHoverLift(
+        child: VhHoverLift(
           borderRadius: radius,
           builder: (context, hovered) => Material(
             color: p.card,
@@ -56,7 +56,7 @@ class ListCard extends ConsumerWidget {
               borderRadius: radius,
               side: BorderSide(
                 color: pinned ? p.ink3 : p.line,
-                width: MTThemeX.of(context).hairline,
+                width: VhThemeX.of(context).hairline,
               ),
             ),
             clipBehavior: Clip.antiAlias,
@@ -76,7 +76,7 @@ class ListCard extends ConsumerWidget {
                         _Mosaic(covers: covers, icon: icon, width: width),
                         if (onPlay != null && hovered)
                           Center(
-                            child: MTShortcutTooltip(
+                            child: VhShortcutTooltip(
                               message: l.playAll,
                               child: Material(
                                 color: p.accent,
@@ -85,10 +85,10 @@ class ListCard extends ConsumerWidget {
                                   customBorder: const CircleBorder(),
                                   onTap: onPlay,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(MTSpace.sm),
-                                    child: MTIcon(
-                                      MTIcons.playFill,
-                                      size: MTSpace.xl,
+                                    padding: const EdgeInsets.all(VhSpace.sm),
+                                    child: VhIcon(
+                                      VhIcons.playFill,
+                                      size: VhSpace.xl,
                                       color: p.onAccent,
                                     ),
                                   ),
@@ -100,7 +100,7 @@ class ListCard extends ConsumerWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(MTSpace.sm),
+                    padding: const EdgeInsets.all(VhSpace.sm),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -108,15 +108,15 @@ class ListCard extends ConsumerWidget {
                           title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          textDirection: mtTextDirectionOf(
+                          textDirection: vhTextDirectionOf(
                             title,
                             Directionality.of(context),
                           ),
                           style: text.titleSmall?.copyWith(color: p.ink),
                         ),
-                        const SizedBox(height: MTSpace.xxs),
+                        const SizedBox(height: VhSpace.xxs),
                         Text(
-                          mtMetaLine([subtitle, if (pinned) l.desktopPinned]),
+                          vhMetaLine([subtitle, if (pinned) l.desktopPinned]),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: text.labelSmall?.copyWith(color: p.ink3),
@@ -143,12 +143,12 @@ class _Mosaic extends ConsumerWidget {
   });
 
   final List<String?> covers;
-  final MTIconData icon;
+  final VhIconData icon;
   final double width;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final drawn = [
       for (final value in covers)
         if (value != null && value.isNotEmpty) value,
@@ -175,7 +175,7 @@ class _Mosaic extends ConsumerWidget {
       content = cover(drawn.first, width);
     } else {
       content = Center(
-        child: MTIcon(icon, size: MTSpace.xxl, color: p.ink3),
+        child: VhIcon(icon, size: VhSpace.xxl, color: p.ink3),
       );
     }
     return ColoredBox(color: p.cardAlt, child: content);

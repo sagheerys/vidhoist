@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../playlists/add_to_playlist_sheet.dart';
 import '../library_actions.dart';
@@ -23,7 +23,7 @@ AppBar libraryMainBar(
   required VoidCallback onSearch,
   required VoidCallback onCloseSearch,
 }) {
-  final l10n = context.mtl;
+  final l10n = context.vhl;
   if (searching) {
     return AppBar(
       leading: IconButton(
@@ -33,8 +33,8 @@ AppBar libraryMainBar(
       ),
       titleSpacing: 0,
       title: Padding(
-        padding: const EdgeInsetsDirectional.only(end: MTSpace.pagePad),
-        child: MTQuerySearchField(
+        padding: const EdgeInsetsDirectional.only(end: VhSpace.pagePad),
+        child: VhQuerySearchField(
           hint: l10n.searchVideos,
           query: ref.watch(libraryViewProvider.select((o) => o.query)),
           onChanged: ref.read(libraryViewProvider.notifier).setQuery,
@@ -49,16 +49,16 @@ AppBar libraryMainBar(
       IconButton(
         tooltip: MaterialLocalizations.of(context).searchFieldLabel,
         onPressed: onSearch,
-        icon: const MTIcon(MTIcons.search),
+        icon: const VhIcon(VhIcons.search),
       ),
       // The active downloads badge, which opens the management sheet.
       IconButton(
         tooltip: l10n.activeDownloadsSheet,
         onPressed: () => showDownloadsSheet(context),
-        icon: MTDownloadsIcon(active: activeCount),
+        icon: VhDownloadsIcon(active: activeCount),
       ),
       // A dot while a platform chosen inside the sheet is on.
-      MTFilterButton(
+      VhFilterButton(
         tooltip: l10n.sortAndPlatform,
         active: ref.watch(
           libraryViewProvider.select((o) => o.platform != null),
@@ -75,7 +75,7 @@ AppBar librarySelectionBar(
   WidgetRef ref,
   LibraryViewOptions options,
 ) {
-  final l10n = context.mtl;
+  final l10n = context.vhl;
 
   /// The library items matching the current selection.
   List<LocalItem> selected() {
@@ -91,10 +91,10 @@ AppBar librarySelectionBar(
   return AppBar(
     leading: IconButton(
       onPressed: controller.clearSelection,
-      icon: const MTIcon(MTIcons.close),
+      icon: const VhIcon(VhIcons.close),
     ),
     // The count rises to its new value rather than jumping.
-    title: MTAnimatedSwap(
+    title: VhAnimatedSwap(
       alignment: AlignmentDirectional.centerStart,
       child: Text(
         l10n.selectedCount(selection.length),
@@ -108,22 +108,22 @@ AppBar librarySelectionBar(
           final items = ref.read(visibleLibraryProvider).valueOrNull ?? [];
           controller.selectAll(items.map((i) => i.key));
         },
-        icon: const MTIcon(MTIcons.selectAll),
+        icon: const VhIcon(VhIcons.selectAll),
       ),
       IconButton(
         tooltip: l10n.addToPlaylist,
         onPressed: () => showAddToPlaylistSheet(context, ref, selected()),
-        icon: const MTIcon(MTIcons.queueAdd),
+        icon: const VhIcon(VhIcons.queueAdd),
       ),
       IconButton(
         tooltip: l10n.shareSelected,
         onPressed: () => ref.read(libraryActionsProvider).share(selected()),
-        icon: const MTIcon(MTIcons.share),
+        icon: const VhIcon(VhIcons.share),
       ),
       IconButton(
         tooltip: l10n.deleteSelected,
         onPressed: () => confirmBulkDelete(context, ref, selection),
-        icon: MTIcon(MTIcons.trash, color: MTThemeX.of(context).palette.err),
+        icon: VhIcon(VhIcons.trash, color: VhThemeX.of(context).palette.err),
       ),
     ],
   );

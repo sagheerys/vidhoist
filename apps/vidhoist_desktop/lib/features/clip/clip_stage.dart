@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/shell_metrics.dart';
 import '../../shell/shell_state.dart';
@@ -40,7 +40,7 @@ class ClipStage extends ConsumerWidget {
     return ValueListenableBuilder<bool>(
       valueListenable: ref.watch(windowControlsProvider).fullScreen,
       builder: (context, full, child) => ClipRRect(
-        borderRadius: BorderRadius.circular(full ? 0 : MTCorners.desktop.card),
+        borderRadius: BorderRadius.circular(full ? 0 : VhCorners.desktop.card),
         child: child,
       ),
       child: _stage(context, ref, picture),
@@ -48,9 +48,9 @@ class ClipStage extends ConsumerWidget {
   }
 
   Widget _stage(BuildContext context, WidgetRef ref, bool picture) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return ColoredBox(
-      color: MTPalette.fullscreenScrim,
+      color: VhPalette.fullscreenScrim,
       child: picture
           ? ClipVideoControls(
               short: item.isShortForm,
@@ -68,17 +68,17 @@ class ClipStage extends ConsumerWidget {
                         height: box.maxHeight,
                       ) ??
                       Center(
-                        child: mtCoverPlaceholder(
+                        child: vhCoverPlaceholder(
                           context,
-                          size: MTSpace.xxl,
+                          size: VhSpace.xxl,
                           color: p.ink3,
                           audio: item.isAudio,
                         ),
                       ),
                   if (!isCurrent)
                     Center(
-                      child: MTShortcutTooltip(
-                        message: context.mtl.play,
+                      child: VhShortcutTooltip(
+                        message: context.vhl.play,
                         child: Material(
                           color: p.accent,
                           shape: const CircleBorder(),
@@ -86,10 +86,10 @@ class ClipStage extends ConsumerWidget {
                             customBorder: const CircleBorder(),
                             onTap: onPlay,
                             child: Padding(
-                              padding: const EdgeInsets.all(MTSpace.lg),
-                              child: MTIcon(
-                                MTIcons.play,
-                                size: MTSpace.xxl,
+                              padding: const EdgeInsets.all(VhSpace.lg),
+                              child: VhIcon(
+                                VhIcons.play,
+                                size: VhSpace.xxl,
                                 color: p.onAccent,
                               ),
                             ),
@@ -115,9 +115,9 @@ class ClipStage extends ConsumerWidget {
 /// site; the title waits below, a scroll away.
 double stageWidth(double width, double height, {bool theater = false}) {
   final room = theater ? 0 : ClipStageRoom.title;
-  final byHeight = (height - MTSpace.xl * 2 - room) * 16 / 9;
+  final byHeight = (height - VhSpace.xl * 2 - room) * 16 / 9;
   return math.min(
-    theater ? width : math.min(EmberShellSize.clipMax, width),
+    theater ? width : math.min(DesktopShellSize.clipMax, width),
     math.max(ClipStageRoom.least, byHeight),
   );
 }
@@ -125,8 +125,8 @@ double stageWidth(double width, double height, {bool theater = false}) {
 /// The room the stage leaves and keeps.
 abstract final class ClipStageRoom {
   /// Under the picture: the title and its line, in sight.
-  static const double title = MTSpace.xxl * 3;
+  static const double title = VhSpace.xxl * 3;
 
   /// The narrowest picture, however short the window.
-  static const double least = EmberShellSize.listCard * 2;
+  static const double least = DesktopShellSize.listCard * 2;
 }

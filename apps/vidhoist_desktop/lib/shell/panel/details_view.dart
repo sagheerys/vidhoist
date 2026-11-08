@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
 import '../../data/lists_data.dart';
@@ -24,7 +24,7 @@ class DetailsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final url = item.canonicalUrl;
     final entry = (ref.watch(libraryItemsProvider).valueOrNull ?? const [])
         .where((i) => i.canonicalUrl == url)
@@ -37,7 +37,7 @@ class DetailsView extends ConsumerWidget {
     ];
     final tags = [
       for (final tag in entry?.tags ?? const <String>[])
-        if (tag != MTConstants.favoritesSystemTag) tag,
+        if (tag != VhConstants.favoritesSystemTag) tag,
     ];
     final folder = switch (item.serverFilename) {
       final name? => ServerPath.folderOf(name),
@@ -55,10 +55,10 @@ class DetailsView extends ConsumerWidget {
           if (item.uploader case final who?) row(l.desktopChannel, who),
           row(l.platform, platformLabel(l, MediaPlatform.detect(url))),
           if (item.duration case final length?)
-            row(l.columnLength, mtLtrRun(mtFormatDuration(length))),
-          if (size != null) row(l.fileSize, mtFormatSize(size)),
+            row(l.columnLength, vhLtrRun(vhFormatDuration(length))),
+          if (size != null) row(l.fileSize, vhFormatSize(size)),
           if (format != null) row(l.format, format),
-          MTQualityRows(
+          VhQualityRows(
             key: ValueKey(url),
             cacheKey: url,
             row: row,
@@ -66,13 +66,13 @@ class DetailsView extends ConsumerWidget {
             duration: item.duration,
             load: ref.read(videoSurfaceProvider).quality,
           ),
-          if (when != null) row(l.downloadDate, mtTimeAgo(context, when)),
-          if (folder.isNotEmpty) row(l.folder, mtName(folder)),
+          if (when != null) row(l.downloadDate, vhTimeAgo(context, when)),
+          if (folder.isNotEmpty) row(l.folder, vhName(folder)),
           if (lists.isNotEmpty)
-            row(l.inPlaylists, lists.map(mtName).join(l.listSeparator)),
+            row(l.inPlaylists, lists.map(vhName).join(l.listSeparator)),
           if (tags.isNotEmpty) row(l.tags, tags.join(l.listSeparator)),
           if (item.localPath != null) row(l.source, l.playingFromDevice),
-          const SizedBox(height: MTSpace.md),
+          const SizedBox(height: VhSpace.md),
           _LinkRow(url: url),
         ],
       ),
@@ -88,15 +88,15 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: MTSpace.sm),
+      padding: const EdgeInsets.symmetric(vertical: VhSpace.sm),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             color: p.line,
-            width: MTThemeX.of(context).hairline,
+            width: VhThemeX.of(context).hairline,
           ),
         ),
       ),
@@ -104,13 +104,13 @@ class _Row extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: MTSpace.xxl * 3,
+            width: VhSpace.xxl * 3,
             child: Text(label, style: text.labelSmall?.copyWith(color: p.ink3)),
           ),
           Expanded(
             child: Text(
               value,
-              textDirection: mtTextDirectionOf(
+              textDirection: vhTextDirectionOf(
                 value,
                 Directionality.of(context),
               ),
@@ -130,8 +130,8 @@ class _LinkRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
-    final l = context.mtl;
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -144,14 +144,14 @@ class _LinkRow extends StatelessWidget {
                 ?.copyWith(color: p.ink2),
           ),
         ),
-        const SizedBox(height: MTSpace.xs),
-        MTLinkButton(
+        const SizedBox(height: VhSpace.xs),
+        VhLinkButton(
           label: l.desktopCopyLink,
-          icon: MTIcons.copy,
+          icon: VhIcons.copy,
           onPressed: () async {
             await Clipboard.setData(ClipboardData(text: url));
             if (!context.mounted) return;
-            showMTNotice(context, message: l.desktopLinkCopied);
+            showVhNotice(context, message: l.desktopLinkCopied);
           },
         ),
       ],

@@ -8,9 +8,9 @@ import 'package:vidhoist_desktop/features/reading/reading_room.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/video_surface.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
@@ -76,8 +76,8 @@ void main() {
       h.player.showPlaying([toPlaylistItem(_entry)], playing: false);
     }
     await tester.pumpAndSettle();
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.reading(_url));
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.reading(_url));
     await tester.pumpAndSettle();
     return h;
   }
@@ -98,14 +98,14 @@ void main() {
     return found;
   }
 
-  MTPalette palette(WidgetTester tester) =>
-      MTThemeX.of(tester.element(find.byType(ReadingRoom))).palette;
+  VhPalette palette(WidgetTester tester) =>
+      VhThemeX.of(tester.element(find.byType(ReadingRoom))).palette;
 
   testWidgets('**the guard**: the clip page opens the room, where the '
       'transcript reads as paragraphs parted at the pause', (tester) async {
     await open(tester);
-    GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.item(_url));
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.item(_url));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Reading room'));
     await tester.pumpAndSettle();
@@ -177,7 +177,7 @@ void main() {
     expect(h.player.sought, const Duration(seconds: 20));
     expect(find.byType(ReadingRoom), findsOneWidget);
     // The time in the margin, the keyboard's way in.
-    await tester.tap(find.text(mtLtrRun('0:10')));
+    await tester.tap(find.text(vhLtrRun('0:10')));
     await tester.pumpAndSettle();
     expect(h.player.sought, const Duration(seconds: 10));
   });

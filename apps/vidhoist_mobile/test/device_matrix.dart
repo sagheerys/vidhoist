@@ -13,45 +13,45 @@ import 'package:flutter_test/flutter_test.dart';
 /// and catches `RenderFlex overflowed` from Flutter's own engine, the error
 /// that shows on a user's device as a yellow and black stripe and never
 /// shows on the developer's.
-class MTDevice {
-  const MTDevice(this.name, this.size);
+class VhDevice {
+  const VhDevice(this.name, this.size);
 
   final String name;
   final Size size;
 
   /// Sizes in logical points (dp), not pixels.
-  static const List<MTDevice> all = [
+  static const List<VhDevice> all = [
     // The smallest realistic Android screen still receiving updates.
-    MTDevice('صغير 320×534', Size(320, 534)),
-    MTDevice('اقتصادي 360×640', Size(360, 640)),
+    VhDevice('صغير 320×534', Size(320, 534)),
+    VhDevice('اقتصادي 360×640', Size(360, 640)),
     // The maintainer's actual device.
-    MTDevice('جلاكسي S22 ألترا 384×823', Size(384, 823)),
-    MTDevice('محاكي المشروع 411×914', Size(411, 914)),
+    VhDevice('جلاكسي S22 ألترا 384×823', Size(384, 823)),
+    VhDevice('محاكي المشروع 411×914', Size(411, 914)),
     // Tablets (2026-10-10), upright and on their side: the small one sits
     // on the 600-point line where a layout switches from phone to rail.
-    MTDevice('لوحي صغير 600×960', Size(600, 960)),
-    MTDevice('لوحي صغير أفقي 960×600', Size(960, 600)),
+    VhDevice('لوحي صغير 600×960', Size(600, 960)),
+    VhDevice('لوحي صغير أفقي 960×600', Size(960, 600)),
     // The owner's 8-inch tablet: the app's window as measured on it, above
     // the three-button bar, under Android's 600 line on both sides.
-    MTDevice('لوحي المالك 8 بوصات 593×900', Size(593, 900)),
-    MTDevice('لوحي المالك أفقي 948×544', Size(948, 544)),
-    MTDevice('لوحي 800×1280', Size(800, 1280)),
-    MTDevice('لوحي أفقي 1280×800', Size(1280, 800)),
+    VhDevice('لوحي المالك 8 بوصات 593×900', Size(593, 900)),
+    VhDevice('لوحي المالك أفقي 948×544', Size(948, 544)),
+    VhDevice('لوحي 800×1280', Size(800, 1280)),
+    VhDevice('لوحي أفقي 1280×800', Size(1280, 800)),
     // More tablet shapes nobody here owns (2026-10-10): a 7-inch tablet on
     // its side above three buttons, an unfolded foldable both ways, a
     // 12-inch tablet both ways, and half a tablet in split screen.
-    MTDevice('لوحي 7 بوصات أفقي بأزرار 1024×552', Size(1024, 552)),
-    MTDevice('قابل للطي مفتوحاً 673×841', Size(673, 841)),
-    MTDevice('قابل للطي مفتوحاً أفقياً 841×673', Size(841, 673)),
-    MTDevice('لوحي 12 بوصة 854×1366', Size(854, 1366)),
-    MTDevice('لوحي 12 بوصة أفقي 1366×854', Size(1366, 854)),
-    MTDevice('نصف شاشة لوحي 640×800', Size(640, 800)),
+    VhDevice('لوحي 7 بوصات أفقي بأزرار 1024×552', Size(1024, 552)),
+    VhDevice('قابل للطي مفتوحاً 673×841', Size(673, 841)),
+    VhDevice('قابل للطي مفتوحاً أفقياً 841×673', Size(841, 673)),
+    VhDevice('لوحي 12 بوصة 854×1366', Size(854, 1366)),
+    VhDevice('لوحي 12 بوصة أفقي 1366×854', Size(1366, 854)),
+    VhDevice('نصف شاشة لوحي 640×800', Size(640, 800)),
   ];
 }
 
 /// Text scales: normal, the one common among older users, and Android's
 /// accessibility ceiling.
-const List<double> mtTextScales = [1.0, 1.3, 2.0];
+const List<double> vhTextScales = [1.0, 1.3, 2.0];
 
 /// Builds [child] at every size and every text scale, and fails at the
 /// first overflow.
@@ -62,8 +62,8 @@ const List<double> mtTextScales = [1.0, 1.3, 2.0];
 Future<void> expectNoOverflow(
   WidgetTester tester,
   Widget Function() build, {
-  List<MTDevice> devices = MTDevice.all,
-  List<double> scales = mtTextScales,
+  List<VhDevice> devices = VhDevice.all,
+  List<double> scales = vhTextScales,
 }) async {
   addTearDown(tester.view.reset);
   for (final device in devices) {

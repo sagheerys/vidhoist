@@ -12,9 +12,9 @@ import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
 import 'package:vidhoist_desktop/features/add/add_options.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'support/shell_harness.dart';
 
@@ -62,7 +62,7 @@ void main() {
     );
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    GoRouter.of(tester.element(find.byType(EmberSidebar))).go(to);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(to);
     await tester.pumpAndSettle();
     return h;
   }
@@ -105,14 +105,14 @@ void main() {
       final words = find.descendant(
         of: find.byType(ChoiceGroup),
         matching: find.byWidgetPredicate(
-          (w) => w is Text || w is EmberSegments,
+          (w) => w is Text || w is DesktopSegments,
         ),
       );
       final widest = [
         for (final e in words.evaluate())
           tester.getRect(find.byWidget(e.widget)).right,
       ].reduce((a, b) => a > b ? a : b);
-      expect(preview.left - widest, lessThanOrEqualTo(MTSpace.xxl + 1));
+      expect(preview.left - widest, lessThanOrEqualTo(VhSpace.xxl + 1));
     });
 
     testWidgets('a size this screen cannot hold cannot be chosen', (
@@ -160,11 +160,11 @@ void main() {
   testWidgets('subscriptions: not in this version, and Channels is one '
       'click away', (tester) async {
     await open(tester, '/settings/subscriptions');
-    final l = lookupMTLocalizations(const Locale('en'));
+    final l = lookupVhLocalizations(const Locale('en'));
     expect(find.text(l.desktopChannelsLater), findsWidgets);
     await tester.tap(find.text('Open channels'));
     await tester.pumpAndSettle();
-    final router = GoRouter.of(tester.element(find.byType(EmberSidebar)));
+    final router = GoRouter.of(tester.element(find.byType(DesktopSidebar)));
     expect(router.state.uri.path, '/channels');
   });
 

@@ -4,16 +4,16 @@ import 'package:vidhoist_desktop/data/choices_data.dart';
 import 'package:vidhoist_desktop/data/folders_data.dart';
 import 'package:vidhoist_desktop/data/notices.dart';
 import 'package:vidhoist_desktop/di.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 import 'support/shell_harness.dart';
 
 /// Windows' notifications, recording what they were asked to show.
 class _Notices implements NoticePort {
-  final shown = <EmberNotice>[];
+  final shown = <DesktopNotice>[];
 
   @override
-  Future<void> show(EmberNotice notice) async => shown.add(notice);
+  Future<void> show(DesktopNotice notice) async => shown.add(notice);
 }
 
 /// Explorer, recording what it was asked to show.

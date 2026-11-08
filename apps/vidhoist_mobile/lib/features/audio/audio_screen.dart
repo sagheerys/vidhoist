@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/vh_media.dart';
 
 import '../../di.dart';
 import '../downloads_library/library_actions.dart';
@@ -8,8 +8,8 @@ import '../downloads_library/library_providers.dart';
 import '../downloads_library/widgets/item_details_sheet.dart';
 import '../player/playback_providers.dart';
 
-/// The full audio screen (`/audio`): the content comes from mt_media, and
-/// the thumbnails and clip details from the app layer, since mt_media does
+/// The full audio screen (`/audio`): the content comes from vh_media, and
+/// the thumbnails and clip details from the app layer, since vh_media does
 /// not know the library indexes.
 class AudioScreen extends ConsumerWidget {
   const AudioScreen({super.key});
@@ -18,7 +18,7 @@ class AudioScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final handler = ref.watch(audioHandlerProvider);
     final library = ref.watch(localMediaProvider).valueOrNull ?? const [];
-    return MTAudioScreen(
+    return VhAudioScreen(
       handler: handler,
       artwork: artworkBuilderFor(ref),
       cover: coverBuilderFor(ref),
@@ -44,7 +44,7 @@ class AudioScreen extends ConsumerWidget {
   void _showDetails(
     BuildContext context,
     WidgetRef ref,
-    MTAudioHandler handler,
+    VhAudioHandler handler,
   ) {
     final key = handler.currentItem?.canonicalUrl;
     if (key == null) return;

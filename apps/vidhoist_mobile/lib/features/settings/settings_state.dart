@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_media/mt_media.dart'
-    show MTCaptionBackground, MTPictureInPicture;
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart'
+    show VhCaptionBackground, VhPictureInPicture;
 
 import '../../di.dart';
 
 /// The phone's settings. Storage key names are fixed, and they are the same
 /// names the old Lite used, so its backup restores as it is.
-class LiteSettings {
-  const LiteSettings({
+class PhoneSettings {
+  const PhoneSettings({
     this.quality = Quality.best,
     this.quickDownload = false,
     this.wifiOnly = false,
@@ -36,7 +36,7 @@ class LiteSettings {
   /// medium at first.
   final int captionSize;
 
-  /// What sits behind them: an index into [MTCaptionBackground.values],
+  /// What sits behind them: an index into [VhCaptionBackground.values],
   /// the dark capsule at first.
   final int captionBackground;
 
@@ -47,10 +47,10 @@ class LiteSettings {
   double get captionScale =>
       captionScales[captionSize.clamp(0, captionScales.length - 1)];
 
-  MTCaptionBackground get captionBackdrop =>
-      MTCaptionBackground.values[captionBackground.clamp(
+  VhCaptionBackground get captionBackdrop =>
+      VhCaptionBackground.values[captionBackground.clamp(
         0,
-        MTCaptionBackground.values.length - 1,
+        VhCaptionBackground.values.length - 1,
       )];
 
   /// The welcome screen has readied the engine once; a fresh install shows
@@ -95,7 +95,7 @@ class LiteSettings {
   /// null means the system language (detected on first run).
   final String? localeCode;
 
-  LiteSettings copyWith({
+  PhoneSettings copyWith({
     Quality? quality,
     bool? quickDownload,
     bool? wifiOnly,
@@ -113,7 +113,7 @@ class LiteSettings {
     /// Distinguishes "clear the language" from "do not change it": `null`
     /// alone is not enough.
     bool clearLocale = false,
-  }) => LiteSettings(
+  }) => PhoneSettings(
     quality: quality ?? this.quality,
     quickDownload: quickDownload ?? this.quickDownload,
     wifiOnly: wifiOnly ?? this.wifiOnly,
@@ -130,9 +130,9 @@ class LiteSettings {
   );
 
   /// Loads the initial snapshot before runApp.
-  static Future<LiteSettings> load(KeyValueStore store) async {
+  static Future<PhoneSettings> load(KeyValueStore store) async {
     final themeName = await store.getString('theme_mode');
-    return LiteSettings(
+    return PhoneSettings(
       quality: Quality.fromWire(await store.getString('video_quality')),
       quickDownload: await store.getBool('quick_download_enabled') ?? false,
       wifiOnly: await store.getBool('wifi_only_downloads') ?? false,
@@ -153,11 +153,11 @@ class LiteSettings {
   }
 }
 
-class SettingsNotifier extends Notifier<LiteSettings> {
+class SettingsNotifier extends Notifier<PhoneSettings> {
   @override
-  LiteSettings build() {
+  PhoneSettings build() {
     final settings = ref.read(initialSettingsProvider);
-    MTPictureInPicture.instance.enabled.value = settings.pictureInPicture;
+    VhPictureInPicture.instance.enabled.value = settings.pictureInPicture;
     return settings;
   }
 
@@ -167,7 +167,7 @@ class SettingsNotifier extends Notifier<LiteSettings> {
   /// Re-reads every setting from storage, after importing a backup (rule
   /// 8).
   Future<void> reloadFromStore() async =>
-      state = await LiteSettings.load(_store);
+      state = await PhoneSettings.load(_store);
 
   Future<void> setQuality(Quality quality) async {
     await _mutex.run(() => _store.setString('video_quality', quality.wire));
@@ -196,7 +196,7 @@ class SettingsNotifier extends Notifier<LiteSettings> {
 
   Future<void> setPictureInPicture(bool enabled) async {
     await _mutex.run(() => _store.setBool('picture_in_picture', enabled));
-    MTPictureInPicture.instance.enabled.value = enabled;
+    VhPictureInPicture.instance.enabled.value = enabled;
     state = state.copyWith(pictureInPicture: enabled);
   }
 
@@ -206,7 +206,7 @@ class SettingsNotifier extends Notifier<LiteSettings> {
   }
 
   Future<void> setWelcomed() async {
-    await _mutex.run(() => _store.setBool(LiteSettings.welcomedKey, true));
+    await _mutex.run(() => _store.setBool(PhoneSettings.welcomedKey, true));
     state = state.copyWith(welcomed: true);
   }
 

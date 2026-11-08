@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/downloads_data.dart';
 import '../../shell/pill.dart';
@@ -78,8 +78,8 @@ class AddOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final audio = choice.audio || audioOnly;
     final qualities = [
@@ -94,32 +94,32 @@ class AddOptions extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Wrap(
-          spacing: MTSpace.xs,
-          runSpacing: MTSpace.xs,
+          spacing: VhSpace.xs,
+          runSpacing: VhSpace.xs,
           children: [
             if (!audioOnly)
-              EmberPill(
+              DesktopPill(
                 label: l.filterVideo,
-                icon: MTIcons.library,
+                icon: VhIcons.library,
                 selected: !audio,
                 onTap: () => onChanged(choice.copyWith(audio: false)),
               ),
-            EmberPill(
+            DesktopPill(
               label: l.filterAudio,
-              icon: MTIcons.headphones,
+              icon: VhIcons.headphones,
               selected: audio,
               onTap: () => onChanged(choice.copyWith(audio: true)),
             ),
           ],
         ),
         if (!audio) ...[
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           Wrap(
-            spacing: MTSpace.xs,
-            runSpacing: MTSpace.xs,
+            spacing: VhSpace.xs,
+            runSpacing: VhSpace.xs,
             children: [
               for (final (quality, label) in qualities)
-                EmberPill(
+                DesktopPill(
                   label: label,
                   selected:
                       choice.quality == quality ||
@@ -129,14 +129,14 @@ class AddOptions extends ConsumerWidget {
             ],
           ),
         ],
-        const SizedBox(height: MTSpace.md),
+        const SizedBox(height: VhSpace.md),
         FolderLine(
           value: folderLabel(l, choice.folder),
           onPick: () => unawaited(_pickFolder(context)),
         ),
         if (offerTranscript)
           Padding(
-            padding: const EdgeInsets.only(top: MTSpace.xs),
+            padding: const EdgeInsets.only(top: VhSpace.xs),
             child: CheckboxListTile(
               dense: true,
               contentPadding: EdgeInsets.zero,

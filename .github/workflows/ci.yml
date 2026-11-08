@@ -47,27 +47,27 @@ jobs:
       - name: Check comments
         run: python3 tool/comment-lint.py
 
-      # mt_core, mt_transcripts and mt_ytdlp are pure Dart, so they run
+      # vh_core, vh_transcripts and vh_ytdlp are pure Dart, so they run
       # under `dart test`; the rest need the Flutter test runner.
-      - name: Test mt_core
+      - name: Test vh_core
         run: dart test
-        working-directory: packages/mt_core
+        working-directory: packages/vh_core
 
-      - name: Test mt_transcripts
+      - name: Test vh_transcripts
         run: dart test
-        working-directory: packages/mt_transcripts
+        working-directory: packages/vh_transcripts
 
-      - name: Test mt_ytdlp
+      - name: Test vh_ytdlp
         run: dart test
-        working-directory: packages/mt_ytdlp
+        working-directory: packages/vh_ytdlp
 
-      - name: Test mt_media
+      - name: Test vh_media
         run: flutter test --no-pub
-        working-directory: packages/mt_media
+        working-directory: packages/vh_media
 
-      - name: Test mt_ui
+      - name: Test vh_ui
         run: flutter test --no-pub
-        working-directory: packages/mt_ui
+        working-directory: packages/vh_ui
 
       - name: Test vidhoist_mobile
         run: flutter test --no-pub

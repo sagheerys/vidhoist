@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/desktop_habits.dart';
 import '../../data/hints_data.dart';
@@ -12,7 +12,7 @@ import '../../shell/key_cap.dart';
 import '../../shell/shell_metrics.dart';
 import '../library/clip_keys.dart';
 import '../shortcuts/shortcuts_sheet.dart';
-import '../../shell/ember_dialog.dart';
+import '../../shell/desktop_dialog.dart';
 
 /// One feature: its name, a line on what it does, the keys that reach it,
 /// and where "Try it" goes, when it can go somewhere with nothing chosen.
@@ -26,7 +26,7 @@ typedef DiscoverLine = ({
 /// Every feature worth finding, in four groups. [go] opens a place;
 /// [shortcuts] opens the shortcuts sheet.
 List<(String, List<DiscoverLine>)> discoverGroups(
-  MTLocalizations l, {
+  VhLocalizations l, {
   required void Function(String route) go,
   required void Function() shortcuts,
 }) => [
@@ -61,7 +61,7 @@ List<(String, List<DiscoverLine>)> discoverGroups(
         title: l.desktopGlobalShortcut,
         line: l.desktopGlobalShortcutHint(GlobalPlayKey.label),
         keys: const [],
-        tryIt: () => go(EmberSettingsPane.desktop.route),
+        tryIt: () => go(DesktopSettingsPane.desktop.route),
       ),
     ],
   ),
@@ -107,19 +107,19 @@ List<(String, List<DiscoverLine>)> discoverGroups(
         title: l.desktopStats,
         line: l.desktopDiscoverStatsLine,
         keys: const [],
-        tryIt: () => go(EmberRoutes.stats),
+        tryIt: () => go(DesktopRoutes.stats),
       ),
       (
         title: l.desktopChannels,
         line: l.desktopNotifyArrivalsHint,
         keys: const [],
-        tryIt: () => go(EmberRoutes.channels),
+        tryIt: () => go(DesktopRoutes.channels),
       ),
       (
         title: l.desktopDiscoverPhone,
         line: l.desktopDiscoverPhoneLine,
         keys: const [],
-        tryIt: () => go(EmberSettingsPane.sync.route),
+        tryIt: () => go(DesktopSettingsPane.sync.route),
       ),
     ],
   ),
@@ -142,7 +142,7 @@ List<(String, List<DiscoverLine>)> discoverGroups(
         title: l.desktopDiscoverBrowser,
         line: l.desktopDiscoverBrowserLine,
         keys: const [],
-        tryIt: () => go(EmberSettingsPane.desktop.route),
+        tryIt: () => go(DesktopSettingsPane.desktop.route),
       ),
       (
         title: l.desktopShortcutsTitle,
@@ -163,8 +163,8 @@ Future<void> showDiscoverDialog(BuildContext context) {
   return showEmberDialog<void>(
     context: context,
     builder: (dialog) {
-      final l = dialog.mtl;
-      final p = MTThemeX.of(dialog).palette;
+      final l = dialog.vhl;
+      final p = VhThemeX.of(dialog).palette;
       final text = Theme.of(dialog).textTheme;
       // "Try it" closes this first, then goes.
       void close(void Function() then) {
@@ -177,7 +177,9 @@ Future<void> showDiscoverDialog(BuildContext context) {
         go: router.go,
         shortcuts: () {
           unawaited(
-            container.read(hintsProvider.notifier).learned(EmberHint.shortcuts),
+            container
+                .read(hintsProvider.notifier)
+                .learned(DesktopHint.shortcuts),
           );
           if (context.mounted) unawaited(showShortcutsSheet(context));
         },
@@ -185,7 +187,7 @@ Future<void> showDiscoverDialog(BuildContext context) {
       return AlertDialog(
         title: Text(l.desktopDiscover),
         content: SizedBox(
-          width: EmberShellSize.addDialog,
+          width: DesktopShellSize.addDialog,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -193,8 +195,8 @@ Future<void> showDiscoverDialog(BuildContext context) {
                 for (final (group, lines) in groups) ...[
                   Padding(
                     padding: const EdgeInsets.only(
-                      top: MTSpace.md,
-                      bottom: MTSpace.xs,
+                      top: VhSpace.md,
+                      bottom: VhSpace.xs,
                     ),
                     child: Text(
                       group,
@@ -203,7 +205,7 @@ Future<void> showDiscoverDialog(BuildContext context) {
                   ),
                   for (final line in lines)
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: MTSpace.xs),
+                      padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
                       child: Row(
                         children: [
                           Expanded(
@@ -221,17 +223,17 @@ Future<void> showDiscoverDialog(BuildContext context) {
                             ),
                           ),
                           if (line.keys.isNotEmpty) ...[
-                            const SizedBox(width: MTSpace.md),
+                            const SizedBox(width: VhSpace.md),
                             Wrap(
-                              spacing: MTSpace.xxs,
+                              spacing: VhSpace.xxs,
                               children: [
                                 for (final key in line.keys) KeyCap(label: key),
                               ],
                             ),
                           ],
                           if (line.tryIt case final run?) ...[
-                            const SizedBox(width: MTSpace.md),
-                            MTLinkButton(
+                            const SizedBox(width: VhSpace.md),
+                            VhLinkButton(
                               label: l.desktopDiscoverTry,
                               onPressed: () => close(run),
                             ),

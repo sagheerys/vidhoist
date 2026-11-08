@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../home/quick_download.dart';
@@ -15,7 +15,7 @@ import 'channels_state.dart';
 Future<void> showFollowSheet(
   BuildContext context, {
   ChannelSubscription? editing,
-}) => showMTSheet<void>(
+}) => showVhSheet<void>(
   context: context,
   isScrollControlled: true,
   useSafeArea: true,
@@ -65,7 +65,7 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
   }
 
   Future<void> _submit() async {
-    final l10n = context.mtl;
+    final l10n = context.vhl;
     final controller = ref.read(channelsControllerProvider);
     setState(() {
       _busy = true;
@@ -90,11 +90,11 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
           titleRegex: filter.isEmpty ? null : filter,
         );
         // The name yt-dlp resolved shows the right channel was followed.
-        message = l10n.subscriptionAdded(mtName(name ?? url));
+        message = l10n.subscriptionAdded(vhName(name ?? url));
       }
       if (!mounted) return;
       Navigator.of(context).pop();
-      showMTNotice(context, message: message, kind: MTNoticeKind.done);
+      showVhNotice(context, message: message, kind: VhNoticeKind.done);
     } on Object catch (e) {
       if (!mounted) return;
       setState(() {
@@ -108,22 +108,22 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.mtl;
-    final p = MTThemeX.of(context).palette;
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final canSubmit = !_busy && (_isEdit || _url.text.trim().isNotEmpty);
     Widget label(String s) => Padding(
-      padding: const EdgeInsets.only(top: MTSpace.lg, bottom: MTSpace.xs),
+      padding: const EdgeInsets.only(top: VhSpace.lg, bottom: VhSpace.xs),
       child: Text(s, style: text.labelLarge?.copyWith(color: p.ink2)),
     );
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(
-          MTSpace.pagePad,
+          VhSpace.pagePad,
           0,
-          MTSpace.pagePad,
-          MTSpace.xl,
+          VhSpace.pagePad,
+          VhSpace.xl,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -135,7 +135,7 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
               overflow: TextOverflow.ellipsis,
             ),
             if (!_isEdit) ...[
-              const SizedBox(height: MTSpace.lg),
+              const SizedBox(height: VhSpace.lg),
               TextField(
                 controller: _url,
                 enabled: !_busy,
@@ -163,13 +163,13 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
                 chosen: _qualities.indexOf(_quality),
                 onChosen: (i) => setState(() => _quality = _qualities[i]),
               ),
-              const SizedBox(height: MTSpace.xs),
+              const SizedBox(height: VhSpace.xs),
               Text(
                 l10n.subscriptionQualityNote,
                 style: text.bodySmall?.copyWith(color: p.ink3),
               ),
             ],
-            const SizedBox(height: MTSpace.lg),
+            const SizedBox(height: VhSpace.lg),
             TextField(
               controller: _filter,
               enabled: !_busy,
@@ -181,21 +181,21 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
               ),
             ),
             if (!_isEdit) ...[
-              const SizedBox(height: MTSpace.md),
+              const SizedBox(height: VhSpace.md),
               Text(
                 l10n.onlyNewVideos,
                 style: text.bodySmall?.copyWith(color: p.ink3),
               ),
             ],
             if (_failure case final failure?) ...[
-              const SizedBox(height: MTSpace.md),
+              const SizedBox(height: VhSpace.md),
               Text(failure, style: text.bodyMedium?.copyWith(color: p.err)),
             ],
-            const SizedBox(height: MTSpace.lg),
+            const SizedBox(height: VhSpace.lg),
             FilledButton(
               onPressed: canSubmit ? _submit : null,
               child: _busy
-                  ? const MTSpinner(size: 18)
+                  ? const VhSpinner(size: 18)
                   : Text(_isEdit ? l10n.saveSettings : l10n.follow),
             ),
           ],

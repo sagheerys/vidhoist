@@ -93,7 +93,7 @@ class WindowManagerControls with WindowListener implements WindowControls {
   final ValueNotifier<int> closeRequests = ValueNotifier(0);
 
   // Every close reaches here, the window's own button and Windows' alike,
-  // since the app holds the close back to decide (see EmberWindow).
+  // since the app holds the close back to decide (see DesktopWindow).
   @override
   void onWindowClose() => closeRequests.value++;
 

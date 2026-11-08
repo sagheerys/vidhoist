@@ -1,7 +1,7 @@
 import 'dart:ui' show PathMetric;
 
 import 'package:flutter/material.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 /// **The copy has arrived**: a check in the colour of things done, drawn
 /// once as it appears, a stroke following the pen after a short beat. A
@@ -9,17 +9,17 @@ import 'package:mt_ui/mt_ui.dart';
 /// did what it was asked. Drawn whole at once for anyone who turned
 /// animations off.
 class DoneCheck extends StatelessWidget {
-  const DoneCheck({super.key, this.size = MTSpace.lg});
+  const DoneCheck({super.key, this.size = VhSpace.lg});
 
   final double size;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: mtMotionDuration(context, _draw),
-      curve: MTMotion.entrance,
+      duration: vhMotionDuration(context, _draw),
+      curve: VhMotion.entrance,
       builder: (context, drawn, _) => Opacity(
         opacity: (drawn * 3).clamp(0, 1),
         child: CustomPaint(

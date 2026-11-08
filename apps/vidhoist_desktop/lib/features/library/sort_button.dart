@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../shell/context_menu.dart';
 import '../../shell/player_controls.dart';
@@ -14,7 +14,7 @@ class SortButton extends StatelessWidget {
   final LibrarySort sort;
   final ValueChanged<LibrarySort> onSort;
 
-  static String labelOf(MTLocalizations l, LibrarySort sort) => switch (sort) {
+  static String labelOf(VhLocalizations l, LibrarySort sort) => switch (sort) {
     LibrarySort.newest => l.sortNewest,
     LibrarySort.oldest => l.sortOldest,
     LibrarySort.nameAZ => l.sortNameAZ,
@@ -25,10 +25,10 @@ class SortButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.mtl;
+    final l = context.vhl;
     return Builder(
-      builder: (context) => EmberPlayerControl(
-        icon: MTIcons.sort,
+      builder: (context) => DesktopPlayerControl(
+        icon: VhIcons.sort,
         label: '${l.sortBy} · ${labelOf(l, sort)}',
         onTap: () async {
           // Opened under the button, as a menu from a toolbar is.
@@ -36,9 +36,9 @@ class SortButton extends StatelessWidget {
           final at = box.localToGlobal(box.size.bottomCenter(Offset.zero));
           final picked = await showEmberMenu<LibrarySort>(context, at, [
             for (final s in LibrarySort.values)
-              EmberMenuEntry(
+              DesktopMenuEntry(
                 s,
-                s == sort ? MTIcons.check : null,
+                s == sort ? VhIcons.check : null,
                 labelOf(l, s),
               ),
           ]);

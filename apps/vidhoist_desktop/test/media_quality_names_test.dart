@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/platform/video_surface_windows.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/vh_media.dart';
 
 /// mpv names a codec its own way; the details rows are shared with the
 /// phone, which names them from Android's types. Both say the same words.

@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/library.dart';
-import 'package:mt_media/mt_media.dart' show mtFormatDuration;
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart' show vhFormatDuration;
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../library/artwork.dart';
 import 'palette_model.dart';
@@ -17,11 +17,11 @@ class PaletteEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(MTSpace.lg),
+    padding: const EdgeInsets.all(VhSpace.lg),
     child: Text(
-      context.mtl.noResults,
+      context.vhl.noResults,
       style: Theme.of(context).textTheme.bodyMedium
-          ?.copyWith(color: MTThemeX.of(context).palette.ink3),
+          ?.copyWith(color: VhThemeX.of(context).palette.ink3),
     ),
   );
 }
@@ -35,15 +35,15 @@ class PaletteHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsetsDirectional.fromSTEB(
-      MTSpace.md,
-      MTSpace.sm,
-      MTSpace.md,
-      MTSpace.xxs,
+      VhSpace.md,
+      VhSpace.sm,
+      VhSpace.md,
+      VhSpace.xxs,
     ),
     child: Text(
       label,
       style: Theme.of(context).textTheme.labelMedium
-          ?.copyWith(color: MTThemeX.of(context).palette.ink3),
+          ?.copyWith(color: VhThemeX.of(context).palette.ink3),
     ),
   );
 }
@@ -90,7 +90,7 @@ class _Row extends StatelessWidget {
     this.lead,
   });
 
-  final MTIconData icon;
+  final VhIconData icon;
   final bool selected;
   final Widget child;
 
@@ -99,22 +99,22 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return Container(
-      color: selected ? mtSelectedFill(p) : null,
+      color: selected ? vhSelectedFill(p) : null,
       padding: const EdgeInsets.symmetric(
-        horizontal: MTSpace.md,
-        vertical: MTSpace.xs,
+        horizontal: VhSpace.md,
+        vertical: VhSpace.xs,
       ),
       child: Row(
         children: [
           lead ??
-              MTIcon(
+              VhIcon(
                 icon,
-                size: MTDensity.desktop.icon,
+                size: VhDensity.desktop.icon,
                 color: selected ? p.ink : p.ink2,
               ),
-          const SizedBox(width: MTSpace.sm),
+          const SizedBox(width: VhSpace.sm),
           Expanded(child: child),
         ],
       ),
@@ -135,7 +135,7 @@ class PaletteCover extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ExcludeSemantics(
-    child: MTMediaThumb(
+    child: VhMediaThumb(
       width: width,
       height: height,
       audio: item.isAudio,
@@ -154,7 +154,7 @@ class TitleRow extends StatelessWidget {
   const TitleRow({super.key, required this.item, required this.selected});
 
   /// What the row says when the arrows reach it.
-  static String spoken(MTLocalizations l, LibraryItem item) =>
+  static String spoken(VhLocalizations l, LibraryItem item) =>
       [item.title, ?item.uploader].join(l.listSeparator);
 
   final LibraryItem item;
@@ -162,10 +162,10 @@ class TitleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return _Row(
-      icon: item.isAudio ? MTIcons.headphones : MTIcons.play,
+      icon: item.isAudio ? VhIcons.headphones : VhIcons.play,
       selected: selected,
       lead: PaletteCover(item: item),
       child: Column(
@@ -205,15 +205,15 @@ class SaidRow extends StatelessWidget {
   final bool selected;
 
   /// What the row says when the arrows reach it: when, what, and where.
-  static String spoken(MTLocalizations l, SaidMatch match) => [
-    mtFormatDuration(match.hit.start),
+  static String spoken(VhLocalizations l, SaidMatch match) => [
+    vhFormatDuration(match.hit.start),
     match.hit.text,
     match.item.title,
   ].join(l.listSeparator);
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final line = match.hit.text;
     final base = text.bodyMedium?.copyWith(color: p.ink);
@@ -231,16 +231,16 @@ class SaidRow extends StatelessWidget {
     }
     if (at < line.length) spans.add(TextSpan(text: line.substring(at)));
     return _Row(
-      icon: MTIcons.transcript,
+      icon: VhIcons.transcript,
       selected: selected,
       lead: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           PaletteCover(item: match.item),
-          const SizedBox(width: MTSpace.sm),
+          const SizedBox(width: VhSpace.sm),
           // A time reads left to right in either language.
           Text(
-            mtLtrRun(mtFormatDuration(match.hit.start)),
+            vhLtrRun(vhFormatDuration(match.hit.start)),
             style: text.labelMedium?.tabular.copyWith(
               color: p.accentInk,
               fontWeight: FontWeight.w700,
@@ -253,7 +253,7 @@ class SaidRow extends StatelessWidget {
         children: [
           Text.rich(
             TextSpan(style: base, children: spans),
-            textDirection: mtForeignLine(context, line).$1,
+            textDirection: vhForeignLine(context, line).$1,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -277,13 +277,13 @@ class CommandRow extends StatelessWidget {
     required this.selected,
   });
 
-  final MTIconData icon;
+  final VhIconData icon;
   final String label;
   final bool selected;
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     return _Row(
       icon: icon,
       selected: selected,

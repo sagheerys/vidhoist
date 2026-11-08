@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_core/mt_core.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// What Windows' clipboard tells the app: the text of each new copy made in
 /// any program. Main puts Windows' in; tests their own.

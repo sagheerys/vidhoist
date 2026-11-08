@@ -10,14 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  mt_core:
-    path: ../../packages/mt_core
-  mt_media:
-    path: ../../packages/mt_media
-  mt_transcripts:
-    path: ../../packages/mt_transcripts
-  mt_ui:
-    path: ../../packages/mt_ui
+  vh_core:
+    path: ../../packages/vh_core
+  vh_media:
+    path: ../../packages/vh_media
+  vh_transcripts:
+    path: ../../packages/vh_transcripts
+  vh_ui:
+    path: ../../packages/vh_ui
   # The same ranges as Super, so the shared resolution does not move.
   cached_network_image: ^3.4.1
   # Covers are cached under the app's local data folder rather than the

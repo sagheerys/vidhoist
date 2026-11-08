@@ -24,39 +24,39 @@ The Arabic version of this document follows the English one.
 | Exclusive | Wi-Fi only, share sheet, picture in picture | Tags, lists, reading room, browser button, tray; Channels and Sync behind a switch (Settings › Engine) |
 
 They are separate apps, not build flavours, with **one palette**
-(`MTPalette`, ADR 0002). They share five packages. Before changing anything
+(`VhPalette`, ADR 0002). They share five packages. Before changing anything
 in a shared package, ask: **does this change the other app?**
 
 ## 2. Packages and the dependency rule
 
 ```
 apps/vidhoist_mobile ─┐
-                      ├─► packages/mt_media ─► packages/mt_core ─► packages/mt_ytdlp
+                      ├─► packages/vh_media ─► packages/vh_core ─► packages/vh_ytdlp
 apps/vidhoist_desktop ┘            │                 ▲
-        │                          └─► packages/mt_ui│
-        └─► packages/mt_transcripts ─────────────────┘
+        │                          └─► packages/vh_ui│
+        └─► packages/vh_transcripts ─────────────────┘
 ```
 
 | Package | Contains | Hard rule |
 |---|---|---|
-| `mt_ytdlp` | yt-dlp's command lines and reading what it prints: format selectors, progress and file lines, the info JSON, errors (`ErrorClassifier`), versions | **Pure Dart, no dependencies, no processes.** Tested on real yt-dlp output (`test/fixtures/`) |
-| `mt_core` | `DownloadBackend` (implemented by each app), `LocalDownloadEngine`, `LocalHistoryStore`, `LocalPendingStore`, the models, storage, backup, sync, URL tools, self-update | **Pure Dart. No Flutter import.** Tested with `dart test` |
-| `mt_media` | Audio handler, video playback, playback stores, the library model | Plays files on the device |
-| `mt_ui` | Design tokens, themes, shared widgets, localisation | Knows no engine and no app |
-| `mt_transcripts` | Subtitle parsing, Arabic-aware search, the transcript store, `YtDlpSource` for clips already in the library | **Pure Dart** |
+| `vh_ytdlp` | yt-dlp's command lines and reading what it prints: format selectors, progress and file lines, the info JSON, errors (`ErrorClassifier`), versions | **Pure Dart, no dependencies, no processes.** Tested on real yt-dlp output (`test/fixtures/`) |
+| `vh_core` | `DownloadBackend` (implemented by each app), `LocalDownloadEngine`, `LocalHistoryStore`, `LocalPendingStore`, the models, storage, backup, sync, URL tools, self-update | **Pure Dart. No Flutter import.** Tested with `dart test` |
+| `vh_media` | Audio handler, video playback, playback stores, the library model | Plays files on the device |
+| `vh_ui` | Design tokens, themes, shared widgets, localisation | Knows no engine and no app |
+| `vh_transcripts` | Subtitle parsing, Arabic-aware search, the transcript store, `YtDlpSource` for clips already in the library | **Pure Dart** |
 | `apps/*` | Screens, routing, dependency injection, the platform's way of running yt-dlp | May depend on the packages above |
 
 Three consequences worth remembering:
 
 - **One reading of yt-dlp.** A command line is built by `CommandBuilder`
-  and what comes back is read by `mt_ytdlp` alone; the apps only start the
+  and what comes back is read by `vh_ytdlp` alone; the apps only start the
   process and hand its lines to `readDownloadRun`. A download and the
   transcript backfill classify an error the same way (`ErrorClassifier`).
 - **No hard-coded UI strings.** Every user-visible string lives in
-  `packages/mt_ui/lib/src/l10n/app_en.arb` and `app_ar.arb`, and both
+  `packages/vh_ui/lib/src/l10n/app_en.arb` and `app_ar.arb`, and both
   files change in the same commit. A parity test enforces it.
 - **No hard-coded colours or spacing.** Both come from
-  `packages/mt_ui/lib/src/tokens/`; a literal colour works in daylight and
+  `packages/vh_ui/lib/src/tokens/`; a literal colour works in daylight and
   breaks at night.
 
 ## 3. Where a feature lives
@@ -74,9 +74,9 @@ features/update/
 
 Rules of thumb:
 
-- Logic that does not need Flutter goes to `mt_core` (or `mt_ytdlp`, when
+- Logic that does not need Flutter goes to `vh_core` (or `vh_ytdlp`, when
   it is about yt-dlp's text) and gets a `dart test`.
-- A widget used by both apps goes to `mt_ui`. A widget used by one app,
+- A widget used by both apps goes to `vh_ui`. A widget used by one app,
   or one that reads app providers, stays in the app.
 - Some files are deliberately duplicated between the two apps
   (`error_text.dart`, `about_screen.dart`). When you edit one, edit the
@@ -95,7 +95,7 @@ engine automatically, with no manual synchronisation.
 dialogs are pushed normally.
 
 Storage is `SharedPreferences` behind the `KeyValueStore` interface, so
-`mt_core` can be tested with `MemoryKeyValueStore`. **Every
+`vh_core` can be tested with `MemoryKeyValueStore`. **Every
 read-modify-write goes through `PrefsMutex`**: two concurrent flows
 without the lock read the same value and the slower one erases the
 faster one's write. The keys and the backup format are in
@@ -106,15 +106,15 @@ faster one's write. The keys and the backup format are in
 ```bash
 flutter pub get                      # once, at the repository root
 flutter analyze --no-pub             # zero issues is the gate
-cd packages/mt_core && dart test     # pure Dart core
-cd packages/mt_transcripts && dart test
-cd packages/mt_ytdlp && dart test
-flutter test --no-pub                # in mt_media, mt_ui and both apps
+cd packages/vh_core && dart test     # pure Dart core
+cd packages/vh_transcripts && dart test
+cd packages/vh_ytdlp && dart test
+flutter test --no-pub                # in vh_media, vh_ui and both apps
 flutter build apk --debug            # in apps/vidhoist_mobile
 flutter build windows --debug        # in apps/vidhoist_desktop
 ```
 
-After editing an `.arb` file, run `cd packages/mt_ui && flutter gen-l10n`.
+After editing an `.arb` file, run `cd packages/vh_ui && flutter gen-l10n`.
 Skipping it produces an `undefined_getter` at build time rather than at
 edit time. On Windows, `tool/fetch-engine.ps1` puts yt-dlp, ffmpeg and
 Deno, at pinned versions with their SHA-256, where the build expects them.
@@ -128,12 +128,12 @@ Deno, at pinned versions with their SHA-256, where the build expects them.
   `desktop_matrix.dart` render a widget across screen sizes and text
   scales and catch `RenderFlex overflowed` from the engine. Every new
   screen or sheet passes through `expectNoOverflow`.
-- **Localisation parity.** `packages/mt_ui/test/arb_parity_test.dart`
+- **Localisation parity.** `packages/vh_ui/test/arb_parity_test.dart`
   fails if the two `.arb` files diverge in key count, translation or
   placeholders.
-- **Real output.** `packages/mt_ytdlp/test/fixtures/` holds what yt-dlp
+- **Real output.** `packages/vh_ytdlp/test/fixtures/` holds what yt-dlp
   really printed on Windows and Android, with media links, addresses and
-  local paths replaced; the models' fixtures in `mt_core` are anonymised
+  local paths replaced; the models' fixtures in `vh_core` are anonymised
   the same way.
 
 ## 7. Deeper references
@@ -167,7 +167,7 @@ Vidhoist. منذ المرحلة 1 (2026-11-06) لا سيرفر: التطبيقا
 | التزامن | تنزيل واحد | كما يُضبط في الإعدادات › المحرّك |
 | الحصري | Wi-Fi فقط، المشاركة إلى التطبيق، الصورة داخل الصورة | الوسوم، القوائم، غرفة القراءة، زر المتصفح، الدرج؛ القنوات والمزامنة خلف مفتاح (الإعدادات › المحرّك) |
 
-تطبيقان مستقلان لا نكهتا بناء، بلوحة ألوان **واحدة** (`MTPalette`، ADR
+تطبيقان مستقلان لا نكهتا بناء، بلوحة ألوان **واحدة** (`VhPalette`، ADR
 0002)، ويتقاسمان خمس حزم. وقبل أي تعديل في حزمة مشتركة اسأل: **هل يغيّر
 هذا سلوك التطبيق الآخر؟**
 
@@ -175,25 +175,25 @@ Vidhoist. منذ المرحلة 1 (2026-11-06) لا سيرفر: التطبيقا
 
 ```
 apps/vidhoist_mobile ─┐
-                      ├─► packages/mt_media ─► packages/mt_core ─► packages/mt_ytdlp
+                      ├─► packages/vh_media ─► packages/vh_core ─► packages/vh_ytdlp
 apps/vidhoist_desktop ┘            │                 ▲
-        │                          └─► packages/mt_ui│
-        └─► packages/mt_transcripts ─────────────────┘
+        │                          └─► packages/vh_ui│
+        └─► packages/vh_transcripts ─────────────────┘
 ```
 
 | الحزمة | تحتوي | القاعدة الصارمة |
 |---|---|---|
-| `mt_ytdlp` | أوامر yt-dlp وقراءة ما يطبعه: محدِّدات الصيغ، أسطر التقدّم والملف، ملف info.json، الأخطاء (`ErrorClassifier`)، الإصدارات | **Dart خالص، بلا اعتماديات ولا عمليات**، ويُختبر على مخرجات حقيقية |
-| `mt_core` | `DownloadBackend` (يكتبه كل تطبيق)، `LocalDownloadEngine`، `LocalHistoryStore`، `LocalPendingStore`، النماذج، التخزين، النسخ، المزامنة، أدوات الروابط، التحديث الذاتي | **Dart خالص بلا Flutter**، ويُختبر بـ`dart test` |
-| `mt_media` | مشغّل الصوت والفيديو ومخازن التشغيل ونموذج المكتبة | يشغّل ملفات الجهاز |
-| `mt_ui` | الرموز التصميمية والثيمات والودجات والترجمة | لا يعرف محرّكاً ولا تطبيقاً |
-| `mt_transcripts` | قراءة الترجمات، والبحث المراعي للعربية، ومخزن النصوص، و`YtDlpSource` للمقاطع الموجودة في المكتبة | **Dart خالص** |
+| `vh_ytdlp` | أوامر yt-dlp وقراءة ما يطبعه: محدِّدات الصيغ، أسطر التقدّم والملف، ملف info.json، الأخطاء (`ErrorClassifier`)، الإصدارات | **Dart خالص، بلا اعتماديات ولا عمليات**، ويُختبر على مخرجات حقيقية |
+| `vh_core` | `DownloadBackend` (يكتبه كل تطبيق)، `LocalDownloadEngine`، `LocalHistoryStore`، `LocalPendingStore`، النماذج، التخزين، النسخ، المزامنة، أدوات الروابط، التحديث الذاتي | **Dart خالص بلا Flutter**، ويُختبر بـ`dart test` |
+| `vh_media` | مشغّل الصوت والفيديو ومخازن التشغيل ونموذج المكتبة | يشغّل ملفات الجهاز |
+| `vh_ui` | الرموز التصميمية والثيمات والودجات والترجمة | لا يعرف محرّكاً ولا تطبيقاً |
+| `vh_transcripts` | قراءة الترجمات، والبحث المراعي للعربية، ومخزن النصوص، و`YtDlpSource` للمقاطع الموجودة في المكتبة | **Dart خالص** |
 | `apps/*` | الشاشات والتوجيه وحقن الاعتماديات وطريقة المنصة في تشغيل yt-dlp | يعتمد على الحزم أعلاه |
 
 ثلاث نتائج تستحق الحفظ:
 
 - **قراءة واحدة لـyt-dlp.** الأمر يبنيه `CommandBuilder` وما يعود تقرؤه
-  `mt_ytdlp` وحدها؛ التطبيقان يشغّلان العملية ويمرّران أسطرها إلى
+  `vh_ytdlp` وحدها؛ التطبيقان يشغّلان العملية ويمرّران أسطرها إلى
   `readDownloadRun` فقط. والتنزيل وجلب النصوص للمقاطع القديمة يصنّفان الخطأ
   بالطريقة نفسها (`ErrorClassifier`).
 - **صفر نص واجهة مثبَّت.** كل نص في ملفَّي `.arb`، ويتغيّران في الدفعة
@@ -205,9 +205,9 @@ apps/vidhoist_desktop ┘            │                 ▲
 
 الميزة مجلَّد تحت `apps/<app>/lib/features/<name>/`. والقواعد العملية:
 
-- ما لا يحتاج Flutter ينزل إلى `mt_core` (أو `mt_ytdlp` إن كان عن نص
+- ما لا يحتاج Flutter ينزل إلى `vh_core` (أو `vh_ytdlp` إن كان عن نص
   yt-dlp) ويأخذ `dart test`.
-- الودجت الذي يستعمله التطبيقان يذهب إلى `mt_ui`، وما يقرأ مزوّدات التطبيق
+- الودجت الذي يستعمله التطبيقان يذهب إلى `vh_ui`، وما يقرأ مزوّدات التطبيق
   يبقى فيه.
 - ملفات مكرَّرة بين التطبيقين بقصد (`error_text.dart`، `about_screen.dart`).
   إن عدّلت إحداها فعدّل أختها أو علّل في الإيداع لماذا لا.
@@ -230,15 +230,15 @@ Riverpod يحقن الاعتماديات، و`di.dart` (ومجلد `data/` في 
 ```bash
 flutter pub get                      # مرة واحدة من الجذر
 flutter analyze --no-pub             # صفر مشاكل هي البوابة
-cd packages/mt_core && dart test     # النواة Dart خالص
-cd packages/mt_transcripts && dart test
-cd packages/mt_ytdlp && dart test
-flutter test --no-pub                # في mt_media وmt_ui والتطبيقين
+cd packages/vh_core && dart test     # النواة Dart خالص
+cd packages/vh_transcripts && dart test
+cd packages/vh_ytdlp && dart test
+flutter test --no-pub                # في vh_media وmt_ui والتطبيقين
 flutter build apk --debug            # في apps/vidhoist_mobile
 flutter build windows --debug        # في apps/vidhoist_desktop
 ```
 
-بعد تعديل أي `.arb`: `cd packages/mt_ui && flutter gen-l10n`. وعلى ويندوز
+بعد تعديل أي `.arb`: `cd packages/vh_ui && flutter gen-l10n`. وعلى ويندوز
 يضع `tool/fetch-engine.ps1` كلاً من yt-dlp وffmpeg وDeno بإصدارات مثبّتة
 وSHA-256 حيث يتوقعها البناء.
 
@@ -250,7 +250,7 @@ flutter build windows --debug        # في apps/vidhoist_desktop
   تجاوز الإطار عبر المقاسات ومقاييس الخط، وكل شاشة جديدة تمرّ بـ`expectNoOverflow`.
 - **تماثل الترجمة**: حارس يفشل إن اختلف الملفان في العدد أو الترجمة أو
   المعاملات.
-- **مخرجات حقيقية** في `packages/mt_ytdlp/test/fixtures/`: ما طبعه yt-dlp
+- **مخرجات حقيقية** في `packages/vh_ytdlp/test/fixtures/`: ما طبعه yt-dlp
   فعلاً على ويندوز وأندرويد، مع استبدال روابط الوسائط والعناوين والمسارات.
 
 ## ٧ · المراجع الأعمق

@@ -74,7 +74,7 @@ class SmtcSurface implements SystemMediaSurface {
         await _smtc.updateMetadata(
           MusicMetadata(
             title: now.title,
-            artist: now.artist ?? EmberIdentity.displayName,
+            artist: now.artist ?? DesktopIdentity.displayName,
             thumbnail: now.thumbnail,
           ),
         );

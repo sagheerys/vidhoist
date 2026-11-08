@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mt_media/mt_media.dart';
-import 'package:mt_transcripts/mt_transcripts.dart';
-import 'package:mt_ui/mt_ui.dart';
+import 'package:vh_media/vh_media.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/transcripts_data.dart';
 import '../../features/reading/reading_find.dart';
@@ -31,11 +31,11 @@ class TranscriptView extends ConsumerWidget {
   const TranscriptView({super.key, required this.item, required this.player});
 
   final PlaylistItem item;
-  final MTPlayer player;
+  final VhPlayer player;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
+    final l = context.vhl;
     final transcript = ref.watch(transcriptForProvider(item.canonicalUrl));
     return switch (transcript) {
       AsyncData(value: final t?) when !t.isEmpty => _Lines(
@@ -44,10 +44,10 @@ class TranscriptView extends ConsumerWidget {
         player: player,
         findHook: ref.read(panelFindProvider),
       ),
-      AsyncLoading() => const Center(child: MTSpinner()),
+      AsyncLoading() => const Center(child: VhSpinner()),
       _ => Center(
         child: SingleChildScrollView(
-          child: MTEmptyFrame(
+          child: VhEmptyFrame(
             title: l.desktopNoTranscriptTitle,
             message: l.desktopNoTranscriptMessage,
           ),
@@ -66,7 +66,7 @@ class _Lines extends StatefulWidget {
   });
 
   final List<TranscriptSegment> segments;
-  final MTPlayer player;
+  final VhPlayer player;
   final ValueNotifier<VoidCallback?> findHook;
 
   @override
@@ -165,8 +165,8 @@ class _LinesState extends State<_Lines> {
         Scrollable.ensureVisible(
           target,
           alignment: 0.3,
-          duration: mtMotionDuration(context, MTMotion.medium),
-          curve: MTMotion.ease,
+          duration: vhMotionDuration(context, VhMotion.medium),
+          curve: VhMotion.ease,
         ),
       );
     });
@@ -174,7 +174,7 @@ class _LinesState extends State<_Lines> {
 
   @override
   Widget build(BuildContext context) {
-    final p = MTThemeX.of(context).palette;
+    final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final chosen = _hits.isEmpty ? null : _hits[_hit];
     return LayoutBuilder(
@@ -198,12 +198,12 @@ class _LinesState extends State<_Lines> {
             constraints: BoxConstraints(maxHeight: box.maxHeight / 3),
             child: ClipRect(
               child: Text(
-                context.mtl.desktopTranscriptHint,
+                context.vhl.desktopTranscriptHint,
                 style: text.labelSmall?.copyWith(color: p.ink3),
               ),
             ),
           ),
-          const SizedBox(height: MTSpace.sm),
+          const SizedBox(height: VhSpace.sm),
           Expanded(
             child: NotificationListener<UserScrollNotification>(
               onNotification: (n) {

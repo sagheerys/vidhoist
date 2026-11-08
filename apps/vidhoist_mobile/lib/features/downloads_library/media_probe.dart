@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:mt_media/mt_media.dart';
+import 'package:vh_media/vh_media.dart';
 
 /// The result of probing one file. Any field may be missing, from a corrupt
 /// file or an unsupported codec.
