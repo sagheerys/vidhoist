@@ -119,12 +119,16 @@ class FakeBackend implements DownloadBackend {
   /// How many times [updateEngine] was called.
   int updates = 0;
 
+  /// What [updateEngine] answers; null means "already current".
+  UpdateOutcome? updateOutcome;
+
   @override
   Future<UpdateOutcome> updateEngine({
     EngineChannel channel = EngineChannel.stable,
   }) async {
     updates++;
-    return UpdateOutcome(updated: false, version: currentVersion.ytDlp);
+    return updateOutcome ??
+        UpdateOutcome(updated: false, version: currentVersion.ytDlp);
   }
 }
 

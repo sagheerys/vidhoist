@@ -6,6 +6,15 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- When a site moves on without yt-dlp and a download fails the way an
+  outdated build fails (a page it can no longer read, a challenge it
+  cannot solve, a 403), the engine updates itself and the download tries
+  once more, on the phone and on Windows, without a word. Attempts are
+  kept hours apart, and one serves every download failing at the same
+  time.
+- Windows brings yt-dlp up to date once a week by itself, a little after
+  the start and while nothing is downloading, as the phone has done; the
+  button in Settings › Engine stays for "now".
 - Following channels on Windows, on the computer itself. Each new video of
   a followed channel downloads into the library at the quality, in the
   folder and through the title filter chosen for it, while VidHoist is open

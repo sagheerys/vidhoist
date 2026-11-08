@@ -63,6 +63,9 @@ class DesktopBackups {
     store: _ref.read(keyValueStoreProvider),
     mutex: _ref.read(prefsMutexProvider),
     variant: 'desktop',
+    // When this computer last updated its engine: another computer has
+    // its own.
+    deviceOnlyKeys: EngineRefresh.deviceOnlyKeys,
   );
 
   /// A dated copy of everything here, skipped when nothing changed since

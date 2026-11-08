@@ -19,18 +19,23 @@ class Harness {
     this.gate,
     bool Function()? compatible,
     List<String> Function()? subtitles,
+    bool refresh = false,
   }) : backend = backend ?? FakeBackend() {
     engine = LocalDownloadEngine(
       backend: this.backend,
       folderFor: (task) => '/out/${task.folder ?? ''}',
       history: history,
       pending: pending,
+      refresh: refresh
+          ? EngineRefresh(backend: this.backend, store: store, onLog: log.add)
+          : null,
       maxConcurrent: maxConcurrent,
       startGate: gate,
       gateRecheck: const Duration(milliseconds: 5),
       compatibleVideo: compatible,
       subtitleLanguages: subtitles,
       onCompleted: completed.add,
+      onLog: log.add,
       sizeOf: (_) async => 1234,
     );
     engine.updates.listen(seen.add);
@@ -45,6 +50,7 @@ class Harness {
   late final LocalDownloadEngine engine;
   final seen = <DownloadTask>[];
   final completed = <DownloadTask>[];
+  final log = <String>[];
 
   List<TaskPhase> phasesOf(String id) {
     final phases = <TaskPhase>[];
@@ -68,6 +74,22 @@ class Harness {
     return engine.updates
         .firstWhere((t) => t.id == id && t.phase == phase)
         .timeout(const Duration(seconds: 5));
+  }
+}
+
+/// The first probe fails as an old yt-dlp fails; the next answers.
+class _ProbeBreaksOnce extends FakeBackend {
+  _ProbeBreaksOnce(this.error);
+
+  final YtDlpError error;
+
+  @override
+  Future<ProbeResult> probe(String url) {
+    if (probes.isEmpty) {
+      probes.add(url);
+      throw error;
+    }
+    return super.probe(url);
   }
 }
 
@@ -485,5 +507,113 @@ void main() {
       expect(h.backend.cancelled, [task.id]);
       expect((await h.pending.load()).single.id, task.id);
     });
+  });
+
+  group('an outdated engine', () {
+    const stale =
+        'ERROR: [youtube] x: nsig extraction failed: Some formats may be '
+        'missing';
+
+    /// Fails like an old yt-dlp the first time, then downloads.
+    FakeBackend brokenOnce({bool updates = true}) {
+      var runs = 0;
+      return FakeBackend(
+          scripts: {
+            yt: FakeScript(
+              events: (request) => ++runs == 1
+                  ? [failure(stale)]
+                  : [
+                      BackendFinished(
+                        '${request.folder}/${request.taskId}.mp4',
+                      ),
+                    ],
+            ),
+          },
+        )
+        ..updateOutcome = UpdateOutcome(
+          updated: updates,
+          version: EngineVersion.tryParse('2026.11.07'),
+        );
+    }
+
+    test('**the guard**: a stale failure updates yt-dlp and the download '
+        'starts over from a fresh probe', () async {
+      final h = Harness(backend: brokenOnce(), refresh: true);
+      final task = h.engine.submit(yt, Quality.best);
+      final done = await h.until(task.id, TaskPhase.completed);
+      expect(h.backend.updates, 1);
+      expect(h.backend.probes, [yt, yt]);
+      expect(h.backend.requests, hasLength(2));
+      expect(done.localPath, '/out//${task.id}.mp4');
+      expect(h.phasesOf(task.id), [
+        TaskPhase.queued,
+        TaskPhase.preparing,
+        TaskPhase.downloading,
+        TaskPhase.preparing,
+        TaskPhase.downloading,
+        TaskPhase.completed,
+      ]);
+      expect(h.log, contains(contains('retry ${task.id} after')));
+    });
+
+    test('an engine already current leaves the failure as it is', () async {
+      final h = Harness(backend: brokenOnce(updates: false), refresh: true);
+      final task = h.engine.submit(yt, Quality.best);
+      final failed = await h.until(task.id, TaskPhase.failed);
+      expect(h.backend.updates, 1);
+      expect(h.backend.requests, hasLength(1));
+      expect(failed.error!.detail, stale);
+    });
+
+    test('a task is retried once, not for ever', () async {
+      final h = Harness(
+        backend: FakeBackend(
+          scripts: {
+            yt: FakeScript(events: (_) => [failure(stale)]),
+          },
+        )..updateOutcome = const UpdateOutcome(updated: true),
+        refresh: true,
+      );
+      final task = h.engine.submit(yt, Quality.best);
+      await h.until(task.id, TaskPhase.failed);
+      expect(h.backend.updates, 1);
+      expect(h.backend.requests, hasLength(2));
+    });
+
+    test('a failure that is not about the engine asks for no update', () async {
+      final h = Harness(
+        backend: FakeBackend(
+          scripts: {
+            yt: FakeScript(
+              events: (_) => [failure('ERROR: [youtube] x: Video unavailable')],
+            ),
+          },
+        ),
+        refresh: true,
+      );
+      final task = h.engine.submit(yt, Quality.best);
+      await h.until(task.id, TaskPhase.failed);
+      expect(h.backend.updates, 0);
+    });
+
+    test('a stale probe is retried the same way', () async {
+      final backend = _ProbeBreaksOnce(ErrorClassifier.classify(stale))
+        ..updateOutcome = const UpdateOutcome(updated: true);
+      final h = Harness(backend: backend, refresh: true);
+      final task = h.engine.submit(yt, Quality.best);
+      await h.until(task.id, TaskPhase.completed);
+      expect(backend.updates, 1);
+      expect(backend.probes, hasLength(2));
+    });
+
+    test(
+      'without a refresh the failure stands, and nothing is asked',
+      () async {
+        final h = Harness(backend: brokenOnce());
+        final task = h.engine.submit(yt, Quality.best);
+        await h.until(task.id, TaskPhase.failed);
+        expect(h.backend.updates, 0);
+      },
+    );
   });
 }

@@ -63,8 +63,9 @@ class EnginePreparer {
   }) : _mutex = mutex ?? PrefsMutex(),
        _now = now ?? DateTime.now;
 
-  /// Never renamed: the date of the last update that worked.
-  static const updatedAtKey = 'engine_updated_at';
+  /// Never renamed: the date of the last update that worked. Shared with
+  /// [EngineRefresh], whose update from a failure counts here too.
+  static const updatedAtKey = EngineRefresh.updatedAtKey;
 
   final YtDlpBridge bridge;
   final KeyValueStore store;

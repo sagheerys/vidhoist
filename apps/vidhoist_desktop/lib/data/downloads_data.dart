@@ -70,6 +70,14 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
       ref.watch(keyValueStoreProvider),
       mutex: ref.watch(prefsMutexProvider),
     ),
+    // A site that moved on without yt-dlp: the engine updates and the
+    // download tries once more, without a word to the person.
+    refresh: EngineRefresh(
+      backend: backend,
+      store: ref.watch(keyValueStoreProvider),
+      mutex: ref.watch(prefsMutexProvider),
+      onLog: (message) => _log(ref, message),
+    ),
     // The transcript comes with the clip itself, in the reader's language
     // then English, when "fetch the transcript" is on.
     subtitleLanguages: () => ref.read(transcriptsFirstProvider)

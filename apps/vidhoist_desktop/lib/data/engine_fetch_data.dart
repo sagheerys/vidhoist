@@ -5,7 +5,9 @@ import 'package:vh_core/vh_core.dart';
 
 import '../platform/engine_fetcher.dart';
 import '../platform/engine_locator.dart';
+import '../di.dart';
 import '../platform/engine_pins.dart';
+import 'downloads_data.dart';
 import 'engine_data.dart';
 
 /// One part's fetch as the screens show it: its share while it runs, or
@@ -125,7 +127,59 @@ class EngineUpdateNotifier extends Notifier<AsyncValue<UpdateOutcome?>> {
     final outcome = await backend.updateEngine(channel: channel);
     ref.read(enginePathsProvider.notifier).refresh();
     ref.invalidate(engineVersionProvider);
+    if (outcome.error == null) {
+      // Checked, whether or not it brought a new build: the weekly update
+      // counts from here.
+      await ref
+          .read(prefsMutexProvider)
+          .run(
+            () => ref
+                .read(keyValueStoreProvider)
+                .setInt(
+                  EngineRefresh.updatedAtKey,
+                  DateTime.now().millisecondsSinceEpoch,
+                ),
+          );
+    }
     state = AsyncData(outcome);
     return outcome;
   }
 }
+
+/// How long yt-dlp goes without a check: YouTube breaks old builds within
+/// months, and the phone keeps the same week.
+const engineUpdateEvery = Duration(days: 7);
+
+/// How long after the start the weekly check waits, so the engine is not
+/// fetched while the window is still coming up; zero in tests.
+final engineUpdateDelayProvider = Provider(
+  (ref) => const Duration(seconds: 30),
+);
+
+/// **yt-dlp brought up to date once a week** without anyone asking, a
+/// little after the start and only while nothing is downloading, since
+/// the files cannot be replaced under a running yt-dlp; a busy start
+/// leaves it to the next. The button in the engine settings stays for
+/// "now". Watched by the shell.
+final engineWeeklyUpdateProvider = FutureProvider<void>((ref) async {
+  if (ref.read(downloadBackendProvider) == null) return;
+  final ms = await ref
+      .read(keyValueStoreProvider)
+      .getInt(EngineRefresh.updatedAtKey);
+  if (ms != null &&
+      DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(ms)) <
+          engineUpdateEvery) {
+    return;
+  }
+  final delay = ref.read(engineUpdateDelayProvider);
+  if (delay > Duration.zero) {
+    // A timer the shell's closing cancels, rather than a delay that would
+    // outlive it.
+    final waited = Completer<void>();
+    final timer = Timer(delay, waited.complete);
+    ref.onDispose(timer.cancel);
+    await waited.future;
+  }
+  if (ref.read(downloadEngineProvider)?.hasActiveWork ?? false) return;
+  await ref.read(engineUpdateProvider.notifier).update();
+});
