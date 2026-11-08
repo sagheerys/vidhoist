@@ -116,12 +116,6 @@ abstract class VhLocalizations {
   /// **'A light, fast app that downloads video and audio from many platforms with yt-dlp, straight to your device, with no server in between. It has its own player and playlists.'**
   String get aboutDescriptionPhone;
 
-  /// No description provided for @aboutDescriptionSuper.
-  ///
-  /// In en, this message translates to:
-  /// **'The Windows edition: a local library with tags, lists, transcripts and batch downloads, all on this computer.'**
-  String get aboutDescriptionSuper;
-
   /// No description provided for @activeDownloads.
   ///
   /// In en, this message translates to:
@@ -301,18 +295,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.'**
   String get autoRetryHelp;
-
-  /// No description provided for @availability.
-  ///
-  /// In en, this message translates to:
-  /// **'Availability'**
-  String get availability;
-
-  /// No description provided for @availabilityOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Offline (local copy)'**
-  String get availabilityOffline;
 
   /// No description provided for @backgroundDownload.
   ///
@@ -1565,7 +1547,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopImportHint.
   ///
   /// In en, this message translates to:
-  /// **'A backup or transcripts file from Vidhoist on another device, or from Vidhoist Super or Lite, chosen here or dropped on the window. It is added to what is here; nothing is replaced.'**
+  /// **'A backup or transcripts file from Vidhoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.'**
   String get desktopImportHint;
 
   /// No description provided for @desktopImportedBackup.
@@ -1865,7 +1847,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopNotABackup.
   ///
   /// In en, this message translates to:
-  /// **'This file is not a Vidhoist or Vidhoist backup or transcripts file.'**
+  /// **'This file is not a Vidhoist backup or transcripts file.'**
   String get desktopNotABackup;
 
   /// No description provided for @desktopNotWatched.
@@ -1889,7 +1871,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopNotifyArrivalsHint.
   ///
   /// In en, this message translates to:
-  /// **'A Windows notice when new clips from the channels you follow reach the server.'**
+  /// **'A Windows notice when new clips from the channels you follow are downloaded.'**
   String get desktopNotifyArrivalsHint;
 
   /// No description provided for @desktopOfferCopiedLinks.
@@ -1903,12 +1885,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'When you copy a video link in another app, a notification offers to add it. Only links are looked at, and none is saved.'**
   String get desktopOfferCopiedLinksHint;
-
-  /// No description provided for @desktopOfflineCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} offline'**
-  String desktopOfflineCount(int count);
 
   /// No description provided for @desktopOpenChannels.
   ///
@@ -3206,12 +3182,6 @@ abstract class VhLocalizations {
   /// **'Allow access to your media'**
   String get mediaAccessTitle;
 
-  /// No description provided for @vidhoistCredit.
-  ///
-  /// In en, this message translates to:
-  /// **'The self-hosted downloader whose apps Vidhoist comes from'**
-  String get vidhoistCredit;
-
   /// No description provided for @mobileChannelsEmptyBody.
   ///
   /// In en, this message translates to:
@@ -4196,12 +4166,6 @@ abstract class VhLocalizations {
   /// **'{count} selected'**
   String selectedCount(int count);
 
-  /// No description provided for @serverUrl.
-  ///
-  /// In en, this message translates to:
-  /// **'Server URL (Vidhoist)'**
-  String get serverUrl;
-
   /// No description provided for @settings.
   ///
   /// In en, this message translates to:
@@ -4442,11 +4406,11 @@ abstract class VhLocalizations {
   /// **'Status'**
   String get status;
 
-  /// No description provided for @streamingFromServer.
+  /// No description provided for @streamingOnline.
   ///
   /// In en, this message translates to:
-  /// **'Streaming from the server'**
-  String get streamingFromServer;
+  /// **'Streaming online'**
+  String get streamingOnline;
 
   /// No description provided for @subscriptionAdded.
   ///
@@ -4505,7 +4469,7 @@ abstract class VhLocalizations {
   /// No description provided for @subscriptionsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Channels the server follows for you'**
+  /// **'New videos from channels you follow, downloaded by themselves'**
   String get subscriptionsSubtitle;
 
   /// No description provided for @subtitles.

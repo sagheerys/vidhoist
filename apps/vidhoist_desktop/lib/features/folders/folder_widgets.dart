@@ -8,7 +8,7 @@ import '../../shell/desktop_dialog.dart';
 /// The name of a new folder, nested when typed with a slash. It is made by
 /// the first download saved into it.
 Future<String?> askNewFolder(BuildContext context, String parent) async {
-  final typed = await showEmberDialog<String>(
+  final typed = await showDesktopDialog<String>(
     context: context,
     builder: (_) => _NewFolderDialog(parent: parent),
   );
@@ -68,7 +68,7 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
 
 /// A help text in its own dialog.
 Future<void> showFolderHelp(BuildContext context, String title, String body) =>
-    showEmberDialog<void>(
+    showDesktopDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(title),

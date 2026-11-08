@@ -160,7 +160,7 @@ List<(String, List<DiscoverLine>)> discoverGroups(
 Future<void> showDiscoverDialog(BuildContext context) {
   final router = GoRouter.of(context);
   final container = ProviderScope.containerOf(context);
-  return showEmberDialog<void>(
+  return showDesktopDialog<void>(
     context: context,
     builder: (dialog) {
       final l = dialog.vhl;

@@ -48,7 +48,7 @@ class ReadingExportPill extends ConsumerWidget {
                 ? box.size.bottomRight(Offset.zero)
                 : box.size.bottomLeft(Offset.zero),
           );
-          final form = await showEmberMenu(context, at, [
+          final form = await showDesktopMenu(context, at, [
             DesktopMenuEntry(
               ReadingExport.phone,
               VhIcons.offline,

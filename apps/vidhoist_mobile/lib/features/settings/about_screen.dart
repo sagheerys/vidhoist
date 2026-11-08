@@ -15,9 +15,8 @@ class AboutScreen extends StatelessWidget {
 
   static const String _github = 'https://github.com/sagheerys';
   static const String _x = 'https://x.com/Sagheer700';
-  static const String _repo = 'https://github.com/sagheerys/vidhoist-mobile';
+  static const String _repo = 'https://github.com/sagheerys/vidhoist';
   static const String _issues = '$_repo/issues';
-  static const String _vidhoist = 'https://github.com/alexta69/vidhoist';
   static const String _ytdlp = 'https://github.com/yt-dlp/yt-dlp';
 
   @override
@@ -91,7 +90,7 @@ class AboutScreen extends StatelessWidget {
             _LinkTile(
               icon: VhIcons.bug,
               title: l10n.reportBug,
-              subtitle: 'vidhoist-mobile/issues',
+              subtitle: 'vidhoist/issues',
               url: _issues,
             ),
             const SizedBox(height: VhSpace.xl),
@@ -99,7 +98,7 @@ class AboutScreen extends StatelessWidget {
             _LinkTile(
               icon: VhIcons.folder,
               title: l10n.sourceCode,
-              subtitle: 'sagheerys/vidhoist-mobile',
+              subtitle: 'sagheerys/vidhoist',
               url: _repo,
             ),
             ListTile(
@@ -117,13 +116,6 @@ class AboutScreen extends StatelessWidget {
             ),
             const SizedBox(height: VhSpace.xl),
             VhSectionHeader(title: l10n.builtWith),
-            _LinkTile(
-              icon: VhIcons.server,
-              title: 'Vidhoist',
-              subtitle: l10n.vidhoistCredit,
-              url: _vidhoist,
-              ltrSubtitle: false,
-            ),
             _LinkTile(
               icon: VhIcons.offline,
               title: 'yt-dlp',

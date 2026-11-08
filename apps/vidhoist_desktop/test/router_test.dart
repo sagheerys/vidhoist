@@ -14,7 +14,7 @@ void main() {
     return tester.widget<PendingPlace>(find.byType(PendingPlace));
   }
 
-  setUp(() => router = buildEmberRouter());
+  setUp(() => router = buildDesktopRouter());
   tearDown(() => router.dispose());
 
   testWidgets('the app opens on the library', (tester) async {
@@ -87,7 +87,7 @@ void main() {
     // scratch on every change of place.
     var created = 0;
     router.dispose();
-    router = buildEmberRouter(
+    router = buildDesktopRouter(
       shell: (_, _, child) =>
           _CountingShell(onCreate: () => created++, child: child),
     );

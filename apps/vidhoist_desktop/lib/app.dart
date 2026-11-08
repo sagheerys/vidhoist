@@ -55,7 +55,7 @@ class _DesktopAppState extends ConsumerState<DesktopApp> {
   // would reset the navigation and everything living under the shell.
   late final GoRouter _router =
       widget.router ??
-      buildEmberRouter(
+      buildDesktopRouter(
         initialLocation: widget.initialLocation ?? DesktopRoutes.library,
         shell: (_, state, child) =>
             DesktopShell(location: state.uri, child: child),

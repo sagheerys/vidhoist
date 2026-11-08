@@ -123,7 +123,7 @@ class VhSourceChip extends StatelessWidget {
         // with large text.
         Flexible(
           child: Text(
-            local ? l10n.playingFromDevice : l10n.streamingFromServer,
+            local ? l10n.playingFromDevice : l10n.streamingOnline,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelSmall!

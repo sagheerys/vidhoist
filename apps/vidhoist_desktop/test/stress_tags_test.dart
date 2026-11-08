@@ -149,7 +149,7 @@ Future<void> upNext(
 
 /// [count] characters with no space to break at: Arabic, Latin and emoji.
 String longText(int count) {
-  const seed = 'وهجEmber🔥مكتبةLibrary✨';
+  const seed = 'تنزيلVidhoist🔥مكتبةLibrary✨';
   final b = StringBuffer();
   while (b.length < count) {
     b.write(seed);

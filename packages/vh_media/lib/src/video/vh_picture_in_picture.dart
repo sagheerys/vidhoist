@@ -9,7 +9,7 @@ import 'vh_video_session.dart';
 /// Off until the user turns it on in the playback settings ([enabled]):
 /// then the player gains a button for it, and leaving the app while a
 /// video plays enters it by itself. Each app's activity answers on the
-/// `mt/pip` channel; without it (tests, the Windows app) nothing happens.
+/// `vidhoist/pip` channel; without it (tests, the Windows app) nothing happens.
 class VhPictureInPicture {
   VhPictureInPicture._() {
     enabled.addListener(_update);
@@ -17,7 +17,7 @@ class VhPictureInPicture {
 
   static final instance = VhPictureInPicture._();
 
-  static const _channel = MethodChannel('mt/pip');
+  static const _channel = MethodChannel('vidhoist/pip');
 
   /// The user's choice in the playback settings, set by the app.
   final enabled = ValueNotifier(false);

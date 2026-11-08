@@ -12,7 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
 /**
- * Installing a self-update, over the `mtf/update` channel.
+ * Installing a self-update, over the `vidhoist/update` channel.
  *
  * **The channel name must match `update_channel.dart`** on the Dart side.
  *
@@ -22,7 +22,7 @@ import java.io.File
  * file.
  */
 object UpdateInstaller {
-    private const val CHANNEL = "mtf/update"
+    private const val CHANNEL = "vidhoist/update"
     private const val APK_MIME = "application/vnd.android.package-archive"
 
     fun register(activity: Activity, engine: FlutterEngine) {

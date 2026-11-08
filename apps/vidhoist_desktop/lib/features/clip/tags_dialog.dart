@@ -22,7 +22,10 @@ Future<void> showTagsDialog(BuildContext context, String canonicalUrl) =>
 /// The same for several clips at once: a tag some of them carry shows a
 /// dash, and ticking it gives it to them all.
 Future<void> showTagsDialogFor(BuildContext context, List<String> urls) =>
-    showEmberDialog<void>(context: context, builder: (_) => _TagsDialog(urls));
+    showDesktopDialog<void>(
+      context: context,
+      builder: (_) => _TagsDialog(urls),
+    );
 
 class _TagsDialog extends ConsumerStatefulWidget {
   const _TagsDialog(this.urls);

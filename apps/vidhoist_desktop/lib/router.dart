@@ -116,7 +116,7 @@ Widget _pendingSettings(String? pane) =>
 
 /// The single route table. One router per app, built once, so the shell
 /// and the player under it live through every navigation.
-GoRouter buildEmberRouter({
+GoRouter buildDesktopRouter({
   String initialLocation = DesktopRoutes.library,
   DesktopShellBuilder shell = _bare,
   DesktopPlaceBuilder library = _pendingLibrary,

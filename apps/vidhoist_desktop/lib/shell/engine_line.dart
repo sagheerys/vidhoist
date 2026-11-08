@@ -120,7 +120,7 @@ class SidebarEngineLine extends ConsumerWidget {
   Future<void> _menu(BuildContext context, WidgetRef ref, Offset at) async {
     final l = context.vhl;
     final ipv4 = ref.read(engineOptionsProvider).forceIpv4;
-    final chosen = await showEmberMenu<String>(context, at, [
+    final chosen = await showDesktopMenu<String>(context, at, [
       DesktopMenuEntry('update', VhIcons.refresh, l.desktopEngineUpdate),
       DesktopMenuEntry(
         'ipv4',

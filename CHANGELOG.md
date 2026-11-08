@@ -38,10 +38,21 @@ All notable changes to Vidhoist. The format follows
   a calm sentence, with yt-dlp's words only in the channel's sheet.
 - Android's "No address associated with host" now counts as a network
   failure everywhere, not as an unknown error.
+- The phone's About screen links to Vidhoist's own repository and issues,
+  not to the project it came from.
+- On Windows, a crash note is written where the app reads it
+  (`%LOCALAPPDATA%\Vidhoist\logs`); it went to an old folder before, so
+  a crash was never reported on the next launch.
+- On Windows, "What's new" and the update notes now leave out what only
+  the phone app has; the filter never matched the Windows app before.
 
 ### Changed
 - Channels are always in the sidebar and in Settings; the "later features"
   switch now hides Sync alone.
+- Nothing of Vidhoist is left in the apps: no Vidhoist credit in About, no
+  mention of Vidhoist or a server in the texts or the Windows installer, and
+  the phone's notification channels now carry Vidhoist's name (the old
+  ones are removed, so Android's settings list each kind once).
 - Vidhoist no longer reads Vidhoist's backups: the old encrypted formats
   (MTBACKUP1, MTSBACKUP1, MTF1), their key, and Vidhoist Lite's playlists of
   file paths are gone. Backups are now written under Vidhoist's own name,

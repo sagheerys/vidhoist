@@ -25,7 +25,9 @@ void main() {
     VideoPlayerPlatform.instance = FakeVideoPlatform();
     calls.clear();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(const MethodChannel('mt/pip'), (call) async {
+        .setMockMethodCallHandler(const MethodChannel('vidhoist/pip'), (
+          call,
+        ) async {
           calls.add(call);
           return null;
         });
@@ -107,7 +109,7 @@ void main() {
     // Android presses it.
     await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .handlePlatformMessage(
-          'mt/pip',
+          'vidhoist/pip',
           const StandardMethodCodec().encodeMethodCall(
             const MethodCall('toggle'),
           ),

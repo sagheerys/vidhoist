@@ -20,10 +20,6 @@ class VhLocalizationsEn extends VhLocalizations {
       'A light, fast app that downloads video and audio from many platforms with yt-dlp, straight to your device, with no server in between. It has its own player and playlists.';
 
   @override
-  String get aboutDescriptionSuper =>
-      'The Windows edition: a local library with tags, lists, transcripts and batch downloads, all on this computer.';
-
-  @override
   String get activeDownloads => 'Active downloads';
 
   @override
@@ -128,12 +124,6 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get autoRetryHelp =>
       'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.';
-
-  @override
-  String get availability => 'Availability';
-
-  @override
-  String get availabilityOffline => 'Offline (local copy)';
 
   @override
   String get backgroundDownload => 'Downloading files in background...';
@@ -896,7 +886,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopImportHint =>
-      'A backup or transcripts file from Vidhoist on another device, or from Vidhoist Super or Lite, chosen here or dropped on the window. It is added to what is here; nothing is replaced.';
+      'A backup or transcripts file from Vidhoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.';
 
   @override
   String desktopImportedBackup(int tagged, int lists, int positions) {
@@ -1079,7 +1069,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopNotABackup =>
-      'This file is not a Vidhoist or Vidhoist backup or transcripts file.';
+      'This file is not a Vidhoist backup or transcripts file.';
 
   @override
   String desktopNotWatched(int count) {
@@ -1101,7 +1091,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopNotifyArrivalsHint =>
-      'A Windows notice when new clips from the channels you follow reach the server.';
+      'A Windows notice when new clips from the channels you follow are downloaded.';
 
   @override
   String get desktopOfferCopiedLinks => 'Offer links I copy';
@@ -1109,11 +1099,6 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get desktopOfferCopiedLinksHint =>
       'When you copy a video link in another app, a notification offers to add it. Only links are looked at, and none is saved.';
-
-  @override
-  String desktopOfflineCount(int count) {
-    return '$count offline';
-  }
 
   @override
   String get desktopOpenChannels => 'Open channels';
@@ -1877,10 +1862,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get mediaAccessTitle => 'Allow access to your media';
 
   @override
-  String get vidhoistCredit =>
-      'The self-hosted downloader whose apps Vidhoist comes from';
-
-  @override
   String get mobileChannelsEmptyBody =>
       'Follow a channel and each new video downloads by itself while Vidhoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.';
 
@@ -2437,9 +2418,6 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
-  String get serverUrl => 'Server URL (Vidhoist)';
-
-  @override
   String get settings => 'Settings';
 
   @override
@@ -2571,7 +2549,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get status => 'Status';
 
   @override
-  String get streamingFromServer => 'Streaming from the server';
+  String get streamingOnline => 'Streaming online';
 
   @override
   String subscriptionAdded(String name) {
@@ -2605,7 +2583,8 @@ class VhLocalizationsEn extends VhLocalizations {
       'Follow a channel and each new video downloads into your library by itself, while Vidhoist is open or in the tray. What is already on the channel is not downloaded.';
 
   @override
-  String get subscriptionsSubtitle => 'Channels the server follows for you';
+  String get subscriptionsSubtitle =>
+      'New videos from channels you follow, downloaded by themselves';
 
   @override
   String get subtitles => 'Subtitles';

@@ -126,7 +126,7 @@ class LibraryChips extends ConsumerWidget {
   ) async {
     final l = chip.vhl;
     final chosen = ref.read(libraryViewProvider).platform;
-    final picked = await showEmberMenu<MediaPlatform>(chip, _under(chip), [
+    final picked = await showDesktopMenu<MediaPlatform>(chip, _under(chip), [
       for (final MapEntry(key: platform, value: count) in platforms)
         DesktopMenuEntry(
           platform,
@@ -150,7 +150,7 @@ class LibraryChips extends ConsumerWidget {
   ) async {
     while (chip.mounted) {
       final options = ref.read(libraryViewProvider);
-      final picked = await showEmberMenu<String>(chip, _under(chip), [
+      final picked = await showDesktopMenu<String>(chip, _under(chip), [
         for (final tag in tags)
           DesktopMenuEntry(
             tag,

@@ -54,7 +54,7 @@ class ListsPage extends ConsumerWidget {
   ) async {
     final l = context.vhl;
     final actions = ref.read(listActionsProvider);
-    final choice = await showEmberMenu(context, at, [
+    final choice = await showDesktopMenu(context, at, [
       DesktopMenuEntry(
         _ListChoice.pin,
         null,

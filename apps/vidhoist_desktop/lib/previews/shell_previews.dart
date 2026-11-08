@@ -37,7 +37,7 @@ final class DesktopPreview extends MultiPreview {
     ])
       for (final brightness in Brightness.values)
         Preview(
-          group: 'Ember shell',
+          group: 'Desktop shell',
           name: '$name - $language, ${brightness.name}',
           size: size,
           wrapper: wrapper,
@@ -46,13 +46,13 @@ final class DesktopPreview extends MultiPreview {
   ];
 }
 
-Widget inEnglish(Widget child) => _InEmber(const Locale('en'), child);
-Widget inArabic(Widget child) => _InEmber(const Locale('ar'), child);
+Widget inEnglish(Widget child) => _InDesktop(const Locale('en'), child);
+Widget inArabic(Widget child) => _InDesktop(const Locale('ar'), child);
 
 /// What the app puts around its pages: the desktop theme for the
 /// previewer's brightness, the language, and a transcript to show.
-class _InEmber extends StatelessWidget {
-  const _InEmber(this.locale, this.child);
+class _InDesktop extends StatelessWidget {
+  const _InDesktop(this.locale, this.child);
 
   final Locale locale;
   final Widget child;

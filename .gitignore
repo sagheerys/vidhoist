@@ -29,8 +29,6 @@ captures/
 *.mp4
 *.vidhoist_backup*.json
 vidhoist_*_backup.json
-*.vidhoist_backup*.json
-vidhoist_*_backup.json
 
 # ===== Secrets =====
 .env

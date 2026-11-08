@@ -57,60 +57,63 @@ List<(String, List<ShortcutLine>)> shortcutGroups(VhLocalizations l) => [
 ];
 
 /// **The shortcuts sheet**, opened with "?".
-Future<void> showShortcutsSheet(BuildContext context) => showEmberDialog<void>(
-  context: context,
-  builder: (dialog) {
-    final l = dialog.vhl;
-    final p = VhThemeX.of(dialog).palette;
-    final text = Theme.of(dialog).textTheme;
-    return AlertDialog(
-      title: Text(l.desktopShortcutsTitle),
-      content: SizedBox(
-        width: DesktopShellSize.formDialog,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (final (group, lines) in shortcutGroups(l)) ...[
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: VhSpace.md,
-                    bottom: VhSpace.xs,
-                  ),
-                  child: Text(
-                    group,
-                    style: text.labelMedium?.copyWith(color: p.ink3),
-                  ),
-                ),
-                for (final line in lines)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: VhSpace.xxs),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(line.does, style: text.bodyMedium),
+Future<void> showShortcutsSheet(BuildContext context) =>
+    showDesktopDialog<void>(
+      context: context,
+      builder: (dialog) {
+        final l = dialog.vhl;
+        final p = VhThemeX.of(dialog).palette;
+        final text = Theme.of(dialog).textTheme;
+        return AlertDialog(
+          title: Text(l.desktopShortcutsTitle),
+          content: SizedBox(
+            width: DesktopShellSize.formDialog,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (final (group, lines) in shortcutGroups(l)) ...[
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: VhSpace.md,
+                        bottom: VhSpace.xs,
+                      ),
+                      child: Text(
+                        group,
+                        style: text.labelMedium?.copyWith(color: p.ink3),
+                      ),
+                    ),
+                    for (final line in lines)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: VhSpace.xxs,
                         ),
-                        const SizedBox(width: VhSpace.md),
-                        Wrap(
-                          spacing: VhSpace.xxs,
+                        child: Row(
                           children: [
-                            for (final key in line.keys) KeyCap(label: key),
+                            Expanded(
+                              child: Text(line.does, style: text.bodyMedium),
+                            ),
+                            const SizedBox(width: VhSpace.md),
+                            Wrap(
+                              spacing: VhSpace.xxs,
+                              children: [
+                                for (final key in line.keys) KeyCap(label: key),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-              ],
-            ],
+                      ),
+                  ],
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(dialog).pop(),
-          child: Text(l.done),
-        ),
-      ],
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialog).pop(),
+              child: Text(l.done),
+            ),
+          ],
+        );
+      },
     );
-  },
-);

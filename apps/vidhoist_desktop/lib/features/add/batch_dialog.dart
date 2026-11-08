@@ -34,7 +34,10 @@ final playlistPreviewProvider = FutureProvider.autoDispose
 /// length, all ticked, to untick what is not wanted; one choice for all;
 /// sent one by one, and gathered into a saved list of the same name.
 Future<void> showBatchDialog(BuildContext context, String url) =>
-    showEmberDialog<void>(context: context, builder: (_) => _BatchDialog(url));
+    showDesktopDialog<void>(
+      context: context,
+      builder: (_) => _BatchDialog(url),
+    );
 
 class _BatchDialog extends ConsumerStatefulWidget {
   const _BatchDialog(this.url);

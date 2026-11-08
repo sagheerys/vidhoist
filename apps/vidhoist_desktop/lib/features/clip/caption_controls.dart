@@ -107,7 +107,7 @@ class DesktopCaptionButtons extends ConsumerWidget {
     final box = button.findRenderObject()! as RenderBox;
     final at = box.localToGlobal(box.size.bottomCenter(Offset.zero));
     VhIconData? tick(bool chosen) => chosen ? VhIcons.check : null;
-    final choice = await showEmberMenu<String>(button, at, [
+    final choice = await showDesktopMenu<String>(button, at, [
       for (final (i, size) in _sizes(l).indexed)
         DesktopMenuEntry(
           's$i',

@@ -17,7 +17,7 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
 
 /**
- * Picture in picture for the video player, on the `mt/pip` channel the
+ * Picture in picture for the video player, on the `vidhoist/pip` channel the
  * Dart side calls.
  *
  * Nothing happens until the user turns it on in the playback settings:
@@ -45,7 +45,7 @@ object PictureInPicture {
 
     fun register(activity: Activity, messenger: BinaryMessenger) {
         listen(activity)
-        channel = MethodChannel(messenger, "mt/pip").apply {
+        channel = MethodChannel(messenger, "vidhoist/pip").apply {
             setMethodCallHandler { call, result ->
                 when (call.method) {
                     "enter" -> {

@@ -50,7 +50,7 @@ class SyncSettingsNotifier extends AsyncNotifier<SyncSettings> {
 
   Future<void> choose(String folder) async {
     final store = ref.read(keyValueStoreProvider);
-    final id = (await future).deviceId ?? SyncFolder.newDeviceId('ember');
+    final id = (await future).deviceId ?? SyncFolder.newDeviceId('desktop');
     await ref.read(prefsMutexProvider).run(() async {
       await store.setString(deviceKey, id);
       await store.setString(folderKey, folder);
@@ -113,7 +113,7 @@ class DesktopSync {
     if (settings == null || !settings.on) return null;
     final mine = await _local.read(
       deviceId: settings.deviceId!,
-      deviceKind: 'ember',
+      deviceKind: 'desktop',
     );
     return (withPositions ? mine : mine.copyWith(positions: const {})).encode();
   }
@@ -144,7 +144,7 @@ class DesktopSync {
       final myId = settings.deviceId!;
       final others = await folder.others(myId);
       final outcome = SyncMerge.forDevice(
-        mine: await _local.read(deviceId: myId, deviceKind: 'ember'),
+        mine: await _local.read(deviceId: myId, deviceKind: 'desktop'),
         others: [for (final d in others) d.snapshot],
         now: now.millisecondsSinceEpoch,
         lastSync: await store.getInt(SyncSettingsNotifier.lastKey),

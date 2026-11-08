@@ -94,7 +94,7 @@ Future<FolderChoice?> showFolderPicker(
   required FolderChoice current,
   bool offerTop = true,
   bool offerChannelName = false,
-}) => showEmberDialog<FolderChoice>(
+}) => showDesktopDialog<FolderChoice>(
   context: context,
   builder: (_) => _FolderPicker(
     current: current,

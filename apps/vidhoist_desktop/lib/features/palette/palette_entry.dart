@@ -70,7 +70,7 @@ Future<void> savedSearchMenu(
   Offset at,
 ) async {
   final l = context.vhl;
-  final action = await showEmberMenu(context, at, [
+  final action = await showDesktopMenu(context, at, [
     DesktopMenuEntry(_SavedAction.rename, VhIcons.tags, l.rename),
     DesktopMenuEntry(
       _SavedAction.delete,

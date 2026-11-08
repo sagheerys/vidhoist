@@ -14,7 +14,7 @@ import '../../shell/desktop_dialog.dart';
 /// already exists merges the two; deleting takes the tag off the clips and
 /// leaves the clips.
 Future<void> showManageTagsDialog(BuildContext context) =>
-    showEmberDialog<void>(
+    showDesktopDialog<void>(
       context: context,
       builder: (_) => const _ManageTags(),
     );

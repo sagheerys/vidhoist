@@ -131,7 +131,7 @@ class _Release extends ConsumerWidget {
     final notes = vhReleaseNotesFor(
       release.notes,
       arabic: Localizations.localeOf(context).languageCode == 'ar',
-      app: 'ember',
+      app: 'windows',
     ).trim();
     final downloading = state.phase == UpdatePhase.downloading;
     return DecoratedBox(

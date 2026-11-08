@@ -108,7 +108,7 @@ void main() {
       final lists = await c.read(playlistsProvider.future);
       expect(lists.single.name, 'Evening');
       final id = c.read(syncSettingsProvider).value!.deviceId!;
-      expect(id, startsWith('ember-'));
+      expect(id, startsWith('desktop-'));
       final written = await folder.read(id);
       expect(written!.tags[_trip]!.keys, containsAll(['travel', 'nature']));
       expect(c.read(syncReportProvider)!.devices.single.id, _phone);

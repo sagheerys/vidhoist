@@ -54,7 +54,10 @@ Future<void> showAddToPlaylistDialog(BuildContext context, PlaylistItem item) =>
 Future<void> showAddAllToPlaylistDialog(
   BuildContext context,
   List<PlaylistItem> items,
-) => showEmberDialog<void>(context: context, builder: (_) => _AddDialog(items));
+) => showDesktopDialog<void>(
+  context: context,
+  builder: (_) => _AddDialog(items),
+);
 
 class _AddDialog extends ConsumerStatefulWidget {
   const _AddDialog(this.items);

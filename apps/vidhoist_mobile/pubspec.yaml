@@ -21,8 +21,8 @@ dependencies:
     path: ../../packages/vh_transcripts
   audio_service: ^0.18.15
   cached_network_image: ^3.4.1
-  # The "Wi-Fi only" gate before a pull, and retrying when the network comes
-  # back. (Super already uses it for automatic server switching.)
+  # The "Wi-Fi only" gate before a download, and retrying when the network
+  # comes back.
   connectivity_plus: ^6.1.0
   # The system file picker (SAF). Android 11+ forbids reading a file the app
   # did not create, so importing a backup from another device cannot work

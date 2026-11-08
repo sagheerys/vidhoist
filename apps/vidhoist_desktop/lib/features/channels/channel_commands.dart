@@ -95,7 +95,7 @@ Future<void> showChannelMenu(
 ) async {
   final l = context.vhl;
   final router = GoRouter.of(context);
-  final choice = await showEmberMenu(context, at, [
+  final choice = await showDesktopMenu(context, at, [
     DesktopMenuEntry(_ChannelChoice.open, VhIcons.external, l.openChannel),
     DesktopMenuEntry(_ChannelChoice.check, null, l.checkNow),
     DesktopMenuEntry(_ChannelChoice.edit, null, l.editSubscription),

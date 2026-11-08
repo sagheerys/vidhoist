@@ -55,10 +55,10 @@ void InstallRunNote() {
   if (FAILED(SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, nullptr, &local))) {
     return;
   }
-  const std::wstring folder = std::wstring(local) + L"\\Vidhoist Ember\\logs\\";
+  const std::wstring folder = std::wstring(local) + L"\\Vidhoist\\logs\\";
   CoTaskMemFree(local);
   const std::wstring crash = folder + L"last_crash.txt";
-  const std::wstring open = folder + L"ember.running";
+  const std::wstring open = folder + L"vidhoist.running";
   if (wcsncpy_s(g_crash_path, crash.c_str(), _TRUNCATE) != 0 ||
       wcsncpy_s(g_open_path, open.c_str(), _TRUNCATE) != 0) {
     return;

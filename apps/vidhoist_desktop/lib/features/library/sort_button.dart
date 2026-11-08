@@ -34,7 +34,7 @@ class SortButton extends StatelessWidget {
           // Opened under the button, as a menu from a toolbar is.
           final box = context.findRenderObject()! as RenderBox;
           final at = box.localToGlobal(box.size.bottomCenter(Offset.zero));
-          final picked = await showEmberMenu<LibrarySort>(context, at, [
+          final picked = await showDesktopMenu<LibrarySort>(context, at, [
             for (final s in LibrarySort.values)
               DesktopMenuEntry(
                 s,

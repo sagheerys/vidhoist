@@ -66,7 +66,7 @@ void main() {
       host(
         Builder(
           builder: (context) => TextButton(
-            onPressed: () => showEmberDialog<void>(
+            onPressed: () => showDesktopDialog<void>(
               context: context,
               builder: (_) => const AlertDialog(content: Text('Hello')),
             ),

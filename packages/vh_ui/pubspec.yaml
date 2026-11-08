@@ -1,5 +1,5 @@
 name: vh_ui
-description: "The Wahaj design system: tokens, themes, shared widgets, l10n (ar/en) — knows nothing about the server."
+description: "Vidhoist's design system: tokens, themes, shared widgets, l10n (ar/en)."
 version: 0.1.0
 publish_to: none
 resolution: workspace
@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   intl: any
   timeago: ^3.7.1
-  # The Wahaj icons. Pinned to the version measured on Windows before any
+  # The app's icons. Pinned to the version measured on Windows before any
   # screen used it.
   flutter_svg: 2.3.0
 

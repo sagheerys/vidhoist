@@ -63,45 +63,45 @@ void main() {
     const mixed = '''
 ## Added
 
-- **Vidhoist Super: follow a channel, and its new videos arrive by
+- **Vidhoist Windows: follow a channel, and its new videos arrive by
   themselves.** Settings, Subscriptions.
-- **Vidhoist Lite finishes, at the next launch, the downloads it could not.**
+- **Vidhoist Phone finishes, at the next launch, the downloads it could not.**
 - **The details show what a file really is.** Both apps.
 - **"View all" leaves full screen first**, instead of
-  opening it over a player still locked sideways. Vidhoist Super.
+  opening it over a player still locked sideways. Vidhoist Windows.
 
-## Only in Super
+## Only in Windows
 
-- **Vidhoist Super: cookies from the phone.**
+- **Vidhoist Windows: cookies from the browser.**
 
 ---
 
 **بالعربية:** إصدار للتطبيقين.
 
-- **Super — تابع قناة وتصلك مقاطعها الجديدة وحدها.**
-- **Lite — يُكمل عند الفتح التالي ما لم يستطع إكماله.**
+- **Windows — تابع قناة وتصلك مقاطعها الجديدة وحدها.**
+- **Phone — يُكمل عند الفتح التالي ما لم يستطع إكماله.**
 - **التفاصيل تعرض جودة الملف الحقيقية.**
 
 **ومن كان على 2.1.0 يحصل أيضاً على الجديد منذها:**
 
-- **Super — الكوكيز من الجوال.**
-- **إشعار عند الوصول (Super).**
-- **مزامنة أسرع، Super وحده.**
+- **Windows — الكوكيز من المتصفح.**
+- **إشعار عند الوصول (Windows).**
+- **مزامنة أسرع، Windows وحده.**
 ''';
 
-    test('Lite leaves out what only Super has', () {
-      final en = vhReleaseNotesFor(mixed, arabic: false, app: 'lite');
-      expect(en, contains('Vidhoist Lite finishes'));
+    test('Phone leaves out what only Windows has', () {
+      final en = vhReleaseNotesFor(mixed, arabic: false, app: 'phone');
+      expect(en, contains('Vidhoist Phone finishes'));
       expect(en, contains('what a file really is'));
       expect(en, isNot(contains('follow a channel')));
       expect(en, isNot(contains('themselves')));
       expect(en, isNot(contains('View all')));
       expect(en, isNot(contains('locked sideways')));
       expect(en, isNot(contains('cookies')));
-      expect(en, isNot(contains('Only in Super')));
+      expect(en, isNot(contains('Only in Windows')));
 
-      final ar = vhReleaseNotesFor(mixed, arabic: true, app: 'lite');
-      expect(ar, contains('Lite — يُكمل'));
+      final ar = vhReleaseNotesFor(mixed, arabic: true, app: 'phone');
+      expect(ar, contains('Phone — يُكمل'));
       expect(ar, contains('جودة الملف'));
       expect(ar, isNot(contains('تابع قناة')));
       expect(ar, isNot(contains('الكوكيز')));
@@ -111,14 +111,14 @@ void main() {
       expect(ar, isNot(contains('مزامنة أسرع')));
     });
 
-    test('Super leaves out what only Lite has, and keeps its own', () {
-      final en = vhReleaseNotesFor(mixed, arabic: false, app: 'super');
+    test('Windows leaves out what only Phone has, and keeps its own', () {
+      final en = vhReleaseNotesFor(mixed, arabic: false, app: 'windows');
       expect(en, contains('follow a channel'));
       expect(en, contains('View all'));
       expect(en, contains('cookies'));
-      expect(en, isNot(contains('Vidhoist Lite finishes')));
+      expect(en, isNot(contains('Vidhoist Phone finishes')));
 
-      final ar = vhReleaseNotesFor(mixed, arabic: true, app: 'super');
+      final ar = vhReleaseNotesFor(mixed, arabic: true, app: 'windows');
       expect(ar, contains('تابع قناة'));
       expect(ar, contains('ومن كان على 2.1.0'));
       expect(ar, isNot(contains('يُكمل عند الفتح')));
@@ -127,7 +127,7 @@ void main() {
     test('without an app the notes are whole, as before', () {
       expect(
         vhReleaseNotesFor(mixed, arabic: false),
-        contains('Vidhoist Super: follow a channel'),
+        contains('Vidhoist Windows: follow a channel'),
       );
     });
   });

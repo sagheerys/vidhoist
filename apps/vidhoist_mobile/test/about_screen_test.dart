@@ -69,9 +69,9 @@ void main() {
   ) async {
     await open(tester);
 
-    expect(find.text('sagheerys/vidhoist-mobile'), findsOneWidget);
-    expect(find.text('vidhoist-mobile/issues'), findsOneWidget);
-    expect(find.text('Vidhoist'), findsOneWidget);
+    expect(find.text('sagheerys/vidhoist'), findsOneWidget);
+    expect(find.text('vidhoist/issues'), findsOneWidget);
+    expect(find.text('Vidhoist'), findsNothing);
     expect(find.text('yt-dlp'), findsOneWidget);
   });
 

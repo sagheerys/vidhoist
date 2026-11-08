@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 class UpdateChannel {
   const UpdateChannel();
 
-  static const MethodChannel _channel = MethodChannel('mtf/update');
+  static const MethodChannel _channel = MethodChannel('vidhoist/update');
 
   /// Does the app hold the "install unknown apps" permission?
   Future<bool> canInstall() async {

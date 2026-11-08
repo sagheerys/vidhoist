@@ -26,7 +26,7 @@ Future<void> showFollowDialog(
   ChannelSubscription? editing,
   String? name,
   String? url,
-}) => showEmberDialog<void>(
+}) => showDesktopDialog<void>(
   context: context,
   builder: (_) => _FollowDialog(editing: editing, name: name, url: url),
 );

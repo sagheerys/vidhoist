@@ -24,20 +24,20 @@ A feature release.
 ## Added
 
 - **Read along while you listen.**
-- **Vidhoist Super: search inside clips.**
+- **Vidhoist Windows: search inside clips.**
 
 ## Which file
 
 | | |
 |---|---|
-| **Vidhoist-Lite-2.3.0.apk** | For family and friends. |
+| **Vidhoist-2.3.0-android-arm64-v8a.apk** | For family and friends. |
 
 ---
 
 **بالعربية:** إصدار ميزات.
 
 - **اقرأ النص وأنت تستمع.**
-- **Super — ابحث داخل المقاطع.**
+- **Windows — ابحث داخل المقاطع.**
 ''';
 
 void main() {

@@ -22,7 +22,7 @@ import '../settings/simple_panes.dart';
 Future<void> showWelcomeDialog(BuildContext context) {
   // The session's one interruption: no tip after it.
   ProviderScope.containerOf(context).read(hintsProvider.notifier).interrupted();
-  return showEmberDialog<void>(
+  return showDesktopDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (_) => const WelcomeDialog(),

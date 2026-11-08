@@ -10,7 +10,7 @@
 ; never touches it and the uninstaller asks before removing it.
 
 #ifndef AppVersion
-  #error Pass the version: ISCC /DAppVersion=x.y.z ember.iss
+  #error Pass the version: ISCC /DAppVersion=x.y.z vidhoist.iss
 #endif
 
 ; The values below are fixed for good at the first release: Windows knows
@@ -103,13 +103,13 @@ Name: "english"; MessagesFile: "compiler:Default.isl"; LicenseFile: "license_en.
 Name: "arabic"; MessagesFile: "compiler:Languages\Arabic.isl"; LicenseFile: "license_ar.rtf"
 
 [Messages]
-english.WelcomeLabel2=This will install [name/ver] on your computer.%n%n[name] is free, open-source software by {#Developer}, made to work with a Vidhoist server you run yourself.%n%nIt is recommended that you close all other applications before continuing.
+english.WelcomeLabel2=This will install [name/ver] on your computer.%n%n[name] is free, open-source software by {#Developer} that downloads video and audio to this computer with yt-dlp.%n%nIt is recommended that you close all other applications before continuing.
 ; The pages on the way, in plainer Arabic than the stock translation.
 arabic.SelectLanguageTitle=اختر لغة التثبيت
 arabic.SelectLanguageLabel=اختر اللغة التي تريدها أثناء التثبيت.
 arabic.ClickNext=انقر «التالي» للمتابعة، أو «إلغاء الأمر» للخروج من التثبيت.
 arabic.WelcomeLabel1=مرحباً بك في تثبيت [name]
-arabic.WelcomeLabel2=سيُثبَّت [name/ver] على هذا الكمبيوتر.%n%n[name] برنامج حرّ مفتوح المصدر من ياسر صغير، يعمل مع سيرفر Vidhoist الذي تشغّله أنت.%n%nيُستحسن أن تغلق البرامج الأخرى قبل المتابعة.
+arabic.WelcomeLabel2=سيُثبَّت [name/ver] على هذا الكمبيوتر.%n%n[name] برنامج حرّ مفتوح المصدر من ياسر صغير، يُنزّل الفيديو والصوت إلى هذا الكمبيوتر بأداة yt-dlp.%n%nيُستحسن أن تغلق البرامج الأخرى قبل المتابعة.
 arabic.WizardLicense=الشروط والرخصة
 arabic.LicenseLabel=اقرأ المعلومات المهمة التالية قبل المتابعة.
 arabic.LicenseLabel3=اقرأ الشروط والرخصة التالية، فلا بد من قبولها قبل متابعة التثبيت.

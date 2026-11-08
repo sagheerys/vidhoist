@@ -5,7 +5,7 @@ import 'package:vh_ui/vh_ui.dart';
 /// smaller as it fades in, and leaves quicker than it came**. Flutter's own
 /// only faded, in the same short time each way, so the add-link dialog, the
 /// first thing a new user opens, arrived as a flat cut.
-Future<T?> showEmberDialog<T>({
+Future<T?> showDesktopDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   bool barrierDismissible = true,

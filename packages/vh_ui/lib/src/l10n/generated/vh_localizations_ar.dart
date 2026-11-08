@@ -20,10 +20,6 @@ class VhLocalizationsAr extends VhLocalizations {
       'تطبيق خفيف وسريع لتحميل الفيديو والصوت من مختلف المنصات بـyt-dlp، إلى جهازك مباشرة بلا سيرفر بينهما، وفيه مشغل مدمج وقوائم تشغيل.';
 
   @override
-  String get aboutDescriptionSuper =>
-      'نسخة ويندوز: مكتبة محلية بوسوم وقوائم ونصوص وتحميل دفعي، كلها على هذا الكمبيوتر.';
-
-  @override
   String get activeDownloads => 'التحميلات النشطة';
 
   @override
@@ -140,12 +136,6 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String get autoRetryHelp =>
       'إذا فشل تحميل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه الموقع فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.';
-
-  @override
-  String get availability => 'التوفّر';
-
-  @override
-  String get availabilityOffline => 'بلا اتصال (نسخة محلية)';
 
   @override
   String get backgroundDownload => 'جارٍ تحميل الملفات في الخلفية…';
@@ -919,7 +909,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopImportHint =>
-      'نسخة احتياطية أو ملف نصوص من Vidhoist على جهاز آخر، أو من Vidhoist Super أو Lite، تختاره هنا أو تُفلته على النافذة. يُضاف إلى ما هنا ولا يستبدل شيئاً.';
+      'نسخة احتياطية أو ملف نصوص من Vidhoist على جهاز آخر، تختاره هنا أو تُفلته على النافذة. يُضاف إلى ما هنا ولا يستبدل شيئاً.';
 
   @override
   String desktopImportedBackup(int tagged, int lists, int positions) {
@@ -1106,7 +1096,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopNotABackup =>
-      'هذا الملف ليس نسخة احتياطية ولا ملف نصوص من Vidhoist أو Vidhoist.';
+      'هذا الملف ليس نسخة احتياطية ولا ملف نصوص من Vidhoist.';
 
   @override
   String desktopNotWatched(int count) {
@@ -1131,7 +1121,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopNotifyArrivalsHint =>
-      'إشعار من Windows حين تصل إلى السيرفر مقاطع جديدة من القنوات التي تتابعها.';
+      'إشعار من Windows حين تُنزَّل مقاطع جديدة من القنوات التي تتابعها.';
 
   @override
   String get desktopOfferCopiedLinks => 'اعرض عليّ الروابط التي أنسخها';
@@ -1139,11 +1129,6 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String get desktopOfferCopiedLinksHint =>
       'حين تنسخ رابط مقطع في برنامج آخر، يعرض عليك إشعارٌ إضافته. لا يُنظر إلا في الروابط، ولا يُحفظ منها شيء.';
-
-  @override
-  String desktopOfflineCount(int count) {
-    return 'دون اتصال: $count';
-  }
 
   @override
   String get desktopOpenChannels => 'افتح القنوات';
@@ -1914,10 +1899,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get mediaAccessTitle => 'اسمح بالوصول إلى الوسائط';
 
   @override
-  String get vidhoistCredit =>
-      'أداة التنزيل ذاتية الاستضافة التي جاء Vidhoist من تطبيقاتها';
-
-  @override
   String get mobileChannelsEmptyBody =>
       'تابِع قناة، فيُنزَّل كل مقطع جديد تنشره تلقائياً ما دام Vidhoist مفتوحاً أو في الخلفية، وما نُشر وهو مغلق يُنزَّل حين تفتحه. أما ما نُشر قبل المتابعة فلا يُنزَّل.';
 
@@ -2478,9 +2459,6 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
-  String get serverUrl => 'رابط السيرفر (Vidhoist)';
-
-  @override
   String get settings => 'الإعدادات';
 
   @override
@@ -2615,7 +2593,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get status => 'الحالة';
 
   @override
-  String get streamingFromServer => 'يُبثّ من السيرفر';
+  String get streamingOnline => 'يُبثّ من الإنترنت';
 
   @override
   String subscriptionAdded(String name) {
@@ -2649,7 +2627,8 @@ class VhLocalizationsAr extends VhLocalizations {
       'تابِع قناة، فيُنزَّل كل مقطع جديد تنشره إلى مكتبتك تلقائياً ما دام Vidhoist مفتوحاً أو في الدرج. أما ما نُشر قبل المتابعة فلا يُنزَّل.';
 
   @override
-  String get subscriptionsSubtitle => 'قنوات يتابعها السيرفر نيابةً عنك';
+  String get subscriptionsSubtitle =>
+      'مقاطع القنوات التي تتابعها، تُنزَّل تلقائياً';
 
   @override
   String get subtitles => 'الترجمة على الفيديو';

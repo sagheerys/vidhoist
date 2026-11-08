@@ -67,9 +67,9 @@ Future<void> showWhatsNewDialog(BuildContext context, WhatsNew notes) {
   final body = vhReleaseNotesFor(
     notes.notes,
     arabic: arabic,
-    app: 'ember',
+    app: 'windows',
   ).trim();
-  return showEmberDialog<void>(
+  return showDesktopDialog<void>(
     context: context,
     builder: (dialog) => AlertDialog(
       title: Row(

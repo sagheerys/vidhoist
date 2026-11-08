@@ -14,7 +14,7 @@ class RunNote {
     : _open = File('$folder/$openName'),
       _crash = File('$folder/$crashName');
 
-  static const openName = 'ember.running';
+  static const openName = 'vidhoist.running';
   static const crashName = 'last_crash.txt';
 
   /// The runner writes one short line; anything longer is not its own.

@@ -116,7 +116,7 @@ Future<void> showItemMenu(
   final l = context.vhl;
   final file = item.localPath;
   final hasFile = file != null && File(file).existsSync();
-  final choice = await showEmberMenu(
+  final choice = await showDesktopMenu(
     context,
     globalPosition,
     itemMenuEntries(l, item, hasFile: hasFile),

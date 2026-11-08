@@ -21,7 +21,7 @@ import '../../shell/desktop_dialog.dart';
 /// Opens the add dialog with [text] in its field: a link, or a text that
 /// holds several, from the clipboard, a drop or the button.
 Future<void> openAddDialog(BuildContext context, {String text = ''}) =>
-    showEmberDialog<void>(context: context, builder: (_) => _AddDialog(text));
+    showDesktopDialog<void>(context: context, builder: (_) => _AddDialog(text));
 
 class _AddDialog extends ConsumerStatefulWidget {
   const _AddDialog(this.text);

@@ -108,7 +108,7 @@ void _show(BuildContext context, WhatsNew notes) {
   showVhWhatsNewSheet(
     context,
     version: notes.version,
-    notes: vhReleaseNotesFor(notes.notes, arabic: arabic, app: 'lite'),
+    notes: vhReleaseNotesFor(notes.notes, arabic: arabic, app: 'phone'),
     onOpenPage: () => openWebLink(notes.pageUrl),
   );
 }

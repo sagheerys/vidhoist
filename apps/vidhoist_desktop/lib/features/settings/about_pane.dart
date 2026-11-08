@@ -23,7 +23,6 @@ class AboutPane extends ConsumerWidget {
   static const _github = 'https://github.com/sagheerys';
   static const _x = 'https://x.com/Sagheer700';
   static const _repo = 'https://github.com/sagheerys/vidhoist';
-  static const _vidhoist = 'https://github.com/alexta69/vidhoist';
   static const _ytdlp = 'https://github.com/yt-dlp/yt-dlp';
 
   static const _markSize = 56.0;
@@ -103,7 +102,6 @@ class AboutPane extends ConsumerWidget {
           ),
         ),
         heading(l.builtWith),
-        link('Vidhoist', 'alexta69/vidhoist', _vidhoist, hint: l.vidhoistCredit),
         link('yt-dlp', 'yt-dlp/yt-dlp', _ytdlp, hint: l.ytdlpCredit),
         heading(l.disclaimer),
         // The disclaimer of affiliation first, so it is read before the

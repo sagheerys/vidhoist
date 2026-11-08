@@ -38,7 +38,7 @@ class DesktopMenuEntry<T> {
 /// laid out in the overlay, which the interface size scales, so the point
 /// is carried into the overlay's own coordinates first; used raw it lands
 /// off the pointer at any size but 100%.
-Future<T?> showEmberMenu<T>(
+Future<T?> showDesktopMenu<T>(
   BuildContext context,
   Offset globalPosition,
   List<DesktopMenuEntry<T>> entries,

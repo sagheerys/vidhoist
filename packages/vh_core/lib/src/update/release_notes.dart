@@ -13,16 +13,16 @@
 /// Notes without the rule, or whose second half is not Arabic, are returned
 /// whole: the worst case is showing more than needed, never less.
 ///
-/// With [app] (`lite` or `super`), the bullets marked for the other of the
-/// two are left out, so a page that serves two editions shows each reader
+/// With [app] (`phone` or `windows`), the bullets marked for the other
+/// app are left out, so a release page that serves both shows each reader
 /// only what their app has. A bullet is marked when it opens with the
-/// other's name ("Super —") or closes with it ("(Super)", "Super only.").
-/// Anything unmarked is for both and stays.
+/// other's name ("Windows —", "Vidhoist Windows:") or closes with it
+/// ("(Windows)", "Windows only."). Anything unmarked is for both and stays.
 String vhReleaseNotesFor(String body, {required bool arabic, String? app}) {
   final notes = _language(body, arabic: arabic);
   final other = switch (app?.toLowerCase()) {
-    'lite' => 'super',
-    'super' => 'lite',
+    'phone' => 'windows',
+    'windows' => 'phone',
     _ => null,
   };
   return other == null ? notes : _withoutApp(notes, other);

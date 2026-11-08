@@ -30,7 +30,7 @@ Future<void> showClipMenu(
   final listed = (ref.read(libraryItemsProvider).valueOrNull ?? const [])
       .where((i) => i.canonicalUrl == item.canonicalUrl)
       .firstOrNull;
-  final choice = await showEmberMenu(context, globalPosition, [
+  final choice = await showDesktopMenu(context, globalPosition, [
     DesktopMenuEntry(_ClipChoice.addToList, VhIcons.queue, l.addToPlaylist),
     DesktopMenuEntry(_ClipChoice.copyLink, VhIcons.link, l.desktopCopyLink),
     DesktopMenuEntry(
