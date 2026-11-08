@@ -21,9 +21,8 @@ class _Device {
 
   Future<String> backup() => BackupService(
     store: store,
-    secrets: MemorySecretStore(),
     mutex: mutex,
-    variant: 'super',
+    variant: 'phone',
   ).exportToString();
 
   Future<MergeResult> merge(String contents) =>
@@ -186,9 +185,8 @@ void main() {
     final phone = _Device(at(3));
     final restore = BackupService(
       store: phone.store,
-      secrets: MemorySecretStore(),
       mutex: phone.mutex,
-      variant: 'super',
+      variant: 'phone',
     );
     await restore.importFromString(file);
     expect(await phone.tags.tagsOf(_a), [_fav]);

@@ -113,8 +113,6 @@ class PlaylistsStore {
   /// titles, artwork, tags, positions, **except the playlists**, so a dead
   /// entry stayed and played something else when tapped.
   ///
-  /// It compares both keys: [PlaylistEntry.canonicalUrl] and the old Lite
-  /// path [PlaylistEntry.legacyPath], since the library key may be either.
   /// Returns how many entries were actually removed.
   Future<int> removeFromAll(Iterable<String> keys) async {
     final targets = {...keys.where((k) => k.isNotEmpty)};
@@ -123,11 +121,7 @@ class PlaylistsStore {
     await _mutateAll((all) {
       for (final playlist in all) {
         final before = playlist.items.length;
-        playlist.items.removeWhere(
-          (e) =>
-              targets.contains(e.canonicalUrl) ||
-              (e.legacyPath != null && targets.contains(e.legacyPath)),
-        );
+        playlist.items.removeWhere((e) => targets.contains(e.canonicalUrl));
         removed += before - playlist.items.length;
       }
     });
@@ -225,8 +219,7 @@ class PlaylistsStore {
     );
   }
 
-  static String _memberKey(PlaylistEntry e) =>
-      e.canonicalUrl.isEmpty ? e.legacyPath ?? '' : e.canonicalUrl;
+  static String _memberKey(PlaylistEntry e) => e.canonicalUrl;
 
   /// Stamps the playlists an edit changed, and only the members that joined
   /// in it: an old member of a renamed playlist keeps having no date rather

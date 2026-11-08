@@ -68,11 +68,9 @@ final smartListsProvider = Provider<List<SmartList>>(
 /// A saved playlist's items after they are matched to the library,
 /// **together with the keys of anything that no longer exists**.
 ///
-/// **Migration from the old Lite:** its entries are file paths
-/// ([PlaylistEntry.isLegacy]), so they are matched by path directly and
-/// then by bare filename. That is how an imported playlist of 18 entries
-/// comes back to life. What does not match is built from its cached data so
-/// it does not vanish silently.
+/// An entry is matched by its key, or by its path for a file that has no
+/// link. What does not match is built from its cached data so it does
+/// not vanish silently.
 ///
 /// Field report 2026-09-04: "when I remove a video from the playlist it
 /// stays there and will not play, or it plays a different clip". An
@@ -124,16 +122,9 @@ final playlistViewProvider = FutureProvider.family<PlaylistView, String>((
   final library = await ref.watch(localMediaProvider.future);
   final byKey = {for (final item in library) item.key: item};
   final byPath = {for (final item in library) item.path: item};
-  final byFilename = {for (final item in library) item.filename: item};
 
-  LocalItem? match(PlaylistEntry entry) {
-    final legacy = entry.legacyPath;
-    if (legacy != null && legacy.isNotEmpty) {
-      final normalized = legacy.replaceAll(r'\', '/');
-      return byPath[normalized] ?? byFilename[normalized.split('/').last];
-    }
-    return byKey[entry.canonicalUrl] ?? byPath[entry.canonicalUrl];
-  }
+  LocalItem? match(PlaylistEntry entry) =>
+      byKey[entry.canonicalUrl] ?? byPath[entry.canonicalUrl];
 
   final items = <PlaylistItem>[];
   final missing = <String>{};
@@ -142,18 +133,14 @@ final playlistViewProvider = FutureProvider.family<PlaylistView, String>((
       items.add(toPlaylistItem(found));
       continue;
     }
-    final key = entry.canonicalUrl.isNotEmpty
-        ? entry.canonicalUrl
-        : (entry.legacyPath ?? '');
+    final key = entry.canonicalUrl;
     missing.add(key);
     items.add(
       PlaylistItem(
         canonicalUrl: key,
         title:
             entry.cachedTitle ??
-            LocalItem.titleFromFilename(
-              (entry.legacyPath ?? entry.canonicalUrl).split('/').last,
-            ),
+            LocalItem.titleFromFilename(entry.canonicalUrl.split('/').last),
         artworkUrl: entry.cachedThumb,
       ),
     );

@@ -39,26 +39,12 @@ void main() {
       },
     );
 
-    test('removeFromAll matches the old Lite path too', () async {
+    test('removeFromAll ignores empty keys', () async {
       final p = await playlists.create('مهاجرة');
-      await playlists.addItems(p.id, [
-        const PlaylistEntry(canonicalUrl: '', legacyPath: '/sd/old.mp4'),
-      ]);
-      expect(await playlists.removeFromAll(['/sd/old.mp4']), 1);
-      expect((await playlists.readAll()).single.items, isEmpty);
+      await playlists.addItems(p.id, [entry('a')]);
+      expect(await playlists.removeFromAll(['', '  x']), 0);
+      expect((await playlists.readAll()).single.items, hasLength(1));
     });
-
-    test(
-      'removeFromAll ignores empty keys, so migrated entries are not wiped',
-      () async {
-        final p = await playlists.create('مهاجرة');
-        await playlists.addItems(p.id, [
-          const PlaylistEntry(canonicalUrl: '', legacyPath: '/sd/old.mp4'),
-        ]);
-        expect(await playlists.removeFromAll(['', '  x']), 0);
-        expect((await playlists.readAll()).single.items, hasLength(1));
-      },
-    );
 
     test('byName finds by the trimmed name and invents nothing', () async {
       await playlists.create('دورة');
@@ -117,29 +103,18 @@ void main() {
       expect((await playlists.byId(p.id))!.items.single.canonicalUrl, 'b');
     });
 
-    test(
-      'importing the old Lite shape, videoPaths, gives legacy entries',
-      () async {
-        await store.setString(
-          PlaylistsStore.prefsKey,
-          json.encode([
-            {
-              'name': 'قديمة',
-              'createdAt': '2025-01-01T00:00:00',
-              'videoPaths': [
-                '/storage/emulated/0/Download/Vidhoist_Lite/فيديو_120001.mp4',
-              ],
-            },
-          ]),
-        );
-        final all = await playlists.readAll();
-        expect(all.single.name, 'قديمة');
-        final item = all.single.items.single;
-        expect(item.isLegacy, isTrue);
-        expect(item.legacyPath, contains('فيديو_120001.mp4'));
-        expect(all.single.createdAt.year, 2025);
-      },
-    );
+    test('an old Vidhoist Lite playlist of file paths imports empty', () async {
+      await store.setString(
+        PlaylistsStore.prefsKey,
+        json.encode([
+          {
+            'name': 'old',
+            'videoPaths': ['/storage/emulated/0/Download/x.mp4'],
+          },
+        ]),
+      );
+      expect((await playlists.readAll()).single.items, isEmpty);
+    });
 
     test('a round trip: writing then reading keeps every field', () async {
       final p = await playlists.create('كاملة');
@@ -155,7 +130,6 @@ void main() {
       expect(reread.serverFilename, 'a.dQw4.mp4');
       expect(reread.cachedTitle, 'عنوان');
       expect(reread.cachedThumb, contains('hqdefault'));
-      expect(reread.isLegacy, isFalse);
     });
   });
 }

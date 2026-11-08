@@ -14,9 +14,8 @@ void main() {
     await store.setString('server_url', 'https://nas.example');
     final svc = BackupService(
       store: store,
-      secrets: MemorySecretStore(),
       mutex: PrefsMutex(),
-      variant: 'super',
+      variant: 'phone',
     );
     final rot = BackupRotation(directory: dir.path, prefix: 'audit');
     await rot.write(await svc.exportToString(), at: DateTime(2026, 1, 1, 10));

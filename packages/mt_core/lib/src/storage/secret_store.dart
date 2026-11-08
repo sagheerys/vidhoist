@@ -12,5 +12,4 @@ abstract interface class SecretStore {
 abstract final class SecretKeys {
   static const String username = 'username';
   static const String password = 'password';
-  static const String backupAesKey = 'backup_aes_key';
 }

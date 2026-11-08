@@ -273,13 +273,12 @@ final activeTasksProvider = Provider<List<DownloadTask>>((ref) {
   return tasks.where((t) => !t.isFinished).toList();
 });
 
-/// Backups: writes the current format and reads the legacy ones.
+/// Backups: Vidhoist's plain JSON format, written and read.
 final backupServiceProvider = Provider(
   (ref) => BackupService(
     store: ref.watch(keyValueStoreProvider),
-    secrets: ref.watch(secretStoreProvider),
     mutex: ref.watch(prefsMutexProvider),
-    variant: 'lite',
+    variant: 'phone',
     // When this install last updated its engine: restored on a new phone
     // it would skip the update the shipped yt-dlp needs.
     deviceOnlyKeys: const {EnginePreparer.updatedAtKey},

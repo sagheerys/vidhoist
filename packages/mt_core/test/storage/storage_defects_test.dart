@@ -55,9 +55,8 @@ void main() {
       ]);
       final service = BackupService(
         store: store,
-        secrets: MemorySecretStore(),
         mutex: PrefsMutex(),
-        variant: 'lite',
+        variant: 'phone',
       );
 
       final exported = await service.exportToString();

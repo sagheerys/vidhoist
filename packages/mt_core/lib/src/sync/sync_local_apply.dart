@@ -99,9 +99,6 @@ Future<void> _applyLists(
               cachedThumb: members[key]!.value!.thumbnail,
               addedAt: SyncLocal._date(members[key]!.at),
             ),
-          // Entries from the old Lite format have no clip address to
-          // sync by; they stay as they are, here only.
-          ...?mine?.items.where((e) => e.isLegacy),
         ],
       ),
     );

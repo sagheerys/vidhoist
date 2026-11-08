@@ -19,9 +19,8 @@ void main() {
       ]);
       final out = await BackupService(
         store: store,
-        secrets: MemorySecretStore(),
         mutex: PrefsMutex(),
-        variant: 'ember',
+        variant: 'desktop',
       ).exportToString();
       expect(out, isNot(contains('s3cret')));
     },

@@ -42,6 +42,10 @@ All notable changes to Vidhoist. The format follows
 ### Changed
 - Channels are always in the sidebar and in Settings; the "later features"
   switch now hides Sync alone.
+- Vidhoist no longer reads Vidhoist's backups: the old encrypted formats
+  (MTBACKUP1, MTSBACKUP1, MTF1), their key, and Vidhoist Lite's playlists of
+  file paths are gone. Backups are now written under Vidhoist's own name,
+  and those written by 1.0.0 still import.
 - The channel pages and the title filter no longer speak of a server, and
   the title filter ignores capitals.
 - The Windows library no longer marks every clip "offline": every clip is

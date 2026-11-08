@@ -61,9 +61,8 @@ class EmberBackups {
 
   BackupService get _service => BackupService(
     store: _ref.read(keyValueStoreProvider),
-    secrets: _ref.read(secretStoreProvider),
     mutex: _ref.read(prefsMutexProvider),
-    variant: 'ember',
+    variant: 'desktop',
   );
 
   /// A dated copy of everything here, skipped when nothing changed since

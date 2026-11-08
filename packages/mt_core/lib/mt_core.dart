@@ -8,7 +8,7 @@ export 'src/api/cookie_files.dart';
 export 'src/backend/download_backend.dart';
 export 'src/backend/fake_backend.dart';
 export 'src/backend/run_reader.dart';
-export 'src/backup/backup_crypto.dart';
+export 'src/backup/backup_errors.dart';
 export 'src/backup/backup_merge.dart';
 export 'src/backup/backup_rotation.dart';
 export 'src/backup/backup_service.dart';

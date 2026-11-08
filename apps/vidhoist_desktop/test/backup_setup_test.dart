@@ -26,9 +26,8 @@ Future<String> _phoneBackup() async {
   await store.setString('active_url', 'http://192.168.1.10:8081');
   return BackupService(
     store: store,
-    secrets: MemorySecretStore(),
     mutex: mutex,
-    variant: 'super',
+    variant: 'phone',
   ).exportToString();
 }
 

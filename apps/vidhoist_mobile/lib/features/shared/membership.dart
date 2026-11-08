@@ -47,9 +47,7 @@ final membershipIndexProvider = FutureProvider<Map<String, ItemMembership>>((
   final names = <String, List<String>>{};
   for (final playlist in playlists) {
     for (final entry in playlist.items) {
-      final key = entry.canonicalUrl.isNotEmpty
-          ? entry.canonicalUrl
-          : (entry.legacyPath ?? '');
+      final key = entry.canonicalUrl;
       if (key.isEmpty) continue;
       (names[key] ??= <String>[]).add(playlist.name);
     }

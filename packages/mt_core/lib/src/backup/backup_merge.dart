@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../models/saved_playlist.dart';
 import '../storage/key_value_store.dart';
 import '../storage/playlists_store.dart';
-import 'backup_crypto.dart';
+import 'backup_errors.dart';
 import '../storage/tags_index.dart';
 import 'backup_service.dart';
 
@@ -52,11 +52,11 @@ class BackupMerge {
   static const _positionPrefix = 'playback_pos_';
   static const _positionStampPrefix = 'playback_stamp_';
 
-  /// The typed prefs of a plain MTF backup, by key. An encrypted backup
-  /// from an older app version, or anything else, is refused.
+  /// The typed prefs of a Vidhoist backup, by key; anything else is
+  /// refused.
   static Map<String, Object> readPrefs(String contents) {
     if (!contents.trimLeft().startsWith('{')) {
-      throw const BackupFormatException('not a plain MTF backup');
+      throw const BackupFormatException('not a Vidhoist backup');
     }
     final Object? decoded;
     try {
@@ -64,8 +64,8 @@ class BackupMerge {
     } on FormatException {
       throw const BackupFormatException('bad json');
     }
-    if (decoded is! Map || decoded['app'] != 'MTF') {
-      throw const BackupFormatException('not an MTF backup');
+    if (decoded is! Map || !backupAppNames.contains(decoded['app'])) {
+      throw const BackupFormatException('not a Vidhoist backup');
     }
     final prefs = decoded['prefs'];
     if (prefs is! Map) throw const BackupFormatException('no prefs');
@@ -101,8 +101,8 @@ class BackupMerge {
       if (value != null) prefs[key] = value;
     }
     return const JsonEncoder.withIndent('  ').convert({
-      'app': 'MTF',
-      'variant': 'super',
+      'app': backupAppName,
+      'variant': 'merged',
       'version': 3,
       'backupDate': now.toIso8601String(),
       'prefs': {
