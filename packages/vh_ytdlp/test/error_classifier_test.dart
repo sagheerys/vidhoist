@@ -149,4 +149,43 @@ void main() {
       expect(ErrorClassifier.reason(''), '');
     });
   });
+
+  group('a failure that smells of an outdated yt-dlp', () {
+    const stale = [
+      'ERROR: [youtube] x: Unable to extract player response; please report '
+          'this issue on https://github.com/yt-dlp/yt-dlp/issues?q= , '
+          'filling out the appropriate issue template. Confirm you are on '
+          'the latest version using  yt-dlp -U',
+      'ERROR: [youtube] x: nsig extraction failed: Some formats may be '
+          'missing',
+      'ERROR: [youtube] x: Signature extraction failed: Some formats may be '
+          'missing',
+      'ERROR: unable to download video data: HTTP Error 403: Forbidden',
+      'ERROR: [youtube] x: Failed to extract any player response',
+      'ERROR: [youtube] x: Requested format is not available. Only images '
+          'are available for download. Use --list-formats for a list of '
+          'available formats',
+    ];
+    for (final stderr in stale) {
+      test(stderr, () {
+        expect(ErrorClassifier.classify(stderr).maybeStaleEngine, isTrue);
+      });
+    }
+
+    const fresh = [
+      'ERROR: [youtube] x: Video unavailable',
+      "ERROR: [youtube] x: Sign in to confirm you're not a bot",
+      'ERROR: Requested format is not available',
+      'ERROR: [youtube] x: Unable to download webpage: <urlopen error '
+          'getaddrinfo failed>',
+      'ERROR: HTTP Error 429: Too Many Requests',
+      'ERROR: [generic] x: Unsupported URL: https://example.com',
+      'ERROR: something else entirely',
+    ];
+    for (final stderr in fresh) {
+      test('not: $stderr', () {
+        expect(ErrorClassifier.classify(stderr).maybeStaleEngine, isFalse);
+      });
+    }
+  });
 }

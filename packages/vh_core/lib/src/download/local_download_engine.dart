@@ -10,6 +10,7 @@ import '../models/quality.dart';
 import '../storage/local_history_store.dart';
 import '../urls/url_kit.dart';
 import 'download_queue.dart';
+import 'engine_refresh.dart';
 import 'local_pending.dart';
 
 /// The folder a task's file goes to; the app decides.
@@ -31,6 +32,7 @@ class LocalDownloadEngine {
     required this.folderFor,
     this.history,
     this.pending,
+    this.refresh,
     this.maxConcurrent = 1,
     this.startGate,
     this.gateRecheck = const Duration(seconds: 15),
@@ -49,6 +51,10 @@ class LocalDownloadEngine {
 
   /// Where unfinished downloads are written down for the next launch.
   final LocalPendingStore? pending;
+
+  /// Updates yt-dlp when a download fails as an outdated build fails, for
+  /// one more try; null gives up at the first failure.
+  final EngineRefresh? refresh;
 
   /// How many downloads run at once.
   final int maxConcurrent;
@@ -189,15 +195,38 @@ class LocalDownloadEngine {
   }
 
   Future<void> _run(String id) async {
-    try {
-      await _prepare(id);
-      if (_stopped(id)) return;
-      await _download(id);
-    } on Object catch (e) {
-      if (_stopped(id)) return;
-      onLog?.call('failed $id: $e');
-      await _fail(id, _classify(e));
+    var refreshed = false;
+    while (true) {
+      try {
+        await _prepare(id);
+        if (_stopped(id)) return;
+        await _download(id);
+        return;
+      } on Object catch (e) {
+        if (_stopped(id)) return;
+        // A site that moved on without yt-dlp fails like this. Once per
+        // task the engine updates and the download starts over, from a
+        // fresh probe.
+        final again = !refreshed && e is YtDlpError && await _refreshed(id, e);
+        if (_stopped(id)) return;
+        if (again) {
+          refreshed = true;
+          _probes.remove(id);
+          continue;
+        }
+        onLog?.call('failed $id: $e');
+        await _fail(id, _classify(e));
+        return;
+      }
     }
+  }
+
+  Future<bool> _refreshed(String id, YtDlpError error) async {
+    final refresh = this.refresh;
+    if (refresh == null || !error.maybeStaleEngine) return false;
+    final updated = await refresh.afterFailure(error);
+    if (updated) onLog?.call('retry $id after the engine update');
+    return updated;
   }
 
   Future<void> _prepare(String id) async {
@@ -256,7 +285,8 @@ class LocalDownloadEngine {
           onLog?.call('retry $id at best: ${error.message}');
           request = request.copyWith(quality: Quality.best);
         case BackendFailed(:final error):
-          return _fail(id, EngineFailureException.from(error));
+          // To _run, which classifies it, or updates the engine first.
+          throw error;
         case _:
           return _fail(id, const LocalFailureException('no result'));
       }

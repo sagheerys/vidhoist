@@ -216,6 +216,7 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 | IPv4 | `-4` by default on both platforms, with a setting to turn it off |
 | YouTube's wait on Android | Probe once, keep the info JSON, download from it; the waiting screen says what it is doing during the probe |
 | Android first run | Initialise and update the engine on the welcome screen, before the first download |
+| An outdated yt-dlp (2026-11-08) | A failure that reads like an old build (`YtDlpError.maybeStaleEngine`: unreadable page, unsolved challenge, 403, "confirm you are on the latest version") has `EngineRefresh` update yt-dlp and the download try once more, at most once per task and once per six hours. Windows also updates weekly at start, idle, like the phone |
 
 ## What carried over: storage, backups and keys
 

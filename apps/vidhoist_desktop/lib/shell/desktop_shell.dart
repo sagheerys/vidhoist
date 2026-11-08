@@ -15,6 +15,7 @@ import '../data/folder_watch.dart';
 import '../data/taskbar_data.dart';
 import '../data/lists_data.dart';
 import '../data/saved_searches.dart';
+import '../data/engine_fetch_data.dart';
 import '../di.dart';
 import '../features/add/add_dialog.dart';
 import '../features/add/add_entry.dart';
@@ -126,6 +127,7 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
     ref.watch(coverEnrichmentProvider);
     ref.watch(shapeEnrichmentProvider);
     ref.watch(startupBackupProvider);
+    ref.watch(engineWeeklyUpdateProvider);
     // Followed channels are checked as they fall due, window or tray.
     ref.watch(channelTickerProvider);
     ref.watch(folderWatchProvider);

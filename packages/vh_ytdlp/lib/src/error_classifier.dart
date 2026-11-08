@@ -50,6 +50,27 @@ class YtDlpError implements Exception {
   /// than ignored; the app tries again once with the best format.
   bool get retryAtBest => kind == YtDlpErrorKind.formatUnavailable;
 
+  /// Whether this is how yt-dlp fails once a site has moved on without
+  /// it: a page it can no longer read, a signature or challenge it cannot
+  /// solve, a 403 on a stream, or its own "confirm you are on the latest
+  /// version" plea. An update and one more try are worth it then; the
+  /// app keeps those rare with a gap between attempts.
+  bool get maybeStaleEngine => switch (kind) {
+    YtDlpErrorKind.failed => _stale.hasMatch(message),
+    // Formats missing altogether, not a height the site lacks.
+    YtDlpErrorKind.formatUnavailable => _noFormats.hasMatch(message),
+    _ => false,
+  };
+
+  static final _stale = RegExp(
+    r'yt-dlp -U|latest version|Unable to extract|Failed to extract|'
+    r'extraction failed|nsig|[Ss]ignature|player response|HTTP Error 403|'
+    r'Please report this issue|JS challenge|JavaScript runtime',
+  );
+  static final _noFormats = RegExp(
+    r'Only images are available|Some formats may be missing',
+  );
+
   @override
   String toString() => 'YtDlpError(${kind.name}): $message';
 }

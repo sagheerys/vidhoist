@@ -208,6 +208,14 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
     folderFor: (_) => phoneMediaDir,
     history: ref.watch(localHistoryProvider),
     pending: ref.watch(localPendingProvider),
+    // A site that moved on without yt-dlp: the engine updates and the
+    // download tries once more, without a word to the person.
+    refresh: EngineRefresh(
+      backend: ref.watch(downloadBackendProvider),
+      store: ref.watch(keyValueStoreProvider),
+      mutex: ref.watch(prefsMutexProvider),
+      onLog: (message) => unawaited(logger.log(message, tag: 'engine')),
+    ),
     onCompleted: (task) {
       // A download can end as the app closes, after this provider has gone.
       if (!alive) return;
@@ -280,7 +288,7 @@ final backupServiceProvider = Provider(
     variant: 'phone',
     // When this install last updated its engine: restored on a new phone
     // it would skip the update the shipped yt-dlp needs.
-    deviceOnlyKeys: const {EnginePreparer.updatedAtKey},
+    deviceOnlyKeys: EngineRefresh.deviceOnlyKeys,
   ),
 );
 
