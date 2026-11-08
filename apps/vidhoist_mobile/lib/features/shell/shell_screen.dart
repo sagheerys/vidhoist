@@ -20,6 +20,7 @@ import '../home/download_watcher.dart';
 import '../home/network_gate.dart';
 import '../home/reception.dart';
 import '../player/playback_providers.dart';
+import '../channels/channels_state.dart';
 import '../settings/restore_prompt.dart';
 import '../update/update_sheet.dart';
 import '../update/update_state.dart';
@@ -280,6 +281,8 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     // "Wi-Fi only": losing Wi-Fi pauses a download, and its return resumes
     // it.
     ref.watch(wifiPauseProvider);
+    // Followed channels are checked as they fall due.
+    ref.watch(channelTickerProvider);
     _watchEnrichment();
 
     final handler = ref.watch(audioHandlerProvider);

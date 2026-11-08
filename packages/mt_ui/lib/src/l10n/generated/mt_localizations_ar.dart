@@ -1919,6 +1919,14 @@ class MTLocalizationsAr extends MTLocalizations {
       'أداة التنزيل ذاتية الاستضافة التي جاء Vidhoist من تطبيقاتها';
 
   @override
+  String get mobileChannelsEmptyBody =>
+      'تابِع قناة، فيُنزَّل كل مقطع جديد تنشره تلقائياً ما دام Vidhoist مفتوحاً أو في الخلفية، وما نُشر وهو مغلق يُنزَّل حين تفتحه. أما ما نُشر قبل المتابعة فلا يُنزَّل.';
+
+  @override
+  String get mobileChannelsHint =>
+      'مقاطع القنوات التي تتابعها، تُنزَّل تلقائياً';
+
+  @override
   String get mobileEngineIpv4 => 'الاتصال عبر IPv4';
 
   @override

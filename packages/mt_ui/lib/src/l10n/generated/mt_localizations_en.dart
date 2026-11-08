@@ -1882,6 +1882,14 @@ class MTLocalizationsEn extends MTLocalizations {
       'The self-hosted downloader whose apps Vidhoist comes from';
 
   @override
+  String get mobileChannelsEmptyBody =>
+      'Follow a channel and each new video downloads by itself while Vidhoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.';
+
+  @override
+  String get mobileChannelsHint =>
+      'New videos from channels you follow, downloaded by themselves';
+
+  @override
   String get mobileEngineIpv4 => 'Connect over IPv4';
 
   @override

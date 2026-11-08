@@ -3218,6 +3218,18 @@ abstract class MTLocalizations {
   /// **'The self-hosted downloader whose apps Vidhoist comes from'**
   String get vidhoistCredit;
 
+  /// No description provided for @mobileChannelsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow a channel and each new video downloads by itself while Vidhoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.'**
+  String get mobileChannelsEmptyBody;
+
+  /// No description provided for @mobileChannelsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'New videos from channels you follow, downloaded by themselves'**
+  String get mobileChannelsHint;
+
   /// No description provided for @mobileEngineIpv4.
   ///
   /// In en, this message translates to:

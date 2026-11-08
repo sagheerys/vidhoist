@@ -16,6 +16,12 @@ All notable changes to Vidhoist. The format follows
 - A channel can be followed from the link of any of its videos, and
   "Channels in your library" fills that in with the newest one there:
   the follow dialog used to open with an empty link.
+- Following channels on the phone, from Settings › Channels: follow by a
+  link (of a channel, a playlist or one of its videos), pause, check now,
+  change how often and the title filter, unfollow. New videos download at
+  the quality chosen when following, while Vidhoist is open or in the
+  background, and what came while it was closed downloads when it opens.
+  The channels are in the backup.
 
 ### Changed
 - Channels are always in the sidebar and in Settings; the "later features"

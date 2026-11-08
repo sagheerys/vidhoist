@@ -953,6 +953,8 @@
   "mediaAccessOpenSettings": "Open settings",
   "mediaAccessTitle": "Allow access to your media",
   "vidhoistCredit": "The self-hosted downloader whose apps Vidhoist comes from",
+  "mobileChannelsEmptyBody": "Follow a channel and each new video downloads by itself while Vidhoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.",
+  "mobileChannelsHint": "New videos from channels you follow, downloaded by themselves",
   "mobileEngineIpv4": "Connect over IPv4",
   "mobileEngineIpv4Help": "Avoids a long stall on networks whose IPv6 route is broken. Turn it off only if your network has IPv6 alone.",
   "mobileEngineLastUpdate": "Last updated {when}",

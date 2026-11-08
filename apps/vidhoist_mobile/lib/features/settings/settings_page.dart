@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mt_ui/mt_ui.dart';
 
+import '../channels/channels_screen.dart';
 import '../update/update_section.dart';
 import 'about_screen.dart';
 import 'backup_screen.dart';
@@ -25,6 +26,7 @@ class SettingsPage extends StatelessWidget {
         title: l10n.mobileSettingsEngine,
         child: const EngineFields(),
       ),
+      SettingsPane.channels => const ChannelsScreen(),
       SettingsPane.downloads => MTSettingsPage(
         title: l10n.settingsDownloads,
         child: const DownloadFields(),

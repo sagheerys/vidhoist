@@ -4,6 +4,7 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
 import '../../di.dart';
+import '../channels/channels_state.dart';
 import '../update/update_state.dart';
 import 'widgets/engine_fields.dart';
 import '../update/whats_new_prompt.dart';
@@ -14,6 +15,7 @@ import 'settings_state.dart';
 /// engine comes first, where the server used to be.
 enum SettingsPane {
   engine,
+  channels,
   downloads,
   playback,
   appearance,
@@ -56,6 +58,12 @@ List<(String, List<SettingsEntry>)> settingsGroups(
           MTIcons.bolt,
           l10n.mobileSettingsEngine,
           v.engine(),
+        ),
+        SettingsEntry(
+          SettingsPane.channels,
+          MTIcons.subscriptions,
+          l10n.desktopChannels,
+          v.channels(),
         ),
       ],
     ),
@@ -132,6 +140,12 @@ class _Values {
     ref.watch(engineStatusProvider).valueOrNull ??
         ref.read(enginePreparerProvider).status,
   );
+
+  /// How many are followed, or what the section is for while reading.
+  String channels() => switch (ref.watch(channelsProvider).valueOrNull) {
+    final subs? when subs.isNotEmpty => l10n.settingsValueChannels(subs.length),
+    _ => l10n.mobileChannelsHint,
+  };
 
   String downloads() => mtMetaLine([
     switch (s.quality) {

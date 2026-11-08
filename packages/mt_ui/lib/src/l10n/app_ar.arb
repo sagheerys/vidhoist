@@ -677,6 +677,8 @@
   "mediaAccessOpenSettings": "فتح الإعدادات",
   "mediaAccessTitle": "اسمح بالوصول إلى الوسائط",
   "vidhoistCredit": "أداة التنزيل ذاتية الاستضافة التي جاء Vidhoist من تطبيقاتها",
+  "mobileChannelsEmptyBody": "تابِع قناة، فيُنزَّل كل مقطع جديد تنشره تلقائياً ما دام Vidhoist مفتوحاً أو في الخلفية، وما نُشر وهو مغلق يُنزَّل حين تفتحه. أما ما نُشر قبل المتابعة فلا يُنزَّل.",
+  "mobileChannelsHint": "مقاطع القنوات التي تتابعها، تُنزَّل تلقائياً",
   "mobileEngineIpv4": "الاتصال عبر IPv4",
   "mobileEngineIpv4Help": "يتجنّب توقّفاً طويلاً في الشبكات التي يتعطّل فيها مسار IPv6. لا توقفه إلا إن كانت شبكتك تعمل بـIPv6 وحده.",
   "mobileEngineLastUpdate": "آخر تحديث {when}",

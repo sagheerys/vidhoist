@@ -99,6 +99,7 @@ void main() {
     final l10n = l10nOf(tester);
     final titles = {
       SettingsPane.engine: l10n.mobileSettingsEngine,
+      SettingsPane.channels: l10n.desktopChannels,
       SettingsPane.downloads: l10n.settingsDownloads,
       SettingsPane.playback: l10n.settingsPlayback,
       SettingsPane.appearance: l10n.appearanceAndLanguage,
