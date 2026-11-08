@@ -236,7 +236,6 @@ void main() {
         LibraryItem(
           canonicalUrl: 'https://www.youtube.com/watch?v=bbbbbbbbbbb',
           title: 'Mine',
-          onServer: true,
         ),
       ],
     );

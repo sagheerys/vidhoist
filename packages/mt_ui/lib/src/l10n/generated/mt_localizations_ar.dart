@@ -1090,13 +1090,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get desktopNoMatchTitle => 'لا شيء يطابق هذه التصفية';
 
   @override
-  String get desktopNoOfflineMessage =>
-      'المقطع الذي يُنزَّل إلى هذا الكمبيوتر يعمل من هنا، ويظهر في هذه القائمة.';
-
-  @override
-  String get desktopNoOfflineTitle => 'لا شيء محفوظ على هذا الكمبيوتر بعد';
-
-  @override
   String get desktopNoTags =>
       'لا وسوم بعد. أضف وسماً لأي مقطع من صفحته فيظهر هنا.';
 
@@ -1790,9 +1783,6 @@ class MTLocalizationsAr extends MTLocalizations {
   String get filterAudio => 'صوت';
 
   @override
-  String get filterOffline => 'بلا اتصال';
-
-  @override
   String get filterVideo => 'فيديو';
 
   @override
@@ -2128,9 +2118,6 @@ class MTLocalizationsAr extends MTLocalizations {
 
   @override
   String get nowPlayingExpand => 'إظهار لوحة التشغيل';
-
-  @override
-  String get offlineSmartList => 'دون اتصال';
 
   @override
   String get ok => 'حسناً';

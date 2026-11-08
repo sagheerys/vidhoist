@@ -11,7 +11,6 @@ import 'support/shell_harness.dart';
 LibraryItem _clip(String id, String title) => LibraryItem(
   canonicalUrl: 'https://youtu.be/$id',
   title: title,
-  onServer: true,
   localPath: 'C:\\Downloads\\$id.m4a',
   isAudio: true,
   timestamp: DateTime(2026, 10, 20),

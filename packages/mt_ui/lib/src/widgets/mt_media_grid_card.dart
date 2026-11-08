@@ -9,8 +9,6 @@ import '../wahaj/mt_hover_lift.dart';
 import 'mt_favorite.dart';
 import 'mt_highlight_surface.dart';
 import 'mt_media_grid_cover.dart';
-import 'mt_location_badge.dart';
-import 'mt_media_card.dart' show MTMediaLocation;
 import 'mt_platform_chip.dart';
 
 /// The library card **led by its cover**: a 16:9 thumbnail first, with two
@@ -23,8 +21,7 @@ import 'mt_platform_chip.dart';
 ///
 /// **The two modes share the cover on purpose**: duration, favourite and
 /// "more" all live over the thumbnail, and two copies of that would
-/// diverge at the first edit. The only differences are text sizes and
-/// whether the location badge is shown.
+/// diverge at the first edit. The only difference is the text sizes.
 ///
 /// Presentation only, exactly like [MTMediaCard]: it knows nothing of a
 /// server or an index.
@@ -36,8 +33,6 @@ class MTMediaGridCard extends StatelessWidget {
     this.duration,
     this.platform = MTPlatformKind.other,
     this.subtitle,
-    this.location = MTMediaLocation.none,
-    this.locationLabel,
     this.selected = false,
     this.highlighted = false,
     this.playing = false,
@@ -56,8 +51,6 @@ class MTMediaGridCard extends StatelessWidget {
   final String? duration;
   final MTPlatformKind platform;
   final String? subtitle;
-  final MTMediaLocation location;
-  final String? locationLabel;
   final bool selected;
   final bool highlighted;
   final bool playing;
@@ -71,8 +64,7 @@ class MTMediaGridCard extends StatelessWidget {
   /// An audio file: its cover carries a music-note mark.
   final bool audio;
 
-  /// Cards mode: a single column, so there is room for larger text and a
-  /// location badge.
+  /// Cards mode: a single column, so there is room for larger text.
   final bool feed;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
@@ -84,7 +76,6 @@ class MTMediaGridCard extends StatelessWidget {
     ?subtitle,
     // The length is on the cover only, which the reader is not given.
     ?duration,
-    ?locationLabel,
     if (audio) l10n.filterAudio,
     if (favorite) l10n.favorites,
     if (playing) l10n.nowPlaying,
@@ -173,20 +164,6 @@ class MTMediaGridCard extends StatelessWidget {
                                   .copyWith(color: p.ink3),
                             ),
                           ),
-                        // The location badge appears in cards mode only: a grid
-                        // cell is half a screen wide and already carries the
-                        // chip and the meta line.
-                        if (feed &&
-                            location != MTMediaLocation.none &&
-                            locationLabel != null) ...[
-                          const SizedBox(width: MTSpace.xs),
-                          Flexible(
-                            child: MTLocationBadge(
-                              location: location,
-                              label: locationLabel!,
-                            ),
-                          ),
-                        ],
                       ],
                     ),
                   ),

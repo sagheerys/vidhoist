@@ -160,7 +160,6 @@ class LibraryItemView extends ConsumerWidget {
             ? null
             : mtTimeAgo(context, item.timestamp!),
         tags: item.tags,
-        location: item.location,
         sourceName: platformLabel(l, MediaPlatform.detect(item.canonicalUrl)),
         favorite: item.favorite,
         audio: item.isAudio,
@@ -177,7 +176,6 @@ class LibraryItemView extends ConsumerWidget {
         // The grid's widest cell, so a cover is never decoded too small.
         thumbnail: cover(_gridCell, _gridCell * 9 / 16),
         platform: platform,
-        location: item.location,
         duration: duration,
         favorite: item.favorite,
         audio: item.isAudio,
@@ -193,7 +191,6 @@ class LibraryItemView extends ConsumerWidget {
       subtitle: subtitle,
       thumbnail: cover(_compactWidth, _compactWidth * 10 / 16),
       platform: platform,
-      location: item.location,
       duration: duration,
       favorite: item.favorite,
       audio: item.isAudio,

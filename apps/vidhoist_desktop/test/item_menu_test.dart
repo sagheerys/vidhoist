@@ -13,7 +13,6 @@ import 'support/shell_harness.dart';
 LibraryItem _clip({String? localPath}) => LibraryItem(
   canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
   title: 'Night Drive',
-  onServer: true,
   localPath: localPath,
   timestamp: DateTime(2026, 10, 20),
 );
@@ -144,7 +143,6 @@ void main() {
               LibraryItem(
                 canonicalUrl: 'https://youtu.be/clip$i',
                 title: 'Clip $i',
-                onServer: true,
                 serverFilename: 'Clip $i.mp4',
                 timestamp: DateTime(2026, 10, 20),
               ),

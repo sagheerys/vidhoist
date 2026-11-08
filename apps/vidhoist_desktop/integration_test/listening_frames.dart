@@ -28,7 +28,6 @@ Future<void> main() async {
     canonicalUrl: _url,
     title: 'هل تفعل هذا؟ إليك 3 سمات تكشفها عادة ترتيب الكرسي قبل المغادرة',
     uploader: 'قناة المختبر',
-    onServer: true,
     isAudio: true,
     serverFilename: 'clip.mp3',
     timestamp: DateTime(2026, 10, 20),

@@ -33,7 +33,6 @@ LibraryItem item(
   title: title ?? 'Clip $i',
   uploader: uploader ?? 'Field Notes',
   serverFilename: folder == null ? 'Clip $i.mp4' : '$folder/Clip $i.mp4',
-  onServer: true,
   isAudio: i.isOdd,
   timestamp: DateTime(2026, 1, 1).add(Duration(minutes: i)),
   sizeBytes: 1000 + i,

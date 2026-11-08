@@ -17,7 +17,6 @@ final _many = [
     LibraryItem(
       canonicalUrl: 'https://youtu.be/clip${i.toString().padLeft(6, '0')}',
       title: 'Clip number $i',
-      onServer: true,
       serverFilename: 'clip$i.mp4',
       timestamp: DateTime(2026, 10, 1).add(Duration(hours: i)),
       duration: const Duration(minutes: 3),

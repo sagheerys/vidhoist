@@ -11,15 +11,10 @@ import 'mt_equalizer.dart';
 import 'mt_favorite.dart';
 import 'mt_highlight_surface.dart';
 import 'mt_platform_chip.dart';
-import 'mt_location_badge.dart';
 import 'mt_media_thumb.dart';
 import 'mt_polish.dart';
 
 import '../icons/mt_icon.dart';
-
-/// Where the item lives, which colours its badge: olive for "offline",
-/// soft ember for "on the server".
-enum MTMediaLocation { none, offline, onServer, both }
 
 /// The Wahaj media card: a row separated by a hairline rather than a box,
 /// full or compact. Presentation only: every value arrives as a ready
@@ -32,8 +27,6 @@ class MTMediaCard extends StatelessWidget {
     this.duration,
     this.platform = MTPlatformKind.other,
     this.subtitle,
-    this.location = MTMediaLocation.none,
-    this.locationLabel,
     this.compact = false,
     this.selected = false,
     this.highlighted = false,
@@ -55,8 +48,6 @@ class MTMediaCard extends StatelessWidget {
   final String? duration;
   final MTPlatformKind platform;
   final String? subtitle;
-  final MTMediaLocation location;
-  final String? locationLabel;
   final bool compact;
   final bool selected;
 
@@ -94,7 +85,6 @@ class MTMediaCard extends StatelessWidget {
     ?subtitle,
     // The length is on the cover only, which the reader is not given.
     ?duration,
-    ?locationLabel,
     if (audio) l10n.filterAudio,
     if (favorite) l10n.favorites,
     if (playing) l10n.nowPlaying,
@@ -200,16 +190,6 @@ class MTMediaCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            if (location != MTMediaLocation.none &&
-                                locationLabel != null) ...[
-                              const SizedBox(width: MTSpace.xs),
-                              Flexible(
-                                child: MTLocationBadge(
-                                  location: location,
-                                  label: locationLabel!,
-                                ),
-                              ),
-                            ],
                           ],
                         ),
                       ],

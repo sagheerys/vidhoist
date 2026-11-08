@@ -152,7 +152,7 @@ Widget sidebarPreview() =>
 
 @EmberPreview('Sidebar, narrow', size: Size(EmberShellSize.sidebarNarrow, 640))
 Widget sidebarNarrowPreview() =>
-    EmberSidebar(narrow: true, current: EmberPlace.offline, onGo: _ignore);
+    EmberSidebar(narrow: true, current: EmberPlace.favorites, onGo: _ignore);
 
 @EmberPreview('Player bar, playing', size: Size(1280, EmberShellSize.playerBar))
 Widget playerBarPreview() => EmberPlayerBar(

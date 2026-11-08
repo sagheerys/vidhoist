@@ -44,7 +44,6 @@ LibraryItem _clip(String id, String uploader, {int day = 20}) => LibraryItem(
   canonicalUrl: 'https://youtu.be/$id',
   title: 'Clip $id',
   uploader: uploader,
-  onServer: true,
   timestamp: DateTime(2026, 10, day),
   sizeBytes: 100,
   thumbnail: 'https://i.ytimg.com/vi/$id/hqdefault.jpg',
@@ -105,7 +104,6 @@ void main() {
             title: 'Clip $id',
             uploader: uploader,
             serverFilename: '$folder/Clip $id.mp4',
-            onServer: true,
             timestamp: DateTime(2026, 10, 20),
           );
       final match = await matchChannels(
@@ -326,11 +324,7 @@ void main() {
       tester,
       subs: [_sub('a', 'Alpha - Videos')],
       library: [
-        LibraryItem(
-          canonicalUrl: 'https://youtu.be/x',
-          title: 'No uploader',
-          onServer: true,
-        ),
+        LibraryItem(canonicalUrl: 'https://youtu.be/x', title: 'No uploader'),
       ],
       at: EmberRoutes.channel('a'),
     );
@@ -345,11 +339,7 @@ void main() {
       tester,
       subs: [_sub('a', 'Alpha - Videos', folder: 'Alpha')],
       library: [
-        LibraryItem(
-          canonicalUrl: 'https://youtu.be/x',
-          title: 'No uploader',
-          onServer: true,
-        ),
+        LibraryItem(canonicalUrl: 'https://youtu.be/x', title: 'No uploader'),
       ],
       at: EmberRoutes.channel('a'),
     );

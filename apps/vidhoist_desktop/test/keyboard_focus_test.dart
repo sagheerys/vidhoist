@@ -10,7 +10,6 @@ import 'support/shell_harness.dart';
 LibraryItem _item(String id, int day) => LibraryItem(
   canonicalUrl: 'https://youtu.be/$id',
   title: 'Clip $id',
-  onServer: true,
   timestamp: DateTime(2026, 10, day),
 );
 

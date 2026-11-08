@@ -101,7 +101,6 @@ void main() {
         tester.widget<EmberSidebar>(find.byType(EmberSidebar)).current;
     for (final (label, place) in [
       ('Favorites', EmberPlace.favorites),
-      ('Offline', EmberPlace.offline),
       ('Playlists', EmberPlace.playlists),
       ('Settings', EmberPlace.settings),
       ('Library', EmberPlace.library),

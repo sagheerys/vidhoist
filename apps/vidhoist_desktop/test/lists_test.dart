@@ -30,7 +30,6 @@ LibraryItem _item(String url, String title, {int day = 20, bool fav = false}) =>
       canonicalUrl: url,
       title: title,
       uploader: 'Field Notes',
-      onServer: true,
       isAudio: true,
       timestamp: DateTime(2026, 10, day),
       sizeBytes: 100,

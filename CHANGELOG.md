@@ -34,7 +34,9 @@ All notable changes to Vidhoist. The format follows
 - The channel pages and the title filter no longer speak of a server, and
   the title filter ignores capitals.
 - The Windows library no longer marks every clip "offline": every clip is
-  a file on this computer.
+  a file on this computer. The "Offline" place in the sidebar, the command
+  palette and the smart lists went with it, since it held the same clips
+  as "All".
 
 ## [1.0.0] - 2026-11-07
 

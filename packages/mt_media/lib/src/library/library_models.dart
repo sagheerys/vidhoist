@@ -1,12 +1,11 @@
 import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart' show MTMediaLocation;
 
 import '../models/playlist_item.dart';
 
 const _audioExtensions = {'mp3', 'm4a', 'aac', 'ogg', 'opus', 'wav', 'flac'};
 
-/// The unified library item: the server history merged with the local
-/// index on the canonicalUrl key, with a location badge on each one.
+/// The unified library item: the download history merged with the local
+/// index on the canonicalUrl key.
 class LibraryItem {
   const LibraryItem({
     required this.canonicalUrl,
@@ -17,7 +16,6 @@ class LibraryItem {
     this.localPath,
     this.timestamp,
     this.sizeBytes,
-    this.onServer = false,
     this.isAudio = false,
     this.favorite = false,
     this.tags = const [],
@@ -36,7 +34,6 @@ class LibraryItem {
   final String? localPath;
   final DateTime? timestamp;
   final int? sizeBytes;
-  final bool onServer;
   final bool isAudio;
   final bool favorite;
   final List<String> tags;
@@ -79,13 +76,6 @@ class LibraryItem {
       aspectRatio != null &&
       aspectRatio! < 1;
 
-  MTMediaLocation get location => switch ((isOffline, onServer)) {
-    (true, true) => MTMediaLocation.both,
-    (true, false) => MTMediaLocation.offline,
-    (false, true) => MTMediaLocation.onServer,
-    _ => MTMediaLocation.none,
-  };
-
   /// [keptCover] is the online cover kept as a file on this device, first
   /// when there is one (see `CoverKeeper`).
   ///
@@ -115,7 +105,6 @@ class LibraryItem {
     localPath: localPath,
     timestamp: item.timestamp,
     sizeBytes: item.sizeBytes,
-    onServer: true,
     isAudio: _looksAudio(item.quality, item.format, item.filename),
     favorite: favorite,
     tags: tags,
@@ -173,7 +162,7 @@ PlaylistItem toPlaylistItem(LibraryItem item) => PlaylistItem(
 );
 
 /// Library filters: all, favourites, offline, server.
-enum LibraryScope { all, favorites, offline, onServer }
+enum LibraryScope { all, favorites }
 
 enum MediaTypeFilter { all, video, audio, shorts }
 
@@ -233,8 +222,6 @@ List<LibraryItem> buildLibraryView(
     final scopeOk = switch (scope) {
       LibraryScope.all => true,
       LibraryScope.favorites => item.favorite,
-      LibraryScope.offline => item.isOffline,
-      LibraryScope.onServer => item.onServer,
     };
     if (!scopeOk) return false;
     final typeOk = switch (type) {

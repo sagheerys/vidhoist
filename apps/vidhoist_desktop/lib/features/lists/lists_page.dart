@@ -138,7 +138,6 @@ class ListsPage extends ConsumerWidget {
                   title: switch (list.kind) {
                     SmartListKind.favorites => l.favorites,
                     SmartListKind.latest => l.latestAdditions,
-                    SmartListKind.offline => l.offlineSmartList,
                   },
                   subtitle: mtMetaLine([
                     l.queueItemsCount(list.items.length),
@@ -147,7 +146,6 @@ class ListsPage extends ConsumerWidget {
                   icon: switch (list.kind) {
                     SmartListKind.favorites => MTIcons.favorite,
                     SmartListKind.latest => MTIcons.library,
-                    SmartListKind.offline => MTIcons.download,
                   },
                   covers: [for (final i in list.items.take(4)) i.thumbnail],
                   // The phone plays a smart list at a tap; it has no page.

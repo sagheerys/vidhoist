@@ -100,7 +100,6 @@ void main() {
           LibraryItem(
             canonicalUrl: 'https://www.youtube.com/watch?v=kept0000000',
             title: 'Kept',
-            onServer: true,
             serverFilename: 'Kept.mp4',
           ),
         ],

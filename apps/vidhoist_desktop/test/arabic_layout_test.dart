@@ -13,7 +13,6 @@ void main() {
   final clip = LibraryItem(
     canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
     title: 'Video by mohamed.abdou90',
-    onServer: true,
     serverFilename: 'clip.mp4',
     timestamp: DateTime(2026, 10, 20),
   );

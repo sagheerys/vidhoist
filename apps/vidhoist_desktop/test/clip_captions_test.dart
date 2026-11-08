@@ -22,7 +22,6 @@ const _url = 'https://youtu.be/aaaaaaaaaaa';
 final _clip = LibraryItem(
   canonicalUrl: _url,
   title: 'Homelab Hour - Ep. 12',
-  onServer: true,
   serverFilename: 'homelab.mp4',
   timestamp: DateTime(2026, 10, 20),
   duration: const Duration(minutes: 12),

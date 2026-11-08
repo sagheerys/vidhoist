@@ -56,7 +56,7 @@ final tagCountsProvider = FutureProvider<Map<String, int>>((ref) async {
 });
 
 /// The lists made by themselves, with nothing to maintain.
-enum SmartListKind { favorites, latest, offline }
+enum SmartListKind { favorites, latest }
 
 class SmartList {
   const SmartList({required this.kind, required this.items});
@@ -68,7 +68,8 @@ class SmartList {
 /// The phone's count for "Latest additions".
 const latestSmartListSize = 30;
 
-/// The three smart lists of [items], newest first, as on the phone.
+/// The smart lists of [items], newest first, as on the phone; not its
+/// "offline" one, since on a computer every clip is a file.
 List<SmartList> buildSmartLists(List<LibraryItem> items) {
   final newest = [...items]
     ..sort(
@@ -86,13 +87,6 @@ List<SmartList> buildSmartLists(List<LibraryItem> items) {
     SmartList(
       kind: SmartListKind.latest,
       items: newest.take(latestSmartListSize).toList(),
-    ),
-    SmartList(
-      kind: SmartListKind.offline,
-      items: [
-        for (final item in newest)
-          if (item.isOffline) item,
-      ],
     ),
   ];
 }

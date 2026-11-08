@@ -15,7 +15,6 @@ List<LibraryItem> _clips(int n) => [
     LibraryItem(
       canonicalUrl: 'https://youtu.be/clip${i.toString().padLeft(7, '0')}',
       title: 'Clip $i',
-      onServer: true,
       serverFilename: 'Clip $i.mp4',
       localPath: 'C:\\Downloads\\Clip $i.mp4',
       timestamp: DateTime(2026, 11, 1).subtract(Duration(minutes: i)),

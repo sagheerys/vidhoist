@@ -42,13 +42,11 @@ final _library = [
     canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
     title: _longTitle,
     uploader: 'A channel with a rather long name of its own',
-    onServer: true,
     timestamp: DateTime(2026, 10, 20),
   ),
   LibraryItem(
     canonicalUrl: 'https://youtu.be/bbbbbbbbbbb',
     title: 'نسخ اللقطات إلى صندوق ثانٍ كل ليلة، ولماذا لا تكفي اللقطة وحدها',
-    onServer: true,
     timestamp: DateTime(2026, 10, 21),
   ),
 ];

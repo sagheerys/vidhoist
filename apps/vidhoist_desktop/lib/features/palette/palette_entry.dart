@@ -35,7 +35,6 @@ Future<void> openPalette(
       PaletteCommand(label: l.addLinkFab, icon: MTIcons.addlink, run: onAdd),
       go(l.navLibrary, MTIcons.library, EmberRoutes.library),
       go(l.favorites, MTIcons.favorite, EmberRoutes.favorites),
-      go(l.filterOffline, MTIcons.offline, EmberRoutes.offline),
       go(l.navPlaylists, MTIcons.queue, EmberRoutes.playlists),
       go(l.desktopChannels, MTIcons.subscriptions, EmberRoutes.channels),
       go(l.desktopStats, MTIcons.stats, EmberRoutes.stats),

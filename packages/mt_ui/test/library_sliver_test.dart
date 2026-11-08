@@ -23,8 +23,6 @@ void main() {
         size: '412.7 MB',
         added: '14 hours ago',
         tags: const ['homelab', 'backup'],
-        location: MTMediaLocation.onServer,
-        locationLabel: 'Server',
         favorite: i == 0,
         onFavoriteToggle: () {},
         onMore: () {},

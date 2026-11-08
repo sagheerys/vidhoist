@@ -1838,18 +1838,6 @@ abstract class MTLocalizations {
   /// **'Nothing matches these filters'**
   String get desktopNoMatchTitle;
 
-  /// No description provided for @desktopNoOfflineMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'A clip downloaded to this computer plays from here, and shows in this list.'**
-  String get desktopNoOfflineMessage;
-
-  /// No description provided for @desktopNoOfflineTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing kept on this computer yet'**
-  String get desktopNoOfflineTitle;
-
   /// No description provided for @desktopNoTags.
   ///
   /// In en, this message translates to:
@@ -3002,12 +2990,6 @@ abstract class MTLocalizations {
   /// **'Audio'**
   String get filterAudio;
 
-  /// No description provided for @filterOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Offline'**
-  String get filterOffline;
-
   /// No description provided for @filterVideo.
   ///
   /// In en, this message translates to:
@@ -3607,12 +3589,6 @@ abstract class MTLocalizations {
   /// In en, this message translates to:
   /// **'Show the player panel'**
   String get nowPlayingExpand;
-
-  /// No description provided for @offlineSmartList.
-  ///
-  /// In en, this message translates to:
-  /// **'Offline'**
-  String get offlineSmartList;
 
   /// No description provided for @ok.
   ///

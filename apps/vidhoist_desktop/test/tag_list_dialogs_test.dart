@@ -18,7 +18,6 @@ void main() {
     canonicalUrl: url,
     title: 'Homelab Hour',
     uploader: 'Field Notes',
-    onServer: true,
     timestamp: DateTime(2026, 10, 20),
   );
 

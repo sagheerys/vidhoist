@@ -25,7 +25,6 @@ class _Notices implements NoticePort {
 final _clip = LibraryItem(
   canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
   title: 'Amber Skies',
-  onServer: true,
   serverFilename: 'amber.mp4',
   timestamp: DateTime(2026, 10, 20),
 );

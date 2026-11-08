@@ -22,7 +22,6 @@ class ClipFacts extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.mtl;
     final p = MTThemeX.of(context).palette;
     final surface = ref.watch(videoSurfaceProvider);
     return ValueListenableBuilder<Size?>(
@@ -33,7 +32,6 @@ class ClipFacts extends ConsumerWidget {
             mtLtrRun('${size.shortestSide.round()}p'),
           fileFormatOf(entry),
           if (entry.sizeBytes case final bytes?) mtFormatSize(bytes),
-          if (entry.isOffline) l.filterOffline,
         ]);
         if (line.isEmpty) return const SizedBox.shrink();
         return Padding(

@@ -23,7 +23,6 @@ final _clip = LibraryItem(
   canonicalUrl: _url,
   title: 'Night Drive',
   uploader: 'Field Notes',
-  onServer: true,
   serverFilename: 'Night Drive.mkv',
   sizeBytes: 412 * 1024 * 1024,
   timestamp: DateTime(2026, 10, 20),
@@ -32,7 +31,6 @@ final _clip = LibraryItem(
 final _other = LibraryItem(
   canonicalUrl: 'https://youtu.be/bbbbbbbbbbb',
   title: 'Amber Skies',
-  onServer: true,
   isAudio: true,
   timestamp: DateTime(2026, 10, 19),
 );

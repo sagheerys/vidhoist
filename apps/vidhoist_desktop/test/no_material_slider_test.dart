@@ -36,7 +36,6 @@ void main() {
     final clip = LibraryItem(
       canonicalUrl: url,
       title: 'Night Drive',
-      onServer: true,
       serverFilename: 'Night Drive.mp4',
       timestamp: DateTime(2026, 10, 20),
     );

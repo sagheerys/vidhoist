@@ -38,7 +38,6 @@ void main() {
   LibraryItem clip(String title, String id) => LibraryItem(
     canonicalUrl: 'https://youtu.be/$id',
     title: title,
-    onServer: false,
     localPath: (File('${root.path}\\$title.mp4')..writeAsBytesSync([1])).path,
     sizeBytes: 1,
     timestamp: DateTime(2026, 10, 20),

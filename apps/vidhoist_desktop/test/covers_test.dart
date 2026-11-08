@@ -119,7 +119,6 @@ void main() {
         LibraryItem(
           canonicalUrl: 'https://soundcloud.com/a/$id',
           title: id,
-          onServer: true,
           isAudio: audio,
           thumbnail: thumbnail,
           serverFilename: '/audio_download/$id.m4a',
@@ -248,7 +247,6 @@ void main() {
           final song = LibraryItem(
             canonicalUrl: 'https://soundcloud.com/a/$name',
             title: name,
-            onServer: true,
             isAudio: true,
             serverFilename: '/audio_download/$name',
           );
@@ -419,7 +417,6 @@ void main() {
       const reel = LibraryItem(
         canonicalUrl: 'https://www.instagram.com/reel/a/',
         title: 'a',
-        onServer: true,
       );
       expect(await enricher.enrich(reel), isTrue);
       final path = await artwork.artworkOf(reel.canonicalUrl);

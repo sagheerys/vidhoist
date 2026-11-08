@@ -32,7 +32,6 @@ LibraryItem _item(
   canonicalUrl: url,
   title: title,
   uploader: 'Field Notes',
-  onServer: true,
   isAudio: audio,
   timestamp: DateTime(2026, 10, day),
   sizeBytes: 100,

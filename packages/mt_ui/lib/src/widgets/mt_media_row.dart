@@ -10,8 +10,6 @@ import '../tokens/tokens.dart';
 import 'mt_desktop_app.dart';
 import 'mt_favorite.dart';
 import 'mt_highlight_surface.dart';
-import 'mt_location_badge.dart';
-import 'mt_media_card.dart' show MTMediaLocation;
 import 'mt_equalizer.dart';
 import 'mt_media_thumb.dart';
 import 'mt_platform_chip.dart';
@@ -34,8 +32,6 @@ class MTMediaRow extends StatelessWidget {
     this.platform = MTPlatformKind.other,
     this.subtitle,
     this.tags = const [],
-    this.location = MTMediaLocation.none,
-    this.locationLabel,
     this.sourceName,
     this.selected = false,
     this.highlighted = false,
@@ -62,12 +58,9 @@ class MTMediaRow extends StatelessWidget {
 
   /// Shown under the title only on the widest table, beside the date.
   final List<String> tags;
-  final MTMediaLocation location;
-  final String? locationLabel;
 
   /// The site the clip came from, for the source column on the computer's
-  /// table, with the location badge under it. Null (the phones) leaves the
-  /// badge alone in that column.
+  /// table. Null (the phones) leaves that column empty.
   final String? sourceName;
   final bool selected;
   final bool highlighted;
@@ -92,7 +85,6 @@ class MTMediaRow extends StatelessWidget {
     // The tags the row shows beside the source.
     if (columns.added)
       for (final tag in tags.take(3)) mtName('#$tag'),
-    ?locationLabel,
     if (audio) l10n.filterAudio,
     if (favorite) l10n.favorites,
   ].join(l10n.listSeparator);
@@ -228,12 +220,7 @@ class MTMediaRow extends StatelessWidget {
                   location: ExcludeSemantics(
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
-                      child: _SourceCell(
-                        name: sourceName,
-                        location: location,
-                        locationLabel: locationLabel,
-                        style: figure,
-                      ),
+                      child: _SourceCell(name: sourceName, style: figure),
                     ),
                   ),
                   actions: Row(

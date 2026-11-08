@@ -18,7 +18,6 @@ LibraryItem _in(String id, String? folder) => LibraryItem(
   canonicalUrl: 'https://youtu.be/$id',
   title: 'Clip $id',
   serverFilename: folder == null ? 'Clip $id.mp4' : '$folder/Clip $id.mp4',
-  onServer: true,
   timestamp: DateTime(2026, 10, 20),
 );
 

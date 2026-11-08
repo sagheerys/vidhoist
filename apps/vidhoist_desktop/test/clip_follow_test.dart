@@ -17,7 +17,6 @@ import 'support/shell_harness.dart';
 LibraryItem _video(String id, String title) => LibraryItem(
   canonicalUrl: 'https://youtu.be/$id',
   title: title,
-  onServer: true,
   timestamp: DateTime(2026, 10, 20),
   duration: const Duration(minutes: 12),
 );
@@ -128,7 +127,6 @@ void main() {
       LibraryItem(
         canonicalUrl: 'https://youtu.be/ccccccccccc',
         title: 'Amber Skies',
-        onServer: true,
         isAudio: true,
       ),
     );

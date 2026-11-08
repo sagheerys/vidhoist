@@ -27,7 +27,6 @@ void main() {
     final entry = LibraryItem(
       canonicalUrl: _url,
       title: 'Rivers and their beds',
-      onServer: true,
       serverFilename: 'Rivers.mp4',
       timestamp: DateTime(2026, 10, 20),
     );

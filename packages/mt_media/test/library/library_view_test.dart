@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mt_core/mt_core.dart';
-import 'package:mt_ui/mt_ui.dart' show MTMediaLocation;
 import 'package:mt_media/library.dart';
 
 void main() {
@@ -10,14 +9,12 @@ void main() {
       title: 'خطبة الجمعة',
       timestamp: DateTime(2026, 9, 1),
       sizeBytes: 300,
-      onServer: true,
     ),
     LibraryItem(
       canonicalUrl: 'https://youtu.be/bbbbbbbbbbb',
       title: 'أنشودة الصباح',
       timestamp: DateTime(2026, 8, 1),
       sizeBytes: 100,
-      onServer: true,
       localPath: '/x/a.mp3',
       isAudio: true,
       favorite: true,
@@ -44,17 +41,6 @@ void main() {
       expect(result.single.title, 'أنشودة الصباح');
     });
 
-    test('the offline and server filters', () {
-      expect(
-        buildLibraryView(items, scope: LibraryScope.offline),
-        hasLength(2),
-      );
-      expect(
-        buildLibraryView(items, scope: LibraryScope.onServer),
-        hasLength(2),
-      );
-    });
-
     test('the audio and video type filter', () {
       expect(
         buildLibraryView(items, type: MediaTypeFilter.audio),
@@ -72,7 +58,6 @@ void main() {
         canonicalUrl: 'https://youtu.be/ccccccccccc',
         title: 'Reel',
         timestamp: DateTime(2026, 9, 2),
-        onServer: true,
         duration: const Duration(seconds: 40),
         aspectRatio: 9 / 16,
       );
@@ -140,10 +125,8 @@ void main() {
       );
     });
 
-    test('the location badge', () {
-      expect(items[0].location, MTMediaLocation.onServer);
-      expect(items[1].location, MTMediaLocation.both);
-      expect(items[2].location, MTMediaLocation.offline);
+    test('a file on this device is what makes a clip offline', () {
+      expect([for (final i in items.take(3)) i.isOffline], [false, true, true]);
     });
   });
 
@@ -158,7 +141,6 @@ void main() {
         }),
       );
       expect(item.isAudio, isTrue);
-      expect(item.onServer, isTrue);
     });
 
     test('**the guard**: a cover kept on the device comes before the '
@@ -237,7 +219,7 @@ void main() {
       );
       expect(item.title, 'درس التجويد_120000');
       expect(item.isAudio, isFalse);
-      expect(item.location, MTMediaLocation.offline);
+      expect(item.isOffline, isTrue);
     });
   });
 
@@ -248,7 +230,6 @@ void main() {
       canonicalUrl: 'https://youtu.be/${path ?? 'top'}',
       title: path ?? 'top',
       serverFilename: path,
-      onServer: true,
     );
 
     test('the top folder is the first level, whatever lies below it', () {

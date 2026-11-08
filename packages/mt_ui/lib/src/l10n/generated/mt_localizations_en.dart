@@ -1063,13 +1063,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get desktopNoMatchTitle => 'Nothing matches these filters';
 
   @override
-  String get desktopNoOfflineMessage =>
-      'A clip downloaded to this computer plays from here, and shows in this list.';
-
-  @override
-  String get desktopNoOfflineTitle => 'Nothing kept on this computer yet';
-
-  @override
   String get desktopNoTags =>
       'No tags yet. Tag a clip from its page and it appears here.';
 
@@ -1756,9 +1749,6 @@ class MTLocalizationsEn extends MTLocalizations {
   String get filterAudio => 'Audio';
 
   @override
-  String get filterOffline => 'Offline';
-
-  @override
   String get filterVideo => 'Video';
 
   @override
@@ -2093,9 +2083,6 @@ class MTLocalizationsEn extends MTLocalizations {
 
   @override
   String get nowPlayingExpand => 'Show the player panel';
-
-  @override
-  String get offlineSmartList => 'Offline';
 
   @override
   String get ok => 'OK';

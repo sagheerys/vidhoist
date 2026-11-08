@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_media/library.dart';
 import 'package:mt_media/mt_media.dart' show MediaShape;
-import 'package:mt_ui/mt_ui.dart' show MTMediaLocation;
 
 HistoryItem done(String url, {String? title, ItemStatus? status}) =>
     HistoryItem(
@@ -58,7 +57,6 @@ void main() {
       [for (final i in items) i.canonicalUrl],
       ['https://youtu.be/aaaaaaaaaaa'],
     );
-    expect(items.single.onServer, isTrue);
   });
 
   test('a local copy joins its server item, and one left alone stays', () {
@@ -70,9 +68,8 @@ void main() {
       },
     );
     expect(items, hasLength(2));
-    expect(items.first.location, MTMediaLocation.both);
+    expect(items.first.isOffline, isTrue);
     final gone = items.last;
-    expect(gone.onServer, isFalse);
     expect(gone.title, 'Gone Clip');
   });
 

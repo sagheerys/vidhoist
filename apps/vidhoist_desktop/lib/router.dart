@@ -28,10 +28,9 @@ enum EmberSettingsPane {
 abstract final class EmberRoutes {
   static const library = '/library';
 
-  /// Favourites and offline are the library seen through a filter, so the
-  /// filter chips and these two sidebar entries are one state.
+  /// Favourites are the library seen through a filter, so the filter chip
+  /// and this sidebar entry are one state.
   static const favorites = '/library?only=favorites';
-  static const offline = '/library?only=offline';
   static const search = '/search';
   static const playlists = '/playlists';
   static const channels = '/channels';
@@ -60,7 +59,6 @@ abstract final class EmberRoutes {
 enum EmberPlace {
   library,
   favorites,
-  offline,
   search,
   playlists,
   channels,
@@ -74,7 +72,6 @@ EmberPlace placeOf(Uri location) {
   return switch (first) {
     'library' => switch (location.queryParameters['only']) {
       'favorites' => EmberPlace.favorites,
-      'offline' => EmberPlace.offline,
       _ => EmberPlace.library,
     },
     'search' => EmberPlace.search,

@@ -18,7 +18,6 @@ final _library = [
     canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
     title: 'Homelab Hour - Ep. 12',
     uploader: 'Homelab Hour',
-    onServer: true,
     timestamp: DateTime(2026, 10, 20),
     sizeBytes: 400,
     tags: const ['homelab'],
@@ -28,7 +27,6 @@ final _library = [
     canonicalUrl: 'https://youtu.be/bbbbbbbbbbb',
     title: 'Amber Skies',
     uploader: 'Lowlands',
-    onServer: true,
     isAudio: true,
     timestamp: DateTime(2026, 10, 21),
     sizeBytes: 100,
@@ -36,7 +34,6 @@ final _library = [
   LibraryItem(
     canonicalUrl: 'https://youtu.be/ccccccccccc',
     title: 'Blue Hour',
-    onServer: true,
     localPath: r'C:\Offline\blue.mp4',
     timestamp: DateTime(2026, 10, 22),
     sizeBytes: 900,
@@ -46,7 +43,6 @@ final _library = [
   LibraryItem(
     canonicalUrl: 'https://www.tiktok.com/@a/video/1',
     title: 'Tidepools at Dawn',
-    onServer: true,
     timestamp: DateTime(2026, 10, 19),
     sizeBytes: 50,
   ),
@@ -155,14 +151,33 @@ void main() {
     expect(find.byType(MTMediaGridCard), findsNWidgets(4));
   });
 
-  testWidgets('**the guard**: the counts follow the place; an empty Offline '
-      'page offers no platform at all', (tester) async {
-    await open(tester, library: _library);
+  testWidgets('**the guard**: the counts follow the place; an empty '
+      'Favorites page offers no platform at all', (tester) async {
+    await open(
+      tester,
+      library: [
+        for (final i in _library)
+          if (!i.favorite) i,
+      ],
+    );
     expect(find.text('Platform'), findsOneWidget);
     GoRouter.of(tester.element(find.byType(EmberSidebar)))
-        .go(EmberRoutes.offline);
+        .go(EmberRoutes.favorites);
     await tester.pumpAndSettle();
     expect(find.text('Platform'), findsNothing);
+  });
+
+  testWidgets('no "Offline" place: on a computer every clip is a file', (
+    tester,
+  ) async {
+    await open(tester, library: _library);
+    expect(
+      find.descendant(
+        of: find.byType(EmberSidebar),
+        matching: find.text('Offline'),
+      ),
+      findsNothing,
+    );
   });
 
   testWidgets('favourites is one state for its chip and its sidebar entry', (
@@ -182,9 +197,7 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Table'));
     await tester.pumpAndSettle();
     expect(find.byType(MTMediaRow), findsNWidgets(4));
-    // **The guard**: no mark of where a clip is, since every clip is a
-    // file on this computer, and no platform letters beside the titles.
-    expect(find.byType(MTLocationBadge), findsNothing);
+    // **The guard**: no platform letters beside the titles.
     expect(find.byType(MTPlatformChip), findsNothing);
     // **The guard**: the source column names the site, for every row, the
     // server's too; it used to stay empty.
@@ -221,10 +234,7 @@ void main() {
     expect(find.byType(MTMediaGridCard), findsNWidgets(4));
   });
 
-  testWidgets('**the guard**: favourites and offline count their own, and '
-      'an empty one says what fills it, not that a filter hides it', (
-    tester,
-  ) async {
+  testWidgets('**the guard**: favourites count their own', (tester) async {
     await open(
       tester,
       library: [
@@ -237,12 +247,6 @@ void main() {
     go(EmberRoutes.favorites);
     await tester.pumpAndSettle();
     expect(find.textContaining('1 clip'), findsOneWidget);
-
-    go(EmberRoutes.offline);
-    await tester.pumpAndSettle();
-    expect(find.text('Nothing kept on this computer yet'), findsOneWidget);
-    expect(find.text('Nothing matches these filters'), findsNothing);
-    expect(find.textContaining('No clips yet'), findsOneWidget);
   });
 
   testWidgets('filters that hide everything offer to clear them', (
@@ -270,13 +274,11 @@ void main() {
         LibraryItem(
           canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
           title: 'From YouTube',
-          onServer: true,
           thumbnail: 'https://i.ytimg.com/vi/aaaaaaaaaaa/hqdefault.jpg',
         ),
         LibraryItem(
           canonicalUrl: 'https://example.com/b',
           title: 'Cover elsewhere',
-          onServer: true,
           thumbnail: 'http://nas:8081/download/b.jpg',
         ),
         const LibraryItem(canonicalUrl: 'https://example.com/c', title: 'None'),

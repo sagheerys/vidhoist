@@ -9,7 +9,6 @@ import 'support/shell_harness.dart';
 LibraryItem _in(String folder, String id) => LibraryItem(
   canonicalUrl: 'https://youtu.be/$id',
   title: id,
-  onServer: true,
   serverFilename: '$folder/$id.mp4',
   timestamp: DateTime(2026, 10, 20),
 );

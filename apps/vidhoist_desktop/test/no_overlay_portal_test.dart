@@ -19,7 +19,6 @@ void main() {
   final clip = LibraryItem(
     canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
     title: 'Night Drive',
-    onServer: true,
     serverFilename: 'Night Drive.mp4',
     timestamp: DateTime(2026, 10, 20),
   );

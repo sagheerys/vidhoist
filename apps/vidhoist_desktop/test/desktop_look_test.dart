@@ -22,7 +22,6 @@ import 'support/shell_harness.dart';
 final _clip = LibraryItem(
   canonicalUrl: 'https://youtu.be/aaaaaaaaaaa',
   title: 'Amber Skies',
-  onServer: true,
   isAudio: true,
   timestamp: DateTime(2026, 10, 20),
 );
@@ -176,7 +175,6 @@ void main() {
     final older = LibraryItem(
       canonicalUrl: 'https://youtu.be/bbbbbbbbbbb',
       title: 'Blue Hour',
-      onServer: true,
       isAudio: true,
       timestamp: DateTime(2026, 10, 1),
     );

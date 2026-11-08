@@ -24,7 +24,6 @@ LibraryItem _clip(
   canonicalUrl: '$site$id',
   title: 'Clip $id',
   uploader: channel,
-  onServer: true,
   sizeBytes: mb * _mb,
   duration: const Duration(minutes: 30),
   timestamp: added ?? DateTime(2026, 10, 1),
@@ -41,7 +40,6 @@ void main() {
           LibraryItem(
             canonicalUrl: 'https://youtu.be/$id',
             title: 'Clip $id',
-            onServer: true,
             sizeBytes: _mb,
             duration: id == 'aaaaaaaaaaa' ? const Duration(hours: 2) : null,
             timestamp: DateTime(2026, 10, 1),

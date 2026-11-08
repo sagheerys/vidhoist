@@ -19,7 +19,6 @@ final _library = [
     canonicalUrl: _song,
     title: 'Evening Raga',
     uploader: 'Strings at Dusk',
-    onServer: true,
     isAudio: true,
     serverFilename: 'Evening Raga.mp3',
     timestamp: DateTime(2026, 10, 20),
@@ -27,7 +26,6 @@ final _library = [
   LibraryItem(
     canonicalUrl: _film,
     title: 'Night Drive',
-    onServer: true,
     serverFilename: 'Night Drive.mp4',
     timestamp: DateTime(2026, 10, 19),
   ),

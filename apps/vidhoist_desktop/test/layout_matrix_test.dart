@@ -59,7 +59,6 @@ final _library = [
     canonicalUrl: _url,
     title: _longTitle,
     uploader: 'Homelab Hour with a rather long channel name',
-    onServer: true,
     timestamp: DateTime(2026, 10, 20),
     sizeBytes: 400000000,
     duration: const Duration(hours: 1, minutes: 12, seconds: 5),
@@ -70,7 +69,6 @@ final _library = [
     canonicalUrl: 'https://youtu.be/bbbbbbbbbbb',
     title: _arabicTitle,
     uploader: 'قناة المختبر',
-    onServer: true,
     isAudio: true,
     timestamp: DateTime(2026, 10, 21),
     sizeBytes: 100,
@@ -78,7 +76,6 @@ final _library = [
   LibraryItem(
     canonicalUrl: 'https://youtu.be/ccccccccccc',
     title: 'Blue Hour',
-    onServer: true,
     localPath: r'C:\Offline\blue.mp4',
     timestamp: DateTime(2026, 10, 22),
     sizeBytes: 900,
@@ -88,7 +85,6 @@ final _library = [
   LibraryItem(
     canonicalUrl: 'https://www.tiktok.com/@a/video/1',
     title: 'Tidepools at Dawn',
-    onServer: true,
     timestamp: DateTime(2026, 10, 19),
     sizeBytes: 50,
   ),
@@ -305,7 +301,6 @@ void main() {
 
   for (final place in [
     EmberRoutes.favorites,
-    EmberRoutes.offline,
     EmberRoutes.search,
     EmberRoutes.playlists,
     EmberRoutes.channels,

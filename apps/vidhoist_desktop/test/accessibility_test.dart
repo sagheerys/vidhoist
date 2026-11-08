@@ -59,7 +59,6 @@ void main() {
           canonicalUrl: _video.canonicalUrl,
           title: _video.title,
           uploader: _video.uploader,
-          onServer: true,
           serverFilename: 'Night Drive.mp4',
           timestamp: DateTime(2026, 10, 20),
         ),

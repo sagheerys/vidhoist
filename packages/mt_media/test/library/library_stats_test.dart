@@ -14,7 +14,6 @@ LibraryItem _clip(
   canonicalUrl: '$site$id',
   title: 'Clip $id',
   uploader: channel,
-  onServer: true,
   sizeBytes: mb * _mb,
   duration: const Duration(minutes: 30),
   timestamp: added ?? DateTime(2026, 10, 1),

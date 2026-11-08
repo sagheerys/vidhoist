@@ -124,12 +124,6 @@ class EmberSidebar extends StatelessWidget {
                 EmberRoutes.favorites,
               ),
               item(
-                EmberPlace.offline,
-                MTIcons.offline,
-                l.filterOffline,
-                EmberRoutes.offline,
-              ),
-              item(
                 EmberPlace.search,
                 MTIcons.search,
                 l.desktopSearch,

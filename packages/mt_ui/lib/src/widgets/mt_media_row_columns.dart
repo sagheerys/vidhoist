@@ -198,19 +198,11 @@ class MTMediaRowHeader extends StatelessWidget {
   }
 }
 
-/// The source column: the site, when the row is given one, over the badge
-/// for a copy kept on this device.
+/// The source column: the site, when the row is given one.
 class _SourceCell extends StatelessWidget {
-  const _SourceCell({
-    required this.name,
-    required this.location,
-    required this.locationLabel,
-    required this.style,
-  });
+  const _SourceCell({required this.name, required this.style});
 
   final String? name;
-  final MTMediaLocation location;
-  final String? locationLabel;
   final TextStyle style;
 
   @override
@@ -226,8 +218,6 @@ class _SourceCell extends StatelessWidget {
           overflow: TextOverflow.fade,
           style: style,
         ),
-      if (location != MTMediaLocation.none && locationLabel != null)
-        MTLocationBadge(location: location, label: locationLabel!),
     ],
   );
 }

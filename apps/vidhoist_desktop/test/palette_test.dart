@@ -20,7 +20,6 @@ LibraryItem _clip(String id, String title, {bool audio = false}) => LibraryItem(
   canonicalUrl: 'https://youtu.be/$id',
   title: title,
   uploader: 'Field Notes',
-  onServer: true,
   isAudio: audio,
   timestamp: DateTime(2026, 10, 20),
   sizeBytes: 100,

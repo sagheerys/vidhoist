@@ -22,8 +22,8 @@ import 'library_state.dart';
 import 'selection.dart';
 import 'selection_bar.dart';
 
-/// The library: the whole unified library, or the favourites or the
-/// offline copies, with the filters in view and three layouts.
+/// The library: the whole unified library, or the favourites, with the
+/// filters in view and three layouts.
 class LibraryPage extends ConsumerWidget {
   const LibraryPage({super.key, this.scope = LibraryScope.all});
 
@@ -32,7 +32,6 @@ class LibraryPage extends ConsumerWidget {
   /// The place a route's `only=` names.
   static LibraryScope scopeOf(String? only) => switch (only) {
     'favorites' => LibraryScope.favorites,
-    'offline' => LibraryScope.offline,
     _ => LibraryScope.all,
   };
 
@@ -44,15 +43,12 @@ class LibraryPage extends ConsumerWidget {
     final all = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
     final title = switch (scope) {
       LibraryScope.favorites => l.favorites,
-      LibraryScope.offline => l.filterOffline,
       _ => l.navLibrary,
     };
-    final offline = all.where((i) => i.isOffline).length;
     // What this place holds before any chip: its own count, and the
     // message when it holds nothing yet.
     final held = switch (scope) {
       LibraryScope.favorites => all.where((i) => i.favorite).length,
-      LibraryScope.offline => offline,
       _ => all.length,
     };
 
@@ -143,13 +139,6 @@ class LibraryPage extends ConsumerWidget {
               ? MTEmptyFrame(
                   title: l.desktopNoFavoritesTitle,
                   message: l.desktopNoFavoritesMessage,
-                  actionLabel: l.navLibrary,
-                  onAction: () => GoRouter.of(context).go(EmberRoutes.library),
-                )
-              : held == 0 && scope == LibraryScope.offline
-              ? MTEmptyFrame(
-                  title: l.desktopNoOfflineTitle,
-                  message: l.desktopNoOfflineMessage,
                   actionLabel: l.navLibrary,
                   onAction: () => GoRouter.of(context).go(EmberRoutes.library),
                 )

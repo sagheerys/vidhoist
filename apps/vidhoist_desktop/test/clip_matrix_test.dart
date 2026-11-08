@@ -19,7 +19,6 @@ final _library = [
         'Homelab Hour - Ep. 12: snapshots, replication and why a second box '
         'in another room is the only backup that counts',
     uploader: 'Homelab Hour with a rather long channel name',
-    onServer: true,
     timestamp: DateTime(2026, 10, 22),
     sizeBytes: 100,
     duration: const Duration(hours: 1, minutes: 12),
@@ -30,7 +29,6 @@ final _library = [
         'ساعة المختبر المنزلي: لماذا لا تُعدّ نسخة احتياطية إلا تلك التي في '
         'جهاز آخر',
     uploader: 'قناة المختبر',
-    onServer: true,
     timestamp: DateTime(2026, 10, 23),
     sizeBytes: 100,
     duration: const Duration(seconds: 40),
