@@ -160,9 +160,7 @@ void main() {
     expect(kept!.single.enabled, isFalse);
   });
 
-  testWidgets('the card: its letter, who follows it, its newest clips', (
-    tester,
-  ) async {
+  testWidgets('the card: its letter and name, no clips', (tester) async {
     final c = container();
     await tester.runAsync(() => followSome(c));
     await tester.pumpWidget(app(c));
@@ -175,19 +173,11 @@ void main() {
     );
     expect(find.textContaining('1.23M subscribers'), findsOneWidget);
     expect(find.textContaining('Every hour'), findsOneWidget);
-    expect(find.textContaining('Episode a'), findsOneWidget);
-    expect(find.text('12:34'), findsOneWidget);
-  });
-
-  testWidgets('a tap on a clip downloads it by hand', (tester) async {
-    final c = container();
-    await tester.runAsync(() => followSome(c));
-    await tester.pumpWidget(app(c));
-    await tester.pumpAndSettle();
-    await tester.tap(find.textContaining('Episode a'));
-    await tester.pumpAndSettle();
-    expect(engine.tasks.single.inputUrl, 'https://www.youtube.com/watch?v=a');
-    expect(find.textContaining('Download started'), findsOneWidget);
+    expect(
+      find.textContaining('Episode a'),
+      findsNothing,
+      reason: 'the owner wants the channel alone, not its videos',
+    );
   });
 
   testWidgets('its sheet: what it is set to, and unfollow apart', (

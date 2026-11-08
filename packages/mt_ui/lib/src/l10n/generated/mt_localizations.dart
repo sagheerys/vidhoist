@@ -428,18 +428,6 @@ abstract class MTLocalizations {
   /// **'{count} subscribers'**
   String channelFollowers(String count);
 
-  /// No description provided for @channelLatest.
-  ///
-  /// In en, this message translates to:
-  /// **'Newest videos'**
-  String get channelLatest;
-
-  /// No description provided for @channelNoClipsYet.
-  ///
-  /// In en, this message translates to:
-  /// **'Its newest videos show after the next check'**
-  String get channelNoClipsYet;
-
   /// No description provided for @channelUrl.
   ///
   /// In en, this message translates to:
