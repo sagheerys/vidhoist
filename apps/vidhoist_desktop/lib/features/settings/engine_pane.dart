@@ -6,7 +6,6 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/engine_data.dart';
 import '../../data/engine_fetch_data.dart';
-import '../../data/later_features.dart';
 import '../../platform/engine_fetcher.dart';
 import '../../platform/engine_locator.dart';
 import '../../shell/engine_line.dart';
@@ -104,14 +103,6 @@ class EnginePane extends ConsumerWidget {
           onChanged: (on) => unawaited(
             ref.read(engineOptionsProvider.notifier).setForceIpv4(on),
           ),
-        ),
-        const SizedBox(height: VhSpace.lg),
-        SwitchLine(
-          title: l.desktopLaterFeatures,
-          hint: l.desktopLaterFeaturesHint,
-          value: ref.watch(laterFeaturesProvider),
-          onChanged: (on) =>
-              unawaited(ref.read(laterFeaturesProvider.notifier).set(on)),
         ),
       ],
     );

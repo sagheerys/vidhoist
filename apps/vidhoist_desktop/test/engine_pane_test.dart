@@ -5,7 +5,6 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/engine_fetch_data.dart';
-import 'package:vidhoist_desktop/data/later_features.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/settings/engine_pane.dart';
 import 'package:vidhoist_desktop/features/settings/simple_panes.dart';
@@ -15,8 +14,7 @@ import 'package:vidhoist_desktop/platform/engine_locator.dart';
 import 'desktop_matrix.dart';
 
 /// Settings › Engine: each part and where it stands, a fetch for the ones
-/// not here yet, yt-dlp's update, IPv4, and the switch that shows Channels
-/// and Sync.
+/// not here yet, yt-dlp's update, and IPv4.
 void main() {
   late FakeBackend backend;
   late MemoryKeyValueStore store;
@@ -100,18 +98,12 @@ void main() {
     expect(find.text(l.desktopEngineUpToDate), findsWidgets);
   });
 
-  testWidgets('IPv4 and the later features are switched and kept', (
-    tester,
-  ) async {
+  testWidgets('IPv4 is switched and kept', (tester) async {
     await tester.pumpWidget(app());
     await tester.pumpAndSettle();
     await tester.tap(switchOf(l.desktopEngineIpv4));
     await tester.pumpAndSettle();
     expect(await store.getBool(EngineOptionsNotifier.ipv4Key), isFalse);
-    await tester.ensureVisible(switchOf(l.desktopLaterFeatures));
-    await tester.tap(switchOf(l.desktopLaterFeatures));
-    await tester.pumpAndSettle();
-    expect(await store.getBool(LaterFeaturesNotifier.key), isTrue);
   });
 
   for (final brightness in Brightness.values) {

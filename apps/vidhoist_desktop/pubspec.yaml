@@ -1,5 +1,5 @@
 name: vidhoist_desktop
-description: "Vidhoist for Windows: download video and audio with yt-dlp, with a local library."
+description: "VidHoist for Windows: download video and audio with yt-dlp, with a local library."
 publish_to: none
 resolution: workspace
 version: 1.0.0+16

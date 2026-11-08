@@ -115,12 +115,6 @@ List<(String, List<DiscoverLine>)> discoverGroups(
         keys: const [],
         tryIt: () => go(DesktopRoutes.channels),
       ),
-      (
-        title: l.desktopDiscoverPhone,
-        line: l.desktopDiscoverPhoneLine,
-        keys: const [],
-        tryIt: () => go(DesktopSettingsPane.sync.route),
-      ),
     ],
   ),
   (

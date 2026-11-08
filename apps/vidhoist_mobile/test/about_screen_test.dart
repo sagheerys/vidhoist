@@ -14,7 +14,7 @@ import 'device_matrix.dart';
 void main() {
   setUp(
     () => PackageInfo.setMockInitialValues(
-      appName: 'Vidhoist',
+      appName: 'VidHoist',
       packageName: 'com.yasir.vidhoist',
       version: '2.0.0',
       buildNumber: '7',

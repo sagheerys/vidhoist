@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "" "\0"
-            VALUE "FileDescription", "Vidhoist" "\0"
+            VALUE "FileDescription", "VidHoist" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "vidhoist_desktop" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 Yasir Sagheer. GPL-3.0." "\0"
             VALUE "OriginalFilename", "vidhoist_desktop.exe" "\0"
-            VALUE "ProductName", "Vidhoist" "\0"
+            VALUE "ProductName", "VidHoist" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

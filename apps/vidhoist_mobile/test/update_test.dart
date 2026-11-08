@@ -47,7 +47,7 @@ void main() {
       if (cacheDir.existsSync()) cacheDir.deleteSync(recursive: true);
     });
     PackageInfo.setMockInitialValues(
-      appName: 'Vidhoist',
+      appName: 'VidHoist',
       packageName: 'com.yasir.test',
       version: '2.0.0',
       buildNumber: '1',

@@ -12,7 +12,7 @@ void main() {
       RegExp('VALUE "$name", "([^"]*)"').firstMatch(rc)?.group(1);
 
   test('the name is fixed for good', () {
-    expect(DesktopIdentity.displayName, 'Vidhoist');
+    expect(DesktopIdentity.displayName, 'VidHoist');
   });
 
   test('**the guard**: the data folder is %APPDATA%\\Vidhoist', () {

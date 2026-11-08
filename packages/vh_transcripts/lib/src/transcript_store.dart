@@ -22,8 +22,8 @@ class TranscriptStore {
 
   File _file(String name) => File('${root.path}${Platform.pathSeparator}$name');
 
-  /// A clip holds one file per language, named from both. Public so the
-  /// sync folder names its copies the same way.
+  /// A clip holds one file per language, named from both. Public so an
+  /// exported bundle names its copies the same way.
   static String nameFor(String canonicalUrl, String language) =>
       _hashName('$canonicalUrl\n$language');
 

@@ -55,7 +55,7 @@ Future<void> main() async {
     ),
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'com.yasir.vidhoist.audio',
-      androidNotificationChannelName: 'Vidhoist',
+      androidNotificationChannelName: 'VidHoist',
       // **`false` is forced by the package**, whose own assertion says an
       // ongoing flag "will make no effect with androidStopForegroundOnPause
       // set to false": a live foreground service already makes its

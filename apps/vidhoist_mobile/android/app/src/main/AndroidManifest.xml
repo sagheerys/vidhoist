@@ -30,7 +30,7 @@
     <!-- Android's automatic backup is enabled, but **without the secure-storage
          file** — see res/xml/backup_rules.xml for why. -->
     <application
-        android:label="Vidhoist"
+        android:label="VidHoist"
         android:name="${applicationName}"
         android:enableOnBackInvokedCallback="true"
         android:allowBackup="true"

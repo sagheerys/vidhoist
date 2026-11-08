@@ -14,7 +14,6 @@ enum DesktopSettingsPane {
   desktop,
   transcripts,
   backup,
-  sync,
   updates,
   logs,
   about;

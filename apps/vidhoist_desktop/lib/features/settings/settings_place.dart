@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-import '../../data/later_features.dart';
 import '../../router.dart';
 import 'about_pane.dart';
 import 'appearance_pane.dart';
@@ -16,7 +15,6 @@ import 'keep_in_view.dart';
 import 'logs_pane.dart';
 import 'pane_entry.dart';
 import 'simple_panes.dart';
-import 'sync_pane.dart';
 import 'transcripts_pane.dart';
 import 'updates_pane.dart';
 
@@ -40,8 +38,6 @@ class SettingsPlace extends ConsumerWidget {
     final p = VhThemeX.of(context).palette;
     final l = context.vhl;
     final text = Theme.of(context).textTheme;
-    // Sync waits behind its switch, until the phone app has it.
-    final later = ref.watch(laterFeaturesProvider);
     final groups = [
       (
         l.desktopEngine,
@@ -65,7 +61,6 @@ class SettingsPlace extends ConsumerWidget {
         l.settingsGroupData,
         [
           DesktopSettingsPane.backup,
-          if (later) DesktopSettingsPane.sync,
           DesktopSettingsPane.updates,
           DesktopSettingsPane.logs,
           DesktopSettingsPane.about,
@@ -165,7 +160,6 @@ class SettingsPlace extends ConsumerWidget {
                           DesktopSettingsPane.desktop => const DesktopPane(),
                           DesktopSettingsPane.backup => const BackupPane(),
                           DesktopSettingsPane.cookies => const CookiesPane(),
-                          DesktopSettingsPane.sync => const SyncPane(),
                           DesktopSettingsPane.subscriptions =>
                             const SubscriptionsPane(),
                           DesktopSettingsPane.appearance =>
@@ -199,7 +193,6 @@ String paneTitle(VhLocalizations l, DesktopSettingsPane pane) => switch (pane) {
   DesktopSettingsPane.desktop => l.desktopDesktopSection,
   DesktopSettingsPane.transcripts => l.settingsTranscripts,
   DesktopSettingsPane.backup => l.settingsBackup,
-  DesktopSettingsPane.sync => l.desktopSync,
   DesktopSettingsPane.updates => l.updates,
   DesktopSettingsPane.logs => l.diagnosticLogs,
   DesktopSettingsPane.about => l.about,

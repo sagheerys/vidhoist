@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Vidhoist. The format follows
+All notable changes to VidHoist. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
@@ -8,7 +8,7 @@ All notable changes to Vidhoist. The format follows
 ### Added
 - Following channels on Windows, on the computer itself. Each new video of
   a followed channel downloads into the library at the quality, in the
-  folder and through the title filter chosen for it, while Vidhoist is open
+  folder and through the title filter chosen for it, while VidHoist is open
   or in the tray; a check missed while it was closed is made a little after
   it opens. What was on the channel before following is not downloaded. A
   YouTube channel's link follows its videos, not its Shorts or live
@@ -19,7 +19,7 @@ All notable changes to Vidhoist. The format follows
 - Following channels on the phone, from Settings › Channels: follow by a
   link (of a channel, a playlist or one of its videos), pause, check now,
   change how often and the title filter, unfollow. New videos download at
-  the quality chosen when following, while Vidhoist is open or in the
+  the quality chosen when following, while VidHoist is open or in the
   background, and what came while it was closed downloads when it opens.
   The channels are in the backup.
 - The phone's channels page shows each channel as a card: its picture, how
@@ -47,13 +47,17 @@ All notable changes to Vidhoist. The format follows
   the phone app has; the filter never matched the Windows app before.
 
 ### Changed
+- The app's name is written VidHoist, with its capital H, wherever it
+  is shown: under the icon, in the window title, in the installer and
+  in every text. Folders, ids and release files keep their spelling,
+  so nothing moves and updates still find each other.
 - Channels are always in the sidebar and in Settings; the "later features"
   switch now hides Sync alone.
 - Nothing of Vidhoist is left in the apps: no Vidhoist credit in About, no
   mention of Vidhoist or a server in the texts or the Windows installer, and
   the phone's notification channels now carry Vidhoist's name (the old
   ones are removed, so Android's settings list each kind once).
-- Vidhoist no longer reads Vidhoist's backups: the old encrypted formats
+- VidHoist no longer reads Vidhoist's backups: the old encrypted formats
   (MTBACKUP1, MTSBACKUP1, MTF1), their key, and Vidhoist Lite's playlists of
   file paths are gone. Backups are now written under Vidhoist's own name,
   and those written by 1.0.0 still import.
@@ -64,10 +68,17 @@ All notable changes to Vidhoist. The format follows
   palette and the smart lists went with it, since it held the same clips
   as "All".
 
+### Removed
+- Sync between the phone and Windows, which waited behind the
+  "later features" switch in Settings › Engine and never reached
+  the phone. Each device keeps its own library, so there was little
+  for it to carry; a backup moves channels, lists, tags and settings
+  from one device to the other.
+
 ## [1.0.0] - 2026-11-07
 
 ### Added
-- The project. Vidhoist starts from
+- The project. VidHoist starts from
   [vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) v2.7.0
   (2026-11-03) by the same author, with two of its three apps: the Android
   app (from Vidhoist Lite) and the Windows app (from Vidhoist Ember). Vidhoist Super
@@ -124,7 +135,7 @@ All notable changes to Vidhoist. The format follows
   The download folder is `Download/Vidhoist`. Self-update reads
   `sagheerys/vidhoist` releases.
 - User-facing strings that named Vidhoist, Lite, Super or Ember now say
-  Vidhoist, in English and Arabic alike. Strings about the server are kept
+  VidHoist, in English and Arabic alike. Strings about the server are kept
   until the engine is replaced.
 
 - **Brought level with vidhoist-mobile v2.7.0 as released** (tag `v2.7.0`,
@@ -137,7 +148,7 @@ All notable changes to Vidhoist. The format follows
   inside their own, updates only from GitHub over https). A patched
   `media_kit_video` in `third_party/` stops Windows closing when a clip of
   another size starts. Brought in with `tool/port_from_vidhoist.py`.
-- The sync subfolder is `Vidhoist Sync`, so Vidhoist and Vidhoist never share
+- The sync subfolder is `Vidhoist Sync`, so VidHoist and Vidhoist never share
   one library when pointed at the same synced folder.
 - Nothing is saved beside a video but its subtitles: no `.info.json` and no
   `.jpg`. The cover goes inside the file, where it outlives the site
@@ -197,7 +208,7 @@ All notable changes to Vidhoist. The format follows
 - Windows looked for missing covers and read clips' lengths only with a
   server set up, so a library downloaded here never had them; both now read
   the files on this computer.
-- Self-update would never have offered a Vidhoist release: the phone looked
+- Self-update would never have offered a VidHoist release: the phone looked
   for files named "lite" and Windows for "ember", and Windows saved the
   installer as `Vidhoist-Ember-…`. Both now look for `Vidhoist` and tell the
   APK from the installer by the extension.

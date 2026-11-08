@@ -12,8 +12,8 @@ final playlistsStoreProvider = Provider(
   (ref) => PlaylistsStore(
     store: ref.watch(keyValueStoreProvider),
     mutex: ref.watch(prefsMutexProvider),
-    // Stamped as the phone app stamps them, so a later merge with the
-    // phone knows which write is newer.
+    // Stamped as the phone app stamps them, so a backup from either
+    // device merges into the other by which write is newer.
     clock: DateTime.now,
   ),
 );

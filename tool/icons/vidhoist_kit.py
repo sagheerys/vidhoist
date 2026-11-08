@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Vidhoist's mark kit: one source for every icon the two apps ship.
+"""VidHoist's mark kit: one source for every icon the two apps ship.
 
 The mark: a window whose title bar carries the accent and whose glyph is a
 download arrow landing in a tray, with film perforations down both sides.
@@ -64,7 +64,7 @@ def glyph(color, cx=128, cy=150, s=1.0):
     )
 
 
-def svg(body, w=GRID, h=GRID, title="Vidhoist"):
+def svg(body, w=GRID, h=GRID, title="VidHoist"):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}">'
             f'<title>{title}</title>{body}</svg>')
 
@@ -192,7 +192,7 @@ def installer_images():
         img.paste(mark, ((w - ms) // 2, int(h * 0.30)), mark)
         d = ImageDraw.Draw(img)
         font = _font(int(w * 0.135))
-        text = "Vidhoist"
+        text = "VidHoist"
         tw = d.textlength(text, font=font)
         d.text(((w - tw) / 2, int(h * 0.30) + ms + int(h * 0.03)), text, font=font, fill=CREAM)
         img.save(os.path.join(inst, f"wizard_large_{scale}.bmp"))
@@ -227,21 +227,21 @@ def _lockup(kind, edge, word_colour):
     font = "font-family=\"Manrope, 'Segoe UI', system-ui, sans-serif\" font-weight=\"800\""
     if kind == "horizontal":
         w, h = 256 + 64 + 640, 256
-        text = f'<text x="320" y="172" font-size="150" {font} fill="{word_colour}">Vidhoist</text>'
+        text = f'<text x="320" y="172" font-size="150" {font} fill="{word_colour}">VidHoist</text>'
         body = f'<g>{tile_art(edge)}</g>{text}'
     else:
         w, h = 640, 256 + 52 + 130
-        text = f'<text x="320" y="{256 + 52 + 110}" text-anchor="middle" font-size="120" {font} fill="{word_colour}">Vidhoist</text>'
+        text = f'<text x="320" y="{256 + 52 + 110}" text-anchor="middle" font-size="120" {font} fill="{word_colour}">VidHoist</text>'
         body = f'<g transform="translate(192 0)">{tile_art(edge)}</g>{text}'
     return svg(body, w, h)
 
 
 def _guide():
-    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Vidhoist mark</title>
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><title>VidHoist mark</title>
 <style>body{{font:15px/1.6 system-ui,sans-serif;max-width:900px;margin:40px auto;padding:0 16px;color:{INK}}}
 figure{{display:inline-block;margin:8px;padding:20px;border:1px solid #e6ddd0;border-radius:12px;text-align:center}}
 figcaption{{font-size:12px;color:#8a7d73;margin-top:8px}}.dark{{background:#000}}</style></head><body>
-<h1>Vidhoist: the mark</h1>
+<h1>VidHoist: the mark</h1>
 <p>A window whose title bar carries the accent blue <code>{ACCENT}</code>; inside it a download arrow lands in a tray. Film perforations run down both sides. On Windows the window sits on an espresso tile <code>{INK}</code> with a cream plate <code>{CREAM}</code>; on Android the tile is the accent and the plate is cream with the glyph cut out of it. Below 24 px the small cut drops the perforations.</p>
 <p dir="rtl">نافذة شريطها العلوي أزرق، وفي داخلها سهم تنزيل يستقر في صينية، وثقوب الفيلم على الجانبين. على ويندوز بلاطة حبرية، وعلى أندرويد بلاطة زرقاء ولوحة كريمية.</p>
 <figure><img src="vidhoist-symbol.svg" width="128"><figcaption>vidhoist-symbol.svg</figcaption></figure>
@@ -262,4 +262,4 @@ if __name__ == "__main__":
     windows_icons()
     installer_images()
     brand_files()
-    print("Vidhoist kit written.")
+    print("VidHoist kit written.")

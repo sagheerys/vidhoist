@@ -40,7 +40,7 @@ permissions:
 
 jobs:
   test:
-    name: Windows tests (Vidhoist)
+    name: Windows tests (VidHoist)
     runs-on: windows-latest
     timeout-minutes: 75
 
@@ -73,7 +73,7 @@ jobs:
         working-directory: apps/vidhoist_desktop
 
   build:
-    name: Windows build (Vidhoist)
+    name: Windows build (VidHoist)
     runs-on: windows-latest
     timeout-minutes: 40
 

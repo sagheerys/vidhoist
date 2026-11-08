@@ -8,7 +8,7 @@ import '../theme/vh_theme.dart';
 import '../widgets/vh_desktop_app.dart';
 import 'vh_icon_data.dart';
 
-/// Draws a Vidhoist icon the way `Icon` draws a glyph: colour and size from the
+/// Draws a VidHoist icon the way `Icon` draws a glyph: colour and size from the
 /// surrounding [IconTheme], so it drops into a button unchanged. The ember
 /// mark always takes the palette's accent, which is what keeps the icon in
 /// step with day, night and the app's own colour.

@@ -16,7 +16,7 @@ class PhoneApp extends ConsumerWidget {
     final localeCode = ref.watch(settingsProvider.select((s) => s.localeCode));
 
     return MaterialApp.router(
-      title: 'Vidhoist',
+      title: 'VidHoist',
       debugShowCheckedModeBanner: false,
       theme: vhTheme(VhVariant.phone, Brightness.light),
       darkTheme: vhTheme(VhVariant.phone, Brightness.dark),

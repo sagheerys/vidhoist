@@ -17,7 +17,7 @@ would rather not be.
 
 ## What is in scope
 
-Vidhoist downloads with yt-dlp on the device; there is no server. The
+VidHoist downloads with yt-dlp on the device; there is no server. The
 interesting surface is small and worth naming:
 
 - **The engine's command line.** Links and names reach yt-dlp as separate

@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/data/folders_data.dart';
-import 'package:vidhoist_desktop/data/sync_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
 import 'package:vidhoist_desktop/di.dart';
@@ -181,52 +180,6 @@ void main() {
             ),
           ),
         );
-      },
-    );
-  });
-
-  testWidgets('settings: sync, on, with a phone and a long folder', (
-    tester,
-  ) async {
-    final root = Directory.systemTemp.createTempSync(
-      'ember matrix a folder with a rather long name, as OneDrive makes them',
-    );
-    addTearDown(() => root.deleteSync(recursive: true));
-    await expectNoOverflow(
-      tester,
-      () {
-        final h = ShellHarness(
-          library: const [],
-          overrides: [
-            loggerProvider.overrideWithValue(
-              VhLogger(filePath: '${root.path}/log.txt'),
-            ),
-            syncReportProvider.overrideWith(
-              (ref) => SyncReport(
-                at: DateTime.now(),
-                cameBack: true,
-                devices: [
-                  SyncDevice(
-                    SyncSnapshot(
-                      deviceId: 'phone-a1b2',
-                      deviceKind: 'phone',
-                      writtenAt: DateTime.now().millisecondsSinceEpoch,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-        unawaited(h.store.setString(SyncSettingsNotifier.folderKey, root.path));
-        unawaited(
-          h.store.setString(SyncSettingsNotifier.deviceKey, 'ember-c3d4'),
-        );
-        return h.app();
-      },
-      then: (tester) async {
-        GoRouter.of(tester.element(find.byType(DesktopSidebar)))
-            .go('/settings/sync');
       },
     );
   });

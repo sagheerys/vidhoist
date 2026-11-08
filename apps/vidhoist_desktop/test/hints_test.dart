@@ -122,7 +122,7 @@ void main() {
     await tester.pump();
     h.controls.close();
     await tester.pump();
-    expect(notices.shown.map((n) => n.title), ['Vidhoist is still running']);
+    expect(notices.shown.map((n) => n.title), ['VidHoist is still running']);
   });
 
   testWidgets('**the guard**: Discover lists the features from About, and '
@@ -135,7 +135,7 @@ void main() {
     await tester.pumpAndSettle();
     final dialog = find.byType(AlertDialog);
     expect(
-      find.descendant(of: dialog, matching: find.text('Discover Vidhoist')),
+      find.descendant(of: dialog, matching: find.text('Discover VidHoist')),
       findsOneWidget,
     );
     expect(find.text('Reading room'), findsOneWidget);

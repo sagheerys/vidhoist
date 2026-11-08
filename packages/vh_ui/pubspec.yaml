@@ -1,5 +1,5 @@
 name: vh_ui
-description: "Vidhoist's design system: tokens, themes, shared widgets, l10n (ar/en)."
+description: "VidHoist's design system: tokens, themes, shared widgets, l10n (ar/en)."
 version: 0.1.0
 publish_to: none
 resolution: workspace

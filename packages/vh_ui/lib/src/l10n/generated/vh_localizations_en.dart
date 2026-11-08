@@ -83,7 +83,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get alreadySubscribed => 'This channel is already followed';
 
   @override
-  String get appTitle => 'Vidhoist';
+  String get appTitle => 'VidHoist';
 
   @override
   String get appearanceAndLanguage => 'Appearance & language';
@@ -198,7 +198,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get channelCheckFailed =>
-      'Not checked this time. Vidhoist tries again by itself.';
+      'Not checked this time. VidHoist tries again by itself.';
 
   @override
   String get channelUrl => 'Link to a channel, a playlist or one of its videos';
@@ -423,7 +423,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get desktopBackupsNone => 'No backup yet';
 
   @override
-  String get desktopBrowserButton => '“To Vidhoist” button in the browser';
+  String get desktopBrowserButton => '“To VidHoist” button in the browser';
 
   @override
   String get desktopBrowserButtonCopied =>
@@ -441,7 +441,7 @@ class VhLocalizationsEn extends VhLocalizations {
       'A button on your bookmarks bar: one click on any video\'s page opens the add dialog here with its link. Nothing is sent until you press Add.';
 
   @override
-  String get desktopBrowserButtonName => 'To Vidhoist';
+  String get desktopBrowserButtonName => 'To VidHoist';
 
   @override
   String get desktopBrowserButtonOpen => 'Open the setup page';
@@ -464,11 +464,11 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopBrowserPageStep3 =>
-      'On any video\'s page, click it: Vidhoist opens its add dialog with the link. The first time, the browser asks whether to open the app; allow it.';
+      'On any video\'s page, click it: VidHoist opens its add dialog with the link. The first time, the browser asks whether to open the app; allow it.';
 
   @override
   String get desktopBrowserPageTitle =>
-      'Add the “To Vidhoist” button to your browser';
+      'Add the “To VidHoist” button to your browser';
 
   @override
   String get desktopChangeFolder => 'Change…';
@@ -582,7 +582,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get desktopDesktopSection => 'Desktop';
 
   @override
-  String get desktopDiscover => 'Discover Vidhoist';
+  String get desktopDiscover => 'Discover VidHoist';
 
   @override
   String get desktopDiscoverAddLink => 'Paste or drop a link';
@@ -599,7 +599,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopDiscoverBrowserLine =>
-      'The “To Vidhoist” button on your bookmarks bar opens the add dialog with the page you are on.';
+      'The “To VidHoist” button on your bookmarks bar opens the add dialog with the page you are on.';
 
   @override
   String get desktopDiscoverChapters => 'Chapters';
@@ -646,13 +646,6 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get desktopDiscoverMiniLine =>
       'A small card above every other window, by the clock.';
-
-  @override
-  String get desktopDiscoverPhone => 'With your phone';
-
-  @override
-  String get desktopDiscoverPhoneLine =>
-      'Tags, lists and resume points, shared with Vidhoist on your phone through a folder you choose.';
 
   @override
   String get desktopDiscoverReading =>
@@ -764,7 +757,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopEngineMissing =>
-      'yt-dlp is not on this computer. Reinstall Vidhoist, or fetch it here.';
+      'yt-dlp is not on this computer. Reinstall VidHoist, or fetch it here.';
 
   @override
   String get desktopEngineOnFirstUse =>
@@ -817,7 +810,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get desktopExportPdf => 'Document (PDF)';
 
   @override
-  String get desktopExportPhone => 'For the phone (Vidhoist import)';
+  String get desktopExportPhone => 'For the phone (VidHoist import)';
 
   @override
   String get desktopExportSrt => 'Subtitles (SRT)';
@@ -869,7 +862,7 @@ class VhLocalizationsEn extends VhLocalizations {
       'It keeps playing from its icon by the clock. To quit, right-click the icon.';
 
   @override
-  String get desktopHintTrayTitle => 'Vidhoist is still running';
+  String get desktopHintTrayTitle => 'VidHoist is still running';
 
   @override
   String get desktopHints => 'Show tips';
@@ -886,7 +879,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopImportHint =>
-      'A backup or transcripts file from Vidhoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.';
+      'A backup or transcripts file from VidHoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.';
 
   @override
   String desktopImportedBackup(int tagged, int lists, int positions) {
@@ -964,13 +957,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String desktopLastArrival(String when) {
     return 'Last arrival $when';
   }
-
-  @override
-  String get desktopLaterFeatures => 'Show sync';
-
-  @override
-  String get desktopLaterFeaturesHint =>
-      'Not ready yet: sync waits for the phone app.';
 
   @override
   String get desktopLess => 'Less';
@@ -1069,7 +1055,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopNotABackup =>
-      'This file is not a Vidhoist backup or transcripts file.';
+      'This file is not a VidHoist backup or transcripts file.';
 
   @override
   String desktopNotWatched(int count) {
@@ -1354,78 +1340,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get desktopSubtitleOptions => 'Subtitle options';
 
   @override
-  String get desktopSync => 'Sync';
-
-  @override
-  String get desktopSyncCameBack =>
-      'This computer was away for more than 90 days, so your other devices\' data was taken first.';
-
-  @override
-  String get desktopSyncChoose => 'Choose a folder';
-
-  @override
-  String desktopSyncComputer(String name) {
-    return 'Computer $name';
-  }
-
-  @override
-  String get desktopSyncFailed =>
-      'The sync folder could not be read. Check that its drive is there.';
-
-  @override
-  String get desktopSyncFolder => 'Sync folder';
-
-  @override
-  String get desktopSyncForget => 'Forget this device';
-
-  @override
-  String desktopSyncForgetBody(String device) {
-    return '$device will no longer be read. Its transcripts move to this computer\'s folder first, so none is lost. Use this for a device that was lost or sold.';
-  }
-
-  @override
-  String desktopSyncFrom(String device, String ago) {
-    return 'Last from $device: $ago';
-  }
-
-  @override
-  String get desktopSyncGuide =>
-      'At home: Syncthing on this computer and Syncthing‑Fork (from F-Droid) on the phone, sharing one folder; set Syncthing‑Fork to Wi‑Fi only to spare the phone\'s battery. Through a cloud: the cloud app\'s folder on this computer (OneDrive, Google Drive, Dropbox), and FolderSync on the phone with the same folder.';
-
-  @override
-  String get desktopSyncHint =>
-      'Mirrors tags, favorites, lists, positions, saved searches and transcripts with your phone and other computers, through a folder a sync app keeps in step (Syncthing at home, or a cloud folder). Nothing goes to any service from here.';
-
-  @override
-  String desktopSyncLast(String ago) {
-    return 'Last synced $ago';
-  }
-
-  @override
-  String get desktopSyncNoOthers =>
-      'No other device in this folder yet. Turn sync on in Vidhoist on the phone with the same folder.';
-
-  @override
-  String get desktopSyncNotBackup =>
-      'Sync is not a backup: it mirrors a mistake as faithfully as anything else. Your dated backups stay apart from it.';
-
-  @override
-  String get desktopSyncOff => 'Off. Nothing leaves this computer.';
-
-  @override
-  String desktopSyncPhone(String name) {
-    return 'Phone $name';
-  }
-
-  @override
-  String desktopSyncThisComputer(String name) {
-    return 'This computer: $name';
-  }
-
-  @override
-  String get desktopSyncTurnOff => 'Turn off';
-
-  @override
   String get desktopTheater => 'Theater';
 
   @override
@@ -1436,7 +1350,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopTranscriptsDeleteBody =>
-      'They are removed from this computer. Only a file you exported, or another device through sync, can bring them back.';
+      'They are removed from this computer. Only a file you exported can bring them back.';
 
   @override
   String get desktopTranscriptsExportHint =>
@@ -1444,7 +1358,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopTranscriptsHelp =>
-      'Vidhoist keeps the words said in each YouTube clip you add, so a search (Ctrl+K) also finds what was said inside your clips, not only their titles. They stay on this computer.';
+      'VidHoist keeps the words said in each YouTube clip you add, so a search (Ctrl+K) also finds what was said inside your clips, not only their titles. They stay on this computer.';
 
   @override
   String get desktopTranscriptsImportHint =>
@@ -1459,7 +1373,7 @@ class VhLocalizationsEn extends VhLocalizations {
       'Closing the window keeps the sound playing; quit from the icon by the clock.';
 
   @override
-  String get desktopTrayOpen => 'Open Vidhoist';
+  String get desktopTrayOpen => 'Open VidHoist';
 
   @override
   String get desktopTrayQuit => 'Quit';
@@ -1480,7 +1394,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopUpdateRestartHint =>
-      'Vidhoist closes, installs the update and opens again. Your settings and library stay as they are.';
+      'VidHoist closes, installs the update and opens again. Your settings and library stay as they are.';
 
   @override
   String get desktopViewCompact => 'Compact';
@@ -1505,16 +1419,16 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopWelcomeMessage =>
-      'Paste a link from YouTube or another site, and Vidhoist downloads it to this computer with yt-dlp. Nothing goes through a server.';
+      'Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp. Nothing goes through a server.';
 
   @override
   String get desktopWelcomeStart => 'Start';
 
   @override
-  String get desktopWelcomeTitle => 'Welcome to Vidhoist';
+  String get desktopWelcomeTitle => 'Welcome to VidHoist';
 
   @override
-  String get desktopWhatsNewAllFeatures => 'Everything Vidhoist can do';
+  String get desktopWhatsNewAllFeatures => 'Everything VidHoist can do';
 
   @override
   String get desktopWidenSidebar => 'Expand sidebar';
@@ -1863,7 +1777,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get mobileChannelsEmptyBody =>
-      'Follow a channel and each new video downloads by itself while Vidhoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.';
+      'Follow a channel and each new video downloads by itself while VidHoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.';
 
   @override
   String get mobileChannelsHint =>
@@ -1945,14 +1859,14 @@ class VhLocalizationsEn extends VhLocalizations {
   String get mobileWelcomeStart => 'Start';
 
   @override
-  String get mobileWelcomeTitle => 'Welcome to Vidhoist';
+  String get mobileWelcomeTitle => 'Welcome to VidHoist';
 
   @override
   String get mobileWelcomeUnpacking => 'Preparing the download engine';
 
   @override
   String get mobileWelcomeUpdateFailed =>
-      'Couldn\'t update now. Vidhoist tries again before your first download.';
+      'Couldn\'t update now. VidHoist tries again before your first download.';
 
   @override
   String get mobileWelcomeUpdating => 'Updating yt-dlp to its latest version';
@@ -2580,7 +2494,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get subscriptionsEmptyBody =>
-      'Follow a channel and each new video downloads into your library by itself, while Vidhoist is open or in the tray. What is already on the channel is not downloaded.';
+      'Follow a channel and each new video downloads into your library by itself, while VidHoist is open or in the tray. What is already on the channel is not downloaded.';
 
   @override
   String get subscriptionsSubtitle =>
@@ -2636,46 +2550,6 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get subtitlesSizeSmall => 'Small';
-
-  @override
-  String get syncDeviceQuiet =>
-      'Nothing has come from it for over two days. If it was in use, a sync app is probably paused or asleep, there or here: phones put apps they think unused to sleep.';
-
-  @override
-  String get syncPhoneCameBack =>
-      'This phone was away for more than 90 days, so your other devices\' data was taken first.';
-
-  @override
-  String get syncPhoneFailed =>
-      'The sync folder could not be read. Choose it again if it moved or its permission was taken back.';
-
-  @override
-  String syncPhoneForgetBody(String device) {
-    return '$device will no longer be read. Its transcripts move to this phone\'s folder first, so none is lost. Use this for a device that was lost or sold.';
-  }
-
-  @override
-  String get syncPhoneGuide =>
-      'At home: Syncthing-Fork (from F-Droid) on this phone and Syncthing on the computer, sharing one folder; set it to Wi‑Fi only to spare the battery. Through a cloud: FolderSync with the cloud folder the computer uses.';
-
-  @override
-  String get syncPhoneHint =>
-      'Mirrors tags, favorites, lists, resume positions and transcripts with Vidhoist on your computer, through a folder a sync app keeps in step. Nothing goes to any service from here.';
-
-  @override
-  String get syncPhoneNoOthers =>
-      'No other device in this folder yet. Turn sync on in Vidhoist on the computer with the same folder.';
-
-  @override
-  String get syncPhoneOff => 'Off. Nothing leaves this phone.';
-
-  @override
-  String syncPhoneThisDevice(String name) {
-    return 'This phone: $name';
-  }
-
-  @override
-  String get syncTitle => 'Sync with the computer';
 
   @override
   String get tagActionsHint => 'Long-press a tag to rename or delete it.';
@@ -2871,7 +2745,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get unfollowConfirmBody =>
-      'Vidhoist forgets which videos it has already seen on this channel. If you follow it again later, everything on it by then counts as seen, and what you missed is not filled in. Pausing keeps that memory.';
+      'VidHoist forgets which videos it has already seen on this channel. If you follow it again later, everything on it by then counts as seen, and what you missed is not filled in. Pausing keeps that memory.';
 
   @override
   String get unlockTouch => 'Unlock';
@@ -3026,5 +2900,5 @@ class VhLocalizationsEn extends VhLocalizations {
   String get yourTags => 'Your tags';
 
   @override
-  String get ytdlpCredit => 'The downloader Vidhoist runs';
+  String get ytdlpCredit => 'The downloader VidHoist runs';
 }

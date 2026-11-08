@@ -13,8 +13,8 @@ body:
     attributes:
       label: Which app
       options:
-        - Vidhoist for Android
-        - Vidhoist for Windows
+        - VidHoist for Android
+        - VidHoist for Windows
         - Both
     validations:
       required: true

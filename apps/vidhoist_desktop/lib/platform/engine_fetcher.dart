@@ -184,7 +184,7 @@ class EngineFetcher {
 
   /// A plain GET that follows GitHub's redirect to its file host.
   static Future<FetchBody> httpDownload(Uri url) async {
-    final client = HttpClient()..userAgent = 'Vidhoist';
+    final client = HttpClient()..userAgent = 'VidHoist';
     final response = await (await client.getUrl(url)).close();
     if (response.statusCode != HttpStatus.ok) {
       client.close();

@@ -1,4 +1,4 @@
-/// A file that is not a Vidhoist backup, or a damaged one.
+/// A file that is not a VidHoist backup, or a damaged one.
 final class BackupFormatException implements Exception {
   const BackupFormatException([this.detail]);
   final String? detail;

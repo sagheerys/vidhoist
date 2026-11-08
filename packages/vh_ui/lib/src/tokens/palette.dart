@@ -4,7 +4,7 @@ import 'dart:ui';
 /// palette and differ in type, corners and components.
 enum VhVariant { phone, desktop }
 
-/// The Vidhoist palette. Values are copied **verbatim** from the approved
+/// The VidHoist palette. Values are copied **verbatim** from the approved
 /// design references. Derived values, the ones not stated there, are marked
 /// with a `derived` comment.
 class VhPalette {
@@ -114,7 +114,7 @@ class VhPalette {
         (VhVariant.phone, Brightness.dark) => phoneNight,
       };
 
-  // Vidhoist by day: white cards on a soft stone ground, the espresso
+  // VidHoist by day: white cards on a soft stone ground, the espresso
   // ink kept for warmth, and a blue accent. The ground was plain white at
   // first (2026-11-04); white on white glared and the cards had only their
   // hairline to stand on (owner, 2026-11-06). Desktop and phone share one
@@ -147,7 +147,7 @@ class VhPalette {
     grainOpacity: 0.035,
   );
 
-  // Vidhoist by night: true black, as the owner asked, with lifted cards so
+  // VidHoist by night: true black, as the owner asked, with lifted cards so
   // the hairlines still read, and the blue brightened for dark ground.
   static const VhPalette desktopNight = VhPalette(
     bg: Color(0xFF000000),

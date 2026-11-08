@@ -21,7 +21,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   // the same one the installer puts on the Start menu shortcut. It must be
   // set before the first window: Windows groups a window under the identity
   // its process had when the window appeared.
-  ::SetCurrentProcessExplicitAppUserModelID(L"Vidhoist");
+  ::SetCurrentProcessExplicitAppUserModelID(L"VidHoist");
 
   // Lets the uninstaller see that the app is still running. Never released:
   // Windows drops it when the process ends.
@@ -41,7 +41,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  if (!window.Create(L"Vidhoist", origin, size)) {
+  if (!window.Create(L"VidHoist", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

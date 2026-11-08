@@ -134,7 +134,7 @@ class EngineUpdater {
   }
 
   static Future<String> _httpText(Uri url) async {
-    final client = HttpClient()..userAgent = 'Vidhoist';
+    final client = HttpClient()..userAgent = 'VidHoist';
     try {
       final request = await client.getUrl(url);
       request.headers.set(HttpHeaders.acceptHeader, 'application/json');
