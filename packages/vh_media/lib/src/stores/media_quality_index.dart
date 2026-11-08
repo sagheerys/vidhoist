@@ -5,12 +5,11 @@ import '../models/media_quality.dart';
 /// Each clip's [MediaQuality] as read from its header: canonicalUrl to the
 /// answer.
 ///
-/// Reading a header from the server takes a round trip long enough to
-/// notice, and a file's resolution never changes once it has downloaded.
-/// So the answer is kept across launches, and the details sheet shows it at
-/// once instead of saying "reading" every time. An item re-downloaded under
-/// the same URL at another quality is not a stale risk: deleting it prunes
-/// this entry along with its other data.
+/// Reading a file's header takes long enough to notice, and a file's resolution
+/// never changes once it has downloaded. So the answer is kept across launches,
+/// and the details sheet shows it at once instead of saying "reading" every
+/// time. An item re-downloaded under the same URL at another quality is not a
+/// stale risk: deleting it prunes this entry along with its other data.
 ///
 /// Only answers are stored. A failed read stays unknown so the next opening
 /// tries again. Storage key: `media_quality_index`.

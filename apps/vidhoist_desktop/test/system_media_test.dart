@@ -48,7 +48,7 @@ PlaylistItem _clip(String title, {String? art}) => PlaylistItem(
 
 void main() {
   group('the cover Windows may fetch', () {
-    test("**the guard**: a cover on the user's own server never goes to "
+    test("**the guard**: a cover at a private address never goes to "
         'Windows; YouTube\'s public ones do', () {
       expect(
         publicThumbnail('https://i.ytimg.com/vi/abc/hqdefault.jpg'),
@@ -150,7 +150,7 @@ void main() {
       expect(player.calls, ['pause', 'next']);
     });
 
-    test("**the guard**: a clip whose cover is on the user's server shows "
+    test("**the guard**: a clip whose cover Windows may not fetch shows "
         'its own cover from this computer, never the last clip\'s', () async {
       final player = FakePlayer();
       final media = _Surface();
@@ -173,7 +173,7 @@ void main() {
       final now = media.shown.last!;
       expect(now.title, 'Blue Hour');
       expect(now.thumbnail, Uri.file(r'C:\cache\covers\b.jpg').toString());
-      // Never the server's address itself.
+      // Never the private address itself.
       expect(media.shown.map((n) => n?.thumbnail), isNot(contains(private)));
     });
   });

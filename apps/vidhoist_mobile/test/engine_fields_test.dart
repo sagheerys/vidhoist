@@ -46,8 +46,8 @@ class _Bridge implements YtDlpBridge {
   Future<bool> cancel(String id) async => false;
 }
 
-/// The engine's settings page, in place of the server's: yt-dlp's version,
-/// an update on demand (`docs/ENGINE.md` finding 12), and IPv4.
+/// The engine's settings page: yt-dlp's version, an update on demand
+/// (`docs/ENGINE.md` finding 12), and IPv4.
 void main() {
   late _Bridge bridge;
   late MemoryKeyValueStore store;

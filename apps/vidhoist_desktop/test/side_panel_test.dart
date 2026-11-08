@@ -183,7 +183,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(inPanel(find.text('Homelab Hour')), findsOneWidget);
     expect(inPanel(find.text('YouTube')), findsOneWidget);
-    // Nothing plays from a server any more, and nothing says so.
+    // Everything plays from this computer, and nothing says otherwise.
     expect(inPanel(find.text('Streaming from the server')), findsNothing);
 
     await tester.tap(inPanel(find.text('Copy link')));

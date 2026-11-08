@@ -26,9 +26,10 @@ class PlaybackSource {
   String toString() => 'PlaybackSource(${origin.name}, $uri)';
 }
 
-/// Everything playback needs from the server: building the file URL and the
-/// streaming headers. A deliberately narrow interface, so the player knows
-/// neither the rest of the server contract nor the network package.
+/// How playback would stream a file it has no local copy of: building the
+/// file URL and the request headers. The apps play local files only and
+/// pass [none]; the narrow shape keeps any network package out of the
+/// player.
 class ServerStreamEndpoint {
   const ServerStreamEndpoint({required this.buildUrl, required this.headers});
 
@@ -36,7 +37,7 @@ class ServerStreamEndpoint {
   final String Function(String serverFilename) buildUrl;
   final Map<String, String> headers;
 
-  /// No server configured means local files only.
+  /// No stream source: local files only.
   static ServerStreamEndpoint get none => ServerStreamEndpoint(
     buildUrl: (_) => throw const UnsafeFilenameException(),
     headers: const {},
@@ -44,7 +45,7 @@ class ServerStreamEndpoint {
 }
 
 /// **The golden rule:** the local copy if it really exists on disk,
-/// otherwise streaming from the server with authentication headers. The
+/// otherwise streaming through the [ServerStreamEndpoint] with its headers. The
 /// position is shared between the two cases because its key is
 /// [PlaylistItem.canonicalUrl], not the path.
 ///
@@ -57,15 +58,15 @@ class PlaybackSourceResolver {
     bool Function(String path)? fileExists,
   }) : _fileExists = fileExists ?? _defaultExists;
 
-  /// Refreshable when the server settings change, so a live player picks up
-  /// the new URL without rebuilding the session.
+  /// Replaceable, so a live player picks up a new URL without rebuilding the
+  /// session.
   ServerStreamEndpoint endpoint;
   final bool Function(String path) _fileExists;
 
   static bool _defaultExists(String path) => File(path).existsSync();
 
-  /// null means no valid source: no local file and no valid filename on the
-  /// server.
+  /// null means no valid source: no local file and no valid filename to
+  /// stream.
   PlaybackSource? resolve(PlaylistItem item) {
     final local = item.localPath;
     if (local != null && local.isNotEmpty && _fileExists(local)) {

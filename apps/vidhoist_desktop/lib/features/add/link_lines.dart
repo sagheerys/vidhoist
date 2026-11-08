@@ -8,8 +8,8 @@ enum LinkState {
   /// The library already has this clip, by its canonical link.
   inLibrary,
 
-  /// A site this app does not know how to name; left out rather than sent
-  /// to fail on the server.
+  /// A site this app does not know how to name; left out rather than
+  /// queued to fail.
   unsupported,
 
   /// The same clip earlier in the text.

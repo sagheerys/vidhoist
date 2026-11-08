@@ -5,8 +5,8 @@ import 'package:vh_ui/vh_ui.dart';
 import '../../shell/shell_metrics.dart';
 import '../../shell/desktop_dialog.dart';
 
-/// The name of a new folder, nested when typed with a slash. It is made on
-/// the server by the first download saved into it.
+/// The name of a new folder, nested when typed with a slash. It is made by
+/// the first download saved into it.
 Future<String?> askNewFolder(BuildContext context, String parent) async {
   final typed = await showEmberDialog<String>(
     context: context,

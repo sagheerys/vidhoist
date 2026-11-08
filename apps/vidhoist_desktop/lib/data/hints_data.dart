@@ -25,7 +25,7 @@ final hintsProvider = NotifierProvider<Hints, HintsState>(Hints.new);
 /// **Tips that never get in the way**: each shows once, and never to
 /// someone who already found the thing by themselves (a shortcut used
 /// marks the shortcuts tip as needless); none at start-up, and none in a
-/// session that already interrupted once (the server setup, "what's new"
+/// session that already interrupted once (the welcome, "what's new"
 /// or an update notice). Settings turns them off or shows them again.
 class Hints extends Notifier<HintsState> {
   static const onKey = 'ember_hints_on';

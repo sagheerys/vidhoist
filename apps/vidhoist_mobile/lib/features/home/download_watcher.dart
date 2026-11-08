@@ -198,8 +198,8 @@ final downloadWatcherProvider = Provider<void>((ref) {
 
 /// Initialises the notifications once and wires the completion tap to the
 /// item highlight.
-/// **It never lets a fault escape into the startup chain** (the same cure
-/// as Super): the platform call throws in an environment with no channel,
+/// **It never lets a fault escape into the startup chain**: the platform
+/// call throws in an environment with no channel,
 /// and what follows it in `initState` has nothing to do with notifications.
 Future<void> initDownloadNotifications(WidgetRef ref) async {
   final notifications = ref.read(notificationsProvider);

@@ -11,8 +11,8 @@ import 'package:vidhoist_desktop/platform/frame_grab.dart';
 ///     flutter test integration_test -d windows
 ///
 /// The picture is a still image written here (the engine's trimmed build
-/// reads no raw video), served by a local server that wants a password, so
-/// the test needs no real one.
+/// reads no raw video), served by a local HTTP server that wants a
+/// password, so the headers are tested without the network.
 Uint8List _png() {
   const w = 64, h = 48;
   Uint8List chunk(String type, List<int> data) {

@@ -9,7 +9,7 @@ import 'vh_theme_x.dart';
 
 export 'vh_theme_x.dart';
 
-/// The Wahaj theme. **A documented lesson**: the five surfaceContainer*
+/// The app's theme. **A documented lesson**: the five surfaceContainer*
 /// roles must be set explicitly, or Material 3 imposes its own greys over
 /// the stone ground.
 ThemeData vhTheme(
@@ -111,7 +111,7 @@ ThemeData vhTheme(
     // two screens relate.
     pageTransitionsTheme: vhPageTransitionsTheme,
     // The back and close buttons Flutter draws by itself (an app bar's
-    // leading arrow) take the Wahaj glyphs, like every other icon.
+    // leading arrow) take the app's own glyphs, like every other icon.
     actionIconTheme: ActionIconThemeData(
       backButtonIconBuilder: (_) =>
           const VhIcon(VhIcons.back, matchTextDirection: true),
@@ -197,7 +197,7 @@ ThemeData vhTheme(
         borderSide: BorderSide(color: p.ink, width: 1.4 * hairline),
       ),
     ),
-    // **One coloured action per screen** (log §4, 2026-10-31): the filled
+    // **One coloured action per screen**: the filled
     // button. A text button beside it (Cancel, Done) is in the ink; in the
     // accent it took the colour from the action it sits next to.
     textButtonTheme: TextButtonThemeData(
@@ -218,7 +218,7 @@ ThemeData vhTheme(
               vertical: VhSpace.md,
             ),
           ).copyWith(
-            // Not yet possible, it stays the ember, pale, so it still reads as
+            // Not yet possible, it stays the accent, pale, so it still reads as
             // the one action; its label in the accent's own dark ink stays
             // legible by day and by night.
             backgroundColor: WidgetStateProperty.resolveWith(
@@ -244,11 +244,11 @@ ThemeData vhTheme(
     checkboxTheme: vhCheckboxTheme(p, corners, hairline: hairline),
     tooltipTheme: vhTooltipTheme(p, corners),
     // Material 3 tints the selected state with secondaryContainer, which is
-    // the olive that means "offline" in this design language (log §4). The
+    // the olive that means "offline" in this design language. The
     // chosen segment is the ink, as a chosen chip is: the accent is kept for
-    // the action, not for a choice (log §4, 2026-10-31).
+    // the action, not for a choice.
     segmentedButtonTheme: SegmentedButtonThemeData(
-      // The chosen segment's tick is the Wahaj one, not Material's glyph.
+      // The chosen segment's tick is the app's own, not Material's glyph.
       selectedIcon: const VhIcon(VhIcons.check),
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith(

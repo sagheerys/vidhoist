@@ -77,7 +77,7 @@ final probeFailureIndexProvider = Provider(
   ),
 );
 
-/// Display titles, under the same key as the old Lite:
+/// Display titles, under a stored key that must never change:
 /// `video_title_metadata`.
 final titleIndexProvider = Provider(
   (ref) => TitleIndex(
@@ -86,8 +86,8 @@ final titleIndexProvider = Provider(
   ),
 );
 
-/// Lite has no user tags (that is a Super feature); this is used for the
-/// system "favourites" tag alone.
+/// The phone app has no user tags; this is used for the system
+/// "favourites" tag alone.
 final tagsIndexProvider = Provider(
   (ref) => TagsIndex(
     store: ref.watch(keyValueStoreProvider),
@@ -179,8 +179,7 @@ final downloadBackendProvider = Provider<DownloadBackend>(
   ),
 );
 
-/// Every download finished on this phone, with the fields the server's
-/// history had.
+/// Every download finished on this phone, kept as its download history.
 final localHistoryProvider = Provider(
   (ref) => LocalHistoryStore(
     ref.watch(keyValueStoreProvider),
@@ -240,8 +239,8 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
 /// **The first `yield engine.tasks` is the fix for the ghost tasks:** a
 /// StreamProvider keeps its previous value while rebuilding, and the new
 /// engine does not broadcast until the first `submit`, so the dead engine's
-/// tasks stayed on display — and in Lite **the foreground service never
-/// switched off**, because it follows the live task count.
+/// tasks stayed on display — and **the foreground service never switched
+/// off**, because it follows the live task count.
 final engineTasksProvider = StreamProvider<List<DownloadTask>>((ref) async* {
   final engine = ref.watch(downloadEngineProvider);
   if (engine == null) {
@@ -321,7 +320,7 @@ final audioStateStoreProvider = Provider(
   ),
 );
 
-/// Overridden in main. **Lite never streams**: its library is entirely
+/// Overridden in main. **The phone app never streams**: its library is entirely
 /// local, so the endpoint stays `none` and the golden rule always ends at
 /// the local file.
 final playbackResolverProvider = Provider<PlaybackSourceResolver>(

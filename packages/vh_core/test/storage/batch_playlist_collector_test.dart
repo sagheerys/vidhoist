@@ -111,8 +111,8 @@ void main() {
     expect(saved.items, isEmpty);
   });
 
-  // **Field report 2026-09-04:** "I downloaded the YouTube playlist again
-  // and it appeared as a new playlist, so now I have two." `begin` used to
+  // **Seen 2026-09-04:** a YouTube playlist downloaded again appeared as
+  // a second playlist of the same name. `begin` used to
   // create a playlist every time without asking.
   group('downloading the same source again', () {
     test(

@@ -12,9 +12,9 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
-/// **Guard: Lite's smart playlists are the same quiet rows as Super's**
-/// (owner's report, 2026-11-05: favourites and the latest additions were
-/// still the three dark glowing cards Super dropped on 2026-11-01).
+/// **Guard: the smart playlists are quiet rows, not cards** (owner's
+/// report, 2026-11-05: favourites and the latest additions were still
+/// three dark glowing cards).
 void main() {
   final clip = LocalItem(
     key: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',

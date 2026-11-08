@@ -82,8 +82,7 @@ abstract final class VhOrientation {
 /// and restores the lock on leaving.
 ///
 /// `setPreferredOrientations([portraitUp])` in full screen's `dispose`
-/// **pinned the entire app to portrait until it was killed** (field report
-/// 2026-09-05: "landscape does not work and was never applied"): the call
+/// **pinned the entire app to portrait until it was killed**: the call
 /// is app-wide and does not end with the screen that made it.
 class VhRotationScope extends StatefulWidget {
   const VhRotationScope({super.key, required this.open, required this.builder});

@@ -13,9 +13,9 @@ import 'playlists_providers.dart';
 import 'widgets/playlist_cards.dart';
 import 'widgets/smart_list_rows.dart';
 
-/// Lite's playlists tab has **two sections**: pinned smart playlists, then
-/// your playlists. The "your tags" section is a Super feature and does not
-/// exist here.
+/// The playlists tab has **two sections**: pinned smart playlists, then
+/// your playlists. There is no tags section: the phone app has no user
+/// tags.
 class PlaylistsScreen extends ConsumerWidget {
   const PlaylistsScreen({super.key});
 
@@ -158,8 +158,8 @@ class _Grid extends ConsumerWidget {
     SavedPlaylist playlist,
   ) async {
     // **A failure is stated rather than thrown**: building a playlist goes
-    // through the library, and the library goes through the server, so a
-    // credential rejection used to escape the tap handler in silence.
+    // through the library, which reads the media folder, so a failure there
+    // would otherwise escape the tap handler in silence.
     try {
       final items = await ref.read(playlistItemsProvider(playlist.id).future);
       final visual = await ref

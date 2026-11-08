@@ -18,7 +18,7 @@ dependencies:
     path: ../../packages/vh_transcripts
   vh_ui:
     path: ../../packages/vh_ui
-  # The same ranges as Super, so the shared resolution does not move.
+  # The same ranges as the phone app, so the shared resolution does not move.
   cached_network_image: ^3.4.1
   # Covers are cached under the app's local data folder rather than the
   # system temp folder; these two name the cache's directory and index.
@@ -26,11 +26,11 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   flutter_riverpod: ^2.6.1
   flutter_svg: 2.3.0
-  # The server password, encrypted for this Windows user (DPAPI); the
-  # phones' own range.
+  # The app's secrets, encrypted for this Windows user (DPAPI); the
+  # phone app's own range.
   flutter_secure_storage: ^9.2.2
   go_router: ^16.2.0
-  # The running version, for About and "what's new"; the phones' range,
+  # The running version, for About and "what's new"; the phone app's range,
   # already in the shared resolution.
   package_info_plus: ^9.0.0
   # Already in the shared resolution at this version; makes the covers
@@ -46,7 +46,7 @@ dependencies:
   shared_preferences: ^2.3.3
   url_launcher: ^6.3.1
   # No audio_service, just_audio, video_player, flutter_background or
-  # receive_sharing_intent: they are the phones' playback and share paths,
+  # receive_sharing_intent: they are the phone app's playback and share paths,
   # and Windows has its own (media_kit, SMTC, drag and drop).
   #
   # Exact pins: each version below was built and measured on this machine

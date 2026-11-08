@@ -1,5 +1,5 @@
-/// The download queue (§3). Concurrency of at most 1, to protect the
-/// server, is enforced by the engine; only ordering lives here. **A single
+/// The download queue (§3). Concurrency, one at a time by default, is
+/// enforced by the engine; only ordering lives here. **A single
 /// item outranks members of a batch**, and within each class it is FIFO by
 /// add order.
 class DownloadQueue {

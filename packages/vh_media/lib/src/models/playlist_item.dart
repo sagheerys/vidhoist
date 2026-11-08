@@ -1,6 +1,6 @@
-/// The unified item for every player, audio, video and reels. **A lesson
-/// from the old Super:** the screens carried two conflicting classes for
-/// the same concept, so play modes drifted apart. The single key is
+/// The unified item for every player, audio, video and reels. **One class
+/// on purpose:** two classes for the same concept let the play modes drift
+/// apart. The single key is
 /// [canonicalUrl], so a stream and a local copy
 /// share the same resume position.
 class PlaylistItem {
@@ -16,7 +16,7 @@ class PlaylistItem {
     this.aspectRatio,
   });
 
-  /// The canonical URL from `/history`: the key for positions, tags and
+  /// The canonical URL from the history: the key for positions, tags and
   /// favourites.
   final String canonicalUrl;
   final String title;
@@ -27,7 +27,7 @@ class PlaylistItem {
   /// golden rule.
   final String? localPath;
 
-  /// The filename on the server, the fallback streaming source.
+  /// The file's path in the download folder, the fallback streaming source.
   final String? serverFilename;
   final bool isAudio;
 

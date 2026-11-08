@@ -19,7 +19,7 @@ import 'choose_mark.dart';
 import 'selection.dart';
 
 /// One library item in the current layout: a grid card, a table row, or a
-/// compact row. The shared Wahaj pieces draw it; this only says what to
+/// compact row. The shared vh_ui pieces draw it; this only says what to
 /// show.
 class LibraryItemView extends ConsumerWidget {
   const LibraryItemView({

@@ -80,8 +80,7 @@ void main() {
       expect(failed.body, isNot(endsWith('Failed')));
     });
 
-    // "Show in Explorer when done" followed the copies from a server; the
-    // downloads made here are what it is about now.
+    // "Show in Explorer when done" is about the downloads made here.
     testWidgets('**the guard**: a finished download opens Explorer on its '
         'file when asked to, and not otherwise', (tester) async {
       ShellHarness.useWindow(tester, const Size(1440, 900));

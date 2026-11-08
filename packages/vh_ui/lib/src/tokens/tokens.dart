@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 export 'palette.dart';
 export 'shadows.dart';
 
-/// **Three corners, not nine** (log §4, 2026-10-31): 8 on what is touched
+/// **Three corners, not nine**: 8 on what is touched
 /// or shown small (a thumbnail, a field, a chip, a button), 16 on what
 /// floats or gathers (a sheet, a dialog, a settings group, the mini player)
 /// and full pills on round controls; 4 on the small badges. Nine near
@@ -23,7 +23,7 @@ abstract final class VhRadius {
   static const double pill = 999;
 }
 
-/// The spacing scale, taken from the rhythm of the Wahaj references: page
+/// The spacing scale, taken from the rhythm of the design references: page
 /// gutter 18, content gap 13.
 abstract final class VhSpace {
   static const double xxs = 4;
@@ -43,19 +43,19 @@ abstract final class VhRail {
   static const double width = 88;
 }
 
-/// Motion: the single Wahaj curve.
+/// Motion: the app's single curve.
 abstract final class VhMotion {
   static const Curve ease = Cubic(0.32, 0.72, 0, 1);
   static const Duration fast = Duration(milliseconds: 160);
   static const Duration medium = Duration(milliseconds: 320);
   static const Duration slow = Duration(milliseconds: 640);
 
-  // Motion (log §4, 2026-09-02). **Softened on request: "unbalanced, calm
-  // it down and make it smoother".**
+  // Motion. **Softened on request: "unbalanced, calm it down and make it
+  // smoother".**
   //
   // The principle: **quick on the way out, calm on the way in**. Motion is
-  // glimpsed, not watched. Wahaj is a warm editorial identity, not a game
-  // interface.
+  // glimpsed, not watched. The app's is a calm editorial identity, not a
+  // game interface.
   //
   // The lesson from the first attempt: **distance tires the eye, not
   // duration.** A 14-point card slide and a page slide of 0.22 of the

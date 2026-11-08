@@ -22,8 +22,8 @@ import 'channel_match.dart';
 import 'channel_row.dart';
 import 'follow_dialog.dart';
 
-/// One followed channel: what the server knows of it (when it last
-/// looked, how often, at what quality, through which filter, how much it
+/// One followed channel: what is known of it (when it was last
+/// looked at, how often, at what quality, through which filter, how much it
 /// has walked past), its actions, and its clips in the library.
 class ChannelPage extends ConsumerWidget {
   const ChannelPage({super.key, required this.id});

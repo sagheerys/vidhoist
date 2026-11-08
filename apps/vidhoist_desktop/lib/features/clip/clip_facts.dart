@@ -6,11 +6,11 @@ import 'package:vh_ui/vh_ui.dart';
 import '../../shell/video_surface.dart';
 
 /// The file's facts under a clip's title: the quality that plays, the
-/// format, the size and where it is kept, as "1080p · MKV · 412 MB · On
-/// the server". Each part shows only when known.
+/// format and the size, as "1080p · MKV · 412 MB". Each part shows only
+/// when known.
 ///
 /// **The quality is the picture's decoded size**, so it is shown only
-/// while the clip's picture is on screen: the server's record holds the
+/// while the clip's picture is on screen: the history's record holds the
 /// quality that was asked for ("best"), not the one that came.
 class ClipFacts extends ConsumerWidget {
   const ClipFacts({super.key, required this.entry, required this.picture});
@@ -47,7 +47,7 @@ class ClipFacts extends ConsumerWidget {
   }
 }
 
-/// The file's format from its name, here or on the server, in capitals;
+/// The file's format from its name, as kept or as recorded, in capitals;
 /// null when the name has none, rather than a guess.
 String? fileFormatOf(LibraryItem item) {
   final name = (item.localPath ?? item.serverFilename)

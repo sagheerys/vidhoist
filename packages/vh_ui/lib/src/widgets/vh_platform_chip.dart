@@ -22,7 +22,7 @@ enum VhPlatformKind {
 
   final String label;
 
-  /// A warm text shade from the Wahaj family; [other] falls back to ink3
+  /// A warm text shade from the palette's family; [other] falls back to ink3
   /// from the palette.
   final Color tint;
 }

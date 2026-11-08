@@ -12,7 +12,7 @@ import 'package:vh_ui/vh_ui.dart' show VhMotion, vhMotionDuration;
 
 import '../../data/library_data.dart';
 
-/// Where downloaded covers are kept: `%LOCALAPPDATA%\Vidhoist Ember\cache\`,
+/// Where downloaded covers are kept: `%LOCALAPPDATA%\Vidhoist\cache\`,
 /// a folder that stays on this computer and is not synced with a roaming
 /// profile. Overridden in main; null falls back to the package's own
 /// cache in the temp folder.

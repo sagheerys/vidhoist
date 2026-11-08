@@ -2,7 +2,7 @@ import '../models/channel_subscription.dart';
 import '../models/quality.dart';
 
 /// Where followed channels are kept and checked: on this device
-/// ([LocalChannelSource]), since there is no server to do it.
+/// ([LocalChannelSource]).
 abstract interface class ChannelSource {
   Future<List<ChannelSubscription>> list();
 

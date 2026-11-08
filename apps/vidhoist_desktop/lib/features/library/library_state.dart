@@ -77,7 +77,7 @@ class DesktopLibraryNotifier extends Notifier<LibraryViewOptions> {
     excludedTags: const {},
   );
 
-  /// One server folder and everything below it; null is every folder.
+  /// One folder and everything below it; null is every folder.
   void setFolder(String? folder) =>
       state = state.copyWith(folder: () => folder);
 

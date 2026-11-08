@@ -8,7 +8,7 @@ import 'vh_video_open.dart';
 
 /// The picture of the clip in the video player, at its own shape.
 ///
-/// **An audio file has no picture** (field report 2026-10-10): a playlist
+/// **An audio file has no picture**: a playlist
 /// that mixes videos and songs plays them all in the video player, and a
 /// song there reports a 0x0 frame, which drew as an empty black square,
 /// held sideways or not. Its cover stands in, in a 16:9 frame like the

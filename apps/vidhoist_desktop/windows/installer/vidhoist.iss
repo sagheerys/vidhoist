@@ -2,7 +2,7 @@
 ;
 ; Built by tool\build-desktop.ps1, which passes the version and the folder
 ; of the release build:
-;   ISCC.exe /DAppVersion=1.2.3 /DCrtDir=... ember.iss
+;   ISCC.exe /DAppVersion=1.2.3 /DCrtDir=... vidhoist.iss
 ;
 ; Installs for the current user only, with no administrator rights:
 ; %LOCALAPPDATA%\Programs\Vidhoist. The app keeps its data elsewhere

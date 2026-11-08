@@ -51,7 +51,7 @@ void main() {
   });
 
   /// The summary bar at the top of the library when several downloads run
-  /// at once (field report 2026-09-03): a waiting task **counts as zero
+  /// at once (2026-09-03): a waiting task **counts as zero
   /// rather than being excluded**.
   group('averageTaskProgress', () {
     DownloadTask make(TaskPhase phase, double progress) => DownloadTask(

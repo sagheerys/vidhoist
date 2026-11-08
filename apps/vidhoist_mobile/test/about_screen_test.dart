@@ -6,11 +6,11 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'device_matrix.dart';
 
-/// **The About screen after open-sourcing (field report 2026-09-09).**
+/// **The About screen names the licence and its sources.**
 ///
-/// It said "all rights reserved", named neither the licence nor the absence
-/// of any affiliation with the Vidhoist project, and printed the build number
-/// `+1` in the user's face.
+/// "All rights reserved" would contradict GPL-3.0, a missing disclaimer of
+/// affiliation would mislead, and a build number `+1` means nothing to the
+/// user.
 void main() {
   setUp(
     () => PackageInfo.setMockInitialValues(

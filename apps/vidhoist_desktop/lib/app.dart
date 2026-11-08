@@ -22,9 +22,8 @@ import 'shell/desktop_shell.dart';
 import 'shell/key_gate.dart';
 import 'shell/zoom_frame.dart';
 
-/// The Vidhoist Ember root: the Wahaj desktop theme in Super's identity,
-/// day or night and the language as chosen in Appearance (Windows' own by
-/// default), plus the router.
+/// The Vidhoist root: the desktop theme, day or night, and the language
+/// as chosen in Appearance (Windows' own by default), plus the router.
 class DesktopApp extends ConsumerStatefulWidget {
   const DesktopApp({super.key, this.router, this.locale, this.initialLocation});
 
@@ -121,7 +120,7 @@ class _DesktopAppState extends ConsumerState<DesktopApp> {
   }
 }
 
-/// The Wahaj component sheet for review by eye (`--gallery`, with
+/// The vh_ui component sheet for review by eye (`--gallery`, with
 /// `--night` and `--ltr`), outside the app's storage and player.
 class DesktopGalleryApp extends StatelessWidget {
   const DesktopGalleryApp({super.key, this.night = false, this.arabic = true});

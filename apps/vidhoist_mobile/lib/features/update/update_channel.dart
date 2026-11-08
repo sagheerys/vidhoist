@@ -2,8 +2,7 @@ import 'package:flutter/services.dart';
 
 /// The native install bridge; the other end is `UpdateInstaller.kt`.
 ///
-/// **The channel name is the same in both apps**, so this file is
-/// identical in each. Every call is fail-safe: the channel is absent in
+/// **Every call is fail-safe**: the channel is absent in
 /// widget tests and on any platform other than Android, and its absence
 /// must never throw in the user's face.
 class UpdateChannel {

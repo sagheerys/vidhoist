@@ -8,7 +8,7 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'fake_video_platform.dart';
 
-/// **Field report 2026-09-30:** the portrait player stuttered and its
+/// **The portrait player stuttered** and its
 /// controls were slow to show with the whole library (468 clips) as the
 /// queue, and ran smoothly with a single clip. The "up next" rows were
 /// built all at once, covers included, and built again on every tick of

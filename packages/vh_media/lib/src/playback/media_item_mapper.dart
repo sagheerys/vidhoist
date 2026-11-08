@@ -41,11 +41,10 @@ extension PlaylistItemMediaItem on PlaylistItem {
     return platform == MediaPlatform.other ? null : platform.label;
   }
 
-  /// **An absolute path is artwork too** (field report 2026-09-19: "some
-  /// audio clips have a cover, and it shows in the app but not in the
-  /// notification or on the lock screen").
+  /// **An absolute path is artwork too**, or an audio clip's cover shows in
+  /// the app but not in the notification or on the lock screen.
   ///
-  /// A video's cover arrives from the server as `https://…` and passed. An
+  /// An online cover arrives as `https://…` and passed. An
   /// audio clip's cover is the one **extracted from the file itself** and
   /// written to disk by the library enricher, so it arrives as
   /// `/data/.../thumbnails/x.jpg` — no scheme, thrown away here, and the

@@ -51,8 +51,8 @@ copy is applied to the other, or the pull request says why not.
 
 **Both themes.** Every colour is read from `VhPalette` through the context —
 never a literal. A hardcoded colour works in daylight and breaks at night. Any
-new palette field is filled in both palettes (`superDay`, `superNight`; the
-`lite*` names are aliases) with real contrast, not a copied daylight value. Screens
+new palette field is filled in both palettes (`desktopDay`, `desktopNight`;
+the `phone*` names are aliases) with real contrast, not a copied daylight value. Screens
 are reviewed in day **and** night.
 
 **Size limits.** 400 lines for a screen, 300 for anything else, counting code

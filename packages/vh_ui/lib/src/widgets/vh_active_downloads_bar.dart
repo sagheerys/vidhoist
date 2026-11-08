@@ -9,7 +9,7 @@ import '../icons/vh_icons.dart';
 /// **A summary bar for active downloads**, replacing one stacked card per
 /// task at the top of the library.
 ///
-/// Field report 2026-09-03: several downloads all appeared in the library
+/// Several downloads all used to appear in the library
 /// **while a button for them already sat in the header**, so they crowded
 /// one place. Each live card is about 78 points tall, so three tasks
 /// pushed the library off screen and left the user scrolling to reach

@@ -8,12 +8,12 @@ import 'package:vh_core/vh_core.dart';
 /// Read from the clip's page, where YouTube lists its subtitle tracks: the
 /// one made by speech recognition (`"kind":"asr"`) is in the language
 /// actually spoken. That is what makes the original-language subtitles
-/// reachable at all: the server accepts a language code, not a pattern, and
+/// reachable at all: a request names a language code, not a pattern, and
 /// the original track is named after its language (`es-orig`), so the
 /// language has to be known before asking.
 ///
-/// The page is fetched straight from YouTube, never through the server
-/// client, so the server's credentials cannot travel with it. Any failure
+/// The page is fetched straight from YouTube through a plain client of
+/// its own, so no credentials can travel with it. Any failure
 /// is a null: the clip simply keeps the app's own languages.
 Future<String?> youtubeSpokenLanguage(
   String videoId, {

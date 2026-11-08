@@ -168,7 +168,7 @@ class _Actions extends ConsumerWidget {
               minHeight: 7,
               // **Both colours come from the palette explicitly**:
               // Material's default track is derived from
-              // `secondaryContainer` and comes out greenish over the Wahaj
+              // `secondaryContainer` and comes out greenish over the app's
               // ground, a colour that does not exist in the identity
               // (measured on the emulator).
               backgroundColor: p.accent.withValues(alpha: 0.16),

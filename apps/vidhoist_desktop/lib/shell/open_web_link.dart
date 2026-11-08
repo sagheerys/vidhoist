@@ -2,7 +2,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Opens [url] in the browser when it is a web page, and does nothing
-/// otherwise: a clip's and a channel's link come from the server, and
+/// otherwise: a clip's and a channel's link come from the sites read, and
 /// Windows opens a `file:` link, a network share or a settings page as
 /// readily as a web page, running what it points at.
 Future<void> openWebLink(

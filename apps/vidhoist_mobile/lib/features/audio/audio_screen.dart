@@ -22,9 +22,9 @@ class AudioScreen extends ConsumerWidget {
       handler: handler,
       artwork: artworkBuilderFor(ref),
       cover: coverBuilderFor(ref),
-      // **No source chip in Lite** (field report 2026-09-04): "playing from
-      // your device" carries no information here, because there is nothing
-      // in Lite's library except the device.
+      // **No source chip** (field report 2026-09-04): "playing from your
+      // device" carries no information here, because everything in the
+      // library is on the device.
       showSourceChip: false,
       // **A details button instead of a queue button** (field report
       // 2026-09-05): the queue already has its visible button at the bottom

@@ -136,7 +136,7 @@ class SyncSnapshot {
 
   final String deviceId;
 
-  /// `phone` or `ember`, readable in the folder's name.
+  /// `phone` or `ember` (the Windows app), readable in the folder's name.
   final String deviceKind;
   final String appVersion;
   final int writtenAt;

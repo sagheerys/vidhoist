@@ -12,7 +12,7 @@ import 'video_buttons.dart';
 import 'video_center_controls.dart';
 import 'video_control_bars.dart';
 
-/// The video chrome over the clip (Wahaj reference C): a touch shows it
+/// The video chrome over the clip: a touch shows it
 /// and three seconds hide it, a double tap on the right or left seeks ten
 /// seconds, and there is a touch lock in immersive mode.
 class VhVideoControls extends StatefulWidget {

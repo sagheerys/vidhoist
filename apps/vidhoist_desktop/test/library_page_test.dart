@@ -64,8 +64,8 @@ void main() {
 
   testWidgets('nothing downloaded yet: it asks for a link', (tester) async {
     await open(tester);
-    // Downloads run on this computer: a link is what fills it, not a
-    // server.
+    // Downloads run on this computer: a link is what fills it, with
+    // nothing to set up first.
     expect(find.text('No server configured'), findsNothing);
     expect(find.textContaining('once it is downloaded'), findsOneWidget);
   });
@@ -199,8 +199,8 @@ void main() {
     expect(find.byType(VhMediaRow), findsNWidgets(4));
     // **The guard**: no platform letters beside the titles.
     expect(find.byType(VhPlatformChip), findsNothing);
-    // **The guard**: the source column names the site, for every row, the
-    // server's too; it used to stay empty.
+    // **The guard**: the source column names the site, for every row; it
+    // used to stay empty.
     expect(
       find.descendant(
         of: find.byType(VhMediaRow),

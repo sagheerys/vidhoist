@@ -5,16 +5,19 @@ void main() {
   final at = DateTime(2026, 9, 1, 14, 30, 5);
 
   group('buildLocalFilename (§2.4)', () {
-    test("an Arabic title survives, and the extension comes from the server's name", () {
-      expect(
-        buildLocalFilename(
-          'أنشودة جميلة',
-          serverFilename: 'x.abc.mp3',
-          now: at,
-        ),
-        'أنشودة جميلة_143005.mp3',
-      );
-    });
+    test(
+      "an Arabic title survives, and the extension comes from the source name",
+      () {
+        expect(
+          buildLocalFilename(
+            'أنشودة جميلة',
+            serverFilename: 'x.abc.mp3',
+            now: at,
+          ),
+          'أنشودة جميلة_143005.mp3',
+        );
+      },
+    );
 
     test('invalid characters are removed and runs of spaces collapse', () {
       expect(
@@ -38,7 +41,7 @@ void main() {
   });
 
   group('extensionOf', () {
-    test("a valid extension from the server's name", () {
+    test('a valid extension from a filename', () {
       expect(extensionOf('أغنية.sc-9.webm'), 'webm');
       expect(extensionOf('a.M4A'), 'm4a');
     });

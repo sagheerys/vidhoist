@@ -5,8 +5,9 @@ import 'package:vh_ui/vh_ui.dart';
 import 'icon_finder.dart';
 
 /// Two touches of motion asked for on 2026-10-04: a paused subscription
-/// travels to the end of the list instead of jumping there, and the server
-/// card's cloud turns its arrows while the connection is being checked.
+/// travels to the end of the list instead of jumping there, and the
+/// connection icon's cloud turns its arrows while the connection is being
+/// checked.
 void main() {
   group('rows travel to their new place', () {
     Widget rows(List<String> order, {bool reduceMotion = false}) => MediaQuery(

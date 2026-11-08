@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// Ember closed with no message, twice on one machine, a moment after a clip
+/// The app closed with no message, twice on one machine, a moment after a clip
 /// of other dimensions opened. Both crash dumps showed media_kit_video's
 /// frame callback throwing `std::out_of_range` from `at` inside the engine's
 /// noexcept call: the plugin stores a new texture's id before it adds the

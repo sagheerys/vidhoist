@@ -18,8 +18,6 @@ import 'features/settings/settings_sections.dart';
 import 'features/shell/shell_screen.dart';
 
 /// The single route table. No direct Navigator.push.
-/// Lite's map is Super's map **without** `/settings/network`, which is a
-/// Super feature.
 final router = GoRouter(
   // Tells the shell what has opened above it so it can hide the floating
   // add button, which used to be drawn over every bottom sheet and dialog,

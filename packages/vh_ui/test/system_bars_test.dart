@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **Guards for the bottom navigation buttons** (field report
-/// 2026-09-04): everything was fine with gestures, and with the three
-/// buttons the last thing in a sheet was clipped, because a bottom sheet
-/// reaches the screen edge and `useSafeArea` does not protect the bottom.
+/// **Guards for the bottom navigation buttons**: everything was fine with
+/// gestures, and with the three buttons the last thing in a sheet was clipped,
+/// because a bottom sheet reaches the screen edge and `useSafeArea` does not
+/// protect the bottom.
 void main() {
   const navBar = 48.0; // the height of Android's three-button navigation bar.
 

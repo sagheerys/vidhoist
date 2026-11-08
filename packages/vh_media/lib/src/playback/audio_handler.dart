@@ -91,9 +91,8 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
   /// runs out of them.
   static const Duration retryBudgetProgress = Duration(seconds: 30);
 
-  /// **Only something this long picks up where it was left** (field report
-  /// 2026-09-25: skipping through a music playlist, every song came back
-  /// half-way in).
+  /// **Only something this long picks up where it was left**, or skipping
+  /// through a music playlist brings every song back half-way in.
   ///
   /// Music players start a song from the top; podcast players resume an
   /// episode. Length is what tells the two apart without asking: songs are
@@ -103,10 +102,9 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
   /// playing — that is a session coming back, not a song being chosen.
   static const Duration resumeMinimumLength = Duration(minutes: 10);
 
-  /// **"Previous" restarts the song first** (field report 2026-09-25, in
-  /// the car): past this point one press goes back to the start, and a
-  /// second press within it goes to the song before — what Samsung Music,
-  /// Spotify and every car head unit expect.
+  /// **"Previous" restarts the song first**: past this point one press goes
+  /// back to the start, and a second press within it goes to the song before —
+  /// what Samsung Music, Spotify and every car head unit expect.
   static const Duration restartThreshold = Duration(seconds: 3);
 
   /// Retries spent on the **current** item, and where it had reached when
@@ -163,8 +161,7 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
 
   /// **Is it actually playing right now?** Different from "which item is
   /// current" ([currentKey]). The "now playing" indicator used to dance
-  /// over a paused clip because the interface knew only the current item
-  /// (field report 2026-09-04).
+  /// over a paused clip because the interface knew only the current item.
   Stream<bool> get playingStream =>
       playbackState.map((state) => state.playing).distinct();
 
@@ -252,9 +249,9 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> play() async {
-    // **Play with nothing queued revives the session, or does nothing**
-    // (field report 2026-09-25: "coming back after a while, the clip plays
-    // on its own, outside the playlist, and next does nothing"). A stopped
+    // **Play with nothing queued revives the session, or does nothing**,
+    // rather than playing the last clip on its own, outside its playlist,
+    // with next doing nothing. A stopped
     // queue is empty while the player still holds its last source, so a
     // play from the car or the earphones started that one clip with no
     // list around it. It now brings the saved list back first, and a
@@ -267,7 +264,7 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
   /// **Silencing video does not cancel playback** (2026-09-03): the
   /// registrar is a screen that may already be gone, and a throw from it
   /// aborted `player.play()` before it began, so the app looked like it
-  /// "plays nothing" after visiting reels (field report).
+  /// "plays nothing" after visiting reels.
   Future<void> _takeVideoFocus() async {
     try {
       await onTakeVideoFocus?.call();

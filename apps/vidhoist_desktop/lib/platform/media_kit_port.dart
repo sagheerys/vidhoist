@@ -11,7 +11,7 @@ import 'mpv_options.dart';
 export 'one_player_guard.dart';
 
 /// [MediaPlayerPort] over a media_kit [Player], so the shared session
-/// player drives libmpv exactly as it drives just_audio on the phones.
+/// player drives libmpv exactly as it drives just_audio on the phone.
 class MediaKitPort implements MediaPlayerPort {
   MediaKitPort._(this._player, this._trace, [this._askEngine]) {
     final s = _player.stream;

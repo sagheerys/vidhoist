@@ -5,7 +5,7 @@ import 'package:vh_media/vh_media.dart';
 
 import 'media_kit_port.dart';
 
-/// The Windows player: the shared session player (the phones' rules) over
+/// The Windows player: the shared session player (the phone app's rules) over
 /// the app's single media_kit engine.
 class DesktopPlayer {
   DesktopPlayer._(this.port, this.session);

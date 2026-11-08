@@ -3,7 +3,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'context_menu.dart';
 
-/// The sidebar's add button: the ember, with the label when wide.
+/// The sidebar's add button: the accent, with the label when wide.
 class SidebarAddButton extends StatelessWidget {
   const SidebarAddButton({
     super.key,
@@ -46,7 +46,7 @@ class SidebarAddButton extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        // Not the theme's opaque hover fill, which would hide the ember.
+        // Not the theme's opaque hover fill, which would hide the accent.
         hoverColor: p.onAccent.withValues(alpha: 0.12),
         child: SizedBox(
           height: VhDensity.desktop.row + VhSpace.xxs,

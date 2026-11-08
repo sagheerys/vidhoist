@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vh_core/vh_core.dart';
 
-/// The server's user name and password, encrypted for this Windows user
+/// The app's secrets, encrypted for this Windows user
 /// (DPAPI): another account on the same computer cannot read them, and
 /// they never enter a backup or a log.
 class WindowsSecretStore implements SecretStore {

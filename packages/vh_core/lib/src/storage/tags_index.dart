@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'key_value_store.dart';
 import 'url_keyed_index.dart';
 
-/// The tags index (Super): canonicalUrl to the user's list of tags. Prefs
+/// The tags index: canonicalUrl to the user's list of tags. Prefs
 /// key: `tags_index` (§5.1). Deleting a tag never deletes media.
 final class TagsIndex extends UrlKeyedIndex<List<String>> {
   TagsIndex({

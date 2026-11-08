@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:vh_core/vh_core.dart' show youtubeWideCover;
 import 'package:vh_ui/vh_ui.dart';
 
-/// In Lite an artwork index value may be a **generated local file path**, a
+/// An artwork index value may be a **generated local file path**, a
 /// frame capture or an embedded audio cover (see `MediaProbe.kt`), or a
 /// platform URL saved at download time. Which one it is can be read from
 /// the value itself rather than from an extra column.

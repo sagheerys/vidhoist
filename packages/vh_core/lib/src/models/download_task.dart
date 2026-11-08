@@ -38,7 +38,7 @@ enum TaskPhase {
   cancelled,
 }
 
-/// A single download task, identified by a uuid v4 rather than the old and
+/// A single download task, identified by a uuid v4 rather than the
 /// fragile `url.hashCode`. Immutable; the download engine advances it
 /// through [copyWith].
 class DownloadTask {
@@ -153,8 +153,8 @@ class DownloadTask {
 }
 
 /// The mean progress of a group of tasks (0 to 1), for the summary bar at
-/// the top of the library when several downloads run at once (field report
-/// 2026-09-03).
+/// the top of the library when several downloads run at once
+/// (2026-09-03).
 ///
 /// Tasks with no known progress count as **zero rather than being
 /// excluded**: excluding them made "3 downloads" show 90% because only one

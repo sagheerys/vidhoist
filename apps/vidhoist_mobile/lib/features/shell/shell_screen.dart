@@ -178,8 +178,8 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     // **The decision is made on the final URL, not the shared one** (field
     // report 2026-09-08): SoundCloud's share button gives
     // `on.soundcloud.com/…` with no `/sets/`, so an album counted as a
-    // single clip and the server expanded it into twenty with no selection
-    // screen. A link that is not short costs no wait.
+    // single clip and all twenty downloaded with no selection screen. A
+    // link that is not short costs no wait.
     final resolver = ref.read(shortLinkResolverProvider);
     final urls = [
       for (final url in shared) await resolver.resolveForRouting(url),

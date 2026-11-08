@@ -191,8 +191,7 @@ class _Bar extends StatelessWidget {
                       // **Play, then next, left to right in every
                       // language**, like the full player's controls: in an
                       // Arabic bar the pair was mirrored, and the next
-                      // arrow pointed back at play (field report
-                      // 2026-09-30).
+                      // arrow pointed back at play.
                       Directionality(
                         textDirection: TextDirection.ltr,
                         child: Row(

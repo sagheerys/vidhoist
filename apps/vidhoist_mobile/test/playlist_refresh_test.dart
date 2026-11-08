@@ -7,7 +7,7 @@ import 'package:vidhoist_mobile/features/playlists/playlists_providers.dart';
 import 'package:vh_core/vh_core.dart';
 
 /// **An open playlist shows what was just added or removed** (field report
-/// 2026-09-25): the same fault, and the same fix, as in Super.
+/// 2026-09-25).
 void main() {
   late ProviderContainer container;
 

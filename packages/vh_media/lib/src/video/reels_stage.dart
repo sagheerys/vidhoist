@@ -39,8 +39,8 @@ class ReelsVideoLayer extends StatelessWidget {
           )
         : controller == null || !controller!.value.isInitialized
         ? const Center(child: VhSpinner())
-        // **`contain`, not `cover`** (field report 2026-09-02: "it
-        // cuts part of the video off and shows it enlarged").
+        // **`contain`, not `cover`**, which cut part of the video off and
+        // showed it enlarged.
         // `cover` fills the screen by enlarging the clip until it
         // covers the longer dimension and crops the rest: on a 20:9
         // phone that means cropping about 20% of a 16:9 portrait

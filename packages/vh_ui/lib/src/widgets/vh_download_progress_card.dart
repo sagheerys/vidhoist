@@ -10,7 +10,7 @@ import '../icons/vh_icon_data.dart';
 import '../icons/vh_icons.dart';
 import '../kit/vh_progress.dart';
 
-/// A live Wahaj download card: a soft accent ground, a progress bar and a
+/// A live download card: a soft accent ground, a progress bar and a
 /// cancel. The status text, whether a phase or an error, arrives already
 /// translated from the app.
 class VhDownloadProgressCard extends StatelessWidget {
@@ -54,7 +54,7 @@ class VhDownloadProgressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    // **Colour for the data alone** (log §4, 2026-10-31): the bar and its
+    // **Colour for the data alone**: the bar and its
     // figure in the accent, a failure's sentence in the error colour. The
     // card itself stays neutral; tinted and framed in the accent, every
     // download looked like an alert, and a failure wore three marks.
@@ -127,14 +127,9 @@ class VhDownloadProgressCard extends StatelessWidget {
                         ),
                       ),
                       // **The percentage follows every phase that knows its
-                      // progress** (field report 2026-09-03: the counter did
-                      // not appear while pulling to the device). The number
-                      // used to be buried inside the "on server %" string
-                      // alone, so the pull phase, the longest one in Lite,
-                      // showed a moving bar with no number. It is an
-                      // independent element now, so it appears during both
-                      // the pull and the poll without a separate string per
-                      // phase.
+                      // progress**: an element of its own rather than part
+                      // of one phase's string, so every phase shows its
+                      // number without a separate string per phase.
                       if (!isError && detail != null) ...[
                         const SizedBox(width: VhSpace.sm),
                         Text(

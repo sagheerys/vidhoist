@@ -40,12 +40,12 @@ class VhGalleryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'معرض وهج — ${x.variant == VhVariant.phone ? 'Lite' : 'Super'}',
+          'معرض Vidhoist — ${x.variant == VhVariant.phone ? 'phone' : 'desktop'}',
         ),
         actions: [
           IconButton(
             onPressed: onToggleVariant,
-            tooltip: 'Lite/Super',
+            tooltip: 'phone/desktop',
             icon: const VhIcon(VhIcons.swap),
           ),
           IconButton(
@@ -83,7 +83,7 @@ class VhGalleryScreen extends StatelessWidget {
           Text('نص ثانوي خافت 11.5', style: text.bodySmall),
           const SizedBox(height: VhSpace.xl),
 
-          const VhSectionHeader(title: 'اللوحة', trailing: 'وهج'),
+          const VhSectionHeader(title: 'اللوحة', trailing: 'Vidhoist'),
           const SizedBox(height: VhSpace.md),
           Wrap(
             spacing: VhSpace.xs,

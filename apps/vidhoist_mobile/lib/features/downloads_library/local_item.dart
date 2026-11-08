@@ -2,8 +2,8 @@ import 'package:vh_core/vh_core.dart';
 
 /// The media folder (§5.3), fixed for good with the first release (ADR
 /// 0002). Its contents are registered in MediaStore so they appear in the
-/// phone's gallery. Not the parent app's `Vidhoist_Lite`: a phone carrying
-/// both would mix the two libraries.
+/// phone's gallery. A folder of its own, so no other app's files mix into
+/// the library.
 const phoneMediaDir = '/storage/emulated/0/Download/Vidhoist';
 
 const _audioExtensions = {'mp3', 'm4a', 'aac', 'ogg', 'opus', 'wav', 'flac'};
@@ -18,11 +18,9 @@ bool isMediaFile(String path) {
 /// A local library item: **the file on disk is the truth**, and the other
 /// fields are enrichment from the indexes.
 ///
-/// **The item key [key]:** the canonicalUrl when known (everything Lite v2
-/// downloads knows its URL), otherwise **the absolute path**. That is what
-/// makes the old Lite's data work as it is: its resume positions, playlists
-/// and titles are all keyed by file paths (confirmed against a real backup:
-/// 32 positions and 18 playlist entries).
+/// **The item key [key]:** the canonicalUrl when known (everything this app
+/// downloads knows its URL), otherwise **the absolute path**, so a file
+/// copied in by hand still keeps its resume position, playlists and title.
 class LocalItem {
   const LocalItem({
     required this.key,
@@ -43,8 +41,7 @@ class LocalItem {
   final int sizeBytes;
   final DateTime modified;
 
-  /// null means a file whose URL we do not know: migrated from the old
-  /// Lite, or copied in by hand.
+  /// null means a file whose URL we do not know: one copied in by hand.
   final String? canonicalUrl;
   final String? thumbnail;
   final bool favorite;
@@ -90,8 +87,8 @@ class LocalItem {
   }
 }
 
-/// The scope filter in Lite: there is no "offline / server", because
-/// everything is local.
+/// The scope filter: there is no "offline" scope, because everything is
+/// local.
 enum LocalScope { all, favorites }
 
 enum MediaTypeFilter { all, video, audio, shorts }

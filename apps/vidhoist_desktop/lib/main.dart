@@ -68,7 +68,7 @@ import 'shell/video_surface.dart';
 
 /// Bootstrap only: one copy, storage, the player, the window, runApp.
 ///
-/// `--gallery` opens the Wahaj component sheet instead, with `--night` and
+/// `--gallery` opens the vh_ui component sheet instead, with `--night` and
 /// `--ltr` for the other theme and direction.
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();

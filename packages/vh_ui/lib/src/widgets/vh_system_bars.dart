@@ -10,7 +10,7 @@ import '../tokens/tokens.dart';
 /// guards against the camera cutout at the top and does not guard the
 /// bottom at all. So with **three-button navigation** rather than
 /// gestures, the last element disappears under the buttons: "start
-/// download" was cut in half (field report 2026-09-04).
+/// download" was cut in half.
 ///
 /// The sum is correct and not double-counted: when the keyboard appears,
 /// `viewInsets` swallows the button bar and `padding.bottom` becomes zero;
@@ -26,7 +26,7 @@ double vhSheetBottomPad(BuildContext context, [double extra = VhSpace.xl]) =>
 /// Android 15+ forces a black or white contrast scrim behind the three
 /// navigation buttons unless the app says it does not want one, which shows
 /// as a band of a different colour immediately below the app's own bar: a
-/// visible cut in both themes (field report 2026-09-04). With gestures it
+/// visible cut in both themes. With gestures it
 /// never appears, because that bar is thin and transparent already, which
 /// is why it went unseen for so long.
 ///

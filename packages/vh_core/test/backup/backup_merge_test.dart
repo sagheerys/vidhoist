@@ -138,7 +138,7 @@ void main() {
     });
   });
 
-  test('nothing device-bound comes over, server addresses neither', () async {
+  test('nothing device-bound comes over, stored addresses neither', () async {
     final phone = _Device(at(0));
     await phone.store.setString('offline_index', '{"$_a": "/storage/a.mp4"}');
     await phone.store.setString('video_sort_option', 'oldest');
@@ -154,7 +154,7 @@ void main() {
     expect(result.changedNothing, isTrue);
   });
 
-  test('anything but an MTF backup is refused', () {
+  test('anything but a Vidhoist backup is refused', () {
     expect(BackupMerge.looksLikeBackup('{"app":"other","prefs":{}}'), isFalse);
     expect(BackupMerge.looksLikeBackup('hello'), isFalse);
     expect(

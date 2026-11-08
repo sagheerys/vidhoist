@@ -192,7 +192,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             ),
           ],
           // The message comes from the error itself rather than from a
-          // fixed string (the same cure as Super).
+          // fixed string.
           // A folder Android refuses to read is not an error to report but
           // a permission to ask for, and it has its own screen.
           AsyncError(error: MediaAccessDeniedException()) => [
@@ -210,7 +210,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           ],
           AsyncValue(valueOrNull: final value?) when value.isEmpty => [
             SliverToBoxAdapter(
-              // **Say why it is empty**, as in Super: a filter that hides
+              // **Say why it is empty**: a filter that hides
               // everything is not an empty library.
               child: switch (options) {
                 LibraryViewOptions(query: final q) when q.isNotEmpty =>

@@ -5,12 +5,12 @@ import '../theme/vh_theme.dart';
 import '../tokens/tokens.dart';
 import 'vh_link_button.dart';
 
-/// The Wahaj empty screen: a plain title that names what is empty, one
+/// The app's empty screen: a plain title that names what is empty, one
 /// sentence that says **how to begin**, and the way out as a link, not a
 /// filled button.
 ///
 /// **No drawing above it.** The same picture over every empty place (it was
-/// a film frame with the ember in it) is one of the marks of a generated
+/// a film frame with the accent in it) is one of the marks of a generated
 /// screen; the words, and the action where the content will appear, are
 /// what an empty place owes the reader.
 class VhEmptyFrame extends StatelessWidget {

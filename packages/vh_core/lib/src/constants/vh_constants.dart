@@ -9,7 +9,7 @@ abstract final class VhConstants {
   static const int maxTextFileBytes = 5 * 1024 * 1024;
 
   /// **How long short-link resolution may hold up a routing decision**
-  /// (field report 2026-09-08): deciding "playlist or single" waits on the
+  /// (2026-09-08): deciding "playlist or single" waits on the
   /// network and the user waits with it, so past this limit the link is
   /// used as it is rather than freezing the interface.
   static const Duration routingResolveTimeout = Duration(seconds: 5);

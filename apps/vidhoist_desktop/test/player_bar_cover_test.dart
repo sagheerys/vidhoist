@@ -8,7 +8,7 @@ import 'support/shell_harness.dart';
 
 /// **Guard: the player bar's square cover shows no black bands.** YouTube's
 /// usual thumbnail is 4:3 with the picture between bands, which a square
-/// box shows; the bar asks for the wide picture instead, as the phones do.
+/// box shows; the bar asks for the wide picture instead, as the phone app does.
 void main() {
   testWidgets('**the guard**: a YouTube clip playing takes the wide '
       'thumbnail in the bar, not the banded one', (tester) async {

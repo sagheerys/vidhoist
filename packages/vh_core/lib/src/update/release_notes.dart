@@ -13,12 +13,11 @@
 /// Notes without the rule, or whose second half is not Arabic, are returned
 /// whole: the worst case is showing more than needed, never less.
 ///
-/// With [app] (`lite` or `super`), the bullets written for the other app
-/// are left out: one page serves both apps, and a Lite user read about
-/// channels and cookies Lite does not have. A bullet belongs to one app
-/// when it opens with its name ("Vidhoist Lite finishes…", "Super —") or
-/// closes with it ("Vidhoist Super.", "(Super)", "Super only."), the way
-/// every release page is written. Anything unmarked is for both and stays.
+/// With [app] (`lite` or `super`), the bullets marked for the other of the
+/// two are left out, so a page that serves two editions shows each reader
+/// only what their app has. A bullet is marked when it opens with the
+/// other's name ("Super —") or closes with it ("(Super)", "Super only.").
+/// Anything unmarked is for both and stays.
 String vhReleaseNotesFor(String body, {required bool arabic, String? app}) {
   final notes = _language(body, arabic: arabic);
   final other = switch (app?.toLowerCase()) {

@@ -39,8 +39,8 @@ class HistoryResponse {
     ],
   );
 
-  /// The discovery check (§2.1): a map carrying both `done` and `queue`.
-  /// Anything else is not a Vidhoist server, an HTML response for example.
+  /// The shape check (§2.1): a map carrying both `done` and `queue`.
+  /// Anything else, an HTML page for example, is not a history.
   static bool looksLikeVidhoist(dynamic decoded) =>
       decoded is Map &&
       decoded.containsKey('done') &&

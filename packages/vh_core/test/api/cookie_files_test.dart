@@ -17,9 +17,9 @@ List<String> cookiesIn(List<int>? merged) => const LineSplitter()
     .toList();
 
 void main() {
-  group('CookieFiles.merge — one file for a server that keeps only one', () {
+  group('CookieFiles.merge — one file for yt-dlp, which reads only one', () {
     test('two platforms picked together both survive: the reason this '
-        'exists, because Vidhoist replaces its cookies file whole', () {
+        'exists, because yt-dlp reads a single cookies file', () {
       final merged = CookieFiles.merge([
         file([row('.youtube.com', 'SID', 'y1')]),
         file([row('.vimeo.com', 'vuid', 'v1')]),

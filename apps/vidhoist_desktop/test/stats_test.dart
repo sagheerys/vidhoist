@@ -30,7 +30,7 @@ LibraryItem _clip(
 );
 
 void main() {
-  testWidgets('**the guard**: what the server does not say is not shown as '
+  testWidgets('**the guard**: what the history does not say is not shown as '
       'if it were: no running time when most lengths are unknown, no '
       'channels when none is named', (tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));

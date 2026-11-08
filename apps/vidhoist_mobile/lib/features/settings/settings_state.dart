@@ -6,8 +6,8 @@ import 'package:vh_media/vh_media.dart'
 
 import '../../di.dart';
 
-/// The phone's settings. Storage key names are fixed, and they are the same
-/// names the old Lite used, so its backup restores as it is.
+/// The phone's settings. Storage key names are fixed: a renamed key would
+/// leave saved settings and backups behind.
 class PhoneSettings {
   const PhoneSettings({
     this.quality = Quality.best,
@@ -72,17 +72,16 @@ class PhoneSettings {
   /// setting rather than an initial value.
   final bool quickDownload;
 
-  /// Pulling to the device on Wi-Fi only, which matters more in the family
-  /// edition than anywhere else.
+  /// Downloading on Wi-Fi only, so a phone on mobile data keeps its plan.
   final bool wifiOnly;
 
   /// Retries what failed because of the network once it returns, never what
   /// the site refused.
   final bool autoRetry;
 
-  /// **Best playback compatibility (H.264/AAC)**, from field report
-  /// 2026-09-03. Measured on a real Vidhoist server: `quality:best` alone
-  /// yields VP9 or AV1 in webm, and hardware AV1 decoding is missing from
+  /// **Best playback compatibility (H.264/AAC).** Measured on YouTube:
+  /// `best` alone yields VP9 or AV1 in webm, and hardware AV1 decoding is
+  /// missing from
   /// most phones, so the picture appears torn. On by default; turning it
   /// off allows the highest resolution at the cost of compatibility.
   final bool compatiblePlayback;

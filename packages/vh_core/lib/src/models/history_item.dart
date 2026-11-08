@@ -5,13 +5,12 @@ import '../urls/url_kit.dart';
 
 const _uuid = Uuid();
 
-/// The state of a `/history` item after the server's synonyms are
-/// normalised.
+/// The state of a history item after the synonyms its status may carry
+/// are normalised.
 enum ItemStatus { inProgress, completed, failed, unknown }
 
-/// One finished download, in the shape Vidhoist's `GET /history` gave it,
-/// which `LocalHistoryStore` keeps; parsed **tolerantly**. The hard
-/// rules:
+/// One finished download, in the record shape `LocalHistoryStore`
+/// keeps; parsed **tolerantly**. The hard rules:
 /// - [canonicalUrl] is the primary key for all app data.
 /// - A missing [filename] stays null; it is **never invented from the
 ///   title** (`docs/ENGINE.md`, Storage).
@@ -41,7 +40,7 @@ class HistoryItem {
 
   final String id;
 
-  /// The canonical URL as the server returned it. Deletion and indexing use
+  /// The canonical URL, the one yt-dlp resolved. Deletion and indexing use
   /// this, never the entered URL.
   final String canonicalUrl;
   final String? title;
@@ -53,7 +52,7 @@ class HistoryItem {
   final double? progress;
 
   /// Bytes per second while yt-dlp downloads, or null between streams and
-  /// once done (Vidhoist sends `speed: null` then).
+  /// once done (a record carries `speed: null` then).
   final double? speed;
   final ItemStatus status;
   final String? rawStatus;
@@ -62,20 +61,20 @@ class HistoryItem {
   final String? quality;
   final String? format;
 
-  /// The file's size on the server in bytes if it reported one (`size`),
+  /// The file's size in bytes, if the record has one (`size`),
   /// for sorting and display.
   final int? sizeBytes;
 
-  /// `download_type` as the server sent it: `video`, `audio`, `captions`
-  /// or `thumbnail`, or null from a server too old to send it.
+  /// `download_type` as recorded: `video`, `audio`, `captions` or
+  /// `thumbnail`, or null in a record without one.
   final String? downloadType;
 
   /// The download's own folder below the download directory (`folder`),
-  /// or null at the top. Chosen when the download was added, by the app,
-  /// the web page or a subscription.
+  /// or null at the top. Chosen when the download was added, by the user
+  /// or by a followed channel.
   final String? folder;
 
-  /// Where the file is, for the client to stream or pull it: the folder,
+  /// Where the file is, as one relative path: the folder,
   /// the [filename] (which may hold subfolders of its own) and the audio
   /// route. Null without a filename.
   String? get serverPath => ServerPath.of(
@@ -128,8 +127,8 @@ class HistoryItem {
     );
   }
 
-  /// Any value becomes a non-empty string or null; errors can arrive from
-  /// the server as a map.
+  /// Any value becomes a non-empty string or null; an error can arrive
+  /// as a map.
   static String? _str(dynamic value) {
     if (value == null) return null;
     final s = value.toString().trim();
@@ -177,7 +176,7 @@ class HistoryItem {
     return null; // not YouTube: nothing is invented; ArtworkIndex fills it later.
   }
 
-  /// Vidhoist's `percent` is **always 0 to 100**, so it is always divided.
+  /// `percent` is **always 0 to 100**, so it is always divided.
   ///
   /// The two keys used to share one guess, "above 1 means a percentage",
   /// and a download at its first percent (`percent: 1.0`, or `0.5`) read as

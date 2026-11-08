@@ -2,16 +2,13 @@ import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  /// **Reddit: the defect, and why resolution is the fix** (field report
-  /// 2026-09-20).
+  /// **Reddit: the defect, and why resolution is the fix** (2026-09-20).
   ///
-  /// The report: a Reddit link downloads on the server but the app's
-  /// counter never moves — Lite never pulls the file and never cleans the
-  /// server, and Super shows a stuck card beside a clip already sitting in
-  /// the library. The cause is not the download: Vidhoist files an item under
-  /// the URL **yt-dlp ended at** and keys every list by it, so a task that
-  /// asked for the short link is polling for a URL that does not exist on
-  /// the server.
+  /// A Reddit link downloads but its card never moves: it sits stuck beside
+  /// a clip already in the library. The cause is not the download: it is
+  /// filed under the URL **yt-dlp ended at** and every list is keyed by it,
+  /// so a task that asked for the short link waits for a URL that is never
+  /// recorded.
   ///
   /// The hops below are the ones measured against reddit.com on that day,
   /// not invented.
@@ -33,13 +30,13 @@ void main() {
       expect(await resolver.resolve(shared), target);
     });
 
-    test('redd.it lands where the server files it', () async {
+    test('redd.it lands where the download is filed', () async {
       final resolver = ShortLinkResolver(
         redirectStep: (url) async => url == 'https://redd.it/1w64qio'
             ? 'https://www.reddit.com/comments/1w64qio'
             : null,
       );
-      // Exactly the pair measured on a real server: sent on the left,
+      // Exactly the pair measured: sent on the left,
       // filed on the right.
       expect(
         await resolver.resolve('https://redd.it/1w64qio'),
@@ -60,7 +57,7 @@ void main() {
     });
 
     test('and the point of all three: unresolved, the pair does not match, '
-        'so the task polls for something the server has never heard of', () {
+        'so the task waits for a URL that is never recorded', () {
       for (final short in [
         'https://redd.it/1w64qio',
         'https://v.redd.it/52oky0lgjanh1',
@@ -85,18 +82,17 @@ void main() {
     });
   });
 
-  /// **Vimeo: the same defect, on a link nobody would call "short"** (field
-  /// report 2026-09-20, with cookies working and the clip downloaded).
+  /// **Vimeo: the same defect, on a link nobody would call "short"**
+  /// (2026-09-20, with cookies working and the clip downloaded).
   ///
   /// The link pasted was the address Vimeo shows on an author's page. The
-  /// server filed the clip under the number that address redirects to, so
+  /// clip was filed under the number that address redirects to, so
   /// the card sat at 0% beside the finished clip in the library — **and the
   /// arrival notice announced the user's own download back to them**,
   /// because a task
-  /// is marked as ours by the canonical URL the poll captures, and the poll
-  /// never captured one.
+  /// is marked as ours by its canonical URL, and that never matched.
   group('Vimeo author-page links', () {
-    test('the link is followed to the number the server files it under', () {
+    test('the link is followed to the number the clip is filed under', () {
       const shown = 'https://vimeo.com/hugodesousa/bestfriendswiththedevil';
       const filed = 'https://vimeo.com/1225400313';
 
@@ -206,12 +202,11 @@ void main() {
     });
   });
 
-  /// **Field report 2026-09-08: a whole album downloaded with no selection
-  /// screen.**
+  /// **2026-09-08: a whole album downloaded with no selection screen.**
   ///
   /// SoundCloud's share button gives `on.soundcloud.com/…`, which contains
-  /// no `/sets/`, so `PlaylistDetector` sees a single clip. It passed to
-  /// the server, yt-dlp expanded it into **20 clips** and all of them
+  /// no `/sets/`, so `PlaylistDetector` sees a single clip. It went to
+  /// yt-dlp, which expanded it into **20 clips** and all of them
   /// downloaded, while the app knew of one task. The decision has to be
   /// made on the final URL.
   group('resolveForRouting: the decision is made on the final URL', () {

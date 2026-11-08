@@ -9,11 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// holding from before, and nothing reaches the screen for it to prefer
 /// over the spinner.
 ///
-/// The effect was measured with a screen recording on the emulator
-/// (Super): an invalidation every two seconds and a history fetch taking
-/// about as long produced **13 unbroken seconds of spinner** in place of
-/// the library during a single download, returning the moment polling
-/// stopped.
+/// The effect was measured with a screen recording on the emulator:
+/// repeated invalidations produced **13 unbroken seconds of spinner** in
+/// place of the library during a single download.
 ///
 /// The rule: **a value exists, build and show it; else the error; else
 /// loading.**

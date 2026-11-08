@@ -168,9 +168,9 @@ void main() {
     });
   });
 
-  /// **The platform filter in Super** (requested 2026-09-08): the same
-  /// logic as Lite, with the choice in the sort sheet rather than a third
-  /// chip row.
+  /// **The platform filter in the Windows app**: the same logic as the
+  /// phone's, with the choice in the sort sheet rather than a third chip
+  /// row.
   group('filtering by platform', () {
     test('only the chosen platform remains', () {
       final result = buildLibraryView(items, platform: MediaPlatform.youtube);
@@ -223,9 +223,9 @@ void main() {
     });
   });
 
-  // A server whose downloads sit in folders: chosen at download time
-  // (`folder`), or written by an OUTPUT_TEMPLATE inside the filename.
-  group('server folders', () {
+  // Downloads that sit in folders: chosen at download time (`folder`), or
+  // written by the output template inside the filename.
+  group('download folders', () {
     LibraryItem at(String? path) => LibraryItem(
       canonicalUrl: 'https://youtu.be/${path ?? 'top'}',
       title: path ?? 'top',

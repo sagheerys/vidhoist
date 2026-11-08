@@ -27,7 +27,7 @@ class LibraryViewOptions {
   final Set<String> tags;
   final Set<String> excludedTags;
 
-  /// **The platform filter** (the same filter Lite has): it lives
+  /// **The platform filter** (the same filter the phone has): it lives
   /// in the sort sheet rather than a third row of chips, because this
   /// library already has a filter row and a tag row above it and a third
   /// would push the first card off screen. The chosen platform appears as a
@@ -37,11 +37,11 @@ class LibraryViewOptions {
   /// **One channel's clips only**. Set from "Show this channel" in an
   /// item's actions sheet, cleared from its chip in the first row — the
   /// same shape as [platform], and deliberately **not** a tag: a tag is
-  /// something the user creates, and this is something the server already
+  /// something the user creates, and this is something the history already
   /// knows.
   final String? channel;
 
-  /// **One server folder's clips, its subfolders included** (see
+  /// **One folder's clips, its subfolders included** (see
   /// [LibraryItem.isIn]), chosen level by level in the sort sheet and shown
   /// as a removable chip in the first row.
   final String? folder;

@@ -25,7 +25,7 @@ enum VhWindowClass {
 
   /// 960 and wider **in the Windows app only** (see [VhDesktopApp]). A
   /// phone app never reaches it however wide its window, so nothing built
-  /// for this class can leak into Lite or Super.
+  /// for this class can leak into the phone app.
   desktop,
 }
 

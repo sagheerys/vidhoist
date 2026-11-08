@@ -241,7 +241,7 @@ void main() {
           .single;
       expect(facts(), isNot(contains('p ')));
       expect(facts(), contains('412.0 MB'));
-      // No clip is on a server any more, and the line does not say one is.
+      // Every clip is on this computer, and the line says nothing of where.
       expect(facts(), isNot(contains('On the server')));
 
       h.video.pictureSize.value = const Size(1920, 1080);

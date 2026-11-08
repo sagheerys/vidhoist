@@ -102,7 +102,7 @@ void main() {
       );
     });
 
-    test('what the server names needs no question', () async {
+    test('what the history names needs no question', () async {
       expect(
         await arrivalOrigin(
           clip,
@@ -188,7 +188,7 @@ void main() {
       expect(await sends().all(), {'a'});
     });
 
-    test('what the server finished is not kept', () async {
+    test('what already finished is not kept', () async {
       await sends().note('a', finished: true);
       expect(await sends().all(), isEmpty);
     });

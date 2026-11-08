@@ -2,7 +2,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 /// The core's classified failures in the user's language, as the phone
-/// apps word them. The one place an error becomes a sentence.
+/// app words them. The one place an error becomes a sentence.
 String errorText(VhLocalizations l, Object error) => switch (error) {
   NetworkException() => l.errNetwork,
   PlatformBlockedException() => l.errPlatformBlockedCookies,

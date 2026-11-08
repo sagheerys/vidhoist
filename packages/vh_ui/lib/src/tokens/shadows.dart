@@ -17,8 +17,7 @@ abstract final class VhShadow {
   ];
 
   /// What floats over a page (the add button): a short neutral shadow,
-  /// 0 8 16 -10. A glow in the accent read as decoration rather than depth
-  /// (log §4, 2026-10-31).
+  /// 0 8 16 -10. A glow in the accent read as decoration rather than depth.
   static const List<BoxShadow> float = [
     BoxShadow(
       color: Color(0x4D50371E),

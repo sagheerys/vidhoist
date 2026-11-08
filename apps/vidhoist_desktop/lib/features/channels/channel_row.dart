@@ -17,7 +17,7 @@ import 'channel_match.dart';
 /// channel's page; a right click its menu.
 ///
 /// [stats] is null when no clip here matches the channel: the row then
-/// shows the server's facts alone, never a count it cannot know.
+/// shows the channel's own facts alone, never a count it cannot know.
 class ChannelRow extends ConsumerWidget {
   const ChannelRow({
     super.key,
@@ -139,8 +139,8 @@ class ChannelRow extends ConsumerWidget {
   }
 }
 
-/// When the server last looked and how much it has seen, which is what it
-/// walked past, not what it downloaded.
+/// When the channel was last checked and how much has been seen, which
+/// is what the check walked past, not what it downloaded.
 String channelServerLine(BuildContext context, ChannelSubscription sub) {
   final l = context.vhl;
   return vhMetaLine([

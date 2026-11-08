@@ -2,7 +2,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Opens [url] in the browser when it is a web page, and does nothing
-/// otherwise: a clip's and a channel's link come from the server, and the
+/// otherwise: a clip's and a channel's link come from yt-dlp, and the
 /// system would hand any other scheme (`tel:`, `intent:`, another app's
 /// deep link) to whatever app claims it.
 Future<void> openWebLink(

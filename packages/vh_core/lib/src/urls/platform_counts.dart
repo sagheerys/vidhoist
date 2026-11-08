@@ -4,9 +4,8 @@ import 'platform_detector.dart';
 /// unknown platform ([MediaPlatform.other]) always last so it never leads
 /// the row.
 ///
-/// One rule for every library: Lite's local files, Super's unified library
-/// and the Windows app count with this, each saying only how an item names
-/// its platform.
+/// One rule for every library: the phone app's and the Windows app's count
+/// with this, each saying only how an item names its platform.
 List<MapEntry<MediaPlatform, int>> countPlatforms<T>(
   Iterable<T> items,
   MediaPlatform Function(T item) platformOf,

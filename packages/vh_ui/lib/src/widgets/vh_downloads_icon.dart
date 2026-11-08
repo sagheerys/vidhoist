@@ -110,10 +110,10 @@ class _VhDownloadsIconState extends State<VhDownloadsIcon>
       ),
       backgroundColor: p.accent,
       textColor: p.onAccent,
-      // **Only the arrow moves; the line under it stays** (field report
-      // 2026-10-01): a still tray with the arrow dropping into it
-      // reads as "downloading", where the whole glyph sliding read as an
-      // icon wobbling. One glyph, cut in two at the gap between them.
+      // **Only the arrow moves; the line under it stays**: a still tray with
+      // the arrow dropping into it reads as "downloading", where the whole
+      // glyph sliding read as an icon wobbling. One glyph, cut in two at the
+      // gap between them.
       child: Stack(
         children: [
           const ClipRect(

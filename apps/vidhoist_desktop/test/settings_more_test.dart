@@ -122,7 +122,7 @@ void main() {
   }
 
   group('the log', () {
-    testWidgets('**the guard**: saved and copied without the server '
+    testWidgets('**the guard**: saved and copied without a private '
         'address, whichever way it leaves', (tester) async {
       await tester.runAsync(
         () => logger.log('history from http://192.168.1.10:8081/history'),
@@ -150,8 +150,8 @@ void main() {
     });
   });
 
-  // Cookies are kept on this computer now, not uploaded to a server:
-  // their guards are in cookies_local_test.dart.
+  // Cookies are kept on this computer: their guards are in
+  // cookies_local_test.dart.
 
   group("what's new", () {
     testWidgets('About shows the version and its notes on request', (

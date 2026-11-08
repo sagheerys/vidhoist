@@ -14,8 +14,8 @@ import 'cover_enricher.dart';
 import 'cover_shrink.dart';
 import 'mp4_cover.dart';
 
-/// Where found covers are kept: `%LOCALAPPDATA%\Vidhoist Ember\cache\
-/// embedded`. Overridden in main; null (tests) turns the search off.
+/// Where found covers are kept: `%LOCALAPPDATA%\Vidhoist\cache\embedded`.
+/// Overridden in main; null (tests) turns the search off.
 final coverFolderProvider = Provider<Directory?>((ref) => null);
 
 /// Takes one frame from a video, given where it is and the headers to

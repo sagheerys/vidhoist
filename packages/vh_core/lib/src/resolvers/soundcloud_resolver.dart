@@ -5,8 +5,8 @@ import '../urls/playlist_detector.dart';
 import 'http_fetch.dart';
 
 /// SoundCloud (§4), **fragile by nature and isolated**: any failure
-/// returns null and breaks nothing, since the link is passed to the server
-/// as it is. There are no official API keys.
+/// returns null and breaks nothing, since the link is then downloaded as it
+/// is. There are no official API keys.
 class SoundCloudResolver {
   SoundCloudResolver({HttpGetString? httpGet})
     : _httpGet = httpGet ?? ioHttpGetString;
@@ -51,7 +51,7 @@ class SoundCloudResolver {
   /// Resolves a `/sets/` playlist from `window.__sc_hydration`, then
   /// **completes the partial tracks** through api-v2.
   ///
-  /// **Field report 2026-09-02, "the album downloads strangely":**
+  /// **Seen 2026-09-02, an album that downloaded strangely:**
   /// SoundCloud embeds the full object for only the first five or so
   /// tracks; the rest arrive as `{id, kind}` with no `permalink_url`, and
   /// the parser was dropping them silently, so an album of 432 tracks

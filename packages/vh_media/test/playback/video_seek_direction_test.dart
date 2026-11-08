@@ -9,8 +9,7 @@ import 'fake_video_platform.dart';
 
 import '../icon_finder.dart';
 
-/// **Media time runs left to right in every language** (field report
-/// 2026-09-25).
+/// **Media time runs left to right in every language.**
 ///
 /// In Arabic the progress bar used to fill from the right while the
 /// transport buttons stayed left to right, so a song moved leftwards and

@@ -359,7 +359,7 @@ void main() {
         );
         expect(bar.value, 0.42);
         // **The guard**: the colour comes from the palette; Material's
-        // default track comes out greenish over the Wahaj cream.
+        // default track comes out greenish over the app's cream ground.
         expect(bar.valueColor!.value, VhThemeX.of(context).palette.accent);
         expect(find.text(l10n.cancel), findsOneWidget);
         expect(find.text(l10n.updateNow), findsNothing);

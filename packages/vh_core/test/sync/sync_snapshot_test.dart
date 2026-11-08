@@ -74,7 +74,7 @@ void main() {
     expect(SyncSnapshot.decode('[1, 2]'), isNull);
   });
 
-  test('nothing of the server travels: no address, user or password field '
+  test('no credentials travel: no address, user or password field '
       'exists to write', () {
     final text = _full().encode();
     for (final word in ['password', 'username', 'server_url', 'active_url']) {

@@ -67,7 +67,7 @@ void main() {
   });
 
   group('no source', () {
-    test('no local file and no name on the server', () {
+    test('no local file and no name to stream', () {
       final resolver = PlaybackSourceResolver(
         endpoint: _endpoint,
         fileExists: (_) => false,
@@ -83,7 +83,7 @@ void main() {
       expect(resolver.resolve(_item(filename: '../../etc/passwd')), isNull);
     });
 
-    test('with no server configured, local only', () {
+    test('with no stream source, local only', () {
       final resolver = PlaybackSourceResolver(
         endpoint: ServerStreamEndpoint.none,
         fileExists: (_) => false,

@@ -14,7 +14,7 @@ import 'package:vh_media/vh_media.dart';
 ///
 ///     flutter test integration_test -d windows
 ///
-/// The clips are tones written here, so the test needs no server.
+/// The clips are tones written here, so the test needs no network.
 File _tone(Directory dir, String name, Duration length, {double hz = 440}) {
   const rate = 8000;
   final samples = rate * length.inMilliseconds ~/ 1000;

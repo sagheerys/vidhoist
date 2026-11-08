@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_media/vh_media.dart';
 
 /// **What a file actually is** (2026-09-25). The values are real clips,
-/// probed on a real server: 4096×2160 AV1 at 24, 3840×2160 AV1 at 60,
+/// probed from real downloads: 4096×2160 AV1 at 24, 3840×2160 AV1 at 60,
 /// a vertical 1080×1920 VP9 reel, an audio-only SoundCloud track.
 void main() {
   group('the resolution people say', () {

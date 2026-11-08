@@ -66,9 +66,9 @@ final videoSessionProvider = Provider.autoDispose<VhVideoSession>((ref) {
 /// Converts a local library item into a unified playback item.
 ///
 /// [PlaylistItem.canonicalUrl] here is **the item key**, a URL or a path,
-/// because that is the key for resuming, favourites and playlists in Lite.
-/// And [serverFilename] is always null: Lite never streams, and the local
-/// file is the only source.
+/// because that is the key for resuming, favourites and playlists here.
+/// And [serverFilename] is always null: the phone app never streams, and
+/// the local file is the only source.
 PlaylistItem toPlaylistItem(LocalItem item) => PlaylistItem(
   canonicalUrl: item.key,
   title: item.title,
@@ -80,8 +80,8 @@ PlaylistItem toPlaylistItem(LocalItem item) => PlaylistItem(
 );
 
 /// The thumbnail builder for the players: platform covers saved in the
-/// artwork index, with no authentication headers, since none of them come
-/// from the family server.
+/// artwork index, with no authentication headers, since they are public
+/// links.
 VhArtworkBuilder artworkBuilderFor(WidgetRef ref) =>
     (context, item) => artworkFor(item.artworkUrl);
 

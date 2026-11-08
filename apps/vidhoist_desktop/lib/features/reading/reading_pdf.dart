@@ -11,7 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 
 import 'reading_export.dart';
 
-/// The Wahaj fonts a document is set in: Tajawal for Latin text, Noto Kufi
+/// The app's fonts a document is set in: Tajawal for Latin text, Noto Kufi
 /// Arabic for Arabic text and for the title.
 typedef ReadingFonts = ({pw.Font latin, pw.Font arabic, pw.Font title});
 

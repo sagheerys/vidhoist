@@ -4,19 +4,19 @@ import 'package:video_player/video_player.dart';
 
 import '../widgets/media_time.dart';
 
-/// The reels progress bar, **draggable** (field report 2026-09-02: "you
-/// cannot seek forward or back, or grab the counter").
+/// The reels progress bar, **draggable**, so the counter can be grabbed to
+/// seek forward or back.
 ///
 /// While dragging we show the finger's position rather than the player's,
 /// or the marker jumped back with every player update and the bar seemed
 /// to "resist" the finger.
 ///
-/// **The touch area is 48 points plus [padding]** around a 3-point line. It
-/// was 24 points, and everything around it belongs to tap-to-pause, so a
-/// finger that slightly missed the strip paused the clip a moment later and
-/// the bar took the blame (field report 2026-09-13: "seeking pauses the
-/// video"). The padding sits inside the detector for the same reason: the
-/// side margins and the system inset around the line scrub too.
+/// **The touch area is 48 points plus [padding]** around a 3-point line. It was
+/// 24 points, and everything around it belongs to tap-to-pause, so a finger
+/// that slightly missed the strip paused the clip a moment later and the bar
+/// took the blame ("seeking pauses the video"). The padding sits inside the
+/// detector for the same reason: the side margins and the system inset around
+/// the line scrub too.
 class ReelsProgressBar extends StatefulWidget {
   const ReelsProgressBar({
     super.key,

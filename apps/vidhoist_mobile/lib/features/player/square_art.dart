@@ -15,8 +15,7 @@ import 'package:path_provider/path_provider.dart';
 /// A YouTube song's wide thumbnail comes from the same image cache as the
 /// player's cover, so it is not downloaded twice. Where an upload has no
 /// wide one, the square is cut inside the 4:3 thumbnail's black bands.
-/// Images on the server itself get no password: covers come from the
-/// platforms, never from the server.
+/// No credential is sent: covers are the platforms' public links.
 Future<Uri?> squareArtFor(PlaylistItem item) async {
   final art = item.artworkUrl;
   if (art == null || art.isEmpty) return null;

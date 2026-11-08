@@ -119,9 +119,9 @@ void main() {
       await open(tester, to: '/settings/folders');
       expect(find.byType(FoldersPane), findsOneWidget);
       // **The guard** (owner's choice, 2026-11-05): the folder bears the
-      // app's own name, not Vidhoist's.
+      // app's own name.
       expect(find.text(r'C:\Users\me\Downloads\Vidhoist'), findsOneWidget);
-      // The offline copies of a server's clips went with the server.
+      // There is no second folder, of offline copies, to show.
       expect(find.textContaining(r'Videos'), findsNothing);
     });
 

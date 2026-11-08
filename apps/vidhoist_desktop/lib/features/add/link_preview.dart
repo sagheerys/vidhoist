@@ -18,15 +18,15 @@ final previewFetchProvider = Provider<HttpGetString>(
 );
 
 /// The preview of [url], or null for a site that offers none, when it
-/// cannot be reached, or after the resolver's few seconds. The phones' own
-/// resolver, so the three apps ask the same sites in the same way: oEmbed
+/// cannot be reached, or after the resolver's few seconds. The phone app's
+/// own resolver, so both apps ask the same sites in the same way: oEmbed
 /// where a site has one, an X post's page, Reddit's oEmbed for a title.
 /// Instagram, Facebook and TikTok offer nothing usable (measured 2026-10); a
 /// clip of theirs gets its cover from its own frames once downloaded.
 ///
-/// **Asked of the clip's own site with a plain request**, never through
-/// the server's client, so the server's password goes nowhere else; the
-/// site learns only the link the user is about to download from it anyway.
+/// **Asked of the clip's own site with a plain request**, with none of
+/// the user's cookies; the site learns only the link the user is about to
+/// download from it anyway.
 final linkPreviewProvider = FutureProvider.autoDispose
     .family<LinkPreview?, String>((ref, url) async {
       if (PlaylistDetector.isPlaylist(url)) return null;

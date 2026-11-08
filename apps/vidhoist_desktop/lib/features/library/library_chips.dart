@@ -81,7 +81,7 @@ class LibraryChips extends ConsumerWidget {
             selected: true,
             onTap: () => view.setFolder(null),
           ),
-        // A single platform is no choice at all, as in Lite.
+        // A single platform is no choice at all, as in the phone app.
         if (platforms.length > 1 || options.platform != null)
           Builder(
             builder: (chip) => DesktopPill(

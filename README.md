@@ -28,10 +28,10 @@ Arabic and English, day and night.
 
 ## Why a fork
 
-Vidhoist Lite and Super are clients for a self-hosted server. Many people want
+Its parent needed a self-hosted server to download anything. Many people want
 the same app without running anything: paste a link, pick a quality, keep the
-file. Vidhoist is that app. It keeps the "Wahaj" design system and the code
-that has nothing to do with the server, and replaces only the engine.
+file. Vidhoist is that app: yt-dlp runs on the phone or the computer itself,
+and Vidhoist has gone its own way since.
 
 ## Building
 
@@ -60,7 +60,7 @@ apps/vidhoist_mobile     Android app
 apps/vidhoist_desktop    Windows app
 packages/vh_core         pure Dart: models, storage, download engine, backup, update
 packages/vh_media        players, mini player, media session
-packages/vh_ui           the Wahaj design system, tokens, icons, EN/AR strings
+packages/vh_ui           the design system, tokens, icons, EN/AR strings
 packages/vh_transcripts  subtitles and transcript search
 third_party/             two patched plugins, see PATCHES.md in each
 docs/                    architecture, blueprint, decisions (docs/adr)

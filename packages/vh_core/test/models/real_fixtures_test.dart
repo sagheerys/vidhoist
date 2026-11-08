@@ -3,9 +3,8 @@ import 'package:test/test.dart';
 
 import '../fixtures/fixtures.dart';
 
-/// Tests against **real** JSON captured from a live server (gate 1,
-/// captured 2026-09-01 from TrueNAS over both the local address and the
-/// tunnel): the tolerant parser holds up against 251 actual items with all
+/// Tests against **real** history JSON (gate 1, captured 2026-09-01): the
+/// tolerant parser holds up against 251 actual items with all
 /// their oddities. The identifying text has since been scrambled; see the
 /// anonymisation note in the fixtures.
 void main() {
@@ -28,8 +27,7 @@ void main() {
     });
 
     test('no invented filenames: a missing one stays null', () {
-      // At minimum, every genuinely finished item carries a filename from
-      // the server.
+      // At minimum, every genuinely finished item carries a filename.
       final finished = response.done.where(
         (i) => i.status == ItemStatus.completed,
       );

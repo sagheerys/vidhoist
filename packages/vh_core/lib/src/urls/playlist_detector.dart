@@ -27,7 +27,7 @@ abstract final class PlaylistDetector {
   ///
   /// **The exclusions are deliberate (2026-09-02):**
   /// - `RD…` are **mix** playlists YouTube generates per viewer with no
-  /// fixed items, and the server returns nothing for them, so they showed
+  /// fixed items, and yt-dlp returns nothing for them, so they showed
   /// "could not load this playlist".
   /// - `WL` (Watch Later) and `LL` (Liked) belong to a signed-in account
   ///   and

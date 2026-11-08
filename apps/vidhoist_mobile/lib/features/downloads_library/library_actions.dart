@@ -13,9 +13,8 @@ import 'local_item.dart';
 
 final libraryActionsProvider = Provider((ref) => LibraryActions(ref));
 
-/// Actions on a local library item (rule 5, simplified for Lite): there are
-/// no server actions, since the file on the phone is everything and the
-/// server was cleaned automatically at download time.
+/// Actions on a local library item (rule 5, simplified): the file on the
+/// phone is everything, so there are no remote actions.
 class LibraryActions {
   LibraryActions(this._ref);
 
@@ -77,8 +76,8 @@ class LibraryActions {
     return deleted;
   }
 
-  /// Shares the file itself: no download and no server, since everything in
-  /// Lite is local.
+  /// Shares the file itself: nothing is downloaded, since everything here
+  /// is local.
   Future<void> share(List<LocalItem> items) async {
     final files = [
       for (final item in items)

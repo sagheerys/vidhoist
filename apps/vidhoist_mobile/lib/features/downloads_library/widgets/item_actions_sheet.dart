@@ -12,8 +12,8 @@ import '../local_item.dart';
 import 'item_details_sheet.dart';
 import '../../shared/open_web_link.dart';
 
-/// The item actions sheet (rule 5, Lite's version where everything is
-/// local). Delete comes last, isolated by a divider and in the error
+/// The item actions sheet (rule 5; everything here is local). Delete
+/// comes last, isolated by a divider and in the error
 /// colour, which is a general navigation rule.
 void showItemActionsSheet(BuildContext context, WidgetRef ref, LocalItem item) {
   showVhSheet<void>(
@@ -125,8 +125,8 @@ class _ItemActionsSheet extends ConsumerWidget {
               l10n.share,
               () => run(() => actions.share([item])),
             ),
-            // An external player gets a file path: Lite has only local
-            // files, so no server URL ever leaves the app.
+            // An external player gets a file path: everything here is
+            // local, so no URL ever leaves the app.
             tile(
               VhIcons.playback,
               l10n.openInExternalPlayer,
@@ -183,8 +183,8 @@ class _ItemActionsSheet extends ConsumerWidget {
     );
   }
 
-  /// **The clip itself is shown before anything is deleted** (the Wahaj
-  /// confirmation, as on the computer), so nobody removes the wrong one of
+  /// **The clip itself is shown before anything is deleted** (the shared
+  /// confirmation, as in the Windows app), so nobody removes the wrong one of
   /// two look-alike titles.
   Future<void> _confirm(
     BuildContext context,

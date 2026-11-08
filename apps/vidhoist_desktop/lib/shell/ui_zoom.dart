@@ -8,7 +8,7 @@ import '../di.dart';
 import '../platform/window_placement.dart';
 import 'shell_state.dart';
 
-/// The interface sizes on offer, as in a browser's zoom: Ember alone grows
+/// The interface sizes on offer, as in a browser's zoom: the app alone grows
 /// or shrinks, on top of whatever Windows' own display scale is.
 const List<double> uiZoomSteps = [0.8, 0.9, 1.0, 1.1, 1.25, 1.5];
 
@@ -36,7 +36,7 @@ double fittingZoom(double wanted, Size? workArea) {
   return uiZoomSteps.first;
 }
 
-/// The interface size, and whether Ember just chose it because the one
+/// The interface size, and whether the app just chose it because the one
 /// asked for no longer fits; the shell says so once, then [acknowledge]s.
 class UiZoom {
   const UiZoom(this.value, {this.lowered = false});
@@ -125,7 +125,7 @@ class UiZoomNotifier extends Notifier<UiZoom> {
     _apply(UiZoom(zoom));
   }
 
-  /// The notice about a size Ember chose has been shown.
+  /// The notice about a size the app chose has been shown.
   void acknowledge() {
     if (state.lowered) state = UiZoom(state.value);
   }

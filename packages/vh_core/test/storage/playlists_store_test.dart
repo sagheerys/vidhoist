@@ -15,8 +15,8 @@ void main() {
       PlaylistEntry(canonicalUrl: url, cachedTitle: title);
 
   group('PlaylistsStore', () {
-    // **Field report 2026-09-04:** "I deleted the playlist's files and they
-    // stayed in the playlist and do not play." Deletion pruned every index
+    // **Seen 2026-09-04:** a playlist's deleted files stayed in it and did
+    // not play. Deletion pruned every index
     // except the playlists.
     test(
       'removeFromAll takes the key out of every playlist and returns the count',
@@ -103,7 +103,7 @@ void main() {
       expect((await playlists.byId(p.id))!.items.single.canonicalUrl, 'b');
     });
 
-    test('an old Vidhoist Lite playlist of file paths imports empty', () async {
+    test('an old playlist of file paths imports empty', () async {
       await store.setString(
         PlaylistsStore.prefsKey,
         json.encode([

@@ -14,7 +14,7 @@ import '../widgets/vh_route_motion.dart';
 /// What a notice reports, which sets its colour.
 enum VhNoticeKind { done, failed, info }
 
-/// The Wahaj notice at the foot of the window. The state is **a bar on the
+/// The app's notice at the foot of the window. The state is **a bar on the
 /// edge**, not a coloured circle; the icon says the action itself (a check,
 /// a cross, a copy); and a line along the bottom shrinks until the notice
 /// leaves, so the user can see how long it will stay.

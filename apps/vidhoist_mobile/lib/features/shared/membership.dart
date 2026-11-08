@@ -10,10 +10,10 @@ import '../playlists/playlists_providers.dart';
 /// playlist it was added to, and which tag it is under". The information
 /// was in the store and no screen displayed it.
 ///
-/// **[tags] is always empty in Lite**, by design rather than by oversight:
-/// tags are exclusively a Super feature, and Lite's index carries nothing
-/// but the system favourites tag. The type is the same in both apps so the
-/// shared screens stay identical.
+/// **[tags] is always empty here**, by design rather than by oversight:
+/// the phone app has no user tags, and its index carries nothing but the
+/// system favourites tag. The field stays so the shared screens need no
+/// phone-only variant.
 class ItemMembership {
   const ItemMembership({this.playlists = const [], this.tags = const []});
 

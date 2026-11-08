@@ -16,7 +16,7 @@ final clipboardUrlProvider = StateProvider<String?>((ref) => null);
 /// read finishing last used to put back a link a newer read had replaced.
 int _clipboardReads = 0;
 
-/// A link already sent to the server is not offered (see [HandledLinks]).
+/// A link already sent for download is not offered (see [HandledLinks]).
 /// Android 10+ only lets a focused window read the clipboard; Flutter
 /// reports `resumed` only once the window has focus, so the read on return
 /// is not refused.

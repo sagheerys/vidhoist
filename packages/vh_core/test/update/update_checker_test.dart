@@ -51,8 +51,8 @@ void main() {
     test(
       "**the guard**: each app takes its own file, not its sibling's",
       () async {
-        // One release carries both apps' APKs; without matching the marker a
-        // Lite user installs Super, the first asset in the list.
+        // One release carries two apps' APKs; without matching the marker a
+        // phone installs the other app's, the first asset in the list.
         final superRelease = await checkerOf(release())
             .check(currentVersion: '2.0.0');
         expect(
@@ -195,7 +195,7 @@ void main() {
     });
   });
 
-  group('Ember, the Windows app', () {
+  group('the Windows app', () {
     UpdateChecker ember(String body) =>
         checkerOf(body, marker: 'ember', extension: '.exe');
 
@@ -231,7 +231,7 @@ void main() {
       expect(r.apkSize, 28000000);
     });
 
-    test('an APK named for Ember is never taken for the installer', () async {
+    test('an APK named for the Windows app is never its installer', () async {
       final body = release(
         assets: [
           {

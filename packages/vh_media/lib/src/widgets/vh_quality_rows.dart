@@ -11,10 +11,10 @@ typedef VhDetailsRowBuilder = Widget Function(String label, String value);
 /// 2026-09-25), from the file's own header — see [MediaQuality].
 ///
 /// Read once per clip per run: the answer does not change, and a stream's
-/// header costs a request. Given a [store], it is read once per clip for
-/// good: the answer is saved there and shown straight from it afterwards.
-/// Until it arrives the rows say so; if it never does (server down, a
-/// format the platform cannot parse) they say it is unavailable rather than
+/// header costs a request. Given a [store], it is read once per clip for good:
+/// the answer is saved there and shown straight from it afterwards. Until it
+/// arrives the rows say so; if it never does (a stream that cannot be reached,
+/// a format the platform cannot parse) they say it is unavailable rather than
 /// vanish, so the sheet does not jump.
 class VhQualityRows extends StatefulWidget {
   const VhQualityRows({

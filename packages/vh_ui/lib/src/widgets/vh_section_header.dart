@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../theme/vh_theme.dart';
 import '../tokens/tokens.dart';
 
-/// A Wahaj section header: a Kufi title, a secondary line and a hairline
-/// rule beneath. Rules instead of boxes (log §4).
+/// The app's section header: a Kufi title, a secondary line and a hairline
+/// rule beneath. Rules instead of boxes.
 class VhSectionHeader extends StatelessWidget {
   const VhSectionHeader({
     super.key,

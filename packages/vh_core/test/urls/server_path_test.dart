@@ -23,9 +23,9 @@ void main() {
       );
     });
 
-    // Measured on a real server 2026-10-22: an absolute outtmpl in
-    // YTDL_OPTIONS writes the file at the top, and Vidhoist reports it as
-    // "../name" relative to the folder that was asked for.
+    // Measured 2026-10-22: an absolute outtmpl writes the file at the top,
+    // and it is then named "../name" relative to the folder that was asked
+    // for.
     test('a file written above its folder is found where it really is', () {
       expect(
         ServerPath.of(

@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_media/vh_media.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **The queue opens on the song that is playing** (field report
-/// 2026-09-26, reproduced on a real phone: the 27th song of a 30-song
-/// playlist, and the queue sheet opened at the first song).
+/// **The queue opens on the song that is playing** (reproduced on a real
+/// phone: the 27th song of a 30-song playlist, and the queue sheet opened
+/// at the first song).
 void main() {
   final songs = [
     for (var i = 0; i < 30; i++)

@@ -12,8 +12,8 @@ import 'package:vidhoist_desktop/features/clip/clip_actions.dart';
 import 'support/shell_harness.dart';
 
 /// **The guard**: deleting a clip deletes its file on this computer and
-/// everything kept about it. It went to the server before, and with no
-/// server it did nothing while saying "deleted".
+/// everything kept about it. It once did nothing while saying
+/// "deleted".
 void main() {
   late Directory dir;
   setUp(() {

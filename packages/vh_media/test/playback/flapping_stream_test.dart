@@ -4,15 +4,14 @@ import 'package:vh_media/vh_media.dart';
 
 import 'fake_player_port.dart';
 
-/// **A stream that loads and then drops, over and over** (parked after the
-/// 2026-09-19 retry work, fixed 2026-09-20).
+/// **A stream that loads and then drops, over and over.**
 ///
 /// Retrying a dropped stream was the right answer to a hiccup. The budget
 /// for it, though, was returned by any **successful load** — and a tunnel,
-/// a failing disk or a server under load produces the one pattern that
+/// a failing disk or a source under load produces the one pattern that
 /// defeats that: load, play a second, drop. Each failure was answered by a
 /// retry and each retry refilled the budget, so the pair repeated for
-/// ever, holding a wake lock and hammering the server, with nothing on
+/// ever, holding a wake lock and hammering the source, with nothing on
 /// screen to say anything was wrong.
 ///
 /// The budget now comes back for **playing**, not for loading.

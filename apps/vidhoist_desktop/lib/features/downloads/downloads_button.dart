@@ -55,7 +55,7 @@ class DownloadsButton extends ConsumerWidget {
   }
 }
 
-/// The small ember pill with the number under way.
+/// The small accent pill with the number under way.
 class _Count extends StatelessWidget {
   const _Count(this.count);
 

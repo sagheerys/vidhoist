@@ -117,7 +117,7 @@ void main() {
     expect(entered, 1);
     expect(await store.getBool(PhoneSettings.welcomedKey), isTrue);
     // A fresh install: the offer to restore a backup comes in this run, and
-    // only in this one (it used to come on every launch with no server).
+    // only in this one.
     final c = ProviderScope.containerOf(
       tester.element(find.byType(WelcomeScreen)),
     );

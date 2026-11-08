@@ -64,11 +64,10 @@ void main() {
       ]);
     });
 
-    test('what this phone owes the server stays on this phone', () async {
-      // A pending download restored on another phone would have **that**
-      // phone pull the file and delete it from the server while this one
-      // is still pulling it; the trashcan flag is a fact about one
-      // container, not about the user.
+    test('what this phone has pending stays on this phone', () async {
+      // A pending download restored on another phone would start there a
+      // second time, for a promise this one made; the other flag is a
+      // fact about one install, not about the user.
       await store.setString(BackupService.serverPendingKey, '[{"id":"t1"}]');
       await store.setBool(BackupService.serverKeepsFilesKey, true);
       await store.setBool('library_compact_view', true);
@@ -217,7 +216,7 @@ void main() {
     );
   });
 
-  test('**the guard**: an old Vidhoist backup is refused, not read', () {
+  test('**the guard**: an old binary backup format is refused, not read', () {
     for (final header in ['MTBACKUP1', 'MTSBACKUP1', 'MTF1']) {
       expect(
         service.importFromString('$header\nabc\ndef'),

@@ -14,7 +14,7 @@ import '../../shell/context_menu.dart';
 import '../../shell/error_text.dart';
 import 'follow_dialog.dart';
 
-/// Runs [action] and says why if the server refused it.
+/// Runs [action] and says why if it failed.
 Future<void> _guarded(
   BuildContext context,
   Future<void> Function() action,
@@ -32,7 +32,7 @@ Future<void> _guarded(
 }
 
 /// Checks one channel, or all of them. Said at once, since a check lasts
-/// as long as the server takes to walk the channel.
+/// as long as yt-dlp takes to walk the channel.
 Future<void> checkChannels(
   BuildContext context,
   WidgetRef ref, {
@@ -56,8 +56,8 @@ Future<void> setChannelEnabled(
   () => ref.read(channelsControllerProvider).setEnabled(sub, enabled),
 );
 
-/// Unfollowing is confirmed: the server forgets what it has seen, and a
-/// later follow fetches nothing already on the channel.
+/// Unfollowing is confirmed: what was seen on the channel is forgotten,
+/// and a later follow fetches nothing already on it.
 Future<bool> unfollowChannel(
   BuildContext context,
   WidgetRef ref,

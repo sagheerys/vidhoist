@@ -40,7 +40,7 @@ class FetchedTracks {
   final bool translationsRefused;
 }
 
-/// Somewhere to fetch a video's subtitles from, off the Vidhoist server.
+/// Somewhere to fetch a video's subtitles from.
 abstract interface class SubtitleSource {
   /// Lists what [url] offers, lets [choose] pick, and fetches the picks.
   ///

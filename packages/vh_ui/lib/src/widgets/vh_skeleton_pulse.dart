@@ -9,7 +9,7 @@ import '../tokens/tokens.dart';
 /// skeleton was avoiding.
 ///
 /// It stops by itself after [breaths], fully bright: a skeleton still up
-/// by then is a slow server, and a placeholder that never stops moving is
+/// by then means something slow, and a placeholder that never stops moving is
 /// one a test, or a tired eye, never sees settle. With animations turned
 /// off in the system it never moves.
 class VhSkeletonPulse extends StatefulWidget {

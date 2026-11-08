@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **Field report 2026-09-30:** scrolled far down the library, the search
-/// field was disposed with its text, while the query stayed on and kept
+/// **The search field keeps its text:** scrolled far down the library, the
+/// search field was disposed with its text, while the query stayed on and kept
 /// filtering; back at the top the field was empty above filtered results.
 void main() {
   Widget page({required String query, required int rows}) => MaterialApp(

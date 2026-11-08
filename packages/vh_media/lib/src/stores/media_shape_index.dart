@@ -19,7 +19,7 @@ class MediaShape {
 
 /// The clip shape index: canonicalUrl to [MediaShape].
 ///
-/// **Why it is needed:** the server gives neither duration nor ratio, and
+/// **Why it is needed:** the history gives neither duration nor ratio, and
 /// both the shorts path and the "shorts" chip in the library need them
 /// before playback. It is filled opportunistically on the first play of
 /// each clip, so the knowledge accumulates with no extra request. Storage

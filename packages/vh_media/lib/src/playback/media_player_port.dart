@@ -16,7 +16,7 @@ abstract interface class MediaPlayerPort {
   /// its future completes when the command is accepted. `just_audio` does
   /// the opposite, completing on stop, and wrapping it is what preserves
   /// this contract. Breaking it hung the video screen and popped the shell
-  /// later (field report 2026-09-03).
+  /// later.
   Future<void> play();
   Future<void> pause();
   Future<void> stop();

@@ -40,8 +40,8 @@ class VhVideoTopBar extends StatelessWidget {
   final VoidCallback? onLock;
   final String? playlistName;
 
-  /// **Where the clip belongs** (field report 2026-09-04): "which tag it is
-  /// under, or which playlist it was added to". Built in the app and shown
+  /// **Where the clip belongs**: which tag it is under, or which playlist
+  /// it was added to. Built in the app and shown
   /// under the title in landscape, where there is no info sheet at all.
   final String? membershipLine;
 
@@ -226,7 +226,7 @@ class VhVideoBottomBar extends StatelessWidget {
                 const SizedBox(width: VhSpace.xxs + 2),
                 // In the style of its neighbours: beside repeat and shuffle,
                 // which light up when on, a filled button read as switched
-                // on (field report 2026-09-30).
+                // on.
                 VhVideoIconButton(
                   icon: extra.icon,
                   onTap: extra.onTap,

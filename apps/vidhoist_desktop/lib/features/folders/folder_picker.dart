@@ -10,8 +10,8 @@ import '../../shell/shell_metrics.dart';
 import 'folder_widgets.dart';
 import '../../shell/desktop_dialog.dart';
 
-/// The server folder line of a form: what is chosen, and a click to choose
-/// again. Shared by adding and following.
+/// The folder line of a form (a folder inside the download folder): what
+/// is chosen, and a click to choose again. Shared by adding and following.
 class FolderLine extends StatelessWidget {
   const FolderLine({
     super.key,
@@ -189,7 +189,7 @@ class _FolderPicker extends ConsumerWidget {
       title: Row(
         children: [
           Expanded(child: Text(l.chooseFolder)),
-          // What folders are and what the server needs, behind a button
+          // What folders are and where they go, behind a button
           // that waits, grey, for whoever wants it.
           FolderHelp(
             label: l.helpAboutField,

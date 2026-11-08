@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Links that reach the app from outside its window: a `vidhoist://add` link
 /// a browser or another program opened, or a link copied elsewhere that the
 /// user chose to add. Each one **opens the add dialog with it; nothing is
-/// ever sent to the server by itself**, so a web page that opens such a link
+/// ever downloaded by itself**, so a web page that opens such a link
 /// can at most put a link in front of the user.
 ///
 /// A link that comes before the window can show it (the app started by the

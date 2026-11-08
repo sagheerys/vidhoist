@@ -94,10 +94,10 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
               )
             else
               VhDownloadProgressCard(
-                // A new task or a new phase starts its own count: the pull
-                // begins at 0 and must not run down from the server's 100%.
+                // A new task or a new phase starts its own count: a phase's
+                // bar begins at 0 and must not run down from the last 100%.
                 key: ValueKey('${task.id}-${task.phase.name}'),
-                // The server's title once it has one, not the bare link.
+                // yt-dlp's title once it has one, not the bare link.
                 title: task.title ?? task.effectiveUrl,
                 thumbnail: taskThumbnail(task),
                 detail: taskSpeed(task),

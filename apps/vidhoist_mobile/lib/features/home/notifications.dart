@@ -59,10 +59,10 @@ class DownloadNotifications {
   }
 
   /// [percent] of null means an **indeterminate** bar, for a phase with no
-  /// percentage: waiting in the queue, adding to the server, cleaning it
-  /// up.
-  /// The secondary text [body] says exactly where we are: "downloading on
-  /// the server" is not "pulling to your device".
+  /// percentage: waiting in the queue, yt-dlp reading the link, ffmpeg
+  /// merging the streams.
+  /// The secondary text [body] says exactly where we are: "preparing" is
+  /// not "downloading".
   Future<void> showProgress(
     int id, {
     required String title,

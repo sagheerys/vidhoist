@@ -4,7 +4,7 @@ import 'url_keyed_index.dart';
 /// canonicalUrl to the moment of the last failure.
 ///
 /// Without it, an impossible item is re-probed **at every launch**: one
-/// library record for a file deleted from the server's disk consumed over
+/// library record for a file deleted from disk consumed over
 /// 80 seconds every session, because the Android platform retries ten
 /// times on an 8s timeout, and it froze the queue behind it. So the
 /// library stayed without thumbnails except for YouTube, whose covers are
@@ -13,8 +13,8 @@ final class ProbeFailureIndex extends UrlKeyedIndex<DateTime> {
   ProbeFailureIndex({required super.store, required super.mutex})
     : super(prefsKey: 'probe_failures');
 
-  /// How long before we forget: the file may come back, re-uploaded or the
-  /// server restored.
+  /// How long before we forget: the file may come back, re-uploaded or
+  /// restored.
   static const retryAfter = Duration(days: 1);
 
   @override

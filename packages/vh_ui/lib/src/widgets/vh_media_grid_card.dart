@@ -23,8 +23,8 @@ import 'vh_platform_chip.dart';
 /// "more" all live over the thumbnail, and two copies of that would
 /// diverge at the first edit. The only difference is the text sizes.
 ///
-/// Presentation only, exactly like [VhMediaCard]: it knows nothing of a
-/// server or an index.
+/// Presentation only, exactly like [VhMediaCard]: it knows nothing of the
+/// downloads or an index.
 class VhMediaGridCard extends StatelessWidget {
   const VhMediaGridCard({
     super.key,
@@ -153,7 +153,7 @@ class VhMediaGridCard extends StatelessWidget {
                           const VhFavoriteMark(),
                         // No platform letters under the title: on a computer
                         // the pills above the grid say it, and a phone card
-                        // carries one mark at most (log §4, 2026-11-01).
+                        // carries one mark at most.
                         if (subtitle != null)
                           Flexible(
                             child: Text(

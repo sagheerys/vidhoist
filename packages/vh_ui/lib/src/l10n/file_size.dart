@@ -1,7 +1,7 @@
 import 'bidi.dart';
 
-/// **A file size as people read it** (field report 2026-09-26: a 3 GB
-/// video read "3000 MB").
+/// **A file size as people read it**, so a 3 GB video does not read
+/// "3000 MB".
 ///
 /// Gigabytes from a thousand megabytes up, not from 1024: "1023.9 MB"
 /// next to "1.0 GB" is a distinction nobody asked for. One decimal either

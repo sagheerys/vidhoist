@@ -8,8 +8,8 @@ import '../../shell/now_playing_bars.dart';
 import '../library/artwork.dart';
 
 /// One clip of a saved list: the grip it is dragged by, its cover, title
-/// and length, and a cross to take it out of the list (never off the
-/// server). The clip playing is marked; one no longer there says so.
+/// and length, and a cross to take it out of the list (its file
+/// stays). The clip playing is marked; one no longer there says so.
 class PlaylistLine extends ConsumerWidget {
   const PlaylistLine({
     super.key,

@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import '../tokens/tokens.dart';
 import 'vh_polish.dart';
 
-/// **Wahaj motion.** Every duration and distance comes from [VhMotion] in
+/// **The app's motion.** Every duration and distance comes from [VhMotion] in
 /// `tokens.dart`; no literal values here.
 ///
-/// **The second revision** (field report 2026-09-02: "the motion is
-/// unbalanced, calm it down and make it smoother"). The first attempt
+/// **The second revision**, after the first read as unbalanced and asked
+/// to be calmer and smoother. The first attempt
 /// animated **every card as it was created**, and `SliverList.builder`
 /// creates cards while you scroll, so every row entering the screen
 /// started its own fade and slide. The result was a list that bounced

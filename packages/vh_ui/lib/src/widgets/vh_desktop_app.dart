@@ -5,8 +5,8 @@ import 'package:flutter/widgets.dart';
 /// **Only the Windows app places this**, above its `MaterialApp`. It is a
 /// policy, not a platform check: layouts ask [isDesktop] (through
 /// `context.windowClass`) rather than `Platform.isWindows`, so a widget test
-/// can stand in either app, and the phone apps, which never place it, can
-/// never take a desktop branch whatever their window size.
+/// can stand in either app, and the phone app, which never places it, can
+/// never take a desktop branch whatever its window size.
 class VhDesktopApp extends InheritedWidget {
   const VhDesktopApp({super.key, this.noticeLift = 0, required super.child});
 

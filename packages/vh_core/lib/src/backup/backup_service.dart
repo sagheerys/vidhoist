@@ -42,20 +42,21 @@ class BackupService {
   final String variant;
 
   /// **Keys that describe this device, not the user's data.** A pending
-  /// download is a promise *this* process made. The two server-era keys
-  /// (a pending pull from Vidhoist, and whether its trashcan kept files)
-  /// stay out too, so an old backup cannot plant them. Which version's
+  /// download is a promise *this* process made. The two keys earlier
+  /// versions kept ([serverPendingKey], [serverKeepsFilesKey]) stay out
+  /// too, so an old backup cannot plant them. Which version's
   /// "what's new" this install has seen is about the installed app: a
   /// restore from
   /// an older backup would show a sheet already read, or show one on a
   /// fresh install. The covers kept as files are paths on this device:
   /// restored elsewhere they point at nothing, and the clips they stand
   /// for show no cover at all instead of fetching theirs again.
-  /// The Vidhoist pipeline's unfinished pulls, from before the engine ran
-  /// on the device.
+  /// Unfinished downloads as earlier versions recorded them; nothing
+  /// reads the key now.
   static const serverPendingKey = 'pending_downloads';
 
-  /// Whether a Vidhoist server kept its files after a delete.
+  /// A flag earlier versions kept about deleted files; nothing reads it
+  /// now.
   static const serverKeepsFilesKey = 'server_keeps_files';
 
   static const _deviceOnlyKeys = {
@@ -70,9 +71,8 @@ class BackupService {
   };
 
   /// **Strip credentials embedded in a URL before backing it up.**
-  /// Excluding the password from the backup is correct, but someone
-  /// who pastes `https://user:pass@host` as the server URL puts it in an
-  /// ordinary string key, so it entered the backup despite the rule.
+  /// Someone who pastes `https://user:pass@host` into a setting puts the
+  /// password in an ordinary string key, and a backup must not carry it.
   /// **Any key whose value is a web address**, not a list of known ones:
   /// the Windows app keeps its addresses under keys of its own, and a list
   /// of names missed them.

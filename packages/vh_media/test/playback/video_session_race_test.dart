@@ -5,8 +5,7 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'fake_video_platform.dart';
 
-/// **A regression: clips playing over each other** (field report
-/// 2026-09-01).
+/// **A regression: clips playing over each other.**
 ///
 /// `_load` awaits `initialize()`; a second skip during that wait started a
 /// parallel load, and the last to finish won `_controller` **while the

@@ -75,7 +75,7 @@ class VhSettingsGroup extends StatelessWidget {
 /// opening anything. On the tablet's list the open section is filled with
 /// the ink's veil and there is no chevron, since nothing is pushed. The icon
 /// stands bare, in the ink: a tinted square behind each of twelve icons
-/// was the loudest mark of a generated screen (log §4, 2026-10-31).
+/// was the loudest mark of a generated screen.
 class VhSettingsRow extends StatelessWidget {
   const VhSettingsRow({
     super.key,
@@ -99,7 +99,7 @@ class VhSettingsRow extends StatelessWidget {
     final p = VhThemeX.of(context).palette;
     // **Its own surface**: a tile's colour is painted on the nearest
     // Material, and on the page's it stayed where the row used to be when
-    // the server card above grew a line after loading.
+    // a card above it grew a line after loading.
     return Material(type: MaterialType.transparency, child: _tile(context, p));
   }
 

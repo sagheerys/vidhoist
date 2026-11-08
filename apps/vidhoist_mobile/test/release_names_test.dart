@@ -6,10 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_mobile/features/update/update_state.dart';
 
-/// **The update finds Vidhoist's own APK.** The fork kept the parent's
-/// asset marker (`lite`) after the rename, so a release carrying
-/// `Vidhoist-<version>.apk` would never have been offered. Found while
-/// bringing in v2.7.0 (2026-11-05), before any release.
+/// **The update finds Vidhoist's own APK.** The asset is matched by name,
+/// and a stale marker (`lite`) once meant a release carrying
+/// `Vidhoist-<version>.apk` would never have been offered.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test('**the guard**: from a release carrying both apps\' files, the '

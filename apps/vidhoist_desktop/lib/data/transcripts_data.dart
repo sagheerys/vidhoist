@@ -7,7 +7,7 @@ import 'package:vh_transcripts/vh_transcripts.dart';
 import 'appearance_data.dart';
 import 'sync_data.dart';
 
-/// The transcripts on this computer, in `%APPDATA%\Vidhoist Ember\transcripts\`
+/// The transcripts on this computer, in `%APPDATA%\Vidhoist\transcripts\`
 /// and in the phone's format, so an exported bundle reads the same here.
 /// Overridden in main; null (tests) means none.
 final transcriptStoreProvider = Provider<TranscriptStore?>((ref) => null);

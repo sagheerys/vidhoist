@@ -10,7 +10,7 @@ import 'package:vh_transcripts/vh_transcripts.dart';
 import '../test/support/shell_harness.dart';
 
 /// **How smoothly the listening room draws**, measured by the engine on
-/// this computer's own screen: the room open on a sound playing, its embers
+/// this computer's own screen: the room open on a sound playing, its glows
 /// moving and its lines gliding every few seconds. A widget test cannot
 /// tell, as it draws nothing. Run in profile mode, as a release draws:
 ///

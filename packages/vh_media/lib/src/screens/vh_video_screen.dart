@@ -16,8 +16,8 @@ import '../video/vh_captions.dart';
 import '../widgets/vh_chapters.dart';
 
 /// One action in the portrait player (offline, share, add to a list…).
-/// The app supplies them, because vh_media knows neither the server nor
-/// the indexes.
+/// The app supplies them, because vh_media knows neither the downloads
+/// nor the indexes.
 class VhPlayerAction {
   const VhPlayerAction({
     required this.icon,
@@ -41,7 +41,7 @@ class VhPlayerAction {
   final bool inMenu;
 }
 
-/// The portrait video player (Wahaj reference B): the video leads with a
+/// The portrait video player: the video leads with a
 /// light sheet beneath it, running title, then actions, then mode, then the
 /// "up next" list. Going back offers "continue as background audio?" from
 /// the same second.
@@ -92,17 +92,16 @@ class VhVideoScreen extends StatelessWidget {
   final Future<void> Function(PlaylistItem item, Duration position)?
   onContinueAsAudio;
 
-  /// **When the question is asked** (field report 2026-09-02: "after
-  /// continuing in the background and pressing back the message appears; it
-  /// should not"). The condition used to be `onContinueAsAudio == null`
-  /// alone, so it asked on every exit, even after the user had already
-  /// moved the clip to audio. Only the app knows the audio player's state,
-  /// so the app decides.
+  /// **When the question is asked**: not again after continuing in the
+  /// background and pressing back. The condition used to be
+  /// `onContinueAsAudio == null` alone, so it asked on every exit, even after
+  /// the user had already moved the clip to audio. Only the app knows the audio player's state, so
+  /// the app decides.
   final bool Function()? shouldOfferContinueAsAudio;
   final String? playlistName;
 
-  /// **Where the clip belongs** (field report 2026-09-04): "which tag it is
-  /// under, or which playlist it was added to". Shown in landscape beneath
+  /// **Where the clip belongs**: which tag it is under, or which playlist
+  /// it was added to. Shown in landscape beneath
   /// the title; portrait shows it through [subtitleBuilder] in the info
   /// sheet.
   final String? membershipLine;
@@ -192,8 +191,8 @@ class VhVideoScreen extends StatelessWidget {
       backgroundColor: VhThemeX.of(context).palette.bg,
       body: ListenableBuilder(
         listenable: Listenable.merge([session, _pip.active]),
-        // **In landscape the video alone fills the screen** (field report
-        // 2026-09-05): leaving full screen by hand left a squeezed video
+        // **In landscape the video alone fills the screen**: leaving full
+        // screen by hand left a squeezed video
         // over a light sheet. Landscape is a form of this screen, and so is
         // a corner of the screen, which an upright clip shapes upright.
         builder: (context, _) => !_pip.active.value && _isWide(context)
@@ -288,7 +287,7 @@ class VhVideoScreen extends StatelessWidget {
   Future<void> _askContinueAsAudio(BuildContext context) async {
     final item = session.current;
     final navigator = Navigator.of(context);
-    // **We only pop our own page** (field report 2026-09-03): the handover
+    // **We only pop our own page**: the handover
     // to audio can take a while, and the user may have left another way in
     // the meantime, so a blind `pop()` afterwards popped **the shell
     // itself** and nothing was left: a black screen.

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/downloads_library/artwork_view.dart';
 
-/// **The audio player's square cover (2026-10-10)**, the twin of Super's:
+/// **The audio player's square cover (2026-10-10)**:
 /// YouTube's 4:3 thumbnail carries black bands, the wide one has none.
 void main() {
   const thumb = 'https://i.ytimg.com/vi/MfDROnE8FG8/hqdefault.jpg';

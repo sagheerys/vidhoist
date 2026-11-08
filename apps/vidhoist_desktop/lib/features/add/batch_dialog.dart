@@ -24,8 +24,7 @@ final playlistReaderProvider =
           },
     );
 
-/// A playlist's clips, read from its own site (never through the server,
-/// so its password goes nowhere else).
+/// A playlist's clips, read from its own site with a plain request.
 final playlistPreviewProvider = FutureProvider.autoDispose
     .family<PlaylistPreview?, String>(
       (ref, url) => ref.read(playlistReaderProvider)(url),

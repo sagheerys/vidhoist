@@ -8,7 +8,7 @@ import '../video/video_side_panel.dart';
 import 'vh_up_next_list.dart';
 
 /// What is playing, read along beside the controls: the app's companion
-/// for the current item (a transcript, in Super) and the queue, as two
+/// for the current item (a transcript, in the apps) and the queue, as two
 /// tabs.
 ///
 /// It lives wherever a tablet has room for it next to the player: the side

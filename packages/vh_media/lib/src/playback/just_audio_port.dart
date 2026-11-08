@@ -25,9 +25,8 @@ class JustAudioPort implements MediaPlayerPort {
     );
   }
 
-  /// **Buffering tuned for a home server on a weak link** (field report
-  /// 2026-09-19: "with a slow connection it cuts out; with a good one it is
-  /// seamless").
+  /// **Buffering tuned for a weak link**: with the defaults, a stream cut
+  /// out on a slow connection and was seamless on a good one.
   ///
   /// Two things beat the defaults here, and neither is "buffer more for its
   /// own sake":
@@ -106,8 +105,7 @@ class JustAudioPort implements MediaPlayerPort {
   /// **just_audio's `play()` future does not complete until playback
   /// stops**
   /// — the package's own words: "completes when playback ends or is
-  /// stopped". Awaiting it means awaiting the whole clip (field report
-  /// 2026-09-03):
+  /// stopped". Awaiting it means awaiting the whole clip:
   ///
   /// "continue as audio" hung the video screen so it would not close
   /// however

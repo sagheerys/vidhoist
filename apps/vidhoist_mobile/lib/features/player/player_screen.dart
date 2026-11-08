@@ -16,7 +16,7 @@ import 'transcript_sheet.dart';
 import 'playback_providers.dart';
 import '../shared/open_web_link.dart';
 
-/// Lite's video player (rule 4): every source is local, so the actions are
+/// The video player (rule 4): every source is local, so the actions are
 /// continue as audio, share and open the original link. There is no
 /// "available offline".
 class PlayerScreen extends ConsumerStatefulWidget {

@@ -18,11 +18,11 @@ class UpdateRelease {
   final AppVersion version;
   final String tag;
 
-  /// The download URL of this app's file: the Lite or Super APK on the
-  /// phones, the Windows installer for Ember.
+  /// The download URL of this app's file: the APK on the phone, the
+  /// installer on Windows.
   final String apkUrl;
 
-  /// The file size in bytes, or `0` when the server did not declare one.
+  /// The file size in bytes, or `0` when GitHub did not declare one.
   final int apkSize;
 
   /// The release notes, raw Markdown as written.
@@ -42,8 +42,8 @@ class UpdateRelease {
   /// the Windows installer).
   ///
   /// **Every asset is optional.** The apps share one release stream, so a
-  /// release may carry any subset of the Lite APK, the Super APK and the
-  /// Windows installer; a release without this app's file is "no update",
+  /// release may carry any subset of the phone APKs and the Windows
+  /// installer; a release without this app's file is "no update",
   /// never an error.
   ///
   /// Returns `null` rather than throwing on any anomaly: a draft, a
@@ -98,8 +98,8 @@ class UpdateRelease {
       if (link == null || !trusted(link)) continue;
       final lower = name.toLowerCase();
       // **Matching on both the marker and the extension**: one release
-      // carries every app's file, so without the marker a Lite user
-      // installs Super; and without the extension a phone could be handed
+      // carries every app's file, so without the marker a phone could
+      // install another app's APK; and without the extension it could be handed
       // the Windows installer that shares the release, or Windows an APK.
       if (!lower.endsWith(ending) || !lower.contains(marker)) continue;
       final size = asset['size'];

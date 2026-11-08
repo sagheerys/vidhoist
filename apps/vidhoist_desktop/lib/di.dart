@@ -4,7 +4,7 @@ import 'package:vh_media/vh_media.dart';
 
 import 'shell/shell_layout.dart';
 
-/// Riverpod injection, as in the phone apps: what needs the disk or the
+/// Riverpod injection, as in the phone app: what needs the disk or the
 /// engine is built once in main and handed in through overrides.
 
 /// Overridden in main once SharedPreferences is ready.

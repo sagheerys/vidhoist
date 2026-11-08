@@ -58,15 +58,15 @@ class ChannelMatch {
   });
 
   /// By subscription id, **only for channels with clips here**: a channel
-  /// nothing matches has no entry, so its row shows the server's facts
-  /// alone rather than a "0 in your library" that may be false.
+  /// nothing matches has no entry, so its row shows the subscription's
+  /// facts alone rather than a "0 in your library" that may be false.
   final Map<String, ChannelStats> stats;
 
   /// Most clips first.
   final List<LibraryChannel> unfollowed;
 
-  /// Whether any clip names its channel at all. Some servers' histories
-  /// carry no uploader, and nothing can be matched there.
+  /// Whether any clip names its channel at all. A history may carry no
+  /// uploader, and nothing can be matched there.
   final bool namesChannels;
 }
 
@@ -77,8 +77,8 @@ typedef FollowedChannel = ({String name, String? folder});
 /// [started] says whether a clip was ever played on this device.
 ///
 /// A channel's clips are those whose uploader is its name, **and those in
-/// its own folder** when it saves into one: the server's history may name
-/// no uploader at all, but it always says where each file went.
+/// its own folder** when it saves into one: the history may name no
+/// uploader at all, but it always says where each file went.
 Future<ChannelMatch> matchChannels(
   List<LibraryItem> items,
   Map<String, FollowedChannel> subscriptions, {

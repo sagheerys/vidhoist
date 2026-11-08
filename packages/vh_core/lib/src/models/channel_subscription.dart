@@ -1,13 +1,10 @@
 import 'channel_clip.dart';
 
-/// **A channel the server watches on the user's behalf** (§2.7).
+/// **A followed channel, as the screens show it** (§2.7).
 ///
-/// The app owns none of the mechanism: Vidhoist runs the check loop, keeps
-/// the list of ids it has already seen, and queues whatever is new. This
-/// class is the shape of one row in that list, and every field it carries
-/// is one the interface actually shows — the server returns a dozen more
-/// (codec, subtitles, sponsorblock, chapter templates) that belong to the
-/// container's configuration rather than to a phone.
+/// `LocalChannelSource` runs the checks, keeps the ids it has already
+/// seen in a `ChannelRecord`, and queues whatever is new. This class is
+/// the part of that record the interface shows, and nothing more.
 class ChannelSubscription {
   const ChannelSubscription({
     required this.id,
@@ -29,8 +26,8 @@ class ChannelSubscription {
 
   final String id;
 
-  /// The channel's own title, as the server resolved it when subscribing.
-  /// Renameable through `/subscriptions/update`.
+  /// The channel's own title, as the site gave it when it was followed.
+  /// The user can rename it.
   final String name;
 
   final String url;
@@ -44,27 +41,27 @@ class ChannelSubscription {
   final int checkIntervalMinutes;
 
   /// The wire value (`best`, `1080`, `audio` …), kept as text because it is
-  /// the server's word and the app only displays it.
+  /// stored that way and the app only displays it.
   final String? quality;
 
   /// Only titles matching this are downloaded. Null means everything.
   final String? titleRegex;
 
-  /// **How many ids the server knows about, not how many it downloaded.**
+  /// **How many ids have been seen, not how many were downloaded.**
   /// It starts at the size of the channel, because subscribing marks the
   /// existing catalogue as seen (§2.7). Labelling this "downloaded" would
   /// tell someone who just subscribed that 214 files landed on their disk.
   final int seenCount;
 
-  /// **Seconds, not milliseconds** — unlike `/history`'s `timestamp` (§2.7).
+  /// Read as **seconds, not milliseconds** by [fromJson] (§2.7).
   final DateTime? lastChecked;
 
-  /// The last check's failure, kept by the server until a check succeeds.
+  /// The last check's failure, kept until a check succeeds.
   final String? error;
 
   /// The folder below the download directory its clips are saved in, or
-  /// null for the top. **It applies to what arrives from then on**: Vidhoist
-  /// never moves a file that is already downloaded.
+  /// null for the top. **It applies to what arrives from then on**: a file
+  /// that is already downloaded is never moved.
   final String? folder;
 
   /// The channel's square picture and its page's wide one, from the last
@@ -115,7 +112,7 @@ class ChannelSubscription {
     final name = decoded['name'];
     return ChannelSubscription(
       id: id,
-      // A server that lost the title still has a URL to show.
+      // A row that lost its title still has a URL to show.
       name: name is String && name.trim().isNotEmpty ? name.trim() : url,
       url: url,
       // **Absent means enabled**: the field is only ever false when the
@@ -132,9 +129,9 @@ class ChannelSubscription {
     );
   }
 
-  /// The array `GET /subscriptions` answers with. Anything that is not an
-  /// array is **not an empty list but a refusal**: a proxy's HTML page and
-  /// "this server has no subscriptions" must not look the same.
+  /// A list of rows. Anything that is not an array is **not an empty list
+  /// but a refusal**: unreadable data and "no channels followed" must not
+  /// look the same.
   static List<ChannelSubscription>? listFromJson(dynamic decoded) {
     if (decoded is! List) return null;
     return [for (final row in decoded) ?fromJson(row)];

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:vh_core/vh_core.dart';
 
 /// Writes every error no code caught to the diagnostic log, as the phone
-/// apps do: a crash in a released build otherwise reaches only a console
+/// app does: a crash in a released build otherwise reaches only a console
 /// nobody has open. A few lines of the stack say where.
 void logEveryError(VhLogger logger) {
   final present = FlutterError.onError;

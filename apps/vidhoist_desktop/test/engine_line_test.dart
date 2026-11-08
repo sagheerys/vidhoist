@@ -9,9 +9,8 @@ import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/platform/engine_locator.dart';
 import 'package:vidhoist_desktop/shell/engine_line.dart';
 
-/// The sidebar's foot, where the server's address was: the engine's
-/// version, quiet while all is well, and in one click its update and the
-/// IPv4 choice.
+/// The sidebar's foot: the engine's version, quiet while all is well,
+/// and in one click its update and the IPv4 choice.
 void main() {
   late FakeBackend backend;
   late MemoryKeyValueStore store;

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
-/// **Field report 2026-09-02: "the album downloads strangely".**
+/// **2026-09-02: an album that downloaded strangely.**
 ///
 /// SoundCloud embeds the full object for only the first five or so tracks,
 /// and the rest arrive as `{id, kind}` with no `permalink_url`. The parser

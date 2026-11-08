@@ -20,8 +20,8 @@ String? welcomeRedirect({required bool welcomed, required String location}) {
 /// installed, the one moment to offer restoring an earlier backup.
 final welcomedThisRunProvider = StateProvider<bool>((ref) => false);
 
-/// The first run, in place of the server setup: the engine is unpacked
-/// and yt-dlp updated in the background, each step shown, then the person
+/// The first run: the engine is unpacked and yt-dlp updated in the
+/// background, each step shown, then the person
 /// goes in (`docs/ENGINE.md` findings 11 and 12). A failed update does not
 /// keep them out; the engine tries again before the first download.
 class WelcomeScreen extends ConsumerStatefulWidget {

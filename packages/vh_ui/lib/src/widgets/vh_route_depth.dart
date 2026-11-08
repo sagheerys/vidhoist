@@ -3,8 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../tokens/tokens.dart';
 import 'vh_polish.dart';
 
-/// **How many routes are stacked above the shell** (field report
-/// 2026-09-02).
+/// **How many routes are stacked above the shell.**
 ///
 /// The floating add button lives in the shell's `Scaffold`, so it stayed
 /// drawn over **every** bottom sheet and dialog: it covered the "about
@@ -51,8 +50,7 @@ class VhRouteDepth extends NavigatorObserver {
 /// Shows [child] only while nothing is stacked above the shell, as a **pure
 /// fade**.
 ///
-/// Three attempts led here (field reports 2026-09-02, then 09-04, then
-/// 09-05):
+/// Three attempts led here:
 ///
 /// 1. Shrinking to **zero**: the disappearance reads as a fade, but
 ///    coming back from zero is "growing out of a point", a slide-deck move.
@@ -63,7 +61,7 @@ class VhRouteDepth extends NavigatorObserver {
 ///    and no difference between appearing and disappearing except the
 ///    direction of the opacity.
 ///
-/// And the third was still not enough (field report 2026-09-05), **because
+/// And the third was still not enough, **because
 /// the motion that annoyed was never ours**: `Scaffold` animates the
 /// floating action button slot with its own default
 /// `_ScalingFabMotionAnimator`, which says verbatim in the Flutter source:

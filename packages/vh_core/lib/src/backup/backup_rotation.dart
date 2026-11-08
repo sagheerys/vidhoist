@@ -38,7 +38,7 @@ class BackupFile {
 ///    changes, and yesterday's copy is evicted by today's duplicates.
 ///
 /// 4. **A minimum spacing between slots** ([minSpacing]), added after
-///    a device review (2026-09-05): all seven copies in Super sat between
+///    a device review (2026-09-05): all seven copies on a phone sat between
 ///    00:39 and 00:45, **six minutes covering the entire backup history**.
 ///    The limit of seven was working perfectly, but every playlist or tag
 ///    change requests a backup, and a batch download from YouTube is a
@@ -73,7 +73,7 @@ class BackupRotation {
   /// The backup folder: `<app media>/backups`.
   final String directory;
 
-  /// The name prefix: `vidhoist_mobile` or `vidhoist_super`.
+  /// The name prefix, one per app: `vidhoist_mobile` or `vidhoist`.
   final String prefix;
 
   final int keep;

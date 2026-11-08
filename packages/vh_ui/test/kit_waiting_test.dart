@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **Guard: the phones wait, refresh, tick and title the Wahaj way** (mobile
+/// **Guard: the phones wait, refresh, tick and title the app's way** (mobile
 /// plan, stage 16/G): the ring rather than Material's spinner, pull to
 /// refresh with the ring and no floating disc, a hairline checkbox, a dark
 /// tooltip card and a dialog title in the heading face.

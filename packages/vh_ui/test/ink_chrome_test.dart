@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-// The phones' chrome in the ink (log §4, 2026-10-31): the accent is kept for
+// The phones' chrome in the ink: the accent is kept for
 // the one action and for the data, and nothing sits in a tinted square.
 
 const _variant = VhVariant.desktop;
@@ -130,7 +130,7 @@ void main() {
 
   for (final desktop in [false, true]) {
     testWidgets('**the guard**: a selected card is the ink\'s veil on the '
-        'phone and keeps the accent\'s tint in Ember (desktop: $desktop)', (
+        'phone and keeps the accent\'s tint on Windows (desktop: $desktop)', (
       tester,
     ) async {
       await tester.pumpWidget(

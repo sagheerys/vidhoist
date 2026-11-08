@@ -64,7 +64,7 @@ void main() {
     await second.dispose();
   });
 
-  // Field report 2026-10-16: the plugin's platform view reads the video
+  // The plugin's platform view reads the video
   // track as the player becomes ready and crashes the whole app when there
   // is none. A song in the video player (a mixed playlist) on a device that
   // had switched to the platform view took the app down.
@@ -84,7 +84,7 @@ void main() {
     },
   );
 
-  // Field report 2026-10-16: leaving full screen on a YouTube clip dimmed
+  // Leaving full screen on a YouTube clip dimmed
   // over a player with no picture, then the picture popped in. The fade
   // showed the page beneath while the platform view was still away.
   test(
@@ -109,7 +109,7 @@ void main() {
     },
   );
 
-  // Field report 2026-10-16, with a screen recording: leaving the player
+  // Seen in a screen recording: leaving the player
   // for the library, the page faded and the AV1 picture did not. Android's
   // surface takes no part in a fade, so it stayed whole over a page that
   // was disappearing beneath it.

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../theme/vh_theme.dart';
 import '../tokens/tokens.dart';
 
-/// A Wahaj empty state: an honest heading in Kufi, the next step in one
+/// The app's empty state: an honest heading in Kufi, the next step in one
 /// sentence, and at most one action in the ink.
 ///
-/// **No icon on a disc** (log §4, 2026-10-31): an emblem over an empty page
+/// **No icon on a disc**: an emblem over an empty page
 /// was one of the marks of a generated screen, and the accent on its action
 /// competed with the screen's own add button.
 class VhEmptyState extends StatelessWidget {

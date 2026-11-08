@@ -9,7 +9,7 @@ import '../icons/vh_icon.dart';
 import '../icons/vh_icons.dart';
 
 /// A quality option shown in the sheet. Values and labels come from the
-/// app, since vh_ui does not know the server contract: numeric qualities
+/// app, since vh_ui does not know the download engine: numeric qualities
 /// are only passed through when the link is a YouTube one.
 class VhQualityOption {
   const VhQualityOption({required this.value, required this.label});
@@ -50,7 +50,7 @@ class VhUrlInputSheet extends StatelessWidget {
   final String? platformLabel;
   final ValueChanged<String>? onUrlChanged;
 
-  /// One more choice under the qualities, such as Super's server folder;
+  /// One more choice under the qualities, such as a download folder;
   /// null for no extra row.
   final Widget? extra;
 

@@ -9,7 +9,7 @@ import '../downloads_library/library_providers.dart';
 import '../playlists/playlists_providers.dart';
 import 'auto_backup.dart';
 
-/// Rule 1, step 4 (Lite): on the first launch after a reinstall, if an
+/// Rule 1, step 4: on the first launch after a reinstall, if an
 /// automatic backup is found on disk, it offers "restore your previous
 /// data?".
 ///
@@ -20,8 +20,7 @@ Future<void> maybeOfferAutoRestore(BuildContext context, WidgetRef ref) async {
   if (await store.getBool('auto_restore_offered') ?? false) return;
   // A fresh install only, the run that showed the welcome screen: on any
   // later launch the backup on disk is one the app itself just wrote, and
-  // offering it is noise (with no server to configure, the old test of a
-  // fresh install, "no server yet", held on every launch).
+  // offering it is noise.
   if (!ref.read(welcomedThisRunProvider)) return;
 
   final backup = ref.read(autoBackupProvider);

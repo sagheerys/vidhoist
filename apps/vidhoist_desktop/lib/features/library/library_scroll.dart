@@ -7,8 +7,8 @@ import 'package:vh_media/library.dart';
 /// Every place in the window is opened with `go`, which replaces the page:
 /// a clip opened from far down the list, then Back or Library, rebuilt the
 /// library at its top, and the user had to scroll down again to the next
-/// clip. The phones keep their place because the player is pushed over the
-/// library; here the offset is kept instead and given back.
+/// clip. The phone app keeps its place because the player is pushed over
+/// the library; here the offset is kept instead and given back.
 final libraryOffsetsProvider = Provider<Map<String, double>>((ref) => {});
 
 /// One view of the library: its place, filters, sort and layout. Another

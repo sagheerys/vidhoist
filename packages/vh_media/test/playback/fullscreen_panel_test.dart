@@ -9,7 +9,8 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'fake_video_platform.dart';
 
-/// Super adds a transcript beside the full-screen video; Lite adds nothing.
+/// An app may add a panel, a transcript, beside the full-screen video, or
+/// add nothing.
 void main() {
   setUp(() {
     VideoPlayerPlatform.instance = FakeVideoPlatform();

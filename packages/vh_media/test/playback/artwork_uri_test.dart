@@ -1,15 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_media/vh_media.dart';
 
-/// **Field report 2026-09-19:** "some audio clips have a cover, and it
-/// shows inside the app but not in the player notification, nor on the
-/// lock screen".
+/// **Some audio clips had a cover** that showed inside the app but not in
+/// the player notification, nor on the lock screen.
 ///
-/// The cause was here: the mapper refused any artwork without a URI
-/// scheme. A video's cover comes from the server as `https://…` and
-/// passed; an audio clip's cover is the one the enricher extracts **from
-/// the file itself** and writes to disk, so it arrives as a bare path and
-/// was dropped — leaving the notification on the app icon. Hence "some".
+/// The cause was here: the mapper refused any artwork without a URI scheme. An
+/// online cover comes as `https://…` and passed; an audio clip's cover is the
+/// one the enricher extracts **from the file itself** and writes to disk, so it
+/// arrives as a bare path and was dropped — leaving the notification on the app
+/// icon. Hence "some".
 PlaylistItem itemWithArt(String? art) => PlaylistItem(
   canonicalUrl: 'https://x/a',
   title: 'a',

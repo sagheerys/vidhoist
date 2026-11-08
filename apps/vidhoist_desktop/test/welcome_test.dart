@@ -15,9 +15,9 @@ import 'package:vidhoist_desktop/platform/engine_locator.dart';
 import 'desktop_matrix.dart';
 import 'support/shell_harness.dart';
 
-/// The first start opens the welcome, in place of the server setup and
-/// Discover: where downloads go, the language, and the engine, with
-/// ffmpeg and Deno offered at once. Once, and never again.
+/// The first start opens the welcome rather than Discover: where
+/// downloads go, the language, and the engine, with ffmpeg and Deno
+/// offered at once. Once, and never again.
 void main() {
   final l = lookupVhLocalizations(const Locale('en'));
   late List<EnginePart> asked;

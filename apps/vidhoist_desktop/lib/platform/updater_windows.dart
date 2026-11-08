@@ -1,7 +1,7 @@
 import 'dart:io';
 
 /// **Updating in place**: starts the downloaded installer without its
-/// wizard, then closes the app. The installer (windows/installer/ember.iss)
+/// wizard, then closes the app. The installer (windows/installer/vidhoist.iss)
 /// waits for the app to go, replaces it, keeps the data, and opens it
 /// again.
 ///

@@ -2,10 +2,10 @@ import 'url_keyed_index.dart';
 
 /// The title index: item key to the displayed title.
 ///
-/// The prefs key `video_title_metadata` is **kept from the old Lite
-/// deliberately** (§5.1: keeping legacy key names where possible makes
+/// The prefs key `video_title_metadata` is **kept deliberately**
+/// (§5.1: keeping legacy key names where possible makes
 /// importing backups easier). In a real backup it holds 48 titles keyed by
-/// **file path** rather than URL, so in Lite it is read by item key, the
+/// **file path** rather than URL, so it is read by item key, the
 /// canonicalUrl when known and the absolute path otherwise, rather than by
 /// URL alone.
 final class TitleIndex extends UrlKeyedIndex<String> {
@@ -14,7 +14,7 @@ final class TitleIndex extends UrlKeyedIndex<String> {
 
   @override
   String? decodeValue(dynamic raw) {
-    // The old Lite stores the title as a string; older versions stored a
+    // A title is stored as a string, or by older versions as a
     // `{title: …}` map.
     final value = raw is Map ? raw['title'] : raw;
     final s = value?.toString().trim();

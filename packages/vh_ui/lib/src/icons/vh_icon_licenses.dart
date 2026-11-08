@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 /// on the app's licence page: pause and download from Material Symbols
 /// (Apache 2.0), and the queue from Tabler Icons (MIT).
 ///
-/// Called once by an app that draws [VhIcons]; the phone apps, which do
-/// not, never register them.
+/// Called once by the Windows app; the phone app does not register
+/// them.
 void registerVhIconLicenses() {
   LicenseRegistry.addLicense(
     () => Stream.fromIterable([

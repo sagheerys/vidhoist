@@ -46,7 +46,7 @@ class VhLibrarySliver extends StatelessWidget {
   final VhLibraryItemBuilder itemBuilder;
 
   /// Whether the table has a "where is it" column. Only a library that
-  /// mixes the server's files with the device's has something to say there.
+  /// mixes files from more than one place has something to say there.
   final bool showLocation;
 
   /// Sorting from the table's header (the Windows app); null keeps plain

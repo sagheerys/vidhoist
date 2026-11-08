@@ -5,8 +5,8 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
 
-/// **The guard**: with no server, an empty library asks for a link, not
-/// for a server to be set up: downloads run on this computer.
+/// **The guard**: an empty library asks for a link, with nothing to set
+/// up first: downloads run on this computer.
 void main() {
   testWidgets('an empty library offers to add a link', (tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));

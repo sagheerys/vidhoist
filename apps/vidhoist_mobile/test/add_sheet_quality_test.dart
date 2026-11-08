@@ -13,9 +13,9 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
-/// **The heights in Lite's add sheet** (owner's decisions of 2026-11-04): a
-/// ceiling on every video site, with 360 offered here alone so a family
-/// phone can keep its downloads small, and none for sound alone.
+/// **The heights in the phone's add sheet** (owner's decisions of
+/// 2026-11-04): a ceiling on every video site, with 360 offered here alone
+/// so a phone can keep its downloads small, and none for sound alone.
 void main() {
   late _Engine engine;
 

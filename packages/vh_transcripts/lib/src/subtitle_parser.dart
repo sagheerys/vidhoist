@@ -111,7 +111,7 @@ abstract final class SubtitleParser {
     var from = 0;
     // Whether the text so far ends inside a word, with no space after it.
     var open = false;
-    // **Punctuation stamped on its own** (measured on a server's files
+    // **Punctuation stamped on its own** (measured on real files
     // 2026-10-14): some tracks stamp the comma after "happen" separately,
     // and taken as a word it read "happen , for". A piece with no space
     // between it and the piece before belongs to the word before it.

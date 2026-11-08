@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **Field report 2026-09-30:** "The Modern Coder Bootcamp
+/// **A foreign title keeps its direction:** "The Modern Coder Bootcamp
 /// (with AI) - New Course!" read "!(with AI) - New Course" under the Arabic
 /// interface. A title keeps its own direction, and still lines up with
 /// the interface.

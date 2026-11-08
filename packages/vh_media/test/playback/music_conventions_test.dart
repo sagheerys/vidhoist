@@ -4,8 +4,8 @@ import 'package:vh_media/vh_media.dart';
 
 import 'fake_player_port.dart';
 
-/// **What a music player is expected to do** (field reports 2026-09-25,
-/// from a playlist played in the car).
+/// **What a music player is expected to do**, as a playlist played in the
+/// car showed.
 ///
 /// Two habits every music player shares, and this one did not: a song
 /// chosen or skipped to starts from the top, and "previous" first returns

@@ -42,8 +42,8 @@ class VhQueuePanel extends StatelessWidget {
   /// stands still.
   final bool paused;
 
-  /// **Inside a scrollable parent?** (field report 2026-09-02: "you cannot
-  /// scroll the video list at the bottom"). The inner list was `shrinkWrap`
+  /// **Inside a scrollable parent?** Otherwise the video list at the bottom
+  /// cannot be scrolled. The inner list was `shrinkWrap`
   /// with no `physics`, an independent scroll view exactly as tall as its
   /// content, so it had no range to move **and it swallowed the drag**,
   /// which never reached the parent. The answer is not to drop `shrinkWrap`

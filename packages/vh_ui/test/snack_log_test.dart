@@ -44,8 +44,7 @@ void main() {
     expect(written, ['it broke']);
   });
 
-  // Field report 2026-10-15: progress read in steps jumped from one figure
-  // to the next.
+  // Progress read in steps jumped from one figure to the next.
   testWidgets('the progress glides to a new reading', (tester) async {
     Widget card(double progress) => MaterialApp(
       theme: vhTheme(VhVariant.desktop, Brightness.light),

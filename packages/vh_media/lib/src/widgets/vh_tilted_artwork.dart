@@ -7,8 +7,7 @@ import '../models/playlist_item.dart';
 import 'vh_up_next_list.dart';
 
 /// The audio screen cover: a plate tilted **-1.5°** inside a frame tilted
-/// **+1°**. An approved identity element in log §4 ("the audio player
-/// cover is tilted inside a frame").
+/// **+1°**, an element of the app's identity.
 ///
 /// **The plate is always square**, the shape of an album cover. A YouTube
 /// thumbnail is 16:9, and the plate used to take the image's own shape, a
@@ -99,8 +98,8 @@ class VhTiltedArtwork extends StatelessWidget {
   }
 }
 
-/// Where the sound comes from, "streaming from the server" or "playing
-/// from your device": the golden rule made visible, as a quiet grey line
+/// Where the sound comes from, streamed or "playing from your device":
+/// the golden rule made visible, as a quiet grey line
 /// rather than a tinted pill over the title (mobile plan 2026-11-01).
 class VhSourceChip extends StatelessWidget {
   const VhSourceChip({super.key, required this.local});

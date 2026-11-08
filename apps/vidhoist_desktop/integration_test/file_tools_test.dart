@@ -12,8 +12,8 @@ import 'package:vidhoist_desktop/platform/shape_probe.dart';
 ///     flutter test integration_test/file_tools_test.dart -d windows
 ///
 /// The clips are fixtures here (a 2.5 s portrait H.264 video, a one-second
-/// song with a cover), served by a local server that wants a password, so
-/// the test needs no real one. The clipboard's text is put back after.
+/// song with a cover), served by a local HTTP server that wants a
+/// password, so the headers are tested without the network. The clipboard's text is put back after.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   final video = File('integration_test/fixtures/portrait.mp4').absolute;

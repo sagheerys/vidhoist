@@ -47,8 +47,8 @@ class _Notices extends DownloadNotifications {
   Future<void> cancel(int id) async => showing.remove(id);
 }
 
-/// Changing the server address replaces the engine, and its tasks leave the
-/// list with no ending of their own. An ongoing notice, which cannot
+/// A replaced engine's tasks leave the list with no ending of their own.
+/// An ongoing notice, which cannot
 /// be swiped away, must still go.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

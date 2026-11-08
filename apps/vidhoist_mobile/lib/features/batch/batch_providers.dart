@@ -39,8 +39,8 @@ class BatchSubmitter {
 
   final Ref _ref;
 
-  /// Returns how many were actually enqueued (0 means no server
-  /// configured).
+  /// Returns how many were actually enqueued (0 means no engine yet, or
+  /// no links).
   ///
   /// **[groupName] collects the batch into one saved playlist** (asked
   /// 2026-09-02): before it, the items of a single course scattered through

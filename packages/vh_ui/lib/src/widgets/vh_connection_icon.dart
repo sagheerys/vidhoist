@@ -9,10 +9,10 @@ import '../icons/vh_icon.dart';
 import '../icons/vh_icon_data.dart';
 import '../icons/vh_icons.dart';
 
-/// **The server card's state icon, alive while it means "trying".**
+/// **A connection state icon, alive while it means "trying".**
 ///
 /// A still glyph cannot tell a check of one second from one of thirty, so
-/// "checking the connection" looked stuck (field request 2026-10-04).
+/// "checking the connection" looked stuck.
 /// While [checking], the arrows inside the cloud turn, the sign every
 /// phone uses for "working on it". Any other state is a still [icon], and
 /// a change of state crossfades into it rather than snapping. When the
@@ -35,11 +35,10 @@ class VhConnectionIcon extends StatefulWidget {
   /// One turn of the arrows. Slow on purpose: a wait, not an alarm.
   static const Duration turn = Duration(milliseconds: 1400);
 
-  /// **The least time the arrows turn once started** (owner's choice
-  /// 2026-10-08). A server on the home network answers in a tenth of a
-  /// second, so a refresh changed nothing the eye could see and looked
-  /// ignored. Long enough to be seen, short enough not to delay the answer
-  /// beside it, which shows at once.
+  /// **The least time the arrows turn once started**. A quick check answers in
+  /// a tenth of a second, so a refresh changed nothing the eye could see and
+  /// looked ignored. Long enough to be seen, short enough not to delay the
+  /// answer beside it, which shows at once.
   static const Duration shortestTurn = Duration(milliseconds: 600);
 
   @override

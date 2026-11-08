@@ -2,7 +2,7 @@ import 'package:vh_transcripts/vh_transcripts.dart';
 import 'package:test/test.dart';
 
 /// Owner's request 2026-10-15: subtitles in the language actually spoken,
-/// beside the reader's own. The server only takes a language's name, so it
+/// beside the reader's own. A request names a language, not a pattern, so it
 /// has to be read first, from the clip's own page.
 void main() {
   // Shaped like a real watch page: a track's name holds arrays of its own.

@@ -154,7 +154,7 @@ List<(String, List<DiscoverLine>)> discoverGroups(
   ),
 ];
 
-/// **"Discover Vidhoist Ember"**: every feature a line each, opened only
+/// **"Discover Vidhoist"**: every feature a line each, opened only
 /// when asked for (About, the command palette, the end of "what's new"),
 /// so it can never get in anyone's way.
 Future<void> showDiscoverDialog(BuildContext context) {

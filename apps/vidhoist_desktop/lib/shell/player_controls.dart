@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// One of the player bar's icon buttons, ember when its mode is on.
+/// One of the player bar's icon buttons, in the accent when its mode is on.
 class DesktopPlayerControl extends StatelessWidget {
   const DesktopPlayerControl({
     super.key,
@@ -110,7 +110,7 @@ class DesktopPlayButton extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        // Not the theme's opaque hover fill, which would hide the ember.
+        // Not the theme's opaque hover fill, which would hide the accent.
         hoverColor: ink.withValues(alpha: 0.12),
         child: SizedBox.square(
           dimension: VhDensity.desktop.row,

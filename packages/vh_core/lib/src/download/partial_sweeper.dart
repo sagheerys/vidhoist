@@ -2,16 +2,16 @@ import 'dart:io';
 
 /// **Sweeping orphaned partial files.**
 ///
-/// Killing the app in the middle of a large pull leaves `<name>.part` on
-/// disk, and the new name after a retry differs because of the `HHmmss`
-/// stamp, so nobody ever cleans the old one — and **neither app swept at
-/// startup**. The library scan skips `.part` on purpose, so the space is
+/// Killing the app in the middle of a large download leaves `<name>.part`
+/// on disk, and the new name after a retry differs because of the
+/// `HHmmss` stamp, so nothing else ever cleans the old one. The library
+/// scan skips `.part` on purpose, so the space is
 /// lost without the user ever seeing it.
 ///
 /// yt-dlp leaves more than `.part` behind when it is stopped:
 /// [isLeftover] names each kind.
 ///
-/// [olderThan] protects a pull **happening right now** from being swept
+/// [olderThan] protects a download **happening right now** from being swept
 /// out from under it.
 Future<int> sweepPartialFiles(
   String directoryPath, {
@@ -25,7 +25,7 @@ Future<int> sweepPartialFiles(
     // granted access to the folder, and this call used to sit outside the
     // guard below — so on a phone that had never been asked for the media
     // permission, the startup sweep threw before the app had drawn anything
-    // (field report 2026-09-16).
+    // (2026-09-16).
     if (!await dir.exists()) return 0;
     await for (final entity in dir.list(followLinks: false)) {
       if (entity is! File) continue;

@@ -12,7 +12,7 @@ import '../icons/vh_icons.dart';
 ///
 /// The filters a sheet holds (platform, folder, tags) would otherwise be
 /// invisible once the sheet closes, and the library would simply look half
-/// empty. A name from the server can be long; the row scrolls, but one chip
+/// empty. A name from a site can be long; the row scrolls, but one chip
 /// must not own all of it.
 class VhActiveFilterChip extends StatelessWidget {
   const VhActiveFilterChip({

@@ -13,7 +13,7 @@ import '../shared/add_to_sheet.dart';
 import '../shared/membership.dart';
 import 'playback_providers.dart';
 
-/// Lite's reels player: the same filtered shorts lane, with favourite and
+/// The reels player: the same filtered shorts lane, with favourite and
 /// share as its actions. There is no download button, since the item is
 /// local already.
 class ReelsScreen extends ConsumerStatefulWidget {

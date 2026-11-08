@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/shell/open_web_link.dart';
 
-/// "Open the original link" takes the link the server gave, so only a web
-/// page may reach the system's opener.
+/// "Open the original link" takes the link the history recorded, so only
+/// a web page may reach the system's opener.
 void main() {
   test(
-    '**the guard**: a server link that is not a web page opens nothing',
+    '**the guard**: a recorded link that is not a web page opens nothing',
     () async {
       final opened = <Uri>[];
       Future<bool> launch(Uri uri) async {

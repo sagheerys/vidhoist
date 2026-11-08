@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// A closed list to pick from, with the Wahaj chevron rather than
+/// A closed list to pick from, with the app's own chevron rather than
 /// Material's arrow.
 class DesktopChoice<T> extends StatelessWidget {
   const DesktopChoice({

@@ -5,7 +5,7 @@ import '../tokens/tokens.dart';
 import '../widgets/vh_polish.dart';
 import 'vh_progress.dart';
 
-/// Pull to refresh with the Wahaj ring: the ring with its gap and ember
+/// Pull to refresh with the app's ring: the ring with its gap and ember
 /// at the top of the list, turning while the refresh runs, with no floating
 /// disc beneath it. Faint while the pull has not yet gone far enough, whole
 /// once letting go would refresh.

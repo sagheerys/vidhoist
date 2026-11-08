@@ -9,8 +9,8 @@ import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// A test shell in Lite's identity with its localisations, and with no
-/// server and no audio.
+/// A test shell in the phone app's identity with its localisations, and
+/// with no audio.
 Widget host(Widget child, {List<Override> overrides = const []}) =>
     ProviderScope(
       overrides: overrides,

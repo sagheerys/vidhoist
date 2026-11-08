@@ -1,20 +1,19 @@
 import '../urls/platform_detector.dart';
 
-/// The Vidhoist qualities in use.
+/// The download qualities the apps offer.
 enum Quality {
   best('best'),
   q1080('1080'),
   q720('720'),
   q480('480'),
 
-  /// Offered by Lite alone, to keep a family phone's storage small; the
-  /// other apps never list it.
+  /// The smallest choice, to keep a family phone's storage small.
   q360('360'),
   audio('audio');
 
   const Quality(this.wire);
 
-  /// The value as sent in `POST /add`.
+  /// The value as stored with a setting, a task or a channel.
   final String wire;
 
   bool get isNumeric =>
@@ -28,10 +27,10 @@ enum Quality {
   /// all, so the download engine retries such a refusal at `best` once.
   ///
   /// An audio-only platform gets `audio` whatever was chosen: there is no
-  /// picture to pick a height or a codec for, and only the audio path asks
-  /// the server to embed the track's cover. `best` there was sent as a video
-  /// download, which kept the sound and dropped the cover (measured on a
-  /// real server: 48 audio tracks with covers, 2 "best" ones without).
+  /// picture to pick a height or a codec for, and only the audio path
+  /// embeds the track's cover. `best` there ran as a video download, which
+  /// kept the sound and dropped the cover (measured: 48 audio tracks with
+  /// covers, 2 "best" ones without).
   Quality applyRule(String url) {
     if (this == Quality.audio) return this;
     if (MediaPlatform.detect(url).isAudioOnly) return Quality.audio;

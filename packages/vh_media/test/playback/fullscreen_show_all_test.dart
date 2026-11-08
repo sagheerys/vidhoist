@@ -10,9 +10,8 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'fake_video_platform.dart';
 
-/// **Field report 2026-09-19:** "in full screen, open the queue panel and
-/// press 'view all' — the picture disappears, the clip keeps playing and
-/// the phone stays sideways".
+/// **In full screen, the queue panel's "view all"** made the picture
+/// disappear while the clip kept playing and the phone stayed sideways.
 ///
 /// The callback pushed the playlists screen **over** the full-screen page,
 /// which therefore stayed alive underneath: its `dispose` never ran, so the

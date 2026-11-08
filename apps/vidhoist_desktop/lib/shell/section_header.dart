@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// The Wahaj section header as the phones draw it (a Kufi title, a quiet
+/// The section header as the phone app draws it (a Kufi title, a quiet
 /// line at the end, a hairline beneath), except that **the end line gives
 /// way**: in a window at a large font it shortens instead of pushing the
-/// row past its edge. The phones' header keeps its own rules.
+/// row past its edge. The phone app's header keeps its own rules.
 class DesktopSectionHeader extends StatelessWidget {
   const DesktopSectionHeader({
     super.key,

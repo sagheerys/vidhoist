@@ -19,7 +19,7 @@ void main() {
   });
 
   test('**the guard**: no Material progress indicators in lib', () {
-    // The waiting and progress shapes are Wahaj's (VhSpinner, VhProgressBar,
+    // The waiting and progress shapes are vh_ui's (VhSpinner, VhProgressBar,
     // VhFilmStrip) or drawn, like the mini window's hairline.
     expect(
       offenders(RegExp(r'\b(Linear|Circular)ProgressIndicator\(')),

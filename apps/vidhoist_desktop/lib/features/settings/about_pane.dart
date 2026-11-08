@@ -106,8 +106,8 @@ class AboutPane extends ConsumerWidget {
         link('Vidhoist', 'alexta69/vidhoist', _vidhoist, hint: l.vidhoistCredit),
         link('yt-dlp', 'yt-dlp/yt-dlp', _ytdlp, hint: l.ytdlpCredit),
         heading(l.disclaimer),
-        // The disclaimer of affiliation first: the name says what the app
-        // connects to, not who made it.
+        // The disclaimer of affiliation first, so it is read before the
+        // rest.
         Text(
           l.notAffiliated,
           style: text.bodySmall?.copyWith(

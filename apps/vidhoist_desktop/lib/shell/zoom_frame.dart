@@ -13,7 +13,7 @@ import 'ui_zoom.dart';
 /// ratio is scaled with it, as measured on Windows at 100% and 150%.
 ///
 /// Also owns Ctrl+= / Ctrl+- / Ctrl+0, as in a browser, says once when
-/// Ember had to choose a smaller size for this screen, and draws the
+/// the app had to choose a smaller size for this screen, and draws the
 /// keyboard focus ring over everything.
 class DesktopZoomFrame extends ConsumerStatefulWidget {
   const DesktopZoomFrame({

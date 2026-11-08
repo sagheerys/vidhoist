@@ -91,8 +91,8 @@ void main() {
     testWidgets('a wide YouTube thumbnail fills a square plate', (
       tester,
     ) async {
-      // Field report 2026-10-10: a song from YouTube showed as a wide strip
-      // in the audio player, where a music app shows a square cover.
+      // A song from YouTube showed as a wide strip in the audio player, where a
+      // music app shows a square cover.
       const picture = Key('picture');
       await tester.pumpWidget(
         host(
@@ -179,7 +179,7 @@ void main() {
         );
 
         // Leaving by the button with the device still in landscape: this is
-        // where a portrait layout appeared on a wide screen (field report).
+        // where a portrait layout appeared on a wide screen.
         navKey.currentState!.pop();
         await settle();
         expect(

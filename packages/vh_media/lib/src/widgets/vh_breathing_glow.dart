@@ -14,9 +14,8 @@ typedef VhEmber = ({Offset centre, double radius, double strength});
 ///
 /// Samsung tints its background from the cover; that was declined,
 /// because a clip's colours would repaint the app. So the idea is kept and
-/// the source changed: the identity is called "glow", and this is light in
-/// the app's **own accent** — ember in Super, petrol in Lite, read from the
-/// palette like everything else.
+/// the source changed: this is light in the app's **own accent**, read
+/// from the palette like everything else.
 ///
 /// **Two embers, circling opposite ways** (chosen 2026-09-24: one halo
 /// breathing at the centre looked as if it stayed in one place).
@@ -206,8 +205,8 @@ class _VhBreathingGlowState extends State<VhBreathingGlow>
     final light = desktop ? _desktopLight() : null;
     // **On a computer, two shades of the ember**: the large slow one deep,
     // the small quick one bright, so the eye tells them apart and where
-    // they cross reads warmer than either. Both from the palette, so the
-    // petrol app gets two petrols.
+    // they cross reads stronger than either. Both from the palette, so they
+    // follow the accent.
     final colors = desktop ? [p.accentDeep, p.accent] : [p.accent, p.accent];
     final peak = VhBreathingGlow.peakFor(
       dark: Theme.of(context).brightness == Brightness.dark,
@@ -267,10 +266,10 @@ ui.Image? _light;
 /// its radius, then fading, tinted to the accent as it is drawn.
 ///
 /// On a computer the embers are drawn from it rather than from a gradient
-/// worked out for every pixel of every frame. On the integrated graphics
-/// of an ordinary laptop that gradient took about 18 ms a frame in a maximized
-/// window, too long for 60 frames a second; the image takes about 2. Phones keep
-/// the gradient, which is quick there.
+/// worked out for every pixel of every frame. On the integrated graphics of an
+/// ordinary laptop that gradient took about 18 ms a frame in a maximized
+/// window, too long for 60 frames a second; the image takes about 2. Phones
+/// keep the gradient, which is quick there.
 ui.Image _desktopLight() {
   if (_light case final ready?) return ready;
   final recorder = ui.PictureRecorder();

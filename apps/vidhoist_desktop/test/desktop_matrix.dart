@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// **The window matrix**: the desktop twin of the phones' device matrix.
+/// **The window matrix**: the desktop twin of the phone app's device matrix.
 ///
-/// A window can be any size between the smallest one Ember allows and a
+/// A window can be any size between the smallest one the app allows and a
 /// maximized 2560-wide screen, and Windows lets the text grow on its own
 /// for eyesight. What breaks there is rarely the logic but **the layout**:
 /// a label that no longer fits pushes its neighbours out of the frame. In a
@@ -19,7 +19,7 @@ class DesktopWindowSize {
   /// Sizes in logical pixels, which is what a window reports at any
   /// Windows display scale.
   static const List<DesktopWindowSize> all = [
-    // The smallest window Ember allows; the side panel becomes a layer.
+    // The smallest window the app allows; the side panel becomes a layer.
     DesktopWindowSize('smallest 960x600', Size(960, 600)),
     // The first width with the panel beside the content, sidebar narrow.
     DesktopWindowSize('panel beside 1100x700', Size(1100, 700)),

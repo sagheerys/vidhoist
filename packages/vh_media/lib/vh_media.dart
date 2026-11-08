@@ -1,4 +1,4 @@
-/// Shared MTF playback: the unified item, the golden source rule, the play
+/// Shared Vidhoist playback: the unified item, the golden source rule, the play
 /// queue, the background audio handler, the players and their widgets, and
 /// the position and state stores.
 library;

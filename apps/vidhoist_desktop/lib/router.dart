@@ -51,7 +51,7 @@ abstract final class DesktopRoutes {
   /// One saved list's page, by its id.
   static String playlist(String id) => '$playlists/${Uri.encodeComponent(id)}';
 
-  /// One followed channel's page, by the server's id for it.
+  /// One followed channel's page, by its id.
   static String channel(String id) => '$channels/${Uri.encodeComponent(id)}';
 }
 

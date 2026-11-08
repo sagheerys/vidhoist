@@ -51,10 +51,10 @@ class VhAudioScreen extends StatelessWidget {
   final VoidCallback? onDetails;
   final String? playlistName;
 
-  /// **The source chip, "streaming from the server" or "playing from your
-  /// device"**: information that matters in Super where both sources
-  /// coexist, and means nothing in Lite, where everything in the library is
-  /// already on the device (field report 2026-09-04).
+  /// **The source chip, streamed or "playing from your device"**:
+  /// information that matters only where both sources coexist. The phone
+  /// app turns it off, since everything in its library is already on the
+  /// device.
   final bool showSourceChip;
 
   /// Asked again for each item as the queue moves: an app feature this
@@ -63,7 +63,7 @@ class VhAudioScreen extends StatelessWidget {
   final VhExtraAction? Function(PlaylistItem item)? extra;
 
   /// Read along beside the player on a tablet, as a tab next to the queue
-  /// (a transcript, in Super). On a phone it is reached through [extra].
+  /// (a transcript, in the apps). On a phone it is reached through [extra].
   final VhVideoPanel? Function(PlaylistItem item)? companion;
 
   /// The heart beside the title: whether the clip is a favourite, and the
@@ -229,7 +229,7 @@ class VhAudioScreen extends StatelessWidget {
     );
   }
 
-  /// **A phone held sideways** (field report 2026-10-10: no cover at all).
+  /// **A phone held sideways**, which used to show no cover at all.
   /// Stacked in a column, the controls left the cover less height than its
   /// smallest size, so it was dropped. Beside the controls it gets the
   /// screen's full height. The controls scroll rather than overflow at the

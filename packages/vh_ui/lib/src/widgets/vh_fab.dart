@@ -83,7 +83,7 @@ class VhFab extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // The glyph alone: a tinted square inside the button
-                      // was a box within a box (log §4, 2026-10-31).
+                      // was a box within a box.
                       VhIconSwap(
                         icon: highlighted ? VhIcons.paste : icon,
                         size: 20,

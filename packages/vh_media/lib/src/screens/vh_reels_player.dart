@@ -115,9 +115,9 @@ class _VhReelsPlayerState extends State<VhReelsPlayer> {
   bool _chrome = true;
   Timer? _hideTimer;
 
-  /// **The screen used to switch off while watching** (field report
-  /// 2026-09-02): `VhVideoSession` holds the wake lock, but reels owns its
-  /// raw controller directly, so nobody held it here at all.
+  /// **The screen used to switch off while watching**: `VhVideoSession` holds
+  /// the wake lock, but reels owns its raw controller directly, so nobody held
+  /// it here at all.
   bool _wakelockOn = false;
 
   /// **The death flag — and it is never replaced by `mounted`** (a field
@@ -129,13 +129,13 @@ class _VhReelsPlayerState extends State<VhReelsPlayer> {
   /// and **`mounted` stayed true forever on a dead screen**. The pending
   /// load then passed every `mounted` guard, played a clip and handed it to
   /// a field nobody would ever dispose: audio running behind the app with
-  /// no mini player and no way to stop it (field report).
+  /// no mini player and no way to stop it.
   bool _disposed = false;
 
   @override
   void initState() {
     super.initState();
-    // **The status bar stays visible** (field report 2026-09-02): Instagram
+    // **The status bar stays visible**: Instagram
     // and TikTok extend the video behind the bar without hiding it. The
     // clock and the battery belong to the user, and `immersiveSticky`
     // swallowed them and made an edge swipe summon the bar instead of
@@ -231,8 +231,8 @@ class _VhReelsPlayerState extends State<VhReelsPlayer> {
   @override
   Widget build(BuildContext context) {
     final item = _current;
-    // **The bar was present and unreadable** (field report "it covers the
-    // top bar", diagnosed with `dumpsys window` 2026-09-02): `vsysui=…
+    // **The bar was present and unreadable** (diagnosed with
+    // `dumpsys window`): `vsysui=…
     // LIGHT_STATUS_BAR`, meaning the system was drawing its icons **black**
     // because the daylight theme is light, on top of the black reels
     // background. The result was a bar that existed and showed nothing: the
@@ -327,7 +327,7 @@ class _VhReelsPlayerState extends State<VhReelsPlayer> {
               // the only reference for where you are in the clip, and hiding
               // it with the chrome makes seeking impossible without two
               // touches. So it lives **outside** the fading chrome layer.
-              // Edge to edge on purpose (field report 2026-09-13): the side
+              // Edge to edge on purpose: the side
               // margins and the system inset are the bar's own padding,
               // inside its touch area, not gaps that fell to tap-to-pause.
               PositionedDirectional(

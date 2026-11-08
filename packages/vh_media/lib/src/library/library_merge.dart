@@ -3,13 +3,13 @@ import 'package:vh_core/vh_core.dart';
 import '../stores/media_shape_index.dart';
 import 'library_models.dart';
 
-/// The unified library: the server's done list merged with the local index
+/// The unified library: the download history merged with the local index
 /// on canonicalUrl, with fuzzy matching, the user's tags and favourites,
 /// and what the artwork, kept-cover and shape indexes know.
 ///
 /// Pure, so the phone and the Windows app merge exactly alike; each only
-/// decides where the inputs come from. A null [history] (no server, or no
-/// answer yet) still lists every local copy.
+/// decides where the inputs come from. A null [history] (none kept, or not
+/// read yet) still lists every local copy.
 List<LibraryItem> mergeLibrary({
   required HistoryResponse? history,
   required Map<String, String> offline,
@@ -78,7 +78,7 @@ List<LibraryItem> mergeLibrary({
     );
   }
 
-  // Local and no longer on the server, deleted there, but still in the
+  // Local and no longer in the history, removed there, but still in the
   // unified library.
   for (final MapEntry(:key, :value) in offline.entries) {
     if (matchedLocal.contains(key)) continue;

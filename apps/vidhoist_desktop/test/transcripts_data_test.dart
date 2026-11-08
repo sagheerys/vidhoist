@@ -59,7 +59,7 @@ void main() {
     expect((await read(store))!.language, 'en');
   });
 
-  test('none kept and no server: no transcript, no error', () async {
+  test('none kept and no folder: no transcript, no error', () async {
     expect(await read(store), isNull);
     expect(await read(null), isNull);
   });

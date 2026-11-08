@@ -2,10 +2,10 @@ import 'package:vh_core/vh_core.dart';
 
 import 'channel_match.dart';
 
-/// Where a clip that turned up on the server came from, as far as can be
-/// known. `/history` does not say, and `/subscriptions` does not list what
-/// each one fetched, so anything another device or the web page queued looks
-/// the same as what a followed channel brought.
+/// Where a clip that turned up in the download history came from, as far
+/// as can be known. The history does not say, and the subscriptions do not
+/// list what each one fetched, so anything queued by hand or from another
+/// device looks the same as what a followed channel brought.
 enum ArrivalOrigin {
   /// A channel the user follows posted it.
   followed,
@@ -23,7 +23,7 @@ typedef ClipAuthorLookup = Future<({String? name, String? url})?> Function(
   String url,
 );
 
-/// The origin of one clip. [uploader] is what the server said, when it did.
+/// The origin of one clip. [uploader] is what the history says, if anything.
 Future<ArrivalOrigin> arrivalOrigin(
   String url, {
   String? uploader,
@@ -110,7 +110,7 @@ Future<SortedArrivals<T>> sortArrivals<T>(
 }
 
 /// The author of a clip from the same public answer the add sheet previews,
-/// which carries no credentials of the user's server. A preview that names
+/// which needs no sign-in. A preview that names
 /// no author (an X or Reddit post) knows nothing of who posted it, so the
 /// clip stays "unknown" rather than "not followed".
 ClipAuthorLookup clipAuthorFrom(ClipPreviewResolver resolver) => (url) async {
@@ -121,7 +121,7 @@ ClipAuthorLookup clipAuthorFrom(ClipPreviewResolver resolver) => (url) async {
       : (name: preview.author, url: preview.authorUrl);
 };
 
-/// **What this device sent and the server has not finished**, across runs.
+/// **What this device sent and the download has not finished**, across runs.
 ///
 /// A clip added here and finished while the app was closed would otherwise
 /// be taken for something that arrived by itself. Only what is still under
@@ -144,7 +144,7 @@ class UnfinishedSends {
   /// Everything still recorded as sent from here.
   Future<Set<String>> all() async => {...await _read()};
 
-  /// Records [url], unless the server had already finished it.
+  /// Records [url], unless it had already finished.
   Future<void> note(String url, {required bool finished}) async {
     if (finished || !(await _read()).add(url)) return;
     await _write();

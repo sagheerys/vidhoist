@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-/// Reads [length] bytes from [start] of a file (an HTTP range on the
-/// server); fewer come back at the end of the file.
+/// Reads [length] bytes from [start] of a file; fewer come back at the end
+/// of the file.
 typedef RangeReader = Future<Uint8List> Function(int start, int length);
 
 /// The cover picture embedded in an MP4 or M4A file, found by reading
@@ -9,7 +9,7 @@ typedef RangeReader = Future<Uint8List> Function(int start, int length);
 ///
 /// Where it lives: `moov` > `udta` > `meta` > `ilst` > `covr` > `data`, the
 /// iTunes layout yt-dlp writes when it embeds a thumbnail. Measured on the
-/// owner's server: every audio download carries one, near the start of
+/// owner's library: every audio download carries one, near the start of
 /// the file, so a quarter of a megabyte is read for each.
 ///
 /// The `moov` box sits at the start of a file written for streaming, or
@@ -20,7 +20,7 @@ abstract final class Mp4Cover {
   static const firstRead = 256 * 1024;
 
   /// A `moov` box larger than this is not read: covers are small, and a
-  /// broken size must not ask the server for gigabytes.
+  /// broken size must not read gigabytes.
   static const maxMoov = 16 * 1024 * 1024;
 
   /// The picture's bytes (JPEG or PNG), or null when the file has none.

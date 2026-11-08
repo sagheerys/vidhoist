@@ -13,8 +13,8 @@ import 'package:vh_transcripts/vh_transcripts.dart';
 
 const _a = 'https://www.youtube.com/watch?v=aaaaaaaaaaa';
 
-/// A phone's backup: one favourite, and the address of the server the
-/// phone once had (which must not come over).
+/// A phone's backup: one favourite, and an `active_url` entry (which must
+/// not come over).
 Future<String> _phoneBackup() async {
   final store = MemoryKeyValueStore();
   final mutex = PrefsMutex();
@@ -79,8 +79,8 @@ void main() {
       },
     );
 
-    test("**the guard**: a phone's backup is added, and its server's "
-        'address does not come over', () async {
+    test("**the guard**: a phone's backup is added, and its `active_url` "
+        'does not come over', () async {
       final tags = c.read(tagsIndexProvider);
       await tags.toggleTag(_a, 'mine');
       final outcome = await c

@@ -12,7 +12,7 @@ import 'auto_backup.dart';
 import 'settings_state.dart';
 
 /// The settings sections, in the order both shapes list them. The download
-/// engine comes first, where the server used to be.
+/// engine comes first.
 enum SettingsPane {
   engine,
   channels,
@@ -122,7 +122,7 @@ List<(String, List<SettingsEntry>)> settingsGroups(
   ];
 }
 
-/// Each row's line. Something not known yet (the server not answered, a
+/// Each row's line. Something not known yet (a value still loading, a
 /// folder not read) falls back to what the section is for, never to a
 /// blank or a guess.
 class _Values {

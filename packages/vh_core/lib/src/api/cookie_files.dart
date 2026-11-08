@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-/// **Several cookies files, sent as the one the server keeps.**
+/// **Several cookies files, merged into the one yt-dlp reads.**
 ///
-/// Vidhoist holds a single `cookies.txt` and every upload replaces it whole
-/// (`os.replace` in `upload-cookies`). So sending Vimeo's file after
-/// YouTube's signs YouTube out, and the only way to keep both is one file
-/// that carries both. This builds it in memory from files the user picked
-/// together; nothing is written to the phone.
+/// yt-dlp takes a single cookies file, so keeping Vimeo's sign-in beside
+/// YouTube's takes one file that carries both. This builds it in memory
+/// from files the user picked together; where it is kept is the caller's
+/// choice.
 ///
 /// The format is Netscape's: one cookie per line, seven tab-separated
 /// fields, `#` for comments — **except `#HttpOnly_`**, which is a cookie
@@ -18,8 +17,8 @@ abstract final class CookieFiles {
   static const _httpOnly = '#HttpOnly_';
 
   /// The merged file, or null when not one line of any file is a cookie:
-  /// a JSON export or a random text file should be refused here, not sent
-  /// to replace a working file on the server.
+  /// a JSON export or a random text file should be refused here, not kept
+  /// in place of a working file.
   ///
   /// The same cookie (domain, path, name) in two files is kept once, **from
   /// the later file**, so re-picking a fresh export with an old one does

@@ -1,8 +1,8 @@
 import '../constants/vh_constants.dart';
 
 /// Building the local filename (§2.4): `<CleanTitle>_<HHmmss>.<ext>`. The
-/// extension comes from the server's name (mp4 by default), the title is
-/// truncated at 80, and Arabic and Unicode are fully supported: only
+/// extension comes from the source file's name (mp4 by default), the title
+/// is truncated at 80, and Arabic and Unicode are fully supported: only
 /// characters invalid in filenames are removed.
 String buildLocalFilename(
   String? title, {
@@ -27,7 +27,7 @@ String buildLocalFilename(
   return '${clean}_$stamp.${extensionOf(serverFilename)}';
 }
 
-/// The extension from the server's filename: letters or digits, at most 5
+/// The extension from a filename: letters or digits, at most 5
 /// after the final dot, otherwise the default.
 String extensionOf(String? serverFilename) {
   final name = serverFilename ?? '';

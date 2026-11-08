@@ -29,7 +29,7 @@ AnimationStyle vhNoticeMotion({required bool still}) => still
         reverseDuration: VhMotion.fast,
       );
 
-/// Every bottom sheet in the phone apps goes through here, so none of them
+/// Every bottom sheet in the phone app goes through here, so none of them
 /// rises at Flutter's default pace.
 Future<T?> showVhSheet<T>({
   required BuildContext context,
@@ -52,7 +52,7 @@ Future<T?> showVhSheet<T>({
   sheetAnimationStyle: vhSheetMotion(context),
 );
 
-/// Every dialog in the phone apps goes through here: it grows a little
+/// Every dialog in the phone app goes through here: it grows a little
 /// from [VhMotion.recede] as it fades in, and goes back faster. The
 /// computer keeps Flutter's dialog.
 Future<T?> showVhDialog<T>({

@@ -96,7 +96,7 @@ class _ListeningLinesState extends State<ListeningLines> {
       builder: (context, box) => ShaderMask(
         // Lines fade in at the foot and out at the head, so the text seems
         // to pass rather than be cut off. A mask over the text alone: a
-        // fade painted in the room's colour would cover the embers too.
+        // fade painted in the room's colour would cover the glow too.
         blendMode: BlendMode.dstIn,
         shaderCallback: (rect) => const LinearGradient(
           begin: Alignment.topCenter,

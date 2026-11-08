@@ -10,8 +10,8 @@ import 'media_probe.dart';
 
 /// **Enriching the local library.**
 ///
-/// The library is built by scanning the folder, so a file migrated from the
-/// old Lite arrives with no cover and no dimensions. Before this
+/// The library is built by scanning the folder, so a file copied into it
+/// arrives with no cover and no dimensions. Before this
 /// enrichment, dimensions were learned **only on first play**, so a library
 /// of 194 files was entirely outside the shorts path until every clip had
 /// been played by hand once, and entirely without thumbnails.
@@ -39,8 +39,8 @@ class LibraryEnricher {
     if (_running) return;
     // Probe order equals the default display order, newest first, or the
     // covers appear at the end of the list where nobody is looking.
-    // **A cover in the index does not mean a file on disk** (the same cure
-    // as Super, 2026-09-07): thumbnails used to be written into `cacheDir`,
+    // **A cover in the index does not mean a file on disk** (2026-09-07):
+    // thumbnails used to be written into `cacheDir`,
     // which Android wipes, so the card stayed empty and was never retried
     // because the index said it had a cover.
     final stale = await _forgetMissingThumbs();

@@ -6,11 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
 
-/// **The update finds Vidhoist's own installer.** The fork kept the
-/// parent's asset marker (`ember`) and file name (`Vidhoist-Ember-…`) after
-/// the rename, so a Vidhoist release would never have been offered: its
-/// installer is named by `vidhoist.iss`, and nothing in it says "ember".
-/// Found while bringing in v2.7.0 (2026-11-05), before any release.
+/// **The update finds Vidhoist's own installer.** The asset marker and the
+/// file name the app looks for must be the ones `vidhoist.iss` gives, or a
+/// release would never be offered.
 void main() {
   test('**the guard**: the name the app downloads to is the name the '
       'installer script gives', () {

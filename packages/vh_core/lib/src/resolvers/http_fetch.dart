@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data' show BytesBuilder;
 
-/// A plain text fetch for external services (§4), **isolated from the
-/// client's Dio** so the server's Basic Auth header can never leak to a
+/// A plain text fetch for external services (§4), **a client of its
+/// own**, so no header set elsewhere in the app can ever leak to a
 /// third-party platform.
 typedef HttpGetString = Future<String> Function(Uri uri);
 

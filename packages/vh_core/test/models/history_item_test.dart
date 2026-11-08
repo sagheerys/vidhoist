@@ -52,7 +52,7 @@ void main() {
               .done,
     );
 
-    test('finished means completed, with a real filename from the server', () {
+    test('finished means completed, with a real filename from the record', () {
       expect(done[0].status, ItemStatus.completed);
       expect(done[0].filename, endsWith('.dQw4w9WgXcQ.mp4'));
     });
@@ -124,8 +124,8 @@ void main() {
   });
 
   group('HistoryItem: the edges', () {
-    // Measured on Vidhoist 2026.10.09: every item carries `folder`, empty at
-    // the top, and `filename` is relative to that folder.
+    // Every item carries `folder`, empty at the top, and `filename` is
+    // relative to that folder.
     test('a clip in a folder is found under its folder', () {
       final item = HistoryItem.fromJson({
         'url': 'https://www.youtube.com/watch?v=jNQXAC9IVRw',

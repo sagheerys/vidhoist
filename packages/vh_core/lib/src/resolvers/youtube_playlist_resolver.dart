@@ -9,12 +9,11 @@ import 'innertube_parser.dart';
 /// shows a message.
 ///
 /// **Written against InnerTube directly rather than
-/// `youtube_explode_dart`** (field report 2026-09-02: "the playlist shows
-/// an empty page"). Running it for real proved that
+/// `youtube_explode_dart`** (2026-09-02: a playlist showed an empty
+/// page). Running it for real proved that
 /// `yt.playlists.getVideos()` emits **zero items** for a playlist counting
 /// 19, in 2.5.3 and in the newest 3.1.0 alike, because YouTube replaced
-/// `playlistVideoRenderer` with `lockupViewModel`. The earlier project
-/// uses the same package, so the defect is inherited rather than new.
+/// `playlistVideoRenderer` with `lockupViewModel`.
 ///
 /// The `browse` endpoint with `browseId: VL<id>` works **without an API
 /// key** (tested), one page holds 100 items, and then a continuation

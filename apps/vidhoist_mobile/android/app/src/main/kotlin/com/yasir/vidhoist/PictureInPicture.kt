@@ -18,7 +18,7 @@ import io.flutter.plugin.common.MethodChannel
 
 /**
  * Picture in picture for the video player, on the `mt/pip` channel the
- * app's Dart side shares with the other app.
+ * Dart side calls.
  *
  * Nothing happens until the user turns it on in the playback settings:
  * the Dart side then asks for it by hand (`enter`), or keeps it armed

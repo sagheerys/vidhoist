@@ -75,7 +75,7 @@ extension VhAudioHandlerRecovery on VhAudioHandler {
   /// right for a hiccup and wrong for a stream that loads, plays for a
   /// second and drops — **that pair repeats for ever**, each failure
   /// answered by a retry and each retry refilling the budget. The phone
-  /// holds a wake lock and hammers the server until the battery ends it,
+  /// holds a wake lock and hammers the source until the battery ends it,
   /// with nothing on screen to say so.
   ///
   /// The budget is returned by **progress**, not by a successful load: a
@@ -108,7 +108,7 @@ extension VhAudioHandlerRecovery on VhAudioHandler {
   ///
   /// **[autoPlay] is inherited from the path that called us:** it
   /// used to be hard-coded to `true`, so if the first item of a restored
-  /// session failed at startup, a deleted file or a server briefly
+  /// session failed at startup, a deleted file or a stream briefly
   /// unreachable, **the next item started playing out loud with no tap at
   /// all**, breaking the rule that restoration never autoplays.
   Future<void> _onError({bool autoPlay = true}) async {
@@ -145,8 +145,8 @@ extension VhAudioHandlerRecovery on VhAudioHandler {
     return square == null ? media : media.copyWith(artUri: square);
   }
 
-  /// **A square cover in the notification** (field report 2026-10-10: a
-  /// YouTube song showed as a strip there and on the lock screen). The item
+  /// **A square cover in the notification**, or a YouTube song shows as a
+  /// strip there and on the lock screen. The item
   /// is shown at once with its own cover, and the square one replaces it
   /// when ready, if that item is still the one playing. Made once a clip.
   Future<void> _prepareSquareArt(PlaylistItem item) async {

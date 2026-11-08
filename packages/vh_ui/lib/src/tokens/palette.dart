@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-/// The two app variants. Identical in everything except the accent colour
-/// (log §4).
+/// The two app variants: the phone app and the Windows app. They share one
+/// palette and differ in type, corners and components.
 enum VhVariant { phone, desktop }
 
-/// The Wahaj palette. Values are copied **verbatim** from the approved
+/// The Vidhoist palette. Values are copied **verbatim** from the approved
 /// design references. Derived values, the ones not stated there, are marked
 /// with a `derived` comment.
 class VhPalette {
@@ -42,23 +42,24 @@ class VhPalette {
   final Color ink2;
   final Color ink3;
 
-  /// Hairline rules, which replace boxes in Wahaj.
+  /// Hairline rules, which replace boxes in this design.
   final Color line;
   final Color line2;
 
-  /// The accent: ember in Super, petrol bay in Lite.
+  /// The accent: blue, the same in both apps.
   final Color accent;
   final Color accentDeep;
   final Color accentSoft;
   final Color accentInk;
   final Color onAccent;
 
-  /// Olive, which signals "offline" in Super.
+  /// Olive, which signals "offline".
   final Color offline;
   final Color offlineSoft;
   final Color offlineInk;
 
-  /// Signals "on the server" (soft ember in Super).
+  /// A soft accent tint and the ink that reads on it; nothing draws with
+  /// them today.
   final Color onServerSoft;
   final Color onServerInk;
 
@@ -86,7 +87,7 @@ class VhPalette {
   Color get miniInk => night ? ink : bg;
   Color get miniInkMuted => (night ? ink : bg).withValues(alpha: 0.55);
 
-  /// The server status card stays charcoal-dark in both themes (log §4).
+  /// A charcoal that stays dark in both themes, for what sits over video.
   static const Color serverCardBg = Color(0xFF211E1B);
   static const Color serverCardInk = Color(0xFFF0EBE4);
 
@@ -113,7 +114,7 @@ class VhPalette {
         (VhVariant.phone, Brightness.dark) => phoneNight,
       };
 
-  // Vidhoist by day: white cards on a soft stone ground, the Wahaj espresso
+  // Vidhoist by day: white cards on a soft stone ground, the espresso
   // ink kept for warmth, and a blue accent. The ground was plain white at
   // first (2026-11-04); white on white glared and the cards had only their
   // hairline to stand on (owner, 2026-11-06). Desktop and phone share one

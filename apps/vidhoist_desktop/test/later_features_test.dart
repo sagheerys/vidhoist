@@ -9,8 +9,8 @@ import 'support/shell_harness.dart';
 
 /// **The guard**: Sync is hidden until the phone app has it, never
 /// removed: Settings leaves it out until its switch is on. Channels work
-/// on this computer since 1.2 and are always there, and the server's own
-/// sections are gone from Settings.
+/// on this computer and are always there, and Settings has no Addresses
+/// section.
 void main() {
   Future<ShellHarness> open(WidgetTester tester, {bool later = false}) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
@@ -41,12 +41,12 @@ void main() {
     matching: find.text(label),
   );
 
-  testWidgets('off: Channels, no Sync, no server sections', (tester) async {
+  testWidgets('off: Channels, no Sync, no Addresses', (tester) async {
     await open(tester);
     expect(inSidebar('Channels'), findsOneWidget);
     expect(find.text('Sync'), findsNothing);
     expect(find.text('Addresses'), findsNothing);
-    // The engine's own section is first, where the server's was.
+    // The engine's own section is first.
     expect(find.text('Engine'), findsWidgets);
   });
 

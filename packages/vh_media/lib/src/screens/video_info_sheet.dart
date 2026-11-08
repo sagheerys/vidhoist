@@ -11,7 +11,7 @@ import '../widgets/vh_up_next_list.dart';
 import 'vh_video_screen.dart';
 import 'video_actions_row.dart';
 
-/// The light sheet under the portrait video (Wahaj reference B): title,
+/// The light sheet under the portrait video: title,
 /// then metadata, then actions, then mode and speed, then the "up next"
 /// section.
 class VhVideoInfoSheet extends StatelessWidget {

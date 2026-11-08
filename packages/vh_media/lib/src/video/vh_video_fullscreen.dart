@@ -17,7 +17,7 @@ import 'vh_captions.dart';
 
 part 'fullscreen_queue_panel.dart';
 
-/// Immersive landscape (Wahaj references C and D): the video fills the
+/// Immersive landscape: the video fills the
 /// screen, the chrome appears on a touch and hides again, and the queue is
 /// **a sliding side panel**.
 class VhVideoFullscreenPage extends StatefulWidget {
@@ -89,12 +89,11 @@ class _VhVideoFullscreenPageState extends State<VhVideoFullscreenPage> {
     }
   }
 
-  /// **A portrait clip fills the screen standing up** (field report
-  /// 2026-10-04). Turned sideways, a portrait clip too long for the shorts
-  /// player sits small in the middle, and in a hand that holds it upright,
-  /// the way a portrait clip is held, it lies on its side.
-  /// Decided again as the queue moves, since the next clip may be the
-  /// other shape. Entering by a tilt keeps the tilt: that user chose
+  /// **A portrait clip fills the screen standing up**. Turned sideways, a
+  /// portrait clip too long for the shorts player sits small in the middle, and
+  /// in a hand that holds it upright, the way a portrait clip is held, it lies
+  /// on its side. Decided again as the queue moves, since the next clip may be
+  /// the other shape. Entering by a tilt keeps the tilt: that user chose
   /// landscape.
   void _lockForShape() {
     // A tablet is not turned to fit a clip: it stands where it was put.
@@ -125,9 +124,8 @@ class _VhVideoFullscreenPageState extends State<VhVideoFullscreenPage> {
     super.dispose();
   }
 
-  /// **Leave fullscreen first, then open the playlist** (field report
-  /// 2026-09-19: "the picture disappears and it keeps playing with the
-  /// phone stuck sideways").
+  /// **Leave fullscreen first, then open the playlist**, or the picture
+  /// disappears and it keeps playing with the phone stuck sideways.
   ///
   /// The callback pushes the playlists screen, and pushing it **over** this
   /// page left this page alive underneath: its [dispose] never ran, so the

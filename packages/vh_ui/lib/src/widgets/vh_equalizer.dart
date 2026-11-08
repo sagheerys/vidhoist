@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/vh_theme.dart';
 
-/// The "now playing" indicator: four swaying bars in the accent colour,
-/// from the Wahaj reference.
+/// The "now playing" indicator: four swaying bars in the accent colour.
 class VhEqualizer extends StatefulWidget {
   const VhEqualizer({super.key, this.size = 14, this.animate = true});
 
@@ -43,11 +42,10 @@ class _VhEqualizerState extends State<VhEqualizer>
     _drive();
   }
 
-  /// **It actually stops when playback pauses** (field report 2026-09-04:
-  /// the effect kept running after the clip stopped, suggesting it was
-  /// still playing). The flag was only read in `initState`, so changing it
-  /// later did not stop the controller, which went on rebuilding sixty
-  /// times a second over a silent clip.
+  /// **It actually stops when playback pauses**, or the effect keeps running
+  /// after the clip stopped and suggests it is still playing. The flag was only
+  /// read in `initState`, so changing it later did not stop the controller,
+  /// which went on rebuilding sixty times a second over a silent clip.
   @override
   void didUpdateWidget(VhEqualizer oldWidget) {
     super.didUpdateWidget(oldWidget);

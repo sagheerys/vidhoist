@@ -42,7 +42,7 @@ Future<void> main() async {
   // One lock for all storage (rule 3), passed to everyone rather than
   // created twice.
   final mutex = PrefsMutex();
-  // Lite never streams: the endpoint stays `none`, so the golden rule
+  // The phone app never streams: the endpoint stays `none`, so the golden rule
   // always ends at the local file.
   final resolver = PlaybackSourceResolver(endpoint: ServerStreamEndpoint.none);
   final handler = await AudioService.init(
@@ -65,8 +65,7 @@ Future<void> main() async {
       // The white status-bar silhouette, as in the download notifications.
       androidNotificationIcon: 'drawable/ic_stat_vidhoist',
       // **`false`, against the package's default of `true`, after the
-      // measurement of
-      // 2026-09-19 on Super.** It used to be `true`, which leaves the
+      // measurement of 2026-09-19.** It used to be `true`, which leaves the
       // foreground service on every pause and releases the wake lock with
       // it. A phone call is the trap: the pause drops the app to `CAC`
       // (cached), and when the call ends and playback resumes the service
@@ -74,7 +73,7 @@ Future<void> main() async {
       // forbids outright (`ForegroundServiceStartNotAllowedException`).
       // Playback then carried on unprotected, the process was frozen, the
       // next item timed out and the session stopped itself a minute after
-      // the call. Lite shares the handler, so it shared the defect.
+      // the call.
       //
       // The cost, accepted by the owner: the notification stays while
       // paused (dismissible on Android 13+, sticky below it) and the wake

@@ -4,9 +4,8 @@ import 'package:vh_ui/vh_ui.dart';
 
 /// **Guard: the bar dismisses itself, with or without an action.**
 ///
-/// Field report 2026-09-04: "the notices that appear over the add-link
-/// button never go away, they have no timer. I want them to behave like
-/// the added-to-favourites notice."
+/// The notices that appeared over the add-link button never went away:
+/// they had no timer, unlike the added-to-favourites notice.
 ///
 /// The cause is in Flutter itself: `SnackBar.persist = persist ?? action
 /// != null`, meaning **every bar with a button stays forever** until the

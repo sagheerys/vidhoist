@@ -28,8 +28,8 @@ class ClipPreview {
 }
 
 /// The add sheet's preview, from each platform's **public oEmbed** (§4),
-/// fetched from the phone through the isolated external client, so the
-/// server's credentials never reach a third party.
+/// fetched on the device through the isolated external client, so no
+/// credentials travel to a third party.
 ///
 /// Fail-safe like every resolver: any failure, an answer with no title, a
 /// platform without a usable endpoint or more than [timeout] all return

@@ -28,7 +28,7 @@ void main() {
     kept: kept,
   );
 
-  test('**the guard**: a kept cover is the face of its clip, on the server '
+  test('**the guard**: a kept cover is the face of its clip, in the history '
       'or left on this device alone', () {
     const onServer = 'https://www.youtube.com/watch?v=aaaaaaaaaaa';
     const localOnly = 'https://youtu.be/zzzzzzzzzzz';
@@ -44,7 +44,7 @@ void main() {
     );
   });
 
-  test('only finished server items join the library', () {
+  test('only finished history items join the library', () {
     final items = merge(
       history: HistoryResponse(
         done: [
@@ -59,7 +59,7 @@ void main() {
     );
   });
 
-  test('a local copy joins its server item, and one left alone stays', () {
+  test('a local copy joins its history item, and one left alone stays', () {
     final items = merge(
       history: HistoryResponse(done: [done('https://youtu.be/aaaaaaaaaaa')]),
       offline: {
@@ -103,7 +103,7 @@ void main() {
     expect(items.single.tags, ['calm']);
   });
 
-  test('no server answer still lists every local copy', () {
+  test('no history still lists every local copy', () {
     final items = merge(
       offline: {'https://youtu.be/aaaaaaaaaaa': r'C:\Offline\a.mp4'},
     );

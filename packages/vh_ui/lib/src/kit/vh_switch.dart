@@ -4,7 +4,7 @@ import '../theme/vh_theme.dart';
 import '../tokens/tokens.dart';
 import '../widgets/vh_polish.dart';
 
-/// The Wahaj switch: a hairline track whose knob is an empty ring when off;
+/// The app's switch: a hairline track whose knob is an empty ring when off;
 /// on, **the track fills with the ink** and the knob turns the page's own
 /// colour. No glow and no accent: a page of settings has many switches on,
 /// and the accent on each of them marked nothing.

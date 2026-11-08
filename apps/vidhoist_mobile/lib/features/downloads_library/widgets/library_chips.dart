@@ -7,7 +7,7 @@ import '../library_providers.dart';
 import '../local_item.dart';
 import 'sort_sheet.dart';
 
-/// A filter chip of uniform shape (the Wahaj reference).
+/// A filter chip of uniform shape (the design reference).
 class _Chip extends StatelessWidget {
   const _Chip({
     required this.label,
@@ -102,7 +102,7 @@ class LibraryFilterChips extends ConsumerWidget {
   }
 }
 
-/// The platform filter **with live counts** (Lite specific), inside the
+/// The platform filter **with live counts** (phone app only), inside the
 /// sort sheet. It disappears entirely when the library holds only one
 /// platform.
 class PlatformFilterChips extends ConsumerWidget {

@@ -7,8 +7,8 @@ import '../downloads_library/library_providers.dart';
 import '../downloads_library/local_item.dart';
 import '../player/playback_providers.dart';
 
-/// The pinned smart playlists. Lite has no "offline" one, since everything
-/// is local.
+/// The pinned smart playlists. There is no "offline" one, since
+/// everything is local.
 enum SmartListKind { favorites, latest }
 
 class SmartList {
@@ -20,7 +20,7 @@ class SmartList {
   int get count => items.length;
 }
 
-/// The last 30 additions; a fixed count stated in the Wahaj reference.
+/// The last 30 additions; a fixed count stated in the design reference.
 const int latestSmartListSize = 30;
 
 /// The order: pinned first, then **by last played** rather than by creation
@@ -79,7 +79,7 @@ final smartListsProvider = Provider<List<SmartList>>(
 /// look as though it had played something else.
 ///
 /// **Nothing is deleted here:** an item's absence may be temporary, a
-/// folder not yet rescanned, or in Super an unreachable server. What is
+/// folder not yet rescanned. What is
 /// missing is only marked, and the screen takes care of keeping it out of
 /// playback and offering its removal to the user.
 class PlaylistView {

@@ -11,13 +11,11 @@ import '../library_providers.dart';
 import '../local_item.dart';
 import 'item_actions_sheet.dart';
 
-/// Lite's library item card: **one source for all four view modes**.
+/// The library item card: **one source for all four view modes**.
 ///
-/// Split out of `library_screen.dart` when the grid view came over from
-/// Super (requested 2026-09-04), by the same reasoning as Super: two copies
-/// of the same logic diverge at the first edit. This file is the
-/// counterpart of `apps/vidhoist_super/.../library_cards.dart`, and any
-/// change here is considered for its twin.
+/// Split out of `library_screen.dart` when the grid view arrived
+/// (requested 2026-09-04): two copies of the same logic diverge at the
+/// first edit.
 class LibraryItemCard extends ConsumerWidget {
   const LibraryItemCard({
     super.key,
@@ -124,11 +122,10 @@ class LibraryItemCard extends ConsumerWidget {
       subtitle: subtitle,
       thumbnail: thumbnail,
       platform: platformKindOf(item.platform),
-      // **No location badge in Lite** (field report 2026-09-02): every item
-      // in this library is a file on the device, because the library is
-      // built by scanning the folder, so "offline" on every card carries no
-      // information and is visual noise. The badge stays in Super, where
-      // local and server items coexist.
+      // **No location badge** (field report 2026-09-02): every item in this
+      // library is a file on the device, because the library is built by
+      // scanning the folder, so "offline" on every card carries no
+      // information and is visual noise.
       compact: options.compact,
       favorite: item.favorite,
       audio: item.isAudio,

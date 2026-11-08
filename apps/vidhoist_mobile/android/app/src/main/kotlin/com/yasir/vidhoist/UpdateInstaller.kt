@@ -14,9 +14,7 @@ import java.io.File
 /**
  * Installing a self-update, over the `mtf/update` channel.
  *
- * **The channel name is deliberately the same in both apps**: the Dart layer
- * above it is literally identical in Lite and Super, so update behaviour
- * cannot drift between them.
+ * **The channel name must match `update_channel.dart`** on the Dart side.
  *
  * The APK is handed over as a `content://` URI from `FileProvider`, never as
  * `file://`: Android 7+ throws `FileUriExposedException` on the latter, while

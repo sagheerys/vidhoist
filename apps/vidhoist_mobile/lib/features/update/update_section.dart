@@ -28,8 +28,7 @@ class UpdateSection extends ConsumerWidget {
           leading: VhIcon(
             hasUpdate ? VhIcons.saveTo : VhIcons.refresh,
             // **The accent colour when an update exists**, read from the
-            // palette so
-            // Super's ember never leaks into Lite's petrol bay.
+            // palette so no other app's accent leaks into the petrol bay.
             color: hasUpdate ? p.accent : p.ink2,
           ),
           title: Text(

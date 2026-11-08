@@ -5,9 +5,8 @@ import 'package:vh_ui/vh_ui.dart';
 import 'di.dart';
 import 'router.dart';
 
-/// The Vidhoist Lite root: the Wahaj theme with the petrol bay accent, plus
-/// localisation and the router. The identity is one and the difference is
-/// functional only.
+/// The phone app's root: the vh_ui theme with the petrol bay accent, plus
+/// localisation and the router.
 class PhoneApp extends ConsumerWidget {
   const PhoneApp({super.key});
 

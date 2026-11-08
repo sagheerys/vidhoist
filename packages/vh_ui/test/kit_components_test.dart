@@ -70,8 +70,8 @@ void main() {
       }
     }
 
-    test('**the guard**: Ember keeps what it had: a pill button, the ember '
-        'on a focused field', () {
+    test('**the guard**: the Windows app keeps what it had: a pill button, '
+        'the accent on a focused field', () {
       final t = vhDesktopTheme(VhVariant.desktop, Brightness.light);
       final p = VhPalette.of(VhVariant.desktop, Brightness.light);
       final button = t.filledButtonTheme.style!.shape!.resolve({})!;

@@ -12,7 +12,7 @@ import 'key_value_store.dart';
 class LocalHistoryEntry {
   const LocalHistoryEntry(this.item, {required this.path, this.infoJsonPath});
 
-  /// The same fields the server's `/history` gave, so the library, the
+  /// The fields every history record carries, so the library, the
   /// details and the statistics read it unchanged.
   final HistoryItem item;
 
@@ -23,13 +23,12 @@ class LocalHistoryEntry {
   final String? infoJsonPath;
 }
 
-/// The history of downloads made on this device, in place of the server's
-/// `/history`.
+/// The history of downloads made on this device.
 ///
-/// Each record carries the fields Vidhoist sent (`url`, `title`,
+/// Each record carries the history fields (`url`, `title`,
 /// `filename`, `uploader`, `thumbnail`, `size`, `download_type`,
-/// `folder`, `timestamp`), so [HistoryItem.fromJson] reads it, and the
-/// screens built on [HistoryResponse] stay as they are. The link kept is
+/// `folder`, `timestamp`), so [HistoryItem.fromJson] reads it and the
+/// screens built on [HistoryResponse] show it. The link kept is
 /// the one yt-dlp resolved (`webpage_url`), the same key every index uses.
 class LocalHistoryStore {
   LocalHistoryStore(this.store, {PrefsMutex? mutex})
@@ -89,7 +88,7 @@ class LocalHistoryStore {
     return list;
   }
 
-  /// The records as the server's history, all in `done`: what is still
+  /// The records as a [HistoryResponse], all in `done`: what is still
   /// running lives in the engine, not here.
   Future<HistoryResponse> history() async =>
       HistoryResponse(done: [for (final e in await entries()) e.item]);

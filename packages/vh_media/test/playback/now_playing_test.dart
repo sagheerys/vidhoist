@@ -191,7 +191,7 @@ void main() {
     testWidgets('a phone on its side sets the cover beside the controls', (
       tester,
     ) async {
-      // Field report 2026-10-10: held sideways, the player had no cover.
+      // Held sideways, the player used to have no cover.
       await tester.runAsync(() => handler.playItems([clip('a'), clip('b')]));
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       for (final size in const [

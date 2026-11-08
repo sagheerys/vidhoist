@@ -16,7 +16,7 @@ void main() {
     history = LocalHistoryStore(store);
   });
 
-  test('a record reads back as the server history did', () async {
+  test('a record reads back as a history item', () async {
     final info = InfoJson.parse(
       '{"id": "aqz", "title": "Big Buck Bunny", "uploader": "Blender",'
       ' "webpage_url": "https://www.youtube.com/watch?v=aqz",'

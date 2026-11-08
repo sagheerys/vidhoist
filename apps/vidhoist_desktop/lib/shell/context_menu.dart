@@ -31,7 +31,7 @@ class DesktopMenuEntry<T> {
   final bool danger;
 }
 
-/// The Wahaj right-click menu: a card sheet with a hairline, one row per
+/// The app's right-click menu: a card sheet with a hairline, one row per
 /// action with its icon, opened at the pointer.
 ///
 /// [globalPosition] is where the click landed in the window. The menu is

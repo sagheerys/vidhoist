@@ -101,7 +101,7 @@ class PanelLine extends ConsumerWidget {
                 if (progress case final value?)
                   Padding(
                     padding: const EdgeInsets.only(top: VhSpace.xxs),
-                    // Wahaj's line led by the ember, or the sliding
+                    // The line led by the accent, or the sliding
                     // perforations while the amount is unknown.
                     child: value < 0
                         ? const VhFilmStrip()

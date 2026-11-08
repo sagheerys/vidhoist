@@ -22,8 +22,7 @@ final class FetchedCover {
 }
 
 /// Fetches a cover from its address. The app supplies it, so the network
-/// stays in the app's own image cache and the server's password goes to
-/// the server alone.
+/// stays in the app's own image cache.
 typedef CoverFetcher = Future<FetchedCover> Function(String url);
 
 /// A picture taken from the clip's own file, for a cover gone at its

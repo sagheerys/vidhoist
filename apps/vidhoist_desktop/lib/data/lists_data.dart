@@ -12,8 +12,8 @@ final playlistsStoreProvider = Provider(
   (ref) => PlaylistsStore(
     store: ref.watch(keyValueStoreProvider),
     mutex: ref.watch(prefsMutexProvider),
-    // Stamped like Super's, so a later merge with the phone knows which
-    // write is newer.
+    // Stamped as the phone app stamps them, so a later merge with the
+    // phone knows which write is newer.
     clock: DateTime.now,
   ),
 );
@@ -98,8 +98,8 @@ final smartListsProvider = Provider<List<SmartList>>(
 /// One saved list matched to the library, **with what is no longer
 /// there**: a clip gone from the library keeps its line, built from what
 /// the entry cached, and is kept out of playback rather than played as
-/// something else. Nothing is deleted here, since a server that is not
-/// answering makes absences that are only temporary.
+/// something else. Nothing is deleted here, since an absence may be only
+/// temporary.
 class PlaylistView {
   const PlaylistView({
     required this.playlist,

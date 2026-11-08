@@ -17,9 +17,8 @@ typedef TaskFolder = String Function(DownloadTask task);
 
 /// Downloads with yt-dlp on this device, through a [DownloadBackend].
 ///
-/// What the screens use is the same as on the server engine (`submit`,
-/// `cancel`, `forget`, [updates], [tasks]), so the cards and panels keep
-/// working while the server engine is retired. Each task goes
+/// The screens use `submit`, `cancel`, `forget`, [updates] and [tasks].
+/// Each task goes
 /// `queued → preparing → downloading → postprocessing → completed`, or
 /// ends `failed` or `cancelled`; [pause] keeps the partial file for
 /// [resume].

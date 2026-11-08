@@ -21,9 +21,9 @@ class BatchPlaylistCollector {
 
   final PlaylistsStore playlists;
 
-  /// **Tells the interface the playlists changed** (field report
-  /// 2026-09-03). The collected playlist was written to disk correctly and
-  /// **never appeared**: the write happens away from the playlists screen,
+  /// **Tells the interface the playlists changed** (2026-09-03). The
+  /// collected playlist was written to disk correctly and **never
+  /// appeared**: the write happens away from the playlists screen,
   /// and the `indexedStack` shell keeps that tab alive with a provider
   /// holding its cached value, so disk is not read again until the app
   /// restarts.
@@ -46,8 +46,8 @@ class BatchPlaylistCollector {
   /// Creates the playlist, **or reuses the one with the same name**, and
   /// registers its tasks. [taskIds] are in source order.
   ///
-  /// Field report 2026-09-04: "I downloaded the YouTube playlist again and
-  /// it appeared as a new playlist, so now I have two." `create` used to
+  /// Seen 2026-09-04: a YouTube playlist downloaded again appeared as a
+  /// second playlist of the same name. `create` used to
   /// make a playlist every time without asking. Now the same name means the
   /// same playlist, and duplicate entries are prevented by
   /// [PlaylistsStore.addItems] on the canonical URL, so re-downloading the

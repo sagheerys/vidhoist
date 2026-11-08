@@ -26,8 +26,8 @@ const String vhPopIsolate = '\u2069';
 /// itself**, so an Arabic channel reads right to left and an English one
 /// left to right, whichever language the interface is in.
 ///
-/// Field report 2026-09-20: an Arabic channel beside an English "5 minutes
-/// ago" came apart — the separator and the neutral characters between the
+/// Without it, an Arabic channel beside an English "5 minutes ago" came
+/// apart — the separator and the neutral characters between the
 /// two runs belong to whichever side wins, and with an unisolated name
 /// there is no defined answer. Isolated, the separator belongs to the
 /// sentence and the name to itself.

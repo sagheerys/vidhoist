@@ -15,8 +15,8 @@ import '../data/shapes/shapes_data.dart';
 /// nothing decoded to show, and destroyed once the file is open. It reads
 /// what opening the file needs, a few hundred kilobytes, not the clip.
 ///
-/// Safe by construction, like the frame: [url] is the server's own file
-/// and [headers] its own credentials, and the engine loads no config and
+/// Safe by construction, like the frame: [url] is the clip's own file
+/// and [headers] what reading it needs, and the engine loads no config and
 /// no scripts.
 Future<ProbedShape?> probeShape(String url, Map<String, String> headers) {
   final header = [

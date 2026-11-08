@@ -17,7 +17,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.yasir.vidhoist"
-    // Pinned explicitly, in step with Super.
+    // Pinned explicitly rather than taken from Flutter's default.
     compileSdk = 37
     ndkVersion = flutter.ndkVersion
 

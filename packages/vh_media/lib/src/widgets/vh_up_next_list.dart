@@ -5,7 +5,7 @@ import '../models/playlist_item.dart';
 import 'media_time.dart';
 
 /// The app builds the thumbnail, from cached_network_image or a local
-/// file; vh_media knows neither the image package nor the server.
+/// file; vh_media knows neither the image package nor the downloads.
 /// **Returns `null` when there is no cover**, never an empty `SizedBox`:
 /// the fallback, an audio or film icon, is drawn on nothing, and returning
 /// an empty widget killed that fallback and left a blank square in the
@@ -42,15 +42,14 @@ class VhUpNextList extends StatefulWidget {
   final bool dark;
 
   /// The current item is **paused**, so the indicator stands still rather
-  /// than dancing (the same cure as the queue screen: field report
-  /// 2026-09-04).
+  /// than dancing (the same cure as the queue screen).
   final bool paused;
   final bool shrinkWrap;
   final ScrollPhysics? physics;
 
-  /// **Opens on the current item** (field report 2026-09-26: with the song
-  /// playing near the end of a thirty-song queue, the sheet opened at the
-  /// top and it had to be hunted for). Only where the list scrolls by
+  /// **Opens on the current item**: with the song playing near the end of
+  /// a thirty-song queue, a sheet that opened at the top had to be hunted
+  /// through. Only where the list scrolls by
   /// itself: nested in a page, under the portrait video, moving it would
   /// move the page.
   final bool revealCurrent;
@@ -130,7 +129,7 @@ class _VhUpNextListState extends State<VhUpNextList> {
 /// what sits above them (under the portrait video). Only the rows on screen
 /// are built: a nested list sized to its content built every one of a
 /// 468-clip queue, covers included, on every tick of the video's clock,
-/// and the player stuttered (field report 2026-09-30).
+/// and the player stuttered.
 class VhUpNextSliver extends StatelessWidget {
   const VhUpNextSliver({
     super.key,
@@ -205,15 +204,14 @@ class _UpNextRow extends StatelessWidget {
                 borderRadius: BorderRadius.circular(VhRadius.thumb - 2),
                 border: Border.all(color: line),
               ),
-              // **The icon sits underneath, not beside** (field report
-              // 2026-09-20: "an audio clip in the video player's queue is a
-              // black square"). The builder returns null only when there is
-              // no cover at all; a cover that **fails to load** — a cleared
-              // cache, a deleted extracted cover, a thumbnail the server no
-              // longer serves — returns an empty box instead, and the
-              // fallback beside it never ran. On a dark sheet an empty box
-              // is a black square. A cover that does load simply covers
-              // this.
+              // **The icon sits underneath, not beside**, or an audio clip in
+              // the video player's queue is a black square. The builder returns
+              // null only when there is no cover at all; a cover that **fails
+              // to load** — a cleared cache, a deleted extracted cover, a
+              // thumbnail the site no longer serves — returns an empty box
+              // instead, and the fallback beside it never ran. On a dark sheet
+              // an empty box is a black square. A cover that does load simply
+              // covers this.
               child: Stack(
                 fit: StackFit.expand,
                 children: [

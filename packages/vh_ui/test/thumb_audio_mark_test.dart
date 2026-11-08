@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-/// **The music-note mark on an audio item's thumbnail** (field report 2026-09-29):
+/// **The music-note mark on an audio item's thumbnail**:
 /// an audio file from a video site keeps the video's frame as its cover, so
 /// nothing on the card told a song from a video.
 void main() {

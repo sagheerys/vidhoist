@@ -17,8 +17,8 @@ import 'package:vh_ui/vh_ui.dart';
 import 'support/fake_channels.dart';
 import 'support/shell_harness.dart';
 
-/// Rows shaped as the owner's server answers `/subscriptions`: a channel
-/// is named after the tab yt-dlp resolved, " - Videos" and all.
+/// Rows shaped as a followed channel is kept: a channel is named after the
+/// tab yt-dlp resolved, " - Videos" and all.
 ChannelSubscription _sub(
   String id,
   String name, {
@@ -216,7 +216,7 @@ void main() {
     );
     expect(find.textContaining('2 in your library'), findsOneWidget);
     expect(find.textContaining('2 not watched'), findsOneWidget);
-    // The guard: Bravo shows the server's facts alone.
+    // The guard: Bravo shows the channel's own facts alone.
     expect(find.textContaining('0 in your library'), findsNothing);
     expect(find.textContaining('12 videos known'), findsOneWidget);
   });
@@ -281,7 +281,7 @@ void main() {
     expect(find.byType(AlertDialog), findsOneWidget);
   });
 
-  testWidgets("a channel's page: the server's facts, check, edit, unfollow", (
+  testWidgets("a channel's page: its facts, check, edit, unfollow", (
     tester,
   ) async {
     final channels = await open(

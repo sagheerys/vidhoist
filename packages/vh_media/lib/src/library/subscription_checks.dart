@@ -5,12 +5,12 @@ import 'package:vh_core/vh_core.dart';
 /// **Which arrivals a subscription check queued**, told from the checks
 /// themselves.
 ///
-/// `/history` says nothing of where a clip came from, so a clip another
-/// device or Vidhoist's own page queued looks exactly like one a followed
-/// channel brought, and the phone and the computer each announced what the
+/// The history says nothing of where a clip came from, so a clip queued by
+/// hand or from another device looks exactly like one a followed channel
+/// brought, and the phone and the computer would each announce what the
 /// other had downloaded as news from a subscription.
 ///
-/// Vidhoist's check queues what it found and only then records the check:
+/// A subscription check queues what it found and only then records itself:
 /// `last_checked` moves on and every queued clip joins `seen_ids`, whose
 /// length is `seen_count`. So a clip came from a subscription only when it
 /// was created inside a window that ended with a check whose count rose.
@@ -36,7 +36,7 @@ class SubscriptionChecks {
   static const keepFor = Duration(days: 3);
 
   /// A check's time is stamped after its clips are created, on the same
-  /// server clock; this covers rounding alone.
+  /// clock; this covers rounding alone.
   static const _slack = Duration(seconds: 2);
 
   /// Records what each subscription's checks queued since the last look.

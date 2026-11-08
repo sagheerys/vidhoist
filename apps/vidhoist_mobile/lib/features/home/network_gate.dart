@@ -122,9 +122,10 @@ final wifiPauseProvider = Provider<void>((ref) {
 /// **Retrying when the network returns.**
 ///
 /// Two deliberate decisions:
-/// 1. **What the server refused is never retried.**
+/// 1. **What the site refused is never retried.**
 ///    [VhApiException.isRetryable] separates a broken road from a refusal
-///    at the destination; repeating a refusal fails and floods the server.
+///    at the destination; repeating a refusal fails again and floods the
+///    site.
 /// 2. **Once per task.** A link that fails twice for network reasons
 ///    does not have a network problem, and an unbounded retry loop drains
 ///    the battery and the data plan.

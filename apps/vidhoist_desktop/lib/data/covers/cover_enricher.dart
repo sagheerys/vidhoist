@@ -21,7 +21,7 @@ typedef FrameFor = Future<Uint8List?> Function(LibraryItem item);
 /// ([FrameFor]).
 ///
 /// The phone takes these from Android's media retriever, which Windows does
-/// not have. Measured on Vidhoist's downloads: every audio download (M4A) has
+/// not have. Measured on yt-dlp's downloads: every audio download (M4A) has
 /// one, near the start of the file, so a quarter of a megabyte is read.
 ///
 /// The rules the phone keeps: a cover already known (YouTube's, or one

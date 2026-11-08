@@ -9,7 +9,7 @@ enum VhSnackType { info, success, error }
 /// without an action.
 const vhSnackDuration = Duration(seconds: 4);
 
-/// One SnackBar style, the Wahaj notice the computer uses ([VhNotice]): a
+/// One SnackBar style, the notice the computer uses ([VhNotice]): a
 /// bar on the edge for its state, and a line along the bottom running out
 /// with the time it stays, and an optional undo.
 void showVhSnack(
@@ -64,13 +64,12 @@ void showVhSnackOn(
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
-        // **It dismisses itself even when it has an action** (field report
-        // 2026-09-04: "the notices that appear over the add-link button
-        // never go away"). In Flutter, `persist = persist ?? action !=
-        // null`, so every bar with a button, such as "download started ·
-        // change quality", stayed **forever** until the user swiped it
-        // away, while "added to favourites" with no action vanished after
-        // four seconds. The decision: one duration for all.
+        // **It dismisses itself even when it has an action**, or the notices
+        // that appear over the add-link button never go away. In Flutter,
+        // `persist = persist ?? action != null`, so every bar with a button,
+        // such as "download started · change quality", stayed **forever** until
+        // the user swiped it away, while "added to favourites" with no action
+        // vanished after four seconds. The decision: one duration for all.
         persist: false,
         duration: duration,
         padding: EdgeInsets.zero,

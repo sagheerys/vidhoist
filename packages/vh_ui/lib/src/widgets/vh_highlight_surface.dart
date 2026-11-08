@@ -13,8 +13,8 @@ import 'vh_desktop_app.dart';
 /// it so the meaning of the colour cannot drift between the two.
 ///
 /// On the phones a selection is the ink's veil, as every chosen thing in
-/// their chrome is (log §4, 2026-10-31); the accent's tint is kept for the
-/// highlight, which marks an arrival. Ember keeps its own tint.
+/// their chrome is; the accent's tint is kept for the highlight, which
+/// marks an arrival. The Windows app keeps its own tint.
 class VhHighlightSurface extends StatelessWidget {
   const VhHighlightSurface({
     super.key,

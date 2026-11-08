@@ -10,7 +10,7 @@ import 'vh_polish.dart';
 /// A list sorted by state, such as subscriptions with the paused ones last,
 /// moves a row the moment its state changes: the row the user just touched
 /// disappeared from under the finger and turned up somewhere else, with
-/// nothing saying where (field report 2026-10-04). Each row now slides from
+/// nothing saying where. Each row now slides from
 /// where it was to where it belongs, so the eye follows it.
 ///
 /// Every child needs a key that stays with it across orders. A row that is

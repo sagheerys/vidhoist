@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../tokens/tokens.dart';
 
-// The controls of the Wahaj theme that choose between the ink and the
+// The controls of the app's theme that choose between the ink and the
 // accent, kept apart from the theme's surfaces and type.
 
-/// **The switch in the ink** (log §4, 2026-10-31), as Ember's VhSwitch:
+/// **The switch in the ink**, as the Windows app's VhSwitch:
 /// a settings page has many switches on, and the accent on each of them
 /// marked nothing. Off, a hairline track and a quiet knob.
 SwitchThemeData vhSwitchTheme(VhPalette p) => SwitchThemeData(
@@ -100,10 +100,10 @@ NavigationRailThemeData vhNavigationRailTheme(VhPalette p, TextStyle label) =>
 /// own step from the page, in day and night alike.
 const double vhHoverVeil = 0.07;
 
-/// How much of the ember a pressed control is veiled with.
+/// How much of the accent a pressed control is veiled with.
 const double vhPressVeil = 0.16;
 
-/// How much of the ember a filled button keeps while it cannot be pressed.
+/// How much of the accent a filled button keeps while it cannot be pressed.
 const double vhDisabledAccent = 0.25;
 
 /// How much of the ink fills whatever is chosen in the chrome: a sidebar

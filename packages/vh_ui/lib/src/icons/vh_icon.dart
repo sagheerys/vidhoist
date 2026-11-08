@@ -8,7 +8,7 @@ import '../theme/vh_theme.dart';
 import '../widgets/vh_desktop_app.dart';
 import 'vh_icon_data.dart';
 
-/// Draws a Wahaj icon the way `Icon` draws a glyph: colour and size from the
+/// Draws a Vidhoist icon the way `Icon` draws a glyph: colour and size from the
 /// surrounding [IconTheme], so it drops into a button unchanged. The ember
 /// mark always takes the palette's accent, which is what keeps the icon in
 /// step with day, night and the app's own colour.
@@ -68,7 +68,7 @@ class VhIcon extends StatelessWidget {
     // A theme's opacity (a disabled button's) dims the glyph, as `Icon` does.
     final opacity = theme.opacity ?? 1;
     if (opacity < 1) ink = ink.withValues(alpha: ink.a * opacity);
-    // Outside a Wahaj theme (a bare widget in a test) the ember takes the
+    // Outside the app's theme (a bare widget in a test) the ember takes the
     // ink, as Material's glyph draws without a theme.
     final ember =
         Theme.of(context).extension<VhThemeX>()?.palette.accent ?? ink;

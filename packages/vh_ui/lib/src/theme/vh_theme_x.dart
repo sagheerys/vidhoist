@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../tokens/tokens.dart';
 
-/// Theme extension: carries the Wahaj palette to every widget through
+/// Theme extension: carries the app's palette to every widget through
 /// `VhThemeX.of(context)` instead of any literal colour (rule 5).
 class VhThemeX extends ThemeExtension<VhThemeX> {
   const VhThemeX({

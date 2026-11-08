@@ -4,8 +4,8 @@ import 'package:vh_media/vh_media.dart';
 
 import 'fake_player_port.dart';
 
-/// **The guards for the phone-call defect, measured on a real device
-/// 2026-09-19** (Galaxy S22 Ultra, Android 16, Super 2.0.2).
+/// **The guards for the phone-call defect, measured on a real device**
+/// (Galaxy S22 Ultra, Android 16).
 ///
 /// A call paused playback; `androidStopForegroundOnPause: true` dropped the
 /// foreground service and the wake lock with it; when the call ended
@@ -190,8 +190,7 @@ void main() {
     });
 
     test('play after the auto-stop brings the WHOLE list back, not the last '
-        'clip alone (field report 2026-09-25: it played on its own and next '
-        'did nothing)', () async {
+        'clip alone (it played on its own and next did nothing)', () async {
       handler = build(pausedAutoStop: const Duration(milliseconds: 20));
       await handler.playItems([_item('a'), _item('b')]);
       await handler.pause();

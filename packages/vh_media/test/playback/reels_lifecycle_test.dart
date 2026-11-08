@@ -6,11 +6,10 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'fake_video_platform.dart';
 
-/// **A field regression proven with a trace on the device (2026-09-03).**
+/// **A regression proven with a trace on the device.**
 ///
-/// Field report: "coming back from reels the audio keeps playing in the
-/// app's background with no mini player… and it broke the app completely so
-/// no other clips play".
+/// Coming back from reels, the audio kept playing in the app's background
+/// with no mini player, and no other clip would play after it.
 ///
 /// The chain as the log captured it on the emulator: `dispose`, then
 /// `dispose-1`, then **nothing** — because `onLive`, which is a `ref.read`

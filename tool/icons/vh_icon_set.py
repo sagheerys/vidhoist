@@ -1,4 +1,4 @@
-"""The Wahaj icon set: the single source of the app icons.
+"""The Vidhoist icon set: the single source of the app icons.
 
 24-unit grid, 1.6 stroke, round caps and joins. Three motifs from the
 identity: the gap (the launcher icon cuts its symbol out of the plate), the
@@ -149,7 +149,7 @@ ICONS = {
     "appearance": '<circle cx="12" cy="12" r="8"/><path class="f" d="M12 4a8 8 0 0 1 0 16z"/>',
     "backup": '<path d="M7.6 18.4a4 4 0 0 1-.6-7.95A5.5 5.5 0 0 1 17.6 9.7a4.4 4.4 0 0 1-1 8.7z"/><path d="M12 16.2v-5"/><path d="M9.8 13.2L12 11l2.2 2.2"/>',
     "info": '<circle cx="12" cy="12" r="8.4"/><path d="M12 11v5.4"/><circle class="f" cx="12" cy="7.9" r="1.05"/>',
-    # phones: what Lite and Super show that the computer does not
+    # the phone app: what it shows that the Windows app does not
     "share": '<circle cx="17.4" cy="5.8" r="2.3"/><circle cx="6.6" cy="12" r="2.3"/><circle cx="17.4" cy="18.2" r="2.3"/>'
              '<path d="M8.6 10.9l6.8-3.9"/><path d="M8.6 13.1l6.8 3.9"/>',
     "more_vert": '<circle class="f" cx="12" cy="5.6" r="1.5"/><circle class="f" cx="12" cy="12" r="1.5"/><circle class="f" cx="12" cy="18.4" r="1.5"/>',
@@ -157,7 +157,7 @@ ICONS = {
     "music": '<path d="M9.4 17.4V6.2l9.2-2v11"/><circle cx="7" cy="17.4" r="2.4"/><circle cx="16.2" cy="15.2" r="2.4"/>',
     "video": '<rect x="3.6" y="5.6" width="16.8" height="12.8" rx="2.4"/><path d="M10.2 9.4v5.2l4.4-2.6z"/>',
     "cloud": '<path d="M7.4 18.2h9.7a3.8 3.8 0 0 0 .4-7.58 5.3 5.3 0 0 0-10.2 1.2A3.2 3.2 0 0 0 7.4 18.2z"/><circle class="e" cx="12.4" cy="14.3" r="1.7"/>',
-    # The cloud alone, under the arrows that turn while the server is checked.
+    # The cloud alone, under the arrows that turn while a check runs.
     "cloud_line": '<path d="M7.4 18.2h9.7a3.8 3.8 0 0 0 .4-7.58 5.3 5.3 0 0 0-10.2 1.2A3.2 3.2 0 0 0 7.4 18.2z"/>',
     "cloud_check": '<path d="M7.4 18.2h9.7a3.8 3.8 0 0 0 .4-7.58 5.3 5.3 0 0 0-10.2 1.2A3.2 3.2 0 0 0 7.4 18.2z"/><path d="M9.6 14.2l1.8 1.8 3.4-3.4"/>',
     "cloud_wait": '<path d="M7.4 18.2h9.7a3.8 3.8 0 0 0 .4-7.58 5.3 5.3 0 0 0-10.2 1.2A3.2 3.2 0 0 0 7.4 18.2z"/><circle class="f" cx="9.6" cy="14.6" r=".9"/>'
@@ -212,8 +212,8 @@ ICONS = {
 # Notes carried into the generated catalogue, for icons whose use is not
 # plain from the name.
 DOCS = {
-    "globe": "The server's addresses (at home and away): the network the server is\n"
-             "reached across. Its own glyph, apart from [swap], which is the sync.",
+    "globe": "The network the downloads cross, as in the connection settings. Its\n"
+             "own glyph, apart from [swap], which is the sync.",
     "more": "More actions behind a menu: three dots across.",
     "more_vert": "More actions behind a menu on a phone: three dots down.",
 }

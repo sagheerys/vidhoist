@@ -157,7 +157,7 @@ void main() {
       );
     });
 
-    test("the platform filter, which is Lite's alone", () {
+    test("the platform filter, which only the phone app has", () {
       expect(
         buildLocalLibraryView(
           items,

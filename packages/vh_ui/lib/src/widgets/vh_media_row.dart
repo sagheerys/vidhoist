@@ -168,7 +168,7 @@ class VhMediaRow extends StatelessWidget {
                               const VhFavoriteMark(),
                             // The platform letters stay on the computer's
                             // table; a phone row carries one mark at most
-                            // (log §4, 2026-11-01), and the platform is in
+                            // and the platform is in
                             // the details and the filter sheet.
                             if (platform != VhPlatformKind.other &&
                                 VhDesktopApp.isDesktop(context)) ...[

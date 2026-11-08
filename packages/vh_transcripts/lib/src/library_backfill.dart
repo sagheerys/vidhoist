@@ -9,11 +9,10 @@ import 'transcript.dart';
 import 'transcript_bundle.dart';
 
 /// Transcripts for clips downloaded before transcripts were turned on,
-/// gathered on a computer into one file that Super imports.
+/// gathered into one bundle file to import.
 ///
-/// The Vidhoist server cannot fetch these: it keys its records by URL, so a
-/// subtitles job for a clip already in the library replaces the clip's own
-/// record and hides it. The server is only read, for its list of clips.
+/// The clips come from the library's history ([candidates]); only their
+/// subtitles are fetched, never the media again.
 ///
 /// Every answer is kept in [work] as it arrives, so a run stopped by a
 /// block or by hand resumes where it left off.
@@ -182,7 +181,7 @@ class LibraryBackfill {
     return report;
   }
 
-  /// Every transcript gathered so far, in the format Super imports.
+  /// Every transcript gathered so far, as a bundle file to import.
   Future<String> bundle() async {
     final transcripts = <Transcript>[];
     if (await work.exists()) {

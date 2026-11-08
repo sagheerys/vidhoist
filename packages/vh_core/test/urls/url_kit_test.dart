@@ -146,7 +146,7 @@ void main() {
       );
     });
 
-    test('a regression from a real server: two watch URLs with different ids are not equal'
+    test('a regression from real data: two watch URLs with different ids are not equal'
         'عبر التطبيع (كاد يحذف عنصراً بريئاً)', () {
       expect(
         UrlKit.urlsMatch(
@@ -175,18 +175,16 @@ void main() {
       expect(UrlKit.isSafeServerFilename('أغنية جميلة.dQw4.mp3'), isTrue);
     });
 
-    // **`x..y` is deliberately accepted now (field report 2026-09-03).**
-    // yt-dlp truncates long titles with an ellipsis, so the old
-    // `contains('..')` condition rejected legitimate files the server
-    // genuinely serves (measured: HTTP 206). Traversal needs a path
+    // **`x..y` is deliberately accepted (2026-09-03).** yt-dlp truncates
+    // long titles with an ellipsis, so a `contains('..')` condition
+    // rejected legitimate files. Traversal needs a path
     // separator, which is rejected below.
     for (final good in [
       'x..y',
       'مدر... [2077436096300945409].mp4',
       'a....b',
-      // A clip in a subfolder, as Vidhoist reports it (contributed by
-      // Kasull-454, pull request #25): the server serves these, so refusing
-      // them made the clip unplayable.
+      // A clip in a subfolder, as a history record names it: refusing
+      // these made the clip unplayable.
       'a/b.mp4',
       'creator/clip [id]/clip [id].mp4',
     ]) {
@@ -221,15 +219,15 @@ void main() {
       'https://fb.watch/abc123/',
       'https://www.facebook.com/share/v/abc/',
       'https://on.soundcloud.com/AbCd',
-      // Reddit, measured against a real server 2026-09-20: the server files
-      // the item under the URL it was redirected to, so leaving any of these
+      // Reddit, measured 2026-09-20: a download is filed under the URL it
+      // was redirected to, so leaving any of these
       // unresolved is a download nothing can ever match.
       'https://redd.it/1w64qio',
       'https://v.redd.it/52oky0lgjanh1',
       'https://www.reddit.com/r/reacher/s/AbCdEfGh12',
       'https://www.reddit.com/u/someone/s/AbCdEfGh12',
       // Vimeo, measured the same day: the address shown on an author's page
-      // is 301'd to the number the server files the clip under.
+      // is 301'd to the number the clip is filed under.
       'https://vimeo.com/hugodesousa/bestfriendswiththedevil',
       'https://vimeo.com/channels/staffpicks/1225400313',
       'https://player.vimeo.com/video/1225400313',
@@ -268,8 +266,8 @@ void main() {
     test('and a Vimeo link that is already the canonical number costs no '
         'request either — that is the form most links take', () {
       expect(UrlKit.needsResolution('https://vimeo.com/1225400313'), isFalse);
-      // An unlisted clip carries its hash after the number, and the server
-      // files it under exactly what it was given.
+      // An unlisted clip carries its hash after the number, and it is
+      // filed under exactly what was given.
       expect(
         UrlKit.needsResolution('https://vimeo.com/1225400313/a1b2c3d4e5'),
         isFalse,
@@ -302,8 +300,8 @@ void main() {
   /// measured effect on a real device: one item made available offline gave
   /// its file to **every** Facebook item, so the fourth one opened the
   /// first one's clip in the external player. Worse, the same function
-  /// matches `/history` in Lite, which means pulling an innocent file **and
-  /// then deleting the original from the server**.
+  /// matches against the history, which means taking an innocent file
+  /// **and then deleting the original**.
   group('urlsMatch: the identity in the query, Facebook', () {
     const a = 'https://m.facebook.com/watch/?v=1619243166301797&_rdr';
     const b = 'https://m.facebook.com/watch/?v=2657266731405287&_rdr';

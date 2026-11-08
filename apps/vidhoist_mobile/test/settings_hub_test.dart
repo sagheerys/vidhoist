@@ -154,7 +154,7 @@ void main() {
     expect(find.text(vhMetaLine([l10n.themeDark, 'English'])), findsOneWidget);
   });
 
-  testWidgets('no server row any more: the engine is on the phone', (
+  testWidgets('the engine row is there: the engine is on the phone', (
     tester,
   ) async {
     await at(tester, const Size(411, 914));

@@ -1,4 +1,4 @@
-/// The Wahaj design system: tokens, themes, shared widgets, localisation.
+/// The Vidhoist design system: tokens, themes, shared widgets, localisation.
 /// Every visual value comes from the tokens here and nowhere else.
 library;
 

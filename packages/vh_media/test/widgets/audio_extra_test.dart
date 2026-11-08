@@ -8,8 +8,8 @@ import '../playback/fake_player_port.dart';
 
 import '../icon_finder.dart';
 
-/// The audio screen is shared: Super adds a transcript button beside
-/// speed and queue, Lite adds nothing and must look as it always has.
+/// The audio screen is shared: an app may add a transcript button beside
+/// speed and queue, and without one the screen must look as it always has.
 void main() {
   late VhAudioHandler handler;
 

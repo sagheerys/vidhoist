@@ -16,8 +16,7 @@ import '../../shell/desktop_dialog.dart';
 /// Following a channel, or editing one already followed: one dialog,
 /// since the fields are the same. The link cannot change on an edit (it
 /// would be another channel, with another seen-list), and the quality is
-/// asked once, when following, because the server will not change it
-/// afterwards.
+/// asked once, when following, because it cannot be changed afterwards.
 ///
 /// [name] heads a follow offered from a channel the library already has
 /// clips from, and [url] fills the link with one of them: following a

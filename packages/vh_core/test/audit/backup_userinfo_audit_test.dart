@@ -1,7 +1,7 @@
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
-/// The Windows app keeps its server addresses under keys of its own, and a
+/// The Windows app keeps web addresses under keys of its own, and a
 /// backup must strip `user:pass@` from those exactly as it does from the
 /// phone's keys: the backup folder is an ordinary file anyone can copy.
 void main() {

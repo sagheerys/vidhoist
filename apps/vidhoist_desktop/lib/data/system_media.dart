@@ -12,7 +12,7 @@ typedef CoverFile = Future<String?> Function(
 );
 
 /// The bridge to Windows' places, so the app can hand it [CoverFile] once
-/// the server is known. Overridden in main; null in tests.
+/// it starts. Overridden in main; null in tests.
 final systemMediaBridgeProvider = Provider<SystemMediaBridge?>((ref) => null);
 
 /// What Windows shows of the clip playing, in its media flyout, the tray
@@ -100,9 +100,9 @@ class SystemNowPlaying {
 
 /// **A cover Windows may fetch itself**, or null. Windows asks for the
 /// picture with no credentials, and the address goes to the system's own
-/// components: YouTube's public covers qualify, a cover on the user's own
-/// server never does (it would need the password, which must not leave
-/// this app, and its address is private).
+/// components: YouTube's public covers qualify, any other address never
+/// does (it may need a credential, which must not leave this app, or be
+/// private).
 String? publicThumbnail(String? url) {
   final uri = url == null ? null : Uri.tryParse(url);
   if (uri == null || uri.scheme != 'https' || uri.userInfo.isNotEmpty) {
@@ -139,7 +139,7 @@ List<T> previewOrder<T>(List<T> buttons, {required bool mirrored}) =>
     mirrored ? buttons.reversed.toList() : buttons;
 
 /// A line for a menu Windows draws itself (the tray's). Those menus lay
-/// text out left to right whatever the language, so "Open Vidhoist Ember" in
+/// text out left to right whatever the language, so "Open Vidhoist" in
 /// Arabic put the verb after the name; a right-to-left embedding makes the
 /// line read in its own order.
 String windowsMenuText(String text, {required bool rtl}) =>
@@ -181,7 +181,7 @@ class SystemMediaBridge {
   var _first = true;
 
   /// **The cover of a clip whose picture Windows may not fetch itself**
-  /// (one on the user's server, which needs the password): the copy
+  /// (any but a public YouTube cover): the copy
   /// already saved on this computer. Without it the flyout kept showing
   /// the cover of the last clip that had a public one.
   CoverFile? coverFile;

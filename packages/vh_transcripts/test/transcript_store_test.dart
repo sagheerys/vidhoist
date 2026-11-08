@@ -167,7 +167,7 @@ void main() {
 
   test('an old file labelled after its subtitle file (ar-orig) is one '
       'language with ar, and goes once ar exists', () async {
-    // Field report: a third tab named "ar-orig" beside
+    // Seen once: a third tab named "ar-orig" beside
     // Arabic and English, for the one clip fetched by the first version.
     String legacyName(String key) {
       var hash = 0xcbf29ce484222325;

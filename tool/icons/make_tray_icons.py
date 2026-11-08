@@ -1,8 +1,8 @@
 """Draws Vidhoist's small Windows icons, one colour each: ink for a light
 taskbar and cream for a dark one.
 
-- the taskbar preview's buttons, from the Wahaj icons the app draws
-  (packages/vh_ui/lib/src/icons/mt_icons.dart), so they match the player;
+- the taskbar preview's buttons, from the icons the app draws
+  (packages/vh_ui/lib/src/icons/vh_icons.dart), so they match the player;
 - the count badge on the taskbar button, Vidhoist's blue with a white
   figure (the day accent: one badge serves both taskbars).
 
@@ -26,7 +26,7 @@ INK, CREAM = "#2B211B", "#FBF6EE"
 THEMES = [("light", INK), ("dark", CREAM)]
 SIZES = [(16, 16), (24, 24), (32, 32), (48, 48)]
 OUT = "apps/vidhoist_desktop/assets/tray/"
-ICONS = "packages/vh_ui/lib/src/icons/mt_icons.dart"
+ICONS = "packages/vh_ui/lib/src/icons/vh_icons.dart"
 
 
 def svg_image(svg, scale):
@@ -37,7 +37,7 @@ def svg_image(svg, scale):
     return Image.open(io.BytesIO(pixmap.tobytes("png"))).convert("RGBA")
 
 
-def wahaj(key):
+def icon_svg(key):
     """One icon's SVG from the app's own set, slots unfilled."""
     source = open(ICONS, encoding="utf-8").read()
     quotes = "'" * 3
@@ -48,7 +48,7 @@ def wahaj(key):
 def preview_buttons():
     for key in ["prev", "play_fill", "pause", "next"]:
         for theme, colour in THEMES:
-            svg = wahaj(key).replace("{ink}", colour).replace("{ember}", colour)
+            svg = icon_svg(key).replace("{ink}", colour).replace("{ember}", colour)
             image = svg_image(svg, 256 / 24).resize((256, 256), Image.LANCZOS)
             image.save(f"{OUT}{key}_{theme}.ico", sizes=SIZES[:3])
 

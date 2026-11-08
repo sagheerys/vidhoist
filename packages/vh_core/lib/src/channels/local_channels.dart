@@ -18,8 +18,8 @@ typedef ChannelEnqueue = void Function(
   String? folder,
 );
 
-/// **Following channels on this device**: what Vidhoist's server did on its
-/// own schedule. A channel is read by a flat listing (`yt-dlp
+/// **Following channels on this device**, each checked on its own
+/// schedule. A channel is read by a flat listing (`yt-dlp
 /// --flat-playlist`, about two seconds), the ids already met are kept, and
 /// whatever is new goes to the download queue.
 ///

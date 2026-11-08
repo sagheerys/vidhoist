@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// Opens a dialog the way Ember's dialogs open: **it grows from a hair
+/// Opens a dialog the way the app's dialogs open: **it grows from a hair
 /// smaller as it fades in, and leaves quicker than it came**. Flutter's own
 /// only faded, in the same short time each way, so the add-link dialog, the
 /// first thing a new user opens, arrived as a flat cut.

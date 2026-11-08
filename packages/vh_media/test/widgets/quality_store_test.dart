@@ -6,7 +6,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 /// **The details sheet read the file's header on every launch** (reported
 /// 2026-09-29): the answer lived in memory alone, so each new session paid
-/// the server round trip again and showed "reading" meanwhile. These guard
+/// the header read again and showed "reading" meanwhile. These guard
 /// the store that keeps it.
 void main() {
   late MediaQualityIndex index;

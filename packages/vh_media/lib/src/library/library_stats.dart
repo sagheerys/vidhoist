@@ -28,7 +28,7 @@ class LibraryStats {
   final int bytes;
 
   /// The length of every clip whose length is known, and how many those
-  /// are: a server's history often gives none.
+  /// are: the history often gives none.
   final Duration length;
   final int timed;
   final int withText;

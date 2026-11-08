@@ -5,7 +5,7 @@ import 'key_value_store.dart';
 import 'playlist_removals.dart';
 
 /// The saved playlists store, under the `saved_playlists` key (§5.1).
-/// Every edit runs inside [PrefsMutex], and the old Lite format
+/// Every edit runs inside [PrefsMutex], and the older format
 /// (videoPaths) is read automatically.
 class PlaylistsStore {
   PlaylistsStore({
@@ -108,8 +108,8 @@ class PlaylistsStore {
   /// **Removes keys from every playlist**, called when a file is deleted
   /// for good.
   ///
-  /// Field report 2026-09-04: "I deleted the playlist's files and they
-  /// stayed in the playlist and do not play." Deletion pruned every index,
+  /// Seen 2026-09-04: a playlist's deleted files stayed in it and did not
+  /// play. Deletion pruned every index,
   /// titles, artwork, tags, positions, **except the playlists**, so a dead
   /// entry stayed and played something else when tapped.
   ///

@@ -28,8 +28,8 @@ class LibraryItem {
   final String? uploader;
   final String? thumbnail;
 
-  /// Where the file is on the server, as a [ServerPath]: folder, name and
-  /// route.
+  /// Where the file is in the download folder, as a [ServerPath]: folder,
+  /// name and route.
   final String? serverFilename;
   final String? localPath;
   final DateTime? timestamp;
@@ -44,9 +44,9 @@ class LibraryItem {
 
   bool get isOffline => localPath != null;
 
-  /// **The folder the file sits in on the server**, below its route, or
-  /// null at the top: the one chosen when it was added, and any subfolders
-  /// `OUTPUT_TEMPLATE` wrote inside it.
+  /// **The folder the file sits in**, below its route, or null at the top:
+  /// the one chosen when it was added, and any subfolders the output
+  /// template wrote inside it.
   String? get folderPath {
     final path = serverFilename;
     if (path == null) return null;
@@ -79,10 +79,9 @@ class LibraryItem {
   /// [keptCover] is the online cover kept as a file on this device, first
   /// when there is one (see `CoverKeeper`).
   ///
-  /// [cachedThumb] is the cover from the artwork index, **in practice the
-  /// only source on a real server**: `/history` returns no `thumbnail` for
-  /// any item (zero out of 252), and the cover is generated locally by
-  /// `MediaProbe` (field report).
+  /// [cachedThumb] is the cover from the artwork index, **often the only
+  /// source**: a history record may carry no `thumbnail`, and then the
+  /// cover is generated locally by `MediaProbe`.
   factory LibraryItem.fromHistory(
     HistoryItem item, {
     String? localPath,
@@ -110,7 +109,7 @@ class LibraryItem {
     tags: tags,
   );
 
-  /// A local item no longer on the server; its metadata comes from its
+  /// A local item no longer in the history; its metadata comes from its
   /// path.
   factory LibraryItem.fromOfflineOnly(
     String canonicalUrl,
@@ -161,7 +160,7 @@ PlaylistItem toPlaylistItem(LibraryItem item) => PlaylistItem(
   aspectRatio: item.aspectRatio,
 );
 
-/// Library filters: all, favourites, offline, server.
+/// Library filters: all or favourites.
 enum LibraryScope { all, favorites }
 
 enum MediaTypeFilter { all, video, audio, shorts }
@@ -208,8 +207,8 @@ List<LibraryItem> buildLibraryView(
 }) {
   final q = query.trim().toLowerCase();
   // **Compared case-insensitively and trimmed**, because the name arrives
-  // from the server verbatim and the same channel can reach `/history`
-  // with a stray space after a yt-dlp upgrade.
+  // from yt-dlp verbatim and the same channel can reach the history with
+  // a stray space after a yt-dlp upgrade.
   //
   // **A blank name is no filter, not "the items with no channel".** The
   // interface never sets one, but a filter that quietly hides the whole
@@ -286,7 +285,7 @@ List<MapEntry<MediaPlatform, int>> platformCounts(List<LibraryItem> items) =>
 /// nothing lies below, which hides that level of the filter.
 ///
 /// **A level where every folder holds a single clip is no level at all**:
-/// a server whose `OUTPUT_TEMPLATE` gives each clip a folder of its own
+/// an output template that gives each clip a folder of its own
 /// (`channel/clip [id]/clip [id].mp4`) would otherwise offer one choice
 /// per clip, so it is left out and the parent shows them all.
 List<MapEntry<String, int>> folderCounts(

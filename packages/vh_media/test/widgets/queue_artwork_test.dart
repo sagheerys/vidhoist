@@ -5,13 +5,13 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../icon_finder.dart';
 
-/// **An empty square where a cover should be** (field report 2026-09-20:
-/// "an audio clip inside the video player's queue shows a black square").
+/// **An empty square where a cover should be**: an audio clip inside the
+/// video player's queue showed a black square.
 ///
 /// The tile asked the app for a cover and drew its own icon only when the
 /// answer was null. But the app answers null only for an item with **no**
 /// cover at all; a cover that exists and then fails to load — a cleared
-/// cache, an extracted cover deleted with the file, a server thumbnail that
+/// cache, an extracted cover deleted with the file, an online thumbnail that
 /// 404s — comes back as an empty box, and an empty box on the dark queue
 /// sheet is a black square with nothing in it.
 PlaylistItem _item({required bool isAudio}) => PlaylistItem(

@@ -7,7 +7,7 @@ final class BackupFormatException implements Exception {
 }
 
 /// The name a backup carries in its `app` field: Vidhoist's own today,
-/// and `MTF`, which version 1.0.0 wrote before it took its own name; both
-/// are the same plain format.
+/// and `MTF`, which backups from version 1.0.0 carry; both are the same
+/// plain format.
 const backupAppName = 'Vidhoist';
 const backupAppNames = {backupAppName, 'MTF'};

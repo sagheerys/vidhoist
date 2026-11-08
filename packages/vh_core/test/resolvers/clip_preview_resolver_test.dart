@@ -2,7 +2,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
 /// **The add sheet's preview** (mobile plan 2026-11-01): each platform's
-/// public oEmbed, never the server's client, and never a wait longer than
+/// public oEmbed, never a shared client, and never a wait longer than
 /// the timeout.
 void main() {
   const youtube = 'https://youtu.be/dQw4w9WgXcQ';

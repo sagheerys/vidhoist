@@ -14,7 +14,7 @@ import 'device_matrix.dart';
 
 import 'icon_finder.dart';
 
-/// **The whole library on every shape (2026-10-10)**, the twin of Super's:
+/// **The whole library on every shape (2026-10-10)**:
 /// each view mode, in both languages, across the device matrix's phones,
 /// tablets and foldables and its three font scales.
 void main() {

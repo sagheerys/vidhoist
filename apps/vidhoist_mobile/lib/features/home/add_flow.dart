@@ -114,7 +114,7 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
         VhQualityOption(value: '1080', label: l10n.quality1080),
         VhQualityOption(value: '720', label: l10n.quality720),
         VhQualityOption(value: '480', label: l10n.quality480),
-        // Lite alone: a family phone keeps what it downloads.
+        // Phone only: a phone keeps what it downloads, so small files count.
         VhQualityOption(value: '360', label: l10n.quality360),
       ],
       VhQualityOption(value: 'audio', label: l10n.audioOnly),
@@ -148,8 +148,8 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
 
     // **The decision is made on the final URL, not the entered one** (field
     // report 2026-09-08): `on.soundcloud.com/…` is an album with no
-    // `/sets/`, so it counted as a single clip and the server expanded it
-    // into twenty with no selection screen. For links that are not short,
+    // `/sets/`, so it counted as a single clip and all twenty downloaded
+    // with no selection screen. For links that are not short,
     // `needsResolution` returns false immediately, so there is no delay at
     // all.
     final url = await ref

@@ -4,8 +4,8 @@ import 'package:vh_transcripts/vh_transcripts.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('the SRT a real Vidhoist server returned reads whole', () {
-    // Fetched from a real server on 2026-09-29 (a subtitles-only job).
+  test('a real SRT from a subtitles-only download reads whole', () {
+    // Fetched for real on 2026-09-29 (a subtitles-only job).
     final srt = File('test/fixtures/me_at_the_zoo.en.srt').readAsStringSync();
     final segments = SubtitleParser.parse(srt);
 
@@ -111,7 +111,7 @@ void main() {
   });
 
   group('when each word is said (2026-10-14)', () {
-    // The shape of YouTube's automatic captions, as a server writes them
+    // The shape of YouTube's automatic captions, as yt-dlp writes them
     // beside a clip: each cue repeats the line before it, and the new line
     // stamps the moment of every word after its first.
     const rolling =
@@ -138,7 +138,7 @@ void main() {
     });
 
     test('stamped punctuation joins its word, and invisible spaces go', () {
-      // Both measured on a server's files: a comma stamped on its own read
+      // Both measured on real files: a comma stamped on its own read
       // "happen , for", and two zero-width spaces after "AI" read as a word.
       final zwsp = String.fromCharCode(0x200B);
       final vtt =

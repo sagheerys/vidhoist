@@ -15,7 +15,7 @@ import '../video_surface.dart';
 /// clipboard (a phone hides this in a sheet; the panel has the room).
 ///
 /// **The phone's details and more**: the size, the video and the sound as
-/// the file really is (the server records "best", not what came), the
+/// the file really is (the history records "best", not what came), the
 /// date it arrived, where it is kept, and the lists and tags it is in.
 class DetailsView extends ConsumerWidget {
   const DetailsView({super.key, required this.item});

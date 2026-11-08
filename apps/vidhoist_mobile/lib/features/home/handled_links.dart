@@ -6,7 +6,7 @@ import 'package:vh_core/vh_core.dart';
 import '../../di.dart';
 import 'reception.dart';
 
-/// The links already sent to the server, by any route: the clipboard bar,
+/// The links already sent for download, by any route: the clipboard bar,
 /// the add sheet, a share, a playlist, a retry.
 ///
 /// The clipboard keeps a link long after it was downloaded, so without

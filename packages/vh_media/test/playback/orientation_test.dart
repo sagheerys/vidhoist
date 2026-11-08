@@ -300,7 +300,7 @@ void main() {
       await tester.runAsync(opened.$2.dispose);
     }
 
-    // Field report 2026-10-04: an Arabic line read "3:02 / 1:20". The
+    // An Arabic line read "3:02 / 1:20". The
     // isolation does not depend on the language, so it is checked where the
     // test font fits the page.
     testWidgets('the time is isolated, position then length', (tester) async {
@@ -323,8 +323,8 @@ void main() {
       await closeAll(tester, opened);
     });
 
-    // Field report 2026-10-04: a portrait clip too long for the shorts
-    // player was turned sideways too, and lay on its side in the hand.
+    // A portrait clip too long for the shorts player was turned sideways
+    // too, and lay on its side in the hand.
     testWidgets('a portrait clip stays standing and fills the screen', (
       tester,
     ) async {

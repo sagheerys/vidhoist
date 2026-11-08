@@ -27,7 +27,7 @@ String qualityLabel(VhLocalizations l10n, Quality quality) => switch (quality) {
 /// 2. **The quality shown is the quality applied**: `Quality.applyRule`
 /// forces numeric qualities to `best` outside YouTube (a yt-dlp
 /// constraint), so showing "1080" for a TikTok link lies to the user. We
-/// show exactly what went to the server.
+/// show exactly what went to the engine.
 /// 3. **An undo, not a confirmation**: a confirmation dialog defeats the
 /// meaning of "quick". Instead there is an action in the snack bar that
 /// cancels the task and opens the sheet with the same URL.
@@ -44,7 +44,7 @@ String qualityLabel(VhLocalizations l10n, Quality quality) => switch (quality) {
 /// works whatever the setting says.
 ///
 /// Returns `false` when it cannot proceed (setting off, a playlist, no
-/// server), and the caller takes over with the sheet.
+/// engine yet), and the caller takes over with the sheet.
 bool startQuickDownload(
   BuildContext context,
   WidgetRef ref,

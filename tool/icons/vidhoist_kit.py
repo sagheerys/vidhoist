@@ -2,8 +2,8 @@
 """Vidhoist's mark kit: one source for every icon the two apps ship.
 
 The mark: a window whose title bar carries the accent and whose glyph is a
-download arrow landing in a tray, with film perforations down both sides, as
-the Vidhoist icons had. On Windows it sits on an espresso tile; on Android the
+download arrow landing in a tray, with film perforations down both sides.
+On Windows it sits on an espresso tile; on Android the
 tile is the accent and the plate is cream with the glyph cut out of it.
 
 Writes:
@@ -204,6 +204,7 @@ def installer_images():
 def brand_files():
     os.makedirs(BRAND, exist_ok=True)
     for old in os.listdir(BRAND):
+        # Brand files from before the rename are swept away.
         if old.startswith("ember-"):
             os.remove(os.path.join(BRAND, old))
     files = {

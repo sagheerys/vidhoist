@@ -27,8 +27,8 @@ Stream<FileSystemEntity> _list(Directory dir) => dir
 
 /// The local library: **scanning the folder** is the source. A file that
 /// actually exists is shown, and the indexes only enrich it. That is how
-/// files from the old Lite appear after migration, and how files deleted
-/// from outside the app disappear with no ghosts.
+/// files copied into the folder appear, and how files deleted from
+/// outside the app disappear with no ghosts.
 final localMediaProvider = FutureProvider<List<LocalItem>>((ref) async {
   final offline = await ref.watch(offlineIndexProvider).readAll();
   final titles = await ref.watch(titleIndexProvider).readAll();
@@ -113,12 +113,12 @@ class LibraryViewOptions {
   final MediaTypeFilter type;
   final String query;
 
-  /// The platform filter with live counts (Lite specific).
+  /// The platform filter with live counts (phone app only).
   final MediaPlatform? platform;
   final LibrarySort sort;
 
-  /// The saved view mode: one of four, not overlapping flags. Grid came
-  /// over from Super on request 2026-09-04, and cards on 2026-09-08.
+  /// The saved view mode: one of four, not overlapping flags. Grid was
+  /// added on request 2026-09-04, and cards on 2026-09-08.
   final LibraryViewMode mode;
 
   bool get compact => mode == LibraryViewMode.compact;
@@ -241,13 +241,13 @@ final libraryViewProvider =
 /// The list on screen after filtering and sorting.
 ///
 /// **`whenData` was erasing the retained data** (field report 2026-09-03,
-/// reproduced on Super with a screen recording: the library was replaced by
+/// reproduced with a screen recording: the library was replaced by
 /// a spinner for 13 seconds during a single download). That function
 /// dispatches on the **type** of the state rather than on whether a value
 /// exists, so on `AsyncLoading` it returns a **new empty** instance, losing
 /// whatever Riverpod held from before, and the ordering in the screen looks
-/// to have no effect. Lite rescans the folder after every completion and
-/// suffers the same thing.
+/// to have no effect. The library rescans the folder after every
+/// completion, so every download triggers it.
 ///
 /// The rule is now explicit: **a value exists, show it; else the error;
 /// else loading.**

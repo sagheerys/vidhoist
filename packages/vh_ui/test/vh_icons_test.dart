@@ -117,7 +117,7 @@ void main() {
     expect(find.byType(SvgPicture), findsNWidgets(2));
   });
 
-  testWidgets('outside a Wahaj theme the icon still draws', (tester) async {
+  testWidgets('outside the app\'s theme the icon still draws', (tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -128,7 +128,7 @@ void main() {
     expect(find.byType(SvgPicture), findsOneWidget);
   });
 
-  testWidgets('**the guard**: what Flutter draws by itself takes the Wahaj '
+  testWidgets('**the guard**: what Flutter draws by itself takes the app\'s '
       'glyphs too: the back arrow, the chosen segment', (tester) async {
     final nav = GlobalKey<NavigatorState>();
     await tester.pumpWidget(

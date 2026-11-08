@@ -10,7 +10,7 @@ import '../icons/vh_icons.dart';
 /// player.
 ///
 /// Presentation only: every string and action comes from the app, since
-/// vh_ui does not know the server exists. **Both actions are offered on
+/// vh_ui knows nothing of downloads. **Both actions are offered on
 /// purpose**: "download" for the common case and "options" for whoever
 /// wants a different quality, because an immediate download with no way
 /// out unsettles anyone unsure of the result. "Dismiss" is a condition: a

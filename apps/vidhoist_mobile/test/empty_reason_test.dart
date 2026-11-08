@@ -3,7 +3,7 @@ import 'package:vidhoist_mobile/features/downloads_library/library_providers.dar
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vh_core/vh_core.dart';
 
-/// **An empty list says why it is empty**, as in Super: the library screen
+/// **An empty list says why it is empty**: the library screen
 /// tells "nothing matches these filters" from "no downloads yet" by
 /// [LibraryViewOptions.narrowed].
 void main() {

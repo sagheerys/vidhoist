@@ -34,11 +34,11 @@ class UpdateChecker {
 
   final HttpGetString fetch;
 
-  /// The part of a filename that identifies this app: `super`, `lite` or
-  /// `ember`.
+  /// The part of a filename that identifies this app's files
+  /// (`vidhoist`).
   final String assetMarker;
 
-  /// How this app's file ends: `.apk` on the phones, `.exe` for Ember.
+  /// How this app's file ends: `.apk` on the phone, `.exe` on Windows.
   final String assetExtension;
 
   /// `owner/name`. The single switching point if releases ever move to a

@@ -39,11 +39,11 @@ class ShortLinkResolver {
   }
 
   /// **Resolution with a time ceiling, for the routing decision before
-  /// downloading** (field report 2026-09-08).
+  /// downloading** (2026-09-08).
   ///
   /// `on.soundcloud.com/…`, which is what the share button in the
   /// SoundCloud app produces, contains no `/sets/`, so `PlaylistDetector`
-  /// saw a single clip and passed it to the server, where yt-dlp expanded
+  /// saw a single clip and passed it to yt-dlp, which expanded
   /// it into a **whole album**: twenty tracks downloaded with no selection
   /// screen, while the app knew of one task. The decision has to be made on
   /// the **final** URL, not the entered one.

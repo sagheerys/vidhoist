@@ -5,9 +5,8 @@ import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_mobile/features/shared/error_text.dart';
 
 /// Every way yt-dlp on the device can fail has its own sentence, in both
-/// languages: the generic "Error: …" with yt-dlp's English inside an
-/// Arabic line is what the server pipeline showed, and it told the person
-/// nothing they could act on.
+/// languages: a generic "Error: …" with yt-dlp's English inside an
+/// Arabic line tells the person nothing they could act on.
 void main() {
   for (final locale in [const Locale('en'), const Locale('ar')]) {
     final l = lookupVhLocalizations(locale);

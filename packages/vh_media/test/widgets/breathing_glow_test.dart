@@ -35,7 +35,7 @@ void main() {
         (VhPalette.phoneDay, VhPalette.phoneNight),
       ]) {
         test('${desktop ? 'computer' : 'phone'}, '
-            '${day == VhPalette.desktopDay ? 'Super' : 'Lite'}', () {
+            '${day == VhPalette.desktopDay ? 'desktop' : 'phone'} palette', () {
           final byNight = standing(night, dark: true, desktop: desktop);
           final byDay = standing(day, dark: false, desktop: desktop);
           expect(byDay, greaterThanOrEqualTo(1.5));

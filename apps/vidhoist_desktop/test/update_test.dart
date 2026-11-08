@@ -90,7 +90,7 @@ void main() {
   }
 
   test('**the guard**: a newer version is downloaded as the installer and '
-      'started, never the phones\' APK', () async {
+      'started, never the phone app\'s APK', () async {
     final c = containerFor(latest('0.2.0', setupUrl()));
     final update = c.read(updateProvider.notifier);
     await update.checkNow();

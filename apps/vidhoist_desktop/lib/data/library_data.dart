@@ -6,8 +6,8 @@ import 'package:vh_media/vh_media.dart';
 import '../di.dart';
 import 'engine_data.dart';
 
-/// The downloads made on this computer, in the shape the server's history
-/// had: the library, the details and the statistics read it unchanged.
+/// The downloads made on this computer, in the shape of a download
+/// history: the library, the details and the statistics read it unchanged.
 final historyProvider = FutureProvider<HistoryResponse?>((ref) async {
   final local = await ref.watch(localLibraryProvider.future);
   return HistoryResponse(done: [for (final entry in local) entry.item]);
@@ -30,8 +30,8 @@ final tagsIndexProvider = Provider(
   (ref) => TagsIndex(
     store: ref.watch(keyValueStoreProvider),
     mutex: ref.watch(prefsMutexProvider),
-    // Stamped like Super's, so a later merge with the phone knows which
-    // write is newer.
+    // Stamped as the phone app stamps them, so a later merge with the
+    // phone knows which write is newer.
     clock: DateTime.now,
   ),
 );

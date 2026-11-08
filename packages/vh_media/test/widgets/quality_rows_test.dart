@@ -38,7 +38,7 @@ void main() {
           cacheKey: 'https://x/4k',
           load: () => answer.future,
           row: row,
-          // 293 MB over 7.1 minutes, measured on a real server.
+          // 293 MB over 7.1 minutes, measured on a real download.
           sizeBytes: 293000000,
           duration: const Duration(minutes: 7, seconds: 6),
         ),

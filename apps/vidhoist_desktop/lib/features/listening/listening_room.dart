@@ -39,11 +39,11 @@ bool playsAsSound(PlaylistItem? item, {required bool audioOnly}) =>
     item != null && (item.isAudio || audioOnly);
 
 /// **The listening room**: for sound left playing while the window stays
-/// open. The cover large and tilted, the two embers behind it at a larger
+/// open. The cover large and tilted, the two glows behind it at a larger
 /// scale, moving while it plays and drawing back when paused, and the
 /// transcript flowing past beside it in large lines.
 ///
-/// With animations turned off the embers stay still and the lines step
+/// With animations turned off the glows stay still and the lines step
 /// rather than glide.
 class ListeningRoom extends ConsumerStatefulWidget {
   const ListeningRoom({super.key, required this.item, required this.onClose});
@@ -65,7 +65,7 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
   /// Below this the cover is left out: a small square says nothing.
   static const double _smallest = 120;
 
-  /// The embers spread past the cover by this much more than on a phone.
+  /// The glows spread past the cover by this much more than on a phone.
   static const double _glowScale = 1.3;
 
   late final VhPlayer _player = ref.read(playerProvider);
@@ -182,7 +182,7 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
   }
 }
 
-/// The tilted cover with the embers behind it, and the title beneath.
+/// The tilted cover with the glows behind it, and the title beneath.
 class _CoverColumn extends ConsumerWidget {
   const _CoverColumn({
     required this.item,
@@ -226,7 +226,7 @@ class _CoverColumn extends ConsumerWidget {
                   size: size * glowScale,
                   clip: item.canonicalUrl,
                   // Its own layer: the cover is drawn once, not on every
-                  // frame the embers behind it move.
+                  // frame the glows behind it move.
                   child: RepaintBoundary(
                     child: VhTiltedArtwork(
                       item: item,

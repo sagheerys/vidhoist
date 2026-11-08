@@ -1,6 +1,6 @@
 import 'url_keyed_index.dart';
 
-/// The "available offline" index (Super): canonicalUrl to the local file
+/// The "available offline" index: canonicalUrl to the local file
 /// path. Prefs key: `offline_index` (§5.1, the old name kept for a smooth
 /// migration).
 final class OfflineIndex extends UrlKeyedIndex<String> {

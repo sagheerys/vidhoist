@@ -5,12 +5,13 @@ import '../widgets/vh_motion.dart';
 import 'vh_theme.dart';
 import 'vh_theme_controls.dart';
 
-/// The Windows app's theme: the Wahaj theme with the desktop type and
-/// corner scales, and the Wahaj components in place of Material's defaults.
+/// The Windows app's theme: the app's theme with the desktop type and
+/// corner scales, and the app's own components in place of Material's
+/// defaults.
 ///
-/// **A separate entry point, not options on [vhTheme]**: the phone apps
-/// call [vhTheme] and get exactly what they had; nothing here can reach
-/// them.
+/// **A separate entry point, not options on [vhTheme]**: the phone app
+/// calls [vhTheme] and gets exactly what it had; nothing here can reach
+/// it.
 ThemeData vhDesktopTheme(
   VhVariant variant,
   Brightness brightness, {
@@ -50,7 +51,7 @@ ThemeData vhDesktopTheme(
     ),
     highlightColor: p.accentSoft,
     // **A veil of the ink, never an opaque fill**: hovered, a button over
-    // a picture or the ember (a play button, the controls on a video)
+    // a picture or the accent (a play button, the controls on a video)
     // kept its glyph in sight. The opaque card fill covered a white glyph
     // in the day and turned a dark square at night.
     hoverColor: p.ink.withValues(alpha: vhHoverVeil),
@@ -116,7 +117,7 @@ ThemeData vhDesktopTheme(
       ),
       checkColor: WidgetStatePropertyAll(p.onAccent),
     ),
-    // The ember in a ring: the ring stays a hairline until chosen.
+    // The accent in a ring: the ring stays a hairline until chosen.
     radioTheme: RadioThemeData(
       fillColor: WidgetStateProperty.resolveWith(
         (states) => states.contains(WidgetState.selected) ? p.accent : p.line2,
@@ -153,7 +154,7 @@ ThemeData vhDesktopTheme(
         textStyle: base.textTheme.labelLarge,
       ),
     ),
-    // Not yet possible, the filled button stays the ember, pale, so it
+    // Not yet possible, the filled button stays the accent, pale, so it
     // still reads as the one action of the dialog.
     filledButtonTheme: FilledButtonThemeData(
       style: base.filledButtonTheme.style?.copyWith(
@@ -170,8 +171,8 @@ ThemeData vhDesktopTheme(
         ),
       ),
     ),
-    // Ember keeps the ember on a focused field, its one mark of where
-    // typing goes in a window full of panels.
+    // The Windows app keeps the accent on a focused field, its one mark of
+    // where typing goes in a window full of panels.
     inputDecorationTheme: base.inputDecorationTheme.copyWith(
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(corners.field),

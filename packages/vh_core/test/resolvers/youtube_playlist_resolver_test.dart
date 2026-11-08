@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
-/// **Field report 2026-09-02: "the playlist shows an empty page".**
+/// **2026-09-02: a playlist that showed an empty page.**
 ///
 /// The cause, proven by running it: `youtube_explode_dart` emits **zero
 /// items** for a playlist counting 19 (in 2.5.3 and 3.1.0 alike), because

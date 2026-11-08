@@ -3,8 +3,8 @@ import 'package:vh_transcripts/vh_transcripts.dart';
 
 /// The forms a clip's transcript is saved in, from the reading room.
 enum ReadingExport {
-  /// Super's import file, the one the backfill tool writes: the phone
-  /// keeps it as its own transcript.
+  /// The phone app's import file: the phone keeps it as its own
+  /// transcript.
   phone('json'),
 
   /// Subtitles, for a player or an editor.

@@ -118,8 +118,8 @@ void main() {
   });
 
   // Seen on a tablet: the lit colour is painted on the nearest Material,
-  // and on the page's own it stayed behind when the server card above the
-  // list grew a line. Each row carries its surface along.
+  // and on the page's own it stayed behind when a card above the list grew
+  // a line. Each row carries its surface along.
   testWidgets('GUARD: each row paints its light on a surface of its own', (
     tester,
   ) async {

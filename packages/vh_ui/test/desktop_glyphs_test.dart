@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-/// The library's shared cards draw Wahaj icons on a phone and in the
+/// The library's shared cards draw the app's icons on a phone and in the
 /// Windows app alike, and no Material icon on either.
 void main() {
   Widget cards() => ListView(
@@ -33,7 +33,7 @@ void main() {
     await tester.pumpWidget(desktop ? VhDesktopApp(child: app) : app);
   }
 
-  testWidgets('**the guard**: a phone draws the Wahaj icons too', (
+  testWidgets('**the guard**: a phone draws the app\'s icons too', (
     tester,
   ) async {
     await pump(tester, desktop: false);

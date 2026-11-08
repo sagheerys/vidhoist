@@ -1,12 +1,12 @@
 import '../constants/vh_constants.dart';
 
 /// Pure URL tools with no network: extraction from shared text,
-/// YouTube and numeric ids, normalisation, fuzzy matching, and the server
+/// YouTube and numeric ids, normalisation, fuzzy matching, and the
 /// filename guard.
 abstract final class UrlKit {
   /// [text] as a page a browser can open: `http` or `https` with a host,
-  /// else null. A clip's or a channel's link comes from the server's
-  /// history, and the system's opener runs `file:`, a network share or
+  /// else null. A clip's or a channel's link comes from a stored
+  /// record, and the system's opener runs `file:`, a network share or
   /// another app's scheme as readily as it opens a web page.
   static Uri? webUri(String? text) {
     final uri = text == null ? null : Uri.tryParse(text.trim());
@@ -69,7 +69,7 @@ abstract final class UrlKit {
   /// Direction marks and zero-width spaces, which **WhatsApp and Telegram
   /// wrap around links inside Arabic messages**. Without
   /// removing them the URL reaches yt-dlp with an invisible tail and fails
-  /// with an opaque server error, while the same link works when pasted by
+  /// with an opaque error, while the same link works when pasted by
   /// hand. This is an Arabic-first app.
   static final RegExp _bidiMarks = RegExp(
     '[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]',
@@ -121,11 +121,11 @@ abstract final class UrlKit {
     return u;
   }
 
-  /// Fuzzy matching between the entered URL and the canonical `/history`
-  /// one. The ladder: exact, YouTube id, numeric id, normalisation, path
-  /// prefix.
+  /// Fuzzy matching between the entered URL and the canonical one a
+  /// record keeps. The ladder: exact, YouTube id, numeric id,
+  /// normalisation, path prefix.
   ///
-  /// **A decisive rule (caught against a real server 2026-09-01):** two
+  /// **A decisive rule (caught on real data 2026-09-01):** two
   /// YouTube ids are final references. When both exist and differ there is
   /// never a match, and watch URLs are not allowed to fall through to the
   /// normalisation rank, which strips the query and flattens every
@@ -135,11 +135,11 @@ abstract final class UrlKit {
   /// containment matched **the wrong item** for everything except YouTube:
   /// `soundcloud.com/x/track` matched `soundcloud.com/x/track-remix`, and a
   /// numeric id matched a longer number starting with it. The result was
-  /// pulling an innocent file under the requested name **and deleting it
-  /// from the server** in Lite. Containment is now **bounded**: a number is
-  /// not accepted when glued to another number, and a path is accepted only
-  /// as a complete prefix at a `/` boundary, so a private link like
-  /// `…/track/s-abc123` still matches.
+  /// an innocent file taken for the requested one, **and deleted**.
+  /// Containment is now **bounded**: a number is not accepted when glued
+  /// to another number, and a path is accepted only as a complete prefix
+  /// at a `/` boundary, so a private link like `…/track/s-abc123` still
+  /// matches.
   static bool urlsMatch(String url1, String url2) {
     if (url1.isEmpty || url2.isEmpty) return false;
     if (url1 == url2) return true;
@@ -165,9 +165,9 @@ abstract final class UrlKit {
     // platform carrying identity in it (Facebook's `?v=…`) collapses
     // entirely onto one path, `facebook.com/watch`, so **every clip matches
     // every other clip**. The effect was measured: one item made available
-    // offline gave its file to every other Facebook item, and `/history`
-    // matching in Lite pulled an innocent file **and then deleted the
-    // original from the server**. This is the same rule written above for
+    // offline gave its file to every other Facebook item, and a match
+    // against the history took an innocent file **and then deleted the
+    // original**. This is the same rule written above for
     // YouTube, generalised to every platform.
     final query1 = _queryOf(url1);
     final query2 = _queryOf(url2);
@@ -217,24 +217,20 @@ abstract final class UrlKit {
   static bool _isPathPrefix(String longer, String shorter) =>
       shorter.isNotEmpty && longer.startsWith('$shorter/');
 
-  /// The path-traversal guard for filenames coming from the server, applied
-  /// before building a `/download/<filename>` URL. It rejects the empty
+  /// The path-traversal guard for recorded filenames, applied before a
+  /// file is reached by its relative path. It rejects the empty
   /// string, backslashes, the NUL character, and any segment that is empty
   /// (a leading, trailing or doubled slash) or is `.` or `..`.
   ///
-  /// **A relative path is a real file.** Vidhoist reports a clip in a
-  /// subfolder as `creator/clip.mp4`, from a download folder or from an
-  /// `OUTPUT_TEMPLATE` that writes folders, and the server serves it. The
-  /// guard used to refuse every `/`, so such a clip could not be played or
-  /// pulled at all. Traversal needs a `..` segment or an absolute path, and
+  /// **A relative path is a real file.** A clip in a subfolder is named
+  /// `creator/clip.mp4`, from a download folder or from an output template
+  /// that writes folders; refusing every `/` would leave such a clip
+  /// unplayable. Traversal needs a `..` segment or an absolute path, and
   /// both are still refused.
   ///
-  /// **`..` inside a name is not traversal** (field report 2026-09-03). The
-  /// condition used to be `contains('..')`, and yt-dlp truncates long
-  /// titles with dots, so **every clip with a long title failed** with
-  /// "unsafe filename" even though the server served it happily. Measured
-  /// against a real Lite server: a truncated name with an embedded `...`
-  /// returned **HTTP 206 video/mp4**.
+  /// **`..` inside a name is not traversal** (2026-09-03). yt-dlp
+  /// truncates long titles with dots, so a `contains('..')` test made
+  /// **every clip with a long title fail** as "unsafe filename".
   static bool isSafeServerFilename(String name) {
     if (name.isEmpty) return false;
     if (name.contains('\\') || name.contains('\u0000')) return false;
@@ -247,14 +243,12 @@ abstract final class UrlKit {
   /// Is this a short link that needs redirect resolution?
   /// (`docs/ENGINE.md`, Short links.)
   ///
-  /// **This list is correctness, not convenience** (field report 2026-09-20,
-  /// Reddit). Vidhoist files an item under the URL **yt-dlp ended at**, and
-  /// keys every list by it; when extraction returns `_type: url` it re-adds
-  /// the redirect target and nothing in the item remembers what was sent. So
-  /// a short link left unresolved is a download that succeeds on the server
-  /// and **can never be matched to its task**: the counter sits still to the
-  /// polling ceiling, Lite never pulls the file and never cleans the server,
-  /// and Super shows a stuck card beside a clip that is already in the
+  /// **This list is correctness, not convenience** (2026-09-20, Reddit). A
+  /// download is filed under the URL **yt-dlp ended at**, and every list is
+  /// keyed by it; when extraction returns `_type: url` the redirect target
+  /// is what is kept and nothing remembers what was sent. So a short link
+  /// left unresolved is a download that succeeds and **can never be matched
+  /// to its task**: a stuck card sits beside a clip that is already in the
   /// library. Measured: `redd.it/1w64qio` was filed as
   /// `reddit.com/comments/1w64qio`.
   ///
@@ -276,15 +270,15 @@ abstract final class UrlKit {
   }
 
   /// A Vimeo link that is **not** already the canonical `vimeo.com/<digits>`
-  /// the server will file it under.
+  /// a download is filed under.
   ///
-  /// Field report 2026-09-20: `vimeo.com/hugodesousa/bestfriendswiththedevil`
+  /// Seen 2026-09-20: `vimeo.com/hugodesousa/bestfriendswiththedevil`
   /// — the address of a clip on its author's page, which is what Vimeo shows
   /// you — answers **301 to `/1225400313`**, and that number is what the
   /// item is filed as. The consequence was not only a stuck card: the
-  /// arrival notice marks a clip as "ours" by the canonical URL the poll
-  /// captures, so a download the user started was announced back to them
-  /// as something that had arrived on its own.
+  /// arrival notice marks a clip as "ours" by its canonical URL, so a
+  /// download the user started was announced back to them as something
+  /// that had arrived on its own.
   ///
   /// The canonical form is recognised so the common link costs no request.
   static bool _isUnresolvedVimeo(String lower) {
@@ -298,7 +292,7 @@ abstract final class UrlKit {
     return first.isNotEmpty && int.tryParse(first) == null;
   }
 
-  /// Does the server's error text indicate a blocked platform (cookies)?
+  /// Does yt-dlp's error text indicate a blocked platform (cookies)?
   static bool isPlatformBlockedError(String error) {
     final e = error.toLowerCase();
     return VhConstants.platformBlockedMarkers.any(e.contains);

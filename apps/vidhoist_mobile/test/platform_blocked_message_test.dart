@@ -4,17 +4,15 @@ import 'package:vidhoist_mobile/features/shared/error_text.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **Lite keeps deferring to the server's owner, on purpose** (2026-09-20).
+/// **A login-walled clip gets the plain sentence, on purpose** (2026-09-20).
 ///
-/// Super's copy of this message now names its own Cookies screen. Lite has no
-/// such screen and is not going to get one: it is the family's app, and the
-/// person holding it is usually not the person who runs the server. Telling
-/// them to upload a cookies file would send them looking for a button that
-/// does not exist — so the divergence between the two apps is deliberate,
-/// and this test is what keeps it deliberate rather than forgotten.
+/// The phone app has no cookies screen. Telling the person to upload a
+/// cookies file would send them looking for a button that does not exist,
+/// and this test is what keeps that choice deliberate rather than
+/// forgotten.
 void main() {
   for (final locale in [const Locale('en'), const Locale('ar')]) {
-    test('in ${locale.languageCode} it points at whoever runs the server', () {
+    test('in ${locale.languageCode} it says a login is required', () {
       final l10n = lookupVhLocalizations(locale);
       final text = errorText(l10n, const PlatformBlockedException('...'));
 

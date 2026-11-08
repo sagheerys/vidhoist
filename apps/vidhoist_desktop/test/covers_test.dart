@@ -188,7 +188,7 @@ void main() {
       expect(await tomorrow.candidates([clip('a')]), hasLength(1));
     });
 
-    test('audio the server cannot be asked about is not a candidate, so it '
+    test('audio with no file to read is not a candidate, so it '
         'never counts as a miss', () async {
       expect(await enricher({}).candidates([clip('local')]), isEmpty);
     });

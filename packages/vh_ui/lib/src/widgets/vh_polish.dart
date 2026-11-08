@@ -6,12 +6,12 @@ import '../icons/vh_icons.dart';
 import '../tokens/tokens.dart';
 import 'vh_desktop_app.dart';
 
-/// **Light Wahaj touches** (requested 2026-09-04: "motion on some icons,
-/// light touches, pretty and consistent and suited to both apps").
+/// **Light touches of motion** on some icons, consistent and suited to
+/// both apps.
 ///
 /// Three small components used by both apps. All of them take their
-/// durations from [VhMotion], none of them bounces (log §4: `elasticOut`
-/// and `bounceOut` are forbidden), and all of them switch themselves off
+/// durations from [VhMotion], none of them bounces (`elasticOut` and
+/// `bounceOut` are forbidden), and all of them switch themselves off
 /// when the system asks to reduce motion.
 
 /// The effective duration: zero when the system asks to reduce motion.

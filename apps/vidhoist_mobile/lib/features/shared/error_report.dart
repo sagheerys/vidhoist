@@ -13,8 +13,8 @@ import 'error_text.dart';
 ///
 /// The diagnostic log was a download log rather than an error log: forty
 /// places in this app show an error message and not one of them reached
-/// the log, not even the credential rejection that took down the entire
-/// library (2026-09-05).
+/// the log, not even the failure that took down the entire library
+/// (2026-09-05).
 ///
 /// **The user's text is translated and the log's is technical**: a log is
 /// read a week later and from another device, so translating it costs its
@@ -69,8 +69,8 @@ String _where(StackTrace? stack) => vhStackPlace(stack?.toString());
 Future<void> logError(VhLogger logger, Object error, {String tag = 'ui'}) =>
     logger.error(error.toString(), tag: tag);
 
-/// **The last error's signature per repeating source.** Live polling every
-/// two seconds repeats the same fault thirty times a minute, and the log is
+/// **The last error's signature per repeating source.** A source that
+/// repeats can log the same fault thirty times a minute, and the log is
 /// a ring of a thousand lines: without this filter one fault erases the
 /// app's entire history in half an hour.
 final _lastSignature = <String, String>{};

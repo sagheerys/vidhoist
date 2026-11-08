@@ -6,12 +6,10 @@ import 'package:url_launcher/url_launcher.dart';
 /// About: the version, the developer, the project, what it is built on,
 /// and the disclaimer.
 ///
-/// **Updated 2026-09-09 with the open-sourcing**: the screen used to say
-/// "all rights reserved", which is the literal opposite of GPL-3.0, and
-/// named neither the licence nor the absence of any affiliation with the
-/// Vidhoist project. The licence expects the user to find the copyright
-/// notice and the warranty disclaimer **inside the program**, not in the
-/// repository alone.
+/// **The licence is named here, not only in the repository**: GPL-3.0
+/// expects the user to find the copyright notice and the warranty
+/// disclaimer **inside the program**, and "all rights reserved" would be
+/// its literal opposite.
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 

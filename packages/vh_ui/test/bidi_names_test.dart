@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **A name the app did not write, inside a sentence it did** (field report
-/// 2026-09-20: an Arabic channel name before "· 5 minutes ago" came apart, and so did the
-/// "Unfollow …?" dialog).
+/// **A name the app did not write, inside a sentence it did**: an Arabic
+/// channel name before "· 5 minutes ago" came apart, and so did the
+/// "Unfollow …?" dialog.
 ///
 /// The interface has one direction and the name has its own. Where the two
 /// meet, the characters between them — the separator, the question mark,

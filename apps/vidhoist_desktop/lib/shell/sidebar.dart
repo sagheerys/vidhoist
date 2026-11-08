@@ -48,7 +48,7 @@ class DesktopSidebar extends StatelessWidget {
   /// The id of the list whose page is open, if one is.
   final String? currentList;
 
-  /// The server folders the library's clips sit in, unfolded along the
+  /// The folders the library's clips sit in, unfolded along the
   /// chosen one; a click filters the library by it.
   final List<SidebarFolder> folders;
 

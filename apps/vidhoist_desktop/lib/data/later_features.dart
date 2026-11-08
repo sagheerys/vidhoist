@@ -3,9 +3,8 @@ import 'package:vh_core/vh_core.dart';
 
 import '../di.dart';
 
-/// Whether Sync is shown. It was built on the server and waits for the
-/// phone app, so it is hidden rather than removed; off unless turned on.
-/// Channels were behind it too until 1.2 checked them on this computer.
+/// Whether Sync is shown. It waits for the phone app, so it is hidden
+/// rather than removed; off unless turned on.
 final laterFeaturesProvider = NotifierProvider<LaterFeaturesNotifier, bool>(
   LaterFeaturesNotifier.new,
 );

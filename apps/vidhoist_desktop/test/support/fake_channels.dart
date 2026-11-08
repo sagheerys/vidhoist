@@ -1,8 +1,7 @@
 import 'package:vh_core/vh_core.dart';
 
-/// Followed channels kept in memory, recording what was asked of them as
-/// the server's client once did, so the hidden Channels page keeps its
-/// tests until the scheduler on this computer comes.
+/// Followed channels kept in memory, recording what was asked of them, so
+/// the Channels page is tested without yt-dlp or the network.
 class FakeChannels implements ChannelSource {
   FakeChannels([List<ChannelSubscription> subscriptions = const []])
     : subscriptions = [...subscriptions];

@@ -17,8 +17,7 @@ import '../settings/appearance_pane.dart';
 import '../settings/engine_pane.dart';
 import '../settings/simple_panes.dart';
 
-/// **The first start**, in place of the server setup: where downloads go,
-/// the language, and the engine, with ffmpeg and Deno offered at once
+/// **The first start**: where downloads go, the language, and the engine, with ffmpeg and Deno offered at once
 /// rather than at the first download.
 Future<void> showWelcomeDialog(BuildContext context) {
   // The session's one interruption: no tip after it.

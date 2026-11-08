@@ -67,7 +67,7 @@ class VhReelsTopBar extends StatelessWidget {
 
 /// The side action column, within thumb reach: details, add to, share.
 ///
-/// **The favourite button is optional** (field report 2026-09-04): both
+/// **The favourite button is optional**: both
 /// apps offer an "add to…" button instead, which gathers favourites, tags
 /// and playlists in one place, so a separate heart repeated an action that
 /// already existed. `onToggleFavorite = null` means no heart, and the

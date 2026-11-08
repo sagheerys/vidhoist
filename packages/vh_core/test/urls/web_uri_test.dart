@@ -1,7 +1,7 @@
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
-/// The links the apps open in a browser come from the server's history:
+/// The links the apps open in a browser come from stored records:
 /// only a web page may reach the system's opener.
 void main() {
   test('**the guard**: a link that is not a web page is never opened', () {

@@ -16,7 +16,7 @@ import 'vh_polish.dart';
 
 import '../icons/vh_icon.dart';
 
-/// The Wahaj media card: a row separated by a hairline rather than a box,
+/// The app's media card: a row separated by a hairline rather than a box,
 /// full or compact. Presentation only: every value arrives as a ready
 /// string or flag from the app layer.
 class VhMediaCard extends StatelessWidget {
@@ -98,7 +98,7 @@ class VhMediaCard extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     final (titleDirection, titleAlign) = vhForeignLine(context, title);
     // The platform letters stay on the computer; a phone card carries one
-    // mark at most (log §4, 2026-11-01).
+    // mark at most.
     final shownPlatform =
         platform != VhPlatformKind.other && VhDesktopApp.isDesktop(context);
     final thumbW = compact ? 64.0 : 98.0;

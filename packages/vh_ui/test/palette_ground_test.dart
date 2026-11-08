@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 /// The ground under everything: warm stone by day and warm charcoal by
 /// night, never the yellowed cream and brown-tinted black that read as a
-/// generated palette beside the ember.
+/// generated palette beside the accent.
 void main() {
   int red(Color c) => (c.r * 255).round();
   int blue(Color c) => (c.b * 255).round();

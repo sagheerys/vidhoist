@@ -1,8 +1,8 @@
 import 'dart:io';
 
-/// An update download failure. **A type of its own, separate from Vidhoist
-/// server errors**: it comes from GitHub, not the server, and its message
-/// never passes through the server error classifier.
+/// An update download failure. **A type of its own, separate from download
+/// errors**: it comes from GitHub, and its message never passes through
+/// the download error classifier.
 class UpdateDownloadException implements Exception {
   const UpdateDownloadException(this.reason);
 

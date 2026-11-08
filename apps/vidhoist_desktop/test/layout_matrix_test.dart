@@ -43,7 +43,7 @@ import 'desktop_matrix.dart';
 import 'support/fake_channels.dart';
 import 'support/shell_harness.dart';
 
-// Every screen and panel Ember has, through the window matrix. The titles
+// Every screen and panel the app has, through the window matrix. The titles
 // are long on purpose, in both scripts: a short title fits anywhere.
 
 const _url = 'https://youtu.be/aaaaaaaaaaa';

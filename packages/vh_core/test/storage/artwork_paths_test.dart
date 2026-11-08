@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
-/// A cover's value can come from the server's history; a path there must
+/// A cover's value can come from a history record; a path there must
 /// never be read or deleted as the app's own file.
 void main() {
   late Directory root;
@@ -12,7 +12,7 @@ void main() {
 
   String sep(List<String> parts) => parts.join(Platform.pathSeparator);
 
-  test('**the guard**: a server cover that is a path on this device is '
+  test('**the guard**: a recorded cover that is a path on this device is '
       'not taken as the cover', () {
     final item = HistoryItem.fromJson({
       'url': 'https://vimeo.com/123',

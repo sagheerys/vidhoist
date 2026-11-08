@@ -42,7 +42,7 @@ class VhSearchField extends StatelessWidget {
 /// A search field that shows [query] whatever happened to it: the text is
 /// the query held elsewhere, not the field's own.
 ///
-/// **Field report 2026-09-30:** the library's search field sits in a lazy
+/// **Why:** the library's search field sits in a lazy
 /// list, so scrolling far down disposed it. Its text went with it, while
 /// the query it had set stayed on and kept filtering the library, with
 /// an empty field above the results. Rebuilt, this field takes its text

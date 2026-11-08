@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 import 'media_time.dart';
 import 'vh_chapter_track.dart';
 
-/// The progress bar with a handle, from the Wahaj reference: a 5px track,
+/// The progress bar with a handle: a 5px track,
 /// an accent-coloured fill and a 15px ink handle. Used in the audio
 /// screen and in both portrait and landscape video.
 class VhProgressSlider extends StatefulWidget {
@@ -56,13 +56,12 @@ class _VhProgressSliderState extends State<VhProgressSlider> {
         : p.ink.withValues(alpha: 0.1);
     final timeColor = onDark ? p.miniInkMuted : p.ink3;
 
-    // **Media time runs left to right in every language** (field report
-    // 2026-09-25). A timeline is a tape moving past, not a sentence being read:
-    // Samsung Music, the system's media notification buttons, the lock screen,
-    // car head units, YouTube and Spotify all keep it left to right in Arabic,
-    // and Material's bidirectionality guidance says the same. Mirrored, the
-    // bar ran leftwards while "next" pointed right, and the buttons read
-    // as reversed.
+    // **Media time runs left to right in every language**. A timeline is a tape
+    // moving past, not a sentence being read: Samsung Music, the system's media
+    // notification buttons, the lock screen, car head units, YouTube and
+    // Spotify all keep it left to right in Arabic, and Material's
+    // bidirectionality guidance says the same. Mirrored, the bar ran leftwards
+    // while "next" pointed right, and the buttons read as reversed.
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Column(

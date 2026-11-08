@@ -5,8 +5,8 @@ import 'package:vh_core/vh_core.dart';
 
 /// Fetches an online cover through the cards' own cache: a picture the
 /// cache still holds is used as it is, however old (it may be the last
-/// copy left); otherwise it is downloaded, with the server's headers only
-/// when the address is the server's.
+/// copy left); otherwise it is downloaded, with whatever headers
+/// [headersFor] gives that address.
 CoverFetcher cachedCoverFetcher(
   BaseCacheManager cache,
   Map<String, String> Function(String url) headersFor,
@@ -28,7 +28,7 @@ CoverFetcher cachedCoverFetcher(
 };
 
 /// [cachedCoverFetcher] over the cache the cards use when they name none
-/// (the phone apps'), so a cover they showed is not fetched twice.
+/// (the phone app's), so a cover they showed is not fetched twice.
 CoverFetcher defaultCoverFetcher(
   Map<String, String> Function(String url) headersFor,
 ) => cachedCoverFetcher(DefaultCacheManager(), headersFor);

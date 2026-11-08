@@ -11,7 +11,7 @@ base class ArtworkIndex extends UrlKeyedIndex<String> {
 
   /// The app's own files folder, where the covers it draws itself are
   /// kept. When given, a cover is deleted with its entry only from inside
-  /// it: an entry's value can come from elsewhere (the server's history,
+  /// it: an entry's value can come from elsewhere (a history record,
   /// a restored backup), and a path there must never decide what is
   /// deleted on this device.
   final Future<String> Function()? ownFolder;

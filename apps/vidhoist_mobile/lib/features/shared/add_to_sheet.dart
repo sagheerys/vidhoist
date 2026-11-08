@@ -13,7 +13,7 @@ import '../playlists/add_to_playlist_sheet.dart';
 /// playlist" had no entry point at all. One button gathers both and makes
 /// the heart redundant, which is why it was removed from the rail.
 ///
-/// **No tags in Lite**, deliberately: tags are a Super feature.
+/// **No tags here**, deliberately: the phone app has no user tags.
 void showAddToSheet(BuildContext context, WidgetRef ref, LocalItem item) {
   showVhSheet<void>(
     context: context,

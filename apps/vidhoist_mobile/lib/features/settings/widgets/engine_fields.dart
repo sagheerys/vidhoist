@@ -8,8 +8,8 @@ import '../../../di.dart';
 import '../../engine/engine_preparer.dart';
 import 'settings_fields.dart';
 
-/// The download engine, in place of the server settings: yt-dlp's
-/// version, an update on demand (YouTube breaks old builds within months,
+/// The download engine: yt-dlp's version, an update on demand (YouTube
+/// breaks old builds within months,
 /// `docs/ENGINE.md` finding 12), and IPv4.
 class EngineFields extends ConsumerWidget {
   const EngineFields({super.key});

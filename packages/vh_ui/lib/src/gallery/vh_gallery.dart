@@ -11,7 +11,7 @@ import '../kit/vh_shortcut_tooltip.dart';
 import '../kit/vh_switch.dart';
 import 'vh_gallery_motion.dart';
 
-/// An internal sheet of the Wahaj components, for reviewing them by eye in
+/// An internal sheet of the app's components, for reviewing them by eye in
 /// both themes and both directions. **Not a product screen**: its strings
 /// are fixed samples on purpose, outside the arb rule, like
 /// `VhGalleryScreen`.
@@ -47,7 +47,7 @@ class _VhGalleryState extends State<VhGallery> {
           padding: const EdgeInsets.all(VhSpace.xxl),
           children: [
             Text(
-              t('مكوّنات وهج', 'Wahaj components'),
+              t('مكوّنات Vidhoist', 'Vidhoist components'),
               style: text.headlineLarge,
             ),
             label(t('المفتاح', 'Switch')),

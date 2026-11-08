@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **A file size as people read it** (field report 2026-09-26: a 3 GB
-/// video read "3000 MB"). The sizes are real files.
+/// **A file size as people read it**, so a 3 GB video does not read
+/// "3000 MB". The sizes are real files.
 void main() {
   const mb = 1024 * 1024;
   const gb = 1024 * mb;

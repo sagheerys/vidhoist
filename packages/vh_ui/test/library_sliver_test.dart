@@ -181,7 +181,7 @@ void main() {
       expect((c.size, c.added), (false, false));
     });
 
-    testWidgets('Lite has no source column', (tester) async {
+    testWidgets('the phone app has no source column', (tester) async {
       await pump(tester, VhLibraryLayout.list, library: 754, location: false);
       expect(columns(tester).location, isFalse);
     });

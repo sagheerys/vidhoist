@@ -9,12 +9,12 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'fake_video_platform.dart';
 
-/// **A field regression reproduced on the emulator (2026-09-03).**
+/// **A regression reproduced on the emulator.**
 ///
-/// Field report: "on going back the continue-in-background message appears,
-/// and pressing continue as audio starts the audio **and stays on the same
-/// screen**… and stopping the clip in the mini player kills the app
-/// entirely and shows a black screen".
+/// On going back the continue-in-background message appeared, and pressing
+/// continue as audio started the audio **and stayed on the same screen**;
+/// stopping the clip in the mini player then killed the app entirely and
+/// showed a black screen.
 ///
 /// The cause: `just_audio.play()`, in the package's own words, "completes
 /// when playback ends or is stopped". Awaiting it hung the handover so the

@@ -62,8 +62,6 @@ class _DetailsSheet extends ConsumerWidget {
           children: [
             VhSectionHeader(title: l10n.details),
             const SizedBox(height: VhSpace.sm),
-            // The same correction as Super: two wrong labels, one of them a
-            // hard-coded string.
             row(l10n.titleLabel, item.title),
             row(l10n.fileSize, vhFormatSize(item.sizeBytes)),
             // **What the file actually is** (asked 2026-09-25), read from
@@ -136,8 +134,8 @@ class _DetailsSheet extends ConsumerWidget {
                 ),
               ],
             ),
-            // The original URL, copied with one tap. Files migrated from
-            // the old version have none, so their path is shown instead.
+            // The original URL, copied with one tap. Files copied in by
+            // hand have none, so their path is shown instead.
             OutlinedButton.icon(
               onPressed: () async {
                 await Clipboard.setData(

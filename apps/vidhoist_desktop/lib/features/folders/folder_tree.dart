@@ -3,7 +3,7 @@ import 'package:vh_media/library.dart';
 /// One folder line in the sidebar.
 typedef SidebarFolder = ({String path, int count, int depth});
 
-/// The server folders the library's clips sit in, as the sidebar lists
+/// The folders the library's clips sit in, as the sidebar lists
 /// them: the top level, and below the [open] folder (and each folder above
 /// it) the folders inside, so the tree unfolds along the chosen path only.
 /// Counts include what lies deeper; the rules of [folderCounts] apply, so

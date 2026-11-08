@@ -50,7 +50,7 @@ final _words = Transcript(
 );
 
 void main() {
-  /// The shell with [url] loaded in the player, paused so the embers rest
+  /// The shell with [url] loaded in the player, paused so the glows rest
   /// and the frame can settle.
   Future<ShellHarness> open(
     WidgetTester tester, {
@@ -79,7 +79,7 @@ void main() {
   );
 
   testWidgets('**the guard**: the bar opens the room while sound plays: the '
-      'tilted cover over its embers and the words beside, the rest out of '
+      'tilted cover over its glows and the words beside, the rest out of '
       'reach; its close button shuts it', (tester) async {
     await open(tester);
     await tester.tap(roomButton);
@@ -168,7 +168,7 @@ void main() {
     addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
     await open(tester, playing: true);
     await tester.tap(roomButton);
-    // Settling at all is the proof: moving embers never settle.
+    // Settling at all is the proof: moving glows never settle.
     await tester.pumpAndSettle();
     expect(find.byType(ListeningRoom), findsOneWidget);
   });

@@ -2,7 +2,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A [KeyValueStore] over SharedPreferences, which on Windows is one JSON
-/// file in `%APPDATA%\Vidhoist Ember\`. The same adapter as the phone apps',
+/// file in `%APPDATA%\Vidhoist\`. The same adapter as the phone app's,
 /// so every shared index reads and writes here unchanged.
 class SharedPrefsKeyValueStore implements KeyValueStore {
   SharedPrefsKeyValueStore(this._prefs);

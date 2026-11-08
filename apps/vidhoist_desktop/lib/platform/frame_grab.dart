@@ -9,7 +9,7 @@ import 'package:media_kit/generated/libmpv/bindings.dart';
 
 import '../data/covers/cover_shrink.dart';
 
-/// One picture from a clip on the server, for a clip the server names no
+/// One picture from a clip's file, for a clip the history names no
 /// cover for: a video's frame (every Instagram, TikTok or X video), or the
 /// cover embedded in an MP3, Opus or FLAC file, which the engine shows as
 /// the file's one frame (measured on all three, and on WebM and MKV video). Windows has nothing like
@@ -17,14 +17,12 @@ import '../data/covers/cover_shrink.dart';
 /// already ships**: a bare engine, not a `Player`, with no window, no
 /// sound, no media keys and nothing shown, made for one frame and destroyed.
 ///
-/// Measured on the owner's server: 8 of 8 videos in a fifth of a second at
-/// home and a second through the tunnel, about 100 KB each; the engine
-/// holds about 200 MB for that moment. It runs on its own isolate, since
+/// Measured on the owner's library: 8 of 8 videos in a fifth of a second,
+/// about 100 KB each; the engine holds about 200 MB for that moment. It runs on its own isolate, since
 /// libmpv's event wait blocks.
 ///
-/// Safe by construction: [url] is the server's own file and [headers] its
-/// own credentials, the same pair the player already streams with, so the
-/// password goes nowhere else. The engine reads no config file and loads
+/// Safe by construction: [url] is the clip's own file and [headers] what
+/// reading it needs, the same pair the player already plays it with. The engine reads no config file and loads
 /// no scripts (this build has no Lua, and JavaScript is never loaded), and
 /// it decodes what the player would decode anyway.
 Future<Uint8List?> grabFrame(String url, Map<String, String> headers) async {

@@ -62,7 +62,7 @@ void main() {
       },
     );
 
-    test("**the guard**: an app that does not stamp (Lite) never writes the "
+    test("**the guard**: an app that does not stamp never writes the "
         'record', () async {
       final lists = PlaylistsStore(store: store, mutex: mutex);
       final evening = await lists.create(

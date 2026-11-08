@@ -22,7 +22,7 @@ class VhCaptionWord {
 }
 
 /// A timed line the app hands a player to draw over the picture. This
-/// package knows nothing of where it came from (a transcript, in Super).
+/// package knows nothing of where it came from (a transcript, in the apps).
 class VhCaptionLine {
   const VhCaptionLine({
     required this.start,

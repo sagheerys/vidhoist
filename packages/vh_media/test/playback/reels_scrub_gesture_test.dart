@@ -7,8 +7,8 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'fake_video_platform.dart';
 
-/// **Field report 2026-09-13:** "pressing the reels counter to seek forward
-/// or back pauses the video".
+/// **Pressing the reels counter to seek forward or back paused the
+/// video.**
 ///
 /// The bar's touch strip was 24 points and everything around it belongs to
 /// tap-to-pause, so a finger that slightly missed it (just above the line,

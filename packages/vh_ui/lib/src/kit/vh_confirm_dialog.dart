@@ -10,7 +10,7 @@ import '../widgets/vh_route_motion.dart';
 VhCorners _cornersOf(BuildContext context) =>
     VhDesktopApp.isDesktop(context) ? VhCorners.desktop : VhCorners.mobile;
 
-/// The Wahaj confirmation: a light card with the heading in Kufi, and
+/// The app's confirmation: a light card with the heading in Kufi, and
 /// **the clip itself shown before anything is deleted**, so nobody removes
 /// the wrong item from a list of look-alike titles.
 ///

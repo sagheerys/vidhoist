@@ -10,9 +10,8 @@ import java.io.FileOutputStream
 /**
  * Probing a local media file without playing it.
  *
- * **Why this exists at all.** A real server returns no `thumbnail` field for
- * any item (measured: zero out of 252), and Lite's migrated library is a set
- * of files on disk with no metadata beside them — so without this probe the
+ * **Why this exists at all.** The library is a set of files on disk with no
+ * metadata beside them — so without this probe the
  * whole library has no covers, and the shorts lane stays empty because
  * dimensions used to be learned **only on first playback** ("the reels only
  * work if I play them once first").

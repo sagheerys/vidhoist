@@ -56,7 +56,7 @@ void main() {
   tearDown(() => handler.dispose());
 
   group('playback and the golden rule', () {
-    test('it streams from the server when there is no local copy', () async {
+    test('it streams when there is no local copy', () async {
       await handler.playItems([_item('a')]);
       expect(player.loaded.single.origin, PlaybackOrigin.stream);
       expect(player.loaded.single.headers['Authorization'], 'Basic k');

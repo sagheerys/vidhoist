@@ -55,14 +55,13 @@ void main() {
     addTearDown(network.close);
   });
 
-  test('**the guard**: downloads land in Download/Vidhoist, never in the '
-      'parent app\'s folder', () {
-    // The fork kept Vidhoist Lite's folder; on a phone with both apps the two
-    // libraries would have mixed.
+  test('**the guard**: downloads land in Download/Vidhoist, never in '
+      'another app\'s folder', () {
+    // A shared folder would mix another app's files into the library.
     expect(phoneMediaDir, '/storage/emulated/0/Download/Vidhoist');
   });
 
-  test('no server is needed: the engine is always there', () {
+  test('nothing to set up: the engine is always there', () {
     final c = build(const PhoneSettings());
     expect(c.read(downloadEngineProvider), isA<LocalDownloadEngine>());
   });

@@ -9,7 +9,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
-/// The counterpart of the menu guard in Super: a clip's menu stopped at
+/// The menu guard: a clip's menu stopped at
 /// nine sixteenths of a short screen and cut its last rows off, delete
 /// among them.
 void main() {
