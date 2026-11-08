@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'appearance_data.dart';
-import 'sync_data.dart';
 
 /// The transcripts on this computer, in `%APPDATA%\Vidhoist\transcripts\`
 /// and in the phone's format, so an exported bundle reads the same here.
@@ -25,10 +24,8 @@ final transcriptIndexProvider = FutureProvider<TranscriptIndex>((ref) async {
   return index;
 });
 
-/// Writes [transcript] and adds it to the search index. One this
-/// computer [fetched] itself also goes to the sync folder, if sync is on;
-/// one read from a file or another device does not, so every transcript
-/// there stays a single copy.
+/// Writes [transcript] and adds it to the search index. [fetched] says
+/// this computer fetched it itself, rather than reading it from a file.
 Future<void> keepTranscript(
   Ref ref,
   TranscriptStore store,
@@ -37,7 +34,6 @@ Future<void> keepTranscript(
 }) async {
   await store.write(transcript);
   noteTranscript(ref, transcript);
-  if (fetched) unawaited(ref.read(desktopSyncProvider).publish(transcript));
 }
 
 /// Adds a transcript already on disk to the search index when the index is

@@ -185,7 +185,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(saver.revealed, [r'C:\Exports\Night Drive.srt']);
 
-    await export('For the phone (Vidhoist import)');
+    await export('For the phone (VidHoist import)');
     expect(
       TranscriptBundle.decode(saver.saved['Night Drive.json']! as String),
       isNotNull,

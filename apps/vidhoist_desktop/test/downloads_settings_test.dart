@@ -120,7 +120,7 @@ void main() {
       expect(find.byType(FoldersPane), findsOneWidget);
       // **The guard** (owner's choice, 2026-11-05): the folder bears the
       // app's own name.
-      expect(find.text(r'C:\Users\me\Downloads\Vidhoist'), findsOneWidget);
+      expect(find.text(r'C:\Users\me\Downloads\VidHoist'), findsOneWidget);
       // There is no second folder, of offline copies, to show.
       expect(find.textContaining(r'Videos'), findsNothing);
     });

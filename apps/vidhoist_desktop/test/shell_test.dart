@@ -243,7 +243,7 @@ void main() {
 
   testWidgets('a double click on the title bar maximizes', (tester) async {
     final h = await open(tester, const Size(1440, 900));
-    final title = find.text('Vidhoist');
+    final title = find.text('VidHoist');
     await tester.tap(title);
     await tester.pump(kDoubleTapMinTime);
     await tester.tap(title);

@@ -18,7 +18,6 @@ VhIconData _paneIcon(DesktopSettingsPane pane) => switch (pane) {
   DesktopSettingsPane.desktop => VhIcons.monitor,
   DesktopSettingsPane.transcripts => VhIcons.transcript,
   DesktopSettingsPane.backup => VhIcons.backup,
-  DesktopSettingsPane.sync => VhIcons.swap,
   DesktopSettingsPane.updates => VhIcons.saveTo,
   DesktopSettingsPane.logs => VhIcons.list,
   DesktopSettingsPane.about => VhIcons.info,

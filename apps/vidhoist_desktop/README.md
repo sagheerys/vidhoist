@@ -1,4 +1,4 @@
-# Vidhoist for Windows
+# VidHoist for Windows
 
 The desktop app: a three-column shell (navigation, library, downloads) with a
 local library of tags, lists, transcripts and covers, a tray icon and a

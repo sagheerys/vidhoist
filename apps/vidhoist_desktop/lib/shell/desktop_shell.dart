@@ -12,7 +12,6 @@ import '../data/covers/covers_data.dart';
 import '../data/shapes/shapes_data.dart';
 import '../data/library_data.dart';
 import '../data/folder_watch.dart';
-import '../data/sync_runner.dart';
 import '../data/taskbar_data.dart';
 import '../data/lists_data.dart';
 import '../data/saved_searches.dart';
@@ -127,7 +126,6 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
     ref.watch(coverEnrichmentProvider);
     ref.watch(shapeEnrichmentProvider);
     ref.watch(startupBackupProvider);
-    ref.watch(syncRunnerProvider);
     // Followed channels are checked as they fall due, window or tray.
     ref.watch(channelTickerProvider);
     ref.watch(folderWatchProvider);

@@ -221,7 +221,7 @@ abstract class VhLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Vidhoist'**
+  /// **'VidHoist'**
   String get appTitle;
 
   /// No description provided for @appearanceAndLanguage.
@@ -413,7 +413,7 @@ abstract class VhLocalizations {
   /// No description provided for @channelCheckFailed.
   ///
   /// In en, this message translates to:
-  /// **'Not checked this time. Vidhoist tries again by itself.'**
+  /// **'Not checked this time. VidHoist tries again by itself.'**
   String get channelCheckFailed;
 
   /// No description provided for @channelUrl.
@@ -767,7 +767,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopBrowserButton.
   ///
   /// In en, this message translates to:
-  /// **'“To Vidhoist” button in the browser'**
+  /// **'“To VidHoist” button in the browser'**
   String get desktopBrowserButton;
 
   /// No description provided for @desktopBrowserButtonCopied.
@@ -797,7 +797,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopBrowserButtonName.
   ///
   /// In en, this message translates to:
-  /// **'To Vidhoist'**
+  /// **'To VidHoist'**
   String get desktopBrowserButtonName;
 
   /// No description provided for @desktopBrowserButtonOpen.
@@ -833,13 +833,13 @@ abstract class VhLocalizations {
   /// No description provided for @desktopBrowserPageStep3.
   ///
   /// In en, this message translates to:
-  /// **'On any video\'s page, click it: Vidhoist opens its add dialog with the link. The first time, the browser asks whether to open the app; allow it.'**
+  /// **'On any video\'s page, click it: VidHoist opens its add dialog with the link. The first time, the browser asks whether to open the app; allow it.'**
   String get desktopBrowserPageStep3;
 
   /// No description provided for @desktopBrowserPageTitle.
   ///
   /// In en, this message translates to:
-  /// **'Add the “To Vidhoist” button to your browser'**
+  /// **'Add the “To VidHoist” button to your browser'**
   String get desktopBrowserPageTitle;
 
   /// No description provided for @desktopChangeFolder.
@@ -1037,7 +1037,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopDiscover.
   ///
   /// In en, this message translates to:
-  /// **'Discover Vidhoist'**
+  /// **'Discover VidHoist'**
   String get desktopDiscover;
 
   /// No description provided for @desktopDiscoverAddLink.
@@ -1067,7 +1067,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopDiscoverBrowserLine.
   ///
   /// In en, this message translates to:
-  /// **'The “To Vidhoist” button on your bookmarks bar opens the add dialog with the page you are on.'**
+  /// **'The “To VidHoist” button on your bookmarks bar opens the add dialog with the page you are on.'**
   String get desktopDiscoverBrowserLine;
 
   /// No description provided for @desktopDiscoverChapters.
@@ -1147,18 +1147,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'A small card above every other window, by the clock.'**
   String get desktopDiscoverMiniLine;
-
-  /// No description provided for @desktopDiscoverPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'With your phone'**
-  String get desktopDiscoverPhone;
-
-  /// No description provided for @desktopDiscoverPhoneLine.
-  ///
-  /// In en, this message translates to:
-  /// **'Tags, lists and resume points, shared with Vidhoist on your phone through a folder you choose.'**
-  String get desktopDiscoverPhoneLine;
 
   /// No description provided for @desktopDiscoverReading.
   ///
@@ -1343,7 +1331,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopEngineMissing.
   ///
   /// In en, this message translates to:
-  /// **'yt-dlp is not on this computer. Reinstall Vidhoist, or fetch it here.'**
+  /// **'yt-dlp is not on this computer. Reinstall VidHoist, or fetch it here.'**
   String get desktopEngineMissing;
 
   /// No description provided for @desktopEngineOnFirstUse.
@@ -1433,7 +1421,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopExportPhone.
   ///
   /// In en, this message translates to:
-  /// **'For the phone (Vidhoist import)'**
+  /// **'For the phone (VidHoist import)'**
   String get desktopExportPhone;
 
   /// No description provided for @desktopExportSrt.
@@ -1517,7 +1505,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopHintTrayTitle.
   ///
   /// In en, this message translates to:
-  /// **'Vidhoist is still running'**
+  /// **'VidHoist is still running'**
   String get desktopHintTrayTitle;
 
   /// No description provided for @desktopHints.
@@ -1547,7 +1535,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopImportHint.
   ///
   /// In en, this message translates to:
-  /// **'A backup or transcripts file from Vidhoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.'**
+  /// **'A backup or transcripts file from VidHoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.'**
   String get desktopImportHint;
 
   /// No description provided for @desktopImportedBackup.
@@ -1669,18 +1657,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Last arrival {when}'**
   String desktopLastArrival(String when);
-
-  /// No description provided for @desktopLaterFeatures.
-  ///
-  /// In en, this message translates to:
-  /// **'Show sync'**
-  String get desktopLaterFeatures;
-
-  /// No description provided for @desktopLaterFeaturesHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Not ready yet: sync waits for the phone app.'**
-  String get desktopLaterFeaturesHint;
 
   /// No description provided for @desktopLess.
   ///
@@ -1847,7 +1823,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopNotABackup.
   ///
   /// In en, this message translates to:
-  /// **'This file is not a Vidhoist backup or transcripts file.'**
+  /// **'This file is not a VidHoist backup or transcripts file.'**
   String get desktopNotABackup;
 
   /// No description provided for @desktopNotWatched.
@@ -2318,114 +2294,6 @@ abstract class VhLocalizations {
   /// **'Subtitle options'**
   String get desktopSubtitleOptions;
 
-  /// No description provided for @desktopSync.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync'**
-  String get desktopSync;
-
-  /// No description provided for @desktopSyncCameBack.
-  ///
-  /// In en, this message translates to:
-  /// **'This computer was away for more than 90 days, so your other devices\' data was taken first.'**
-  String get desktopSyncCameBack;
-
-  /// No description provided for @desktopSyncChoose.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a folder'**
-  String get desktopSyncChoose;
-
-  /// No description provided for @desktopSyncComputer.
-  ///
-  /// In en, this message translates to:
-  /// **'Computer {name}'**
-  String desktopSyncComputer(String name);
-
-  /// No description provided for @desktopSyncFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'The sync folder could not be read. Check that its drive is there.'**
-  String get desktopSyncFailed;
-
-  /// No description provided for @desktopSyncFolder.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync folder'**
-  String get desktopSyncFolder;
-
-  /// No description provided for @desktopSyncForget.
-  ///
-  /// In en, this message translates to:
-  /// **'Forget this device'**
-  String get desktopSyncForget;
-
-  /// No description provided for @desktopSyncForgetBody.
-  ///
-  /// In en, this message translates to:
-  /// **'{device} will no longer be read. Its transcripts move to this computer\'s folder first, so none is lost. Use this for a device that was lost or sold.'**
-  String desktopSyncForgetBody(String device);
-
-  /// No description provided for @desktopSyncFrom.
-  ///
-  /// In en, this message translates to:
-  /// **'Last from {device}: {ago}'**
-  String desktopSyncFrom(String device, String ago);
-
-  /// No description provided for @desktopSyncGuide.
-  ///
-  /// In en, this message translates to:
-  /// **'At home: Syncthing on this computer and Syncthing‑Fork (from F-Droid) on the phone, sharing one folder; set Syncthing‑Fork to Wi‑Fi only to spare the phone\'s battery. Through a cloud: the cloud app\'s folder on this computer (OneDrive, Google Drive, Dropbox), and FolderSync on the phone with the same folder.'**
-  String get desktopSyncGuide;
-
-  /// No description provided for @desktopSyncHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Mirrors tags, favorites, lists, positions, saved searches and transcripts with your phone and other computers, through a folder a sync app keeps in step (Syncthing at home, or a cloud folder). Nothing goes to any service from here.'**
-  String get desktopSyncHint;
-
-  /// No description provided for @desktopSyncLast.
-  ///
-  /// In en, this message translates to:
-  /// **'Last synced {ago}'**
-  String desktopSyncLast(String ago);
-
-  /// No description provided for @desktopSyncNoOthers.
-  ///
-  /// In en, this message translates to:
-  /// **'No other device in this folder yet. Turn sync on in Vidhoist on the phone with the same folder.'**
-  String get desktopSyncNoOthers;
-
-  /// No description provided for @desktopSyncNotBackup.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync is not a backup: it mirrors a mistake as faithfully as anything else. Your dated backups stay apart from it.'**
-  String get desktopSyncNotBackup;
-
-  /// No description provided for @desktopSyncOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Off. Nothing leaves this computer.'**
-  String get desktopSyncOff;
-
-  /// No description provided for @desktopSyncPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'Phone {name}'**
-  String desktopSyncPhone(String name);
-
-  /// No description provided for @desktopSyncThisComputer.
-  ///
-  /// In en, this message translates to:
-  /// **'This computer: {name}'**
-  String desktopSyncThisComputer(String name);
-
-  /// No description provided for @desktopSyncTurnOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Turn off'**
-  String get desktopSyncTurnOff;
-
   /// No description provided for @desktopTheater.
   ///
   /// In en, this message translates to:
@@ -2447,7 +2315,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopTranscriptsDeleteBody.
   ///
   /// In en, this message translates to:
-  /// **'They are removed from this computer. Only a file you exported, or another device through sync, can bring them back.'**
+  /// **'They are removed from this computer. Only a file you exported can bring them back.'**
   String get desktopTranscriptsDeleteBody;
 
   /// No description provided for @desktopTranscriptsExportHint.
@@ -2459,7 +2327,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopTranscriptsHelp.
   ///
   /// In en, this message translates to:
-  /// **'Vidhoist keeps the words said in each YouTube clip you add, so a search (Ctrl+K) also finds what was said inside your clips, not only their titles. They stay on this computer.'**
+  /// **'VidHoist keeps the words said in each YouTube clip you add, so a search (Ctrl+K) also finds what was said inside your clips, not only their titles. They stay on this computer.'**
   String get desktopTranscriptsHelp;
 
   /// No description provided for @desktopTranscriptsImportHint.
@@ -2483,7 +2351,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopTrayOpen.
   ///
   /// In en, this message translates to:
-  /// **'Open Vidhoist'**
+  /// **'Open VidHoist'**
   String get desktopTrayOpen;
 
   /// No description provided for @desktopTrayQuit.
@@ -2519,7 +2387,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopUpdateRestartHint.
   ///
   /// In en, this message translates to:
-  /// **'Vidhoist closes, installs the update and opens again. Your settings and library stay as they are.'**
+  /// **'VidHoist closes, installs the update and opens again. Your settings and library stay as they are.'**
   String get desktopUpdateRestartHint;
 
   /// No description provided for @desktopViewCompact.
@@ -2561,7 +2429,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopWelcomeMessage.
   ///
   /// In en, this message translates to:
-  /// **'Paste a link from YouTube or another site, and Vidhoist downloads it to this computer with yt-dlp. Nothing goes through a server.'**
+  /// **'Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp. Nothing goes through a server.'**
   String get desktopWelcomeMessage;
 
   /// No description provided for @desktopWelcomeStart.
@@ -2573,13 +2441,13 @@ abstract class VhLocalizations {
   /// No description provided for @desktopWelcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Vidhoist'**
+  /// **'Welcome to VidHoist'**
   String get desktopWelcomeTitle;
 
   /// No description provided for @desktopWhatsNewAllFeatures.
   ///
   /// In en, this message translates to:
-  /// **'Everything Vidhoist can do'**
+  /// **'Everything VidHoist can do'**
   String get desktopWhatsNewAllFeatures;
 
   /// No description provided for @desktopWidenSidebar.
@@ -3185,7 +3053,7 @@ abstract class VhLocalizations {
   /// No description provided for @mobileChannelsEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Follow a channel and each new video downloads by itself while Vidhoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.'**
+  /// **'Follow a channel and each new video downloads by itself while VidHoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.'**
   String get mobileChannelsEmptyBody;
 
   /// No description provided for @mobileChannelsHint.
@@ -3329,7 +3197,7 @@ abstract class VhLocalizations {
   /// No description provided for @mobileWelcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Vidhoist'**
+  /// **'Welcome to VidHoist'**
   String get mobileWelcomeTitle;
 
   /// No description provided for @mobileWelcomeUnpacking.
@@ -3341,7 +3209,7 @@ abstract class VhLocalizations {
   /// No description provided for @mobileWelcomeUpdateFailed.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t update now. Vidhoist tries again before your first download.'**
+  /// **'Couldn\'t update now. VidHoist tries again before your first download.'**
   String get mobileWelcomeUpdateFailed;
 
   /// No description provided for @mobileWelcomeUpdating.
@@ -4463,7 +4331,7 @@ abstract class VhLocalizations {
   /// No description provided for @subscriptionsEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Follow a channel and each new video downloads into your library by itself, while Vidhoist is open or in the tray. What is already on the channel is not downloaded.'**
+  /// **'Follow a channel and each new video downloads into your library by itself, while VidHoist is open or in the tray. What is already on the channel is not downloaded.'**
   String get subscriptionsEmptyBody;
 
   /// No description provided for @subscriptionsSubtitle.
@@ -4567,66 +4435,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Small'**
   String get subtitlesSizeSmall;
-
-  /// No description provided for @syncDeviceQuiet.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing has come from it for over two days. If it was in use, a sync app is probably paused or asleep, there or here: phones put apps they think unused to sleep.'**
-  String get syncDeviceQuiet;
-
-  /// No description provided for @syncPhoneCameBack.
-  ///
-  /// In en, this message translates to:
-  /// **'This phone was away for more than 90 days, so your other devices\' data was taken first.'**
-  String get syncPhoneCameBack;
-
-  /// No description provided for @syncPhoneFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'The sync folder could not be read. Choose it again if it moved or its permission was taken back.'**
-  String get syncPhoneFailed;
-
-  /// No description provided for @syncPhoneForgetBody.
-  ///
-  /// In en, this message translates to:
-  /// **'{device} will no longer be read. Its transcripts move to this phone\'s folder first, so none is lost. Use this for a device that was lost or sold.'**
-  String syncPhoneForgetBody(String device);
-
-  /// No description provided for @syncPhoneGuide.
-  ///
-  /// In en, this message translates to:
-  /// **'At home: Syncthing-Fork (from F-Droid) on this phone and Syncthing on the computer, sharing one folder; set it to Wi‑Fi only to spare the battery. Through a cloud: FolderSync with the cloud folder the computer uses.'**
-  String get syncPhoneGuide;
-
-  /// No description provided for @syncPhoneHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Mirrors tags, favorites, lists, resume positions and transcripts with Vidhoist on your computer, through a folder a sync app keeps in step. Nothing goes to any service from here.'**
-  String get syncPhoneHint;
-
-  /// No description provided for @syncPhoneNoOthers.
-  ///
-  /// In en, this message translates to:
-  /// **'No other device in this folder yet. Turn sync on in Vidhoist on the computer with the same folder.'**
-  String get syncPhoneNoOthers;
-
-  /// No description provided for @syncPhoneOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Off. Nothing leaves this phone.'**
-  String get syncPhoneOff;
-
-  /// No description provided for @syncPhoneThisDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'This phone: {name}'**
-  String syncPhoneThisDevice(String name);
-
-  /// No description provided for @syncTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync with the computer'**
-  String get syncTitle;
 
   /// No description provided for @tagActionsHint.
   ///
@@ -4913,7 +4721,7 @@ abstract class VhLocalizations {
   /// No description provided for @unfollowConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'Vidhoist forgets which videos it has already seen on this channel. If you follow it again later, everything on it by then counts as seen, and what you missed is not filled in. Pausing keeps that memory.'**
+  /// **'VidHoist forgets which videos it has already seen on this channel. If you follow it again later, everything on it by then counts as seen, and what you missed is not filled in. Pausing keeps that memory.'**
   String get unfollowConfirmBody;
 
   /// No description provided for @unlockTouch.
@@ -5201,7 +5009,7 @@ abstract class VhLocalizations {
   /// No description provided for @ytdlpCredit.
   ///
   /// In en, this message translates to:
-  /// **'The downloader Vidhoist runs'**
+  /// **'The downloader VidHoist runs'**
   String get ytdlpCredit;
 }
 

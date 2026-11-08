@@ -47,7 +47,7 @@ class _VhGalleryState extends State<VhGallery> {
           padding: const EdgeInsets.all(VhSpace.xxl),
           children: [
             Text(
-              t('مكوّنات Vidhoist', 'Vidhoist components'),
+              t('مكوّنات VidHoist', 'VidHoist components'),
               style: text.headlineLarge,
             ),
             label(t('المفتاح', 'Switch')),

@@ -109,3 +109,7 @@ __pycache__/
 
 # yt-dlp fetched by tool/fetch-engine.ps1 for the installer.
 apps/vidhoist_desktop/tools/
+
+# Research scratch (deep-research skill), not part of the app
+/research_notes/
+/reports/

@@ -3,7 +3,7 @@
 
 import 'vh_icon_data.dart';
 
-/// The Vidhoist icon set.
+/// The VidHoist icon set.
 abstract final class VhIcons {
   static const library = VhIconData(
     'library',
@@ -203,7 +203,7 @@ abstract final class VhIcons {
   );
 
   /// The network the downloads cross, as in the connection settings. Its
-  /// own glyph, apart from [swap], which is the sync.
+  /// own glyph, apart from [swap], which is an exchange.
   static const globe = VhIconData(
     'globe',
     r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><path d="M3.9 12h16.2"/><path d="M12 3.8c2.2 2.3 3.3 5 3.3 8.2s-1.1 5.9-3.3 8.2c-2.2-2.3-3.3-5-3.3-8.2s1.1-5.9 3.3-8.2z"/></svg>''',

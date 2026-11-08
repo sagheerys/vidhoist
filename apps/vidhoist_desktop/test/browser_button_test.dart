@@ -78,7 +78,7 @@ void main() {
     GoRouter.of(tester.element(find.byType(DesktopSidebar)))
         .go('/settings/desktop');
     await tester.pumpAndSettle();
-    expect(find.text('“To Vidhoist” button in the browser'), findsOneWidget);
+    expect(find.text('“To VidHoist” button in the browser'), findsOneWidget);
     expect(find.text('Open the setup page'), findsOneWidget);
     await tester.tap(find.text('Copy the code'));
     await tester.pumpAndSettle();

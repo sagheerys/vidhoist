@@ -1,4 +1,4 @@
-# Vidhoist for Android
+# VidHoist for Android
 
 The phone app: paste a link, pick a quality, keep the file in
 `Download/Vidhoist`. Its library is a scan of that folder, with its own

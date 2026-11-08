@@ -10,8 +10,8 @@ import '../di.dart';
 /// what they held when it was saved.
 ///
 /// Each carries when it last changed ([at]), and a removal is kept under
-/// [SavedSearches.removedKey], in the form [SyncLocal] reads, so the sync
-/// folder can tell a new search from one deleted on another computer.
+/// [SavedSearches.removedKey], so a backup merged in later can tell a
+/// new search from one deleted here.
 class SavedSearch {
   const SavedSearch({
     required this.id,

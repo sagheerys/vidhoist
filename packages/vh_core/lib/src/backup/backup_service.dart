@@ -7,7 +7,7 @@ import '../storage/secret_store.dart';
 import '../update/update_prefs.dart';
 import 'backup_errors.dart';
 
-/// The one format Vidhoist writes and reads: plain JSON.
+/// The one format VidHoist writes and reads: plain JSON.
 enum BackupFormat { plain }
 
 class ImportResult {

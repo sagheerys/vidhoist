@@ -247,7 +247,7 @@ class _Folders extends NoFolders {
   final String downloadsRoot;
   final Duration delay;
 
-  // The test's own folder stands for Downloads (the app adds Vidhoist).
+  // The test's own folder stands for Downloads (the app adds VidHoist).
   @override
   Future<String?> downloads() async {
     await Future<void>.delayed(delay);

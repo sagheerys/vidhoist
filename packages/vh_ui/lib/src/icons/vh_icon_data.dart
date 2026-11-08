@@ -1,4 +1,4 @@
-/// One Vidhoist icon: an SVG with two colour slots, `{ink}` for the strokes
+/// One VidHoist icon: an SVG with two colour slots, `{ink}` for the strokes
 /// and `{ember}` for the single accent mark.
 class VhIconData {
   const VhIconData(this.name, this.svg);

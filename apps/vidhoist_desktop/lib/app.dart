@@ -22,7 +22,7 @@ import 'shell/desktop_shell.dart';
 import 'shell/key_gate.dart';
 import 'shell/zoom_frame.dart';
 
-/// The Vidhoist root: the desktop theme, day or night, and the language
+/// The VidHoist root: the desktop theme, day or night, and the language
 /// as chosen in Appearance (Windows' own by default), plus the router.
 class DesktopApp extends ConsumerStatefulWidget {
   const DesktopApp({super.key, this.router, this.locale, this.initialLocation});

@@ -52,7 +52,7 @@ class BackupMerge {
   static const _positionPrefix = 'playback_pos_';
   static const _positionStampPrefix = 'playback_stamp_';
 
-  /// The typed prefs of a Vidhoist backup, by key; anything else is
+  /// The typed prefs of a VidHoist backup, by key; anything else is
   /// refused.
   static Map<String, Object> readPrefs(String contents) {
     if (!contents.trimLeft().startsWith('{')) {
@@ -80,7 +80,7 @@ class BackupMerge {
   }
 
   /// **The part of this device another one can take**, as a backup file
-  /// any Vidhoist app restores: tags and favourites with their stamps,
+  /// any VidHoist app restores: tags and favourites with their stamps,
   /// playlists, resume positions. Never paths (offline copies, covers),
   /// settings, addresses or credentials: restored on a phone, those would
   /// point at this computer's disks or replace the phone's own choices.
@@ -121,7 +121,7 @@ class BackupMerge {
     });
   }
 
-  /// Whether [contents] reads as a Vidhoist backup at all, for a dropped or
+  /// Whether [contents] reads as a VidHoist backup at all, for a dropped or
   /// pasted file.
   static bool looksLikeBackup(String contents) {
     try {

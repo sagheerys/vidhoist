@@ -30,7 +30,6 @@ import 'features/welcome/startup_offers.dart';
 import 'features/library/artwork.dart';
 import 'data/desktop_habits.dart';
 import 'data/notices.dart';
-import 'data/sync_runner.dart';
 import 'data/system_media.dart';
 import 'data/taskbar_data.dart';
 import 'data/volume.dart';
@@ -126,9 +125,6 @@ Future<void> main(List<String> args) async {
   final layout = await ShellLayoutStore(store: store, mutex: mutex).read();
   final zooms = UiZoomStore(store: store, mutex: mutex);
   final wanted = await zooms.read();
-  // The player is saved first; then whatever the app adds, such as the
-  // sync folder's last write.
-  final closing = <Future<void> Function()>[];
   // Off until chosen: closing the window closes the app.
   var toTray = await store.getBool(CloseToTray.key) ?? false;
   final window = await DesktopWindow.open(
@@ -136,9 +132,6 @@ Future<void> main(List<String> args) async {
     beforeClose: () async {
       await runNote.end();
       await player.persist();
-      for (final step in [...closing]) {
-        await step();
-      }
     },
     hideOnClose: () => toTray,
     zoom: wanted,
@@ -237,7 +230,6 @@ Future<void> main(List<String> args) async {
         installerLauncherProvider.overrideWithValue(
           (path) => runInstaller(path, window.quit),
         ),
-        beforeCloseProvider.overrideWithValue(closing),
         initialCloseToTrayProvider.overrideWithValue(toTray),
         closeToTrayHookProvider.overrideWithValue((on) {
           toTray = on;

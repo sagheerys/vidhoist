@@ -53,7 +53,7 @@ abstract final class VhConstants {
   /// **A limit a person never meets and a screen can hold**: tags are a
   /// handful of words for sorting, and without a ceiling a stress test of a
   /// thousand tags made every row of chips a wall. Only the creating of a
-  /// new one stops at it; tags that arrive from a backup or a sync are all
+  /// new one stops at it; tags that arrive from a backup are all
   /// kept.
   static const int maxTags = 50;
 

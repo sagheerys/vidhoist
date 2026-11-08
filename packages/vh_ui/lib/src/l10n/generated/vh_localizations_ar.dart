@@ -85,7 +85,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get alreadySubscribed => 'أنت تتابع هذه القناة بالفعل';
 
   @override
-  String get appTitle => 'Vidhoist';
+  String get appTitle => 'VidHoist';
 
   @override
   String get appearanceAndLanguage => 'المظهر واللغة';
@@ -219,7 +219,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get channelCheckFailed =>
-      'تعذّر فحصها هذه المرة، وسيحاول Vidhoist مجدداً من تلقاء نفسه.';
+      'تعذّر فحصها هذه المرة، وسيحاول VidHoist مجدداً من تلقاء نفسه.';
 
   @override
   String get channelUrl => 'رابط قناة أو قائمة أو أحد مقاطعها';
@@ -451,7 +451,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopBackupsNone => 'لا نسخة بعد';
 
   @override
-  String get desktopBrowserButton => 'زر «إلى Vidhoist» في المتصفح';
+  String get desktopBrowserButton => 'زر «إلى VidHoist» في المتصفح';
 
   @override
   String get desktopBrowserButtonCopied =>
@@ -469,7 +469,7 @@ class VhLocalizationsAr extends VhLocalizations {
       'زرّ في شريط الإشارات المرجعية: نقرة عليه في صفحة أي مقطع تفتح نافذة الإضافة هنا بالرابط، ولا يُرسَل شيء قبل أن تضغط «إضافة».';
 
   @override
-  String get desktopBrowserButtonName => 'إلى Vidhoist';
+  String get desktopBrowserButtonName => 'إلى VidHoist';
 
   @override
   String get desktopBrowserButtonOpen => 'افتح صفحة الإعداد';
@@ -492,10 +492,10 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopBrowserPageStep3 =>
-      'في صفحة أي مقطع انقره، فيفتح Vidhoist نافذة الإضافة بالرابط. وفي المرة الأولى يسألك المتصفح هل يفتح التطبيق، فاسمح له.';
+      'في صفحة أي مقطع انقره، فيفتح VidHoist نافذة الإضافة بالرابط. وفي المرة الأولى يسألك المتصفح هل يفتح التطبيق، فاسمح له.';
 
   @override
-  String get desktopBrowserPageTitle => 'أضف زر «إلى Vidhoist» إلى متصفحك';
+  String get desktopBrowserPageTitle => 'أضف زر «إلى VidHoist» إلى متصفحك';
 
   @override
   String get desktopChangeFolder => 'تغيير…';
@@ -612,7 +612,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopDesktopSection => 'سطح المكتب';
 
   @override
-  String get desktopDiscover => 'اكتشف Vidhoist';
+  String get desktopDiscover => 'اكتشف VidHoist';
 
   @override
   String get desktopDiscoverAddLink => 'الصق رابطاً أو اسحبه';
@@ -629,7 +629,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopDiscoverBrowserLine =>
-      'زر «إلى Vidhoist» في شريط الإشارات المرجعية يفتح نافذة الإضافة بالصفحة التي أنت فيها.';
+      'زر «إلى VidHoist» في شريط الإشارات المرجعية يفتح نافذة الإضافة بالصفحة التي أنت فيها.';
 
   @override
   String get desktopDiscoverChapters => 'الفصول';
@@ -674,13 +674,6 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String get desktopDiscoverMiniLine =>
       'بطاقة صغيرة فوق كل النوافذ، بجانب الساعة.';
-
-  @override
-  String get desktopDiscoverPhone => 'مع جوالك';
-
-  @override
-  String get desktopDiscoverPhoneLine =>
-      'الوسوم والقوائم ومواضع الاستئناف، تُزامَن مع Vidhoist على جوالك عبر مجلد تختاره.';
 
   @override
   String get desktopDiscoverReading =>
@@ -789,7 +782,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopEngineMissing =>
-      'yt-dlp غير موجود على هذا الحاسوب. أعد تثبيت Vidhoist، أو نزّله من هنا.';
+      'yt-dlp غير موجود على هذا الحاسوب. أعد تثبيت VidHoist، أو نزّله من هنا.';
 
   @override
   String get desktopEngineOnFirstUse => 'يُنزَّل مع أول تنزيل يحتاجه';
@@ -840,7 +833,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopExportPdf => 'مستند (PDF)';
 
   @override
-  String get desktopExportPhone => 'للجوال (ملف الاستيراد في Vidhoist)';
+  String get desktopExportPhone => 'للجوال (ملف الاستيراد في VidHoist)';
 
   @override
   String get desktopExportSrt => 'ترجمة (SRT)';
@@ -892,7 +885,7 @@ class VhLocalizationsAr extends VhLocalizations {
       'يكمل التشغيل من أيقونته بجانب الساعة. للخروج، انقر الأيقونة بالزر الأيمن.';
 
   @override
-  String get desktopHintTrayTitle => 'ما زال Vidhoist يعمل';
+  String get desktopHintTrayTitle => 'ما زال VidHoist يعمل';
 
   @override
   String get desktopHints => 'إظهار التلميحات';
@@ -909,7 +902,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopImportHint =>
-      'نسخة احتياطية أو ملف نصوص من Vidhoist على جهاز آخر، تختاره هنا أو تُفلته على النافذة. يُضاف إلى ما هنا ولا يستبدل شيئاً.';
+      'نسخة احتياطية أو ملف نصوص من VidHoist على جهاز آخر، تختاره هنا أو تُفلته على النافذة. يُضاف إلى ما هنا ولا يستبدل شيئاً.';
 
   @override
   String desktopImportedBackup(int tagged, int lists, int positions) {
@@ -989,13 +982,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String desktopLastArrival(String when) {
     return 'آخر وصول $when';
   }
-
-  @override
-  String get desktopLaterFeatures => 'أظهر المزامنة';
-
-  @override
-  String get desktopLaterFeaturesHint =>
-      'لم تكتمل بعد: المزامنة تنتظر تطبيق الجوال.';
 
   @override
   String get desktopLess => 'أقل';
@@ -1096,7 +1082,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopNotABackup =>
-      'هذا الملف ليس نسخة احتياطية ولا ملف نصوص من Vidhoist.';
+      'هذا الملف ليس نسخة احتياطية ولا ملف نصوص من VidHoist.';
 
   @override
   String desktopNotWatched(int count) {
@@ -1390,78 +1376,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopSubtitleOptions => 'خيارات الترجمة';
 
   @override
-  String get desktopSync => 'المزامنة';
-
-  @override
-  String get desktopSyncCameBack =>
-      'غاب هذا الكمبيوتر أكثر من 90 يوماً، فأُخذت بيانات أجهزتك الأخرى أولاً.';
-
-  @override
-  String get desktopSyncChoose => 'اختر مجلداً';
-
-  @override
-  String desktopSyncComputer(String name) {
-    return 'الكمبيوتر $name';
-  }
-
-  @override
-  String get desktopSyncFailed =>
-      'تعذّرت قراءة مجلد المزامنة، فتأكد أن قرصه موجود.';
-
-  @override
-  String get desktopSyncFolder => 'مجلد المزامنة';
-
-  @override
-  String get desktopSyncForget => 'انسَ هذا الجهاز';
-
-  @override
-  String desktopSyncForgetBody(String device) {
-    return 'لن يُقرأ $device بعد الآن، وتُنقل نصوصه إلى مجلد هذا الكمبيوتر أولاً فلا يضيع منها شيء. استعمله لجهاز ضاع أو بِيع.';
-  }
-
-  @override
-  String desktopSyncFrom(String device, String ago) {
-    return 'آخر ما وصل من $device: $ago';
-  }
-
-  @override
-  String get desktopSyncGuide =>
-      'داخل البيت: Syncthing على هذا الكمبيوتر وSyncthing‑Fork (من F-Droid) على الجوال يتشاركان مجلداً واحداً، واضبط Syncthing‑Fork على «Wi‑Fi فقط» توفيراً لبطارية الجوال. وعبر السحابة: مجلد برنامج السحابة على هذا الكمبيوتر (OneDrive أو Google Drive أو Dropbox)، وFolderSync على الجوال بالمجلد نفسه.';
-
-  @override
-  String get desktopSyncHint =>
-      'تعكس الوسوم والمفضلة والقوائم ومواضع التوقف والبحوث المحفوظة والنصوص بين هذا الكمبيوتر وجوالك وأجهزتك الأخرى، عبر مجلد يزامنه برنامج تختاره (Syncthing داخل البيت، أو مجلد سحابي). ولا يُرسَل شيء من هنا إلى أي خدمة.';
-
-  @override
-  String desktopSyncLast(String ago) {
-    return 'آخر مزامنة $ago';
-  }
-
-  @override
-  String get desktopSyncNoOthers =>
-      'لا جهاز آخر في هذا المجلد بعد. شغّل المزامنة في Vidhoist على الجوال بالمجلد نفسه.';
-
-  @override
-  String get desktopSyncNotBackup =>
-      'المزامنة ليست نسخاً احتياطياً: تعكس الخطأ كما تعكس الصواب، ونسخك المؤرَّخة تبقى منفصلة عنها.';
-
-  @override
-  String get desktopSyncOff => 'متوقفة، ولا يخرج شيء من هذا الكمبيوتر.';
-
-  @override
-  String desktopSyncPhone(String name) {
-    return 'الجوال $name';
-  }
-
-  @override
-  String desktopSyncThisComputer(String name) {
-    return 'هذا الكمبيوتر: $name';
-  }
-
-  @override
-  String get desktopSyncTurnOff => 'إيقاف';
-
-  @override
   String get desktopTheater => 'وضع المسرح';
 
   @override
@@ -1472,14 +1386,14 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopTranscriptsDeleteBody =>
-      'تُحذف من هذا الكمبيوتر، ولا يعيدها إلا ملف صدّرته أو جهاز آخر عبر المزامنة.';
+      'تُحذف من هذا الكمبيوتر، ولا يعيدها إلا ملف صدّرته.';
 
   @override
   String get desktopTranscriptsExportHint => 'كلها في ملف واحد يستورده الجوال.';
 
   @override
   String get desktopTranscriptsHelp =>
-      'يحفظ Vidhoist ما يُقال في كل مقطع يوتيوب تضيفه، فيجد البحث (Ctrl+K) ما قيل داخل مقاطعك لا عناوينها وحدها. وتبقى النصوص على هذا الكمبيوتر.';
+      'يحفظ VidHoist ما يُقال في كل مقطع يوتيوب تضيفه، فيجد البحث (Ctrl+K) ما قيل داخل مقاطعك لا عناوينها وحدها. وتبقى النصوص على هذا الكمبيوتر.';
 
   @override
   String get desktopTranscriptsImportHint =>
@@ -1493,7 +1407,7 @@ class VhLocalizationsAr extends VhLocalizations {
       'إغلاق النافذة يُبقي الصوت شغالاً، والخروج من الأيقونة بجانب الساعة.';
 
   @override
-  String get desktopTrayOpen => 'فتح Vidhoist';
+  String get desktopTrayOpen => 'فتح VidHoist';
 
   @override
   String get desktopTrayQuit => 'خروج';
@@ -1514,7 +1428,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopUpdateRestartHint =>
-      'يُغلَق Vidhoist ويثبّت التحديث ثم يُفتح من جديد، وتبقى إعداداتك ومكتبتك كما هي.';
+      'يُغلَق VidHoist ويثبّت التحديث ثم يُفتح من جديد، وتبقى إعداداتك ومكتبتك كما هي.';
 
   @override
   String get desktopViewCompact => 'مختصر';
@@ -1539,16 +1453,16 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopWelcomeMessage =>
-      'الصق رابطاً من يوتيوب أو أي موقع آخر، فينزّله Vidhoist إلى هذا الحاسوب بمحرّك yt-dlp، دون المرور بأي خادم.';
+      'الصق رابطاً من يوتيوب أو أي موقع آخر، فينزّله VidHoist إلى هذا الحاسوب بمحرّك yt-dlp، دون المرور بأي خادم.';
 
   @override
   String get desktopWelcomeStart => 'ابدأ';
 
   @override
-  String get desktopWelcomeTitle => 'أهلاً بك في Vidhoist';
+  String get desktopWelcomeTitle => 'أهلاً بك في VidHoist';
 
   @override
-  String get desktopWhatsNewAllFeatures => 'وكل مزايا Vidhoist';
+  String get desktopWhatsNewAllFeatures => 'وكل مزايا VidHoist';
 
   @override
   String get desktopWidenSidebar => 'توسيع الشريط الجانبي';
@@ -1900,7 +1814,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get mobileChannelsEmptyBody =>
-      'تابِع قناة، فيُنزَّل كل مقطع جديد تنشره تلقائياً ما دام Vidhoist مفتوحاً أو في الخلفية، وما نُشر وهو مغلق يُنزَّل حين تفتحه. أما ما نُشر قبل المتابعة فلا يُنزَّل.';
+      'تابِع قناة، فيُنزَّل كل مقطع جديد تنشره تلقائياً ما دام VidHoist مفتوحاً أو في الخلفية، وما نُشر وهو مغلق يُنزَّل حين تفتحه. أما ما نُشر قبل المتابعة فلا يُنزَّل.';
 
   @override
   String get mobileChannelsHint =>
@@ -1980,14 +1894,14 @@ class VhLocalizationsAr extends VhLocalizations {
   String get mobileWelcomeStart => 'ابدأ';
 
   @override
-  String get mobileWelcomeTitle => 'أهلاً بك في Vidhoist';
+  String get mobileWelcomeTitle => 'أهلاً بك في VidHoist';
 
   @override
   String get mobileWelcomeUnpacking => 'تجهيز محرّك التنزيل';
 
   @override
   String get mobileWelcomeUpdateFailed =>
-      'تعذّر التحديث الآن، وسيحاول Vidhoist مجدداً قبل أول تنزيل.';
+      'تعذّر التحديث الآن، وسيحاول VidHoist مجدداً قبل أول تنزيل.';
 
   @override
   String get mobileWelcomeUpdating => 'تحديث yt-dlp إلى آخر إصدار';
@@ -2624,7 +2538,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get subscriptionsEmptyBody =>
-      'تابِع قناة، فيُنزَّل كل مقطع جديد تنشره إلى مكتبتك تلقائياً ما دام Vidhoist مفتوحاً أو في الدرج. أما ما نُشر قبل المتابعة فلا يُنزَّل.';
+      'تابِع قناة، فيُنزَّل كل مقطع جديد تنشره إلى مكتبتك تلقائياً ما دام VidHoist مفتوحاً أو في الدرج. أما ما نُشر قبل المتابعة فلا يُنزَّل.';
 
   @override
   String get subscriptionsSubtitle =>
@@ -2680,46 +2594,6 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get subtitlesSizeSmall => 'صغير';
-
-  @override
-  String get syncDeviceQuiet =>
-      'لم يصل منه شيء منذ أكثر من يومين. إن كان مستعملاً فالأرجح أن برنامج المزامنة متوقف أو نائم، عليه أو هنا، فالجوال يُنيم التطبيقات التي يظنها غير مستعملة.';
-
-  @override
-  String get syncPhoneCameBack =>
-      'غاب هذا الجوال أكثر من 90 يوماً، فأُخذت بيانات أجهزتك الأخرى أولاً.';
-
-  @override
-  String get syncPhoneFailed =>
-      'تعذّرت قراءة مجلد المزامنة. اختره من جديد إن نُقل أو سُحب إذنه.';
-
-  @override
-  String syncPhoneForgetBody(String device) {
-    return 'لن يُقرأ $device بعد الآن، وتُنقل نصوصه إلى مجلد هذا الجوال أولاً فلا يضيع منها شيء. استعمله لجهاز ضاع أو بِيع.';
-  }
-
-  @override
-  String get syncPhoneGuide =>
-      'داخل البيت: Syncthing-Fork (من F-Droid) على هذا الجوال وSyncthing على الكمبيوتر يتشاركان مجلداً واحداً، واضبطه على «Wi‑Fi فقط» توفيراً للبطارية. وعبر السحابة: FolderSync مع المجلد السحابي الذي يستعمله الكمبيوتر.';
-
-  @override
-  String get syncPhoneHint =>
-      'تعكس الوسوم والمفضلة والقوائم ومواضع التوقف والنصوص بين هذا الجوال وVidhoist على الكمبيوتر، عبر مجلد يزامنه برنامج تختاره. ولا يُرسَل شيء من هنا إلى أي خدمة.';
-
-  @override
-  String get syncPhoneNoOthers =>
-      'لا جهاز آخر في هذا المجلد بعد. شغّل المزامنة في Vidhoist على الكمبيوتر بالمجلد نفسه.';
-
-  @override
-  String get syncPhoneOff => 'متوقفة، ولا يخرج شيء من هذا الجوال.';
-
-  @override
-  String syncPhoneThisDevice(String name) {
-    return 'هذا الجوال: $name';
-  }
-
-  @override
-  String get syncTitle => 'المزامنة مع الكمبيوتر';
 
   @override
   String get tagActionsHint => 'اضغط مطوّلاً على وسم لإعادة تسميته أو حذفه.';
@@ -2927,7 +2801,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get unfollowConfirmBody =>
-      'سينسى Vidhoist المقاطع التي سبق أن رآها من هذه القناة. فإن تابعتها لاحقاً عُدَّ كل ما عليها حينها مُشاهَداً، ولن يُنزَّل ما فاتك. أما الإيقاف المؤقت فيحفظ هذا السجل.';
+      'سينسى VidHoist المقاطع التي سبق أن رآها من هذه القناة. فإن تابعتها لاحقاً عُدَّ كل ما عليها حينها مُشاهَداً، ولن يُنزَّل ما فاتك. أما الإيقاف المؤقت فيحفظ هذا السجل.';
 
   @override
   String get unlockTouch => 'فك القفل';
@@ -3082,5 +2956,5 @@ class VhLocalizationsAr extends VhLocalizations {
   String get yourTags => 'وسومك';
 
   @override
-  String get ytdlpCredit => 'أداة التنزيل التي يعتمد عليها Vidhoist';
+  String get ytdlpCredit => 'أداة التنزيل التي يعتمد عليها VidHoist';
 }

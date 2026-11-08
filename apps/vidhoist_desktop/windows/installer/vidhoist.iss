@@ -20,7 +20,7 @@
 ; the real one without touching it (with NoRelaunch, so it never opens the
 ; app, which would use the real data).
 #ifndef AppName
-  #define AppName "Vidhoist"
+  #define AppName "VidHoist"
 #endif
 #ifndef AppIdGuid
   #define AppIdGuid "E0FBCB9C-889B-404E-AB5A-156466DC8CE4"
