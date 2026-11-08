@@ -20,28 +20,33 @@ import '../../shell/ember_dialog.dart';
 /// afterwards.
 ///
 /// [name] heads a follow offered from a channel the library already has
-/// clips from; the link is still the user's to paste.
+/// clips from, and [url] fills the link with one of them: following a
+/// clip's link follows its channel.
 Future<void> showFollowDialog(
   BuildContext context, {
   ChannelSubscription? editing,
   String? name,
+  String? url,
 }) => showEmberDialog<void>(
   context: context,
-  builder: (_) => _FollowDialog(editing: editing, name: name),
+  builder: (_) => _FollowDialog(editing: editing, name: name, url: url),
 );
 
 class _FollowDialog extends ConsumerStatefulWidget {
-  const _FollowDialog({this.editing, this.name});
+  const _FollowDialog({this.editing, this.name, this.url});
 
   final ChannelSubscription? editing;
   final String? name;
+  final String? url;
 
   @override
   ConsumerState<_FollowDialog> createState() => _FollowDialogState();
 }
 
 class _FollowDialogState extends ConsumerState<_FollowDialog> {
-  late final _url = TextEditingController(text: widget.editing?.url ?? '');
+  late final _url = TextEditingController(
+    text: widget.editing?.url ?? widget.url ?? '',
+  );
   late final _name = TextEditingController(text: widget.editing?.name ?? '');
   late final _filter = TextEditingController(
     text: widget.editing?.titleRegex ?? '',
@@ -109,8 +114,8 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
           ownFolder: _ownFolder,
           folder: _folder.path,
         );
-        // The title the server resolved is the proof the right channel
-        // was followed.
+        // The title yt-dlp resolved is the proof the right channel was
+        // followed, the more so when a clip's link was given.
         message = l.subscriptionAdded(mtName(named ?? url));
       }
       if (!mounted) return;

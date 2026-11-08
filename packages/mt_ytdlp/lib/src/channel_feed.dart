@@ -7,6 +7,8 @@ class ChannelFeed {
     required this.id,
     required this.name,
     required this.entries,
+    this.channelUrl,
+    this.isClip = false,
   });
 
   /// The listing as yt-dlp printed it.
@@ -43,12 +45,22 @@ class ChannelFeed {
       // "NASA", not the tab's "NASA - Videos".
       name: text('channel') ?? info.uploader ?? info.title ?? '',
       entries: entries,
+      // The handle reads better than the id, and both list the same.
+      channelUrl: text('uploader_url') ?? text('channel_url'),
+      isClip: !info.isPlaylist,
     );
   }
 
   final String id;
   final String name;
   final List<FlatEntry> entries;
+
+  /// The channel's own page, named by a listing and by a single clip.
+  final String? channelUrl;
+
+  /// A link to one clip rather than to a list: it is followed by its
+  /// channel ([channelUrl]).
+  final bool isClip;
 }
 
 final _youTubeChannel = RegExp(

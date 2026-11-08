@@ -223,7 +223,7 @@ class MTLocalizationsAr extends MTLocalizations {
   String get channelNameFolder => 'باسم القناة';
 
   @override
-  String get channelUrl => 'رابط قناة أو قائمة';
+  String get channelUrl => 'رابط قناة أو قائمة أو أحد مقاطعها';
 
   @override
   String get channelUrlHint => 'https://www.youtube.com/@name';

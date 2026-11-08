@@ -425,7 +425,7 @@ abstract class MTLocalizations {
   /// No description provided for @channelUrl.
   ///
   /// In en, this message translates to:
-  /// **'Channel or playlist link'**
+  /// **'Link to a channel, a playlist or one of its videos'**
   String get channelUrl;
 
   /// No description provided for @channelUrlHint.

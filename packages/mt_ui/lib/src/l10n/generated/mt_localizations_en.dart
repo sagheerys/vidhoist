@@ -202,7 +202,7 @@ class MTLocalizationsEn extends MTLocalizations {
   String get channelNameFolder => 'Named after the channel';
 
   @override
-  String get channelUrl => 'Channel or playlist link';
+  String get channelUrl => 'Link to a channel, a playlist or one of its videos';
 
   @override
   String get channelUrlHint => 'https://www.youtube.com/@name';

@@ -362,7 +362,7 @@ void main() {
     await open(
       tester,
       subs: [_sub('a', 'Alpha - Videos')],
-      library: [_clip('1', 'Lowlands'), _clip('2', 'Lowlands')],
+      library: [_clip('1', 'Lowlands'), _clip('2', 'Lowlands', day: 22)],
     );
     expect(find.text('Channels in your library'), findsOneWidget);
     await tester.tap(find.text('Follow'));
@@ -371,6 +371,15 @@ void main() {
       find.descendant(
         of: find.byType(AlertDialog),
         matching: find.text('Lowlands'),
+      ),
+      findsOneWidget,
+    );
+    // **The guard**: the link is filled with its newest clip, which follows
+    // the channel; it used to be left empty, with nothing to paste.
+    expect(
+      find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.widgetWithText(TextField, 'https://youtu.be/2'),
       ),
       findsOneWidget,
     );

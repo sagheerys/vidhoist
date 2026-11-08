@@ -92,13 +92,33 @@ class LocalChannelSource implements ChannelSource {
     String? folder,
   }) => _serial(() async {
     final records = await _load();
-    final feedUrl = channelFeedUrl(url);
+    var feedUrl = channelFeedUrl(url);
+    var pasted = url.trim();
     if (records.any((r) => r.feedUrl == feedUrl)) {
       throw const AlreadyFollowedException();
     }
-    final feed = ChannelFeed.of(
+    var feed = ChannelFeed.of(
       await _read(() => backend.list(feedUrl, limit: listLimit)),
     );
+    // A clip's link follows its channel: the library knows its clips'
+    // links, not their channels'.
+    if (feed.isClip) {
+      final channel = feed.channelUrl;
+      if (channel == null) {
+        throw const EngineFailureException(
+          YtDlpErrorKind.unsupportedUrl,
+          'no channel named for this link',
+        );
+      }
+      pasted = channel;
+      feedUrl = channelFeedUrl(channel);
+      if (records.any((r) => r.feedUrl == feedUrl)) {
+        throw const AlreadyFollowedException();
+      }
+      feed = ChannelFeed.of(
+        await _read(() => backend.list(feedUrl, limit: listLimit)),
+      );
+    }
     final id = feed.id.isNotEmpty ? feed.id : feedUrl;
     if (records.any((r) => r.id == id)) {
       throw const AlreadyFollowedException();
@@ -106,7 +126,7 @@ class LocalChannelSource implements ChannelSource {
     final record = ChannelRecord(
       id: id,
       name: feed.name.isNotEmpty ? feed.name : feedUrl,
-      url: url.trim(),
+      url: pasted,
       feedUrl: feedUrl,
       quality: quality.wire,
       checkIntervalMinutes: checkIntervalMinutes,

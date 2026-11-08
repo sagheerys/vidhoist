@@ -151,7 +151,11 @@ class ChannelsPage extends ConsumerWidget {
                   _Unfollowed(
                     channel: channel,
                     onFollow: () => unawaited(
-                      showFollowDialog(context, name: channel.name),
+                      showFollowDialog(
+                        context,
+                        name: channel.name,
+                        url: channel.latestUrl,
+                      ),
                     ),
                   ),
               ],

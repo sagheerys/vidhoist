@@ -13,6 +13,9 @@ All notable changes to Vidhoist. The format follows
   it opens. What was on the channel before following is not downloaded. A
   YouTube channel's link follows its videos, not its Shorts or live
   streams, and a stream on the air arrives once it is over.
+- A channel can be followed from the link of any of its videos, and
+  "Channels in your library" fills that in with the newest one there:
+  the follow dialog used to open with an empty link.
 
 ### Changed
 - Channels are always in the sidebar and in Settings; the "later features"

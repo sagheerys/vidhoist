@@ -49,6 +49,22 @@ void main() {
     });
   });
 
+  test("a clip's link names its channel, to follow it by", () {
+    // The channel fields of a real listing of one clip; the rest of its
+    // eleven megabytes (formats, links) is left out.
+    final feed = ChannelFeed.of(
+      InfoJson.parse(fixture('channel-clip.stdout.txt')),
+    );
+    expect(feed.isClip, isTrue);
+    expect(feed.channelUrl, 'https://www.youtube.com/@NASA');
+    expect(feed.entries, isEmpty);
+
+    final list = ChannelFeed.of(
+      InfoJson.parse(fixture('channel-videos.stdout.txt')),
+    );
+    expect(list.isClip, isFalse);
+  });
+
   test('a clip listed under two tabs counts once', () {
     final feed = ChannelFeed.of(
       InfoJson.parse('''

@@ -86,6 +86,37 @@ void main() {
       expect(await channels.list(), hasLength(1));
     });
 
+    test("a clip's link follows its channel", () async {
+      const clip = 'https://www.youtube.com/watch?v=b';
+      backend.listings[clip] = {
+        '_type': 'video',
+        'id': 'b',
+        'channel': 'Some Channel',
+        'channel_id': 'UC_some',
+        'uploader_url': 'https://www.youtube.com/@Some',
+      };
+      final channels = source();
+      final sub = await follow(channels, url: clip);
+      expect(backend.listed, [clip, _videos]);
+      expect(sub.url, 'https://www.youtube.com/@Some');
+      expect(sub.seenCount, 2, reason: "the channel's clips, not the one");
+      await expectLater(
+        follow(channels, url: clip),
+        throwsA(isA<AlreadyFollowedException>()),
+      );
+    });
+
+    test('a clip that names no channel is not followed', () async {
+      const clip = 'https://example.com/v/1';
+      backend.listings[clip] = {'_type': 'video', 'id': '1'};
+      final channels = source();
+      await expectLater(
+        follow(channels, url: clip),
+        throwsA(isA<EngineFailureException>()),
+      );
+      expect(await channels.list(), isEmpty);
+    });
+
     test('a link yt-dlp cannot read is not followed', () async {
       backend.listings[_videos] = const YtDlpError(
         YtDlpErrorKind.unavailable,

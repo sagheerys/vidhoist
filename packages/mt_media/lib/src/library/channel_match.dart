@@ -36,10 +36,18 @@ class ChannelStats {
 
 /// A channel the library has clips from that no subscription follows.
 class LibraryChannel {
-  const LibraryChannel({required this.name, required this.count});
+  const LibraryChannel({
+    required this.name,
+    required this.count,
+    this.latestUrl,
+  });
 
   final String name;
   final int count;
+
+  /// Its newest clip here: the library knows its clips' links, not the
+  /// channel's, and a clip's link is enough to follow its channel.
+  final String? latestUrl;
 }
 
 class ChannelMatch {
@@ -115,7 +123,11 @@ Future<ChannelMatch> matchChannels(
   final unfollowed = [
     for (final MapEntry(:key, :value) in byKey.entries)
       if (!followed.contains(key))
-        LibraryChannel(name: spelled[key]!, count: value.length),
+        LibraryChannel(
+          name: spelled[key]!,
+          count: value.length,
+          latestUrl: _newest(value).canonicalUrl,
+        ),
   ]..sort((a, b) => b.count.compareTo(a.count));
   return ChannelMatch(
     stats: stats,
@@ -123,3 +135,8 @@ Future<ChannelMatch> matchChannels(
     namesChannels: byKey.isNotEmpty,
   );
 }
+
+LibraryItem _newest(List<LibraryItem> items) => items.reduce(
+  (a, b) =>
+      (b.timestamp ?? DateTime(0)).isAfter(a.timestamp ?? DateTime(0)) ? b : a,
+);
