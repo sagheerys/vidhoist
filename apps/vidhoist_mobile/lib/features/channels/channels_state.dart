@@ -5,6 +5,7 @@ import 'package:mt_core/mt_core.dart';
 
 import '../../di.dart';
 import '../settings/auto_backup.dart';
+import 'channel_art.dart';
 
 /// The channels followed on this phone, kept by the app and read through
 /// its yt-dlp. What is new joins the download queue like a pasted link, at
@@ -21,13 +22,11 @@ final channelSourceProvider = Provider<LocalChannelSource>(
   ),
 );
 
-/// The followed channels as the page reads them: the ones that need
-/// attention first, then the active ones, the paused ones last, each by
-/// name.
+/// The followed channels as the page reads them: the active ones, the
+/// paused ones last, each by name.
 final channelsProvider = FutureProvider<List<ChannelSubscription>>((ref) async {
   final all = await ref.watch(channelSourceProvider).list();
   return all..sort((a, b) {
-    if (a.hasError != b.hasError) return a.hasError ? -1 : 1;
     if (a.enabled != b.enabled) return a.enabled ? -1 : 1;
     return a.name.toLowerCase().compareTo(b.name.toLowerCase());
   });
@@ -99,8 +98,10 @@ class ChannelsController {
     _changed(backup: true);
   }
 
+  /// Its pictures go with it; following it again fetches them anew.
   Future<void> unfollow(ChannelSubscription sub) async {
     await _source.unfollow([sub.id]);
+    unawaited(_ref.read(channelArtProvider).forget(sub.id));
     _changed(backup: true);
   }
 

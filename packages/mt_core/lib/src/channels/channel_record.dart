@@ -21,6 +21,7 @@ class ChannelRecord {
     this.folder,
     this.lastChecked,
     this.error,
+    this.retryAt,
     this.avatarUrl,
     this.bannerUrl,
     this.followers,
@@ -44,6 +45,10 @@ class ChannelRecord {
   String? folder;
   DateTime? lastChecked;
   String? error;
+
+  /// Set when a check starts, and kept when it could not reach the site:
+  /// the channel is read again from then on, not a whole interval later.
+  DateTime? retryAt;
 
   String? avatarUrl;
   String? bannerUrl;
@@ -91,12 +96,14 @@ class ChannelRecord {
     if (seen.length > seenCap) seen.removeRange(0, seen.length - seenCap);
   }
 
-  bool isDue(DateTime now) =>
-      enabled &&
-      (lastChecked == null ||
-          !now.isBefore(
-            lastChecked!.add(Duration(minutes: checkIntervalMinutes)),
-          ));
+  bool isDue(DateTime now) {
+    if (!enabled) return false;
+    if (retryAt case final at?) return !now.isBefore(at);
+    return lastChecked == null ||
+        !now.isBefore(
+          lastChecked!.add(Duration(minutes: checkIntervalMinutes)),
+        );
+  }
 
   ChannelSubscription get subscription => ChannelSubscription(
     id: id,
@@ -128,6 +135,7 @@ class ChannelRecord {
     if (folder != null) 'folder': folder,
     if (lastChecked != null) 'checked': lastChecked!.millisecondsSinceEpoch,
     if (error != null) 'error': error,
+    if (retryAt != null) 'retry': retryAt!.millisecondsSinceEpoch,
     if (avatarUrl != null) 'avatar': avatarUrl,
     if (bannerUrl != null) 'banner': bannerUrl,
     if (followers != null) 'followers': followers,
@@ -166,6 +174,10 @@ class ChannelRecord {
           ? DateTime.fromMillisecondsSinceEpoch(checked)
           : null,
       error: text('error'),
+      retryAt: switch (raw['retry']) {
+        final int ms => DateTime.fromMillisecondsSinceEpoch(ms),
+        _ => null,
+      },
       avatarUrl: text('avatar'),
       bannerUrl: text('banner'),
       followers: switch (raw['followers']) {

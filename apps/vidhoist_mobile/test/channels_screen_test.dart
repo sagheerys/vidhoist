@@ -7,6 +7,7 @@ import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/channels/channel_actions.dart';
+import 'package:vidhoist_mobile/features/channels/channel_art.dart';
 import 'package:vidhoist_mobile/features/channels/channel_avatar.dart';
 import 'package:vidhoist_mobile/features/channels/channel_card.dart';
 import 'package:vidhoist_mobile/features/channels/channels_screen.dart';
@@ -42,9 +43,11 @@ void main() {
   late FakeBackend backend;
   late LocalDownloadEngine engine;
   late _Backups backups;
+  late _Art art;
 
   setUp(() {
     backups = _Backups();
+    art = _Art();
     store = MemoryKeyValueStore();
     backend = FakeBackend(hold: true)..listings[_videos] = _feed(['a']);
     engine = LocalDownloadEngine(
@@ -69,6 +72,7 @@ void main() {
         downloadBackendProvider.overrideWithValue(backend),
         downloadEngineProvider.overrideWithValue(engine),
         autoBackupProvider.overrideWithValue(backups),
+        channelArtProvider.overrideWithValue(art),
       ],
     );
     addTearDown(c.dispose);
@@ -203,19 +207,60 @@ void main() {
     expect(find.byType(AlertDialog), findsOneWidget, reason: 'asked first');
   });
 
-  testWidgets('a failed check shows on its row', (tester) async {
+  testWidgets('**the guard**: a failed check says so calmly, not in '
+      "yt-dlp's words; its sheet has them, small", (tester) async {
     final c = container();
     await tester.runAsync(() async {
       await followSome(c);
       backend.listings[_videos] = const YtDlpError(
-        YtDlpErrorKind.network,
-        'ERROR: Unable to download webpage',
+        YtDlpErrorKind.unavailable,
+        'ERROR: [youtube:tab] @Some: This channel does not exist.',
       );
       await c.read(channelsControllerProvider).checkNow();
     });
     await tester.pumpWidget(app(c));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Unable to download webpage'), findsOneWidget);
+    expect(find.textContaining('tries again by itself'), findsOneWidget);
+    expect(find.textContaining('does not exist'), findsNothing);
+    await tester.tap(find.textContaining('Some Channel'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('does not exist'), findsOneWidget);
+  });
+
+  testWidgets('no network: the card stays as it was, nothing said', (
+    tester,
+  ) async {
+    final c = container();
+    await tester.runAsync(() async {
+      await followSome(c);
+      backend.listings[_videos] = const YtDlpError(
+        YtDlpErrorKind.network,
+        'ERROR: [youtube:tab] @Some/videos: Unable to download API page: '
+        '[Errno 7] No address associated with host',
+      );
+      await c.read(channelsControllerProvider).checkNow();
+    });
+    await tester.pumpWidget(app(c));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('tries again'), findsNothing);
+    expect(find.textContaining('Errno'), findsNothing);
+    expect(find.textContaining('Last checked'), findsOneWidget);
+  });
+
+  testWidgets("unfollowing forgets the channel's pictures", (tester) async {
+    final c = container();
+    await tester.runAsync(() => followSome(c));
+    await tester.pumpWidget(app(c));
+    await tester.pumpAndSettle();
+    await tester.tap(find.textContaining('Some Channel'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Unfollow'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, 'Unfollow').last);
+    await tester.pumpAndSettle();
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+    await tester.pumpAndSettle();
+    expect(art.forgotten, ['UC_some']);
   });
 
   for (final lang in ['en', 'ar']) {
@@ -278,6 +323,19 @@ void main() {
       expect(find.byType(TextField), findsNWidgets(2));
     });
   }
+}
+
+/// Keeps no picture and fetches none, and notes what was forgotten.
+class _Art extends ChannelArt {
+  _Art() : super(root: () async => Directory.systemTemp.path);
+
+  final forgotten = <String>[];
+
+  @override
+  Future<File?> file(String id, ChannelArtKind kind, String? url) async => null;
+
+  @override
+  Future<void> forget(String id) async => forgotten.add(id);
 }
 
 /// Counts the backups asked for, writing none.

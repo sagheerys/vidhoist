@@ -198,6 +198,7 @@
   "changeQuality": "تغيير الجودة",
   "channelNameFolder": "باسم القناة",
   "channelFollowers": "{count} مشترك",
+  "channelCheckFailed": "تعذّر فحصها هذه المرة، وسيحاول Vidhoist مجدداً من تلقاء نفسه.",
   "channelUrl": "رابط قناة أو قائمة أو أحد مقاطعها",
   "channelUrlHint": "https://www.youtube.com/@name",
   "chapterCount": "{count, plural, =1{فصل واحد} =2{فصلان} few{{count} فصول} many{{count} فصلاً} other{{count} فصل}}",

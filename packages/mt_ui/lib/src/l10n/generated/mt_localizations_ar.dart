@@ -228,6 +228,10 @@ class MTLocalizationsAr extends MTLocalizations {
   }
 
   @override
+  String get channelCheckFailed =>
+      'تعذّر فحصها هذه المرة، وسيحاول Vidhoist مجدداً من تلقاء نفسه.';
+
+  @override
   String get channelUrl => 'رابط قناة أو قائمة أو أحد مقاطعها';
 
   @override

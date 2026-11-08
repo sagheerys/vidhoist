@@ -421,6 +421,7 @@
   "changeQuality": "Change quality",
   "channelNameFolder": "Named after the channel",
   "channelFollowers": "{count} subscribers",
+  "channelCheckFailed": "Not checked this time. Vidhoist tries again by itself.",
   "channelUrl": "Link to a channel, a playlist or one of its videos",
   "channelUrlHint": "https://www.youtube.com/@name",
   "chapterCount": "{count, plural, =1{1 chapter} other{{count} chapters}}",

@@ -28,6 +28,17 @@ All notable changes to Vidhoist. The format follows
   its banner, opens the channel itself ("Open channel"), and keeps
   unfollowing apart from checking, pausing and editing.
 
+### Fixed
+- A channel's picture and banner are kept on the phone: they show with no
+  network and are no longer fetched at each visit; unfollowing deletes
+  them, and following again fetches them anew.
+- A channel check with no network (the phone waking offline) no longer
+  shows yt-dlp's error in red: the card keeps its last good check, and the
+  channel is tried again a few minutes later. Any other failure says so in
+  a calm sentence, with yt-dlp's words only in the channel's sheet.
+- Android's "No address associated with host" now counts as a network
+  failure everywhere, not as an unknown error.
+
 ### Changed
 - Channels are always in the sidebar and in Settings; the "later features"
   switch now hides Sync alone.

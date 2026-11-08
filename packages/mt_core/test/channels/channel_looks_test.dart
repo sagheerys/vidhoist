@@ -84,8 +84,8 @@ void main() {
     final channels = source();
     await follow(channels);
     backend.listings[_videos] = const YtDlpError(
-      YtDlpErrorKind.network,
-      'ERROR: Unable to download webpage',
+      YtDlpErrorKind.unavailable,
+      'ERROR: This channel does not exist.',
     );
     await channels.check();
     final sub = (await channels.list()).single;

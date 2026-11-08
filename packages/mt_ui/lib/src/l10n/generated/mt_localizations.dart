@@ -428,6 +428,12 @@ abstract class MTLocalizations {
   /// **'{count} subscribers'**
   String channelFollowers(String count);
 
+  /// No description provided for @channelCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not checked this time. Vidhoist tries again by itself.'**
+  String get channelCheckFailed;
+
   /// No description provided for @channelUrl.
   ///
   /// In en, this message translates to:

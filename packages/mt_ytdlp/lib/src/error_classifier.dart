@@ -97,7 +97,10 @@ abstract final class ErrorClassifier {
     (
       YtDlpErrorKind.network,
       _re(
+        // Android words a failed name lookup as "No address associated
+        // with host" (errno 7), where Windows says getaddrinfo.
         r'getaddrinfo failed|Name or service not known|'
+        r'No address associated with host|'
         r'Temporary failure in name resolution|Failed to resolve|'
         r'timed out|Connection (refused|reset)|Network is unreachable|'
         r'Unable to download webpage: HTTP Error 5\d\d|No route to host',

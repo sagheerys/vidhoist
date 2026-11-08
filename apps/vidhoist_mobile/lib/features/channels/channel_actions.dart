@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
@@ -8,6 +7,7 @@ import 'package:mt_ui/mt_ui.dart';
 
 import '../shared/error_text.dart';
 import '../shared/open_web_link.dart';
+import 'channel_art.dart';
 import 'channel_avatar.dart';
 import 'channel_card.dart';
 import 'channels_state.dart';
@@ -56,7 +56,7 @@ Future<void> showChannelActions(
   }
 }
 
-class _ChannelSheet extends StatelessWidget {
+class _ChannelSheet extends ConsumerWidget {
   const _ChannelSheet({required this.sub});
 
   final ChannelSubscription sub;
@@ -64,12 +64,16 @@ class _ChannelSheet extends StatelessWidget {
   static const _avatar = 72.0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.mtl;
     final p = MTThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     void pick(_Action a) => Navigator.of(context).pop(a);
-    final banner = sub.bannerUrl;
+    final banner = ref
+        .watch(
+          channelArtFileProvider(channelArtKey(sub, ChannelArtKind.banner)),
+        )
+        .valueOrNull;
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
         MTSpace.pagePad,
@@ -91,10 +95,10 @@ class _ChannelSheet extends StatelessWidget {
                   aspectRatio: 4,
                   child: banner == null
                       ? ColoredBox(color: p.accentSoft)
-                      : CachedNetworkImage(
-                          imageUrl: banner,
+                      : Image.file(
+                          banner,
                           fit: BoxFit.cover,
-                          errorWidget: (_, _, _) =>
+                          errorBuilder: (_, _, _) =>
                               ColoredBox(color: p.accentSoft),
                         ),
                 ),
@@ -127,7 +131,7 @@ class _ChannelSheet extends StatelessWidget {
           const SizedBox(height: MTSpace.md),
           ClipRRect(
             borderRadius: BorderRadius.circular(MTRadius.thumb),
-            child: ChannelStatus(sub: sub),
+            child: ChannelStatus(sub: sub, detail: true),
           ),
           const SizedBox(height: MTSpace.lg),
           Row(

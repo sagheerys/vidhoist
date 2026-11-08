@@ -48,6 +48,10 @@ class LocalChannelSource implements ChannelSource {
   /// interval is half an hour.
   static const listLimit = 30;
 
+  /// How soon a check that could not reach the site is tried again: a
+  /// phone waking with no network yet, or a site asking to slow down.
+  static const retryDelay = Duration(minutes: 5);
+
   List<ChannelRecord>? _records;
 
   /// One change at a time: a check runs for seconds per channel, and a
@@ -208,14 +212,19 @@ class LocalChannelSource implements ChannelSource {
   });
 
   Future<void> _checkOne(ChannelRecord record) async {
-    record.lastChecked = _clock();
+    final at = _clock();
+    // Marked before reading, so a tick meanwhile finds it not due.
+    record.retryAt = at.add(retryDelay);
     final RegExp? filter;
     try {
       filter = record.titleRegex == null
           ? null
           : RegExp(record.titleRegex!, caseSensitive: false, unicode: true);
     } on FormatException catch (e) {
-      record.error = 'title filter: ${e.message}';
+      record
+        ..error = 'title filter: ${e.message}'
+        ..lastChecked = at
+        ..retryAt = null;
       return;
     }
     final ChannelFeed feed;
@@ -224,7 +233,16 @@ class LocalChannelSource implements ChannelSource {
         await _read(() => backend.list(record.feedUrl, limit: listLimit)),
       );
     } on Exception catch (e) {
-      record.error = _describe(e);
+      // No network is not the channel's fault: nothing is said, the last
+      // good check stays on the row, and it is tried again shortly.
+      if (_passing(e)) {
+        onLog?.call('channel check put off: ${e.runtimeType}');
+        return;
+      }
+      record
+        ..error = _describe(e)
+        ..lastChecked = at
+        ..retryAt = null;
       return;
     }
     final known = record.seen.toSet();
@@ -242,6 +260,8 @@ class LocalChannelSource implements ChannelSource {
     }
     record
       ..error = null
+      ..lastChecked = at
+      ..retryAt = null
       ..refresh(feed);
     if (fresh.isNotEmpty) {
       onLog?.call('channel checked: ${fresh.length} new');
@@ -256,6 +276,13 @@ class LocalChannelSource implements ChannelSource {
       throw EngineFailureException.from(e);
     }
   }
+
+  /// A failure that says nothing about the channel and passes by itself.
+  static bool _passing(Exception e) => switch (e) {
+    NetworkException() || TimeoutException() => true,
+    EngineFailureException(kind: YtDlpErrorKind.rateLimited) => true,
+    _ => false,
+  };
 
   /// Kept on the row until a check succeeds: yt-dlp's own words, which
   /// the page shows as they are.

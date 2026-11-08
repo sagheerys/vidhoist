@@ -201,23 +201,77 @@ void main() {
       expect((await channels.list()).single.error, startsWith('title filter'));
     });
 
-    test('a failed check is kept on the row until one works', () async {
+    test('a channel that fails is kept on the row until one works', () async {
       final channels = source();
       await follow(channels);
       backend.listings[_videos] = const YtDlpError(
-        YtDlpErrorKind.network,
-        'ERROR: Unable to download webpage',
+        YtDlpErrorKind.unavailable,
+        'ERROR: [youtube:tab] @Some: This channel does not exist.',
       );
       now = now.add(const Duration(hours: 1));
       await channels.check();
       var sub = (await channels.list()).single;
-      expect(sub.error, contains('Unable to download webpage'));
+      expect(sub.error, contains('does not exist'));
       expect(sub.lastChecked, now, reason: 'not tried again at once');
+      expect(await channels.due(), isEmpty);
 
       backend.listings[_videos] = _feed([_clip('b'), _clip('a')]);
       await channels.check();
       sub = (await channels.list()).single;
       expect(sub.hasError, isFalse);
+    });
+
+    test('**the guard**: no network says nothing, keeps the last good check '
+        'and tries again in minutes', () async {
+      final channels = source();
+      await follow(channels);
+      final good = now;
+      now = now.add(const Duration(hours: 1));
+      backend.listings[_videos] = const YtDlpError(
+        YtDlpErrorKind.network,
+        'ERROR: [youtube:tab] @Some/videos: Unable to download API page: '
+        '[Errno 7] No address associated with host',
+      );
+      await channels.check();
+      var sub = (await channels.list()).single;
+      expect(sub.hasError, isFalse, reason: 'the phone woke offline');
+      expect(sub.lastChecked, good);
+      expect(await channels.due(), isEmpty, reason: 'not every minute');
+      now = now.add(LocalChannelSource.retryDelay);
+      expect(await channels.due(), ['UC_some']);
+
+      backend.listings[_videos] = _feed([_clip('c'), _clip('b'), _clip('a')]);
+      await channels.checkDue();
+      sub = (await channels.list()).single;
+      expect(sub.lastChecked, now);
+      expect(queued.single.$1, 'https://www.youtube.com/watch?v=c');
+      expect(await channels.due(), isEmpty, reason: 'a whole interval now');
+    });
+
+    test('a site asking to slow down is waited out the same way', () async {
+      final channels = source();
+      await follow(channels);
+      now = now.add(const Duration(hours: 1));
+      backend.listings[_videos] = const YtDlpError(
+        YtDlpErrorKind.rateLimited,
+        'ERROR: HTTP Error 429: Too Many Requests',
+      );
+      await channels.check();
+      expect((await channels.list()).single.hasError, isFalse);
+    });
+
+    test('a retry put off is kept across runs', () async {
+      await follow(source());
+      now = now.add(const Duration(hours: 1));
+      backend.listings[_videos] = const YtDlpError(
+        YtDlpErrorKind.network,
+        'ERROR: Unable to download webpage: timed out',
+      );
+      await source().check();
+      final again = source();
+      expect(await again.due(), isEmpty);
+      now = now.add(LocalChannelSource.retryDelay);
+      expect(await again.due(), ['UC_some']);
     });
   });
 

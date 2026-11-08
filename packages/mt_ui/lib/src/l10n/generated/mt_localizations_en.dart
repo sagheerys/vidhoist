@@ -207,6 +207,10 @@ class MTLocalizationsEn extends MTLocalizations {
   }
 
   @override
+  String get channelCheckFailed =>
+      'Not checked this time. Vidhoist tries again by itself.';
+
+  @override
   String get channelUrl => 'Link to a channel, a playlist or one of its videos';
 
   @override

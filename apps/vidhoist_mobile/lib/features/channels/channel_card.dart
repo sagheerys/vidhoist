@@ -46,10 +46,7 @@ class ChannelCard extends ConsumerWidget {
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(MTRadius.card),
-          side: BorderSide(
-            color: sub.hasError ? p.err : p.line,
-            width: MTThemeX.of(context).hairline,
-          ),
+          side: BorderSide(color: p.line, width: MTThemeX.of(context).hairline),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -101,20 +98,24 @@ class ChannelCard extends ConsumerWidget {
   }
 }
 
-/// How the channel stands, along the card's foot: its error in red until
-/// a check works, else paused or not, and when it was last read.
+/// How the channel stands, along the card's foot: paused or not, and when
+/// it was last read. A check that failed says so in a calm sentence, not
+/// in yt-dlp's words or in red: it is tried again by itself, and nothing
+/// needs doing. No network says nothing at all ([LocalChannelSource]).
+/// With [detail], the sheet adds yt-dlp's words, small, for whoever asks.
 class ChannelStatus extends StatelessWidget {
-  const ChannelStatus({super.key, required this.sub});
+  const ChannelStatus({super.key, required this.sub, this.detail = false});
 
   final ChannelSubscription sub;
+  final bool detail;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.mtl;
     final p = MTThemeX.of(context).palette;
-    final color = sub.hasError ? p.err : p.ink3;
+    final color = p.ink3;
     final line = sub.hasError
-        ? sub.error!
+        ? l10n.channelCheckFailed
         : mtMetaLine([
             if (!sub.enabled) l10n.subscriptionPaused,
             switch (sub.lastChecked) {
@@ -129,7 +130,7 @@ class ChannelStatus extends StatelessWidget {
         vertical: MTSpace.sm,
       ),
       decoration: BoxDecoration(
-        color: sub.hasError ? p.err.withValues(alpha: 0.08) : p.cardAlt,
+        color: p.cardAlt,
         border: Border(
           top: BorderSide(color: p.line, width: MTThemeX.of(context).hairline),
         ),
@@ -146,12 +147,25 @@ class ChannelStatus extends StatelessWidget {
           ),
           const SizedBox(width: MTSpace.xs),
           Expanded(
-            child: Text(
-              line,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: color),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  line,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: color),
+                ),
+                if (detail && sub.hasError)
+                  Text(
+                    mtLtrRun(sub.error!),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall
+                        ?.copyWith(color: p.ink3),
+                  ),
+              ],
             ),
           ),
         ],

@@ -1,18 +1,21 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mt_core/mt_core.dart';
 import 'package:mt_ui/mt_ui.dart';
 
-/// A channel's round picture, or its first letter on the accent until a
-/// check brings the picture, and wherever the site has none.
-class ChannelAvatar extends StatelessWidget {
+import 'channel_art.dart';
+
+/// A channel's round picture, kept on the phone ([ChannelArt]), or its
+/// first letter on the accent until one is kept, and wherever the site
+/// has none.
+class ChannelAvatar extends ConsumerWidget {
   const ChannelAvatar({super.key, required this.sub, this.size = 48});
 
   final ChannelSubscription sub;
   final double size;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final p = MTThemeX.of(context).palette;
     final letter = Container(
       color: p.accentSoft,
@@ -27,7 +30,11 @@ class ChannelAvatar extends StatelessWidget {
         ),
       ),
     );
-    final url = sub.avatarUrl;
+    final file = ref
+        .watch(
+          channelArtFileProvider(channelArtKey(sub, ChannelArtKind.avatar)),
+        )
+        .valueOrNull;
     return Container(
       width: size,
       height: size,
@@ -36,16 +43,15 @@ class ChannelAvatar extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: p.line, width: MTThemeX.of(context).hairline),
       ),
-      child: url == null
+      child: file == null
           ? letter
-          : CachedNetworkImage(
-              imageUrl: url,
+          : Image.file(
+              file,
               fit: BoxFit.cover,
               // A 900-pixel square drawn at 48: decoded at the size shown.
-              memCacheWidth: (size * MediaQuery.devicePixelRatioOf(context))
+              cacheWidth: (size * MediaQuery.devicePixelRatioOf(context))
                   .round(),
-              placeholder: (_, _) => letter,
-              errorWidget: (_, _, _) => letter,
+              errorBuilder: (_, _, _) => letter,
             ),
     );
   }
