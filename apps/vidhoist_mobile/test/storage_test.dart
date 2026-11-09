@@ -158,6 +158,50 @@ void main() {
     });
   });
 
+  group('a rename Android refuses, as on the owner phone', () {
+    late Directory parent;
+
+    setUp(() async {
+      parent = await Directory.systemTemp.createTemp('vh_find_');
+      addTearDown(() => parent.delete(recursive: true));
+    });
+
+    test('the folder is found under the spelling the disk has, since '
+        'Android lists files under that one only', () async {
+      await Directory('${parent.path}/Vidhoist').create();
+      expect(
+        await findMediaDir(parent: parent.path),
+        '${parent.path}/Vidhoist',
+      );
+    });
+
+    test('no folder yet: the wanted spelling', () async {
+      expect(
+        await findMediaDir(parent: parent.path),
+        '${parent.path}/VidHoist',
+      );
+      expect(
+        await findMediaDir(parent: '${parent.path}/missing'),
+        '${parent.path}/missing/VidHoist',
+      );
+    });
+
+    test('paths already moved to VidHoist go back to Vidhoist on disk, '
+        'so the library and its titles come back', () async {
+      const disk = '/storage/emulated/0/Download/Vidhoist';
+      final store = MemoryKeyValueStore();
+      await store.setString(
+        'offline_index',
+        jsonEncode({'https://youtu.be/a': '$preferredMediaDir/A.mp4'}),
+      );
+
+      expect(await rewriteStoredPaths(store, PrefsMutex(), to: disk), 1);
+      expect(jsonDecode((await store.getString('offline_index'))!), {
+        'https://youtu.be/a': '$disk/A.mp4',
+      });
+    });
+  });
+
   group('the setting', () {
     test('kept under its key, and null removes it', () async {
       final store = MemoryKeyValueStore();

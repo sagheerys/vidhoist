@@ -66,7 +66,7 @@ void main() {
     // A shared folder would mix another app's files into the library. The
     // spelling follows the shown name since 2026-11-09; the old `Vidhoist`
     // is the same folder to Android (`media_folder_rename.dart`).
-    expect(phoneMediaDir, '/storage/emulated/0/Download/VidHoist');
+    expect(preferredMediaDir, '/storage/emulated/0/Download/VidHoist');
   });
 
   const card = PhoneVolume(
