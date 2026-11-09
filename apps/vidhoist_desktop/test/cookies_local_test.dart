@@ -111,6 +111,14 @@ void main() {
     expect(await store.getString(EngineOptionsNotifier.cookiesFileKey), '');
   });
 
+  testWidgets('the pane warns that an account can be restricted', (
+    tester,
+  ) async {
+    await tester.pumpWidget(app());
+    await tester.pumpAndSettle();
+    expect(find.text(l.accountsBanRisk), findsOneWidget);
+  });
+
   testWidgets('a browser is chosen, and none again', (tester) async {
     await tester.pumpWidget(app());
     await tester.pumpAndSettle();
