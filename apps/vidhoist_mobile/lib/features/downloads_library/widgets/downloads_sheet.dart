@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../../di.dart';
 import '../../home/add_flow.dart';
 import '../../home/network_gate.dart';
+import '../../settings/settings_sections.dart';
 import 'task_card_parts.dart';
 
 /// The "manage downloads" sheet: in progress, waiting, needs your
@@ -135,6 +137,17 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  // A site that wants a sign-in gets the page that does it,
+                  // beside the retry that will work once it is done.
+                  if (task.error is PlatformBlockedException)
+                    TextButton(
+                      onPressed: () {
+                        final router = GoRouter.of(context);
+                        Navigator.pop(context);
+                        router.go(SettingsPane.accounts.route);
+                      },
+                      child: Text(l10n.accountSignIn),
+                    ),
                   TextButton(
                     onPressed: () {
                       engine?.submit(task.effectiveUrl, task.quality);

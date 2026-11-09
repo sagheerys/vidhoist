@@ -6,7 +6,9 @@ import 'package:vh_ui/vh_ui.dart';
 /// strings.
 String errorText(VhLocalizations l10n, Object error) => switch (error) {
   NetworkException() => l10n.errNetwork,
-  PlatformBlockedException() => l10n.errPlatformBlocked,
+  // The phone has a sign-in page of its own since 2026-11-09, so the
+  // sentence can say where it is.
+  PlatformBlockedException() => l10n.mobileSignInNeeded,
   EngineFailureException(:final kind, :final detail) => engineErrorText(
     l10n,
     kind,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vh_ui/vh_ui.dart';
 
+import '../accounts/accounts_fields.dart';
 import '../channels/channels_screen.dart';
 import '../update/update_section.dart';
 import 'about_screen.dart';
@@ -25,6 +26,10 @@ class SettingsPage extends StatelessWidget {
       SettingsPane.engine => VhSettingsPage(
         title: l10n.mobileSettingsEngine,
         child: const EngineFields(),
+      ),
+      SettingsPane.accounts => VhSettingsPage(
+        title: l10n.settingsAccounts,
+        child: const AccountsFields(),
       ),
       SettingsPane.channels => const ChannelsScreen(),
       SettingsPane.downloads => VhSettingsPage(

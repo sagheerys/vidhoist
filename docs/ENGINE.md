@@ -123,7 +123,13 @@ yt-dlp --no-config -4 --newline --progress --no-colors
     (verbose run: no retries, the time sits between "Solving JS challenges
     using quickjs" and the formats). A cache folder (`--cache-dir`) does not
     shorten it. The `android_vr` client needs no challenge but offers 360p
-    only; `tv` and `web_safari` fail.
+    only; `tv` and `web_safari` fail. **Measured again 2026-11-09** on the
+    same phone, after the weekly update brought a newer yt-dlp: 17 s and
+    20 s from "start download" to the first byte (subtitles after 16–17 s,
+    `.part` after 17–20 s), twice in a row, a 1080p60 clip of five minutes
+    done in 44 s. A Node pack (30–50 MB more to download) would buy back
+    at most ten seconds of that, so it waits until a measurement says
+    otherwise.
 15. **`destroyProcessById` stops a download at once**: no Python or ffmpeg
     process left, the folder no longer grows. On the phone it stopped a
     1080p download at 40 s and left no file behind.
@@ -212,6 +218,7 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 |---|---|
 | Go on with yt-dlp on both platforms? | **Yes.** Nothing measured blocks it. |
 | JavaScript runtime on Windows | Deno, downloaded on first need rather than shipped (94 MB): it solved YouTube's challenge within seconds, where QuickJS took about 50 s on the phone. QuickJS (1.8 MB) only if a Windows measurement shows it fast |
+| Sign-ins on the phone | The site's own page in a WebView (Settings › Accounts), its cookies read from Android's jar (`CookieJar.kt`: one `Cookie:` header per page, HTTP-only included) and written as session cookies of the site (`CookieFiles.fromHeaders`, empty expiry, never `0`) into `cookies.txt` in the app's private folder, passed as `--cookies`. The WebView's agent loses `; wv` and `Version/4.0`, or Google refuses the sign-in. No `--cookies-from-browser`: Android gives no app another browser's jar |
 | ffmpeg on Windows | Downloaded on first use, or the shared build; never the 162 MB static one in the installer |
 | IPv4 | `-4` by default on both platforms, with a setting to turn it off |
 | YouTube's wait on Android | Probe once, keep the info JSON, download from it; the waiting screen says what it is doing during the probe |

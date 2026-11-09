@@ -91,6 +91,7 @@ void main() {
   late Directory cache;
   late ChannelYtDlpBackend backend;
   var ipv4 = true;
+  String? cookies;
   var readies = 0;
   Completer<void>? readyGate;
 
@@ -98,12 +99,14 @@ void main() {
     phone = FakePhone();
     cache = Directory.systemTemp.createTempSync('vh_backend_');
     ipv4 = true;
+    cookies = null;
     readies = 0;
     readyGate = null;
     backend = ChannelYtDlpBackend(
       bridge: MethodChannelYtDlpBridge(),
       cacheDir: () async => cache.path,
       forceIpv4: () => ipv4,
+      cookiesFile: () => cookies,
       ready: () async {
         readies++;
         await readyGate?.future;
@@ -218,6 +221,22 @@ void main() {
       final runs = phone.named('execute').toList();
       expect(argsOf(runs[0]), contains('-4'));
       expect(argsOf(runs[1]), isNot(contains('-4')));
+    });
+
+    test('the sign-ins go in as --cookies once there is a file, for the '
+        'probe too', () async {
+      phone.printed = (_) => ['[vh-file] /x/A.mp4'];
+      await backend.download(request).toList();
+      cookies = '/data/app/cookies.txt';
+      await backend.download(request).toList();
+      await backend.probe(request.url);
+      final runs = phone.named('execute').map(argsOf).toList();
+      expect(runs[0], isNot(contains('--cookies')));
+      for (final run in runs.skip(1)) {
+        final at = run.indexOf('--cookies');
+        expect(at, isNonNegative);
+        expect(run[at + 1], '/data/app/cookies.txt');
+      }
     });
   });
 

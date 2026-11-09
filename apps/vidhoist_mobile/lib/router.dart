@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import 'di.dart';
+import 'features/accounts/login_screen.dart';
+import 'features/accounts/login_sites.dart';
 import 'features/audio/audio_screen.dart';
 import 'features/batch/batch_screen.dart';
 import 'features/settings/language_screen.dart';
@@ -77,6 +79,15 @@ final router = GoRouter(
                 GoRoute(
                   path: 'language',
                   builder: (_, _) => const LanguageScreen(),
+                ),
+                // A site's sign-in page, pushed over Settings › Accounts
+                // so that leaving it lands back on the accounts.
+                GoRoute(
+                  path: 'login/:site',
+                  builder: (_, state) => LoginScreen(
+                    LoginSite.byName(state.pathParameters['site'] ?? '') ??
+                        LoginSite.youtube,
+                  ),
                 ),
               ],
             ),

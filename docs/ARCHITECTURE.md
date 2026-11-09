@@ -21,7 +21,7 @@ The Arabic version of this document follows the English one.
 | yt-dlp runs through | youtubedl-android (`YtDlpBridge.kt`, `ChannelYtDlpBackend`), kept alive by `EngineService.kt` | `yt-dlp.exe` beside the app or in `tools\` (`ProcessYtDlpBackend`, a Job object per run), with ffmpeg and Deno fetched on first need |
 | Library | The download folder, scanned (`Download/Vidhoist`) | `LocalHistoryStore` and a watch on the download folder |
 | At once | One download | As set in Settings › Engine |
-| Exclusive | Wi-Fi only, share sheet, picture in picture | Tags, lists, reading room, browser button, tray; Channels and Sync behind a switch (Settings › Engine) |
+| Exclusive | Wi-Fi only, share sheet, picture in picture, a sign-in page per site (Settings › Accounts) | Tags, lists, reading room, browser button, tray, channels; cookies from a file or the computer's browser (Settings › Cookies) |
 
 They are separate apps, not build flavours, with **one palette**
 (`VhPalette`, ADR 0002). They share five packages. Before changing anything

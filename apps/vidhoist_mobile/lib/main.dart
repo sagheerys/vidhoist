@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
 import 'di.dart';
+import 'features/accounts/accounts_state.dart';
 import 'features/downloads_library/local_item.dart';
 import 'features/settings/settings_state.dart';
 import 'features/shared/error_report.dart';
@@ -110,6 +111,9 @@ Future<void> main() async {
         audioHandlerProvider.overrideWithValue(handler),
         loggerProvider.overrideWithValue(logger),
         deviceAbisProvider.overrideWithValue(abis),
+        // The sign-ins, in the same private folder as the log: no backup
+        // and no other app reads it.
+        cookiesFileProvider.overrideWithValue('${logsDir.path}/cookies.txt'),
       ],
       child: const PhoneApp(),
     ),

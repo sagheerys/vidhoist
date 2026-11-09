@@ -1,4 +1,11 @@
 {
+  "@accountSignedOutOf": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
   "@audioChannels": {
     "placeholders": {
       "count": {
@@ -199,6 +206,20 @@
       }
     }
   },
+  "@loginKept": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
+  "@loginTitle": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      }
+    }
+  },
   "@mobileEngineLastUpdate": {
     "placeholders": {
       "when": {
@@ -272,6 +293,13 @@
     "placeholders": {
       "count": {
         "type": "int"
+      }
+    }
+  },
+  "@settingsValueSignedIn": {
+    "placeholders": {
+      "sites": {
+        "type": "String"
       }
     }
   },
@@ -369,6 +397,15 @@
   "about": "About",
   "aboutApp": "About the app",
   "aboutDescriptionPhone": "A light, fast app that downloads video and audio from many platforms with yt-dlp, straight to your device, with no server in between. It has its own player and playlists.",
+  "accountSignIn": "Sign in",
+  "accountSignOut": "Sign out",
+  "accountSignedIn": "Signed in",
+  "accountSignedOut": "Not signed in",
+  "accountSignedOutOf": "Signed out of {site}",
+  "accountsClearAll": "Delete all cookies",
+  "accountsCleared": "Cookies deleted",
+  "accountsHelp": "A sign-in expires after a while; when a site starts refusing again, sign in once more. Signing out of one site also signs the in-app browser out of the others, whose downloads go on as they were.",
+  "accountsHint": "For the sites that refuse a download without a login. You sign in on the site's own page inside the app; what it leaves stays on this phone, where yt-dlp reads it for every download, and goes nowhere else.",
   "activeDownloads": "Active downloads",
   "activeDownloadsCount": "{count, plural, =1{1 download in progress} other{{count} downloads in progress}}",
   "activeDownloadsSheet": "Active downloads",
@@ -917,6 +954,10 @@
   "listSeparator": ", ",
   "listenInBackground": "Listen in the background",
   "lockTouch": "Lock touch",
+  "loginDone": "Done",
+  "loginKept": "Signed in to {site}; downloads will use it",
+  "loginNotYet": "No sign-in found yet. Finish signing in, then tap Done",
+  "loginTitle": "Sign in to {site}",
   "logsEmpty": "The log is empty",
   "logsSanitizedNote": "Links, addresses and credentials are stripped before sharing",
   "manageTags": "Manage tags",
@@ -938,6 +979,7 @@
   "mobileEngineVersionUnknown": "Its version shows after the first update",
   "mobileSettingsEngine": "Download engine",
   "mobileSettingsGroupEngine": "Engine",
+  "mobileSignInNeeded": "This site wants you signed in. Sign in from Settings › Accounts, then retry",
   "mobileSubtitleOptions": "Size, background and the transcript",
   "mobileSubtitleStyleHelp": "Also in the player: hold the CC button.",
   "mobileSubtitles": "Download subtitles",
@@ -1105,6 +1147,7 @@
   "selected": "{count} selected",
   "selectedCount": "{count} selected",
   "settings": "Settings",
+  "settingsAccounts": "Accounts",
   "settingsBackup": "Backup",
   "settingsDownloads": "Downloads",
   "settingsGroupApp": "App",
@@ -1119,6 +1162,7 @@
   "settingsValueOff": "Off",
   "settingsValueOn": "On",
   "settingsValueQuick": "quick",
+  "settingsValueSignedIn": "Signed in: {sites}",
   "settingsValueSubtitlesShown": "subtitles shown",
   "settingsValueWifiOnly": "Wi‑Fi only",
   "share": "Share",

@@ -17,8 +17,11 @@ class ChannelYtDlpBackend implements DownloadBackend {
     required this.cacheDir,
     required this.forceIpv4,
     required this.ready,
+    this.cookiesFile = _noCookies,
     this.probeLifetime = const Duration(hours: 6),
   });
+
+  static String? _noCookies() => null;
 
   final YtDlpBridge bridge;
 
@@ -29,6 +32,10 @@ class ChannelYtDlpBackend implements DownloadBackend {
 
   /// The engine setting, read at each run.
   final bool Function() forceIpv4;
+
+  /// The cookies file of Settings › Accounts, read at each run: null until
+  /// a site is signed in, so a run before that passes no `--cookies`.
+  final String? Function() cookiesFile;
 
   /// Unpacks the engine, and updates it the first time, before any run
   /// (`docs/ENGINE.md` findings 11 and 12).
@@ -43,8 +50,11 @@ class ChannelYtDlpBackend implements DownloadBackend {
   final _stopAsked = <String>{};
   var _count = 0;
 
-  EngineSetup get _setup =>
-      EngineSetup(platform: HostPlatform.android, forceIpv4: forceIpv4());
+  EngineSetup get _setup => EngineSetup(
+    platform: HostPlatform.android,
+    forceIpv4: forceIpv4(),
+    cookiesFile: cookiesFile(),
+  );
 
   @override
   Future<ProbeResult> probe(String url) async {
