@@ -1,3 +1,5 @@
+import 'features/pc/pc_screen.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vh_ui/vh_ui.dart';
@@ -92,6 +94,11 @@ final router = GoRouter(
               ],
             ),
           ],
+        ),
+        // The paired computer, last so that the branches before it keep
+        // their numbers; the shell shows its tab only once paired.
+        StatefulShellBranch(
+          routes: [GoRoute(path: '/pc', builder: (_, _) => const PcScreen())],
         ),
       ],
     ),

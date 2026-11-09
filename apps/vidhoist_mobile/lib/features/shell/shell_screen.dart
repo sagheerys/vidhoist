@@ -1,3 +1,5 @@
+import '../pc/pc_pairing_store.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -26,6 +28,7 @@ import '../update/update_sheet.dart';
 import '../update/update_state.dart';
 import '../update/whats_new_prompt.dart';
 import 'share_landing.dart';
+import 'shell_tabs.dart';
 
 /// The shell: three bottom destinations plus the floating layer holding
 /// the smart add button, which appears in the library and the playlists
@@ -260,6 +263,13 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     final l10n = context.vhl;
     final branch = widget.navigationShell.currentIndex;
     final clipboardUrl = ref.watch(clipboardUrlProvider);
+    final tabs = shellTabs(paired: ref.watch(pcPairingProvider) != null);
+    if (!tabs.contains(branch)) {
+      // Unpaired while on the computer's tab: back to the library.
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => widget.navigationShell.goBranch(ShellBranch.library),
+      );
+    }
 
     // **The button is always mounted, never `null`** (field report
     // 2026-09-05: "the appearing animation is strange"). Swapping the
@@ -293,7 +303,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
         // **The player panel** takes the mini player's place beside the
         // content on a tablet held sideways; settings has neither.
         final panel =
-            branch != 2 &&
+            branch != ShellBranch.settings &&
             playing.data != null &&
             !_panelFolded &&
             roomForPanel;
@@ -308,9 +318,9 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
                   onCollapse: () => setState(() => _panelFolded = true),
                 )
               : null,
-          items: _navItems(l10n),
-          selectedIndex: branch,
-          onSelected: widget.navigationShell.goBranch,
+          items: shellNavItems(l10n, tabs),
+          selectedIndex: tabs.contains(branch) ? tabs.indexOf(branch) : 0,
+          onSelected: (i) => widget.navigationShell.goBranch(tabs[i]),
           body: widget.navigationShell,
           floatingActionButtonAnimator:
               FloatingActionButtonAnimator.noAnimation,
@@ -318,7 +328,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
             // It hides under any sheet or dialog: it used to cover the "about
             // this clip" link and crowd the bottom sheets' actions (field
             // report 2026-09-02).
-            visible: branch != 2,
+            visible: branch != ShellBranch.settings,
             child: VhFab(
               label: clipboardUrl == null
                   ? l10n.addLinkFab
@@ -378,24 +388,6 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
       },
     );
   }
-
-  List<VhNavItem> _navItems(VhLocalizations l10n) => [
-    VhNavItem(
-      icon: VhIcons.download,
-      selectedIcon: VhIcons.download,
-      label: l10n.navMyDownloads,
-    ),
-    VhNavItem(
-      icon: VhIcons.queue,
-      selectedIcon: VhIcons.queue,
-      label: l10n.navPlaylists,
-    ),
-    VhNavItem(
-      icon: VhIcons.settings,
-      selectedIcon: VhIcons.settings,
-      label: l10n.navSettings,
-    ),
-  ];
 }
 
 /// The clipboard check, callable from the shell.

@@ -6,6 +6,15 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- "Download on the computer", off until turned on: on Windows, Settings ›
+  Phone receives from a paired phone over the home network; on the phone,
+  Settings › Computer pairs with it (a code shown on the computer, then four
+  digits both screens show, which the owner compares before allowing it).
+  Once paired, a Computer tab shows what the computer downloads and its
+  library, and the add sheet offers to send a single link there while the
+  computer answers. HTTPS with the computer's own certificate pinned on the
+  phone; every path answers an empty 404 without a paired phone's key. A
+  phone that never pairs sees no change. See docs/PC-LINK.md.
 - Design brief (`docs/blueprint/DESIGN-BRIEF.md`): the identity in one
   table, how a screen is drawn before it is coded, and the approval log.
   Mockups live in `docs/design/` and are built from the icon set and from
@@ -65,6 +74,8 @@ All notable changes to VidHoist. The format follows
   unfollowing apart from checking, pausing and editing.
 
 ### Fixed
+- The download card no longer runs past its edge on the narrowest phone
+  when a speed shows beside the percentage: the speed yields first.
 - A channel's picture and banner are kept on the phone: they show with no
   network and are no longer fetched at each visit; unfollowing deletes
   them, and following again fetches them anew.

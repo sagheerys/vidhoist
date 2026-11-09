@@ -8,7 +8,16 @@ import '../di.dart';
 import 'folders_data.dart';
 import 'library_data.dart';
 import 'lists_data.dart';
+import 'pc_link_data.dart';
 import 'transcripts_data.dart';
+
+/// What a backup of this computer leaves out: when it last updated its
+/// engine, and its paired phones and whether it receives from them; another
+/// computer has its own.
+const desktopBackupDeviceOnlyKeys = {
+  ...EngineRefresh.deviceOnlyKeys,
+  ...pcLinkDeviceOnlyKeys,
+};
 
 /// Where the dated backups of this computer are kept:
 /// `%APPDATA%\Vidhoist\backup`. Overridden in main; null (tests) keeps
@@ -63,9 +72,7 @@ class DesktopBackups {
     store: _ref.read(keyValueStoreProvider),
     mutex: _ref.read(prefsMutexProvider),
     variant: 'desktop',
-    // When this computer last updated its engine: another computer has
-    // its own.
-    deviceOnlyKeys: EngineRefresh.deviceOnlyKeys,
+    deviceOnlyKeys: desktopBackupDeviceOnlyKeys,
   );
 
   /// A dated copy of everything here, skipped when nothing changed since

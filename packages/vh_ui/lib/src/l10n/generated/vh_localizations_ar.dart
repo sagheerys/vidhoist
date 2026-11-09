@@ -2127,6 +2127,205 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pauseSubscription => 'إيقاف مؤقت';
 
   @override
+  String get pcAddressLabel => 'العنوان';
+
+  @override
+  String get pcBadAddress =>
+      'اكتب العنوان كما يعرضه الكمبيوتر، مثلاً 192.168.1.24:47321.';
+
+  @override
+  String get pcCertificate => 'شهادة الكمبيوتر';
+
+  @override
+  String get pcCodeLabel => 'الرمز';
+
+  @override
+  String get pcConnected => 'متصل';
+
+  @override
+  String get pcDestPhone => 'هذا الجوال';
+
+  @override
+  String get pcEmptyLibrary => 'لا تنزيلات على الكمبيوتر بعد.';
+
+  @override
+  String get pcErrBad =>
+      'ردّ الكمبيوتر بما لا تفهمه هذه النسخة. حدّث التطبيقين.';
+
+  @override
+  String get pcErrClosed =>
+      'لا رمز معروض على الكمبيوتر، أو انتهت مدته. اضغط «اربط جوالاً» هناك.';
+
+  @override
+  String get pcErrDenied =>
+      'رُفض الاقتران على الكمبيوتر، أو لم يُجب عنه في الوقت.';
+
+  @override
+  String get pcErrRefused => 'رفض الكمبيوتر هذا الرابط.';
+
+  @override
+  String get pcErrUnauthorized =>
+      'الكمبيوتر لم يعد يعرف هذا الجوال. اربط من جديد.';
+
+  @override
+  String get pcErrUnreachable =>
+      'لم يردّ الكمبيوتر. هل هو شغّال، وعلى هذه الشبكة، و«استقبال من الجوال» مفعّل فيه؟';
+
+  @override
+  String get pcErrWrongCertificate =>
+      'ردّ على هذا العنوان جهاز غير كمبيوترك. لم يُرسل شيء.';
+
+  @override
+  String get pcErrWrongCode => 'رمز خاطئ.';
+
+  @override
+  String pcLastContact(String time) {
+    return 'آخر تواصل $time';
+  }
+
+  @override
+  String get pcLibrary => 'مكتبة الكمبيوتر';
+
+  @override
+  String get pcLinkAddress => 'العنوان على هذه الشبكة';
+
+  @override
+  String get pcLinkAllow => 'اسمح';
+
+  @override
+  String get pcLinkCodeHint =>
+      'على الجوال: الإعدادات › الكمبيوتر › اربط بكمبيوتر، ثم اكتب هذا العنوان والرمز. الرمز يعمل مرة واحدة ولمدة دقيقتين.';
+
+  @override
+  String pcLinkCodeLeft(int seconds) {
+    return 'بقي $seconds ث';
+  }
+
+  @override
+  String get pcLinkCodeTitle => 'رمز الاقتران';
+
+  @override
+  String get pcLinkDeny => 'ارفض';
+
+  @override
+  String get pcLinkDevices => 'الأجهزة المقترنة';
+
+  @override
+  String pcLinkFailed(String error) {
+    return 'تعذّر التشغيل: $error';
+  }
+
+  @override
+  String get pcLinkIntro =>
+      'أرسل الروابط من VidHoist على جوالك إلى هذا الكمبيوتر، وشاهد تنزيلاته ومكتبته هناك. يعمل داخل شبكة البيت فقط.';
+
+  @override
+  String pcLinkLastSeen(String time) {
+    return 'آخر تواصل $time';
+  }
+
+  @override
+  String get pcLinkNoDevices => 'لا جوال بعد.';
+
+  @override
+  String get pcLinkOff => 'مطفأ';
+
+  @override
+  String get pcLinkPairPhone => 'اربط جوالاً';
+
+  @override
+  String pcLinkPairedAt(String time) {
+    return 'اقترن $time';
+  }
+
+  @override
+  String pcLinkPhones(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count جهاز',
+      few: '$count أجهزة',
+      two: 'جوالان',
+      one: 'جوال واحد',
+      zero: 'لا جوال',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pcLinkReceive => 'استقبال من الجوال';
+
+  @override
+  String get pcLinkReceiveHint =>
+      'حين يكون مطفأً لا يُفتح أي منفذ على هذا الكمبيوتر. وإن سألك ويندوز فاسمح للشبكات الخاصة فقط.';
+
+  @override
+  String pcLinkRequest(String name) {
+    return '$name يطلب الاقتران';
+  }
+
+  @override
+  String get pcLinkRequestHint =>
+      'اسمح فقط إن كان الجوال يعرض الأرقام الأربعة نفسها.';
+
+  @override
+  String get pcLinkRevoke => 'إلغاء الاقتران';
+
+  @override
+  String get pcLinkSecurity =>
+      'لا شيء يغادر شبكتك. يقترن الجوال مرة واحدة بالرمز وبموافقتك هنا، وبعدها يقدّم مفتاحه الخاص مع كل طلب، عبر اتصال مشفّر بشهادة هذا الكمبيوتر وحدها. ومن سواه على الشبكة يجد باباً مغلقاً.';
+
+  @override
+  String get pcLinkStarting => 'يبدأ…';
+
+  @override
+  String get pcLinkTitle => 'الجوال';
+
+  @override
+  String get pcNow => 'يُنزَّل على الكمبيوتر الآن';
+
+  @override
+  String get pcOffline => 'غير متاح';
+
+  @override
+  String get pcOfflineMessage =>
+      'الكمبيوتر مطفأ أو على شبكة أخرى. ما كان فيه آخر مرة معروض أدناه.';
+
+  @override
+  String get pcPairButton => 'اربط';
+
+  @override
+  String pcPairCheck(String check) {
+    return 'تأكد أن الكمبيوتر يعرض $check، ثم اسمح للجوال هناك.';
+  }
+
+  @override
+  String get pcPairIntro =>
+      'إن كان VidHoist يعمل على كمبيوترك بويندوز، يستطيع هذا الجوال أن يرسل إليه الروابط ويعرض تنزيلاته ومكتبته. على الكمبيوتر فعّل الإعدادات › الجوال واضغط «اربط جوالاً»، ثم اكتب هنا العنوان والرمز اللذين يعرضهما.';
+
+  @override
+  String get pcPairStart => 'اربط بكمبيوتر';
+
+  @override
+  String pcPaired(String name) {
+    return 'اقترن بـ$name';
+  }
+
+  @override
+  String get pcSendToPc => 'أرسل إلى الكمبيوتر';
+
+  @override
+  String pcSent(String name) {
+    return 'أُرسل إلى $name';
+  }
+
+  @override
+  String get pcSettingsHint => 'أرسل الروابط إلى كمبيوترك';
+
+  @override
+  String get pcTab => 'الكمبيوتر';
+
+  @override
   String percentValue(Object percent) {
     return '$percent٪';
   }

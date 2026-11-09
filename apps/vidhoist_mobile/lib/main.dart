@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'features/pc/pc_pairing_store.dart';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,6 +62,9 @@ Future<void> main() async {
     unawaited(logger.log('media folder: $rewritten entries', tag: 'storage'));
   }
   final volumes = await const ChannelVolumeSource().volumes();
+  // Read before the first frame, so the computer's tab is there or not
+  // from the start rather than appearing a moment later.
+  final pcPairing = await loadPcPairing(store, secrets);
 
   // The phone app never streams: the endpoint stays `none`, so the golden rule
   // always ends at the local file.
@@ -131,6 +136,7 @@ Future<void> main() async {
         loggerProvider.overrideWithValue(logger),
         deviceAbisProvider.overrideWithValue(abis),
         initialVolumesProvider.overrideWithValue(volumes),
+        initialPcPairingProvider.overrideWithValue(pcPairing),
         // The sign-ins, in the same private folder as the log: no backup
         // and no other app reads it.
         cookiesFileProvider.overrideWithValue('${logsDir.path}/cookies.txt'),

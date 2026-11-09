@@ -33,6 +33,29 @@ void main() {
     expect(find.text('64%'), findsOneWidget);
   });
 
+  testWidgets('**the guard**: status, speed and percentage hold in a narrow '
+      'card', (tester) async {
+    await tester.pumpWidget(
+      host(
+        Center(
+          child: SizedBox(
+            width: 230,
+            child: VhDownloadProgressCard(
+              title: 'Designing Data-Intensive Applications',
+              statusText: 'Downloading',
+              progress: 0.38,
+              detail: vhFormatTransferRate(11.2 * 1024 * 1024),
+              onCancel: () {},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.text('38%'), findsOneWidget);
+  });
+
   testWidgets('**the guard**: a waiting task is a still line, not a moving '
       'bar', (tester) async {
     await tester.pumpWidget(

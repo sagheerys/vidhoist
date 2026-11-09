@@ -40,7 +40,7 @@ apps/vidhoist_desktop ┘            │                 ▲
 | Package | Contains | Hard rule |
 |---|---|---|
 | `vh_ytdlp` | yt-dlp's command lines and reading what it prints: format selectors, progress and file lines, the info JSON, errors (`ErrorClassifier`), versions | **Pure Dart, no dependencies, no processes.** Tested on real yt-dlp output (`test/fixtures/`) |
-| `vh_core` | `DownloadBackend` (implemented by each app), `LocalDownloadEngine`, `LocalHistoryStore`, `LocalPendingStore`, the models, storage, backup, sync, URL tools, self-update | **Pure Dart. No Flutter import.** Tested with `dart test` |
+| `vh_core` | `DownloadBackend` (implemented by each app), `LocalDownloadEngine`, `LocalHistoryStore`, `LocalPendingStore`, the models, storage, backup, sync, URL tools, self-update, the link to the computer (`pc_link`: protocol, certificate, server, pinned client) | **Pure Dart. No Flutter import.** Tested with `dart test` |
 | `vh_media` | Audio handler, video playback, playback stores, the library model | Plays files on the device |
 | `vh_ui` | Design tokens, themes, shared widgets, localisation | Knows no engine and no app |
 | `vh_transcripts` | Subtitle parsing, Arabic-aware search, the transcript store, `YtDlpSource` for clips already in the library | **Pure Dart** |
@@ -184,7 +184,7 @@ apps/vidhoist_desktop ┘            │                 ▲
 | الحزمة | تحتوي | القاعدة الصارمة |
 |---|---|---|
 | `vh_ytdlp` | أوامر yt-dlp وقراءة ما يطبعه: محدِّدات الصيغ، أسطر التقدّم والملف، ملف info.json، الأخطاء (`ErrorClassifier`)، الإصدارات | **Dart خالص، بلا اعتماديات ولا عمليات**، ويُختبر على مخرجات حقيقية |
-| `vh_core` | `DownloadBackend` (يكتبه كل تطبيق)، `LocalDownloadEngine`، `LocalHistoryStore`، `LocalPendingStore`، النماذج، التخزين، النسخ، المزامنة، أدوات الروابط، التحديث الذاتي | **Dart خالص بلا Flutter**، ويُختبر بـ`dart test` |
+| `vh_core` | `DownloadBackend` (يكتبه كل تطبيق)، `LocalDownloadEngine`، `LocalHistoryStore`، `LocalPendingStore`، النماذج، التخزين، النسخ، المزامنة، أدوات الروابط، التحديث الذاتي، والربط بالكمبيوتر (`pc_link`: البروتوكول والشهادة والخادم والعميل المثبَّت) | **Dart خالص بلا Flutter**، ويُختبر بـ`dart test` |
 | `vh_media` | مشغّل الصوت والفيديو ومخازن التشغيل ونموذج المكتبة | يشغّل ملفات الجهاز |
 | `vh_ui` | الرموز التصميمية والثيمات والودجات والترجمة | لا يعرف محرّكاً ولا تطبيقاً |
 | `vh_transcripts` | قراءة الترجمات، والبحث المراعي للعربية، ومخزن النصوص، و`YtDlpSource` للمقاطع الموجودة في المكتبة | **Dart خالص** |

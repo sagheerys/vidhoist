@@ -12,6 +12,7 @@ enum DesktopSettingsPane {
   folders,
   appearance,
   desktop,
+  phone,
   transcripts,
   backup,
   updates,

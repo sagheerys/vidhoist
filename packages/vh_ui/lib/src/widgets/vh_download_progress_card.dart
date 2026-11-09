@@ -132,9 +132,15 @@ class VhDownloadProgressCard extends StatelessWidget {
                       // number without a separate string per phase.
                       if (!isError && detail != null) ...[
                         const SizedBox(width: VhSpace.sm),
-                        Text(
-                          detail!,
-                          style: text.bodySmall!.copyWith(color: p.ink3),
+                        // It yields before the percentage does: on the
+                        // narrowest phone the speed ran 10 px past the card.
+                        Flexible(
+                          child: Text(
+                            detail!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: text.bodySmall!.copyWith(color: p.ink3),
+                          ),
                         ),
                       ],
                       if (!isError && progress != null) ...[

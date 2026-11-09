@@ -1,3 +1,5 @@
+import '../pc/pc_pairing_store.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
@@ -20,6 +22,7 @@ enum SettingsPane {
   accounts,
   channels,
   downloads,
+  pc,
   playback,
   appearance,
   backup,
@@ -85,6 +88,7 @@ List<(String, List<SettingsEntry>)> settingsGroups(
           l10n.settingsDownloads,
           v.downloads(),
         ),
+        SettingsEntry(SettingsPane.pc, VhIcons.monitor, l10n.pcTab, v.pc()),
         SettingsEntry(
           SettingsPane.playback,
           VhIcons.playback,
@@ -170,6 +174,9 @@ class _Values {
     if (s.wifiOnly) l10n.settingsValueWifiOnly,
     if (s.quickDownload) l10n.settingsValueQuick,
   ]);
+
+  /// The paired computer, or what the page is for.
+  String pc() => ref.watch(pcPairingProvider)?.name ?? l10n.pcSettingsHint;
 
   String playback() => s.compatiblePlayback
       ? l10n.settingsValueCompatOn

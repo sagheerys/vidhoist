@@ -227,6 +227,76 @@
       }
     }
   },
+  "@pcLastContact": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcLinkCodeLeft": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@pcLinkFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcLinkLastSeen": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcLinkPairedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcLinkPhones": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@pcLinkRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcPairCheck": {
+    "placeholders": {
+      "check": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcPaired": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "@percentValue": {
     "placeholders": {
       "percent": {
@@ -1055,6 +1125,58 @@
   "pasteUrlHint": "Paste the link here…",
   "pause": "Pause",
   "pauseSubscription": "Pause",
+  "pcAddressLabel": "Address",
+  "pcBadAddress": "Type the address as the computer shows it, for example 192.168.1.24:47321.",
+  "pcCertificate": "Computer's certificate",
+  "pcCodeLabel": "Code",
+  "pcConnected": "Connected",
+  "pcDestPhone": "This phone",
+  "pcEmptyLibrary": "No downloads on the computer yet.",
+  "pcErrBad": "The computer answered in a way this version does not understand. Update both apps.",
+  "pcErrClosed": "No code is showing on the computer, or it expired. Press Pair a phone there.",
+  "pcErrDenied": "The pairing was refused on the computer, or not answered in time.",
+  "pcErrRefused": "The computer would not take this link.",
+  "pcErrUnauthorized": "The computer no longer knows this phone. Pair again.",
+  "pcErrUnreachable": "The computer did not answer. Is it on, on this Wi-Fi, with Receive from the phone turned on?",
+  "pcErrWrongCertificate": "Something other than your computer answered at this address. Nothing was sent.",
+  "pcErrWrongCode": "Wrong code.",
+  "pcLastContact": "Last contact {time}",
+  "pcLibrary": "Library on the computer",
+  "pcLinkAddress": "Address on this network",
+  "pcLinkAllow": "Allow",
+  "pcLinkCodeHint": "On the phone: Settings › Computer › Pair with a computer, then type this address and code. The code works once, for two minutes.",
+  "pcLinkCodeLeft": "{seconds} s left",
+  "pcLinkCodeTitle": "Pairing code",
+  "pcLinkDeny": "Refuse",
+  "pcLinkDevices": "Paired phones",
+  "pcLinkFailed": "Could not start: {error}",
+  "pcLinkIntro": "Send links from VidHoist on your phone to this computer, and see its downloads and library there. It works on your home network only.",
+  "pcLinkLastSeen": "Last heard from {time}",
+  "pcLinkNoDevices": "No phone yet.",
+  "pcLinkOff": "Off",
+  "pcLinkPairPhone": "Pair a phone",
+  "pcLinkPairedAt": "Paired {time}",
+  "pcLinkPhones": "{count, plural, =0{No phone} =1{One phone} other{{count} phones}}",
+  "pcLinkReceive": "Receive from the phone",
+  "pcLinkReceiveHint": "While it is off, no port is open on this computer. If Windows asks, allow private networks only.",
+  "pcLinkRequest": "{name} asks to pair",
+  "pcLinkRequestHint": "Allow only if the phone shows the same four digits.",
+  "pcLinkRevoke": "Unpair",
+  "pcLinkSecurity": "Nothing leaves your network. A phone pairs once, with the code and your approval here; after that it must show its own key on every request, over a connection encrypted to this computer's certificate alone. Anyone else on the network finds a closed door.",
+  "pcLinkStarting": "Starting…",
+  "pcLinkTitle": "Phone",
+  "pcNow": "On the computer now",
+  "pcOffline": "Unavailable",
+  "pcOfflineMessage": "The computer is off or on another network. What it had last time is shown below.",
+  "pcPairButton": "Pair",
+  "pcPairCheck": "Check that the computer shows {check}, then allow the phone there.",
+  "pcPairIntro": "If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then type here the address and code it shows.",
+  "pcPairStart": "Pair with a computer",
+  "pcPaired": "Paired with {name}",
+  "pcSendToPc": "Send to the computer",
+  "pcSent": "Sent to {name}",
+  "pcSettingsHint": "Send links to your computer",
+  "pcTab": "Computer",
   "percentValue": "{percent}%",
   "pickAnotherFile": "From another file…",
   "pickAnotherFileSubtitle": "A backup from another phone or an older version",

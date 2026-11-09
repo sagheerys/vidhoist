@@ -6,6 +6,7 @@ import '../../data/appearance_data.dart';
 import '../../data/channels_data.dart';
 import '../../data/choices_data.dart';
 import '../../data/engine_data.dart';
+import '../../data/pc_link_data.dart';
 import '../../data/update_data.dart';
 import '../../router.dart';
 import '../../shell/ui_zoom.dart';
@@ -58,6 +59,15 @@ String? paneValue(
     case DesktopSettingsPane.about:
       final version = ref.watch(installedVersionProvider).valueOrNull;
       return version == null ? null : '${l.version} $version';
+    case DesktopSettingsPane.phone:
+      if (!ref.watch(pcLinkEnabledProvider)) return l.pcLinkOff;
+      final devices = ref
+          .watch(pcLinkProvider)
+          .valueOrNull
+          ?.pairing
+          .devices
+          .length;
+      return devices == null ? null : l.pcLinkPhones(devices);
     default:
       return null;
   }

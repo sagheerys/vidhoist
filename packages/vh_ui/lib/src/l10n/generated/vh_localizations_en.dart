@@ -2093,6 +2093,203 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pauseSubscription => 'Pause';
 
   @override
+  String get pcAddressLabel => 'Address';
+
+  @override
+  String get pcBadAddress =>
+      'Type the address as the computer shows it, for example 192.168.1.24:47321.';
+
+  @override
+  String get pcCertificate => 'Computer\'s certificate';
+
+  @override
+  String get pcCodeLabel => 'Code';
+
+  @override
+  String get pcConnected => 'Connected';
+
+  @override
+  String get pcDestPhone => 'This phone';
+
+  @override
+  String get pcEmptyLibrary => 'No downloads on the computer yet.';
+
+  @override
+  String get pcErrBad =>
+      'The computer answered in a way this version does not understand. Update both apps.';
+
+  @override
+  String get pcErrClosed =>
+      'No code is showing on the computer, or it expired. Press Pair a phone there.';
+
+  @override
+  String get pcErrDenied =>
+      'The pairing was refused on the computer, or not answered in time.';
+
+  @override
+  String get pcErrRefused => 'The computer would not take this link.';
+
+  @override
+  String get pcErrUnauthorized =>
+      'The computer no longer knows this phone. Pair again.';
+
+  @override
+  String get pcErrUnreachable =>
+      'The computer did not answer. Is it on, on this Wi-Fi, with Receive from the phone turned on?';
+
+  @override
+  String get pcErrWrongCertificate =>
+      'Something other than your computer answered at this address. Nothing was sent.';
+
+  @override
+  String get pcErrWrongCode => 'Wrong code.';
+
+  @override
+  String pcLastContact(String time) {
+    return 'Last contact $time';
+  }
+
+  @override
+  String get pcLibrary => 'Library on the computer';
+
+  @override
+  String get pcLinkAddress => 'Address on this network';
+
+  @override
+  String get pcLinkAllow => 'Allow';
+
+  @override
+  String get pcLinkCodeHint =>
+      'On the phone: Settings › Computer › Pair with a computer, then type this address and code. The code works once, for two minutes.';
+
+  @override
+  String pcLinkCodeLeft(int seconds) {
+    return '$seconds s left';
+  }
+
+  @override
+  String get pcLinkCodeTitle => 'Pairing code';
+
+  @override
+  String get pcLinkDeny => 'Refuse';
+
+  @override
+  String get pcLinkDevices => 'Paired phones';
+
+  @override
+  String pcLinkFailed(String error) {
+    return 'Could not start: $error';
+  }
+
+  @override
+  String get pcLinkIntro =>
+      'Send links from VidHoist on your phone to this computer, and see its downloads and library there. It works on your home network only.';
+
+  @override
+  String pcLinkLastSeen(String time) {
+    return 'Last heard from $time';
+  }
+
+  @override
+  String get pcLinkNoDevices => 'No phone yet.';
+
+  @override
+  String get pcLinkOff => 'Off';
+
+  @override
+  String get pcLinkPairPhone => 'Pair a phone';
+
+  @override
+  String pcLinkPairedAt(String time) {
+    return 'Paired $time';
+  }
+
+  @override
+  String pcLinkPhones(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count phones',
+      one: 'One phone',
+      zero: 'No phone',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pcLinkReceive => 'Receive from the phone';
+
+  @override
+  String get pcLinkReceiveHint =>
+      'While it is off, no port is open on this computer. If Windows asks, allow private networks only.';
+
+  @override
+  String pcLinkRequest(String name) {
+    return '$name asks to pair';
+  }
+
+  @override
+  String get pcLinkRequestHint =>
+      'Allow only if the phone shows the same four digits.';
+
+  @override
+  String get pcLinkRevoke => 'Unpair';
+
+  @override
+  String get pcLinkSecurity =>
+      'Nothing leaves your network. A phone pairs once, with the code and your approval here; after that it must show its own key on every request, over a connection encrypted to this computer\'s certificate alone. Anyone else on the network finds a closed door.';
+
+  @override
+  String get pcLinkStarting => 'Starting…';
+
+  @override
+  String get pcLinkTitle => 'Phone';
+
+  @override
+  String get pcNow => 'On the computer now';
+
+  @override
+  String get pcOffline => 'Unavailable';
+
+  @override
+  String get pcOfflineMessage =>
+      'The computer is off or on another network. What it had last time is shown below.';
+
+  @override
+  String get pcPairButton => 'Pair';
+
+  @override
+  String pcPairCheck(String check) {
+    return 'Check that the computer shows $check, then allow the phone there.';
+  }
+
+  @override
+  String get pcPairIntro =>
+      'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then type here the address and code it shows.';
+
+  @override
+  String get pcPairStart => 'Pair with a computer';
+
+  @override
+  String pcPaired(String name) {
+    return 'Paired with $name';
+  }
+
+  @override
+  String get pcSendToPc => 'Send to the computer';
+
+  @override
+  String pcSent(String name) {
+    return 'Sent to $name';
+  }
+
+  @override
+  String get pcSettingsHint => 'Send links to your computer';
+
+  @override
+  String get pcTab => 'Computer';
+
+  @override
   String percentValue(Object percent) {
     return '$percent%';
   }
