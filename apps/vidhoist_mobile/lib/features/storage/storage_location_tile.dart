@@ -9,8 +9,11 @@ import '../downloads_library/local_item.dart';
 import 'phone_volumes.dart';
 
 /// The folder's place inside a volume, shown under each choice so the
-/// person knows where to look in a file manager.
-const _folder = 'Download/$mediaFolderName';
+/// person knows where to look in a file manager: on the phone as the disk
+/// spells it (an old `Vidhoist` may stay), on a card as the app makes it.
+String _folder(String? volumeId) => volumeId == null
+    ? 'Download/${phoneMediaDir.split('/').last}'
+    : 'Download/$mediaFolderName';
 
 /// **Where new downloads go**: the phone's storage, or a memory card while
 /// one is in (plan item R4). In the downloads settings.
@@ -62,9 +65,13 @@ String storageSummary(
   String? chosen,
   List<PhoneVolume> volumes,
 ) {
-  if (chosen == null) return '${l10n.storagePhone} · ${vhLtrRun(_folder)}';
+  if (chosen == null) {
+    return '${l10n.storagePhone} · ${vhLtrRun(_folder(null))}';
+  }
   for (final volume in volumes) {
-    if (volume.id == chosen) return '${volume.label} · ${vhLtrRun(_folder)}';
+    if (volume.id == chosen) {
+      return '${volume.label} · ${vhLtrRun(_folder(chosen))}';
+    }
   }
   return l10n.storageCardMissing;
 }
@@ -84,7 +91,7 @@ class StorageLocationSheet extends ConsumerWidget {
 
     Widget choice(String title, String? id) => ListTile(
       title: Text(title),
-      subtitle: Text(vhLtrRun(_folder), style: text.bodySmall),
+      subtitle: Text(vhLtrRun(_folder(id)), style: text.bodySmall),
       trailing: chosen == id ? VhIcon(VhIcons.check, color: p.ink) : null,
       onTap: () {
         unawaited(notifier.setDownloadVolume(id));
