@@ -3026,6 +3026,12 @@ abstract class VhLocalizations {
   /// **'Go to the newest'**
   String get jumpToNewest;
 
+  /// No description provided for @justNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get justNow;
+
   /// No description provided for @knownVideos.
   ///
   /// In en, this message translates to:
@@ -3629,7 +3635,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcBadAddress.
   ///
   /// In en, this message translates to:
-  /// **'Type the address as the computer shows it, for example 192.168.1.24:47321.'**
+  /// **'Type the address as the computer shows it, for example 192.168.1.24.'**
   String get pcBadAddress;
 
   /// No description provided for @pcCertificate.
@@ -3695,7 +3701,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcErrUnreachable.
   ///
   /// In en, this message translates to:
-  /// **'The computer did not answer. Is it on, on this Wi-Fi, with Receive from the phone turned on?'**
+  /// **'The computer did not answer. Is it on, on this network or on your Tailscale, with \"Receive from the phone\" turned on?'**
   String get pcErrUnreachable;
 
   /// No description provided for @pcErrWrongCertificate.
@@ -3727,6 +3733,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Address on this network'**
   String get pcLinkAddress;
+
+  /// No description provided for @pcLinkAddressTailscale.
+  ///
+  /// In en, this message translates to:
+  /// **'Through Tailscale, from outside home'**
+  String get pcLinkAddressTailscale;
 
   /// No description provided for @pcLinkAllow.
   ///
@@ -3773,7 +3785,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcLinkIntro.
   ///
   /// In en, this message translates to:
-  /// **'Send links from VidHoist on your phone to this computer, and see its downloads and library there. It works on your home network only.'**
+  /// **'Send links from VidHoist on your phone to this computer, and see its downloads and library there. Works inside your home network, and from outside it through Tailscale.'**
   String get pcLinkIntro;
 
   /// No description provided for @pcLinkLastSeen.
@@ -3793,6 +3805,18 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Off'**
   String get pcLinkOff;
+
+  /// No description provided for @pcLinkOtherAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Other addresses ({count})'**
+  String pcLinkOtherAddresses(int count);
+
+  /// No description provided for @pcLinkOtherAddressesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Network adapters other programs add, such as VirtualBox or WSL. The phone rarely needs them.'**
+  String get pcLinkOtherAddressesHint;
 
   /// No description provided for @pcLinkPairPhone.
   ///
@@ -3845,7 +3869,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcLinkSecurity.
   ///
   /// In en, this message translates to:
-  /// **'Nothing leaves your network. A phone pairs once, with the code and your approval here; after that it must show its own key on every request, over a connection encrypted to this computer\'s certificate alone. Anyone else on the network finds a closed door.'**
+  /// **'Nothing passes through any server of ours: the phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer\'s certificate alone. Anyone else on the network finds a closed door.'**
   String get pcLinkSecurity;
 
   /// No description provided for @pcLinkStarting.
@@ -3908,6 +3932,12 @@ abstract class VhLocalizations {
   /// **'Paired with {name}'**
   String pcPaired(String name);
 
+  /// No description provided for @pcPortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Port'**
+  String get pcPortLabel;
+
   /// No description provided for @pcSendToPc.
   ///
   /// In en, this message translates to:
@@ -3931,6 +3961,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Computer'**
   String get pcTab;
+
+  /// No description provided for @pcWatchLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Watching from the computer comes in a later update.'**
+  String get pcWatchLater;
 
   /// No description provided for @percentValue.
   ///

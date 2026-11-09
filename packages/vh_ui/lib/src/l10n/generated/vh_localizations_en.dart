@@ -1758,6 +1758,9 @@ class VhLocalizationsEn extends VhLocalizations {
   String get jumpToNewest => 'Go to the newest';
 
   @override
+  String get justNow => 'just now';
+
+  @override
   String knownVideos(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2097,7 +2100,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcBadAddress =>
-      'Type the address as the computer shows it, for example 192.168.1.24:47321.';
+      'Type the address as the computer shows it, for example 192.168.1.24.';
 
   @override
   String get pcCertificate => 'Computer\'s certificate';
@@ -2135,7 +2138,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcErrUnreachable =>
-      'The computer did not answer. Is it on, on this Wi-Fi, with Receive from the phone turned on?';
+      'The computer did not answer. Is it on, on this network or on your Tailscale, with \"Receive from the phone\" turned on?';
 
   @override
   String get pcErrWrongCertificate =>
@@ -2154,6 +2157,9 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcLinkAddress => 'Address on this network';
+
+  @override
+  String get pcLinkAddressTailscale => 'Through Tailscale, from outside home';
 
   @override
   String get pcLinkAllow => 'Allow';
@@ -2183,7 +2189,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcLinkIntro =>
-      'Send links from VidHoist on your phone to this computer, and see its downloads and library there. It works on your home network only.';
+      'Send links from VidHoist on your phone to this computer, and see its downloads and library there. Works inside your home network, and from outside it through Tailscale.';
 
   @override
   String pcLinkLastSeen(String time) {
@@ -2195,6 +2201,15 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcLinkOff => 'Off';
+
+  @override
+  String pcLinkOtherAddresses(int count) {
+    return 'Other addresses ($count)';
+  }
+
+  @override
+  String get pcLinkOtherAddressesHint =>
+      'Network adapters other programs add, such as VirtualBox or WSL. The phone rarely needs them.';
 
   @override
   String get pcLinkPairPhone => 'Pair a phone';
@@ -2237,7 +2252,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcLinkSecurity =>
-      'Nothing leaves your network. A phone pairs once, with the code and your approval here; after that it must show its own key on every request, over a connection encrypted to this computer\'s certificate alone. Anyone else on the network finds a closed door.';
+      'Nothing passes through any server of ours: the phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer\'s certificate alone. Anyone else on the network finds a closed door.';
 
   @override
   String get pcLinkStarting => 'Starting…';
@@ -2276,6 +2291,9 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
+  String get pcPortLabel => 'Port';
+
+  @override
   String get pcSendToPc => 'Send to the computer';
 
   @override
@@ -2288,6 +2306,10 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcTab => 'Computer';
+
+  @override
+  String get pcWatchLater =>
+      'Watching from the computer comes in a later update.';
 
   @override
   String percentValue(Object percent) {

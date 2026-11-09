@@ -7,6 +7,7 @@ import 'package:vh_core/vh_core.dart';
 
 import '../di.dart';
 import '../platform/computer_name.dart';
+import 'pc_link_addresses.dart';
 import 'pc_link_host.dart';
 import 'update_data.dart';
 
@@ -141,18 +142,30 @@ final pcLinkProvider = FutureProvider<PcLinkSession?>((ref) async {
   return PcLinkSession(server: server, pairing: pairing, port: port);
 });
 
-/// The addresses a phone on this network can reach: private IPv4 only.
-final pcLinkAddressesProvider = FutureProvider<List<String>>((ref) async {
+/// The paired phones as they change: the settings list reads its count,
+/// which a value read once left at "No phone" after a pairing (2026-11-09).
+final pcLinkDevicesProvider = StreamProvider<List<PcDevice>>((ref) async* {
+  final session = await ref.watch(pcLinkProvider.future);
+  if (session == null) return;
+  final pairing = session.pairing;
+  yield pairing.devices;
+  await for (final _ in pairing.changes) {
+    yield pairing.devices;
+  }
+});
+
+/// This computer's IPv4 addresses, the one a phone at home dials first.
+final pcLinkAddressesProvider = FutureProvider<List<PcAddress>>((ref) async {
   ref.watch(pcLinkProvider);
   try {
     final interfaces = await NetworkInterface.list(
       type: InternetAddressType.IPv4,
     );
-    return [
+    return sortPcAddresses([
       for (final i in interfaces)
         for (final a in i.addresses)
-          if (!a.isLoopback && !a.isLinkLocal) a.address,
-    ];
+          if (!a.isLoopback && !a.isLinkLocal) (i.name, a.address),
+    ]);
   } on Object {
     return const [];
   }

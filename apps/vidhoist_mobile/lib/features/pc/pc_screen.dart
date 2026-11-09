@@ -331,6 +331,9 @@ class _ItemRow extends StatelessWidget {
       url: item.thumbnail,
       coverId: item.hasCover ? item.id : null,
     ),
+    // Watching streams through a proxy on the phone (batch B); until then
+    // a tap says so rather than doing nothing (owner's report, 2026-11-09).
+    onTap: () => showVhSnack(context, context.vhl.pcWatchLater),
   );
 }
 

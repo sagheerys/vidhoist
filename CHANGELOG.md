@@ -74,6 +74,15 @@ All notable changes to VidHoist. The format follows
   unfollowing apart from checking, pausing and editing.
 
 ### Fixed
+- Download on the computer, from its first try on real devices: the phone's
+  pairing form has the port in a field of its own (the number pad has no
+  colon, and the port is rarely needed); Windows shows the home network's
+  address first, named by its adapter, Tailscale's apart, and the adapters
+  other programs add (VirtualBox, WSL…) folded away; the settings list
+  counts a phone paired after it was opened instead of "No phone"; a clip
+  tapped in the computer's library says watching comes later; "0 seconds
+  ago" reads "just now". The link also works over Tailscale, and the texts
+  say so.
 - The download card no longer runs past its edge on the narrowest phone
   when a speed shows beside the percentage: the speed yields first.
 - A channel's picture and banner are kept on the phone: they show with no

@@ -260,11 +260,10 @@ void main() {
             ),
           ),
         );
-        await tester.enterText(
-          find.byType(TextField).at(0),
-          '192.168.1.24:47321',
-        );
-        await tester.enterText(find.byType(TextField).at(1), '123456');
+        // No port typed: the number pad has no colon, and the default is
+        // the computer's own.
+        await tester.enterText(find.byType(TextField).at(0), '192.168.1.24');
+        await tester.enterText(find.byType(TextField).at(2), '123456');
         await tester.tap(find.text(l.pcPairButton));
         await tester.pump();
         expect(find.text('4 8 2 1'), findsOneWidget);
@@ -301,11 +300,48 @@ void main() {
         ),
       );
       await tester.enterText(find.byType(TextField).at(0), 'nowhere!');
-      await tester.enterText(find.byType(TextField).at(1), '123456');
+      await tester.enterText(find.byType(TextField).at(2), '123456');
       await tester.tap(find.text(l.pcPairButton));
       await tester.pump();
       expect(find.text(l.pcBadAddress), findsOneWidget);
       expect(called, isFalse);
+    });
+
+    testWidgets('**the guard**: a port other than the default has a field '
+        'of its own, typed on the number pad', (tester) async {
+      int? asked;
+      Future<PcPairing> pairer({
+        required String host,
+        required int port,
+        required String code,
+        required String phoneName,
+        required void Function(String check) onCheck,
+      }) async {
+        asked = port;
+        throw const PcLinkException(PcLinkFailure.unreachable);
+      }
+
+      await tester.pumpWidget(
+        _app(
+          _overrides(store: store, secrets: secrets, pairer: pairer),
+          const Scaffold(
+            body: SingleChildScrollView(child: PcSettingsFields()),
+          ),
+        ),
+      );
+      final fields = tester.widgetList<TextField>(find.byType(TextField));
+      expect(
+        fields.where((f) => f.keyboardType.index == TextInputType.number.index),
+        hasLength(3),
+        reason: 'no field needs a key the number pad lacks',
+      );
+      expect(find.text('192.168.1.24:${PcLink.defaultPort}'), findsNothing);
+      await tester.enterText(find.byType(TextField).at(0), '192.168.1.24');
+      await tester.enterText(find.byType(TextField).at(1), '50000');
+      await tester.enterText(find.byType(TextField).at(2), '123456');
+      await tester.tap(find.text(l.pcPairButton));
+      await tester.pumpAndSettle();
+      expect(asked, 50000);
     });
 
     testWidgets('a refusal on the computer says so', (tester) async {
@@ -326,7 +362,7 @@ void main() {
         ),
       );
       await tester.enterText(find.byType(TextField).at(0), '192.168.1.24');
-      await tester.enterText(find.byType(TextField).at(1), '123456');
+      await tester.enterText(find.byType(TextField).at(2), '123456');
       await tester.tap(find.text(l.pcPairButton));
       await tester.pumpAndSettle();
       expect(find.text(l.pcErrDenied), findsOneWidget);
@@ -373,6 +409,26 @@ void main() {
       expect(find.text('Rust for TypeScript devs'), findsOneWidget);
       // The page asks again on its own while something downloads.
       await tester.pump(const Duration(seconds: 3));
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('**the guard**: a clip tapped says watching comes later, '
+        'rather than doing nothing', (tester) async {
+      await tester.pumpWidget(
+        _app(
+          _overrides(
+            store: store,
+            secrets: secrets,
+            pairing: _pairing,
+            api: FakeApi(),
+          ),
+          const Scaffold(body: PcScreen()),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Rust for TypeScript devs'));
+      await tester.pump();
+      expect(find.text(l.pcWatchLater), findsOneWidget);
       await tester.pumpWidget(const SizedBox());
     });
 

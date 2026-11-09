@@ -7,6 +7,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/pc_link_data.dart';
 import '../../shell/folded_text.dart';
+import 'phone_addresses.dart';
 import 'phone_pane_cards.dart';
 import 'simple_panes.dart';
 
@@ -145,12 +146,7 @@ class _SessionState extends ConsumerState<_Session> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SettingLine(
-          title: l.pcLinkAddress,
-          value: addresses.isEmpty
-              ? '—'
-              : addresses.map((a) => '$a:$port').join('  ·  '),
-        ),
+        PhoneAddresses(addresses: addresses, port: port),
         if (request != null && request.isOpen)
           PhoneRequestCard(request: request)
         else if (code != null)

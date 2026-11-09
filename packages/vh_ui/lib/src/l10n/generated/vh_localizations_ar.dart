@@ -1791,6 +1791,9 @@ class VhLocalizationsAr extends VhLocalizations {
   String get jumpToNewest => 'إلى الأحدث';
 
   @override
+  String get justNow => 'الآن';
+
+  @override
   String knownVideos(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2131,7 +2134,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcBadAddress =>
-      'اكتب العنوان كما يعرضه الكمبيوتر، مثلاً 192.168.1.24:47321.';
+      'اكتب العنوان كما يعرضه الكمبيوتر، مثلاً 192.168.1.24.';
 
   @override
   String get pcCertificate => 'شهادة الكمبيوتر';
@@ -2169,7 +2172,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcErrUnreachable =>
-      'لم يردّ الكمبيوتر. هل هو شغّال، وعلى هذه الشبكة، و«استقبال من الجوال» مفعّل فيه؟';
+      'لم يردّ الكمبيوتر. هل هو شغّال، وعلى هذه الشبكة أو على Tailscale، و«استقبال من الجوال» مفعّل فيه؟';
 
   @override
   String get pcErrWrongCertificate =>
@@ -2188,6 +2191,9 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcLinkAddress => 'العنوان على هذه الشبكة';
+
+  @override
+  String get pcLinkAddressTailscale => 'عبر Tailscale، من خارج البيت';
 
   @override
   String get pcLinkAllow => 'اسمح';
@@ -2217,7 +2223,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcLinkIntro =>
-      'أرسل الروابط من VidHoist على جوالك إلى هذا الكمبيوتر، وشاهد تنزيلاته ومكتبته هناك. يعمل داخل شبكة البيت فقط.';
+      'أرسل الروابط من VidHoist على جوالك إلى هذا الكمبيوتر، وشاهد تنزيلاته ومكتبته هناك. يعمل داخل شبكة البيت، ومن خارجها عبر Tailscale.';
 
   @override
   String pcLinkLastSeen(String time) {
@@ -2229,6 +2235,15 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcLinkOff => 'مطفأ';
+
+  @override
+  String pcLinkOtherAddresses(int count) {
+    return 'عناوين أخرى ($count)';
+  }
+
+  @override
+  String get pcLinkOtherAddressesHint =>
+      'بطاقات شبكة تضيفها برامج أخرى مثل VirtualBox أو WSL. لا يحتاجها الجوال غالباً.';
 
   @override
   String get pcLinkPairPhone => 'اربط جوالاً';
@@ -2273,7 +2288,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcLinkSecurity =>
-      'لا شيء يغادر شبكتك. يقترن الجوال مرة واحدة بالرمز وبموافقتك هنا، وبعدها يقدّم مفتاحه الخاص مع كل طلب، عبر اتصال مشفّر بشهادة هذا الكمبيوتر وحدها. ومن سواه على الشبكة يجد باباً مغلقاً.';
+      'لا يمر شيء بأي خادم لنا: الجوال يكلّم هذا الكمبيوتر مباشرة، داخل شبكتك أو عبر Tailscale الخاص بك. يقترن مرة واحدة بالرمز وبموافقتك هنا، وبعدها يقدّم مفتاحه الخاص مع كل طلب، عبر اتصال مشفّر بشهادة هذا الكمبيوتر وحدها. ومن سواه على الشبكة يجد باباً مغلقاً.';
 
   @override
   String get pcLinkStarting => 'يبدأ…';
@@ -2312,6 +2327,9 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String get pcPortLabel => 'المنفذ';
+
+  @override
   String get pcSendToPc => 'أرسل إلى الكمبيوتر';
 
   @override
@@ -2324,6 +2342,9 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcTab => 'الكمبيوتر';
+
+  @override
+  String get pcWatchLater => 'المشاهدة من الكمبيوتر قادمة في تحديث لاحق.';
 
   @override
   String percentValue(Object percent) {
