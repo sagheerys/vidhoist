@@ -60,6 +60,7 @@ List<Override> engineOverrides({
         ),
         tree: tree,
         updater: updater.update,
+        repairer: updater.repair,
         onLog: log,
       );
       return backend;

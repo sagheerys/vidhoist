@@ -130,6 +130,19 @@ class FakeBackend implements DownloadBackend {
     return updateOutcome ??
         UpdateOutcome(updated: false, version: currentVersion.ytDlp);
   }
+
+  /// How many times [repairEngine] was called.
+  int repairs = 0;
+
+  /// What [repairEngine] answers; null means a clean, current copy.
+  UpdateOutcome? repairOutcome;
+
+  @override
+  Future<UpdateOutcome> repairEngine() async {
+    repairs++;
+    return repairOutcome ??
+        UpdateOutcome(updated: true, version: currentVersion.ytDlp);
+  }
 }
 
 /// How [FakeBackend] answers for one link.

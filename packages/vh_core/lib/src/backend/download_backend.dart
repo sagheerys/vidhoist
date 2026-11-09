@@ -33,6 +33,15 @@ abstract interface class DownloadBackend {
   Future<UpdateOutcome> updateEngine({
     EngineChannel channel = EngineChannel.stable,
   });
+
+  /// **"Repair the engine"** (plan item R5): for downloads failing across
+  /// sites when an update alone did not help. Clears what yt-dlp saved
+  /// between runs and puts a clean, current yt-dlp in place, whatever
+  /// version the one there claims to be; the person's files and settings
+  /// are not touched. [UpdateOutcome.updated] is false with an error when
+  /// only part of it could be done, usually for want of a network. Called
+  /// only while nothing downloads: the files are replaced.
+  Future<UpdateOutcome> repairEngine();
 }
 
 /// yt-dlp's release channels.

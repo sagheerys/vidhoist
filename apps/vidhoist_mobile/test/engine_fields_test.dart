@@ -32,6 +32,16 @@ class _Bridge implements YtDlpBridge {
     return (updated: true, version: '2026.11.01');
   }
 
+  var repairs = 0;
+  Object? repairError;
+
+  @override
+  Future<({bool updated, String? version})> repair() async {
+    repairs++;
+    if (repairError case final e?) throw e;
+    return (updated: true, version: '2026.11.05');
+  }
+
   @override
   Future<BridgeRun> execute(
     String id,
@@ -48,6 +58,14 @@ class _Bridge implements YtDlpBridge {
 
 /// The engine's settings page: yt-dlp's version, an update on demand
 /// (`docs/ENGINE.md` finding 12), and IPv4.
+/// An engine with a download under way, which a repair must wait for.
+class _BusyEngine extends LocalDownloadEngine {
+  _BusyEngine() : super(backend: FakeBackend(), folderFor: (_) => '');
+
+  @override
+  bool get hasActiveWork => true;
+}
+
 void main() {
   late _Bridge bridge;
   late MemoryKeyValueStore store;
@@ -63,8 +81,10 @@ void main() {
   Widget host({
     Brightness brightness = Brightness.light,
     Locale locale = const Locale('en'),
+    bool downloading = false,
   }) => ProviderScope(
     overrides: [
+      if (downloading) downloadEngineProvider.overrideWithValue(_BusyEngine()),
       keyValueStoreProvider.overrideWithValue(store),
       initialSettingsProvider.overrideWithValue(const PhoneSettings()),
       loggerProvider.overrideWithValue(logger),
@@ -105,6 +125,45 @@ void main() {
     await tester.tap(find.text(t.mobileEngineUpdate));
     await tester.pumpAndSettle();
     expect(find.text(t.mobileEngineUpdateFailed), findsOneWidget);
+  });
+
+  testWidgets('the repair puts back a clean yt-dlp and names it', (
+    tester,
+  ) async {
+    await tester.pumpWidget(host());
+    await tester.pumpAndSettle();
+    final t = l10n(tester);
+    await tester.ensureVisible(find.text(t.engineRepair));
+    await tester.tap(find.text(t.engineRepair));
+    await tester.pumpAndSettle();
+    expect(bridge.repairs, 1);
+    expect(find.text(t.engineRepaired('2026.11.05')), findsOneWidget);
+    expect(find.text('2026.11.05'), findsOneWidget);
+  });
+
+  testWidgets('a repair that could not fetch says it is partly done', (
+    tester,
+  ) async {
+    bridge.repairError = PlatformException(code: 'offline');
+    await tester.pumpWidget(host());
+    await tester.pumpAndSettle();
+    final t = l10n(tester);
+    await tester.ensureVisible(find.text(t.engineRepair));
+    await tester.tap(find.text(t.engineRepair));
+    await tester.pumpAndSettle();
+    expect(find.text(t.engineRepairPartly), findsOneWidget);
+  });
+
+  testWidgets('no repair while something downloads: it would replace the '
+      'yt-dlp that download reads', (tester) async {
+    await tester.pumpWidget(host(downloading: true));
+    await tester.pumpAndSettle();
+    final t = l10n(tester);
+    await tester.ensureVisible(find.text(t.engineRepair));
+    await tester.tap(find.text(t.engineRepair));
+    await tester.pumpAndSettle();
+    expect(bridge.repairs, 0);
+    expect(find.text(t.engineRepairBusy), findsOneWidget);
   });
 
   testWidgets('IPv4 is on, and turns off', (tester) async {

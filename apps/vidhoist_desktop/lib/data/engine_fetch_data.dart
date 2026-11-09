@@ -146,6 +146,42 @@ class EngineUpdateNotifier extends Notifier<AsyncValue<UpdateOutcome?>> {
   }
 }
 
+/// The last "repair the engine": running, its outcome, or none yet.
+final engineRepairProvider =
+    NotifierProvider<EngineRepairNotifier, AsyncValue<UpdateOutcome?>>(
+      EngineRepairNotifier.new,
+    );
+
+/// Why a repair did not start: something is downloading, and Windows
+/// will not replace a yt-dlp that runs.
+const engineRepairBusy = 'busy';
+
+class EngineRepairNotifier extends Notifier<AsyncValue<UpdateOutcome?>> {
+  @override
+  AsyncValue<UpdateOutcome?> build() => const AsyncData(null);
+
+  Future<UpdateOutcome?> repair() async {
+    final backend = ref.read(downloadBackendProvider);
+    if (backend == null || state.isLoading) return null;
+    if (ref.read(downloadEngineProvider)?.hasActiveWork ?? false) {
+      const busy = UpdateOutcome(updated: false, error: engineRepairBusy);
+      state = const AsyncData(busy);
+      return busy;
+    }
+    state = const AsyncLoading();
+    final outcome = await backend.repairEngine();
+    ref.read(enginePathsProvider.notifier).refresh();
+    ref.invalidate(engineVersionProvider);
+    await EngineRefresh.recordRepair(
+      ref.read(keyValueStoreProvider),
+      ref.read(prefsMutexProvider),
+      outcome,
+    );
+    state = AsyncData(outcome);
+    return outcome;
+  }
+}
+
 /// How long yt-dlp goes without a check: YouTube breaks old builds within
 /// months, and the phone keeps the same week.
 const engineUpdateEvery = Duration(days: 7);

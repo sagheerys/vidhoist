@@ -35,6 +35,16 @@ class _Bridge implements YtDlpBridge {
     return (updated: true, version: current);
   }
 
+  var repairs = 0;
+  Object? repairError;
+
+  @override
+  Future<({bool updated, String? version})> repair() async {
+    repairs++;
+    if (repairError case final e?) throw e;
+    return (updated: true, version: '2026.11.05');
+  }
+
   @override
   Future<BridgeRun> execute(
     String id,
@@ -137,5 +147,42 @@ void main() {
     expect(await p.update(), isFalse);
     expect(p.status.stage, EngineStage.ready);
     expect(p.status.updateFailed, isTrue);
+  });
+
+  group('repair — the shipped yt-dlp, then the current one', () {
+    test('a finished repair is an update: version, date, and the next '
+        'failure free to update at once', () async {
+      await store.setInt(EngineRefresh.attemptKey, 1);
+      final p = preparer();
+      await p.ensure();
+
+      expect(await p.repair(), isTrue);
+
+      expect(bridge.repairs, 1);
+      expect(p.status.stage, EngineStage.ready);
+      expect(p.status.version.toString(), '2026.11.05');
+      expect(p.status.updatedAt, now);
+      expect(await store.getInt(EngineRefresh.attemptKey), isNull);
+      expect(
+        await store.getInt(EngineRefresh.updatedAtKey),
+        now.millisecondsSinceEpoch,
+      );
+    });
+
+    test('a repair that could not fetch says so, and the next run updates '
+        'first, since the shipped copy fails on YouTube', () async {
+      final p = preparer();
+      await p.ensure();
+      expect(bridge.updates, 1);
+      bridge.repairError = StateError('offline');
+
+      expect(await p.repair(), isFalse);
+
+      expect(p.status.updateFailed, isTrue);
+      expect(p.status.updatedAt, isNull);
+      expect(await store.getInt(EngineRefresh.updatedAtKey), isNull);
+      await p.ensure();
+      expect(bridge.updates, 2);
+    });
   });
 }

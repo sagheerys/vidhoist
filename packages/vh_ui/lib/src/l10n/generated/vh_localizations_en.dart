@@ -1611,6 +1611,29 @@ class VhLocalizationsEn extends VhLocalizations {
   String get enginePreparing => 'Reading the link…';
 
   @override
+  String get engineRepair => 'Repair the engine';
+
+  @override
+  String get engineRepairBusy =>
+      'Wait for the downloads to finish, then repair';
+
+  @override
+  String get engineRepairHint =>
+      'When downloads fail across sites as they did not before, and an update did not help: clears what yt-dlp saved and puts back a clean, current copy. Your downloads and settings stay as they are.';
+
+  @override
+  String get engineRepairPartly =>
+      'Repaired in part: the rest needs a connection. Try again once online.';
+
+  @override
+  String engineRepaired(String version) {
+    return 'Repaired: yt-dlp $version';
+  }
+
+  @override
+  String get engineRepairing => 'Repairing…';
+
+  @override
   String get engineResume => 'Resume';
 
   @override

@@ -39,6 +39,11 @@ abstract interface class YtDlpBridge {
   /// Updates yt-dlp; true when a newer one was installed.
   Future<({bool updated, String? version})> update({bool nightly = false});
 
+  /// "Repair the engine": yt-dlp as the app shipped it, then the current
+  /// release over it. [updated] is false when that fetch failed and the
+  /// shipped copy stays (`YtDlpBridge.kt`, `repair`).
+  Future<({bool updated, String? version})> repair();
+
   /// Runs yt-dlp with [args], whole and in order. Each line it prints that
   /// starts with `[` comes on [lines] under [id] before the run answers.
   /// [stdoutFile] keeps everything it printed in that file (a probe's
@@ -91,6 +96,15 @@ class MethodChannelYtDlpBridge implements YtDlpBridge {
     final answer = await methods.invokeMapMethod<String, Object?>('update', {
       'channel': nightly ? 'nightly' : 'stable',
     });
+    return (
+      updated: answer?['status'] == 'DONE',
+      version: answer?['version'] as String?,
+    );
+  }
+
+  @override
+  Future<({bool updated, String? version})> repair() async {
+    final answer = await methods.invokeMapMethod<String, Object?>('repair');
     return (
       updated: answer?['status'] == 'DONE',
       version: answer?['version'] as String?,

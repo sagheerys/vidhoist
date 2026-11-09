@@ -58,6 +58,7 @@ class ProcessYtDlpBackend implements DownloadBackend {
     ProcessStarter? start,
     required this.tree,
     this.updater,
+    this.repairer,
     this.onLog,
     this.keepProbes = const Duration(hours: 6),
     DateTime Function()? clock,
@@ -74,6 +75,10 @@ class ProcessYtDlpBackend implements DownloadBackend {
 
   /// Brings yt-dlp up to date; null where nothing can update it.
   final Future<UpdateOutcome> Function(EngineChannel channel)? updater;
+
+  /// Puts back a clean, current yt-dlp (`EngineUpdater.repair`); null
+  /// where nothing can.
+  final Future<UpdateOutcome> Function()? repairer;
   final void Function(String message)? onLog;
 
   /// A probe's media links expire after some hours; an older JSON is no
@@ -218,6 +223,11 @@ class ProcessYtDlpBackend implements DownloadBackend {
   }) async =>
       await updater?.call(channel) ??
       const UpdateOutcome(updated: false, error: 'nothing can update yt-dlp');
+
+  @override
+  Future<UpdateOutcome> repairEngine() async =>
+      await repairer?.call() ??
+      const UpdateOutcome(updated: false, error: 'nothing can repair yt-dlp');
 
   Stream<String> _lines(Process process) => process.stdout
       .transform(const Utf8Decoder(allowMalformed: true))

@@ -6,6 +6,11 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- "Repair the engine", in the engine settings of both apps, for downloads
+  failing across sites when an update did not help: it clears what yt-dlp
+  saved between runs and puts back a clean, current copy, even when the
+  one there claims the right version. Files and settings stay; it waits
+  until nothing downloads.
 - Settings › Downloads › Save to, on the phone: downloads go to the
   phone's storage or to a memory card (Android 11 and later). The library
   shows both, clips already downloaded stay where they are, and a chosen

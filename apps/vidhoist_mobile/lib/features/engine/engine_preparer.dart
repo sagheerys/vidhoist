@@ -102,6 +102,42 @@ class EnginePreparer {
     return _update();
   }
 
+  /// **"Repair the engine"** (plan item R5): yt-dlp as shipped, then the
+  /// current one (`YtDlpBridge.repair`). True when it finished. False
+  /// leaves the shipped copy, which fails on YouTube, so the update is
+  /// left due ([EngineRefresh.recordRepair]) and the next run tries it
+  /// first. The caller makes sure nothing downloads.
+  Future<bool> repair() async {
+    await _unpack();
+    _set(_status.copyWith(stage: EngineStage.updating));
+    UpdateOutcome outcome;
+    try {
+      final result = await bridge.repair();
+      outcome = UpdateOutcome(
+        updated: result.updated,
+        version: EngineVersion.tryParse(result.version),
+        error: result.updated ? null : 'the current yt-dlp was not fetched',
+      );
+    } on Object catch (e) {
+      outcome = UpdateOutcome(updated: false, error: '$e');
+    }
+    final at = _now();
+    await EngineRefresh.recordRepair(store, _mutex, outcome, at: at);
+    if (!outcome.updated) _ready = null;
+    _set(
+      EngineStatus(
+        stage: EngineStage.ready,
+        version: outcome.version,
+        updatedAt: outcome.updated ? at : null,
+        updateFailed: !outcome.updated,
+      ),
+    );
+    onLog?.call(
+      'engine repair: ${outcome.updated ? 'yt-dlp ${outcome.version}' : outcome.error}',
+    );
+    return outcome.updated;
+  }
+
   Future<void> _prepare() async {
     await _unpack();
     final at = await _lastUpdate();

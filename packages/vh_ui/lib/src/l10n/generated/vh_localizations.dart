@@ -2774,6 +2774,42 @@ abstract class VhLocalizations {
   /// **'Reading the link…'**
   String get enginePreparing;
 
+  /// No description provided for @engineRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair the engine'**
+  String get engineRepair;
+
+  /// No description provided for @engineRepairBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for the downloads to finish, then repair'**
+  String get engineRepairBusy;
+
+  /// No description provided for @engineRepairHint.
+  ///
+  /// In en, this message translates to:
+  /// **'When downloads fail across sites as they did not before, and an update did not help: clears what yt-dlp saved and puts back a clean, current copy. Your downloads and settings stay as they are.'**
+  String get engineRepairHint;
+
+  /// No description provided for @engineRepairPartly.
+  ///
+  /// In en, this message translates to:
+  /// **'Repaired in part: the rest needs a connection. Try again once online.'**
+  String get engineRepairPartly;
+
+  /// No description provided for @engineRepaired.
+  ///
+  /// In en, this message translates to:
+  /// **'Repaired: yt-dlp {version}'**
+  String engineRepaired(String version);
+
+  /// No description provided for @engineRepairing.
+  ///
+  /// In en, this message translates to:
+  /// **'Repairing…'**
+  String get engineRepairing;
+
   /// No description provided for @engineResume.
   ///
   /// In en, this message translates to:
