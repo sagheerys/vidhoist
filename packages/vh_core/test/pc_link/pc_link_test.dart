@@ -257,6 +257,74 @@ void main() {
     });
   });
 
+  group('pairing by the QR code', () {
+    test('the phone finds the address that answers, then pairs with the '
+        'certificate pinned from the start', () async {
+      final shown = window.open();
+      final sub = window.requests.listen((request) => request.allow());
+      addTearDown(sub.cancel);
+      final offer = PcPairOffer(
+        // 127.0.0.2 answers nothing: the server listens on .1 only.
+        hosts: const ['127.0.0.2', '127.0.0.1'],
+        port: port,
+        code: shown,
+        fingerprint: certificate.fingerprint,
+      );
+      final host = await PcLinkClient.reach(
+        hosts: offer.hosts,
+        port: offer.port,
+        fingerprint: offer.fingerprint,
+      );
+      expect(host, '127.0.0.1');
+      final pairing = await PcLinkClient.pair(
+        host: host!,
+        port: port,
+        code: shown,
+        phoneName: 'Galaxy',
+        onCheck: (_) {},
+        fingerprint: offer.fingerprint,
+      );
+      expect(pairing.fingerprint, certificate.fingerprint);
+      expect(window.devices.single.name, 'Galaxy');
+    });
+
+    test('**the guard**: another certificate than the code says is refused '
+        'before the code leaves the phone', () async {
+      final shown = window.open();
+      var asked = false;
+      final sub = window.requests.listen((_) => asked = true);
+      addTearDown(sub.cancel);
+      final other = PcCertificate.generate().fingerprint;
+      expect(
+        await PcLinkClient.reach(
+          hosts: const ['127.0.0.1'],
+          port: port,
+          fingerprint: other,
+        ),
+        isNull,
+      );
+      await expectLater(
+        PcLinkClient.pair(
+          host: '127.0.0.1',
+          port: port,
+          code: shown,
+          phoneName: 'Galaxy',
+          onCheck: (_) {},
+          fingerprint: other,
+        ),
+        throwsA(
+          isA<PcLinkException>().having(
+            (e) => e.failure,
+            'f',
+            PcLinkFailure.wrongCertificate,
+          ),
+        ),
+      );
+      expect(asked, isFalse);
+      expect(window.isOpen, isTrue, reason: 'no try was spent');
+    });
+  });
+
   group('pairing refuses', () {
     test('a wrong code, and shuts after five', () async {
       window.open();

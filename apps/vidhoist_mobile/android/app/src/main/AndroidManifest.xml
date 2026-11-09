@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Networking: sending the URL to the server and pulling the file. Flutter
          injects this in debug builds only, so release needs it declared here. -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -77,6 +78,13 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts"/>
         </activity>
+        <!-- The pairing QR scanner (QrScanner.kt): the library declares its
+             screen landscape-only; a phone is held upright to scan a
+             computer's screen. -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation"/>
         <!-- The download engine's own foreground service (EngineService.kt):
              it outlives the Flutter engine, so a download goes on with the
              app swiped away. -->

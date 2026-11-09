@@ -352,6 +352,10 @@ abstract final class VhIcons {
     'phone_off',
     r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6.8" y="3.4" width="10.4" height="17.2" rx="2.6"/><path d="M10 8.6l4 4"/><path d="M14 8.6l-4 4"/><path d="M11 17.4h2"/></svg>''',
   );
+  static const qrScan = VhIconData(
+    'qr_scan',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.6V6.2A2.2 2.2 0 0 1 6.2 4h2.4"/><path d="M15.4 4h2.4A2.2 2.2 0 0 1 20 6.2v2.4"/><path d="M20 15.4v2.4a2.2 2.2 0 0 1-2.2 2.2h-2.4"/><path d="M8.6 20H6.2A2.2 2.2 0 0 1 4 17.8v-2.4"/><path d="M7.4 12h9.2"/></svg>''',
+  );
   static const folderOff = VhIconData(
     'folder_off',
     r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5A2 2 0 0 1 5.5 5.5h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><path d="M4.4 4.4l15.2 15.2"/></svg>''',
@@ -495,6 +499,7 @@ abstract final class VhIcons {
     bug,
     phone,
     phoneOff,
+    qrScan,
     folderOff,
     textSize,
     upload,

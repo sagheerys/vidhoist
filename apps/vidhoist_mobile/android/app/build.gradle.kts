@@ -83,6 +83,9 @@ dependencies {
     // yt-dlp with its Python and QuickJS, and ffmpeg (docs/ENGINE.md).
     implementation("io.github.junkfood02.youtubedl-android:library:0.18.1")
     implementation("io.github.junkfood02.youtubedl-android:ffmpeg:0.18.1")
+    // The computer's pairing QR code (QrScanner): zxing, Apache 2.0, no
+    // Google Play services.
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }
 
 kotlin {

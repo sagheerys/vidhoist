@@ -13,6 +13,7 @@ import 'package:vidhoist_mobile/features/home/add_flow.dart';
 import 'package:vidhoist_mobile/features/home/link_preview_view.dart';
 import 'package:vidhoist_mobile/features/pc/pc_link_state.dart';
 import 'package:vidhoist_mobile/features/pc/pc_pairing_store.dart';
+import 'package:vidhoist_mobile/features/pc/pc_scan.dart';
 import 'package:vidhoist_mobile/features/pc/pc_screen.dart';
 import 'package:vidhoist_mobile/features/pc/pc_settings_fields.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
@@ -115,6 +116,8 @@ List<Override> _overrides({
   PcPairing? pairing,
   FakeApi? api,
   PcPairer? pairer,
+  PcScanner? scanner,
+  PcOfferPairer? offerPairer,
   LocalDownloadEngine? engine,
 }) => [
   keyValueStoreProvider.overrideWithValue(store),
@@ -130,6 +133,8 @@ List<Override> _overrides({
       (ref) => ref.watch(pcPairingProvider) == null ? null : api,
     ),
   if (pairer != null) pcPairerProvider.overrideWithValue(pairer),
+  if (scanner != null) pcScannerProvider.overrideWithValue(scanner),
+  if (offerPairer != null) pcOfferPairerProvider.overrideWithValue(offerPairer),
   pcPhoneNameProvider.overrideWithValue(() async => 'Galaxy'),
   downloadEngineProvider.overrideWithValue(engine),
   linkPreviewResolverProvider.overrideWithValue(
@@ -342,6 +347,87 @@ void main() {
       await tester.tap(find.text(l.pcPairButton));
       await tester.pumpAndSettle();
       expect(asked, 50000);
+    });
+
+    group('by the QR code', () {
+      final offer = PcPairOffer(
+        hosts: const ['192.168.1.24', '100.101.102.103'],
+        port: PcLink.defaultPort,
+        code: '123456',
+        fingerprint: _pairing.fingerprint,
+      );
+
+      Future<void> open(
+        WidgetTester tester, {
+        required String? scanned,
+        required PcOfferPairer offerPairer,
+      }) async {
+        await tester.pumpWidget(
+          _app(
+            _overrides(
+              store: store,
+              secrets: secrets,
+              scanner: (_) async => scanned,
+              offerPairer: offerPairer,
+            ),
+            const Scaffold(
+              body: SingleChildScrollView(child: PcSettingsFields()),
+            ),
+          ),
+        );
+        await tester.tap(find.text(l.pcScanButton));
+        await tester.pumpAndSettle();
+      }
+
+      testWidgets('a scan pairs, nothing typed', (tester) async {
+        PcPairOffer? used;
+        await open(
+          tester,
+          scanned: offer.toUri(),
+          offerPairer:
+              ({required offer, required phoneName, required onCheck}) async {
+                used = offer;
+                return _pairing;
+              },
+        );
+        expect(used?.hosts, offer.hosts);
+        expect(used?.fingerprint, offer.fingerprint);
+        expect(find.text('HOME-PC'), findsOneWidget);
+        expect(await secrets.read(pcSecretKey), 'the-secret');
+      });
+
+      testWidgets('**the guard**: a code that is not an offer reaches '
+          'nothing', (tester) async {
+        var called = false;
+        await open(
+          tester,
+          scanned: 'https://example.com/promo',
+          offerPairer:
+              ({required offer, required phoneName, required onCheck}) async {
+                called = true;
+                return _pairing;
+              },
+        );
+        expect(find.text(l.pcBadQr), findsOneWidget);
+        expect(called, isFalse);
+        expect(await loadPcPairing(store, secrets), isNull);
+      });
+
+      testWidgets('backing out of the camera changes nothing', (tester) async {
+        var called = false;
+        await open(
+          tester,
+          scanned: null,
+          offerPairer:
+              ({required offer, required phoneName, required onCheck}) async {
+                called = true;
+                return _pairing;
+              },
+        );
+        expect(called, isFalse);
+        expect(find.text(l.pcBadQr), findsNothing);
+        expect(find.text(l.pcScanButton), findsOneWidget);
+      });
     });
 
     testWidgets('a refusal on the computer says so', (tester) async {

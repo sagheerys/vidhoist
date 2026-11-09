@@ -79,17 +79,27 @@ class PcLinkClient implements PcLinkApi {
   /// screen. [onCheck] receives the four digits to compare with the
   /// computer's as soon as the connection is made; the call then waits,
   /// up to [PcLink.approvalWait], for the owner to allow the phone there.
+  ///
+  /// With [fingerprint], read from the computer's QR code, only that
+  /// certificate is accepted: anything else fails the handshake with
+  /// [PcLinkFailure.wrongCertificate] before the code is sent.
   static Future<PcPairing> pair({
     required String host,
     required int port,
     required String code,
     required String phoneName,
     required void Function(String check) onCheck,
+    String? fingerprint,
   }) async {
     final nonce = newSecret();
     String? seen;
+    var wrong = false;
     final http = _pinnedClient((fp) {
-      // While pairing, any certificate is accepted *for comparison*: the
+      if (fingerprint != null && fp != fingerprint) {
+        wrong = true;
+        return false;
+      }
+      // Typed by hand, any certificate is accepted *for comparison*: the
       // owner compares the four digits it yields with the computer's.
       if (seen == null) {
         seen = fp;
@@ -146,10 +156,46 @@ class PcLinkClient implements PcLinkApi {
     } on PcLinkException {
       rethrow;
     } on Object catch (e) {
+      if (wrong) throw const PcLinkException(PcLinkFailure.wrongCertificate);
       throw PcLinkException(PcLinkFailure.unreachable, '$e');
     } finally {
       http.close(force: true);
     }
+  }
+
+  /// The first of [hosts], in their order, where the computer with
+  /// [fingerprint] answers on [port]; null when none does. Only a TLS
+  /// handshake is made, nothing is sent: a computer has several addresses
+  /// and the phone reaches only some of them.
+  static Future<String?> reach({
+    required List<String> hosts,
+    required int port,
+    required String fingerprint,
+    Duration timeout = const Duration(seconds: 3),
+  }) async {
+    Future<bool> answers(String host) async {
+      try {
+        final socket = await SecureSocket.connect(
+          host,
+          port,
+          context: SecurityContext(withTrustedRoots: false),
+          onBadCertificate: (cert) => fingerprintOf(cert.der) == fingerprint,
+          timeout: timeout,
+        );
+        socket.destroy();
+        return true;
+      } on Object {
+        return false;
+      }
+    }
+
+    // All at once, so an address that does not answer costs one timeout,
+    // not one each.
+    final results = await Future.wait(hosts.map(answers));
+    for (var i = 0; i < hosts.length; i++) {
+      if (results[i]) return hosts[i];
+    }
+    return null;
   }
 
   @override

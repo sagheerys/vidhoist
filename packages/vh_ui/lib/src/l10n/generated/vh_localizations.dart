@@ -3638,6 +3638,12 @@ abstract class VhLocalizations {
   /// **'Type the address as the computer shows it, for example 192.168.1.24.'**
   String get pcBadAddress;
 
+  /// No description provided for @pcBadQr.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a VidHoist pairing code.'**
+  String get pcBadQr;
+
   /// No description provided for @pcCertificate.
   ///
   /// In en, this message translates to:
@@ -3749,7 +3755,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcLinkCodeHint.
   ///
   /// In en, this message translates to:
-  /// **'On the phone: Settings › Computer › Pair with a computer, then type this address and code. The code works once, for two minutes.'**
+  /// **'On the phone: Settings › Computer › Scan the code. Or type this address and code there. It works once, for two minutes.'**
   String get pcLinkCodeHint;
 
   /// No description provided for @pcLinkCodeLeft.
@@ -3836,6 +3842,12 @@ abstract class VhLocalizations {
   /// **'{count, plural, =0{No phone} =1{One phone} other{{count} phones}}'**
   String pcLinkPhones(int count);
 
+  /// No description provided for @pcLinkQrHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan from the phone'**
+  String get pcLinkQrHint;
+
   /// No description provided for @pcLinkReceive.
   ///
   /// In en, this message translates to:
@@ -3902,6 +3914,12 @@ abstract class VhLocalizations {
   /// **'The computer is off or on another network. What it had last time is shown below.'**
   String get pcOfflineMessage;
 
+  /// No description provided for @pcOrType.
+  ///
+  /// In en, this message translates to:
+  /// **'Or type the address and code'**
+  String get pcOrType;
+
   /// No description provided for @pcPairButton.
   ///
   /// In en, this message translates to:
@@ -3917,7 +3935,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcPairIntro.
   ///
   /// In en, this message translates to:
-  /// **'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then type here the address and code it shows.'**
+  /// **'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the code it shows.'**
   String get pcPairIntro;
 
   /// No description provided for @pcPairStart.
@@ -3937,6 +3955,24 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Port'**
   String get pcPortLabel;
+
+  /// No description provided for @pcScanButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the code'**
+  String get pcScanButton;
+
+  /// No description provided for @pcScanFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera could not be opened.'**
+  String get pcScanFailed;
+
+  /// No description provided for @pcScanPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at the code on the computer\'s screen'**
+  String get pcScanPrompt;
 
   /// No description provided for @pcSendToPc.
   ///

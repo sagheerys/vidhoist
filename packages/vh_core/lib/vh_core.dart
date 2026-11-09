@@ -43,6 +43,7 @@ export 'src/pc_link/pc_link_client.dart';
 export 'src/pc_link/pc_link_models.dart';
 export 'src/pc_link/pc_link_server.dart';
 export 'src/pc_link/pc_link_wire.dart';
+export 'src/pc_link/pc_pair_offer.dart';
 export 'src/pc_link/pc_pairing.dart';
 export 'src/resolvers/soundcloud_resolver.dart';
 export 'src/resolvers/youtube_playlist_resolver.dart';
