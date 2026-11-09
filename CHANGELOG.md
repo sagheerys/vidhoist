@@ -6,6 +6,11 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- Design brief (`docs/blueprint/DESIGN-BRIEF.md`): the identity in one
+  table, how a screen is drawn before it is coded, and the approval log.
+  Mockups live in `docs/design/` and are built from the icon set and from
+  `tool/icons/vh_palette.py`, which reads `palette.dart`; the first set draws
+  "download on the PC" on the phone.
 - A warning beside the sign-ins (Accounts on the phone, Cookies on
   Windows): better a secondary account, since heavy downloading can get
   an account restricted by the site for a while.
