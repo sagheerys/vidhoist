@@ -23,7 +23,15 @@ class PhoneSettings {
     this.captionSize = 1,
     this.captionBackground = 0,
     this.welcomed = false,
+    this.downloadVolume,
   });
+
+  /// The memory card new downloads go to, by its id (`PhoneVolume.id`);
+  /// null for the phone's own storage. About this phone, so kept out of
+  /// backups: another phone's card has another id.
+  final String? downloadVolume;
+
+  static const downloadVolumeKey = 'download_volume';
 
   /// yt-dlp's `-4`: a broken IPv6 route stalls every download (ENGINE.md,
   /// findings 7 and 20). Off only for a network with IPv6 alone.
@@ -108,10 +116,12 @@ class PhoneSettings {
     int? captionSize,
     int? captionBackground,
     bool? welcomed,
+    String? downloadVolume,
 
     /// Distinguishes "clear the language" from "do not change it": `null`
-    /// alone is not enough.
+    /// alone is not enough. The same for the card.
     bool clearLocale = false,
+    bool clearDownloadVolume = false,
   }) => PhoneSettings(
     quality: quality ?? this.quality,
     quickDownload: quickDownload ?? this.quickDownload,
@@ -126,6 +136,9 @@ class PhoneSettings {
     captionSize: captionSize ?? this.captionSize,
     captionBackground: captionBackground ?? this.captionBackground,
     welcomed: welcomed ?? this.welcomed,
+    downloadVolume: clearDownloadVolume
+        ? null
+        : (downloadVolume ?? this.downloadVolume),
   );
 
   /// Loads the initial snapshot before runApp.
@@ -148,6 +161,7 @@ class PhoneSettings {
       captionSize: await store.getInt('caption_size') ?? 1,
       captionBackground: await store.getInt('caption_background') ?? 0,
       welcomed: await store.getBool(welcomedKey) ?? false,
+      downloadVolume: await store.getString(downloadVolumeKey),
     );
   }
 }
@@ -222,6 +236,16 @@ class SettingsNotifier extends Notifier<PhoneSettings> {
   Future<void> setCaptionBackground(int background) async {
     await _mutex.run(() => _store.setInt('caption_background', background));
     state = state.copyWith(captionBackground: background);
+  }
+
+  /// The card new downloads go to; null for the phone's own storage.
+  Future<void> setDownloadVolume(String? id) async {
+    await _mutex.run(
+      () => id == null
+          ? _store.remove(PhoneSettings.downloadVolumeKey)
+          : _store.setString(PhoneSettings.downloadVolumeKey, id),
+    );
+    state = state.copyWith(downloadVolume: id, clearDownloadVolume: id == null);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {

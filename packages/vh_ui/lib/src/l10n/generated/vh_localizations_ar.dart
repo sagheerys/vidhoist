@@ -2562,6 +2562,23 @@ class VhLocalizationsAr extends VhLocalizations {
   String get status => 'الحالة';
 
   @override
+  String get storageCardMissing =>
+      'البطاقة غير موجودة، فالتنزيلات تذهب إلى ذاكرة الجوال';
+
+  @override
+  String get storageLocation => 'مكان الحفظ';
+
+  @override
+  String get storageLocationHelp =>
+      'المقاطع المنزّلة تبقى حيث هي وتظهر في المكتبة. بطاقة الذاكرة تحتاج أندرويد 11 أو أحدث.';
+
+  @override
+  String get storageNoCard => 'لا توجد بطاقة ذاكرة في هذا الجوال';
+
+  @override
+  String get storagePhone => 'ذاكرة الجوال';
+
+  @override
   String get streamingOnline => 'يُبثّ من الإنترنت';
 
   @override

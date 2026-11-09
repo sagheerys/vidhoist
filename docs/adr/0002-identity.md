@@ -57,3 +57,19 @@ search, npm, PyPI and the `.com`/`.app`/`.io` domains.
 - The availability check is a snapshot of 2026-11-04 and is not a trademark
   search. Before the public release, the owner registers at least
   `vidhoist.app` and rechecks the stores.
+
+## Amendment 2026-11-09: the phone's folder is `Download/VidHoist`
+
+The owner asked for the folder to be spelled as the app is shown. The app
+was not public yet, so only the owner's phone held data. Android's shared
+storage ignores letter case, so `Vidhoist` and `VidHoist` are one folder;
+what the spelling changes is the saved text, because the library keys
+favourites, titles, covers and each clip's link by the file's path. At
+every start, and after every restore, the phone app rewrites any saved
+path in the old spelling (`media_folder_rename.dart`), then renames the
+folder on disk through a spare name. Android may refuse the rename when
+the folder holds files an earlier install left; the app works the same,
+and only a file manager still shows `Vidhoist`. A memory card, when one is
+chosen in Settings › Downloads, gets a folder of the same name. Windows
+keeps `%APPDATA%\Vidhoist`: Windows ignores case too, and nothing there is
+keyed by that path's spelling in a way a user sees.

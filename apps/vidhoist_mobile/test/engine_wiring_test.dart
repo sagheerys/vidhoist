@@ -10,6 +10,7 @@ import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/pending_recovery.dart';
 import 'package:vidhoist_mobile/features/home/network_gate.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
+import 'package:vidhoist_mobile/features/storage/phone_volumes.dart';
 
 /// The app runs on the phone's own engine: the settings reach each
 /// download, a finished one is recorded on the phone, and what the last
@@ -19,7 +20,11 @@ void main() {
   late FakeBackend backend;
   late StreamController<List<ConnectivityResult>> network;
 
-  ProviderContainer build(PhoneSettings settings, {bool onWifi = true}) {
+  ProviderContainer build(
+    PhoneSettings settings, {
+    bool onWifi = true,
+    List<PhoneVolume> volumes = const [],
+  }) {
     final gate = NetworkGate(
       changes: network.stream,
       check: () async => [
@@ -36,6 +41,7 @@ void main() {
         ),
         networkGateProvider.overrideWithValue(gate),
         downloadBackendProvider.overrideWithValue(backend),
+        initialVolumesProvider.overrideWithValue(volumes),
       ],
     );
     addTearDown(c.dispose);
@@ -55,10 +61,41 @@ void main() {
     addTearDown(network.close);
   });
 
-  test('**the guard**: downloads land in Download/Vidhoist, never in '
+  test('**the guard**: downloads land in Download/VidHoist, never in '
       'another app\'s folder', () {
-    // A shared folder would mix another app's files into the library.
-    expect(phoneMediaDir, '/storage/emulated/0/Download/Vidhoist');
+    // A shared folder would mix another app's files into the library. The
+    // spelling follows the shown name since 2026-11-09; the old `Vidhoist`
+    // is the same folder to Android (`media_folder_rename.dart`).
+    expect(phoneMediaDir, '/storage/emulated/0/Download/VidHoist');
+  });
+
+  const card = PhoneVolume(
+    id: '1A2B-3C4D',
+    path: '/storage/1A2B-3C4D',
+    label: 'SD card',
+  );
+
+  test('the chosen card takes the download while it is in', () async {
+    final c = build(
+      const PhoneSettings(downloadVolume: '1A2B-3C4D'),
+      volumes: const [card],
+    );
+    final engine = c.read(downloadEngineProvider)!;
+    final task = engine.submit('https://youtu.be/a', Quality.best);
+    await until(() => engine.taskById(task.id)!.isFinished);
+    expect(
+      backend.requests.single.folder,
+      '/storage/1A2B-3C4D/Download/VidHoist',
+    );
+  });
+
+  test('a chosen card that is out sends the download to the phone, not '
+      'to a failure', () async {
+    final c = build(const PhoneSettings(downloadVolume: '1A2B-3C4D'));
+    final engine = c.read(downloadEngineProvider)!;
+    final task = engine.submit('https://youtu.be/a', Quality.best);
+    await until(() => engine.taskById(task.id)!.isFinished);
+    expect(backend.requests.single.folder, phoneMediaDir);
   });
 
   test('nothing to set up: the engine is always there', () {

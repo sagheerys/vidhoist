@@ -14,6 +14,7 @@ import '../../di.dart';
 import '../downloads_library/library_providers.dart';
 import '../playlists/playlists_providers.dart';
 import '../shared/error_report.dart';
+import '../storage/media_folder_rename.dart';
 import 'auto_backup.dart';
 import 'widgets/backup_picker.dart';
 
@@ -114,6 +115,11 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
 
   /// Everything the backup may have changed is reloaded (rule 8, step 1).
   Future<void> _refreshEverything() async {
+    // A picked file may predate the folder's `VidHoist` spelling.
+    await rewriteStoredPaths(
+      ref.read(keyValueStoreProvider),
+      ref.read(prefsMutexProvider),
+    );
     await ref.read(settingsProvider.notifier).reloadFromStore();
     ref.invalidate(localMediaProvider);
     ref.invalidate(playlistsProvider);

@@ -105,6 +105,8 @@ class MainActivity : AudioServiceActivity() {
                 // first: a release carries one APK per ABI, since the
                 // engine's Python and ffmpeg are compiled for each.
                 "supportedAbis" -> result.success(android.os.Build.SUPPORTED_ABIS.toList())
+                // Cards and drives a download may go to (StorageVolumes).
+                "volumes" -> result.success(StorageVolumes.list(applicationContext))
                 // The launcher shortcut's destination, **consumed once**.
                 // Keeping it would re-run the shortcut on every return to the
                 // app.

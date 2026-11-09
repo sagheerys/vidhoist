@@ -7,6 +7,7 @@ import 'package:vh_ui/vh_ui.dart';
 import '../../../di.dart';
 import 'help_button.dart';
 import '../../player/caption_style.dart';
+import '../../storage/storage_location_tile.dart';
 
 /// A row that opens one of the settings screens.
 class SettingsNavTile extends StatelessWidget {
@@ -112,6 +113,7 @@ class DownloadFields extends ConsumerWidget {
             HelpButton(title: l10n.defaultQuality, body: l10n.qualityHelper),
           ],
         ),
+        const StorageLocationTile(),
         // **The default quality used to be a setting with no effect**: it
         // filled in the add sheet and the user re-chose it every time. With
         // "quick download" it becomes the actual decision, and the sheet is

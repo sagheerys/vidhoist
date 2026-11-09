@@ -10,6 +10,7 @@ import '../../di.dart';
 import '../home/network_gate.dart';
 import '../shared/error_text.dart';
 import '../player/playback_providers.dart';
+import '../storage/phone_volumes.dart';
 import 'library_providers.dart';
 import 'local_item.dart';
 import 'media_access.dart';
@@ -118,6 +119,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             // rethrowing here escapes the `RefreshIndicator` with
             // nobody to catch
             // it.
+            // A card put in since the start shows its files on a pull.
+            await ref.read(phoneVolumesProvider.notifier).refresh();
             ref.invalidate(localMediaProvider);
             try {
               await ref.read(localMediaProvider.future);

@@ -11,12 +11,12 @@ import 'features/downloads_library/download_wiring.dart';
 import 'features/engine/channel_backend.dart';
 import 'features/engine/engine_preparer.dart';
 import 'features/engine/ytdlp_bridge.dart';
-import 'features/downloads_library/local_item.dart';
 import 'features/home/handled_links.dart';
 import 'features/home/network_gate.dart';
 import 'features/settings/auto_backup.dart';
 import 'features/settings/settings_state.dart';
 import 'features/shared/stores.dart';
+import 'features/storage/phone_volumes.dart';
 
 /// Riverpod injection (TRD §3.1): a settings change rebuilds the engine
 /// automatically, with no Completers and no manual synchronisation.
@@ -213,7 +213,11 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
   var alive = true;
   final engine = LocalDownloadEngine(
     backend: ref.watch(downloadBackendProvider),
-    folderFor: (_) => phoneMediaDir,
+    // The chosen card while it is in, the phone otherwise.
+    folderFor: (_) => downloadDirFor(
+      ref.read(settingsProvider).downloadVolume,
+      ref.read(phoneVolumesProvider),
+    ),
     history: ref.watch(localHistoryProvider),
     pending: ref.watch(localPendingProvider),
     // A site that moved on without yt-dlp: the engine updates and the
@@ -296,7 +300,11 @@ final backupServiceProvider = Provider(
     variant: 'phone',
     // When this install last updated its engine: restored on a new phone
     // it would skip the update the shipped yt-dlp needs.
-    deviceOnlyKeys: EngineRefresh.deviceOnlyKeys,
+    // Which card downloads go to: another phone's card has another id.
+    deviceOnlyKeys: {
+      ...EngineRefresh.deviceOnlyKeys,
+      PhoneSettings.downloadVolumeKey,
+    },
   ),
 );
 

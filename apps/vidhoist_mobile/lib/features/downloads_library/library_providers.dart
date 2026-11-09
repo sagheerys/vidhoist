@@ -6,6 +6,7 @@ import 'package:vh_media/vh_media.dart' show MediaShape;
 
 import '../../di.dart';
 import '../shared/async_view.dart';
+import '../storage/phone_volumes.dart';
 import 'local_item.dart';
 import 'media_access.dart';
 
@@ -46,21 +47,32 @@ final localMediaProvider = FutureProvider<List<LocalItem>>((ref) async {
   };
 
   final gate = ref.watch(mediaAccessGateProvider);
-  final dir = Directory(phoneMediaDir);
+  final [phoneDir, ...cardDirs] = ref.watch(libraryDirsProvider);
+  final files = <FileSystemEntity>[];
   // **Permission, not absence.** `exists()` on a folder Android will not let
   // us read throws rather than answering false, and the raw errno used to
   // land on the library screen. The screen offers the permission instead.
   try {
-    if (!await dir.exists()) {
-      assertLibraryVisible(isEmpty: true, hasAccess: await gate.hasAccess());
-      return const [];
-    }
+    final dir = Directory(phoneDir);
+    if (await dir.exists()) files.addAll(await _list(dir).toList());
   } on FileSystemException {
     throw const MediaAccessDeniedException();
   }
+  // A memory card's folder (R4) adds to the library and never breaks it:
+  // a card pulled out mid-scan only hides its own files.
+  for (final path in cardDirs) {
+    try {
+      final dir = Directory(path);
+      if (await dir.exists()) {
+        files.addAll(await dir.list(followLinks: false).toList());
+      }
+    } on FileSystemException {
+      continue;
+    }
+  }
 
   final items = <LocalItem>[];
-  await for (final entity in _list(dir)) {
+  for (final entity in files) {
     if (entity is! File || !isMediaFile(entity.path)) continue;
     final path = entity.path.replaceAll(r'\', '/');
     final url = urlOfPath[path];

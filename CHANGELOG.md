@@ -6,6 +6,12 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- Settings › Downloads › Save to, on the phone: downloads go to the
+  phone's storage or to a memory card (Android 11 and later). The library
+  shows both, clips already downloaded stay where they are, and a chosen
+  card that is out sends the download to the phone instead of failing it.
+  The phone's folder is now spelled `Download/VidHoist`, like the app; the
+  favourites, titles and covers of clips already there carry over.
 - Settings › Accounts on the phone: a sign-in to YouTube, Instagram,
   Facebook, TikTok, X or Vimeo on the site's own page inside the app, for
   the clips a site refuses without one (age checks, "confirm you're not a

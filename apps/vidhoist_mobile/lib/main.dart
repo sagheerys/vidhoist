@@ -12,7 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'di.dart';
 import 'features/accounts/accounts_state.dart';
-import 'features/downloads_library/local_item.dart';
+import 'features/storage/media_folder_rename.dart';
+import 'features/storage/phone_volumes.dart';
 import 'features/settings/settings_state.dart';
 import 'features/shared/error_report.dart';
 import 'features/shared/stores.dart';
@@ -43,6 +44,19 @@ Future<void> main() async {
   // One lock for all storage (rule 3), passed to everyone rather than
   // created twice.
   final mutex = PrefsMutex();
+
+  // **The folder's new spelling** (VidHoist, 2026-11-09), before anything
+  // reads a saved path or loads a playback position. The saved paths keep
+  // the data; the rename on disk is only what a file manager shows, and
+  // Android may refuse it.
+  final renamed = await renameMediaFolder();
+  if (renamed != null) unawaited(logger.log(renamed, tag: 'storage'));
+  final rewritten = await rewriteStoredPaths(store, mutex);
+  if (rewritten > 0) {
+    unawaited(logger.log('media folder: $rewritten entries', tag: 'storage'));
+  }
+  final volumes = await const ChannelVolumeSource().volumes();
+
   // The phone app never streams: the endpoint stays `none`, so the golden rule
   // always ends at the local file.
   final resolver = PlaybackSourceResolver(endpoint: ServerStreamEndpoint.none);
@@ -93,12 +107,13 @@ Future<void> main() async {
   // its pieces, and the library scan ignores them on purpose, so the space
   // is lost unseen. Three days, not hours: a paused download goes on from
   // its partial file. Startup never waits on a cleanup.
-  unawaited(
-    sweepPartialFiles(
-      phoneMediaDir,
-      olderThan: const Duration(days: 3),
-    ).then((count) => count == 0 ? null : logger.log('swept $count partials')),
-  );
+  for (final dir in libraryDirsFor(volumes)) {
+    unawaited(
+      sweepPartialFiles(dir, olderThan: const Duration(days: 3)).then(
+        (count) => count == 0 ? null : logger.log('swept $count partials'),
+      ),
+    );
+  }
 
   runApp(
     ProviderScope(
@@ -111,6 +126,7 @@ Future<void> main() async {
         audioHandlerProvider.overrideWithValue(handler),
         loggerProvider.overrideWithValue(logger),
         deviceAbisProvider.overrideWithValue(abis),
+        initialVolumesProvider.overrideWithValue(volumes),
         // The sign-ins, in the same private folder as the log: no backup
         // and no other app reads it.
         cookiesFileProvider.overrideWithValue('${logsDir.path}/cookies.txt'),
