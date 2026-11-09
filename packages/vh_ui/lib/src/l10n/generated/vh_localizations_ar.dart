@@ -20,6 +20,37 @@ class VhLocalizationsAr extends VhLocalizations {
       'تطبيق خفيف وسريع لتحميل الفيديو والصوت من مختلف المنصات بـyt-dlp، إلى جهازك مباشرة بلا سيرفر بينهما، وفيه مشغل مدمج وقوائم تشغيل.';
 
   @override
+  String get accountSignIn => 'تسجيل الدخول';
+
+  @override
+  String get accountSignOut => 'خروج';
+
+  @override
+  String get accountSignedIn => 'مسجّل الدخول';
+
+  @override
+  String get accountSignedOut => 'غير مسجّل';
+
+  @override
+  String accountSignedOutOf(String site) {
+    return 'خرجت من $site';
+  }
+
+  @override
+  String get accountsClearAll => 'حذف كل الكوكيز';
+
+  @override
+  String get accountsCleared => 'حُذفت الكوكيز';
+
+  @override
+  String get accountsHelp =>
+      'تنتهي صلاحية تسجيل الدخول بعد مدة؛ فإن عاد موقع يرفض، سجّل الدخول مرة أخرى. الخروج من موقع يُخرج متصفح التطبيق من المواقع الأخرى أيضاً، وتبقى تنزيلاتها تعمل كما كانت.';
+
+  @override
+  String get accountsHint =>
+      'للمواقع التي ترفض التحميل بلا تسجيل دخول. تسجّل الدخول في صفحة الموقع نفسها داخل التطبيق، وما يتركه يبقى على هذا الجوال حيث يقرؤه yt-dlp في كل تنزيل، ولا يذهب إلى أي مكان آخر.';
+
+  @override
   String get activeDownloads => 'التحميلات النشطة';
 
   @override
@@ -1786,6 +1817,23 @@ class VhLocalizationsAr extends VhLocalizations {
   String get lockTouch => 'قفل اللمس';
 
   @override
+  String get loginDone => 'تم';
+
+  @override
+  String loginKept(String site) {
+    return 'سُجّل الدخول إلى $site، وستستعمله التنزيلات';
+  }
+
+  @override
+  String get loginNotYet =>
+      'لم يظهر تسجيل دخول بعد. أكمل تسجيل الدخول ثم اضغط «تم»';
+
+  @override
+  String loginTitle(String site) {
+    return 'تسجيل الدخول إلى $site';
+  }
+
+  @override
   String get logsEmpty => 'السجل فارغ';
 
   @override
@@ -1856,6 +1904,10 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get mobileSettingsGroupEngine => 'المحرّك';
+
+  @override
+  String get mobileSignInNeeded =>
+      'هذا الموقع يطلب تسجيل الدخول. سجّل الدخول من الإعدادات › الحسابات ثم أعد المحاولة';
 
   @override
   String get mobileSubtitleOptions => 'الحجم والخلفية والنص';
@@ -2376,6 +2428,9 @@ class VhLocalizationsAr extends VhLocalizations {
   String get settings => 'الإعدادات';
 
   @override
+  String get settingsAccounts => 'الحسابات';
+
+  @override
   String get settingsBackup => 'النسخ الاحتياطي';
 
   @override
@@ -2428,6 +2483,11 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get settingsValueQuick => 'سريع';
+
+  @override
+  String settingsValueSignedIn(String sites) {
+    return 'مسجّل: $sites';
+  }
 
   @override
   String get settingsValueSubtitlesShown => 'الترجمة ظاهرة';

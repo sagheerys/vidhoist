@@ -118,4 +118,93 @@ void main() {
       expect(cookiesIn(merged), [row('.x.com', 'a', '1')]);
     });
   });
+
+  group('CookieFiles.fromHeaders — the phone browser\'s cookies', () {
+    test('each cookie of a header becomes a session cookie of the site', () {
+      final bytes = CookieFiles.fromHeaders({
+        'https://www.youtube.com/': 'SID=abc; HSID=def; LOGIN_INFO=g=h',
+      });
+
+      expect(cookiesIn(bytes), [
+        '.youtube.com\tTRUE\t/\tTRUE\t\tSID\tabc',
+        '.youtube.com\tTRUE\t/\tTRUE\t\tHSID\tdef',
+        '.youtube.com\tTRUE\t/\tTRUE\t\tLOGIN_INFO\tg=h',
+      ]);
+      expect(utf8.decode(bytes!), startsWith(CookieFiles.header));
+    });
+
+    test('the expiry is empty, never 0: Python sends a session cookie and '
+        'drops one that expired in 1970', () {
+      final bytes = CookieFiles.fromHeaders({'https://x.com/': 'auth_token=t'});
+      final fields = cookiesIn(bytes).single.split('\t');
+      expect(fields, hasLength(7));
+      expect(fields[4], isEmpty);
+    });
+
+    test('two pages of one site give the site once, the later value kept', () {
+      final bytes = CookieFiles.fromHeaders({
+        'https://accounts.google.com/': 'SID=old',
+        'https://www.google.com/': 'SID=new; NID=n',
+      });
+      expect(cookiesIn(bytes), [
+        '.google.com\tTRUE\t/\tTRUE\t\tSID\tnew',
+        '.google.com\tTRUE\t/\tTRUE\t\tNID\tn',
+      ]);
+    });
+
+    test('a page with no cookies, or none at all, gives null', () {
+      expect(CookieFiles.fromHeaders({'https://x.com/': ''}), isNull);
+      expect(CookieFiles.fromHeaders({'https://x.com/': '; ;'}), isNull);
+      expect(CookieFiles.fromHeaders({}), isNull);
+      expect(CookieFiles.fromHeaders({'not a url': 'a=b'}), isNull);
+    });
+
+    test('what it writes, merge and sites read back', () {
+      final bytes = CookieFiles.fromHeaders({
+        'https://www.youtube.com/': 'SID=abc',
+        'https://www.instagram.com/': 'sessionid=s',
+      });
+      expect(CookieFiles.sites(bytes!), ['instagram.com', 'youtube.com']);
+      final merged = CookieFiles.merge([
+        file([row('.vimeo.com', 'vimeo', 'v')]),
+        bytes,
+      ]);
+      expect(CookieFiles.sites(merged!), [
+        'instagram.com',
+        'vimeo.com',
+        'youtube.com',
+      ]);
+    });
+  });
+
+  group('CookieFiles.names and without — one site at a time', () {
+    final bytes = file([
+      row('.youtube.com', 'SID', 'y1'),
+      row('#HttpOnly_.youtube.com', 'LOGIN_INFO', 'l'),
+      row('.vimeo.com', 'vimeo', 'v1'),
+      row('accounts.google.com', 'SID', 'g'),
+    ]);
+
+    test('names are grouped by site, HttpOnly rows included', () {
+      expect(CookieFiles.names(bytes), {
+        'youtube.com': {'SID', 'LOGIN_INFO'},
+        'vimeo.com': {'vimeo'},
+        'google.com': {'SID'},
+      });
+    });
+
+    test('without a site keeps the other sites as they were', () {
+      final left = CookieFiles.without(bytes, 'youtube.com');
+      expect(cookiesIn(left), [
+        row('.vimeo.com', 'vimeo', 'v1'),
+        row('accounts.google.com', 'SID', 'g'),
+      ]);
+    });
+
+    test('without the last site is null, so the file goes', () {
+      final only = file([row('.vimeo.com', 'vimeo', 'v1')]);
+      expect(CookieFiles.without(only, 'vimeo.com'), isNull);
+      expect(CookieFiles.without(only, 'x.com'), isNotNull);
+    });
+  });
 }

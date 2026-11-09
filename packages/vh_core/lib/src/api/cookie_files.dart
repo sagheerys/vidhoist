@@ -56,32 +56,91 @@ abstract final class CookieFiles {
   /// same site to the person reading, so each host is cut to its last two
   /// labels — three when the last two look like a country's second level
   /// (`bbc.co.uk`, not `co.uk`).
-  static List<String> sites(List<int> bytes) {
-    final found = <String>{};
+  static List<String> sites(List<int> bytes) =>
+      names(bytes).keys.toList()..sort();
+
+  /// The cookie names each site has in the file, by site as [sites] names
+  /// them: whether YouTube's sign-in is there is read off `SID`, not off
+  /// the mere presence of a consent cookie.
+  static Map<String, Set<String>> names(List<int> bytes) {
+    final found = <String, Set<String>>{};
+    for (final fields in _rows(bytes)) {
+      final site = _site(fields[0]);
+      if (site == null) continue;
+      (found[site] ??= {}).add(fields[5]);
+    }
+    return found;
+  }
+
+  /// The file without the cookies of [site] (as [sites] names it), or null
+  /// when nothing is left: signing out of one site keeps the others.
+  static List<int>? without(List<int> bytes, String site) {
+    final kept = [
+      for (final fields in _rows(bytes))
+        if (_site(fields[0]) != site) fields.join('\t'),
+    ];
+    if (kept.isEmpty) return null;
+    return utf8.encode('$header\n${kept.join('\n')}\n');
+  }
+
+  /// **A browser's cookies, as yt-dlp reads them.** Android's `CookieManager`
+  /// gives a page's cookies as one `Cookie:` header (`SID=a; HSID=b`), with
+  /// no path, expiry or flags; each becomes a session cookie of the page's
+  /// site (`.youtube.com`), secure, on `/`. The expiry field is left empty
+  /// rather than `0`: Python reads an empty field as "session" and sends
+  /// the cookie, where `0` is an expiry in 1970 and the cookie is dropped
+  /// at the first request. Null when no header carried a cookie.
+  static List<int>? fromHeaders(Map<String, String> headersByUrl) {
+    final byKey = <String, String>{};
+    for (final MapEntry(key: url, value: header) in headersByUrl.entries) {
+      final site = _site(Uri.tryParse(url)?.host ?? '');
+      if (site == null) continue;
+      for (final pair in header.split(';')) {
+        final at = pair.indexOf('=');
+        if (at <= 0) continue;
+        final name = pair.substring(0, at).trim();
+        final value = pair.substring(at + 1).trim();
+        if (name.isEmpty) continue;
+        byKey['$site\t$name'] = '.$site\tTRUE\t/\tTRUE\t\t$name\t$value';
+      }
+    }
+    if (byKey.isEmpty) return null;
+    return utf8.encode('$header\n${byKey.values.join('\n')}\n');
+  }
+
+  /// The cookie rows of a file, each as its seven (or more) fields, with
+  /// the `#HttpOnly_` prefix kept on the domain so [without] writes the
+  /// row back as it was.
+  static Iterable<List<String>> _rows(List<int> bytes) sync* {
     final text = utf8.decode(bytes, allowMalformed: true);
     for (final raw in const LineSplitter().convert(text)) {
       final line = raw.trim();
       if (line.isEmpty) continue;
       if (line.startsWith('#') && !line.startsWith(_httpOnly)) continue;
-      final fields = line.split('\t');
+      final fields = raw.trimLeft().split('\t');
       if (fields.length < 7) continue;
-      var host = fields[0];
-      if (host.startsWith(_httpOnly)) host = host.substring(_httpOnly.length);
-      final labels = host
-          .toLowerCase()
-          .split('.')
-          .where((label) => label.isNotEmpty)
-          .toList();
-      if (labels.isEmpty) continue;
-      final countrySecondLevel =
-          labels.length >= 3 &&
-          labels.last.length == 2 &&
-          labels[labels.length - 2].length <= 3;
-      final keep = countrySecondLevel ? 3 : 2;
-      found.add(
-        labels.skip(labels.length < keep ? 0 : labels.length - keep).join('.'),
-      );
+      yield fields;
     }
-    return found.toList()..sort();
+  }
+
+  /// A host's site: its last two labels, or three under a country's second
+  /// level. Null for an empty host.
+  static String? _site(String rawHost) {
+    var host = rawHost;
+    if (host.startsWith(_httpOnly)) host = host.substring(_httpOnly.length);
+    final labels = host
+        .toLowerCase()
+        .split('.')
+        .where((label) => label.isNotEmpty)
+        .toList();
+    if (labels.isEmpty) return null;
+    final countrySecondLevel =
+        labels.length >= 3 &&
+        labels.last.length == 2 &&
+        labels[labels.length - 2].length <= 3;
+    final keep = countrySecondLevel ? 3 : 2;
+    return labels
+        .skip(labels.length < keep ? 0 : labels.length - keep)
+        .join('.');
   }
 }

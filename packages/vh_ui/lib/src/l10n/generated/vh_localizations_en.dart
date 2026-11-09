@@ -20,6 +20,37 @@ class VhLocalizationsEn extends VhLocalizations {
       'A light, fast app that downloads video and audio from many platforms with yt-dlp, straight to your device, with no server in between. It has its own player and playlists.';
 
   @override
+  String get accountSignIn => 'Sign in';
+
+  @override
+  String get accountSignOut => 'Sign out';
+
+  @override
+  String get accountSignedIn => 'Signed in';
+
+  @override
+  String get accountSignedOut => 'Not signed in';
+
+  @override
+  String accountSignedOutOf(String site) {
+    return 'Signed out of $site';
+  }
+
+  @override
+  String get accountsClearAll => 'Delete all cookies';
+
+  @override
+  String get accountsCleared => 'Cookies deleted';
+
+  @override
+  String get accountsHelp =>
+      'A sign-in expires after a while; when a site starts refusing again, sign in once more. Signing out of one site also signs the in-app browser out of the others, whose downloads go on as they were.';
+
+  @override
+  String get accountsHint =>
+      'For the sites that refuse a download without a login. You sign in on the site\'s own page inside the app; what it leaves stays on this phone, where yt-dlp reads it for every download, and goes nowhere else.';
+
+  @override
   String get activeDownloads => 'Active downloads';
 
   @override
@@ -1749,6 +1780,23 @@ class VhLocalizationsEn extends VhLocalizations {
   String get lockTouch => 'Lock touch';
 
   @override
+  String get loginDone => 'Done';
+
+  @override
+  String loginKept(String site) {
+    return 'Signed in to $site; downloads will use it';
+  }
+
+  @override
+  String get loginNotYet =>
+      'No sign-in found yet. Finish signing in, then tap Done';
+
+  @override
+  String loginTitle(String site) {
+    return 'Sign in to $site';
+  }
+
+  @override
   String get logsEmpty => 'The log is empty';
 
   @override
@@ -1820,6 +1868,10 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get mobileSettingsGroupEngine => 'Engine';
+
+  @override
+  String get mobileSignInNeeded =>
+      'This site wants you signed in. Sign in from Settings › Accounts, then retry';
 
   @override
   String get mobileSubtitleOptions => 'Size, background and the transcript';
@@ -2335,6 +2387,9 @@ class VhLocalizationsEn extends VhLocalizations {
   String get settings => 'Settings';
 
   @override
+  String get settingsAccounts => 'Accounts';
+
+  @override
   String get settingsBackup => 'Backup';
 
   @override
@@ -2384,6 +2439,11 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get settingsValueQuick => 'quick';
+
+  @override
+  String settingsValueSignedIn(String sites) {
+    return 'Signed in: $sites';
+  }
 
   @override
   String get settingsValueSubtitlesShown => 'subtitles shown';

@@ -6,6 +6,13 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- Settings › Accounts on the phone: a sign-in to YouTube, Instagram,
+  Facebook, TikTok, X or Vimeo on the site's own page inside the app, for
+  the clips a site refuses without one (age checks, "confirm you're not a
+  bot", posts for followers). The sign-in stays on the phone, in the
+  app's private folder, where yt-dlp reads it for every download; a
+  download that failed for want of it offers the sign-in on its card, and
+  each site signs out from its row.
 - When a site moves on without yt-dlp and a download fails the way an
   outdated build fails (a page it can no longer read, a challenge it
   cannot solve, a 403), the engine updates itself and the download tries

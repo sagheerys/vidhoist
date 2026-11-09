@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/vh_media.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'features/accounts/accounts_state.dart';
 import 'features/downloads_library/download_wiring.dart';
 import 'features/engine/channel_backend.dart';
 import 'features/engine/engine_preparer.dart';
@@ -175,6 +177,12 @@ final downloadBackendProvider = Provider<DownloadBackend>(
     // phone's address.
     cacheDir: () async => (await getTemporaryDirectory()).path,
     forceIpv4: () => ref.read(settingsProvider).forceIpv4,
+    // The sign-ins of Settings › Accounts, once there is a file: yt-dlp
+    // refuses to start on a `--cookies` path that does not exist.
+    cookiesFile: () {
+      final path = ref.read(cookiesFileProvider);
+      return path != null && File(path).existsSync() ? path : null;
+    },
     ready: ref.watch(enginePreparerProvider).ensure,
   ),
 );

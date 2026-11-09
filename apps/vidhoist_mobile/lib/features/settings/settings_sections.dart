@@ -4,6 +4,8 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
+import '../accounts/accounts_fields.dart';
+import '../accounts/accounts_state.dart';
 import '../channels/channels_state.dart';
 import '../update/update_state.dart';
 import 'widgets/engine_fields.dart';
@@ -15,6 +17,7 @@ import 'settings_state.dart';
 /// engine comes first.
 enum SettingsPane {
   engine,
+  accounts,
   channels,
   downloads,
   playback,
@@ -58,6 +61,12 @@ List<(String, List<SettingsEntry>)> settingsGroups(
           VhIcons.bolt,
           l10n.mobileSettingsEngine,
           v.engine(),
+        ),
+        SettingsEntry(
+          SettingsPane.accounts,
+          VhIcons.lock,
+          l10n.settingsAccounts,
+          v.accounts(),
         ),
         SettingsEntry(
           SettingsPane.channels,
@@ -140,6 +149,9 @@ class _Values {
     ref.watch(engineStatusProvider).valueOrNull ??
         ref.read(enginePreparerProvider).status,
   );
+
+  String accounts() =>
+      accountsSummary(l10n, ref.watch(signedInSitesProvider));
 
   /// How many are followed, or what the section is for while reading.
   String channels() => switch (ref.watch(channelsProvider).valueOrNull) {

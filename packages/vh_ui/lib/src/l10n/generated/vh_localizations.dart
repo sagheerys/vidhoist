@@ -116,6 +116,60 @@ abstract class VhLocalizations {
   /// **'A light, fast app that downloads video and audio from many platforms with yt-dlp, straight to your device, with no server in between. It has its own player and playlists.'**
   String get aboutDescriptionPhone;
 
+  /// No description provided for @accountSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get accountSignIn;
+
+  /// No description provided for @accountSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get accountSignOut;
+
+  /// No description provided for @accountSignedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in'**
+  String get accountSignedIn;
+
+  /// No description provided for @accountSignedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Not signed in'**
+  String get accountSignedOut;
+
+  /// No description provided for @accountSignedOutOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed out of {site}'**
+  String accountSignedOutOf(String site);
+
+  /// No description provided for @accountsClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all cookies'**
+  String get accountsClearAll;
+
+  /// No description provided for @accountsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookies deleted'**
+  String get accountsCleared;
+
+  /// No description provided for @accountsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'A sign-in expires after a while; when a site starts refusing again, sign in once more. Signing out of one site also signs the in-app browser out of the others, whose downloads go on as they were.'**
+  String get accountsHelp;
+
+  /// No description provided for @accountsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For the sites that refuse a download without a login. You sign in on the site\'s own page inside the app; what it leaves stays on this phone, where yt-dlp reads it for every download, and goes nowhere else.'**
+  String get accountsHint;
+
   /// No description provided for @activeDownloads.
   ///
   /// In en, this message translates to:
@@ -3002,6 +3056,30 @@ abstract class VhLocalizations {
   /// **'Lock touch'**
   String get lockTouch;
 
+  /// No description provided for @loginDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get loginDone;
+
+  /// No description provided for @loginKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in to {site}; downloads will use it'**
+  String loginKept(String site);
+
+  /// No description provided for @loginNotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No sign-in found yet. Finish signing in, then tap Done'**
+  String get loginNotYet;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to {site}'**
+  String loginTitle(String site);
+
   /// No description provided for @logsEmpty.
   ///
   /// In en, this message translates to:
@@ -3127,6 +3205,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Engine'**
   String get mobileSettingsGroupEngine;
+
+  /// No description provided for @mobileSignInNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'This site wants you signed in. Sign in from Settings › Accounts, then retry'**
+  String get mobileSignInNeeded;
 
   /// No description provided for @mobileSubtitleOptions.
   ///
@@ -4040,6 +4124,12 @@ abstract class VhLocalizations {
   /// **'Settings'**
   String get settings;
 
+  /// No description provided for @settingsAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get settingsAccounts;
+
   /// No description provided for @settingsBackup.
   ///
   /// In en, this message translates to:
@@ -4123,6 +4213,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'quick'**
   String get settingsValueQuick;
+
+  /// No description provided for @settingsValueSignedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in: {sites}'**
+  String settingsValueSignedIn(String sites);
 
   /// No description provided for @settingsValueSubtitlesShown.
   ///
