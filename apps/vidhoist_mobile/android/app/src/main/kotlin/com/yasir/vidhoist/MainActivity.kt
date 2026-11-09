@@ -107,6 +107,12 @@ class MainActivity : AudioServiceActivity() {
                 "supportedAbis" -> result.success(android.os.Build.SUPPORTED_ABIS.toList())
                 // Cards and drives a download may go to (StorageVolumes).
                 "volumes" -> result.success(StorageVolumes.list(applicationContext))
+                // The name the owner gave this phone, shown on the computer
+                // when it pairs; the model when there is none.
+                "deviceName" -> result.success(
+                    android.provider.Settings.Global.getString(contentResolver, "device_name")
+                        ?: "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}",
+                )
                 // The launcher shortcut's destination, **consumed once**.
                 // Keeping it would re-run the shortcut on every return to the
                 // app.

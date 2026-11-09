@@ -1,3 +1,8 @@
+import '../pc/pc_destination.dart';
+import '../pc/pc_errors.dart';
+import '../pc/pc_link_state.dart';
+import '../pc/pc_pairing_store.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -96,6 +101,27 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
   late String _quality = ref.read(settingsProvider).quality.wire;
   late String _url = _controller.text;
 
+  /// The paired computer answered just now: only then is it offered.
+  var _pcReachable = false;
+  var _toPc = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (ref.read(pcPairingProvider) == null) return;
+    unawaited(_lookForPc());
+  }
+
+  Future<void> _lookForPc() async {
+    final toPc = await readSendToPc(ref.read(keyValueStoreProvider));
+    final reachable = await ref.read(pcViewProvider.notifier).probe();
+    if (!mounted) return;
+    setState(() {
+      _pcReachable = reachable;
+      _toPc = toPc;
+    });
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -120,6 +146,9 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
       VhQualityOption(value: 'audio', label: l10n.audioOnly),
     ];
     if (!qualities.any((q) => q.value == _quality)) _quality = 'best';
+    final pc = ref.watch(pcPairingProvider);
+    final showPc = pc != null && offerPc(ref, _url, reachable: _pcReachable);
+    final toPc = showPc && _toPc;
 
     return VhUrlInputSheet(
       title: l10n.addUrl,
@@ -132,12 +161,22 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
       qualities: qualities,
       selectedQuality: _quality,
       onQualitySelected: (value) => setState(() => _quality = value),
-      startLabel: l10n.startDownload,
-      onStart: () => unawaited(_submit()),
+      extra: showPc
+          ? PcDestination(
+              pcName: pc.name,
+              toPc: _toPc,
+              onChanged: (value) {
+                setState(() => _toPc = value);
+                unawaited(writeSendToPc(ref, value));
+              },
+            )
+          : null,
+      startLabel: toPc ? l10n.pcSendToPc : l10n.startDownload,
+      onStart: () => unawaited(_submit(toPc: toPc)),
     );
   }
 
-  Future<void> _submit() async {
+  Future<void> _submit({bool toPc = false}) async {
     final l10n = widget.l10n;
     final input = UrlKit.extractUrl(_controller.text);
     if (!input.startsWith('http')) {
@@ -162,6 +201,10 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
       widget.router.push('/batch', extra: url);
       return;
     }
+    if (toPc) {
+      await _sendToPc(url);
+      return;
+    }
     final engine = ref.read(downloadEngineProvider);
     if (engine == null) {
       showVhSnackOn(
@@ -177,6 +220,28 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
       l10n.downloadStarted,
       type: VhSnackType.success,
     );
+  }
+}
+
+extension on _AddSheetState {
+  /// Queues [url] on the paired computer rather than on this phone.
+  Future<void> _sendToPc(String url) async {
+    final l10n = widget.l10n;
+    final name = ref.read(pcPairingProvider)?.name ?? '';
+    try {
+      await ref.read(pcViewProvider.notifier).submit(url, _quality);
+      showVhSnackOn(
+        widget.messenger,
+        l10n.pcSent(name),
+        type: VhSnackType.success,
+      );
+    } on PcLinkException catch (e) {
+      showVhSnackOn(
+        widget.messenger,
+        pcFailureText(l10n, e.failure),
+        type: VhSnackType.error,
+      );
+    }
   }
 }
 

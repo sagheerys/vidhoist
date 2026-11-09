@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'features/pc/pc_pairing_store.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/vh_media.dart';
@@ -301,9 +303,11 @@ final backupServiceProvider = Provider(
     // When this install last updated its engine: restored on a new phone
     // it would skip the update the shipped yt-dlp needs.
     // Which card downloads go to: another phone's card has another id.
+    // The computer this phone pairs with belongs to this phone alone.
     deviceOnlyKeys: {
       ...EngineRefresh.deviceOnlyKeys,
       PhoneSettings.downloadVolumeKey,
+      ...pcDeviceOnlyKeys,
     },
   ),
 );

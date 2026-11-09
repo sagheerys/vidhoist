@@ -14,6 +14,7 @@ import 'folders_pane.dart';
 import 'keep_in_view.dart';
 import 'logs_pane.dart';
 import 'pane_entry.dart';
+import 'phone_pane.dart';
 import 'simple_panes.dart';
 import 'transcripts_pane.dart';
 import 'updates_pane.dart';
@@ -158,6 +159,7 @@ class SettingsPlace extends ConsumerWidget {
                             const DownloadsPane(),
                           DesktopSettingsPane.folders => const FoldersPane(),
                           DesktopSettingsPane.desktop => const DesktopPane(),
+                          DesktopSettingsPane.phone => const PhonePane(),
                           DesktopSettingsPane.backup => const BackupPane(),
                           DesktopSettingsPane.cookies => const CookiesPane(),
                           DesktopSettingsPane.subscriptions =>
@@ -191,6 +193,7 @@ String paneTitle(VhLocalizations l, DesktopSettingsPane pane) => switch (pane) {
   DesktopSettingsPane.folders => l.desktopFolders,
   DesktopSettingsPane.appearance => l.appearanceAndLanguage,
   DesktopSettingsPane.desktop => l.desktopDesktopSection,
+  DesktopSettingsPane.phone => l.pcLinkTitle,
   DesktopSettingsPane.transcripts => l.settingsTranscripts,
   DesktopSettingsPane.backup => l.settingsBackup,
   DesktopSettingsPane.updates => l.updates,

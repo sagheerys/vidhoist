@@ -102,6 +102,7 @@ void main() {
       SettingsPane.accounts: l10n.settingsAccounts,
       SettingsPane.channels: l10n.desktopChannels,
       SettingsPane.downloads: l10n.settingsDownloads,
+      SettingsPane.pc: l10n.pcTab,
       SettingsPane.playback: l10n.settingsPlayback,
       SettingsPane.appearance: l10n.appearanceAndLanguage,
       SettingsPane.backup: l10n.settingsBackup,

@@ -1,3 +1,5 @@
+import '../pc/pc_settings_fields.dart';
+
 import 'package:flutter/material.dart';
 import 'package:vh_ui/vh_ui.dart';
 
@@ -35,6 +37,10 @@ class SettingsPage extends StatelessWidget {
       SettingsPane.downloads => VhSettingsPage(
         title: l10n.settingsDownloads,
         child: const DownloadFields(),
+      ),
+      SettingsPane.pc => VhSettingsPage(
+        title: l10n.pcTab,
+        child: const PcSettingsFields(),
       ),
       SettingsPane.playback => VhSettingsPage(
         title: l10n.settingsPlayback,

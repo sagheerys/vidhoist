@@ -3620,6 +3620,318 @@ abstract class VhLocalizations {
   /// **'Pause'**
   String get pauseSubscription;
 
+  /// No description provided for @pcAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get pcAddressLabel;
+
+  /// No description provided for @pcBadAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Type the address as the computer shows it, for example 192.168.1.24:47321.'**
+  String get pcBadAddress;
+
+  /// No description provided for @pcCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Computer\'s certificate'**
+  String get pcCertificate;
+
+  /// No description provided for @pcCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get pcCodeLabel;
+
+  /// No description provided for @pcConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get pcConnected;
+
+  /// No description provided for @pcDestPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone'**
+  String get pcDestPhone;
+
+  /// No description provided for @pcEmptyLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'No downloads on the computer yet.'**
+  String get pcEmptyLibrary;
+
+  /// No description provided for @pcErrBad.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer answered in a way this version does not understand. Update both apps.'**
+  String get pcErrBad;
+
+  /// No description provided for @pcErrClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'No code is showing on the computer, or it expired. Press Pair a phone there.'**
+  String get pcErrClosed;
+
+  /// No description provided for @pcErrDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'The pairing was refused on the computer, or not answered in time.'**
+  String get pcErrDenied;
+
+  /// No description provided for @pcErrRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer would not take this link.'**
+  String get pcErrRefused;
+
+  /// No description provided for @pcErrUnauthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer no longer knows this phone. Pair again.'**
+  String get pcErrUnauthorized;
+
+  /// No description provided for @pcErrUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer did not answer. Is it on, on this Wi-Fi, with Receive from the phone turned on?'**
+  String get pcErrUnreachable;
+
+  /// No description provided for @pcErrWrongCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Something other than your computer answered at this address. Nothing was sent.'**
+  String get pcErrWrongCertificate;
+
+  /// No description provided for @pcErrWrongCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong code.'**
+  String get pcErrWrongCode;
+
+  /// No description provided for @pcLastContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Last contact {time}'**
+  String pcLastContact(String time);
+
+  /// No description provided for @pcLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Library on the computer'**
+  String get pcLibrary;
+
+  /// No description provided for @pcLinkAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address on this network'**
+  String get pcLinkAddress;
+
+  /// No description provided for @pcLinkAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get pcLinkAllow;
+
+  /// No description provided for @pcLinkCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'On the phone: Settings › Computer › Pair with a computer, then type this address and code. The code works once, for two minutes.'**
+  String get pcLinkCodeHint;
+
+  /// No description provided for @pcLinkCodeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds} s left'**
+  String pcLinkCodeLeft(int seconds);
+
+  /// No description provided for @pcLinkCodeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pairing code'**
+  String get pcLinkCodeTitle;
+
+  /// No description provided for @pcLinkDeny.
+  ///
+  /// In en, this message translates to:
+  /// **'Refuse'**
+  String get pcLinkDeny;
+
+  /// No description provided for @pcLinkDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Paired phones'**
+  String get pcLinkDevices;
+
+  /// No description provided for @pcLinkFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not start: {error}'**
+  String pcLinkFailed(String error);
+
+  /// No description provided for @pcLinkIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Send links from VidHoist on your phone to this computer, and see its downloads and library there. It works on your home network only.'**
+  String get pcLinkIntro;
+
+  /// No description provided for @pcLinkLastSeen.
+  ///
+  /// In en, this message translates to:
+  /// **'Last heard from {time}'**
+  String pcLinkLastSeen(String time);
+
+  /// No description provided for @pcLinkNoDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No phone yet.'**
+  String get pcLinkNoDevices;
+
+  /// No description provided for @pcLinkOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get pcLinkOff;
+
+  /// No description provided for @pcLinkPairPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair a phone'**
+  String get pcLinkPairPhone;
+
+  /// No description provided for @pcLinkPairedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Paired {time}'**
+  String pcLinkPairedAt(String time);
+
+  /// No description provided for @pcLinkPhones.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No phone} =1{One phone} other{{count} phones}}'**
+  String pcLinkPhones(int count);
+
+  /// No description provided for @pcLinkReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive from the phone'**
+  String get pcLinkReceive;
+
+  /// No description provided for @pcLinkReceiveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'While it is off, no port is open on this computer. If Windows asks, allow private networks only.'**
+  String get pcLinkReceiveHint;
+
+  /// No description provided for @pcLinkRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} asks to pair'**
+  String pcLinkRequest(String name);
+
+  /// No description provided for @pcLinkRequestHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow only if the phone shows the same four digits.'**
+  String get pcLinkRequestHint;
+
+  /// No description provided for @pcLinkRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair'**
+  String get pcLinkRevoke;
+
+  /// No description provided for @pcLinkSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing leaves your network. A phone pairs once, with the code and your approval here; after that it must show its own key on every request, over a connection encrypted to this computer\'s certificate alone. Anyone else on the network finds a closed door.'**
+  String get pcLinkSecurity;
+
+  /// No description provided for @pcLinkStarting.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting…'**
+  String get pcLinkStarting;
+
+  /// No description provided for @pcLinkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get pcLinkTitle;
+
+  /// No description provided for @pcNow.
+  ///
+  /// In en, this message translates to:
+  /// **'On the computer now'**
+  String get pcNow;
+
+  /// No description provided for @pcOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get pcOffline;
+
+  /// No description provided for @pcOfflineMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer is off or on another network. What it had last time is shown below.'**
+  String get pcOfflineMessage;
+
+  /// No description provided for @pcPairButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair'**
+  String get pcPairButton;
+
+  /// No description provided for @pcPairCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that the computer shows {check}, then allow the phone there.'**
+  String pcPairCheck(String check);
+
+  /// No description provided for @pcPairIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then type here the address and code it shows.'**
+  String get pcPairIntro;
+
+  /// No description provided for @pcPairStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair with a computer'**
+  String get pcPairStart;
+
+  /// No description provided for @pcPaired.
+  ///
+  /// In en, this message translates to:
+  /// **'Paired with {name}'**
+  String pcPaired(String name);
+
+  /// No description provided for @pcSendToPc.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to the computer'**
+  String get pcSendToPc;
+
+  /// No description provided for @pcSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to {name}'**
+  String pcSent(String name);
+
+  /// No description provided for @pcSettingsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Send links to your computer'**
+  String get pcSettingsHint;
+
+  /// No description provided for @pcTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Computer'**
+  String get pcTab;
+
   /// No description provided for @percentValue.
   ///
   /// In en, this message translates to:
