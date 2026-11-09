@@ -37,6 +37,10 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
+  String get accountsBanRisk =>
+      'Better use a secondary account: heavy downloading can get an account restricted by the site for a while.';
+
+  @override
   String get accountsClearAll => 'Delete all cookies';
 
   @override

@@ -37,6 +37,10 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String get accountsBanRisk =>
+      'يُفضّل استخدام حساب ثانوي: التنزيل الكثيف قد يعرّض الحساب لتقييد مؤقت من الموقع.';
+
+  @override
   String get accountsClearAll => 'حذف كل الكوكيز';
 
   @override

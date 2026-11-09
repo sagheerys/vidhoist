@@ -119,6 +119,20 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
           style: text.bodyMedium?.copyWith(color: p.ink2),
         ),
         const SizedBox(height: VhSpace.sm),
+        // yt-dlp's own guide warns that an account used with it can be
+        // restricted; the owner should read that before handing one over.
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: VhIcon(VhIcons.alert, color: p.err),
+            ),
+            const SizedBox(width: VhSpace.sm),
+            Expanded(child: Text(l.accountsBanRisk, style: text.bodyMedium)),
+          ],
+        ),
+        const SizedBox(height: VhSpace.sm),
         SettingLine(
           title: l.desktopCookiesFile,
           value: file == null

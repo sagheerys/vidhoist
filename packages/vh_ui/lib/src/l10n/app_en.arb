@@ -402,6 +402,7 @@
   "accountSignedIn": "Signed in",
   "accountSignedOut": "Not signed in",
   "accountSignedOutOf": "Signed out of {site}",
+  "accountsBanRisk": "Better use a secondary account: heavy downloading can get an account restricted by the site for a while.",
   "accountsClearAll": "Delete all cookies",
   "accountsCleared": "Cookies deleted",
   "accountsHelp": "A sign-in expires after a while; when a site starts refusing again, sign in once more. Signing out of one site also signs the in-app browser out of the others, whose downloads go on as they were.",

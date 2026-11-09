@@ -6,6 +6,9 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- A warning beside the sign-ins (Accounts on the phone, Cookies on
+  Windows): better a secondary account, since heavy downloading can get
+  an account restricted by the site for a while.
 - "Repair the engine", in the engine settings of both apps, for downloads
   failing across sites when an update did not help: it clears what yt-dlp
   saved between runs and puts back a clean, current copy, even when the

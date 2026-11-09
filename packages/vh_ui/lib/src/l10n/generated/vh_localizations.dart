@@ -146,6 +146,12 @@ abstract class VhLocalizations {
   /// **'Signed out of {site}'**
   String accountSignedOutOf(String site);
 
+  /// No description provided for @accountsBanRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Better use a secondary account: heavy downloading can get an account restricted by the site for a while.'**
+  String get accountsBanRisk;
+
   /// No description provided for @accountsClearAll.
   ///
   /// In en, this message translates to:

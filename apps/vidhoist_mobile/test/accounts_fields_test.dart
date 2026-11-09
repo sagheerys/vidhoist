@@ -86,6 +86,7 @@ void main() {
       findsNWidgets(LoginSite.values.length),
     );
     expect(find.text(l10n.accountsClearAll), findsNothing);
+    expect(find.text(l10n.accountsBanRisk), findsOneWidget);
   });
 
   testWidgets('the sign-in button opens the site\'s sign-in page', (

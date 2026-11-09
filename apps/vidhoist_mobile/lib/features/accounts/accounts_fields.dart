@@ -30,6 +30,8 @@ class AccountsFields extends ConsumerWidget {
       children: [
         Text(l10n.accountsHint, style: text.bodySmall?.copyWith(color: p.ink2)),
         const SizedBox(height: VhSpace.sm),
+        AccountRiskNote(text: l10n.accountsBanRisk),
+        const SizedBox(height: VhSpace.sm),
         for (final site in LoginSite.values)
           _SiteRow(
             site: site,
@@ -75,6 +77,32 @@ class AccountsFields extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     await ref.read(accountsProvider)?.forgetAll();
     showVhSnackOn(messenger, l10n.accountsCleared);
+  }
+}
+
+/// The warning that sits before any sign-in: yt-dlp's own guide says an
+/// account used with it can be restricted, so the owner should learn it
+/// here rather than from a locked account.
+class AccountRiskNote extends StatelessWidget {
+  const AccountRiskNote({required this.text, super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    final style = Theme.of(context).textTheme.bodySmall;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: VhIcon(VhIcons.alert, color: p.err),
+        ),
+        const SizedBox(width: VhSpace.sm),
+        Expanded(child: Text(text, style: style)),
+      ],
+    );
   }
 }
 
