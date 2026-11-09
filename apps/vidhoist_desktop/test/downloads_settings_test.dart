@@ -7,6 +7,7 @@ import 'package:vidhoist_desktop/data/folders_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/downloads/downloads_panel.dart';
 import 'package:vidhoist_desktop/features/settings/folders_pane.dart';
+import 'package:vidhoist_desktop/features/settings/pane_entry.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vh_core/vh_core.dart';
@@ -131,6 +132,22 @@ void main() {
       final change = tester.getRect(find.text('Change…').first);
       final open_ = tester.getRect(find.text('Open in Explorer').first);
       expect(open_.left - change.right, greaterThanOrEqualTo(VhSpace.lg));
+    });
+
+    testWidgets('**the guard**: every section has its row in the list', (
+      tester,
+    ) async {
+      // The list is written by hand: a section added to the enum and the
+      // pages but not here opened by its address only, and the owner found
+      // no way to it (Phone, 2026-11-09).
+      await open(tester, to: '/settings/subscriptions');
+      final listed = {
+        for (final entry in tester.widgetList<PaneEntry>(
+          find.byType(PaneEntry, skipOffstage: false),
+        ))
+          entry.pane,
+      };
+      expect(listed, DesktopSettingsPane.values.toSet());
     });
 
     testWidgets('**the guard**: every section opens a page of its own, none '

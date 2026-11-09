@@ -55,6 +55,7 @@ class SettingsPlace extends ConsumerWidget {
           DesktopSettingsPane.folders,
           DesktopSettingsPane.appearance,
           DesktopSettingsPane.desktop,
+          DesktopSettingsPane.phone,
           DesktopSettingsPane.transcripts,
         ],
       ),
