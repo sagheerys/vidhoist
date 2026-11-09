@@ -5,6 +5,7 @@ import 'package:vh_core/vh_core.dart';
 
 import '../../di.dart';
 import '../downloads_library/local_item.dart';
+import '../storage/media_folder_rename.dart';
 
 /// The backups folder, inside the app's media folder (§5.3).
 const phoneBackupDir = '$phoneMediaDir/backups';
@@ -113,7 +114,11 @@ class AutoBackup {
   Future<List<BackupFile>> list() => rotation.list();
   Future<BackupFile?> latest() => rotation.latest();
 
-  /// Restores one specific copy.
-  Future<ImportResult> restore(BackupFile file) async =>
-      service.importFromString(await rotation.read(file));
+  /// Restores one specific copy. A copy written before the folder became
+  /// `VidHoist` brings the old spelling back, so the paths are fixed again.
+  Future<ImportResult> restore(BackupFile file) async {
+    final result = await service.importFromString(await rotation.read(file));
+    await rewriteStoredPaths(service.store, service.mutex);
+    return result;
+  }
 }

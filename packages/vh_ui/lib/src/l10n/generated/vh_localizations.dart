@@ -4364,6 +4364,36 @@ abstract class VhLocalizations {
   /// **'Status'**
   String get status;
 
+  /// No description provided for @storageCardMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The card is not in, so downloads go to the phone'**
+  String get storageCardMissing;
+
+  /// No description provided for @storageLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to'**
+  String get storageLocation;
+
+  /// No description provided for @storageLocationHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Clips already downloaded stay where they are and still show in the library. A memory card needs Android 11 or later.'**
+  String get storageLocationHelp;
+
+  /// No description provided for @storageNoCard.
+  ///
+  /// In en, this message translates to:
+  /// **'No memory card in this phone'**
+  String get storageNoCard;
+
+  /// No description provided for @storagePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone storage'**
+  String get storagePhone;
+
   /// No description provided for @streamingOnline.
   ///
   /// In en, this message translates to:

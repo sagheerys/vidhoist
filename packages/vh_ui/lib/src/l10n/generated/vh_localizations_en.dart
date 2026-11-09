@@ -2518,6 +2518,23 @@ class VhLocalizationsEn extends VhLocalizations {
   String get status => 'Status';
 
   @override
+  String get storageCardMissing =>
+      'The card is not in, so downloads go to the phone';
+
+  @override
+  String get storageLocation => 'Save to';
+
+  @override
+  String get storageLocationHelp =>
+      'Clips already downloaded stay where they are and still show in the library. A memory card needs Android 11 or later.';
+
+  @override
+  String get storageNoCard => 'No memory card in this phone';
+
+  @override
+  String get storagePhone => 'Phone storage';
+
+  @override
   String get streamingOnline => 'Streaming online';
 
   @override

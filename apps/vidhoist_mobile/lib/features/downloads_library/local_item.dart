@@ -1,10 +1,16 @@
 import 'package:vh_core/vh_core.dart';
 
-/// The media folder (§5.3), fixed for good with the first release (ADR
-/// 0002). Its contents are registered in MediaStore so they appear in the
-/// phone's gallery. A folder of its own, so no other app's files mix into
-/// the library.
-const phoneMediaDir = '/storage/emulated/0/Download/Vidhoist';
+/// The media folder's name, spelled as the app is shown (2026-11-09). It
+/// was `Vidhoist` before; Android's shared storage ignores letter case, so
+/// the old folder answers to this name too, and `media_folder_rename.dart`
+/// renames it on disk and in the saved paths.
+const mediaFolderName = 'VidHoist';
+
+/// The media folder on the phone's own storage (§5.3, ADR 0002). Its
+/// contents are registered in MediaStore so they appear in the phone's
+/// gallery. A folder of its own, so no other app's files mix into the
+/// library. A memory card has one of the same name (`phone_volumes.dart`).
+const phoneMediaDir = '/storage/emulated/0/Download/$mediaFolderName';
 
 const _audioExtensions = {'mp3', 'm4a', 'aac', 'ogg', 'opus', 'wav', 'flac'};
 const _videoExtensions = {'mp4', 'webm', 'mkv', 'mov', 'avi', '3gp', 'm4v'};

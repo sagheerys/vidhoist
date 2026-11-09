@@ -1,7 +1,7 @@
 # VidHoist for Android
 
 The phone app: paste a link, pick a quality, keep the file in
-`Download/Vidhoist`. Its library is a scan of that folder, with its own
+`Download/VidHoist`, or on a memory card. Its library is a scan of that folder, with its own
 player, playlists and transcripts.
 
 - Identity: `com.yasir.vidhoist`, label "Vidhoist", launcher icons in

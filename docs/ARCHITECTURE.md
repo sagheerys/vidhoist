@@ -19,7 +19,7 @@ The Arabic version of this document follows the English one.
 |---|---|---|
 | Came from | Vidhoist Lite | Vidhoist Ember |
 | yt-dlp runs through | youtubedl-android (`YtDlpBridge.kt`, `ChannelYtDlpBackend`), kept alive by `EngineService.kt` | `yt-dlp.exe` beside the app or in `tools\` (`ProcessYtDlpBackend`, a Job object per run), with ffmpeg and Deno fetched on first need |
-| Library | The download folder, scanned (`Download/Vidhoist`) | `LocalHistoryStore` and a watch on the download folder |
+| Library | The download folder, scanned (`Download/VidHoist`, and the same folder on a memory card) | `LocalHistoryStore` and a watch on the download folder |
 | At once | One download | As set in Settings › Engine |
 | Exclusive | Wi-Fi only, share sheet, picture in picture, a sign-in page per site (Settings › Accounts) | Tags, lists, reading room, browser button, tray, channels; cookies from a file or the computer's browser (Settings › Cookies) |
 
@@ -163,7 +163,7 @@ Vidhoist. منذ المرحلة 1 (2026-11-06) لا سيرفر: التطبيقا
 |---|---|---|
 | أصله | Vidhoist Lite | Vidhoist Ember |
 | yt-dlp يعمل عبر | youtubedl-android (`YtDlpBridge.kt` و`ChannelYtDlpBackend`)، وتبقيه حياً `EngineService.kt` | `yt-dlp.exe` بجانب التطبيق أو في `tools\` (`ProcessYtDlpBackend`، بكائن Job لكل تشغيل)، وffmpeg وDeno يُنزَّلان عند أول حاجة |
-| المكتبة | مسح مجلد التنزيل (`Download/Vidhoist`) | `LocalHistoryStore` ومراقبة مجلد التنزيل |
+| المكتبة | مسح مجلد التنزيل (`Download/VidHoist`، ومثله على بطاقة الذاكرة) | `LocalHistoryStore` ومراقبة مجلد التنزيل |
 | التزامن | تنزيل واحد | كما يُضبط في الإعدادات › المحرّك |
 | الحصري | Wi-Fi فقط، المشاركة إلى التطبيق، الصورة داخل الصورة | الوسوم، القوائم، غرفة القراءة، زر المتصفح، الدرج؛ القنوات والمزامنة خلف مفتاح (الإعدادات › المحرّك) |
 

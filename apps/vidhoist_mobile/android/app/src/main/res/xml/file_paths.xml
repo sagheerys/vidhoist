@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- The shared-storage root. Only the app's own files under
-     Download/Vidhoist are ever shared, and permission is granted for the one
+     Download/VidHoist are ever shared, and permission is granted for the one
      file named in each call. -->
 <paths>
     <external-path name="shared" path="." />
+    <!-- Memory cards and drives (/storage/1A2B-3C4D/...), where downloads
+         may go since the storage setting: "external-path" is only the
+         phone's own storage, and opening a card's file in another player
+         failed without this. -->
+    <root-path name="volumes" path="storage" />
     <!-- The downloaded update APK, handed to the package installer as a
          content:// URI. The **internal** cache, not the external one: it needs
          no storage permission and the system reclaims it when space runs low. -->
