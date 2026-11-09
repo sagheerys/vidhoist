@@ -9,6 +9,7 @@ import 'package:vh_ui/vh_ui.dart';
 import 'pc_errors.dart';
 import 'pc_link_state.dart';
 import 'pc_pairing_store.dart';
+import 'pc_scan.dart';
 
 /// **Settings › Computer**: pair with VidHoist on a Windows computer, or
 /// see the pairing and undo it. Until a pairing exists, this page is the
@@ -113,6 +114,50 @@ class _PairFormState extends ConsumerState<_PairForm> {
       setState(() => _error = l10n.pcErrWrongCode);
       return;
     }
+    final pair = ref.read(pcPairerProvider);
+    await _run(
+      (phoneName, onCheck) => pair(
+        host: address.$1,
+        port: address.$2,
+        code: code,
+        phoneName: phoneName,
+        onCheck: onCheck,
+      ),
+    );
+  }
+
+  /// The computer's QR code: its addresses, code and certificate in one
+  /// look, nothing typed (owner's request, 2026-11-10).
+  Future<void> _scan() async {
+    final l10n = context.vhl;
+    final String? read;
+    try {
+      read = await ref.read(pcScannerProvider)(l10n.pcScanPrompt);
+    } on PlatformException {
+      if (mounted) setState(() => _error = l10n.pcScanFailed);
+      return;
+    }
+    if (read == null || !mounted) return;
+    final offer = PcPairOffer.parse(read);
+    if (offer == null) {
+      setState(() => _error = l10n.pcBadQr);
+      return;
+    }
+    final pair = ref.read(pcOfferPairerProvider);
+    await _run(
+      (phoneName, onCheck) =>
+          pair(offer: offer, phoneName: phoneName, onCheck: onCheck),
+    );
+  }
+
+  Future<void> _run(
+    Future<PcPairing> Function(
+      String phoneName,
+      void Function(String check) onCheck,
+    )
+    attempt,
+  ) async {
+    final l10n = context.vhl;
     final messenger = ScaffoldMessenger.of(context);
     setState(() {
       _busy = true;
@@ -120,15 +165,11 @@ class _PairFormState extends ConsumerState<_PairForm> {
       _check = null;
     });
     try {
-      final pairing = await ref.read(pcPairerProvider)(
-        host: address.$1,
-        port: address.$2,
-        code: code,
-        phoneName: await ref.read(pcPhoneNameProvider)(),
-        onCheck: (check) {
-          if (mounted) setState(() => _check = check);
-        },
-      );
+      final pairing = await attempt(await ref.read(pcPhoneNameProvider)(), (
+        check,
+      ) {
+        if (mounted) setState(() => _check = check);
+      });
       await ref.read(pcPairingProvider.notifier).save(pairing);
       showVhSnackOn(
         messenger,
@@ -158,6 +199,13 @@ class _PairFormState extends ConsumerState<_PairForm> {
       children: [
         Text(l10n.pcPairIntro, style: text.bodySmall?.copyWith(color: p.ink2)),
         const SizedBox(height: VhSpace.lg),
+        FilledButton.icon(
+          onPressed: _busy ? null : () => unawaited(_scan()),
+          icon: const VhIcon(VhIcons.qrScan),
+          label: Text(l10n.pcScanButton),
+        ),
+        const SizedBox(height: VhSpace.lg),
+        Text(l10n.pcOrType, style: text.bodySmall?.copyWith(color: p.ink2)),
         // The port has its own field: the phone's number pad has a dot but
         // no colon (owner's report, 2026-11-09), and it is rarely needed.
         Row(
@@ -237,7 +285,7 @@ class _PairFormState extends ConsumerState<_PairForm> {
           Text(error, style: text.bodySmall?.copyWith(color: p.err)),
           const SizedBox(height: VhSpace.md),
         ],
-        FilledButton(
+        OutlinedButton(
           onPressed: _busy ? null : () => unawaited(_pair()),
           child: _busy ? const VhSpinner(size: 18) : Text(l10n.pcPairButton),
         ),

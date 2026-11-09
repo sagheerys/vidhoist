@@ -10,6 +10,7 @@ import 'package:vidhoist_desktop/data/pc_link_addresses.dart';
 import 'package:vidhoist_desktop/data/pc_link_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/settings/phone_pane.dart';
+import 'package:vidhoist_desktop/features/settings/phone_qr.dart';
 
 import 'desktop_matrix.dart';
 
@@ -205,6 +206,21 @@ void main() {
     await pumpEventQueue();
     expect(seen.last, 1);
     expect(seen.first, 0);
+  });
+
+  testWidgets('**the guard**: the QR code carries every address, home '
+      'first, the code and the fingerprint of this computer', (tester) async {
+    await turnOn(tester);
+    await tester.tap(find.text(l.pcLinkPairPhone));
+    await tester.pump();
+    final qr = tester.widget<PhoneQr>(find.byType(PhoneQr));
+    final offer = PcPairOffer.parse(qr.data)!;
+    expect(offer.hosts, ['192.168.1.24', '100.101.102.103', '192.168.56.1']);
+    expect(offer.port, PcLink.defaultPort);
+    expect(offer.code, pairing.code);
+    expect(offer.fingerprint, certificate.fingerprint);
+    // The code to type stays beside it.
+    expect(find.text(pairing.code!.split('').join(' ')), findsOneWidget);
   });
 
   testWidgets('unpairing forgets the phone', (tester) async {

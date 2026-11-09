@@ -187,6 +187,10 @@ ICONS = {
            '<path d="M14.6 5.2l-1.2 2.2"/><path d="M7.4 12.6h-3"/><path d="M16.6 12.6h3"/><path d="M7.6 16.6L5 18.2"/><path d="M16.4 16.6l2.6 1.6"/>',
     "phone": '<rect x="6.8" y="3.4" width="10.4" height="17.2" rx="2.6"/><path d="M11 17.4h2"/>',
     "phone_off": '<rect x="6.8" y="3.4" width="10.4" height="17.2" rx="2.6"/><path d="M10 8.6l4 4"/><path d="M14 8.6l-4 4"/><path d="M11 17.4h2"/>',
+    # A viewfinder's four corners over a scan line: pairing by QR code.
+    "qr_scan": '<path d="M4 8.6V6.2A2.2 2.2 0 0 1 6.2 4h2.4"/><path d="M15.4 4h2.4A2.2 2.2 0 0 1 20 6.2v2.4"/>'
+               '<path d="M20 15.4v2.4a2.2 2.2 0 0 1-2.2 2.2h-2.4"/><path d="M8.6 20H6.2A2.2 2.2 0 0 1 4 17.8v-2.4"/>'
+               '<path d="M7.4 12h9.2"/>',
     "folder_off": '<path d="M3.5 7.5A2 2 0 0 1 5.5 5.5h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><path d="M4.4 4.4l15.2 15.2"/>',
     "text_size": '<path d="M4 18.4L9 6.4l5 12"/><path d="M5.8 14.4h6.4"/><path d="M15 18.4l2.6-6.4 2.6 6.4"/><path d="M15.9 16.4h3.4"/>',
     "upload": '<path d="M13.6 3.6H7.2a1.8 1.8 0 0 0-1.8 1.8v13.2a1.8 1.8 0 0 0 1.8 1.8h9.6a1.8 1.8 0 0 0 1.8-1.8V8.6z"/>'
@@ -213,7 +217,7 @@ ICONS = {
 # plain from the name.
 DOCS = {
     "globe": "The network the downloads cross, as in the connection settings. Its\n"
-             "own glyph, apart from [swap], which is the sync.",
+             "own glyph, apart from [swap], which is an exchange.",
     "more": "More actions behind a menu: three dots across.",
     "more_vert": "More actions behind a menu on a phone: three dots down.",
 }

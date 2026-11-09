@@ -2103,6 +2103,9 @@ class VhLocalizationsEn extends VhLocalizations {
       'Type the address as the computer shows it, for example 192.168.1.24.';
 
   @override
+  String get pcBadQr => 'This is not a VidHoist pairing code.';
+
+  @override
   String get pcCertificate => 'Computer\'s certificate';
 
   @override
@@ -2166,7 +2169,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcLinkCodeHint =>
-      'On the phone: Settings › Computer › Pair with a computer, then type this address and code. The code works once, for two minutes.';
+      'On the phone: Settings › Computer › Scan the code. Or type this address and code there. It works once, for two minutes.';
 
   @override
   String pcLinkCodeLeft(int seconds) {
@@ -2232,6 +2235,9 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
+  String get pcLinkQrHint => 'Scan from the phone';
+
+  @override
   String get pcLinkReceive => 'Receive from the phone';
 
   @override
@@ -2271,6 +2277,9 @@ class VhLocalizationsEn extends VhLocalizations {
       'The computer is off or on another network. What it had last time is shown below.';
 
   @override
+  String get pcOrType => 'Or type the address and code';
+
+  @override
   String get pcPairButton => 'Pair';
 
   @override
@@ -2280,7 +2289,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcPairIntro =>
-      'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then type here the address and code it shows.';
+      'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the code it shows.';
 
   @override
   String get pcPairStart => 'Pair with a computer';
@@ -2292,6 +2301,16 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcPortLabel => 'Port';
+
+  @override
+  String get pcScanButton => 'Scan the code';
+
+  @override
+  String get pcScanFailed => 'The camera could not be opened.';
+
+  @override
+  String get pcScanPrompt =>
+      'Point the camera at the code on the computer\'s screen';
 
   @override
   String get pcSendToPc => 'Send to the computer';

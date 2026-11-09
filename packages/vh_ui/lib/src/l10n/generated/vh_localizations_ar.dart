@@ -2137,6 +2137,9 @@ class VhLocalizationsAr extends VhLocalizations {
       'اكتب العنوان كما يعرضه الكمبيوتر، مثلاً 192.168.1.24.';
 
   @override
+  String get pcBadQr => 'هذا ليس باركود اقتران من VidHoist.';
+
+  @override
   String get pcCertificate => 'شهادة الكمبيوتر';
 
   @override
@@ -2200,7 +2203,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcLinkCodeHint =>
-      'على الجوال: الإعدادات › الكمبيوتر › اربط بكمبيوتر، ثم اكتب هذا العنوان والرمز. الرمز يعمل مرة واحدة ولمدة دقيقتين.';
+      'على الجوال: الإعدادات › الكمبيوتر › امسح الباركود. أو اكتب هناك العنوان والرمز. يعمل مرة واحدة ولمدة دقيقتين.';
 
   @override
   String pcLinkCodeLeft(int seconds) {
@@ -2268,6 +2271,9 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String get pcLinkQrHint => 'امسحه من الجوال';
+
+  @override
   String get pcLinkReceive => 'استقبال من الجوال';
 
   @override
@@ -2307,6 +2313,9 @@ class VhLocalizationsAr extends VhLocalizations {
       'الكمبيوتر مطفأ أو على شبكة أخرى. ما كان فيه آخر مرة معروض أدناه.';
 
   @override
+  String get pcOrType => 'أو اكتب العنوان والرمز';
+
+  @override
   String get pcPairButton => 'اربط';
 
   @override
@@ -2316,7 +2325,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcPairIntro =>
-      'إن كان VidHoist يعمل على كمبيوترك بويندوز، يستطيع هذا الجوال أن يرسل إليه الروابط ويعرض تنزيلاته ومكتبته. على الكمبيوتر فعّل الإعدادات › الجوال واضغط «اربط جوالاً»، ثم اكتب هنا العنوان والرمز اللذين يعرضهما.';
+      'إن كان VidHoist يعمل على كمبيوترك بويندوز، يستطيع هذا الجوال أن يرسل إليه الروابط ويعرض تنزيلاته ومكتبته. على الكمبيوتر فعّل الإعدادات › الجوال واضغط «اربط جوالاً»، ثم امسح الباركود الذي يظهر.';
 
   @override
   String get pcPairStart => 'اربط بكمبيوتر';
@@ -2328,6 +2337,15 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcPortLabel => 'المنفذ';
+
+  @override
+  String get pcScanButton => 'امسح الباركود';
+
+  @override
+  String get pcScanFailed => 'تعذّر فتح الكاميرا.';
+
+  @override
+  String get pcScanPrompt => 'وجّه الكاميرا إلى الباركود على شاشة الكمبيوتر';
 
   @override
   String get pcSendToPc => 'أرسل إلى الكمبيوتر';

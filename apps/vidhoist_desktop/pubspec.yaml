@@ -43,6 +43,9 @@ dependencies:
   # The Videos known folder (the default offline folder), which
   # path_provider does not name; the version already in the resolution.
   path_provider_windows: 2.3.0
+  # The pairing QR code, drawn by the app; the version already in the
+  # resolution, pure Dart.
+  qr: 3.0.2
   shared_preferences: ^2.3.3
   url_launcher: ^6.3.1
   # No audio_service, just_audio, video_player, flutter_background or

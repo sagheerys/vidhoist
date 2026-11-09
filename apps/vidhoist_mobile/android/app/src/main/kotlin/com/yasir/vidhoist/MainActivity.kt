@@ -113,6 +113,12 @@ class MainActivity : AudioServiceActivity() {
                     android.provider.Settings.Global.getString(contentResolver, "device_name")
                         ?: "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}",
                 )
+                // The computer's pairing QR code, read through the camera.
+                "scanQr" -> QrScanner.start(
+                    this,
+                    call.argument<String>("prompt") ?: "",
+                    result,
+                )
                 // The launcher shortcut's destination, **consumed once**.
                 // Keeping it would re-run the shortcut on every return to the
                 // app.
@@ -131,6 +137,13 @@ class MainActivity : AudioServiceActivity() {
     /** The media probe executor: one thread serving every batch in order. */
     private val probeExecutor: java.util.concurrent.ExecutorService =
         java.util.concurrent.Executors.newSingleThreadExecutor()
+
+    @Deprecated("The scanner answers through startActivityForResult")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (!QrScanner.onResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
 
     override fun onDestroy() {
         probeExecutor.shutdown()

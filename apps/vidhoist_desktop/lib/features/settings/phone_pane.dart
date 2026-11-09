@@ -152,6 +152,12 @@ class _SessionState extends ConsumerState<_Session> {
         else if (code != null)
           PhoneCodeCard(
             code: code,
+            qrData: PcPairOffer(
+              hosts: [for (final a in addresses) a.address],
+              port: port,
+              code: code,
+              fingerprint: _pairing.fingerprint,
+            ).toUri(),
             secondsLeft: _pairing.expires!.difference(DateTime.now()).inSeconds,
             onCancel: _pairing.close,
           )

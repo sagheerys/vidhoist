@@ -15,6 +15,12 @@ All notable changes to VidHoist. The format follows
   computer answers. HTTPS with the computer's own certificate pinned on the
   phone; every path answers an empty 404 without a paired phone's key. A
   phone that never pairs sees no change. See docs/PC-LINK.md.
+- Pairing with the computer by QR code: Windows shows one beside the code,
+  carrying the computer's addresses, the code and its certificate's
+  fingerprint; on the phone, "Scan the code" opens Android's camera
+  (zxing, open source, no Google Play services), tries the addresses and
+  pairs on the first that answers, with the certificate pinned before the
+  code is sent. Typing the address and code stays as a fallback.
 - Design brief (`docs/blueprint/DESIGN-BRIEF.md`): the identity in one
   table, how a screen is drawn before it is coded, and the approval log.
   Mockups live in `docs/design/` and are built from the icon set and from
