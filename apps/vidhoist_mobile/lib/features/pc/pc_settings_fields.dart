@@ -84,6 +84,7 @@ class _PairForm extends ConsumerStatefulWidget {
 
 class _PairFormState extends ConsumerState<_PairForm> {
   final _address = TextEditingController();
+  final _port = TextEditingController();
   final _code = TextEditingController();
   var _busy = false;
   String? _check;
@@ -92,13 +93,17 @@ class _PairFormState extends ConsumerState<_PairForm> {
   @override
   void dispose() {
     _address.dispose();
+    _port.dispose();
     _code.dispose();
     super.dispose();
   }
 
   Future<void> _pair() async {
     final l10n = context.vhl;
-    final address = parsePcAddress(_address.text);
+    final port = _port.text.trim();
+    final address = parsePcAddress(
+      port.isEmpty ? _address.text : '${_address.text.trim()}:$port',
+    );
     final code = _code.text.trim();
     if (address == null) {
       setState(() => _error = l10n.pcBadAddress);
@@ -153,17 +158,46 @@ class _PairFormState extends ConsumerState<_PairForm> {
       children: [
         Text(l10n.pcPairIntro, style: text.bodySmall?.copyWith(color: p.ink2)),
         const SizedBox(height: VhSpace.lg),
-        TextField(
-          controller: _address,
-          enabled: !_busy,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          textDirection: TextDirection.ltr,
-          autocorrect: false,
-          decoration: InputDecoration(
-            labelText: l10n.pcAddressLabel,
-            hintText: '192.168.1.24:${PcLink.defaultPort}',
-            hintTextDirection: TextDirection.ltr,
-          ),
+        // The port has its own field: the phone's number pad has a dot but
+        // no colon (owner's report, 2026-11-09), and it is rarely needed.
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: TextField(
+                controller: _address,
+                enabled: !_busy,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                textDirection: TextDirection.ltr,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  labelText: l10n.pcAddressLabel,
+                  hintText: '192.168.1.24',
+                  hintTextDirection: TextDirection.ltr,
+                ),
+              ),
+            ),
+            const SizedBox(width: VhSpace.md),
+            Expanded(
+              child: TextField(
+                controller: _port,
+                enabled: !_busy,
+                keyboardType: TextInputType.number,
+                textDirection: TextDirection.ltr,
+                maxLength: 5,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: InputDecoration(
+                  labelText: l10n.pcPortLabel,
+                  hintText: '${PcLink.defaultPort}',
+                  hintTextDirection: TextDirection.ltr,
+                  counterText: '',
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: VhSpace.md),
         TextField(

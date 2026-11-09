@@ -61,12 +61,7 @@ String? paneValue(
       return version == null ? null : '${l.version} $version';
     case DesktopSettingsPane.phone:
       if (!ref.watch(pcLinkEnabledProvider)) return l.pcLinkOff;
-      final devices = ref
-          .watch(pcLinkProvider)
-          .valueOrNull
-          ?.pairing
-          .devices
-          .length;
+      final devices = ref.watch(pcLinkDevicesProvider).valueOrNull?.length;
       return devices == null ? null : l.pcLinkPhones(devices);
     default:
       return null;

@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/backup_data.dart';
+import 'package:vidhoist_desktop/data/pc_link_addresses.dart';
 import 'package:vidhoist_desktop/data/pc_link_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/settings/phone_pane.dart';
@@ -30,6 +31,24 @@ class _NoHost implements PcLinkHost {
   @override
   Future<File?> cover(String id) async => null;
 }
+
+const _addresses = [
+  PcAddress(
+    address: '192.168.1.24',
+    adapter: 'Wi-Fi',
+    kind: PcAddressKind.home,
+  ),
+  PcAddress(
+    address: '100.101.102.103',
+    adapter: 'Tailscale',
+    kind: PcAddressKind.tailscale,
+  ),
+  PcAddress(
+    address: '192.168.56.1',
+    adapter: 'VirtualBox Host-Only Network',
+    kind: PcAddressKind.other,
+  ),
+];
 
 /// Settings › Phone: off until turned on; a code to pair; the owner
 /// allowing the phone after comparing four digits; the phones listed.
@@ -65,7 +84,7 @@ void main() {
       overrides: [
         keyValueStoreProvider.overrideWithValue(store),
         pcLinkProvider.overrideWith((ref) async => on ? session : null),
-        pcLinkAddressesProvider.overrideWith((ref) async => ['192.168.1.24']),
+        pcLinkAddressesProvider.overrideWith((ref) async => _addresses),
       ],
       child: MaterialApp(
         localizationsDelegates: VhLocalizations.localizationsDelegates,
@@ -135,6 +154,57 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Galaxy'), findsOneWidget);
     expect(find.text(l.pcLinkRevoke), findsOneWidget);
+  });
+
+  testWidgets('**the guard**: the home address first, Tailscale named, '
+      'the other adapters folded away', (tester) async {
+    await turnOn(tester);
+    expect(find.text('192.168.1.24:${PcLink.defaultPort}'), findsOneWidget);
+    expect(find.text('Wi-Fi'), findsOneWidget);
+    expect(find.text(l.pcLinkAddressTailscale), findsOneWidget);
+    expect(find.text('100.101.102.103:${PcLink.defaultPort}'), findsOneWidget);
+    expect(find.textContaining('192.168.56.1'), findsNothing);
+    await tester.tap(find.text(l.pcLinkOtherAddresses(1)));
+    await tester.pumpAndSettle();
+    expect(find.text('192.168.56.1:${PcLink.defaultPort}'), findsOneWidget);
+  });
+
+  test('**the guard**: the settings list counts a phone paired after it '
+      'was read', () async {
+    final session = PcLinkSession(
+      server: PcLinkServer(
+        certificate: certificate,
+        host: _NoHost(),
+        pairing: pairing,
+        name: 'PC',
+      ),
+      pairing: pairing,
+      port: PcLink.defaultPort,
+    );
+    final container = ProviderContainer(
+      overrides: [pcLinkProvider.overrideWith((ref) async => session)],
+    );
+    addTearDown(container.dispose);
+    final seen = <int>[];
+    container.listen(
+      pcLinkDevicesProvider,
+      (_, next) => next.whenData((d) => seen.add(d.length)),
+      fireImmediately: true,
+    );
+    await pumpEventQueue();
+    pairing.open();
+    // Listening before the attempt: the request is not replayed.
+    final request = pairing.requests.first;
+    final result = pairing.attempt(
+      code: pairing.code!,
+      name: 'Galaxy',
+      nonce: newSecret(),
+    );
+    (await request).allow();
+    expect((await result).device?.name, 'Galaxy');
+    await pumpEventQueue();
+    expect(seen.last, 1);
+    expect(seen.first, 0);
   });
 
   testWidgets('unpairing forgets the phone', (tester) async {
