@@ -44,6 +44,16 @@ class _Bridge implements YtDlpBridge {
   @override
   Future<String?> version() async => '2026.10.26';
 
+  var repairs = 0;
+  Object? repairError;
+
+  @override
+  Future<({bool updated, String? version})> repair() async {
+    repairs++;
+    if (repairError case final e?) throw e;
+    return (updated: true, version: '2026.11.05');
+  }
+
   @override
   Future<BridgeRun> execute(
     String id,

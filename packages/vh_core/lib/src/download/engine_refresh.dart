@@ -53,6 +53,29 @@ class EngineRefresh {
     return _inflight ??= _refresh(error).whenComplete(() => _inflight = null);
   }
 
+  /// **What a repair leaves behind** (`DownloadBackend.repairEngine`). The
+  /// attempt from a failure is forgotten, so the next failure that looks
+  /// like an old build may update again at once rather than hours later.
+  /// A repair that finished counts as an update; one that could not fetch
+  /// yt-dlp clears the date instead, so the next start (the phone's
+  /// preparer, Windows' weekly check) tries the update again.
+  static Future<void> recordRepair(
+    KeyValueStore store,
+    PrefsMutex mutex,
+    UpdateOutcome outcome, {
+    DateTime? at,
+  }) => mutex.run(() async {
+    await store.remove(attemptKey);
+    if (outcome.error == null) {
+      await store.setInt(
+        updatedAtKey,
+        (at ?? DateTime.now()).millisecondsSinceEpoch,
+      );
+    } else {
+      await store.remove(updatedAtKey);
+    }
+  });
+
   Future<bool> _refresh(YtDlpError error) async {
     final now = _now();
     final last = await store.getInt(attemptKey);

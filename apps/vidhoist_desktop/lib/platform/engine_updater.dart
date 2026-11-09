@@ -55,7 +55,39 @@ class EngineUpdater {
     }
   }
 
-  Future<UpdateOutcome> _replace(EngineChannel channel) async {
+  /// **"Repair the engine"** (`DownloadBackend.repairEngine`): yt-dlp's
+  /// own `--rm-cache-dir` first, which drops what it saved of YouTube's
+  /// player code (the classic cure when every YouTube link fails at once,
+  /// and it needs no network); then a fresh copy of the current release,
+  /// checked against its SHA2-256SUMS, even when the version there claims
+  /// to be current, since a damaged copy reports the right number. The
+  /// copy in use is replaced only once the new one is whole, so a repair
+  /// that cannot fetch leaves a working yt-dlp. A yt-dlp on PATH is
+  /// someone's own, and gets the cache and its own `-U`.
+  Future<UpdateOutcome> repair() async {
+    final paths = locate();
+    final exe = paths.ytDlp;
+    if (exe == null) {
+      return const UpdateOutcome(updated: false, error: 'no yt-dlp to repair');
+    }
+    try {
+      await _run(exe, const ['--rm-cache-dir']);
+      return paths.managed
+          ? await _replace(EngineChannel.stable, force: true)
+          : await _selfUpdate(exe, EngineChannel.stable);
+    } on Object catch (e) {
+      return UpdateOutcome(
+        updated: false,
+        version: await currentVersion(),
+        error: '$e',
+      );
+    }
+  }
+
+  Future<UpdateOutcome> _replace(
+    EngineChannel channel, {
+    bool force = false,
+  }) async {
     final repo = switch (channel) {
       EngineChannel.stable => 'yt-dlp/yt-dlp',
       EngineChannel.nightly => 'yt-dlp/yt-dlp-nightly-builds',
@@ -75,7 +107,7 @@ class EngineUpdater {
         error: 'the release names no version',
       );
     }
-    if (current != null && latest.compareTo(current) <= 0) {
+    if (!force && current != null && latest.compareTo(current) <= 0) {
       return UpdateOutcome(updated: false, version: current);
     }
     final base = '/$repo/releases/download/$tag';

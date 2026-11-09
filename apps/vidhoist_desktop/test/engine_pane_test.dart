@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
+import 'package:vidhoist_desktop/data/downloads_data.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/engine_fetch_data.dart';
 import 'package:vidhoist_desktop/di.dart';
@@ -15,6 +16,14 @@ import 'desktop_matrix.dart';
 
 /// Settings › Engine: each part and where it stands, a fetch for the ones
 /// not here yet, yt-dlp's update, and IPv4.
+/// A download under way, which a repair must wait for.
+class _BusyEngine extends LocalDownloadEngine {
+  _BusyEngine() : super(backend: FakeBackend(), folderFor: (_) => '');
+
+  @override
+  bool get hasActiveWork => true;
+}
+
 void main() {
   late FakeBackend backend;
   late MemoryKeyValueStore store;
@@ -29,8 +38,10 @@ void main() {
   Widget app({
     Brightness brightness = Brightness.light,
     Map<EnginePart, PartFetch> fetching = const {},
+    bool downloading = false,
   }) => ProviderScope(
     overrides: [
+      if (downloading) downloadEngineProvider.overrideWithValue(_BusyEngine()),
       keyValueStoreProvider.overrideWithValue(store),
       engineLocatorProvider.overrideWithValue(
         EngineLocator(
@@ -96,6 +107,47 @@ void main() {
     await tester.pumpAndSettle();
     expect(backend.updates, 1);
     expect(find.text(l.desktopEngineUpToDate), findsWidgets);
+  });
+
+  testWidgets('the repair runs, says how it went, and leaves the next '
+      'failure free to update at once', (tester) async {
+    await store.setInt(EngineRefresh.attemptKey, 1);
+    await tester.pumpWidget(app());
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text(l.engineRepair).last);
+    await tester.tap(find.text(l.engineRepair).last);
+    await tester.pumpAndSettle();
+    expect(backend.repairs, 1);
+    expect(find.text(l.engineRepaired('2026.10.26')), findsOneWidget);
+    expect(await store.getInt(EngineRefresh.attemptKey), isNull);
+    expect(await store.getInt(EngineRefresh.updatedAtKey), isNotNull);
+  });
+
+  testWidgets('a repair that could not fetch says it is partly done', (
+    tester,
+  ) async {
+    backend.repairOutcome = const UpdateOutcome(
+      updated: false,
+      error: 'offline',
+    );
+    await tester.pumpWidget(app());
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text(l.engineRepair).last);
+    await tester.tap(find.text(l.engineRepair).last);
+    await tester.pumpAndSettle();
+    expect(find.text(l.engineRepairPartly), findsOneWidget);
+    expect(await store.getInt(EngineRefresh.updatedAtKey), isNull);
+  });
+
+  testWidgets('no repair while something downloads: Windows will not '
+      'replace a yt-dlp that runs', (tester) async {
+    await tester.pumpWidget(app(downloading: true));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text(l.engineRepair).last);
+    await tester.tap(find.text(l.engineRepair).last);
+    await tester.pumpAndSettle();
+    expect(backend.repairs, 0);
+    expect(find.text(l.engineRepairBusy), findsOneWidget);
   });
 
   testWidgets('IPv4 is switched and kept', (tester) async {

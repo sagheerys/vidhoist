@@ -10,12 +10,22 @@ import 'settings_fields.dart';
 
 /// The download engine: yt-dlp's version, an update on demand (YouTube
 /// breaks old builds within months,
-/// `docs/ENGINE.md` finding 12), and IPv4.
-class EngineFields extends ConsumerWidget {
+/// `docs/ENGINE.md` finding 12), a repair for when that is not enough
+/// (plan item R5), and IPv4.
+class EngineFields extends ConsumerStatefulWidget {
   const EngineFields({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<EngineFields> createState() => _EngineFieldsState();
+}
+
+class _EngineFieldsState extends ConsumerState<EngineFields> {
+  /// The repair, not the update, is what keeps the engine busy: each
+  /// button names its own work.
+  bool _repairing = false;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = context.vhl;
     final text = Theme.of(context).textTheme;
     final settings = ref.watch(settingsProvider);
@@ -45,10 +55,22 @@ class EngineFields extends ConsumerWidget {
         Align(
           alignment: AlignmentDirectional.centerStart,
           child: FilledButton.tonal(
-            onPressed: busy ? null : () => unawaited(_update(context, ref)),
+            onPressed: busy ? null : () => unawaited(_update(context)),
             child: Text(
-              busy ? l10n.mobileEngineUpdating : l10n.mobileEngineUpdate,
+              busy && !_repairing
+                  ? l10n.mobileEngineUpdating
+                  : l10n.mobileEngineUpdate,
             ),
+          ),
+        ),
+        const SizedBox(height: VhSpace.md),
+        Text(l10n.engineRepairHint, style: text.bodySmall),
+        const SizedBox(height: VhSpace.xs),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: OutlinedButton(
+            onPressed: busy ? null : () => unawaited(_repair(context)),
+            child: Text(_repairing ? l10n.engineRepairing : l10n.engineRepair),
           ),
         ),
         const SizedBox(height: VhSpace.md),
@@ -62,7 +84,29 @@ class EngineFields extends ConsumerWidget {
     );
   }
 
-  Future<void> _update(BuildContext context, WidgetRef ref) async {
+  /// Refused while something downloads: the repair replaces the yt-dlp a
+  /// running download reads.
+  Future<void> _repair(BuildContext context) async {
+    final l10n = context.vhl;
+    final messenger = ScaffoldMessenger.of(context);
+    if (ref.read(downloadEngineProvider)?.hasActiveWork ?? false) {
+      showVhSnackOn(messenger, l10n.engineRepairBusy);
+      return;
+    }
+    setState(() => _repairing = true);
+    final preparer = ref.read(enginePreparerProvider);
+    final ok = await preparer.repair();
+    if (mounted) setState(() => _repairing = false);
+    showVhSnackOn(
+      messenger,
+      ok
+          ? l10n.engineRepaired(preparer.status.version?.toString() ?? '?')
+          : l10n.engineRepairPartly,
+      type: ok ? VhSnackType.success : VhSnackType.error,
+    );
+  }
+
+  Future<void> _update(BuildContext context) async {
     final l10n = context.vhl;
     final messenger = ScaffoldMessenger.of(context);
     final ok = await ref.read(enginePreparerProvider).update();

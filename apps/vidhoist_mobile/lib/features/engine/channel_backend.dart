@@ -231,6 +231,23 @@ class ChannelYtDlpBackend implements DownloadBackend {
     }
   }
 
+  /// The shipped yt-dlp, then the current one (`YtDlpBridge.repair`); a
+  /// fetch that failed is an error, since the shipped copy is a year old
+  /// and fails on YouTube until the next update.
+  @override
+  Future<UpdateOutcome> repairEngine() async {
+    try {
+      final result = await bridge.repair();
+      return UpdateOutcome(
+        updated: result.updated,
+        version: EngineVersion.tryParse(result.version),
+        error: result.updated ? null : 'the current yt-dlp was not fetched',
+      );
+    } on PlatformException catch (e) {
+      return UpdateOutcome(updated: false, error: e.message ?? e.code);
+    }
+  }
+
   static YtDlpError _broken(PlatformException e) =>
       YtDlpError(YtDlpErrorKind.engineMissing, e.message ?? e.code);
 

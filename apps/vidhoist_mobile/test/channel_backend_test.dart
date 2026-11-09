@@ -46,6 +46,13 @@ class FakePhone {
     'webpage_url': 'https://www.youtube.com/watch?v=abc',
   });
 
+  /// What the phone answers a repair: a fetched copy unless a test says
+  /// otherwise.
+  Map<String, Object?> repairAnswer = {
+    'status': 'DONE',
+    'version': '2026.11.05',
+  };
+
   /// Holds every run open until released, so a test can cancel it.
   Completer<void>? hold;
 
@@ -78,6 +85,8 @@ class FakePhone {
         return '2026.10.26';
       case 'update':
         return {'status': 'DONE', 'version': '2026.11.01'};
+      case 'repair':
+        return repairAnswer;
       case 'init':
         return {'ms': 4200};
     }
@@ -366,5 +375,18 @@ void main() {
       (phone.named('update').single.arguments as Map)['channel'],
       'stable',
     );
+  });
+
+  test('a repair in the terms of the core: fetched is done, the shipped copy '
+      'alone is an error, since it fails on YouTube', () async {
+    final done = await backend.repairEngine();
+    expect(done.updated, isTrue);
+    expect(done.error, isNull);
+    expect(done.version.toString(), '2026.11.05');
+
+    phone.repairAnswer = {'status': null, 'version': null};
+    final partly = await backend.repairEngine();
+    expect(partly.updated, isFalse);
+    expect(partly.error, isNotNull);
   });
 }

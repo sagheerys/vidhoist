@@ -132,4 +132,69 @@ void main() {
     expect(outcome.updated, isFalse);
     expect(outcome.error, isNotNull);
   });
+
+  group('repair — the cache cleared, then a fresh copy', () {
+    test('the managed copy: --rm-cache-dir first, then the current release '
+        'fetched even though the version there says it is current, since a '
+        'damaged copy reports the right number', () async {
+      final outcome = await updater(
+        managed: true,
+        latest: '2026.10.26',
+      ).repair();
+      expect(ran.single, [r'C:\own\yt-dlp\yt-dlp.exe', '--rm-cache-dir']);
+      expect(installed.single.version, '2026.10.26');
+      expect(outcome.updated, isTrue);
+      expect(outcome.error, isNull);
+    });
+
+    test(
+      'a yt-dlp on PATH belongs to its owner: the cache, then its own -U',
+      () async {
+        final outcome = await updater(managed: false).repair();
+        expect(ran, [
+          [r'C:\bin\yt-dlp.exe', '--rm-cache-dir'],
+          [r'C:\bin\yt-dlp.exe', '-U'],
+        ]);
+        expect(installed, isEmpty);
+        expect(outcome.updated, isTrue);
+      },
+    );
+
+    test('no network: the cache is cleared, the copy in use stays, and the '
+        'outcome says the rest failed', () async {
+      final offline = EngineUpdater(
+        locate: () => const EnginePaths(
+          ytDlp: r'C:\own\yt-dlp\yt-dlp.exe',
+          managed: true,
+        ),
+        currentVersion: () async => EngineVersion.tryParse('2026.10.26'),
+        getText: (url) async => throw const SocketExceptionLike(),
+        install: (asset) async => installed.add(asset),
+        run: (exe, args) async {
+          ran.add([exe, ...args]);
+          return (code: 0, output: '');
+        },
+      );
+      final outcome = await offline.repair();
+      expect(ran.single.last, '--rm-cache-dir');
+      expect(installed, isEmpty);
+      expect(outcome.updated, isFalse);
+      expect(outcome.error, isNotNull);
+      expect(outcome.version.toString(), '2026.10.26');
+    });
+
+    test('no yt-dlp at all is said, not thrown', () async {
+      final none = EngineUpdater(
+        locate: () => const EnginePaths(managed: false),
+        currentVersion: () async => null,
+        install: (asset) async {},
+      );
+      expect((await none.repair()).error, 'no yt-dlp to repair');
+    });
+  });
+}
+
+/// A network failure, as the fetch would throw it.
+class SocketExceptionLike implements Exception {
+  const SocketExceptionLike();
 }

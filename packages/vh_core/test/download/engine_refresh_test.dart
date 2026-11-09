@@ -119,6 +119,38 @@ void main() {
     expect(await r.afterFailure(error(stale)), isFalse);
     expect(log.last, contains('Bad state'));
   });
+
+  group('recordRepair — what "repair the engine" leaves', () {
+    test('a finished repair counts as an update and frees the next '
+        'attempt from a failure at once', () async {
+      await store.setInt(EngineRefresh.attemptKey, 1);
+      await EngineRefresh.recordRepair(
+        store,
+        PrefsMutex(),
+        const UpdateOutcome(updated: true),
+        at: now,
+      );
+      expect(await store.getInt(EngineRefresh.attemptKey), isNull);
+      expect(
+        await store.getInt(EngineRefresh.updatedAtKey),
+        now.millisecondsSinceEpoch,
+      );
+
+      final r = EngineRefresh(backend: FakeBackend(), store: store);
+      await r.afterFailure(error(stale));
+      expect(await store.getInt(EngineRefresh.attemptKey), isNotNull);
+    });
+
+    test('a repair that could not fetch leaves the update due', () async {
+      await store.setInt(EngineRefresh.updatedAtKey, 1);
+      await EngineRefresh.recordRepair(
+        store,
+        PrefsMutex(),
+        const UpdateOutcome(updated: false, error: 'offline'),
+      );
+      expect(await store.getInt(EngineRefresh.updatedAtKey), isNull);
+    });
+  });
 }
 
 class _Throws extends FakeBackend {

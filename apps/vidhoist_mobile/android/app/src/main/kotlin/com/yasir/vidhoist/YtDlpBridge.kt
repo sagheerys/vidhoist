@@ -93,6 +93,8 @@ object YtDlpBridge {
                         "version" to YoutubeDL.getInstance().version(this.context),
                     )
                 }
+                // "Repair the engine" (see repair()).
+                "repair" -> work(result, "repair_failed") { repair() }
                 "execute" -> {
                     val id = call.argument<String>("id")
                     val args = call.argument<List<String>>("args")
@@ -152,6 +154,40 @@ object YtDlpBridge {
             FFmpeg.getInstance().init(context)
             initialised = true
         }
+    }
+
+    /**
+     * **"Repair the engine"** (plan item R5). The library keeps the yt-dlp
+     * it updated to in `no_backup/youtubedl-android/yt-dlp`, and that
+     * version in its own preferences (`dlpVersion`, `dlpVersionName`):
+     * both go, `init_ytdlp` unpacks the shipped copy into the empty
+     * folder, and the current release is fetched over it. Clearing the
+     * version matters: left behind, the updater would take the old copy
+     * for current and fetch nothing. The phone runs yt-dlp with no cache
+     * (the library adds `--no-cache-dir`), so nothing else is kept between
+     * runs. A fetch that fails leaves the shipped copy, and a null status.
+     * Dart calls this only while nothing downloads.
+     */
+    private fun repair(): Map<String, Any?> {
+        ensureInit()
+        val dir = File(File(context.noBackupFilesDir, YoutubeDL.baseName), YoutubeDL.ytdlpDirName)
+        dir.deleteRecursively()
+        context.getSharedPreferences(YoutubeDL.baseName, Context.MODE_PRIVATE)
+            .edit()
+            .remove("dlpVersion")
+            .remove("dlpVersionName")
+            .commit()
+        YoutubeDL.getInstance().init_ytdlp(context, dir)
+        val status = try {
+            YoutubeDL.getInstance()
+                .updateYoutubeDL(context, YoutubeDL.UpdateChannel.STABLE)?.name
+        } catch (e: YoutubeDLException) {
+            null
+        }
+        return mapOf(
+            "status" to status,
+            "version" to YoutubeDL.getInstance().version(context),
+        )
     }
 
     private fun work(result: MethodChannel.Result, code: String, body: () -> Any?) {
