@@ -1792,11 +1792,6 @@ class VhLocalizationsEn extends VhLocalizations {
       'No sign-in found yet. Finish signing in, then tap Done';
 
   @override
-  String loginTitle(String site) {
-    return 'Sign in to $site';
-  }
-
-  @override
   String get logsEmpty => 'The log is empty';
 
   @override

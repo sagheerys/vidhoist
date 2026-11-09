@@ -150,8 +150,7 @@ class _Values {
         ref.read(enginePreparerProvider).status,
   );
 
-  String accounts() =>
-      accountsSummary(l10n, ref.watch(signedInSitesProvider));
+  String accounts() => accountsSummary(l10n, ref.watch(signedInSitesProvider));
 
   /// How many are followed, or what the section is for while reading.
   String channels() => switch (ref.watch(channelsProvider).valueOrNull) {

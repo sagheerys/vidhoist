@@ -3074,12 +3074,6 @@ abstract class VhLocalizations {
   /// **'No sign-in found yet. Finish signing in, then tap Done'**
   String get loginNotYet;
 
-  /// No description provided for @loginTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in to {site}'**
-  String loginTitle(String site);
-
   /// No description provided for @logsEmpty.
   ///
   /// In en, this message translates to:

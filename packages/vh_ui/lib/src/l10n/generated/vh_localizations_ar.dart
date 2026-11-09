@@ -1829,11 +1829,6 @@ class VhLocalizationsAr extends VhLocalizations {
       'لم يظهر تسجيل دخول بعد. أكمل تسجيل الدخول ثم اضغط «تم»';
 
   @override
-  String loginTitle(String site) {
-    return 'تسجيل الدخول إلى $site';
-  }
-
-  @override
   String get logsEmpty => 'السجل فارغ';
 
   @override

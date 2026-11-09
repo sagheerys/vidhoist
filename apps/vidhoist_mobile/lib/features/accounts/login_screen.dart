@@ -89,7 +89,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final l10n = context.vhl;
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.loginTitle(widget.site.label)),
+        // The site's name alone: "Sign in to Instagram" did not fit the
+        // large title on a phone, and the page below already says sign in.
+        title: Text(widget.site.label),
         actions: [
           TextButton(
             onPressed: () => unawaited(_finish(quiet: false)),
