@@ -62,14 +62,18 @@ search, npm, PyPI and the `.com`/`.app`/`.io` domains.
 
 The owner asked for the folder to be spelled as the app is shown. The app
 was not public yet, so only the owner's phone held data. Android's shared
-storage ignores letter case, so `Vidhoist` and `VidHoist` are one folder;
-what the spelling changes is the saved text, because the library keys
-favourites, titles, covers and each clip's link by the file's path. At
-every start, and after every restore, the phone app rewrites any saved
-path in the old spelling (`media_folder_rename.dart`), then renames the
-folder on disk through a spare name. Android may refuse the rename when
-the folder holds files an earlier install left; the app works the same,
-and only a file manager still shows `Vidhoist`. A memory card, when one is
+storage ignores letter case when it opens a folder, but **lists a
+folder's files only under the spelling on disk**: the first build scanned
+`VidHoist` while the owner's phone still said `Vidhoist`, and the library
+showed no downloads at all, files untouched. At every start the phone app
+tries the rename through a spare name, then reads the spelling the disk
+really has and uses it (`phoneMediaDir`, settled before runApp), and
+rewrites any saved path to that spelling, at start and after every
+restore, since the library keys favourites, titles, covers and each
+clip's link by the file's path (`media_folder_rename.dart`). Android
+refused the rename on the owner's phone ("Operation not permitted": the
+folder holds an earlier install's files), so it stays `Vidhoist` there
+until renamed in a file manager, which the next start then follows. A memory card, when one is
 chosen in Settings › Downloads, gets a folder of the same name. Windows
 keeps `%APPDATA%\Vidhoist`: Windows ignores case too, and nothing there is
 keyed by that path's spelling in a way a user sees.

@@ -1,16 +1,29 @@
 import 'package:vh_core/vh_core.dart';
 
 /// The media folder's name, spelled as the app is shown (2026-11-09). It
-/// was `Vidhoist` before; Android's shared storage ignores letter case, so
-/// the old folder answers to this name too, and `media_folder_rename.dart`
-/// renames it on disk and in the saved paths.
+/// was `Vidhoist` before, and `media_folder_rename.dart` renames it.
 const mediaFolderName = 'VidHoist';
 
-/// The media folder on the phone's own storage (§5.3, ADR 0002). Its
-/// contents are registered in MediaStore so they appear in the phone's
-/// gallery. A folder of its own, so no other app's files mix into the
-/// library. A memory card has one of the same name (`phone_volumes.dart`).
-const phoneMediaDir = '/storage/emulated/0/Download/$mediaFolderName';
+/// Where the media folder is wanted on the phone's own storage.
+const preferredMediaDir = '/storage/emulated/0/Download/$mediaFolderName';
+
+/// **The media folder as it is spelled on disk** (§5.3, ADR 0002), settled
+/// once before runApp by [settlePhoneMediaDir]. Its contents are
+/// registered in MediaStore so they appear in the phone's gallery. A
+/// folder of its own, so no other app's files mix into the library. A
+/// memory card has one of the same name (`phone_volumes.dart`).
+///
+/// Not a constant, learned on the owner's phone (2026-11-09): Android
+/// opens `VidHoist` and `Vidhoist` alike, but lists a folder's files only
+/// under its own spelling, so a library scanning `VidHoist` while the
+/// disk said `Vidhoist` showed no downloads at all. Android refuses the
+/// rename when the folder holds an earlier install's files, so the old
+/// spelling can stay for good, and the app follows the disk.
+String get phoneMediaDir => _phoneMediaDir;
+String _phoneMediaDir = preferredMediaDir;
+
+/// Sets [phoneMediaDir] to the spelling found on disk.
+void settlePhoneMediaDir(String path) => _phoneMediaDir = path;
 
 const _audioExtensions = {'mp3', 'm4a', 'aac', 'ogg', 'opus', 'wav', 'flac'};
 const _videoExtensions = {'mp4', 'webm', 'mkv', 'mov', 'avi', '3gp', 'm4v'};

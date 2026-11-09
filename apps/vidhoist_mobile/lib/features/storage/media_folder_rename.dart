@@ -7,13 +7,13 @@ import '../downloads_library/local_item.dart';
 /// **`Download/Vidhoist` becomes `Download/VidHoist`** (owner's request,
 /// 2026-11-09), in two parts that each stand alone.
 ///
-/// Android's shared storage ignores letter case, so both names already
-/// open the same folder. What the case changes is the text: the library
-/// keys favourites, titles, covers and each clip's link by the file's
-/// path, and a scan of `VidHoist` yields paths that no longer match the
-/// saved `Vidhoist` ones. [rewriteStoredPaths] fixes the saved text,
-/// which is what keeps the data; [renameMediaFolder] fixes what a file
-/// manager shows, and may fail without harm.
+/// [renameMediaFolder] tries the rename on disk; Android may refuse it
+/// ("Operation not permitted" on the owner's phone, whose folder holds an
+/// earlier install's backups). [findMediaDir] then reads the spelling the
+/// disk really has, which the app uses for good: Android opens either
+/// spelling but lists files only under the real one. [rewriteStoredPaths]
+/// makes the saved text match it, since the library keys favourites,
+/// titles, covers and each clip's link by the file's path.
 
 /// The parent of the media folder on the phone's own storage.
 const _parent = '/storage/emulated/0/Download';
@@ -68,41 +68,61 @@ Future<String?> renameMediaFolder({String parent = _parent}) async {
   }
 }
 
+/// The media folder as spelled on disk, whatever the case, or the wanted
+/// spelling when there is none yet (a first download creates it).
+Future<String> findMediaDir({String parent = _parent}) async {
+  try {
+    await for (final entity in Directory(parent).list(followLinks: false)) {
+      if (entity is! Directory) continue;
+      final name = _nameOf(entity.path);
+      if (name.toLowerCase() == 'vidhoist') return '$parent/$name';
+    }
+  } on FileSystemException {
+    // Unreadable without the media permission on some versions: the
+    // wanted spelling, as before the rename existed.
+  }
+  return '$parent/$mediaFolderName';
+}
+
 /// Rewrites every saved string that holds the folder's path in another
-/// spelling, keys included; returns how many entries changed.
+/// spelling than [to] (the folder on disk, [phoneMediaDir]), keys
+/// included; returns how many entries changed.
 ///
 /// Every key, not a list of the indexes that hold paths: a list would miss
 /// the next index to save one. The pattern is narrow enough that nothing
 /// else matches. Run at every start, since it costs one pass over values
 /// already in memory, and after a restore, which can bring back a backup
 /// written before the rename.
-Future<int> rewriteStoredPaths(KeyValueStore store, PrefsMutex mutex) =>
-    mutex.run(() async {
-      var changed = 0;
-      for (final key in await store.keys()) {
-        final value = await store.get(key);
-        final newKey = _fix(key);
-        Object? newValue = value;
-        if (value is String) {
-          newValue = _fix(value);
-        } else if (value is List) {
-          newValue = [for (final item in value) _fix(item.toString())];
-        }
-        final valueChanged = value is List
-            ? !_sameList(value, newValue! as List<String>)
-            : newValue != value;
-        if (newKey == key && !valueChanged) continue;
-        if (newKey != key) await store.remove(key);
-        await _put(store, newKey, newValue);
-        changed++;
-      }
-      return changed;
-    });
-
-String _fix(String text) =>
-    text.contains(RegExp('vidhoist', caseSensitive: false))
-    ? text.replaceAll(_anySpelling, phoneMediaDir)
-    : text;
+Future<int> rewriteStoredPaths(
+  KeyValueStore store,
+  PrefsMutex mutex, {
+  String? to,
+}) => mutex.run(() async {
+  final target = to ?? phoneMediaDir;
+  String fix(String text) =>
+      text.contains(RegExp('vidhoist', caseSensitive: false))
+      ? text.replaceAll(_anySpelling, target)
+      : text;
+  var changed = 0;
+  for (final key in await store.keys()) {
+    final value = await store.get(key);
+    final newKey = fix(key);
+    Object? newValue = value;
+    if (value is String) {
+      newValue = fix(value);
+    } else if (value is List) {
+      newValue = [for (final item in value) fix(item.toString())];
+    }
+    final valueChanged = value is List
+        ? !_sameList(value, newValue! as List<String>)
+        : newValue != value;
+    if (newKey == key && !valueChanged) continue;
+    if (newKey != key) await store.remove(key);
+    await _put(store, newKey, newValue);
+    changed++;
+  }
+  return changed;
+});
 
 bool _sameList(List<Object?> a, List<String> b) {
   if (a.length != b.length) return false;

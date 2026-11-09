@@ -8,7 +8,7 @@ import '../downloads_library/local_item.dart';
 import '../storage/media_folder_rename.dart';
 
 /// The backups folder, inside the app's media folder (§5.3).
-const phoneBackupDir = '$phoneMediaDir/backups';
+String get phoneBackupDir => '$phoneMediaDir/backups';
 
 /// The backup name prefix, **new on purpose** (requested 2026-09-04): the
 /// old name `vidhoist_mobile_backup.json` is owned by an earlier install, and

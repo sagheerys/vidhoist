@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'di.dart';
 import 'features/accounts/accounts_state.dart';
+import 'features/downloads_library/local_item.dart';
 import 'features/storage/media_folder_rename.dart';
 import 'features/storage/phone_volumes.dart';
 import 'features/settings/settings_state.dart';
@@ -46,11 +47,14 @@ Future<void> main() async {
   final mutex = PrefsMutex();
 
   // **The folder's new spelling** (VidHoist, 2026-11-09), before anything
-  // reads a saved path or loads a playback position. The saved paths keep
-  // the data; the rename on disk is only what a file manager shows, and
-  // Android may refuse it.
+  // reads a saved path or loads a playback position. The rename may be
+  // refused; the saved paths then follow the old spelling, which keeps the
+  // data and the library.
   final renamed = await renameMediaFolder();
   if (renamed != null) unawaited(logger.log(renamed, tag: 'storage'));
+  // The spelling the disk really has, renamed or not: the only one Android
+  // lists files under.
+  settlePhoneMediaDir(await findMediaDir());
   final rewritten = await rewriteStoredPaths(store, mutex);
   if (rewritten > 0) {
     unawaited(logger.log('media folder: $rewritten entries', tag: 'storage'));
