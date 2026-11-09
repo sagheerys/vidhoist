@@ -213,13 +213,6 @@
       }
     }
   },
-  "@loginTitle": {
-    "placeholders": {
-      "site": {
-        "type": "String"
-      }
-    }
-  },
   "@mobileEngineLastUpdate": {
     "placeholders": {
       "when": {
@@ -957,7 +950,6 @@
   "loginDone": "Done",
   "loginKept": "Signed in to {site}; downloads will use it",
   "loginNotYet": "No sign-in found yet. Finish signing in, then tap Done",
-  "loginTitle": "Sign in to {site}",
   "logsEmpty": "The log is empty",
   "logsSanitizedNote": "Links, addresses and credentials are stripped before sharing",
   "manageTags": "Manage tags",
