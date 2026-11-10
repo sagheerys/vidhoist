@@ -21,6 +21,24 @@ import 'package:vidhoist_mobile/features/shell/shell_tabs.dart';
 
 import 'device_matrix.dart';
 
+const _routes = [
+  PcAddress(
+    address: '192.168.1.24',
+    adapter: 'Wi-Fi',
+    kind: PcAddressKind.home,
+  ),
+  PcAddress(
+    address: '100.101.102.103',
+    adapter: 'Tailscale',
+    kind: PcAddressKind.tailscale,
+  ),
+  PcAddress(
+    address: '192.168.56.1',
+    adapter: 'VirtualBox Host-Only Network',
+    kind: PcAddressKind.other,
+  ),
+];
+
 const _pairing = PcPairing(
   host: '192.168.1.24',
   port: PcLink.defaultPort,
@@ -33,6 +51,7 @@ const _pairing = PcPairing(
 
 class FakeApi implements PcLinkApi {
   bool reachable = true;
+  List<PcAddress> addresses = const [];
   final submitted = <(String, String)>[];
   final cancelled = <String>[];
   List<PcTask> live = const [
@@ -54,7 +73,12 @@ class FakeApi implements PcLinkApi {
   @override
   Future<PcStatus> status() async {
     _check();
-    return const PcStatus(name: 'HOME-PC', version: '1.0.0', active: 1);
+    return PcStatus(
+      name: 'HOME-PC',
+      version: '1.0.0',
+      active: 1,
+      addresses: addresses,
+    );
   }
 
   @override
@@ -467,6 +491,99 @@ void main() {
       await tester.tap(find.text(l.pcLinkRevoke));
       await tester.pumpAndSettle();
       expect(find.text(l.pcPairButton), findsOneWidget);
+    });
+  });
+
+  group('the route to the computer, the owner’s choice', () {
+    testWidgets('**the guard**: the computer’s addresses are kept, and '
+        'the route in use is never switched by itself', (tester) async {
+      // Saved as a real pairing is, secret apart.
+      await secrets.write(pcSecretKey, _pairing.secret);
+      final api = FakeApi()..addresses = _routes;
+      await tester.pumpWidget(
+        _app(
+          _overrides(
+            store: store,
+            secrets: secrets,
+            pairing: _pairing,
+            api: api,
+          ),
+          const PcScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final saved = await loadPcPairing(store, secrets);
+      expect(saved?.routes, _routes);
+      expect(saved?.host, '192.168.1.24');
+      expect(find.text(l.pcVia(l.pcRouteHome)), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('Tailscale is picked in Settings, and the link uses it', (
+      tester,
+    ) async {
+      await secrets.write(pcSecretKey, _pairing.secret);
+      await tester.pumpWidget(
+        _app(
+          _overrides(
+            store: store,
+            secrets: secrets,
+            pairing: _pairing.copyWith(routes: _routes),
+          ),
+          const Scaffold(
+            body: SingleChildScrollView(child: PcSettingsFields()),
+          ),
+        ),
+      );
+      expect(find.text(l.pcRouteTitle), findsOneWidget);
+      expect(find.text(l.pcRouteHint), findsOneWidget);
+      // The adapters other programs added are not routes to offer.
+      expect(find.textContaining('192.168.56.1'), findsNothing);
+      await tester.tap(find.text(l.pcRouteTailscale));
+      await tester.pumpAndSettle();
+      expect((await loadPcPairing(store, secrets))?.host, '100.101.102.103');
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(PcSettingsFields)),
+      );
+      final client = container.read(pcClientProvider)! as PcLinkClient;
+      expect(client.pairing.host, '100.101.102.103');
+    });
+
+    test('learning the routes keeps the same link; a route picked makes a '
+        'new one', () async {
+      final container = ProviderContainer(
+        overrides: _overrides(
+          store: store,
+          secrets: secrets,
+          pairing: _pairing,
+        ),
+      );
+      addTearDown(container.dispose);
+      final first = container.read(pcClientProvider);
+      await container.read(pcPairingProvider.notifier).learnRoutes(_routes);
+      expect(container.read(pcClientProvider), same(first));
+      await container
+          .read(pcPairingProvider.notifier)
+          .useRoute('100.101.102.103');
+      expect(container.read(pcClientProvider), isNot(same(first)));
+    });
+
+    testWidgets('away from home, the page points to Tailscale', (tester) async {
+      final api = FakeApi()..reachable = false;
+      await tester.pumpWidget(
+        _app(
+          _overrides(
+            store: store,
+            secrets: secrets,
+            pairing: _pairing.copyWith(routes: _routes),
+            api: api,
+          ),
+          const PcScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.textContaining(l.pcOfflineRoute), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
     });
   });
 

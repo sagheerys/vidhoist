@@ -21,6 +21,11 @@ All notable changes to VidHoist. The format follows
   (zxing, open source, no Google Play services), tries the addresses and
   pairs on the first that answers, with the certificate pinned before the
   code is sent. Typing the address and code stays as a fallback.
+- Settings › Computer › Connect through, on the phone: the owner picks the
+  home network or Tailscale, from the addresses the computer reports with
+  every answer (no new pairing needed). The phone never switches on its
+  own; the Computer page shows the route in use and, when the computer does
+  not answer, points to Tailscale.
 - Design brief (`docs/blueprint/DESIGN-BRIEF.md`): the identity in one
   table, how a screen is drawn before it is coded, and the approval log.
   Mockups live in `docs/design/` and are built from the icon set and from

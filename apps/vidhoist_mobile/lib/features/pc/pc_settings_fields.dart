@@ -9,6 +9,7 @@ import 'package:vh_ui/vh_ui.dart';
 import 'pc_errors.dart';
 import 'pc_link_state.dart';
 import 'pc_pairing_store.dart';
+import 'pc_route_picker.dart';
 import 'pc_scan.dart';
 
 /// **Settings › Computer**: pair with VidHoist on a Windows computer, or
@@ -40,13 +41,8 @@ class _Paired extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(pairing.name, style: text.titleMedium?.copyWith(color: p.ink)),
-        const SizedBox(height: VhSpace.xxs),
-        Text(
-          '${pairing.host}:${pairing.port}',
-          textDirection: TextDirection.ltr,
-          textAlign: TextAlign.start,
-          style: text.bodyMedium?.copyWith(color: p.ink2),
-        ),
+        const SizedBox(height: VhSpace.md),
+        PcRoutePicker(pairing: pairing),
         const SizedBox(height: VhSpace.md),
         Text(
           l10n.pcCertificate,

@@ -2277,6 +2277,10 @@ class VhLocalizationsEn extends VhLocalizations {
       'The computer is off or on another network. What it had last time is shown below.';
 
   @override
+  String get pcOfflineRoute =>
+      'Away from home? Choose Tailscale in Settings › Computer.';
+
+  @override
   String get pcOrType => 'Or type the address and code';
 
   @override
@@ -2303,6 +2307,26 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pcPortLabel => 'Port';
 
   @override
+  String get pcRouteHint =>
+      'Choose Tailscale when you are away from home; it must be running on both the phone and the computer.';
+
+  @override
+  String get pcRouteHome => 'Home network';
+
+  @override
+  String get pcRouteOther => 'Another network';
+
+  @override
+  String get pcRouteTailscale => 'Tailscale';
+
+  @override
+  String get pcRouteTitle => 'Connect through';
+
+  @override
+  String get pcRouteWaiting =>
+      'The computer\'s other routes show here once it answers.';
+
+  @override
   String get pcScanButton => 'Scan the code';
 
   @override
@@ -2325,6 +2349,11 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcTab => 'Computer';
+
+  @override
+  String pcVia(String route) {
+    return 'Through $route';
+  }
 
   @override
   String get pcWatchLater =>

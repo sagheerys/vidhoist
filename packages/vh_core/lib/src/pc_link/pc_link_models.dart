@@ -4,8 +4,15 @@
 /// or older version.
 library;
 
+import 'pc_addresses.dart';
+
 class PcStatus {
-  const PcStatus({required this.name, required this.version, this.active = 0});
+  const PcStatus({
+    required this.name,
+    required this.version,
+    this.active = 0,
+    this.addresses = const [],
+  });
 
   final String name;
   final String version;
@@ -13,10 +20,16 @@ class PcStatus {
   /// Downloads under way or waiting their turn.
   final int active;
 
+  /// Where the computer can be reached now, sorted: the phone keeps them
+  /// for the owner to choose the route, and learns a changed one here.
+  final List<PcAddress> addresses;
+
   Map<String, Object?> toJson() => {
     'name': name,
     'version': version,
     'active': active,
+    if (addresses.isNotEmpty)
+      'addresses': [for (final a in addresses) a.toJson()],
   };
 
   static PcStatus? fromJson(Object? json) {
@@ -25,6 +38,7 @@ class PcStatus {
       name: json['name'] as String,
       version: json['version'] as String? ?? '',
       active: json['active'] as int? ?? 0,
+      addresses: PcAddress.listFromJson(json['addresses']),
     );
   }
 }

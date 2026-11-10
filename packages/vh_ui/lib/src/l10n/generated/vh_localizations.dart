@@ -3914,6 +3914,12 @@ abstract class VhLocalizations {
   /// **'The computer is off or on another network. What it had last time is shown below.'**
   String get pcOfflineMessage;
 
+  /// No description provided for @pcOfflineRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Away from home? Choose Tailscale in Settings › Computer.'**
+  String get pcOfflineRoute;
+
   /// No description provided for @pcOrType.
   ///
   /// In en, this message translates to:
@@ -3956,6 +3962,42 @@ abstract class VhLocalizations {
   /// **'Port'**
   String get pcPortLabel;
 
+  /// No description provided for @pcRouteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Tailscale when you are away from home; it must be running on both the phone and the computer.'**
+  String get pcRouteHint;
+
+  /// No description provided for @pcRouteHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home network'**
+  String get pcRouteHome;
+
+  /// No description provided for @pcRouteOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Another network'**
+  String get pcRouteOther;
+
+  /// No description provided for @pcRouteTailscale.
+  ///
+  /// In en, this message translates to:
+  /// **'Tailscale'**
+  String get pcRouteTailscale;
+
+  /// No description provided for @pcRouteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect through'**
+  String get pcRouteTitle;
+
+  /// No description provided for @pcRouteWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer\'s other routes show here once it answers.'**
+  String get pcRouteWaiting;
+
   /// No description provided for @pcScanButton.
   ///
   /// In en, this message translates to:
@@ -3997,6 +4039,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Computer'**
   String get pcTab;
+
+  /// No description provided for @pcVia.
+  ///
+  /// In en, this message translates to:
+  /// **'Through {route}'**
+  String pcVia(String route);
 
   /// No description provided for @pcWatchLater.
   ///

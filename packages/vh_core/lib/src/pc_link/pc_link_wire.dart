@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 
+import 'pc_addresses.dart';
+
 /// "Download on the computer": the words both ends agree on. The computer
 /// runs a small HTTPS server on the home network; the phone pairs once, then
 /// sends links and reads the computer's downloads and library. See
@@ -87,8 +89,10 @@ class PcPairing {
     required this.deviceId,
     required this.secret,
     required this.name,
+    this.routes = const [],
   });
 
+  /// The address in use: the owner's choice among [routes].
   final String host;
   final int port;
   final String fingerprint;
@@ -98,13 +102,23 @@ class PcPairing {
   /// The computer's name, as it gave it.
   final String name;
 
-  PcPairing copyWith({String? host, int? port, String? name}) => PcPairing(
+  /// Every address the computer last said it has (home network, Tailscale…),
+  /// for the owner to switch [host] between; empty until it first answers.
+  final List<PcAddress> routes;
+
+  PcPairing copyWith({
+    String? host,
+    int? port,
+    String? name,
+    List<PcAddress>? routes,
+  }) => PcPairing(
     host: host ?? this.host,
     port: port ?? this.port,
     fingerprint: fingerprint,
     deviceId: deviceId,
     secret: secret,
     name: name ?? this.name,
+    routes: routes ?? this.routes,
   );
 
   Map<String, Object?> toJson() => {
@@ -114,6 +128,7 @@ class PcPairing {
     'deviceId': deviceId,
     'secret': secret,
     'name': name,
+    if (routes.isNotEmpty) 'routes': [for (final r in routes) r.toJson()],
   };
 
   static PcPairing? fromJson(Object? json) {
@@ -137,6 +152,7 @@ class PcPairing {
       deviceId: deviceId,
       secret: secret,
       name: json['name'] as String? ?? host,
+      routes: PcAddress.listFromJson(json['routes']),
     );
   }
 }

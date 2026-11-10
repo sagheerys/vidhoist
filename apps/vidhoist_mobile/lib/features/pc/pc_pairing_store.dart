@@ -55,9 +55,28 @@ class PcPairingNotifier extends Notifier<PcPairing?> {
   PcPairing? build() => ref.read(initialPcPairingProvider);
 
   Future<void> save(PcPairing pairing) async {
+    await ref.read(secretStoreProvider).write(pcSecretKey, pairing.secret);
+    await _keep(pairing);
+  }
+
+  /// The computer's addresses as it last gave them. The route in use stays
+  /// the owner's to change, never switched behind their back (owner's
+  /// choice, 2026-11-10).
+  Future<void> learnRoutes(List<PcAddress> routes) async {
+    if (state case final pairing?) {
+      await _keep(pairing.copyWith(routes: routes));
+    }
+  }
+
+  /// The owner's route: the home network, or Tailscale away from home.
+  Future<void> useRoute(String host) async {
+    if (state case final pairing?) await _keep(pairing.copyWith(host: host));
+  }
+
+  /// Saves all but the secret, which stays in the encrypted store.
+  Future<void> _keep(PcPairing pairing) async {
     final store = ref.read(keyValueStoreProvider);
     final json = pairing.toJson()..remove('secret');
-    await ref.read(secretStoreProvider).write(pcSecretKey, pairing.secret);
     await ref
         .read(prefsMutexProvider)
         .run(() => store.setString(pcPairingKey, jsonEncode(json)));
