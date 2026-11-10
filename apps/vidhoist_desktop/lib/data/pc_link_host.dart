@@ -13,11 +13,20 @@ import 'library_data.dart';
 /// that are files here, newest first. Read fresh on each call, so the phone
 /// never sees a stale list.
 class DesktopPcHost implements PcLinkHost {
-  DesktopPcHost(this._ref, {required this.name, required this.version});
+  DesktopPcHost(
+    this._ref, {
+    required this.name,
+    required this.version,
+    List<PcAddress> Function()? addresses,
+  }) : _addresses = addresses ?? (() => const []);
 
   final Ref _ref;
   final String name;
   final String version;
+
+  /// This computer's addresses as they are now, for the phone's choice of
+  /// route.
+  final List<PcAddress> Function() _addresses;
 
   LocalDownloadEngine? get _engine => _ref.read(downloadEngineProvider);
 
@@ -26,6 +35,7 @@ class DesktopPcHost implements PcLinkHost {
     name: name,
     version: version,
     active: (_engine?.tasks ?? const []).where(isUnderWay).length,
+    addresses: _addresses(),
   );
 
   @override

@@ -263,6 +263,7 @@
       }
     }
   },
+  "@pcVia": {"placeholders": {"route": {"type": "String"}}},
   "@pcLinkPhones": {
     "placeholders": {
       "count": {
@@ -1175,6 +1176,7 @@
   "pcNow": "On the computer now",
   "pcOffline": "Unavailable",
   "pcOfflineMessage": "The computer is off or on another network. What it had last time is shown below.",
+  "pcOfflineRoute": "Away from home? Choose Tailscale in Settings › Computer.",
   "pcOrType": "Or type the address and code",
   "pcPairButton": "Pair",
   "pcPairCheck": "Check that the computer shows {check}, then allow the phone there.",
@@ -1182,6 +1184,12 @@
   "pcPairStart": "Pair with a computer",
   "pcPaired": "Paired with {name}",
   "pcPortLabel": "Port",
+  "pcRouteHint": "Choose Tailscale when you are away from home; it must be running on both the phone and the computer.",
+  "pcRouteHome": "Home network",
+  "pcRouteOther": "Another network",
+  "pcRouteTailscale": "Tailscale",
+  "pcRouteTitle": "Connect through",
+  "pcRouteWaiting": "The computer's other routes show here once it answers.",
   "pcScanButton": "Scan the code",
   "pcScanFailed": "The camera could not be opened.",
   "pcScanPrompt": "Point the camera at the code on the computer's screen",
@@ -1189,6 +1197,7 @@
   "pcSent": "Sent to {name}",
   "pcSettingsHint": "Send links to your computer",
   "pcTab": "Computer",
+  "pcVia": "Through {route}",
   "pcWatchLater": "Watching from the computer comes in a later update.",
   "percentValue": "{percent}%",
   "pickAnotherFile": "From another file…",

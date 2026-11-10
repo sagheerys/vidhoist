@@ -2313,6 +2313,10 @@ class VhLocalizationsAr extends VhLocalizations {
       'الكمبيوتر مطفأ أو على شبكة أخرى. ما كان فيه آخر مرة معروض أدناه.';
 
   @override
+  String get pcOfflineRoute =>
+      'خارج البيت؟ اختر Tailscale من الإعدادات › الكمبيوتر.';
+
+  @override
   String get pcOrType => 'أو اكتب العنوان والرمز';
 
   @override
@@ -2339,6 +2343,26 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pcPortLabel => 'المنفذ';
 
   @override
+  String get pcRouteHint =>
+      'اختر Tailscale حين تكون خارج البيت، ويجب أن يعمل على الجوال والكمبيوتر معاً.';
+
+  @override
+  String get pcRouteHome => 'شبكة البيت';
+
+  @override
+  String get pcRouteOther => 'شبكة أخرى';
+
+  @override
+  String get pcRouteTailscale => 'Tailscale';
+
+  @override
+  String get pcRouteTitle => 'الاتصال عبر';
+
+  @override
+  String get pcRouteWaiting =>
+      'تظهر طرق الاتصال الأخرى هنا بعد أول رد من الكمبيوتر.';
+
+  @override
   String get pcScanButton => 'امسح الباركود';
 
   @override
@@ -2360,6 +2384,11 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcTab => 'الكمبيوتر';
+
+  @override
+  String pcVia(String route) {
+    return 'عبر $route';
+  }
 
   @override
   String get pcWatchLater => 'المشاهدة من الكمبيوتر قادمة في تحديث لاحق.';

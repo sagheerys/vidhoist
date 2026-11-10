@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-import '../../data/pc_link_addresses.dart';
 import '../../shell/folded_text.dart';
 
 /// The addresses a phone dials, the home network's first and named by its

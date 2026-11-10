@@ -9,6 +9,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'pc_errors.dart';
 import 'pc_link_state.dart';
+import 'pc_route_picker.dart';
 import 'pc_pairing_store.dart';
 
 /// **The "Computer" tab**, there only once this phone is paired: the
@@ -71,6 +72,9 @@ class _PcScreenState extends ConsumerState<PcScreen> {
             _StatusCard(
               view: view,
               name: view.status?.name ?? pairing?.name ?? '',
+              route: pairing == null
+                  ? null
+                  : l10n.pcVia(pcRouteName(l10n, pairing, pairing.host)),
             ),
             if (!view.online && view.failure != null)
               Padding(
@@ -82,7 +86,12 @@ class _PcScreenState extends ConsumerState<PcScreen> {
                 ),
                 child: Text(
                   view.failure == PcLinkFailure.unreachable
-                      ? l10n.pcOfflineMessage
+                      ? [
+                          l10n.pcOfflineMessage,
+                          // Tailscale known but not in use: the way out.
+                          if (pairing != null && pcTailscaleUnused(pairing))
+                            l10n.pcOfflineRoute,
+                        ].join(' ')
                       : pcFailureText(l10n, view.failure!),
                   style: text.bodySmall?.copyWith(color: p.ink2),
                 ),
@@ -114,10 +123,13 @@ class _PcScreenState extends ConsumerState<PcScreen> {
 }
 
 class _StatusCard extends StatelessWidget {
-  const _StatusCard({required this.view, required this.name});
+  const _StatusCard({required this.view, required this.name, this.route});
 
   final PcView view;
   final String name;
+
+  /// "Through Tailscale": the route the owner chose.
+  final String? route;
 
   @override
   Widget build(BuildContext context) {
@@ -184,6 +196,11 @@ class _StatusCard extends StatelessWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         _Pill(online: view.online),
+                        if (route case final route?)
+                          Text(
+                            route,
+                            style: text.bodySmall?.copyWith(color: p.ink2),
+                          ),
                         if (seen != null)
                           Text(
                             l10n.pcLastContact(vhTimeAgo(context, seen)),

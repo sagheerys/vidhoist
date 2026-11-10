@@ -9,8 +9,15 @@ import 'pc_pairing_store.dart';
 
 /// The link to the paired computer, or null when there is none.
 final pcClientProvider = Provider<PcLinkApi?>((ref) {
-  final pairing = ref.watch(pcPairingProvider);
-  if (pairing == null) return null;
+  // Only what the connection needs: the routes the computer reports change
+  // without a new client, a route the owner picks makes one.
+  final link = ref.watch(
+    pcPairingProvider.select(
+      (p) => p == null ? null : (p.host, p.port, p.fingerprint, p.secret),
+    ),
+  );
+  final pairing = ref.read(pcPairingProvider);
+  if (link == null || pairing == null) return null;
   final client = PcLinkClient(pairing);
   ref.onDispose(client.close);
   return client;
@@ -97,7 +104,25 @@ class PcViewNotifier extends Notifier<PcView> {
     ref.watch(pcClientProvider);
     ref.onDispose(() => _timer?.cancel());
     unawaited(_loadCache());
+    // A route changed while the page is open: ask again at once.
+    if (_watching > 0) Future.microtask(refresh);
     return const PcView();
+  }
+
+  /// Keeps the computer's addresses for the owner's choice of route.
+  void _learn(PcStatus status) {
+    final pairing = ref.read(pcPairingProvider);
+    if (pairing == null || status.addresses.isEmpty) return;
+    final known = pairing.routes;
+    final same =
+        known.length == status.addresses.length &&
+        [for (var i = 0; i < known.length; i++) known[i] == status.addresses[i]]
+            .every((s) => s);
+    if (!same) {
+      unawaited(
+        ref.read(pcPairingProvider.notifier).learnRoutes(status.addresses),
+      );
+    }
   }
 
   /// The page opened; [stopWatching] when it closes.
@@ -118,6 +143,7 @@ class PcViewNotifier extends Notifier<PcView> {
     final hadLive = state.live.map((t) => t.id).toSet();
     try {
       final status = await client.status();
+      _learn(status);
       final tasks = await client.tasks();
       final stillLive = {
         for (final t in tasks)
@@ -149,6 +175,7 @@ class PcViewNotifier extends Notifier<PcView> {
     if (client == null) return false;
     try {
       final status = await client.status();
+      _learn(status);
       state = state.copyWith(
         status: status,
         lastContact: DateTime.now(),

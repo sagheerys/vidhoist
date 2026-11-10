@@ -7,7 +7,6 @@ import 'package:vh_core/vh_core.dart';
 
 import '../di.dart';
 import '../platform/computer_name.dart';
-import 'pc_link_addresses.dart';
 import 'pc_link_host.dart';
 import 'update_data.dart';
 
@@ -113,34 +112,43 @@ class PcLinkSession {
 }
 
 /// Null while the link is off; otherwise listening on every IPv4 interface.
-final pcLinkProvider = FutureProvider<PcLinkSession?>((ref) async {
-  if (!ref.watch(pcLinkEnabledProvider)) return null;
-  final certificate = await ref.watch(pcCertificateProvider.future);
-  final pairing = PcPairingWindow(
-    store: PrefsPcDeviceStore(
-      ref.read(keyValueStoreProvider),
-      ref.read(prefsMutexProvider),
-    ),
-    fingerprint: certificate.fingerprint,
-  );
-  await pairing.load();
-  final version = await ref
-      .read(installedVersionProvider.future)
-      .catchError((Object _) => '');
-  final server = PcLinkServer(
-    certificate: certificate,
-    host: DesktopPcHost(ref, name: computerName(), version: version),
-    pairing: pairing,
-    name: computerName(),
-    onLog: (message) => _log(ref, message),
-  );
-  final port = await server.start();
-  ref.onDispose(() {
-    unawaited(server.stop());
-    unawaited(pairing.dispose());
-  });
-  return PcLinkSession(server: server, pairing: pairing, port: port);
-});
+final FutureProvider<PcLinkSession?> pcLinkProvider =
+    FutureProvider<PcLinkSession?>((ref) async {
+      if (!ref.watch(pcLinkEnabledProvider)) return null;
+      final certificate = await ref.watch(pcCertificateProvider.future);
+      final pairing = PcPairingWindow(
+        store: PrefsPcDeviceStore(
+          ref.read(keyValueStoreProvider),
+          ref.read(prefsMutexProvider),
+        ),
+        fingerprint: certificate.fingerprint,
+      );
+      await pairing.load();
+      final version = await ref
+          .read(installedVersionProvider.future)
+          .catchError((Object _) => '');
+      final server = PcLinkServer(
+        certificate: certificate,
+        host: DesktopPcHost(
+          ref,
+          name: computerName(),
+          version: version,
+          // Read when the phone asks: the list is loaded by then, and a newer
+          // one (a new Wi-Fi) is what the phone should learn.
+          addresses: () =>
+              ref.read(pcLinkAddressesProvider).valueOrNull ?? const [],
+        ),
+        pairing: pairing,
+        name: computerName(),
+        onLog: (message) => _log(ref, message),
+      );
+      final port = await server.start();
+      ref.onDispose(() {
+        unawaited(server.stop());
+        unawaited(pairing.dispose());
+      });
+      return PcLinkSession(server: server, pairing: pairing, port: port);
+    });
 
 /// The paired phones as they change: the settings list reads its count,
 /// which a value read once left at "No phone" after a pairing (2026-11-09).
@@ -155,21 +163,22 @@ final pcLinkDevicesProvider = StreamProvider<List<PcDevice>>((ref) async* {
 });
 
 /// This computer's IPv4 addresses, the one a phone at home dials first.
-final pcLinkAddressesProvider = FutureProvider<List<PcAddress>>((ref) async {
-  ref.watch(pcLinkProvider);
-  try {
-    final interfaces = await NetworkInterface.list(
-      type: InternetAddressType.IPv4,
-    );
-    return sortPcAddresses([
-      for (final i in interfaces)
-        for (final a in i.addresses)
-          if (!a.isLoopback && !a.isLinkLocal) (i.name, a.address),
-    ]);
-  } on Object {
-    return const [];
-  }
-});
+final FutureProvider<List<PcAddress>> pcLinkAddressesProvider =
+    FutureProvider<List<PcAddress>>((ref) async {
+      ref.watch(pcLinkProvider);
+      try {
+        final interfaces = await NetworkInterface.list(
+          type: InternetAddressType.IPv4,
+        );
+        return sortPcAddresses([
+          for (final i in interfaces)
+            for (final a in i.addresses)
+              if (!a.isLoopback && !a.isLinkLocal) (i.name, a.address),
+        ]);
+      } on Object {
+        return const [];
+      }
+    });
 
 void _log(Ref ref, String message) {
   try {

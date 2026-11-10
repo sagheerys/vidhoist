@@ -6,8 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/backup_data.dart';
-import 'package:vidhoist_desktop/data/pc_link_addresses.dart';
+import 'package:vidhoist_desktop/data/downloads_data.dart';
 import 'package:vidhoist_desktop/data/pc_link_data.dart';
+import 'package:vidhoist_desktop/data/pc_link_host.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/settings/phone_pane.dart';
 import 'package:vidhoist_desktop/features/settings/phone_qr.dart';
@@ -247,6 +248,25 @@ void main() {
     expect(pairing.isOpen, isTrue);
     await tester.pumpWidget(const SizedBox());
     expect(pairing.isOpen, isFalse);
+  });
+
+  test('**the guard**: the status a phone reads carries the addresses '
+      'of this computer, for its choice of route', () {
+    final container = ProviderContainer(
+      overrides: [downloadEngineProvider.overrideWithValue(null)],
+    );
+    addTearDown(container.dispose);
+    final host = container.read(
+      Provider(
+        (ref) => DesktopPcHost(
+          ref,
+          name: 'PC',
+          version: '1',
+          addresses: () => _addresses,
+        ),
+      ),
+    );
+    expect(host.status().addresses, _addresses);
   });
 
   test('a backup leaves the link out', () {
