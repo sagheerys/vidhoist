@@ -348,9 +348,9 @@ final audioStateStoreProvider = Provider(
   ),
 );
 
-/// Overridden in main. **The phone app never streams**: its library is entirely
-/// local, so the endpoint stays `none` and the golden rule always ends at
-/// the local file.
+/// Overridden in main. The phone's library is entirely local, so the golden
+/// rule ends at the local file; only a clip on the paired computer streams,
+/// through the link's proxy (`pc_stream.dart`).
 final playbackResolverProvider = Provider<PlaybackSourceResolver>(
   (ref) => throw UnimplementedError('overridden in main'),
 );

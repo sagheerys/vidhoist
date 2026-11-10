@@ -4,59 +4,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'pc_certificate.dart';
+import 'pc_link_api.dart';
 import 'pc_link_models.dart';
+import 'pc_reach.dart';
 import 'pc_link_wire.dart';
-
-/// Why a call to the computer failed, in the terms the phone shows.
-enum PcLinkFailure {
-  /// Off, asleep, on another network, or a firewall in the way.
-  unreachable,
-
-  /// Something answered with another certificate: not our computer, or a
-  /// machine in the middle. Nothing was sent.
-  wrongCertificate,
-
-  /// The computer forgot this phone; pair again.
-  unauthorized,
-
-  /// No pairing window on the computer (no code shown, or it expired).
-  pairingClosed,
-  wrongCode,
-
-  /// The owner refused on the computer, or did not answer in time.
-  pairingDenied,
-
-  /// The computer would not take the link.
-  refused,
-  badResponse,
-}
-
-class PcLinkException implements Exception {
-  const PcLinkException(this.failure, [this.detail]);
-
-  final PcLinkFailure failure;
-  final String? detail;
-
-  @override
-  String toString() =>
-      'PcLinkException(${failure.name}${detail == null ? '' : ': $detail'})';
-}
-
-/// What the phone asks of the computer once paired; [PcLinkClient] over the
-/// network, a fake in tests.
-abstract interface class PcLinkApi {
-  Future<PcStatus> status();
-  Future<List<PcTask>> tasks();
-  Future<PcTask> submit(String url, String quality);
-  Future<bool> cancel(String id);
-  Future<PcLibraryPage> library({
-    int offset = 0,
-    int limit = 100,
-    String? query,
-  });
-  Future<Uint8List?> cover(String id);
-  void close();
-}
 
 /// The phone's end of the link. **It trusts one certificate, the one it saw
 /// when it paired**: no authority, no system store. Anything else fails the
@@ -164,39 +115,18 @@ class PcLinkClient implements PcLinkApi {
   }
 
   /// The first of [hosts], in their order, where the computer with
-  /// [fingerprint] answers on [port]; null when none does. Only a TLS
-  /// handshake is made, nothing is sent: a computer has several addresses
-  /// and the phone reaches only some of them.
+  /// [fingerprint] answers on [port]; see [pcReach].
   static Future<String?> reach({
     required List<String> hosts,
     required int port,
     required String fingerprint,
     Duration timeout = const Duration(seconds: 3),
-  }) async {
-    Future<bool> answers(String host) async {
-      try {
-        final socket = await SecureSocket.connect(
-          host,
-          port,
-          context: SecurityContext(withTrustedRoots: false),
-          onBadCertificate: (cert) => fingerprintOf(cert.der) == fingerprint,
-          timeout: timeout,
-        );
-        socket.destroy();
-        return true;
-      } on Object {
-        return false;
-      }
-    }
-
-    // All at once, so an address that does not answer costs one timeout,
-    // not one each.
-    final results = await Future.wait(hosts.map(answers));
-    for (var i = 0; i < hosts.length; i++) {
-      if (results[i]) return hosts[i];
-    }
-    return null;
-  }
+  }) => pcReach(
+    hosts: hosts,
+    port: port,
+    fingerprint: fingerprint,
+    timeout: timeout,
+  );
 
   @override
   Future<PcStatus> status() async {
@@ -266,6 +196,38 @@ class PcLinkClient implements PcLinkApi {
   }
 
   @override
+  Future<PcFileResponse> file(String id, {String? range}) async {
+    final response = await _open(
+      'GET',
+      '${PcLink.libraryPath}/${Uri.encodeComponent(id)}/${PcLink.fileSegment}',
+      headers: {HttpHeaders.rangeHeader: ?range},
+    );
+    return PcFileResponse(
+      statusCode: response.statusCode,
+      headers: {
+        for (final name in PcFileResponse.passed)
+          name: ?response.headers.value(name),
+      },
+      body: response,
+    );
+  }
+
+  @override
+  Future<List<Object?>> transcripts(String id) async {
+    final (code, body) = await _send(
+      'GET',
+      '${PcLink.libraryPath}/${Uri.encodeComponent(id)}/transcripts',
+    );
+    if (code == HttpStatus.notFound) return const [];
+    if (code != HttpStatus.ok) {
+      throw PcLinkException(PcLinkFailure.badResponse, '$code');
+    }
+    final json = _decode(body);
+    final list = json is Map ? json['transcripts'] : null;
+    return list is List ? list : const [];
+  }
+
+  @override
   void close() => _http.close(force: true);
 
   Future<Object?> _getJson(String path, [Map<String, String>? query]) async {
@@ -282,7 +244,28 @@ class PcLinkClient implements PcLinkApi {
     Map<String, String>? query,
     Object? body,
   }) async {
+    final response = await _open(method, path, query: query, body: body);
+    try {
+      return (
+        response.statusCode,
+        await _readBody(response).timeout(timeout * 4),
+      );
+    } on Object catch (e) {
+      throw _failure(e);
+    }
+  }
+
+  /// The computer's response with its body still to read; a forgotten
+  /// phone learns so here.
+  Future<HttpClientResponse> _open(
+    String method,
+    String path, {
+    Map<String, String>? query,
+    Object? body,
+    Map<String, String> headers = const {},
+  }) async {
     _sawWrongCertificate = false;
+    final HttpClientResponse response;
     try {
       final uri = Uri(
         scheme: 'https',
@@ -295,27 +278,28 @@ class PcLinkClient implements PcLinkApi {
       request.headers
         ..set(HttpHeaders.authorizationHeader, 'Bearer ${pairing.secret}')
         ..set(PcLink.deviceHeader, pairing.deviceId);
+      headers.forEach(request.headers.set);
       if (body != null) {
         request.headers.contentType = ContentType.json;
         request.write(jsonEncode(body));
       }
-      final response = await request.close().timeout(timeout);
-      final bytes = await _readBody(response).timeout(timeout * 4);
-      if (response.statusCode == HttpStatus.unauthorized) {
-        throw const PcLinkException(PcLinkFailure.unauthorized);
-      }
-      return (response.statusCode, bytes);
-    } on PcLinkException {
-      rethrow;
+      response = await request.close().timeout(timeout);
     } on Object catch (e) {
-      throw PcLinkException(
-        _sawWrongCertificate
-            ? PcLinkFailure.wrongCertificate
-            : PcLinkFailure.unreachable,
-        '$e',
-      );
+      throw _failure(e);
     }
+    if (response.statusCode == HttpStatus.unauthorized) {
+      unawaited(response.drain<void>().catchError((Object _) {}));
+      throw const PcLinkException(PcLinkFailure.unauthorized);
+    }
+    return response;
   }
+
+  PcLinkException _failure(Object e) => PcLinkException(
+    _sawWrongCertificate
+        ? PcLinkFailure.wrongCertificate
+        : PcLinkFailure.unreachable,
+    '$e',
+  );
 
   static HttpClient _pinnedClient(
     bool Function(String fp) accept,

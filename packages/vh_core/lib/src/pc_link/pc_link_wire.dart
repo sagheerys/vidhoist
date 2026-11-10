@@ -18,6 +18,9 @@ abstract final class PcLink {
   static const downloadsPath = '/v1/downloads';
   static const libraryPath = '/v1/library';
 
+  /// `/v1/library/<id>/file`: a clip's file, ranges honoured.
+  static const fileSegment = 'file';
+
   /// Who is asking: the device id, beside `Authorization: Bearer <secret>`.
   static const deviceHeader = 'x-vh-device';
 

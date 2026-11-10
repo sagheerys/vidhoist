@@ -3662,6 +3662,42 @@ abstract class VhLocalizations {
   /// **'Connected'**
   String get pcConnected;
 
+  /// No description provided for @pcCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to the phone\'s library, with its subtitles.'**
+  String get pcCopied;
+
+  /// No description provided for @pcCopyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The copy did not finish: the computer may be off or out of reach. Nothing was kept.'**
+  String get pcCopyFailed;
+
+  /// No description provided for @pcCopyStarting.
+  ///
+  /// In en, this message translates to:
+  /// **'Copying…'**
+  String get pcCopyStarting;
+
+  /// No description provided for @pcCopyStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop copying'**
+  String get pcCopyStop;
+
+  /// No description provided for @pcCopyToPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to the phone'**
+  String get pcCopyToPhone;
+
+  /// No description provided for @pcCopying.
+  ///
+  /// In en, this message translates to:
+  /// **'Copying {percent}%'**
+  String pcCopying(int percent);
+
   /// No description provided for @pcDestPhone.
   ///
   /// In en, this message translates to:
@@ -3896,6 +3932,12 @@ abstract class VhLocalizations {
   /// **'Phone'**
   String get pcLinkTitle;
 
+  /// No description provided for @pcListen.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen'**
+  String get pcListen;
+
   /// No description provided for @pcNow.
   ///
   /// In en, this message translates to:
@@ -3919,6 +3961,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Away from home? Choose Tailscale in Settings › Computer.'**
   String get pcOfflineRoute;
+
+  /// No description provided for @pcOnPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'On the phone'**
+  String get pcOnPhone;
 
   /// No description provided for @pcOrType.
   ///
@@ -4046,11 +4094,11 @@ abstract class VhLocalizations {
   /// **'Through {route}'**
   String pcVia(String route);
 
-  /// No description provided for @pcWatchLater.
+  /// No description provided for @pcWatch.
   ///
   /// In en, this message translates to:
-  /// **'Watching from the computer comes in a later update.'**
-  String get pcWatchLater;
+  /// **'Watch'**
+  String get pcWatch;
 
   /// No description provided for @percentValue.
   ///

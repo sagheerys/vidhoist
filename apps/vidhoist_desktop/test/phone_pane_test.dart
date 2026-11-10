@@ -32,6 +32,10 @@ class _NoHost implements PcLinkHost {
   }) async => const PcLibraryPage(items: [], total: 0);
   @override
   Future<File?> cover(String id) async => null;
+  @override
+  Future<File?> file(String id) async => null;
+  @override
+  Future<List<Object?>> transcripts(String id) async => const [];
 }
 
 const _addresses = [

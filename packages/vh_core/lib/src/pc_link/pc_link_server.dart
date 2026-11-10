@@ -6,6 +6,7 @@ import 'pc_certificate.dart';
 import 'pc_link_models.dart';
 import 'pc_link_wire.dart';
 import 'pc_pairing.dart';
+import 'pc_range.dart';
 
 /// What the server serves, answered by the app: its download engine and
 /// its library. The server knows HTTP and pairing; the host knows clips.
@@ -24,6 +25,14 @@ abstract interface class PcLinkHost {
 
   /// The cover file kept for [id], or null.
   Future<File?> cover(String id);
+
+  /// The clip's own file, for the phone to play or copy; null when [id]
+  /// is not a file in the library.
+  Future<File?> file(String id);
+
+  /// Every transcript kept for [id], each as its JSON: the phone reads them
+  /// with the transcripts package, which this one does not know.
+  Future<List<Object?>> transcripts(String id);
 }
 
 /// The computer's end of the link: HTTPS on the home network.
@@ -32,8 +41,9 @@ abstract interface class PcLinkHost {
 /// empty 404 to anyone without a paired device's secret, the certificate
 /// names nobody, and `/v1/pair` exists only while the owner shows a code.
 /// What a paired phone may do is narrow: read the downloads and library,
-/// queue a web link, cancel a download, fetch a cover. Nothing reaches the
-/// computer's settings, files outside the library, or a command line.
+/// queue a web link, cancel a download, fetch a cover, and read a library
+/// clip's file and transcripts by its id. Nothing reaches the computer's
+/// settings, files outside the library, or a command line.
 class PcLinkServer {
   PcLinkServer({
     required this.certificate,
@@ -101,7 +111,11 @@ class PcLinkServer {
       await _route(request, response);
     } on Object catch (e) {
       onLog?.call('link: ${request.method} ${request.uri.path} failed: $e');
-      response.statusCode = HttpStatus.internalServerError;
+      try {
+        response.statusCode = HttpStatus.internalServerError;
+      } on StateError {
+        // The headers went out already; the close below ends it.
+      }
     } finally {
       try {
         await response.close();
@@ -177,11 +191,21 @@ class PcLinkServer {
       );
       return _json(response, page.toJson());
     }
-    if (method == 'GET' &&
+    final inLibrary =
         segments.length == 4 &&
-        '/${segments[0]}/${segments[1]}' == PcLink.libraryPath &&
-        segments[3] == 'cover') {
+        '/${segments[0]}/${segments[1]}' == PcLink.libraryPath;
+    if (method == 'GET' && inLibrary && segments[3] == 'cover') {
       return _cover(segments[2], response);
+    }
+    if ((method == 'GET' || method == 'HEAD') &&
+        inLibrary &&
+        segments[3] == PcLink.fileSegment) {
+      return _file(segments[2], request, response);
+    }
+    if (method == 'GET' && inLibrary && segments[3] == 'transcripts') {
+      return _json(response, {
+        'transcripts': await host.transcripts(segments[2]),
+      });
     }
     response.statusCode = HttpStatus.notFound;
   }
@@ -231,6 +255,19 @@ class PcLinkServer {
       _ => ContentType('image', 'jpeg'),
     };
     await response.addStream(file.openRead());
+  }
+
+  Future<void> _file(
+    String id,
+    HttpRequest request,
+    HttpResponse response,
+  ) async {
+    final file = await host.file(id);
+    if (file == null || !await file.exists()) {
+      response.statusCode = HttpStatus.notFound;
+      return;
+    }
+    await servePcFile(file, request, response);
   }
 
   static String? _bearer(HttpRequest request) {

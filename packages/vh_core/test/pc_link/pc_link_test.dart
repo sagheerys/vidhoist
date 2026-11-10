@@ -55,6 +55,19 @@ class FakeHost implements PcLinkHost {
 
   @override
   Future<File?> cover(String id) async => id == 'i0' ? coverFile : null;
+
+  /// The clip `i0`'s file, when a test gives it one.
+  File? mediaFile;
+
+  @override
+  Future<File?> file(String id) async => id == 'i0' ? mediaFile : null;
+
+  @override
+  Future<List<Object?>> transcripts(String id) async => id == 'i0'
+      ? [
+          {'lang': 'ar', 'url': 'https://example.com/a'},
+        ]
+      : const [];
 }
 
 void main() {
@@ -221,6 +234,8 @@ void main() {
           PcLink.downloadsPath,
           PcLink.libraryPath,
           '/v1/library/i0/cover',
+          '/v1/library/i0/file',
+          '/v1/library/i0/transcripts',
         ]) {
           expect(await raw('GET', path), (404, ''), reason: path);
         }
@@ -481,10 +496,16 @@ void main() {
       duration: const Duration(seconds: 61),
       added: DateTime(2026),
       hasCover: true,
+      url: 'https://youtu.be/x',
+      extension: 'webm',
     );
     final back = PcItem.fromJson(jsonDecode(jsonEncode(item.toJson())))!;
     expect(back.duration, item.duration);
     expect(back.added, item.added);
     expect(back.hasCover, isTrue);
+    expect(back.url, 'https://youtu.be/x');
+    expect(back.extension, 'webm');
+    // An older computer sends neither.
+    expect(PcItem.fromJson({'id': 'x', 'title': 't'})!.url, isNull);
   });
 }

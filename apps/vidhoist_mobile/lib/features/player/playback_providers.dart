@@ -67,8 +67,8 @@ final videoSessionProvider = Provider.autoDispose<VhVideoSession>((ref) {
 ///
 /// [PlaylistItem.canonicalUrl] here is **the item key**, a URL or a path,
 /// because that is the key for resuming, favourites and playlists here.
-/// And [serverFilename] is always null: the phone app never streams, and
-/// the local file is the only source.
+/// And [serverFilename] is always null: the local file is the only source.
+/// A clip on the paired computer is built by `pcPlaylistItem` instead.
 PlaylistItem toPlaylistItem(LocalItem item) => PlaylistItem(
   canonicalUrl: item.key,
   title: item.title,

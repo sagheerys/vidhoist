@@ -130,6 +130,33 @@ class FakeApi implements PcLinkApi {
   @override
   Future<Uint8List?> cover(String id) async => null;
 
+  /// The bytes of each clip that is a file, by its id.
+  Map<String, List<int>> files = const {};
+
+  /// Transcripts by clip id, as the computer keeps them.
+  Map<String, List<Object?>> kept = const {};
+
+  @override
+  Future<PcFileResponse> file(String id, {String? range}) async {
+    _check();
+    final bytes = files[id];
+    return PcFileResponse(
+      statusCode: bytes == null ? 404 : 200,
+      headers: {if (bytes != null) 'content-length': '${bytes.length}'},
+      body: Stream.fromIterable([
+        if (bytes != null)
+          for (var i = 0; i < bytes.length; i += 4)
+            bytes.sublist(i, (i + 4).clamp(0, bytes.length)),
+      ]),
+    );
+  }
+
+  @override
+  Future<List<Object?>> transcripts(String id) async {
+    _check();
+    return kept[id] ?? const [];
+  }
+
   @override
   void close() {}
 }
@@ -612,26 +639,6 @@ void main() {
       expect(find.text('Rust for TypeScript devs'), findsOneWidget);
       // The page asks again on its own while something downloads.
       await tester.pump(const Duration(seconds: 3));
-      await tester.pumpWidget(const SizedBox());
-    });
-
-    testWidgets('**the guard**: a clip tapped says watching comes later, '
-        'rather than doing nothing', (tester) async {
-      await tester.pumpWidget(
-        _app(
-          _overrides(
-            store: store,
-            secrets: secrets,
-            pairing: _pairing,
-            api: FakeApi(),
-          ),
-          const Scaffold(body: PcScreen()),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Rust for TypeScript devs'));
-      await tester.pump();
-      expect(find.text(l.pcWatchLater), findsOneWidget);
       await tester.pumpWidget(const SizedBox());
     });
 

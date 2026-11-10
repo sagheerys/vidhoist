@@ -263,6 +263,7 @@
       }
     }
   },
+  "@pcCopying": {"placeholders": {"percent": {"type": "int"}}},
   "@pcVia": {"placeholders": {"route": {"type": "String"}}},
   "@pcLinkPhones": {
     "placeholders": {
@@ -1134,6 +1135,12 @@
   "pcCertificate": "Computer's certificate",
   "pcCodeLabel": "Code",
   "pcConnected": "Connected",
+  "pcCopied": "Copied to the phone's library, with its subtitles.",
+  "pcCopyFailed": "The copy did not finish: the computer may be off or out of reach. Nothing was kept.",
+  "pcCopyStarting": "Copying…",
+  "pcCopyStop": "Stop copying",
+  "pcCopyToPhone": "Copy to the phone",
+  "pcCopying": "Copying {percent}%",
   "pcDestPhone": "This phone",
   "pcEmptyLibrary": "No downloads on the computer yet.",
   "pcErrBad": "The computer answered in a way this version does not understand. Update both apps.",
@@ -1173,10 +1180,12 @@
   "pcLinkSecurity": "Nothing passes through any server of ours: the phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer's certificate alone. Anyone else on the network finds a closed door.",
   "pcLinkStarting": "Starting…",
   "pcLinkTitle": "Phone",
+  "pcListen": "Listen",
   "pcNow": "On the computer now",
   "pcOffline": "Unavailable",
   "pcOfflineMessage": "The computer is off or on another network. What it had last time is shown below.",
   "pcOfflineRoute": "Away from home? Choose Tailscale in Settings › Computer.",
+  "pcOnPhone": "On the phone",
   "pcOrType": "Or type the address and code",
   "pcPairButton": "Pair",
   "pcPairCheck": "Check that the computer shows {check}, then allow the phone there.",
@@ -1198,7 +1207,7 @@
   "pcSettingsHint": "Send links to your computer",
   "pcTab": "Computer",
   "pcVia": "Through {route}",
-  "pcWatchLater": "Watching from the computer comes in a later update.",
+  "pcWatch": "Watch",
   "percentValue": "{percent}%",
   "pickAnotherFile": "From another file…",
   "pickAnotherFileSubtitle": "A backup from another phone or an older version",
