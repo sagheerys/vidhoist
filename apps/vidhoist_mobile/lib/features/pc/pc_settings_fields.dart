@@ -9,7 +9,7 @@ import 'package:vh_ui/vh_ui.dart';
 import 'pc_errors.dart';
 import 'pc_link_state.dart';
 import 'pc_pairing_store.dart';
-import 'pc_route_picker.dart';
+import 'pc_paired_view.dart';
 import 'pc_scan.dart';
 
 /// **Settings › Computer**: pair with VidHoist on a Windows computer, or
@@ -21,54 +21,7 @@ class PcSettingsFields extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pairing = ref.watch(pcPairingProvider);
-    return pairing == null ? const _PairForm() : _Paired(pairing: pairing);
-  }
-}
-
-class _Paired extends ConsumerWidget {
-  const _Paired({required this.pairing});
-
-  final PcPairing pairing;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.vhl;
-    final p = VhThemeX.of(context).palette;
-    final text = Theme.of(context).textTheme;
-    final fp = pairing.fingerprint.toUpperCase();
-    final groups = [for (var i = 0; i < 16; i += 4) fp.substring(i, i + 4)];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(pairing.name, style: text.titleMedium?.copyWith(color: p.ink)),
-        const SizedBox(height: VhSpace.md),
-        PcRoutePicker(pairing: pairing),
-        const SizedBox(height: VhSpace.md),
-        Text(
-          l10n.pcCertificate,
-          style: text.bodySmall?.copyWith(color: p.ink2),
-        ),
-        Text(
-          groups.join(' '),
-          textDirection: TextDirection.ltr,
-          style: text.bodyMedium?.copyWith(
-            color: p.ink,
-            fontFeatures: const [FontFeature.tabularFigures()],
-          ),
-        ),
-        const SizedBox(height: VhSpace.lg),
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: TextButton.icon(
-            style: TextButton.styleFrom(foregroundColor: p.err),
-            onPressed: () =>
-                unawaited(ref.read(pcPairingProvider.notifier).forget()),
-            icon: const VhIcon(VhIcons.linkOff),
-            label: Text(l10n.pcLinkRevoke),
-          ),
-        ),
-      ],
-    );
+    return pairing == null ? const _PairForm() : PcPairedView(pairing: pairing);
   }
 }
 
@@ -84,8 +37,12 @@ class _PairFormState extends ConsumerState<_PairForm> {
   final _port = TextEditingController();
   final _code = TextEditingController();
   var _busy = false;
+  var _finding = false;
   String? _check;
   String? _error;
+
+  /// What the network search found, said above the code field.
+  String? _note;
 
   @override
   void dispose() {
@@ -120,6 +77,30 @@ class _PairFormState extends ConsumerState<_PairForm> {
         onCheck: onCheck,
       ),
     );
+  }
+
+  /// Fills the address with the computer showing a code on this Wi-Fi, so
+  /// only the code is typed. It still pairs as typed: the four digits.
+  Future<void> _find() async {
+    final l10n = context.vhl;
+    setState(() {
+      _finding = true;
+      _error = null;
+      _note = null;
+    });
+    final found = await ref.read(pcPairableFinderProvider)();
+    if (!mounted) return;
+    setState(() {
+      _finding = false;
+      if (found.isEmpty) {
+        _error = l10n.pcFindNone;
+        return;
+      }
+      final first = found.first;
+      _address.text = first.host;
+      _port.text = first.port == PcLink.defaultPort ? '' : '${first.port}';
+      _note = l10n.pcFound(first.name ?? first.host);
+    });
   }
 
   /// The computer's QR code: its addresses, code and certificate in one
@@ -202,6 +183,16 @@ class _PairFormState extends ConsumerState<_PairForm> {
         ),
         const SizedBox(height: VhSpace.lg),
         Text(l10n.pcOrType, style: text.bodySmall?.copyWith(color: p.ink2)),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: TextButton.icon(
+            onPressed: _busy || _finding ? null : () => unawaited(_find()),
+            icon: _finding
+                ? const VhSpinner(size: 18)
+                : const VhIcon(VhIcons.search),
+            label: Text(l10n.pcFindOnNetwork),
+          ),
+        ),
         // The port has its own field: the phone's number pad has a dot but
         // no colon (owner's report, 2026-11-09), and it is rarely needed.
         Row(
@@ -244,6 +235,10 @@ class _PairFormState extends ConsumerState<_PairForm> {
           ],
         ),
         const SizedBox(height: VhSpace.md),
+        if (_note case final note?) ...[
+          Text(note, style: text.bodyMedium?.copyWith(color: p.ink)),
+          const SizedBox(height: VhSpace.sm),
+        ],
         TextField(
           controller: _code,
           enabled: !_busy,

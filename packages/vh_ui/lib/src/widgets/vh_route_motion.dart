@@ -31,11 +31,16 @@ AnimationStyle vhNoticeMotion({required bool still}) => still
 
 /// Every bottom sheet in the phone app goes through here, so none of them
 /// rises at Flutter's default pace.
+///
+/// It opens on the root navigator unless told otherwise: [VhRouteDepth]
+/// watches that one only, and a sheet on a tab's own navigator left the add
+/// button drawn over it (the computer library's menu, field report
+/// 2026-11-10).
 Future<T?> showVhSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   bool isScrollControlled = false,
-  bool useRootNavigator = false,
+  bool useRootNavigator = true,
   bool useSafeArea = false,
   BoxConstraints? constraints,
   bool? showDragHandle,

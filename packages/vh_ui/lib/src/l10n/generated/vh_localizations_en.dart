@@ -942,6 +942,13 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
+  String get desktopKeepAwake => 'Keep the computer awake while downloading';
+
+  @override
+  String get desktopKeepAwakeHint =>
+      'So a link sent from the phone, or a long playlist, finishes instead of stopping when Windows goes to sleep. The screen still turns off as usual.';
+
+  @override
   String get desktopKeyAddLink => 'Add the link you copied';
 
   @override
@@ -2172,6 +2179,40 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pcErrWrongCode => 'Wrong code.';
 
   @override
+  String get pcFindNone =>
+      'No computer found. On the computer, open Settings › Phone › Pair a phone first, on the same Wi-Fi.';
+
+  @override
+  String get pcFindOnNetwork => 'Find on the network';
+
+  @override
+  String get pcFirewallAllow => 'Allow';
+
+  @override
+  String get pcFirewallBlocked =>
+      'Windows Firewall blocks VidHoist, so the phone cannot reach it. Allow it on home (private) networks.';
+
+  @override
+  String get pcFirewallMissing =>
+      'Windows has not let VidHoist receive from the phone yet. Allow it once, on home (private) networks only.';
+
+  @override
+  String get pcFirewallPublic =>
+      'Windows calls this network Public, and lets nothing in there. If it is your home network, make it Private: Settings › Network & internet › Wi-Fi › its properties.';
+
+  @override
+  String get pcFirewallRefused =>
+      'Nothing changed: Windows needs an administrator\'s permission.';
+
+  @override
+  String get pcFirewallTitle => 'Windows Firewall';
+
+  @override
+  String pcFound(String name) {
+    return 'Found $name. Type the code it shows.';
+  }
+
+  @override
   String pcLastContact(String time) {
     return 'Last contact $time';
   }
@@ -2311,6 +2352,14 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pcOrType => 'Or type the address and code';
 
   @override
+  String get pcOutboxRefused => 'The computer would not take this link';
+
+  @override
+  String pcOutboxTitle(int count) {
+    return 'Waiting to send ($count)';
+  }
+
+  @override
   String get pcPairButton => 'Pair';
 
   @override
@@ -2332,6 +2381,11 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcPortLabel => 'Port';
+
+  @override
+  String pcQueued(String name) {
+    return 'It goes to $name when it is back.';
+  }
 
   @override
   String get pcRouteHint =>
@@ -2384,6 +2438,9 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcWatch => 'Watch';
+
+  @override
+  String get pcWillSend => 'Away: sent when it is back';
 
   @override
   String percentValue(Object percent) {

@@ -227,6 +227,13 @@
       }
     }
   },
+  "@pcFound": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "@pcLastContact": {
     "placeholders": {
       "time": {
@@ -264,6 +271,20 @@
     }
   },
   "@pcCopying": {"placeholders": {"percent": {"type": "int"}}},
+  "@pcOutboxTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@pcQueued": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "@pcVia": {"placeholders": {"route": {"type": "String"}}},
   "@pcLinkPhones": {
     "placeholders": {
@@ -760,6 +781,8 @@
   "@desktopImportedTranscripts": {"placeholders": {"count": {"type": "int"}}},
   "desktopInLibrary": "{count, plural, =1{1 in your library} other{{count} in your library}}",
   "@desktopInLibrary": {"placeholders": {"count": {"type": "int"}}},
+  "desktopKeepAwake": "Keep the computer awake while downloading",
+  "desktopKeepAwakeHint": "So a link sent from the phone, or a long playlist, finishes instead of stopping when Windows goes to sleep. The screen still turns off as usual.",
   "desktopKeyAddLink": "Add the link you copied",
   "desktopKeyFavorite": "Add to favorites or remove",
   "desktopKeyFullScreen": "Full screen; for sound, the listening room",
@@ -1151,6 +1174,15 @@
   "pcErrUnreachable": "The computer did not answer. Is it on, on this network or on your Tailscale, with \"Receive from the phone\" turned on?",
   "pcErrWrongCertificate": "Something other than your computer answered at this address. Nothing was sent.",
   "pcErrWrongCode": "Wrong code.",
+  "pcFindNone": "No computer found. On the computer, open Settings › Phone › Pair a phone first, on the same Wi-Fi.",
+  "pcFindOnNetwork": "Find on the network",
+  "pcFirewallAllow": "Allow",
+  "pcFirewallBlocked": "Windows Firewall blocks VidHoist, so the phone cannot reach it. Allow it on home (private) networks.",
+  "pcFirewallMissing": "Windows has not let VidHoist receive from the phone yet. Allow it once, on home (private) networks only.",
+  "pcFirewallPublic": "Windows calls this network Public, and lets nothing in there. If it is your home network, make it Private: Settings › Network & internet › Wi-Fi › its properties.",
+  "pcFirewallRefused": "Nothing changed: Windows needs an administrator's permission.",
+  "pcFirewallTitle": "Windows Firewall",
+  "pcFound": "Found {name}. Type the code it shows.",
   "pcLastContact": "Last contact {time}",
   "pcLibrary": "Library on the computer",
   "pcLinkAddress": "Address on this network",
@@ -1187,12 +1219,15 @@
   "pcOfflineRoute": "Away from home? Choose Tailscale in Settings › Computer.",
   "pcOnPhone": "On the phone",
   "pcOrType": "Or type the address and code",
+  "pcOutboxRefused": "The computer would not take this link",
+  "pcOutboxTitle": "Waiting to send ({count})",
   "pcPairButton": "Pair",
   "pcPairCheck": "Check that the computer shows {check}, then allow the phone there.",
   "pcPairIntro": "If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the code it shows.",
   "pcPairStart": "Pair with a computer",
   "pcPaired": "Paired with {name}",
   "pcPortLabel": "Port",
+  "pcQueued": "It goes to {name} when it is back.",
   "pcRouteHint": "Choose Tailscale when you are away from home; it must be running on both the phone and the computer.",
   "pcRouteHome": "Home network",
   "pcRouteOther": "Another network",
@@ -1208,6 +1243,7 @@
   "pcTab": "Computer",
   "pcVia": "Through {route}",
   "pcWatch": "Watch",
+  "pcWillSend": "Away: sent when it is back",
   "percentValue": "{percent}%",
   "pickAnotherFile": "From another file…",
   "pickAnotherFileSubtitle": "A backup from another phone or an older version",

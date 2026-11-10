@@ -1,6 +1,7 @@
 import '../pc/pc_destination.dart';
 import '../pc/pc_errors.dart';
 import '../pc/pc_link_state.dart';
+import '../pc/pc_outbox.dart';
 import '../pc/pc_pairing_store.dart';
 
 import 'dart:async';
@@ -101,8 +102,9 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
   late String _quality = ref.read(settingsProvider).quality.wire;
   late String _url = _controller.text;
 
-  /// The paired computer answered just now: only then is it offered.
-  var _pcReachable = false;
+  /// The paired computer was asked (null until it answers or fails), and
+  /// whether it answered: offered either way, away it takes the link later.
+  bool? _pcReachable;
   var _toPc = false;
 
   @override
@@ -147,7 +149,7 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
     ];
     if (!qualities.any((q) => q.value == _quality)) _quality = 'best';
     final pc = ref.watch(pcPairingProvider);
-    final showPc = pc != null && offerPc(ref, _url, reachable: _pcReachable);
+    final showPc = pc != null && _pcReachable != null && offerPc(ref, _url);
     final toPc = showPc && _toPc;
 
     return VhUrlInputSheet(
@@ -165,6 +167,7 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
           ? PcDestination(
               pcName: pc.name,
               toPc: _toPc,
+              away: _pcReachable == false,
               onChanged: (value) {
                 setState(() => _toPc = value);
                 unawaited(writeSendToPc(ref, value));
@@ -228,6 +231,12 @@ extension on _AddSheetState {
   Future<void> _sendToPc(String url) async {
     final l10n = widget.l10n;
     final name = ref.read(pcPairingProvider)?.name ?? '';
+    Future<void> later() async {
+      await ref.read(pcOutboxProvider.notifier).add(url, _quality);
+      showVhSnackOn(widget.messenger, l10n.pcQueued(name));
+    }
+
+    if (_pcReachable != true) return later();
     try {
       await ref.read(pcViewProvider.notifier).submit(url, _quality);
       showVhSnackOn(
@@ -236,6 +245,8 @@ extension on _AddSheetState {
         type: VhSnackType.success,
       );
     } on PcLinkException catch (e) {
+      // Gone since the sheet asked: it waits like any link sent away.
+      if (e.failure == PcLinkFailure.unreachable) return later();
       showVhSnackOn(
         widget.messenger,
         pcFailureText(l10n, e.failure),

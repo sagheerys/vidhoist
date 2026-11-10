@@ -31,6 +31,8 @@ import 'features/library/artwork.dart';
 import 'data/desktop_habits.dart';
 import 'data/notices.dart';
 import 'data/system_media.dart';
+import 'data/firewall_data.dart';
+import 'data/keep_awake_data.dart';
 import 'data/taskbar_data.dart';
 import 'data/volume.dart';
 import 'di.dart';
@@ -42,7 +44,9 @@ import 'platform/link_drop.dart';
 import 'platform/media_kit_debug.dart';
 import 'platform/notifications.dart';
 import 'platform/error_log.dart';
+import 'platform/firewall_windows.dart';
 import 'platform/hotkeys.dart';
+import 'platform/keep_awake_windows.dart';
 import 'platform/player_desktop.dart';
 import 'platform/run_note.dart';
 import 'platform/secret_store_windows.dart';
@@ -236,6 +240,8 @@ Future<void> main(List<String> args) async {
           unawaited(tray.setOn(on));
         }),
         taskbarPortProvider.overrideWithValue(taskbar),
+        sleepPortProvider.overrideWithValue(const WindowsSleepPort()),
+        firewallPortProvider.overrideWithValue(const WindowsFirewall()),
         systemMediaBridgeProvider.overrideWithValue(bridge),
         volumeControlProvider.overrideWithValue(volume),
         noticePortProvider.overrideWithValue(notices ?? const NoNotices()),

@@ -143,7 +143,17 @@ final FutureProvider<PcLinkSession?> pcLinkProvider =
         onLog: (message) => _log(ref, message),
       );
       final port = await server.start();
+      // So a paired phone finds this computer again when the router gives it
+      // another address, and a pairing phone finds it without typing.
+      final finder = PcDiscoveryResponder(
+        pairing: pairing,
+        linkPort: port,
+        name: computerName(),
+        onLog: (message) => _log(ref, message),
+      );
+      await finder.start();
       ref.onDispose(() {
+        finder.stop();
         unawaited(server.stop());
         unawaited(pairing.dispose());
       });
@@ -166,6 +176,10 @@ final pcLinkDevicesProvider = StreamProvider<List<PcDevice>>((ref) async* {
 final FutureProvider<List<PcAddress>> pcLinkAddressesProvider =
     FutureProvider<List<PcAddress>>((ref) async {
       ref.watch(pcLinkProvider);
+      // Looked at again each minute: a new Wi-Fi or a new address from the
+      // router is what the phone should learn next time it asks.
+      final again = Timer(const Duration(minutes: 1), ref.invalidateSelf);
+      ref.onDispose(again.cancel);
       try {
         final interfaces = await NetworkInterface.list(
           type: InternetAddressType.IPv4,

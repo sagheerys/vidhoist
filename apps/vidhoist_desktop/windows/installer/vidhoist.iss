@@ -31,6 +31,10 @@
 #define AppExe "vidhoist_desktop.exe"
 ; Created by the runner while the app is open (windows/runner/main.cpp).
 #define RunningMutex "Vidhoist.Running"
+; The firewall rule the app adds when the owner lets a phone in
+; (lib/data/firewall_data.dart); the installer adds none, having no
+; administrator rights.
+#define FirewallRule "VidHoist phone link"
 #define Developer "Yasir Sagheer"
 #define ProjectPage "https://github.com/sagheerys/vidhoist"
 
@@ -211,9 +215,15 @@ begin
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  Code: Integer;
 begin
   if CurUninstallStep <> usPostUninstall then
     Exit;
+  // The app's firewall rule would outlive it. Removing it takes an
+  // administrator, so Windows asks, and only when the rule is there.
+  if Exec(ExpandConstant('{sys}\netsh.exe'), 'advfirewall firewall show rule name="{#FirewallRule}"', '', SW_HIDE, ewWaitUntilTerminated, Code) and (Code = 0) then
+    ShellExec('runas', ExpandConstant('{sys}\netsh.exe'), 'advfirewall firewall delete rule name="{#FirewallRule}"', '', SW_HIDE, ewWaitUntilTerminated, Code);
   // "Start with Windows" (launch_at_startup) would otherwise point at a
   // program that is gone.
   RegDeleteValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', '{#AppName}');

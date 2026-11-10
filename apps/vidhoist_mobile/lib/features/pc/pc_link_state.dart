@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 
 import '../../di.dart';
+import 'pc_outbox.dart';
 import 'pc_pairing_store.dart';
 
 /// The link to the paired computer, or null when there is none.
@@ -33,6 +34,17 @@ typedef PcPairer = Future<PcPairing> Function({
 });
 
 final pcPairerProvider = Provider<PcPairer>((ref) => PcLinkClient.pair);
+
+/// Asks the home network where the paired computer is now; replaced in
+/// tests, where nothing answers a broadcast.
+final pcFinderProvider = Provider<Future<PcFound?> Function(PcPairing)>(
+  (ref) => pcFindPaired,
+);
+
+/// The computers showing a pairing code on this network; replaced in tests.
+final pcPairableFinderProvider = Provider<Future<List<PcFound>> Function()>(
+  (ref) => pcFindPairable,
+);
 
 /// The phone's name for the computer's list; replaced in tests, where no
 /// channel answers.
@@ -96,16 +108,26 @@ final pcViewProvider = NotifierProvider<PcViewNotifier, PcView>(
 class PcViewNotifier extends Notifier<PcView> {
   Timer? _timer;
   var _watching = 0;
+  DateTime? _lastFind;
 
   PcLinkApi? get _client => ref.read(pcClientProvider);
 
   @override
   PcView build() {
-    ref.watch(pcClientProvider);
+    // Listened to, not watched: a new link (a route picked, an address
+    // found) keeps what the page shows, and a call under way can retry on
+    // the new link without this rebuilding beneath it.
+    ref.listen(pcClientProvider, (_, client) {
+      if (client == null) {
+        _timer?.cancel();
+        state = const PcView();
+      } else if (_watching > 0) {
+        // A route changed while the page is open: ask again at once.
+        unawaited(refresh());
+      }
+    });
     ref.onDispose(() => _timer?.cancel());
     unawaited(_loadCache());
-    // A route changed while the page is open: ask again at once.
-    if (_watching > 0) Future.microtask(refresh);
     return const PcView();
   }
 
@@ -144,6 +166,7 @@ class PcViewNotifier extends Notifier<PcView> {
     try {
       final status = await client.status();
       _learn(status);
+      await _sendWaiting(client);
       final tasks = await client.tasks();
       final stillLive = {
         for (final t in tasks)
@@ -165,6 +188,8 @@ class PcViewNotifier extends Notifier<PcView> {
       state = next;
     } on PcLinkException catch (e) {
       state = state.copyWith(failure: e.failure);
+      // Found elsewhere: the new link asks again by itself while watched.
+      if (await _findAgain(e)) return;
     }
     _schedule();
   }
@@ -181,11 +206,50 @@ class PcViewNotifier extends Notifier<PcView> {
         lastContact: DateTime.now(),
         clearFailure: true,
       );
+      await _sendWaiting(client);
       return true;
     } on PcLinkException catch (e) {
       state = state.copyWith(failure: e.failure);
+      if (await _findAgain(e)) return probe();
       return false;
     }
+  }
+
+  /// The links sent while it was away go now that it answers.
+  Future<void> _sendWaiting(PcLinkApi client) async {
+    final made = await ref.read(pcOutboxProvider.notifier).send(client);
+    if (made.isNotEmpty) {
+      state = state.copyWith(tasks: [...made, ...state.tasks]);
+    }
+  }
+
+  /// **The computer did not answer where it was.** On the home network the
+  /// router may have given it a new address: the network is asked, and an
+  /// answer with the computer's proof moves the link there. The route stays
+  /// the owner's (the home network, never switched to Tailscale), only its
+  /// address follows; the certificate pin still decides who is reached.
+  /// True when it moved.
+  Future<bool> _findAgain(PcLinkException e) async {
+    final pairing = ref.read(pcPairingProvider);
+    if (e.failure != PcLinkFailure.unreachable || pairing == null) {
+      return false;
+    }
+    if (pcAddressKind('', pairing.host) != PcAddressKind.home) return false;
+    // At most twice a minute: a computer that is off stays silent.
+    final now = DateTime.now();
+    if (_lastFind case final last?
+        when now.difference(last) < const Duration(seconds: 30)) {
+      return false;
+    }
+    _lastFind = now;
+    final found = await ref.read(pcFinderProvider)(pairing);
+    if (found == null ||
+        pcAddressKind('', found.host) != PcAddressKind.home ||
+        (found.host == pairing.host && found.port == pairing.port)) {
+      return false;
+    }
+    await ref.read(pcPairingProvider.notifier).moved(found.host, found.port);
+    return true;
   }
 
   /// Sends [url] to be downloaded on the computer.
@@ -265,3 +329,28 @@ class PcViewNotifier extends Notifier<PcView> {
     }
   }
 }
+
+/// While links wait for the computer, asks it once a minute; its first
+/// answer sends them. Lives with the shell, so a link waits through a
+/// restart and goes without the page being opened.
+final pcOutboxRetryProvider = Provider<void>((ref) {
+  Timer? timer;
+  void follow(List<PcQueued> queued) {
+    if (!queued.any((q) => !q.refused)) {
+      timer?.cancel();
+      timer = null;
+      return;
+    }
+    if (timer != null) return;
+    void ask() => unawaited(ref.read(pcViewProvider.notifier).probe());
+    timer = Timer.periodic(const Duration(minutes: 1), (_) => ask());
+    ask();
+  }
+
+  ref.listen(
+    pcOutboxProvider,
+    (_, next) => follow(next),
+    fireImmediately: true,
+  );
+  ref.onDispose(() => timer?.cancel());
+});

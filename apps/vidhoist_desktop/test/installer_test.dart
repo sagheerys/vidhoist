@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vidhoist_desktop/data/firewall_data.dart';
 import 'package:vidhoist_desktop/identity.dart';
 import 'package:vidhoist_desktop/platform/engine_pins.dart';
 
@@ -101,6 +102,19 @@ void main() {
         r"\Run', '{#AppName}')",
       ),
     );
+  });
+
+  test("the uninstaller removes the app's firewall rule by the name the app "
+      'gives it, and adds none itself', () {
+    expect(define('FirewallRule'), pcFirewallRuleName);
+    expect(
+      iss,
+      contains(
+        "ShellExec('runas', ExpandConstant('{sys}\\netsh.exe'), "
+        '\'advfirewall firewall delete rule name="{#FirewallRule}"\'',
+      ),
+    );
+    expect(iss, isNot(contains('firewall add')));
   });
 
   test('**the guard**: it ships yt-dlp in tools, where the app looks, and '

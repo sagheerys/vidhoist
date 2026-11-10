@@ -20,8 +20,11 @@ const pcSecretKey = 'pc_link_secret';
 /// next link goes where the last one went.
 const pcSendToPcKey = 'pc_link_send_to_pc';
 
+/// Links sent while the computer was away, waiting to go to it.
+const pcOutboxKey = 'pc_link_outbox';
+
 /// The keys a phone backup leaves out: a pairing belongs to this phone.
-const pcDeviceOnlyKeys = {pcPairingKey, pcCacheKey, pcSendToPcKey};
+const pcDeviceOnlyKeys = {pcPairingKey, pcCacheKey, pcSendToPcKey, pcOutboxKey};
 
 /// Reads the pairing at startup, so the "Computer" tab is there or not
 /// from the first frame; null when this phone has never paired.
@@ -73,6 +76,15 @@ class PcPairingNotifier extends Notifier<PcPairing?> {
     if (state case final pairing?) await _keep(pairing.copyWith(host: host));
   }
 
+  /// The computer answered on the home network from a new address (the
+  /// router gave it another): the route is still the home network, so it
+  /// follows without a new pairing.
+  Future<void> moved(String host, int port) async {
+    if (state case final pairing?) {
+      await _keep(pairing.copyWith(host: host, port: port));
+    }
+  }
+
   /// Saves all but the secret, which stays in the encrypted store.
   Future<void> _keep(PcPairing pairing) async {
     final store = ref.read(keyValueStoreProvider);
@@ -90,6 +102,7 @@ class PcPairingNotifier extends Notifier<PcPairing?> {
     await ref.read(prefsMutexProvider).run(() async {
       await store.remove(pcPairingKey);
       await store.remove(pcCacheKey);
+      await store.remove(pcOutboxKey);
     });
     state = null;
   }

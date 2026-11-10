@@ -12,6 +12,7 @@ import '../data/covers/covers_data.dart';
 import '../data/shapes/shapes_data.dart';
 import '../data/library_data.dart';
 import '../data/folder_watch.dart';
+import '../data/keep_awake_data.dart';
 import '../data/taskbar_data.dart';
 import '../data/lists_data.dart';
 import '../data/saved_searches.dart';
@@ -132,6 +133,7 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
     ref.watch(channelTickerProvider);
     ref.watch(folderWatchProvider);
     ref.watch(taskbarDownloadsWiringProvider);
+    ref.watch(keepAwakeWiringProvider);
 
     // Theater widens a clip's picture over the side panel's column too.
     final theater =
