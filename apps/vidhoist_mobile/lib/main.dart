@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'features/pc/pc_pairing_store.dart';
+import 'features/pc/pc_destination.dart';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,7 @@ Future<void> main() async {
   // Read before the first frame, so the computer's tab is there or not
   // from the start rather than appearing a moment later.
   final pcPairing = await loadPcPairing(store, secrets);
+  final sendToPc = await readSendToPc(store);
 
   // The phone's own clips are files, so the golden rule ends at the local
   // file; a clip on the paired computer plays through the link's proxy,
@@ -138,6 +140,7 @@ Future<void> main() async {
         deviceAbisProvider.overrideWithValue(abis),
         initialVolumesProvider.overrideWithValue(volumes),
         initialPcPairingProvider.overrideWithValue(pcPairing),
+        initialSendToPcProvider.overrideWithValue(sendToPc),
         // The sign-ins, in the same private folder as the log: no backup
         // and no other app reads it.
         cookiesFileProvider.overrideWithValue('${logsDir.path}/cookies.txt'),

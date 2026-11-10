@@ -2146,6 +2146,11 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pcDestPhone => 'This phone';
 
   @override
+  String pcDoneOnPc(String title) {
+    return 'Done on the computer: $title';
+  }
+
+  @override
   String get pcEmptyLibrary => 'No downloads on the computer yet.';
 
   @override
@@ -2388,6 +2393,17 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
+  String pcQueuedMany(int count, String name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count clips go to $name when it is back.',
+      one: '1 clip goes to $name when it is back.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get pcRouteHint =>
       'Choose Tailscale when you are away from home; it must be running on both the phone and the computer.';
 
@@ -2423,6 +2439,17 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String pcSent(String name) {
     return 'Sent to $name';
+  }
+
+  @override
+  String pcSentMany(int count, String name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count clips sent to $name',
+      one: '1 clip sent to $name',
+    );
+    return '$_temp0';
   }
 
   @override

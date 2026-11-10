@@ -1,8 +1,8 @@
 import '../pc/pc_destination.dart';
-import '../pc/pc_errors.dart';
 import '../pc/pc_link_state.dart';
 import '../pc/pc_outbox.dart';
 import '../pc/pc_pairing_store.dart';
+import '../pc/pc_send.dart';
 
 import 'dart:async';
 
@@ -105,7 +105,7 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
   /// The paired computer was asked (null until it answers or fails), and
   /// whether it answered: offered either way, away it takes the link later.
   bool? _pcReachable;
-  var _toPc = false;
+  late var _toPc = ref.read(sendToPcProvider);
 
   @override
   void initState() {
@@ -115,13 +115,9 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
   }
 
   Future<void> _lookForPc() async {
-    final toPc = await readSendToPc(ref.read(keyValueStoreProvider));
     final reachable = await ref.read(pcViewProvider.notifier).probe();
     if (!mounted) return;
-    setState(() {
-      _pcReachable = reachable;
-      _toPc = toPc;
-    });
+    setState(() => _pcReachable = reachable);
   }
 
   @override
@@ -170,7 +166,7 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
               away: _pcReachable == false,
               onChanged: (value) {
                 setState(() => _toPc = value);
-                unawaited(writeSendToPc(ref, value));
+                unawaited(ref.read(sendToPcProvider.notifier).set(value));
               },
             )
           : null,
@@ -227,32 +223,22 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
 }
 
 extension on _AddSheetState {
-  /// Queues [url] on the paired computer rather than on this phone.
+  /// Queues [url] on the paired computer rather than on this phone; away,
+  /// it waits here for it.
   Future<void> _sendToPc(String url) async {
-    final l10n = widget.l10n;
-    final name = ref.read(pcPairingProvider)?.name ?? '';
-    Future<void> later() async {
-      await ref.read(pcOutboxProvider.notifier).add(url, _quality);
-      showVhSnackOn(widget.messenger, l10n.pcQueued(name));
-    }
-
-    if (_pcReachable != true) return later();
-    try {
-      await ref.read(pcViewProvider.notifier).submit(url, _quality);
-      showVhSnackOn(
-        widget.messenger,
-        l10n.pcSent(name),
-        type: VhSnackType.success,
-      );
-    } on PcLinkException catch (e) {
-      // Gone since the sheet asked: it waits like any link sent away.
-      if (e.failure == PcLinkFailure.unreachable) return later();
-      showVhSnackOn(
-        widget.messenger,
-        pcFailureText(l10n, e.failure),
-        type: VhSnackType.error,
-      );
-    }
+    final result = await sendLinksToPc(
+      view: ref.read(pcViewProvider.notifier),
+      outbox: ref.read(pcOutboxProvider.notifier),
+      urls: [url],
+      quality: _quality,
+      away: _pcReachable != true,
+    );
+    showPcSendResult(
+      widget.messenger,
+      widget.l10n,
+      result,
+      ref.read(pcPairingProvider)?.name ?? '',
+    );
   }
 }
 

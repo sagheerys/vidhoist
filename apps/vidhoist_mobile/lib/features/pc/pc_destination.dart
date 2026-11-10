@@ -10,13 +10,36 @@ import 'pc_pairing_store.dart';
 Future<bool> readSendToPc(KeyValueStore store) async =>
     await store.getBool(pcSendToPcKey) ?? false;
 
-Future<void> writeSendToPc(WidgetRef ref, bool toPc) => ref
-    .read(prefsMutexProvider)
-    .run(() => ref.read(keyValueStoreProvider).setBool(pcSendToPcKey, toPc));
+/// The choice saved at the last start; main reads it before the first
+/// frame, so a link shared into a closed app goes where the owner last
+/// sent one.
+final initialSendToPcProvider = Provider<bool>((ref) => false);
+
+/// **The last "Save to" picked**: the add sheet, the batch screen and the
+/// quick download all follow it.
+final sendToPcProvider = NotifierProvider<SendToPc, bool>(SendToPc.new);
+
+class SendToPc extends Notifier<bool> {
+  @override
+  bool build() => ref.read(initialSendToPcProvider);
+
+  Future<void> set(bool toPc) async {
+    state = toPc;
+    await ref
+        .read(prefsMutexProvider)
+        .run(
+          () => ref.read(keyValueStoreProvider).setBool(pcSendToPcKey, toPc),
+        );
+  }
+}
+
+/// Whether a link goes to the computer: paired, and last sent there.
+bool wantsPc(WidgetRef ref) =>
+    ref.read(pcPairingProvider) != null && ref.read(sendToPcProvider);
 
 /// "Save to": the paired computer or this phone, side by side. Shown in the
-/// add sheet once the computer was asked, never for a playlist; a computer
-/// away takes the link when it is back.
+/// add sheet and the batch screen once the computer was asked; a computer
+/// away takes the links when it is back.
 class PcDestination extends StatelessWidget {
   const PcDestination({
     super.key,

@@ -114,7 +114,7 @@ class _Destination extends StatelessWidget {
       container: true,
       selected: selected,
       button: true,
-      label: item.label,
+      label: item.badge > 0 ? '${item.label}, ${item.badge}' : item.label,
       hint: hint,
       child: InkWell(
         onTap: onTap,
@@ -131,10 +131,14 @@ class _Destination extends StatelessWidget {
                 SizedBox(
                   height: VhBottomBar.pill.height,
                   child: Center(
-                    child: VhIconSwap(
-                      icon: selected ? item.selectedIcon : item.icon,
-                      color: icon?.color,
-                      size: icon?.size,
+                    child: vhNavBadge(
+                      context,
+                      item,
+                      VhIconSwap(
+                        icon: selected ? item.selectedIcon : item.icon,
+                        color: icon?.color,
+                        size: icon?.size,
+                      ),
                     ),
                   ),
                 ),

@@ -73,10 +73,14 @@ class PcOutbox extends Notifier<List<PcQueued>> {
       if (!q.refused) q,
   ];
 
-  Future<void> add(String url, String quality) async {
+  Future<void> add(String url, String quality) => addAll([url], quality);
+
+  /// A batch's links in one save, in their order.
+  Future<void> addAll(List<String> urls, String quality) async {
+    final at = DateTime.now();
     state = [
       ...state,
-      PcQueued(url: url, quality: quality, at: DateTime.now()),
+      for (final url in urls) PcQueued(url: url, quality: quality, at: at),
     ];
     await _save();
   }

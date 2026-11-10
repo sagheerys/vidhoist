@@ -2180,6 +2180,11 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pcDestPhone => 'هذا الجوال';
 
   @override
+  String pcDoneOnPc(String title) {
+    return 'انتهى على الكمبيوتر: $title';
+  }
+
+  @override
   String get pcEmptyLibrary => 'لا تنزيلات على الكمبيوتر بعد.';
 
   @override
@@ -2424,6 +2429,19 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String pcQueuedMany(int count, String name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'سيُرسل $count مقطعاً إلى $name حين يعود.',
+      few: 'ستُرسل $count مقاطع إلى $name حين يعود.',
+      two: 'سيُرسل مقطعان إلى $name حين يعود.',
+      one: 'سيُرسل مقطع إلى $name حين يعود.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get pcRouteHint =>
       'اختر Tailscale حين تكون خارج البيت، ويجب أن يعمل على الجوال والكمبيوتر معاً.';
 
@@ -2458,6 +2476,19 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String pcSent(String name) {
     return 'أُرسل إلى $name';
+  }
+
+  @override
+  String pcSentMany(int count, String name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'أُرسل $count مقطعاً إلى $name',
+      few: 'أُرسلت $count مقاطع إلى $name',
+      two: 'أُرسل مقطعان إلى $name',
+      one: 'أُرسل مقطع إلى $name',
+    );
+    return '$_temp0';
   }
 
   @override

@@ -160,6 +160,39 @@ void main() {
       }
     });
 
+    test(
+      'the cover the computer keeps, for the lists the players show',
+      () async {
+        host.coverFile = File('${dir.path}/c.png')
+          ..writeAsBytesSync([0x89, 0x50, 0x4e, 0x47, 1, 2]);
+        final url = proxy.coverUrlFor('i0')!;
+        expect(url.host, '127.0.0.1');
+        final http = HttpClient();
+        addTearDown(() => http.close(force: true));
+        final response = await (await http.getUrl(url)).close();
+        expect(response.statusCode, 200);
+        expect(response.headers.contentType?.mimeType, 'image/png');
+        expect(
+          [for (final c in await response.toList()) ...c],
+          [
+            0x89, 0x50, 0x4e, 0x47, 1, 2, //
+          ],
+        );
+        expect((await get(proxy.coverUrlFor('i1')!)).$1, 404);
+      },
+    );
+
+    test('**the guard**: a cover needs the token too', () async {
+      host.coverFile = File('${dir.path}/c.jpg')..writeAsBytesSync([1, 2, 3]);
+      final url = proxy.coverUrlFor('i0')!;
+      final guessed = url.replace(
+        pathSegments: ['not-the-token', ...url.pathSegments.skip(1)],
+      );
+      final (code, _, body) = await get(guessed);
+      expect(code, 404);
+      expect(body, isEmpty);
+    });
+
     test('unpaired, or the computer away: the player is told', () async {
       api = null;
       expect((await get(proxy.urlFor('i0')!)).$1, 503);
