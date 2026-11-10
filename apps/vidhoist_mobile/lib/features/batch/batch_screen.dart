@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +8,11 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
+import '../pc/pc_destination.dart';
+import '../pc/pc_link_state.dart';
+import '../pc/pc_outbox.dart';
+import '../pc/pc_pairing_store.dart';
+import '../pc/pc_send.dart';
 import '../shared/error_text.dart';
 import 'batch_providers.dart';
 
@@ -30,6 +37,47 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
   /// saved playlist.
   String? _playlistName;
 
+  /// The paired computer was asked (null until it answers or fails); the
+  /// choice is offered either way, as in the add sheet.
+  bool? _pcReachable;
+  late var _toPc = ref.read(sendToPcProvider);
+
+  bool get _sendsToPc =>
+      ref.read(pcPairingProvider) != null && _pcReachable != null && _toPc;
+
+  @override
+  void initState() {
+    super.initState();
+    if (ref.read(pcPairingProvider) == null) return;
+    unawaited(
+      ref.read(pcViewProvider.notifier).probe().then((reachable) {
+        if (mounted) setState(() => _pcReachable = reachable);
+      }),
+    );
+  }
+
+  /// **The selection goes to the computer one link at a time** (asked
+  /// 2026-11-10), in the playlist's order: the computer takes single links
+  /// from the phone, never a playlist.
+  Future<void> _sendToPc(List<String> urls, String quality) async {
+    // All read before leaving: this screen is gone once the links go.
+    final l10n = context.vhl;
+    final messenger = ScaffoldMessenger.of(context);
+    final name = ref.read(pcPairingProvider)?.name ?? '';
+    final view = ref.read(pcViewProvider.notifier);
+    final outbox = ref.read(pcOutboxProvider.notifier);
+    final away = _pcReachable == false;
+    context.go('/');
+    final result = await sendLinksToPc(
+      view: view,
+      outbox: outbox,
+      urls: urls,
+      quality: quality,
+      away: away,
+    );
+    showPcSendResult(messenger, l10n, result, name);
+  }
+
   /// The single video's URL when the input was `watch?v=…&list=…`.
   String? get _singleVideoUrl {
     final id = UrlKit.youtubeVideoId(widget.playlistUrl);
@@ -38,6 +86,12 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
 
   void _downloadSingle() {
     final l10n = context.vhl;
+    if (_sendsToPc) {
+      unawaited(
+        _sendToPc([_singleVideoUrl!], ref.read(settingsProvider).quality.wire),
+      );
+      return;
+    }
     final count = ref.read(batchSubmitterProvider).submit([
       _singleVideoUrl!,
     ], ref.read(settingsProvider).quality);
@@ -76,7 +130,9 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
           : FloatingActionButton.extended(
               onPressed: _submit,
               icon: const VhIcon(VhIcons.download),
-              label: Text(l10n.batchDownloadSelected),
+              label: Text(
+                _sendsToPc ? l10n.pcSendToPc : l10n.batchDownloadSelected,
+              ),
             ),
       body: VhReadableWidth(
         child: preview.when(
@@ -116,6 +172,19 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
     final l10n = context.vhl;
     if (_selected.isEmpty) {
       showVhSnack(context, l10n.batchNothingSelected, type: VhSnackType.error);
+      return;
+    }
+    if (_sendsToPc) {
+      final tracks = ref
+          .read(playlistPreviewProvider(widget.playlistUrl))
+          .valueOrNull
+          ?.tracks;
+      unawaited(
+        _sendToPc([
+          for (final t in tracks ?? const <PlaylistTrack>[])
+            if (_selected.contains(t.url)) t.url,
+        ], (_quality ?? Quality.best).wire),
+      );
       return;
     }
     final count = ref
@@ -172,6 +241,25 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
             quality: _quality ?? Quality.best,
             heights: kind != PlaylistKind.soundcloud,
             onChanged: (q) => setState(() => _quality = q),
+          ),
+        if (ref.watch(pcPairingProvider) case final pc?
+            when _pcReachable != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              VhSpace.pagePad,
+              VhSpace.xs,
+              VhSpace.pagePad,
+              VhSpace.sm,
+            ),
+            child: PcDestination(
+              pcName: pc.name,
+              toPc: _toPc,
+              away: _pcReachable == false,
+              onChanged: (value) {
+                setState(() => _toPc = value);
+                unawaited(ref.read(sendToPcProvider.notifier).set(value));
+              },
+            ),
           ),
         Expanded(
           child: ListView.builder(

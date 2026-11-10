@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
@@ -7,6 +6,7 @@ import 'package:vh_core/vh_core.dart';
 import '../../di.dart';
 import 'pc_outbox.dart';
 import 'pc_pairing_store.dart';
+import 'pc_view_cache.dart';
 
 /// The link to the paired computer, or null when there is none.
 final pcClientProvider = Provider<PcLinkApi?>((ref) {
@@ -98,17 +98,27 @@ class PcView {
   );
 }
 
+/// Whether the app is in front; the shell keeps it. Nothing is asked of
+/// the computer from behind other apps.
+final pcForegroundProvider = StateProvider<bool>((ref) => true);
+
 final pcViewProvider = NotifierProvider<PcViewNotifier, PcView>(
   PcViewNotifier.new,
 );
 
 /// Keeps [PcView] current while the page is open: every two seconds while
 /// something downloads there, every ten otherwise, and the library again
-/// when a download finishes. Asks nothing while the page is closed.
+/// when a download finishes. With the page closed, **it follows only
+/// downloads it knows are running**, every five seconds while the app is
+/// in front, for the count on the tab and the word when one is done.
 class PcViewNotifier extends Notifier<PcView> {
   Timer? _timer;
   var _watching = 0;
   DateTime? _lastFind;
+  final _done = StreamController<PcTask>.broadcast();
+
+  /// Each download the computer finished while it was being followed.
+  Stream<PcTask> get done => _done.stream;
 
   PcLinkApi? get _client => ref.read(pcClientProvider);
 
@@ -126,7 +136,17 @@ class PcViewNotifier extends Notifier<PcView> {
         unawaited(refresh());
       }
     });
-    ref.onDispose(() => _timer?.cancel());
+    ref.listen(pcForegroundProvider, (_, front) {
+      if (front) {
+        unawaited(glance());
+      } else if (_watching == 0) {
+        _timer?.cancel();
+      }
+    });
+    ref.onDispose(() {
+      _timer?.cancel();
+      unawaited(_done.close());
+    });
     unawaited(_loadCache());
     return const PcView();
   }
@@ -158,6 +178,12 @@ class PcViewNotifier extends Notifier<PcView> {
     if (_watching == 0) _timer?.cancel();
   }
 
+  /// One look with the page closed, at a start or a return to the app: a
+  /// download running there is then followed.
+  Future<void> glance() async {
+    if (_watching == 0) await refresh(library: false);
+  }
+
   Future<void> refresh({bool library = true}) async {
     final client = _client;
     if (client == null) return;
@@ -186,6 +212,9 @@ class PcViewNotifier extends Notifier<PcView> {
         unawaited(_saveCache(next));
       }
       state = next;
+      for (final t in tasks) {
+        if (hadLive.contains(t.id) && t.phase == 'completed') _done.add(t);
+      }
     } on PcLinkException catch (e) {
       state = state.copyWith(failure: e.failure);
       // Found elsewhere: the new link asks again by itself while watched.
@@ -220,6 +249,7 @@ class PcViewNotifier extends Notifier<PcView> {
     final made = await ref.read(pcOutboxProvider.notifier).send(client);
     if (made.isNotEmpty) {
       state = state.copyWith(tasks: [...made, ...state.tasks]);
+      _schedule();
     }
   }
 
@@ -259,7 +289,7 @@ class PcViewNotifier extends Notifier<PcView> {
       throw const PcLinkException(PcLinkFailure.unauthorized);
     }
     final task = await client.submit(url, quality);
-    state = state.copyWith(tasks: [task, ...state.tasks]);
+    state = state.copyWith(tasks: [task, ...state.tasks], clearFailure: true);
     _schedule();
     return task;
   }
@@ -277,80 +307,35 @@ class PcViewNotifier extends Notifier<PcView> {
 
   void _schedule() {
     _timer?.cancel();
-    if (_watching == 0) return;
     final busy = state.live.isNotEmpty;
-    _timer = Timer(
-      Duration(seconds: busy ? 2 : 10),
-      () => unawaited(refresh(library: false)),
-    );
+    final Duration every;
+    if (_watching > 0) {
+      every = Duration(seconds: busy ? 2 : 10);
+    } else if (busy &&
+        state.failure == null &&
+        ref.read(pcForegroundProvider)) {
+      every = const Duration(seconds: 5);
+    } else {
+      return;
+    }
+    _timer = Timer(every, () => unawaited(refresh(library: false)));
   }
 
   Future<void> _loadCache() async {
-    try {
-      final raw = await ref.read(keyValueStoreProvider).getString(pcCacheKey);
-      if (raw == null || state.items.isNotEmpty) return;
-      final json = jsonDecode(raw);
-      if (json is! Map) return;
-      final page = PcLibraryPage.fromJson(json['library']);
-      final seen = json['seen'];
-      state = state.copyWith(
-        items: page.items,
-        total: page.total,
-        lastContact: seen is int
-            ? DateTime.fromMillisecondsSinceEpoch(seen)
-            : null,
-      );
-    } on Object {
-      // A cache is a convenience.
-    }
+    final cache = await loadPcViewCache(ref.read(keyValueStoreProvider));
+    if (cache == null || state.items.isNotEmpty) return;
+    state = state.copyWith(
+      items: cache.page.items,
+      total: cache.page.total,
+      lastContact: cache.seen,
+    );
   }
 
-  Future<void> _saveCache(PcView view) async {
-    try {
-      final page = PcLibraryPage(
-        items: view.items.take(60).toList(),
-        total: view.total,
-      );
-      await ref
-          .read(prefsMutexProvider)
-          .run(
-            () => ref
-                .read(keyValueStoreProvider)
-                .setString(
-                  pcCacheKey,
-                  jsonEncode({
-                    'library': page.toJson(),
-                    'seen': view.lastContact?.millisecondsSinceEpoch,
-                  }),
-                ),
-          );
-    } on Object {
-      // A cache is a convenience.
-    }
-  }
-}
-
-/// While links wait for the computer, asks it once a minute; its first
-/// answer sends them. Lives with the shell, so a link waits through a
-/// restart and goes without the page being opened.
-final pcOutboxRetryProvider = Provider<void>((ref) {
-  Timer? timer;
-  void follow(List<PcQueued> queued) {
-    if (!queued.any((q) => !q.refused)) {
-      timer?.cancel();
-      timer = null;
-      return;
-    }
-    if (timer != null) return;
-    void ask() => unawaited(ref.read(pcViewProvider.notifier).probe());
-    timer = Timer.periodic(const Duration(minutes: 1), (_) => ask());
-    ask();
-  }
-
-  ref.listen(
-    pcOutboxProvider,
-    (_, next) => follow(next),
-    fireImmediately: true,
+  Future<void> _saveCache(PcView view) => savePcViewCache(
+    ref.read(keyValueStoreProvider),
+    ref.read(prefsMutexProvider),
+    items: view.items,
+    total: view.total,
+    seen: view.lastContact,
   );
-  ref.onDispose(() => timer?.cancel());
-});
+}

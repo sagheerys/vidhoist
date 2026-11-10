@@ -227,6 +227,13 @@
       }
     }
   },
+  "@pcDoneOnPc": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "@pcFound": {
     "placeholders": {
       "name": {
@@ -280,6 +287,26 @@
   },
   "@pcQueued": {
     "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcQueuedMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@pcSentMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
       "name": {
         "type": "String"
       }
@@ -1165,6 +1192,7 @@
   "pcCopyToPhone": "Copy to the phone",
   "pcCopying": "Copying {percent}%",
   "pcDestPhone": "This phone",
+  "pcDoneOnPc": "Done on the computer: {title}",
   "pcEmptyLibrary": "No downloads on the computer yet.",
   "pcErrBad": "The computer answered in a way this version does not understand. Update both apps.",
   "pcErrClosed": "No code is showing on the computer, or it expired. Press Pair a phone there.",
@@ -1228,6 +1256,7 @@
   "pcPaired": "Paired with {name}",
   "pcPortLabel": "Port",
   "pcQueued": "It goes to {name} when it is back.",
+  "pcQueuedMany": "{count, plural, =1{1 clip goes to {name} when it is back.} other{{count} clips go to {name} when it is back.}}",
   "pcRouteHint": "Choose Tailscale when you are away from home; it must be running on both the phone and the computer.",
   "pcRouteHome": "Home network",
   "pcRouteOther": "Another network",
@@ -1239,6 +1268,7 @@
   "pcScanPrompt": "Point the camera at the code on the computer's screen",
   "pcSendToPc": "Send to the computer",
   "pcSent": "Sent to {name}",
+  "pcSentMany": "{count, plural, =1{1 clip sent to {name}} other{{count} clips sent to {name}}}",
   "pcSettingsHint": "Send links to your computer",
   "pcTab": "Computer",
   "pcVia": "Through {route}",

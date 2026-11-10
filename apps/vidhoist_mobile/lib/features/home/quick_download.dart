@@ -1,9 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
+import '../pc/pc_destination.dart';
+import '../pc/pc_link_state.dart';
+import '../pc/pc_outbox.dart';
+import '../pc/pc_pairing_store.dart';
+import '../pc/pc_send.dart';
 import 'add_flow.dart';
 
 /// The quality name as the user sees it: what was **actually applied**
@@ -54,6 +61,10 @@ bool startQuickDownload(
 }) {
   if (PlaylistDetector.isPlaylist(url)) return false;
   if (!explicit && !ref.read(settingsProvider).quickDownload) return false;
+  if (wantsPc(ref)) {
+    unawaited(_quickToPc(context, ref, url));
+    return true;
+  }
   final engine = ref.read(downloadEngineProvider);
   if (engine == null) return false;
 
@@ -76,4 +87,35 @@ bool startQuickDownload(
     },
   );
   return true;
+}
+
+/// **The last link went to the computer, so this one does too** (asked
+/// 2026-11-10): at the default quality, with an undo that takes it back
+/// from the computer and opens the sheet on the same link. Away, it waits
+/// on this phone like a link from the sheet.
+Future<void> _quickToPc(BuildContext context, WidgetRef ref, String url) async {
+  final l10n = context.vhl;
+  final messenger = ScaffoldMessenger.of(context);
+  final view = ref.read(pcViewProvider.notifier);
+  final name = ref.read(pcPairingProvider)?.name ?? '';
+  final result = await sendLinksToPc(
+    view: view,
+    outbox: ref.read(pcOutboxProvider.notifier),
+    urls: [url],
+    quality: ref.read(settingsProvider).quality.wire,
+  );
+  final task = result.tasks.firstOrNull;
+  showPcSendResult(
+    messenger,
+    l10n,
+    result,
+    name,
+    actionLabel: task == null ? null : l10n.undo,
+    onAction: task == null
+        ? null
+        : () {
+            unawaited(view.cancel(task.id));
+            if (context.mounted) openAddSheet(context, ref, initialUrl: url);
+          },
+  );
 }

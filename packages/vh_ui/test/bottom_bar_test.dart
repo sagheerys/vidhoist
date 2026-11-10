@@ -86,4 +86,32 @@ void main() {
     expect(opacityOf('الثاني'), 1);
     expect(find.text('الأول'), findsNothing);
   });
+
+  testWidgets('a count shows on its icon, and none at zero', (tester) async {
+    Widget bar(int count) => MaterialApp(
+      theme: vhTheme(VhVariant.phone, Brightness.light),
+      home: Scaffold(
+        bottomNavigationBar: VhBottomBar(
+          items: [
+            items[0],
+            VhNavItem(
+              icon: VhIcons.monitor,
+              selectedIcon: VhIcons.monitor,
+              label: 'الكمبيوتر',
+              badge: count,
+            ),
+          ],
+          selectedIndex: 0,
+          onSelected: (_) {},
+        ),
+      ),
+    );
+    await tester.pumpWidget(bar(2));
+    expect(find.text('2'), findsOneWidget);
+    expect(tester.getSemantics(find.text('الكمبيوتر')).label, 'الكمبيوتر, 2');
+    await tester.pumpWidget(bar(0));
+    expect(find.byType(Badge), findsNothing);
+    await tester.pumpWidget(bar(120));
+    expect(find.text('99+'), findsOneWidget);
+  });
 }

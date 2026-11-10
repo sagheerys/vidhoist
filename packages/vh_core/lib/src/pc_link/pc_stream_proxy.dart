@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'pc_link_api.dart';
 import 'pc_link_wire.dart';
@@ -74,6 +75,17 @@ class PcStreamProxy {
     );
   }
 
+  /// The address of the cover the computer keeps for clip [id], for the
+  /// players' lists and the media notification, which load images by
+  /// address; null until [start] has finished. It changes with each run,
+  /// so it is never worth keeping.
+  Uri? coverUrlFor(String id) {
+    final clip = urlFor(id);
+    return clip?.replace(pathSegments: [_token!, _cover, id]);
+  }
+
+  static const _cover = 'cover';
+
   /// The id in a [prefix]ed name, or null for any other.
   static String? idOf(String serverFilename) =>
       serverFilename.startsWith(prefix) && serverFilename.length > prefix.length
@@ -85,8 +97,9 @@ class PcStreamProxy {
     final segments = request.uri.pathSegments;
     final method = request.method;
     try {
+      final cover = segments.length == 3 && segments[1] == _cover;
       if ((method != 'GET' && method != 'HEAD') ||
-          segments.length != 2 ||
+          (segments.length != 2 && !cover) ||
           segments[0] != _token) {
         response.statusCode = HttpStatus.notFound;
         return;
@@ -96,6 +109,7 @@ class PcStreamProxy {
         response.statusCode = HttpStatus.serviceUnavailable;
         return;
       }
+      if (cover) return await _sendCover(api, segments[2], response);
       final PcFileResponse answer;
       try {
         answer = await api.file(
@@ -127,4 +141,31 @@ class PcStreamProxy {
       }
     }
   }
+
+  /// A cover is small and whole: read through the link, then handed on.
+  Future<void> _sendCover(
+    PcLinkApi api,
+    String id,
+    HttpResponse response,
+  ) async {
+    final Uint8List? bytes;
+    try {
+      bytes = await api.cover(id);
+    } on PcLinkException {
+      response.statusCode = HttpStatus.badGateway;
+      return;
+    }
+    if (bytes == null) {
+      response.statusCode = HttpStatus.notFound;
+      return;
+    }
+    response.headers.contentType = _imageType(bytes);
+    response.add(bytes);
+  }
+
+  /// PNG by its signature, JPEG otherwise: what the computer keeps.
+  static ContentType _imageType(Uint8List bytes) =>
+      bytes.length > 3 && bytes[0] == 0x89 && bytes[1] == 0x50
+      ? ContentType('image', 'png')
+      : ContentType('image', 'jpeg');
 }

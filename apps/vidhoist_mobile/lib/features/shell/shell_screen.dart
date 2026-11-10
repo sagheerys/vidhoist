@@ -1,3 +1,4 @@
+import '../pc/pc_follow.dart';
 import '../pc/pc_link_state.dart';
 import '../pc/pc_pairing_store.dart';
 
@@ -116,11 +117,18 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
       if (mounted) await maybeOfferAutoRestore(context, ref);
       if (mounted) await _handleShortcut();
       if (mounted) unawaited(_maybeShowUpdate());
+      // A download running on the computer is followed from the start.
+      if (mounted) unawaited(ref.read(pcViewProvider.notifier).glance());
     });
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    // The computer is followed only while the app is in front.
+    final front = state == AppLifecycleState.resumed;
+    if (front || state == AppLifecycleState.paused) {
+      ref.read(pcForegroundProvider.notifier).state = front;
+    }
     if (state == AppLifecycleState.resumed) {
       ref.read(clipboardRefresherProvider)();
       // A shortcut arrives as a new intent on a running app, not as a fresh
@@ -296,6 +304,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     ref.watch(channelTickerProvider);
     // Links sent while the computer was away go when it answers.
     ref.watch(pcOutboxRetryProvider);
+    listenPcDone(ref, context);
     _watchEnrichment();
 
     final handler = ref.watch(audioHandlerProvider);
@@ -321,7 +330,11 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
                   onCollapse: () => setState(() => _panelFolded = true),
                 )
               : null,
-          items: shellNavItems(l10n, tabs),
+          items: shellNavItems(
+            l10n,
+            tabs,
+            pcRunning: ref.watch(pcRunningProvider),
+          ),
           selectedIndex: tabs.contains(branch) ? tabs.indexOf(branch) : 0,
           onSelected: (i) => widget.navigationShell.goBranch(tabs[i]),
           body: widget.navigationShell,

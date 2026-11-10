@@ -120,11 +120,32 @@ class VhNavItem {
     required this.icon,
     required this.selectedIcon,
     required this.label,
+    this.badge = 0,
   });
 
   final VhIconData icon;
   final VhIconData selectedIcon;
   final String label;
+
+  /// A count on the icon, such as the downloads running on the paired
+  /// computer; none at zero.
+  final int badge;
+}
+
+/// [icon] with [item]'s count over its corner, in the accent: a queue is
+/// news, not an alarm, so not Material's red.
+Widget vhNavBadge(BuildContext context, VhNavItem item, Widget icon) {
+  if (item.badge <= 0) return icon;
+  final p = VhThemeX.of(context).palette;
+  return Badge(
+    label: Text(
+      item.badge > 99 ? '99+' : '${item.badge}',
+      textDirection: TextDirection.ltr,
+    ),
+    backgroundColor: p.accent,
+    textColor: p.onAccent,
+    child: icon,
+  );
 }
 
 /// The shell's frame: **a bottom bar on a phone, a side rail from medium
@@ -255,8 +276,13 @@ class VhAdaptiveScaffold extends StatelessWidget {
     destinations: [
       for (final item in items)
         NavigationRailDestination(
-          icon: VhIcon(item.icon),
-          selectedIcon: VhIcon(item.selectedIcon),
+          icon: Builder(
+            builder: (context) => vhNavBadge(context, item, VhIcon(item.icon)),
+          ),
+          selectedIcon: Builder(
+            builder: (context) =>
+                vhNavBadge(context, item, VhIcon(item.selectedIcon)),
+          ),
           label: Text(item.label),
           padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
         ),

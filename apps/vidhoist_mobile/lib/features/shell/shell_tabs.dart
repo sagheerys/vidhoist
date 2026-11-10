@@ -19,7 +19,13 @@ List<int> shellTabs({required bool paired}) => [
   ShellBranch.settings,
 ];
 
-List<VhNavItem> shellNavItems(VhLocalizations l10n, List<int> tabs) => [
+/// [pcRunning] is the downloads running on the computer, counted on its
+/// tab.
+List<VhNavItem> shellNavItems(
+  VhLocalizations l10n,
+  List<int> tabs, {
+  int pcRunning = 0,
+}) => [
   for (final branch in tabs)
     switch (branch) {
       ShellBranch.library => VhNavItem(
@@ -36,6 +42,7 @@ List<VhNavItem> shellNavItems(VhLocalizations l10n, List<int> tabs) => [
         icon: VhIcons.monitor,
         selectedIcon: VhIcons.monitor,
         label: l10n.pcTab,
+        badge: pcRunning,
       ),
       _ => VhNavItem(
         icon: VhIcons.settings,

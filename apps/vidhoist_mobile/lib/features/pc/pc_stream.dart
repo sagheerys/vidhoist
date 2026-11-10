@@ -39,11 +39,21 @@ ServerStreamEndpoint pcStreamEndpoint(PcStreamProxy proxy) =>
 /// when the computer gave it, so a resume position, and a copy on the phone,
 /// are the same clip's; [onPhone] is that copy's path, which the golden
 /// rule then plays instead of the network.
-PlaylistItem pcPlaylistItem(PcItem item, {String? onPhone}) => PlaylistItem(
+///
+/// **A cover the computer keeps comes through the proxy** ([proxy]),
+/// since the players' lists and the media notification load images by
+/// address (field report 2026-11-10: the "Next" list showed none).
+PlaylistItem pcPlaylistItem(
+  PcItem item, {
+  String? onPhone,
+  PcStreamProxy? proxy,
+}) => PlaylistItem(
   canonicalUrl: item.url ?? '${PcStreamProxy.prefix}${item.id}',
   title: item.title,
   uploader: item.uploader,
-  artworkUrl: item.thumbnail,
+  artworkUrl:
+      item.thumbnail ??
+      (item.hasCover ? proxy?.coverUrlFor(item.id)?.toString() : null),
   localPath: onPhone,
   serverFilename: '${PcStreamProxy.prefix}${item.id}',
   isAudio: item.isAudio,
@@ -69,7 +79,8 @@ Future<void> playFromPc(
   ref.read(playbackResolverProvider).endpoint = pcStreamEndpoint(proxy);
   final copies = pcCopiesOnPhone(ref);
   final queue = [
-    for (final item in items) pcPlaylistItem(item, onPhone: copies[item.url]),
+    for (final item in items)
+      pcPlaylistItem(item, onPhone: copies[item.url], proxy: proxy),
   ];
   final index = items.indexWhere((i) => i.id == tapped.id);
   if (index < 0) return;

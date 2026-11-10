@@ -3716,6 +3716,12 @@ abstract class VhLocalizations {
   /// **'This phone'**
   String get pcDestPhone;
 
+  /// No description provided for @pcDoneOnPc.
+  ///
+  /// In en, this message translates to:
+  /// **'Done on the computer: {title}'**
+  String pcDoneOnPc(String title);
+
   /// No description provided for @pcEmptyLibrary.
   ///
   /// In en, this message translates to:
@@ -4094,6 +4100,12 @@ abstract class VhLocalizations {
   /// **'It goes to {name} when it is back.'**
   String pcQueued(String name);
 
+  /// No description provided for @pcQueuedMany.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 clip goes to {name} when it is back.} other{{count} clips go to {name} when it is back.}}'**
+  String pcQueuedMany(int count, String name);
+
   /// No description provided for @pcRouteHint.
   ///
   /// In en, this message translates to:
@@ -4159,6 +4171,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Sent to {name}'**
   String pcSent(String name);
+
+  /// No description provided for @pcSentMany.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 clip sent to {name}} other{{count} clips sent to {name}}}'**
+  String pcSentMany(int count, String name);
 
   /// No description provided for @pcSettingsHint.
   ///

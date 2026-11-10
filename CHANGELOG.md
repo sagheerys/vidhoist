@@ -114,8 +114,21 @@ All notable changes to VidHoist. The format follows
   a rule for private networks only (lifting this app's own blocks there).
   A home network Windows calls Public is named. The uninstaller removes the
   rule.
+- The batch screen offers "Save to" the computer as the add sheet does: the
+  chosen clips go there one link at a time, in the playlist's order, and
+  wait on the phone when it is away.
+- Quick download follows the last "Save to": a link goes straight to the
+  computer when that was the last choice, with an undo that takes it back
+  and opens the sheet; phone-only users see no change.
+- The Computer tab counts the downloads running on the computer, and a
+  notice in the app says when one is done, with Play. The phone asks only
+  while the app is in front and something runs there; no phone
+  notification, which would need a service running in the background.
 
 ### Fixed
+- The player's "Next" list, the mini player and the media notification
+  show the covers the computer keeps for its clips (owner's report,
+  2026-11-10): they come through the phone's local proxy.
 - The add-link button no longer shows over the menu of a clip in the
   Computer tab (owner's report, 2026-11-10): every sheet now opens above
   the whole app, where the button knows to hide.
