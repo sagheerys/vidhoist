@@ -2149,6 +2149,27 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pcConnected => 'متصل';
 
   @override
+  String get pcCopied => 'نُسخ إلى مكتبة الجوال مع ترجماته.';
+
+  @override
+  String get pcCopyFailed =>
+      'لم يكتمل النسخ: ربما الكمبيوتر مطفأ أو بعيد عن الشبكة. لم يُحفظ شيء.';
+
+  @override
+  String get pcCopyStarting => 'يُنسخ…';
+
+  @override
+  String get pcCopyStop => 'أوقف النسخ';
+
+  @override
+  String get pcCopyToPhone => 'انسخ إلى الجوال';
+
+  @override
+  String pcCopying(int percent) {
+    return 'يُنسخ $percent٪';
+  }
+
+  @override
   String get pcDestPhone => 'هذا الجوال';
 
   @override
@@ -2303,6 +2324,9 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pcLinkTitle => 'الجوال';
 
   @override
+  String get pcListen => 'استمع';
+
+  @override
   String get pcNow => 'يُنزَّل على الكمبيوتر الآن';
 
   @override
@@ -2315,6 +2339,9 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String get pcOfflineRoute =>
       'خارج البيت؟ اختر Tailscale من الإعدادات › الكمبيوتر.';
+
+  @override
+  String get pcOnPhone => 'على الجوال';
 
   @override
   String get pcOrType => 'أو اكتب العنوان والرمز';
@@ -2391,7 +2418,7 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
-  String get pcWatchLater => 'المشاهدة من الكمبيوتر قادمة في تحديث لاحق.';
+  String get pcWatch => 'شاهد';
 
   @override
   String percentValue(Object percent) {

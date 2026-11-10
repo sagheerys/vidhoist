@@ -26,6 +26,14 @@ All notable changes to VidHoist. The format follows
   every answer (no new pairing needed). The phone never switches on its
   own; the Computer page shows the route in use and, when the computer does
   not answer, points to Tailscale.
+- Watching from the computer: a tap on a clip in the Computer tab plays it
+  on the phone, seeking included, with its transcript as subtitles. Android's
+  player opens a proxy on the phone itself (127.0.0.1, a random token per
+  run) that fetches through the pinned link, so the computer's certificate
+  is still the only one trusted. A copy already on the phone plays instead.
+- "Copy to the phone", from a computer clip's menu: the file into the
+  phone's media folder with its transcripts beside it as subtitle files,
+  indexed as a download is. A copy cut off or stopped leaves nothing.
 - Design brief (`docs/blueprint/DESIGN-BRIEF.md`): the identity in one
   table, how a screen is drawn before it is coded, and the approval log.
   Mockups live in `docs/design/` and are built from the icon set and from

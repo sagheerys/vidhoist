@@ -2115,6 +2115,27 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pcConnected => 'Connected';
 
   @override
+  String get pcCopied => 'Copied to the phone\'s library, with its subtitles.';
+
+  @override
+  String get pcCopyFailed =>
+      'The copy did not finish: the computer may be off or out of reach. Nothing was kept.';
+
+  @override
+  String get pcCopyStarting => 'Copying…';
+
+  @override
+  String get pcCopyStop => 'Stop copying';
+
+  @override
+  String get pcCopyToPhone => 'Copy to the phone';
+
+  @override
+  String pcCopying(int percent) {
+    return 'Copying $percent%';
+  }
+
+  @override
   String get pcDestPhone => 'This phone';
 
   @override
@@ -2267,6 +2288,9 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pcLinkTitle => 'Phone';
 
   @override
+  String get pcListen => 'Listen';
+
+  @override
   String get pcNow => 'On the computer now';
 
   @override
@@ -2279,6 +2303,9 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get pcOfflineRoute =>
       'Away from home? Choose Tailscale in Settings › Computer.';
+
+  @override
+  String get pcOnPhone => 'On the phone';
 
   @override
   String get pcOrType => 'Or type the address and code';
@@ -2356,8 +2383,7 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
-  String get pcWatchLater =>
-      'Watching from the computer comes in a later update.';
+  String get pcWatch => 'Watch';
 
   @override
   String percentValue(Object percent) {

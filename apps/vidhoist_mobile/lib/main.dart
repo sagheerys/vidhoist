@@ -66,8 +66,9 @@ Future<void> main() async {
   // from the start rather than appearing a moment later.
   final pcPairing = await loadPcPairing(store, secrets);
 
-  // The phone app never streams: the endpoint stays `none`, so the golden rule
-  // always ends at the local file.
+  // The phone's own clips are files, so the golden rule ends at the local
+  // file; a clip on the paired computer plays through the link's proxy,
+  // whose endpoint is set when the first one is played (`pc_stream.dart`).
   final resolver = PlaybackSourceResolver(endpoint: ServerStreamEndpoint.none);
   final handler = await AudioService.init(
     builder: () => VhAudioHandler(

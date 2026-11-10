@@ -12,3 +12,4 @@ export 'src/transcript.dart';
 export 'src/transcript_bundle.dart';
 export 'src/transcript_index.dart';
 export 'src/transcript_store.dart';
+export 'src/vtt_writer.dart';

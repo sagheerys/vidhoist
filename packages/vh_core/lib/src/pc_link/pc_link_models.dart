@@ -126,11 +126,21 @@ class PcItem {
     this.sizeBytes,
     this.added,
     this.isAudio = false,
+    this.url,
+    this.extension,
   });
 
   /// Stable for the clip, opaque to the phone.
   final String id;
   final String title;
+
+  /// The clip's web link, the key the phone keeps a resume position and a
+  /// copy under, so the same clip on both is one clip. Null from a computer
+  /// older than the link's batch B.
+  final String? url;
+
+  /// The file's extension (`mp4`, `m4a`), for the name of a copy.
+  final String? extension;
   final String? uploader;
 
   /// A web address the phone loads itself.
@@ -153,6 +163,8 @@ class PcItem {
     'size': ?sizeBytes,
     if (added != null) 'added': added!.millisecondsSinceEpoch,
     if (isAudio) 'audio': true,
+    'url': ?url,
+    'ext': ?extension,
   };
 
   static PcItem? fromJson(Object? json) {
@@ -171,6 +183,8 @@ class PcItem {
       sizeBytes: json['size'] as int?,
       added: added is int ? DateTime.fromMillisecondsSinceEpoch(added) : null,
       isAudio: json['audio'] == true,
+      url: json['url'] as String?,
+      extension: json['ext'] as String?,
     );
   }
 }

@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vh_core/vh_core.dart' show PcStreamProxy;
 import 'package:vh_media/vh_media.dart';
 import 'package:vh_transcripts/vh_transcripts.dart';
 
 import '../../di.dart';
+import '../pc/pc_link_state.dart';
 import 'caption_style.dart';
 import 'transcript_sheet.dart';
 
@@ -53,22 +55,36 @@ Future<Map<String, List<VhCaptionLine>>> readSidecarSubtitles(
   final tracks = <String, List<VhCaptionLine>>{};
   for (final file in sidecarSubtitleFiles(mediaPath)) {
     try {
-      final lines = [
-        for (final s in SubtitleParser.parse(await file.readAsString()))
-          VhCaptionLine(
-            start: s.start,
-            end: s.end,
-            text: s.text,
-            words: s.words == null
-                ? null
-                : [for (final w in s.words!) VhCaptionWord(w.start, w.text)],
-          ),
-      ];
+      final lines = captionLinesOf(
+        SubtitleParser.parse(await file.readAsString()),
+      );
       if (lines.isNotEmpty) tracks[_languageOf(file, stem)!] = lines;
     } on FileSystemException {
       // A file gone since the listing, or unreadable: the others still show.
     }
   }
+  return orderTracks(tracks, preferred: preferred);
+}
+
+/// Timed lines as the player draws them.
+List<VhCaptionLine> captionLinesOf(List<TranscriptSegment> segments) => [
+  for (final s in segments)
+    VhCaptionLine(
+      start: s.start,
+      end: s.end,
+      text: s.text,
+      words: s.words == null
+          ? null
+          : [for (final w in s.words!) VhCaptionWord(w.start, w.text)],
+    ),
+];
+
+/// [tracks] with the [preferred] base languages first, and a language
+/// that repeats another's lines left out.
+Map<String, List<VhCaptionLine>> orderTracks(
+  Map<String, List<VhCaptionLine>> tracks, {
+  List<String> preferred = const [],
+}) {
   int rank(String language) {
     final at = preferred.indexOf(language.split('-').first.toLowerCase());
     return at < 0 ? preferred.length : at;
@@ -122,11 +138,38 @@ class SubtitleCache
   /// Reads [path]'s subtitles once; asking again costs nothing.
   void want(String path) {
     if (!_asked.add(path)) return;
-    final locale = ref.read(settingsProvider).localeCode;
-    readSidecarSubtitles(path, preferred: [?locale, 'ar', 'en']).then((tracks) {
+    readSidecarSubtitles(path, preferred: _preferred).then((tracks) {
       state = {...state, path: tracks};
     });
   }
+
+  /// A clip playing from the computer: its transcripts, asked of the
+  /// computer once, under the item's [key]. One that cannot be reached
+  /// gives none for this run, rather than asking on every rebuild.
+  void wantFromPc(String key, String id) {
+    if (!_asked.add(key)) return;
+    final client = ref.read(pcClientProvider);
+    Future<Map<String, List<VhCaptionLine>>> read() async {
+      if (client == null) return const {};
+      final tracks = <String, List<VhCaptionLine>>{};
+      for (final raw in await client.transcripts(id)) {
+        final transcript = Transcript.fromJson(raw);
+        if (transcript == null || transcript.isEmpty) continue;
+        tracks[transcript.language] = captionLinesOf(transcript.segments);
+      }
+      return orderTracks(tracks, preferred: _preferred);
+    }
+
+    read()
+        .catchError((Object _) => const <String, List<VhCaptionLine>>{})
+        .then((tracks) => state = {...state, key: tracks});
+  }
+
+  List<String> get _preferred => [
+    ?ref.read(settingsProvider).localeCode,
+    'ar',
+    'en',
+  ];
 }
 
 /// Whether subtitles show, and in which language: the person's choice,
@@ -199,10 +242,13 @@ Map<String, List<VhCaptionLine>>? sidecarTracksFor(
   PlaylistItem item,
 ) {
   final path = item.localPath;
-  if (path == null) return null;
-  final tracks = subtitles[path];
+  final pcId = PcStreamProxy.idOf(item.serverFilename ?? '');
+  final key = path ?? (pcId == null ? null : item.serverFilename);
+  if (key == null) return null;
+  final tracks = subtitles[key];
   if (tracks == null) {
-    ref.read(subtitleCacheProvider.notifier).want(path);
+    final cache = ref.read(subtitleCacheProvider.notifier);
+    path != null ? cache.want(path) : cache.wantFromPc(key, pcId!);
     return null;
   }
   return tracks.isEmpty ? null : tracks;

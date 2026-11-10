@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
-import 'package:vh_media/vh_media.dart' show vhFormatDuration;
 import 'package:vh_ui/vh_ui.dart';
 
 import 'pc_errors.dart';
+import 'pc_item_row.dart';
 import 'pc_link_state.dart';
 import 'pc_route_picker.dart';
 import 'pc_pairing_store.dart';
@@ -114,7 +113,8 @@ class _PcScreenState extends ConsumerState<PcScreen> {
                   style: text.bodyMedium?.copyWith(color: p.ink2),
                 ),
               ),
-            for (final item in view.items) _ItemRow(item: item),
+            for (final item in view.items)
+              PcItemRow(item: item, items: view.items),
           ],
         ),
       ),
@@ -321,76 +321,10 @@ class _TaskRow extends ConsumerWidget {
             : null,
         progress: measured ? task.progress / 100 : null,
         waiting: phase == 'queued',
-        thumbnail: _Thumb(url: task.thumbnail),
+        thumbnail: PcThumb(url: task.thumbnail),
         onCancel: () =>
             unawaited(ref.read(pcViewProvider.notifier).cancel(task.id)),
       ),
-    );
-  }
-}
-
-/// A clip in the computer's library.
-class _ItemRow extends StatelessWidget {
-  const _ItemRow({required this.item});
-
-  final PcItem item;
-
-  @override
-  Widget build(BuildContext context) => VhMediaCard(
-    title: item.title,
-    subtitle: vhMetaLine([
-      if (item.added case final at?) vhTimeAgo(context, at),
-      if (item.sizeBytes case final size?) vhFormatSize(size),
-    ]),
-    duration: item.duration == null ? null : vhFormatDuration(item.duration!),
-    audio: item.isAudio,
-    thumbnail: _Thumb(
-      url: item.thumbnail,
-      coverId: item.hasCover ? item.id : null,
-    ),
-    // Watching streams through a proxy on the phone (batch B); until then
-    // a tap says so rather than doing nothing (owner's report, 2026-11-09).
-    onTap: () => showVhSnack(context, context.vhl.pcWatchLater),
-  );
-}
-
-/// A web thumbnail, or a cover the computer keeps, fetched through the link
-/// and held for this run.
-class _Thumb extends ConsumerWidget {
-  const _Thumb({this.url, this.coverId});
-
-  final String? url;
-  final String? coverId;
-
-  static final _covers = <String, Future<Uint8List?>>{};
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final p = VhThemeX.of(context).palette;
-    final blank = ColoredBox(color: p.cardAlt);
-    if (url case final url?) {
-      return Image.network(
-        url,
-        fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => blank,
-      );
-    }
-    final client = ref.watch(pcClientProvider);
-    if (coverId == null || client == null) return blank;
-    final bytes = _covers.putIfAbsent(
-      coverId!,
-      () => client.cover(coverId!).catchError((Object _) => null),
-    );
-    return FutureBuilder(
-      future: bytes,
-      builder: (context, snap) => switch (snap.data) {
-        final data? => Image.memory(
-          data,
-          fit: BoxFit.cover,
-          errorBuilder: (_, _, _) => blank,
-        ),
-        null => blank,
-      },
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:vh_media/library.dart';
 
 import 'downloads_data.dart';
 import 'library_data.dart';
+import 'transcripts_data.dart';
 
 /// What a paired phone sees of this computer: its downloads and the clips
 /// that are files here, newest first. Read fresh on each call, so the phone
@@ -85,11 +86,29 @@ class DesktopPcHost implements PcLinkHost {
 
   @override
   Future<File?> cover(String id) async {
+    final thumb = (await _item(id))?.thumbnail;
+    if (thumb == null || _isWeb(thumb)) return null;
+    return File(thumb);
+  }
+
+  /// Only a clip of the library, by its id: the phone names no path.
+  @override
+  Future<File?> file(String id) async {
+    final path = (await _item(id))?.localPath;
+    return path == null ? null : File(path);
+  }
+
+  @override
+  Future<List<Object?>> transcripts(String id) async {
+    final item = await _item(id);
+    final store = _ref.read(transcriptStoreProvider);
+    if (item == null || store == null) return const [];
+    return [for (final t in await store.readFor(item.canonicalUrl)) t.toJson()];
+  }
+
+  Future<LibraryItem?> _item(String id) async {
     for (final item in await _files(null)) {
-      if (pcItemId(item) != id) continue;
-      final thumb = item.thumbnail;
-      if (thumb == null || _isWeb(thumb)) return null;
-      return File(thumb);
+      if (pcItemId(item) == id) return item;
     }
     return null;
   }
@@ -130,6 +149,13 @@ PcItem pcItemOf(LibraryItem item) {
     sizeBytes: item.sizeBytes,
     added: item.timestamp,
     isAudio: item.isAudio,
+    // A clip added from a folder may be keyed by its path, which is not
+    // the phone's to know.
+    url: _isWeb(item.canonicalUrl) ? item.canonicalUrl : null,
+    extension: switch (item.localPath) {
+      final path? => extensionOf(path),
+      null => null,
+    },
   );
 }
 
