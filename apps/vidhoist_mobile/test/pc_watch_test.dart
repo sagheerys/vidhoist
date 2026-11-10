@@ -82,6 +82,8 @@ void main() {
     ),
     initialPcPairingProvider.overrideWithValue(_pairing),
     pcClientProvider.overrideWith((ref) => api),
+    // Nothing answers a broadcast in a test.
+    pcFinderProvider.overrideWithValue((_) async => null),
     pcCopyDirProvider.overrideWithValue(dir.path),
   ];
 

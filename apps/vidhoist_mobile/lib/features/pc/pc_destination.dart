@@ -15,18 +15,23 @@ Future<void> writeSendToPc(WidgetRef ref, bool toPc) => ref
     .run(() => ref.read(keyValueStoreProvider).setBool(pcSendToPcKey, toPc));
 
 /// "Save to": the paired computer or this phone, side by side. Shown in the
-/// add sheet only while the computer answers, and never for a playlist.
+/// add sheet once the computer was asked, never for a playlist; a computer
+/// away takes the link when it is back.
 class PcDestination extends StatelessWidget {
   const PcDestination({
     super.key,
     required this.pcName,
     required this.toPc,
     required this.onChanged,
+    this.away = false,
   });
 
   final String pcName;
   final bool toPc;
   final ValueChanged<bool> onChanged;
+
+  /// It did not answer just now: the link waits on this phone for it.
+  final bool away;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +53,7 @@ class PcDestination extends StatelessWidget {
               child: _Choice(
                 icon: VhIcons.monitor,
                 title: pcName,
-                subtitle: l10n.pcConnected,
+                subtitle: away ? l10n.pcWillSend : l10n.pcConnected,
                 selected: toPc,
                 onTap: () => onChanged(true),
               ),
@@ -142,8 +147,7 @@ class _Choice extends StatelessWidget {
   }
 }
 
-/// Whether the add sheet offers the computer at all.
-bool offerPc(WidgetRef ref, String url, {required bool reachable}) =>
-    reachable &&
-    ref.read(pcPairingProvider) != null &&
-    !PlaylistDetector.isPlaylist(url);
+/// Whether the add sheet offers the computer at all: paired, and not a
+/// playlist, which has its own screen on the phone.
+bool offerPc(WidgetRef ref, String url) =>
+    ref.read(pcPairingProvider) != null && !PlaylistDetector.isPlaylist(url);

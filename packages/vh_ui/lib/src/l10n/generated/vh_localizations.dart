@@ -1622,6 +1622,18 @@ abstract class VhLocalizations {
   /// **'{count, plural, =1{1 in your library} other{{count} in your library}}'**
   String desktopInLibrary(int count);
 
+  /// No description provided for @desktopKeepAwake.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the computer awake while downloading'**
+  String get desktopKeepAwake;
+
+  /// No description provided for @desktopKeepAwakeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'So a link sent from the phone, or a long playlist, finishes instead of stopping when Windows goes to sleep. The screen still turns off as usual.'**
+  String get desktopKeepAwakeHint;
+
   /// No description provided for @desktopKeyAddLink.
   ///
   /// In en, this message translates to:
@@ -3758,6 +3770,60 @@ abstract class VhLocalizations {
   /// **'Wrong code.'**
   String get pcErrWrongCode;
 
+  /// No description provided for @pcFindNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No computer found. On the computer, open Settings › Phone › Pair a phone first, on the same Wi-Fi.'**
+  String get pcFindNone;
+
+  /// No description provided for @pcFindOnNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Find on the network'**
+  String get pcFindOnNetwork;
+
+  /// No description provided for @pcFirewallAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get pcFirewallAllow;
+
+  /// No description provided for @pcFirewallBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows Firewall blocks VidHoist, so the phone cannot reach it. Allow it on home (private) networks.'**
+  String get pcFirewallBlocked;
+
+  /// No description provided for @pcFirewallMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows has not let VidHoist receive from the phone yet. Allow it once, on home (private) networks only.'**
+  String get pcFirewallMissing;
+
+  /// No description provided for @pcFirewallPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows calls this network Public, and lets nothing in there. If it is your home network, make it Private: Settings › Network & internet › Wi-Fi › its properties.'**
+  String get pcFirewallPublic;
+
+  /// No description provided for @pcFirewallRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing changed: Windows needs an administrator\'s permission.'**
+  String get pcFirewallRefused;
+
+  /// No description provided for @pcFirewallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows Firewall'**
+  String get pcFirewallTitle;
+
+  /// No description provided for @pcFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found {name}. Type the code it shows.'**
+  String pcFound(String name);
+
   /// No description provided for @pcLastContact.
   ///
   /// In en, this message translates to:
@@ -3974,6 +4040,18 @@ abstract class VhLocalizations {
   /// **'Or type the address and code'**
   String get pcOrType;
 
+  /// No description provided for @pcOutboxRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer would not take this link'**
+  String get pcOutboxRefused;
+
+  /// No description provided for @pcOutboxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting to send ({count})'**
+  String pcOutboxTitle(int count);
+
   /// No description provided for @pcPairButton.
   ///
   /// In en, this message translates to:
@@ -4009,6 +4087,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Port'**
   String get pcPortLabel;
+
+  /// No description provided for @pcQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'It goes to {name} when it is back.'**
+  String pcQueued(String name);
 
   /// No description provided for @pcRouteHint.
   ///
@@ -4099,6 +4183,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Watch'**
   String get pcWatch;
+
+  /// No description provided for @pcWillSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Away: sent when it is back'**
+  String get pcWillSend;
 
   /// No description provided for @percentValue.
   ///

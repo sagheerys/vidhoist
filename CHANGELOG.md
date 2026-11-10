@@ -91,8 +91,34 @@ All notable changes to VidHoist. The format follows
   last check went. A channel's sheet shows
   its banner, opens the channel itself ("Open channel"), and keeps
   unfollowing apart from checking, pausing and editing.
+- The computer found again when the router gives it a new address: when
+  it does not answer on the home network, the phone asks the network (one
+  UDP broadcast, at most twice a minute), and an answer carrying the
+  computer's proof moves the link there, kept, with no new pairing. The
+  route stays the owner's: never switched to or from Tailscale. The
+  computer stays silent to anyone not paired with it, except while it shows
+  a pairing code, when "Find on the network" in the typed pairing fills in
+  its address.
+- Links sent while the computer is away: the add sheet offers it anyway
+  ("Away: sent when it is back"), the link waits on the phone (kept through
+  restarts, never in a backup, dropped on unpairing) and shows at the top
+  of the Computer page with a way to remove it. The phone asks the computer
+  every minute while the app runs, and its first answer sends them in
+  order; one it refuses stays marked and is not sent again.
+- Windows keeps awake while a download runs (the screen still turns off),
+  so a link sent from the phone finishes; Settings › Downloads turns it
+  off.
+- Windows Firewall on the computer's Phone page: when no rule lets VidHoist
+  in on the network in use, or one blocks it, a line says so with an Allow
+  button that asks Windows for an administrator's permission once and adds
+  a rule for private networks only (lifting this app's own blocks there).
+  A home network Windows calls Public is named. The uninstaller removes the
+  rule.
 
 ### Fixed
+- The add-link button no longer shows over the menu of a clip in the
+  Computer tab (owner's report, 2026-11-10): every sheet now opens above
+  the whole app, where the button knows to hide.
 - Download on the computer, from its first try on real devices: the phone's
   pairing form has the port in a field of its own (the number pad has no
   colon, and the port is rarely needed); Windows shows the home network's

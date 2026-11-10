@@ -8,6 +8,7 @@ import 'package:vh_ui/vh_ui.dart';
 import 'pc_errors.dart';
 import 'pc_item_row.dart';
 import 'pc_link_state.dart';
+import 'pc_outbox_section.dart';
 import 'pc_route_picker.dart';
 import 'pc_pairing_store.dart';
 
@@ -95,11 +96,12 @@ class _PcScreenState extends ConsumerState<PcScreen> {
                   style: text.bodySmall?.copyWith(color: p.ink2),
                 ),
               ),
+            const PcOutboxSection(),
             if (live.isNotEmpty) ...[
-              _Header(title: '${l10n.pcNow} · ${live.length}'),
+              PcHeader(title: '${l10n.pcNow} · ${live.length}'),
               for (final task in live) _TaskRow(task: task),
             ],
-            _Header(
+            PcHeader(
               title: view.total == 0
                   ? l10n.pcLibrary
                   : '${l10n.pcLibrary} · ${view.total}',
@@ -265,27 +267,6 @@ class _Pill extends StatelessWidget {
       ),
     );
   }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(
-      VhSpace.lg,
-      VhSpace.md,
-      VhSpace.lg,
-      VhSpace.xs,
-    ),
-    child: Text(
-      title,
-      style: Theme.of(context).textTheme.titleSmall
-          ?.copyWith(color: VhThemeX.of(context).palette.ink2),
-    ),
-  );
 }
 
 /// A download on the computer, drawn as the phone's own downloads are:

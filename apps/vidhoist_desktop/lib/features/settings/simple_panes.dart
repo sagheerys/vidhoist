@@ -9,6 +9,7 @@ import '../../data/choices_data.dart';
 import '../../data/desktop_habits.dart';
 import '../../data/downloads_data.dart';
 import '../../data/hints_data.dart';
+import '../../data/keep_awake_data.dart';
 import '../../shell/pill.dart';
 import 'appearance_pane.dart';
 import 'browser_button.dart';
@@ -152,6 +153,13 @@ class DownloadsPane extends ConsumerWidget {
           value: ref.watch(transcriptsFirstProvider),
           onChanged: (on) =>
               unawaited(ref.read(transcriptsFirstProvider.notifier).set(on)),
+        ),
+        SwitchLine(
+          title: l.desktopKeepAwake,
+          hint: l.desktopKeepAwakeHint,
+          value: ref.watch(keepAwakeProvider),
+          onChanged: (on) =>
+              unawaited(ref.read(keepAwakeProvider.notifier).set(on)),
         ),
       ],
     );

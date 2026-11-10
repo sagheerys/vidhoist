@@ -12,6 +12,7 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/home/add_flow.dart';
 import 'package:vidhoist_mobile/features/home/link_preview_view.dart';
 import 'package:vidhoist_mobile/features/pc/pc_link_state.dart';
+import 'package:vidhoist_mobile/features/pc/pc_outbox.dart';
 import 'package:vidhoist_mobile/features/pc/pc_pairing_store.dart';
 import 'package:vidhoist_mobile/features/pc/pc_scan.dart';
 import 'package:vidhoist_mobile/features/pc/pc_screen.dart';
@@ -54,6 +55,9 @@ class FakeApi implements PcLinkApi {
   List<PcAddress> addresses = const [];
   final submitted = <(String, String)>[];
   final cancelled = <String>[];
+
+  /// Links the computer will not take.
+  Set<String> refuse = const {};
   List<PcTask> live = const [
     PcTask(
       id: 't1',
@@ -90,6 +94,9 @@ class FakeApi implements PcLinkApi {
   @override
   Future<PcTask> submit(String url, String quality) async {
     _check();
+    if (refuse.contains(url)) {
+      throw const PcLinkException(PcLinkFailure.refused);
+    }
     submitted.add((url, quality));
     return PcTask(id: 't9', url: url, phase: 'queued', quality: quality);
   }
@@ -170,6 +177,8 @@ List<Override> _overrides({
   PcScanner? scanner,
   PcOfferPairer? offerPairer,
   LocalDownloadEngine? engine,
+  Future<PcFound?> Function(PcPairing pairing)? finder,
+  Future<List<PcFound>> Function()? pairable,
 }) => [
   keyValueStoreProvider.overrideWithValue(store),
   secretStoreProvider.overrideWithValue(secrets),
@@ -187,6 +196,9 @@ List<Override> _overrides({
   if (scanner != null) pcScannerProvider.overrideWithValue(scanner),
   if (offerPairer != null) pcOfferPairerProvider.overrideWithValue(offerPairer),
   pcPhoneNameProvider.overrideWithValue(() async => 'Galaxy'),
+  // Nothing answers a broadcast in a test.
+  pcFinderProvider.overrideWithValue(finder ?? (_) async => null),
+  pcPairableFinderProvider.overrideWithValue(pairable ?? () async => const []),
   downloadEngineProvider.overrideWithValue(engine),
   linkPreviewResolverProvider.overrideWithValue(
     ClipPreviewResolver(httpGet: (_) async => '{}'),
@@ -270,6 +282,7 @@ void main() {
     await container.read(pcPairingProvider.notifier).save(_pairing);
     await store.setString(pcCacheKey, '{"library":{}}');
     await store.setBool(pcSendToPcKey, true);
+    await store.setString(pcOutboxKey, '[{"url":"https://x.y/a"}]');
     final backup = await container.read(backupServiceProvider).exportToString();
     for (final key in pcDeviceOnlyKeys) {
       expect(backup, isNot(contains(key)), reason: key);
@@ -803,9 +816,34 @@ void main() {
       expect(find.text(l.startDownload), findsOneWidget);
     });
 
-    testWidgets('paired but away: no choice either', (tester) async {
-      await open(tester, FakeApi()..reachable = false);
-      expect(find.text(l.storageLocation), findsNothing);
+    testWidgets('**the guard**: paired but away, the computer is still '
+        'offered and the link waits for it', (tester) async {
+      final api = FakeApi()..reachable = false;
+      await open(tester, api);
+      expect(find.text(l.storageLocation), findsOneWidget);
+      expect(find.text(l.pcWillSend), findsOneWidget);
+      await tester.tap(find.text('HOME-PC'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l.pcSendToPc));
+      await tester.pumpAndSettle();
+      expect(find.text(l.pcQueued('HOME-PC')), findsOneWidget);
+      expect(api.submitted, isEmpty);
+      expect(engine.qualities, isEmpty, reason: 'not downloaded here either');
+      final container = ProviderScope.containerOf(
+        tester.element(find.text('open')),
+      );
+      expect(
+        container.read(pcOutboxProvider).single.url,
+        contains('jNQXAC9IVRw'),
+      );
+      expect(await store.getString(pcOutboxKey), contains('jNQXAC9IVRw'));
+
+      // Back: its first answer sends it.
+      api.reachable = true;
+      await container.read(pcViewProvider.notifier).probe();
+      expect(api.submitted.single.$1, contains('jNQXAC9IVRw'));
+      expect(container.read(pcOutboxProvider), isEmpty);
+      expect(await store.getString(pcOutboxKey), '[]');
     });
 
     testWidgets('paired and there: the computer takes the link', (

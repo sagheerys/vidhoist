@@ -968,6 +968,13 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String get desktopKeepAwake => 'أبقِ الكمبيوتر مستيقظاً أثناء التنزيل';
+
+  @override
+  String get desktopKeepAwakeHint =>
+      'حتى يكتمل ما أرسلته من الجوال أو قائمة طويلة، بدل أن يتوقف حين ينام ويندوز. الشاشة تنطفئ كالعادة.';
+
+  @override
   String get desktopKeyAddLink => 'إضافة الرابط المنسوخ';
 
   @override
@@ -2206,6 +2213,40 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pcErrWrongCode => 'رمز خاطئ.';
 
   @override
+  String get pcFindNone =>
+      'لم يُعثر على كمبيوتر. افتح على الكمبيوتر الإعدادات › الجوال › «اربط جوالاً» أولاً، على شبكة Wi-Fi نفسها.';
+
+  @override
+  String get pcFindOnNetwork => 'ابحث في الشبكة';
+
+  @override
+  String get pcFirewallAllow => 'اسمح';
+
+  @override
+  String get pcFirewallBlocked =>
+      'جدار حماية ويندوز يحجب VidHoist، فلا يصل إليه الجوال. اسمح له على شبكات البيت (الخاصة).';
+
+  @override
+  String get pcFirewallMissing =>
+      'لم يسمح ويندوز بعدُ لـVidHoist بالاستقبال من الجوال. اسمح له مرة واحدة، على شبكات البيت (الخاصة) فقط.';
+
+  @override
+  String get pcFirewallPublic =>
+      'يصنّف ويندوز هذه الشبكة «عامة» ولا يسمح فيها بأي اتصال وارد. إن كانت شبكة بيتك فاجعلها «خاصة»: الإعدادات › الشبكة والإنترنت › Wi-Fi › خصائصها.';
+
+  @override
+  String get pcFirewallRefused =>
+      'لم يتغيّر شيء: يحتاج ويندوز إذن مسؤول الجهاز.';
+
+  @override
+  String get pcFirewallTitle => 'جدار حماية ويندوز';
+
+  @override
+  String pcFound(String name) {
+    return 'وُجد $name. اكتب الرمز الظاهر عليه.';
+  }
+
+  @override
   String pcLastContact(String time) {
     return 'آخر تواصل $time';
   }
@@ -2347,6 +2388,14 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pcOrType => 'أو اكتب العنوان والرمز';
 
   @override
+  String get pcOutboxRefused => 'لم يقبل الكمبيوتر هذا الرابط';
+
+  @override
+  String pcOutboxTitle(int count) {
+    return 'بانتظار الإرسال ($count)';
+  }
+
+  @override
   String get pcPairButton => 'اربط';
 
   @override
@@ -2368,6 +2417,11 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcPortLabel => 'المنفذ';
+
+  @override
+  String pcQueued(String name) {
+    return 'سيُرسل إلى $name حين يعود.';
+  }
 
   @override
   String get pcRouteHint =>
@@ -2419,6 +2473,9 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcWatch => 'شاهد';
+
+  @override
+  String get pcWillSend => 'غائب: يُرسل حين يعود';
 
   @override
   String percentValue(Object percent) {

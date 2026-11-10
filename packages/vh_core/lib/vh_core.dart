@@ -40,6 +40,7 @@ export 'src/resolvers/clip_preview_resolver.dart';
 export 'src/resolvers/page_preview.dart';
 export 'src/pc_link/pc_addresses.dart';
 export 'src/pc_link/pc_certificate.dart';
+export 'src/pc_link/pc_discovery.dart';
 export 'src/pc_link/pc_link_api.dart';
 export 'src/pc_link/pc_link_client.dart';
 export 'src/pc_link/pc_link_models.dart';

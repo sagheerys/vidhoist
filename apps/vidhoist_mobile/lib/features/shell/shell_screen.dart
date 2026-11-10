@@ -1,3 +1,4 @@
+import '../pc/pc_link_state.dart';
 import '../pc/pc_pairing_store.dart';
 
 import 'dart:async';
@@ -293,6 +294,8 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     ref.watch(wifiPauseProvider);
     // Followed channels are checked as they fall due.
     ref.watch(channelTickerProvider);
+    // Links sent while the computer was away go when it answers.
+    ref.watch(pcOutboxRetryProvider);
     _watchEnrichment();
 
     final handler = ref.watch(audioHandlerProvider);

@@ -73,6 +73,37 @@ void main() {
     expect(vhSheetMotion(captured), isNull);
   });
 
+  testWidgets('**the guard**: a sheet opened in a tab hides the add button', (
+    tester,
+  ) async {
+    // A tab has its own navigator; the depth watches the root one only, so
+    // a sheet left on the tab's was drawn under the add button.
+    addTearDown(() => VhRouteDepth.depth.value = 0);
+    await tester.pumpWidget(
+      MaterialApp(
+        navigatorObservers: [VhRouteDepth.instance],
+        home: Navigator(
+          onGenerateRoute: (_) => MaterialPageRoute<void>(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () => showVhSheet<void>(
+                  context: context,
+                  builder: (_) => const Text('ورقة'),
+                ),
+                child: const Text('افتح'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(VhRouteDepth.depth.value, 0);
+    await tester.tap(find.text('افتح'));
+    await tester.pumpAndSettle();
+    expect(find.text('ورقة'), findsOneWidget);
+    expect(VhRouteDepth.depth.value, 1);
+  });
+
   testWidgets('a dialog grows from 0.96 and is gone in 160', (tester) async {
     await tester.pumpWidget(
       host(
