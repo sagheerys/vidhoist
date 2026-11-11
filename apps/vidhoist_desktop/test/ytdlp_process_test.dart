@@ -188,8 +188,9 @@ void main() {
       final kept = File(result.infoJsonPath!);
       expect(kept.parent.path, cache.path);
       expect(jsonDecode(await kept.readAsString()), jsonDecode(json));
-      // The link is not in the file's name: the folder can be listed.
-      expect(kept.path, isNot(contains('abc')));
+      // The link is not in the file's name: the folder can be listed. The
+      // name alone, as the temp folder is random and may hold the letters.
+      expect(kept.uri.pathSegments.last, isNot(contains('abc')));
     });
 
     test('a refused probe throws the classified error', () async {
