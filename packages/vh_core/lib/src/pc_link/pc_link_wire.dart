@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 
 import 'pc_addresses.dart';
+import 'pc_link_models.dart';
 
 /// "Download on the computer": the words both ends agree on. The computer
 /// runs a small HTTPS server on the home network; the phone pairs once, then
@@ -17,6 +18,16 @@ abstract final class PcLink {
   static const statusPath = '/v1/status';
   static const downloadsPath = '/v1/downloads';
   static const libraryPath = '/v1/library';
+
+  /// The saved lists; `/v1/lists/<id>` one with its clips.
+  static const listsPath = '/v1/lists';
+
+  /// `DELETE /v1/library/<id>` answers in these, so the phone can say why.
+  static const deleteRefusals = {
+    'notAllowed': PcDeleteOutcome.notAllowed,
+    'noRecycleBin': PcDeleteOutcome.noRecycleBin,
+    'failed': PcDeleteOutcome.failed,
+  };
 
   /// `/v1/library/<id>/file`: a clip's file, ranges honoured.
   static const fileSegment = 'file';

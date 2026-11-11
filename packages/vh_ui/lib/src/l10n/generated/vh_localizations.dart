@@ -3710,6 +3710,54 @@ abstract class VhLocalizations {
   /// **'Copying {percent}%'**
   String pcCopying(int percent);
 
+  /// No description provided for @pcDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from the computer'**
+  String get pcDelete;
+
+  /// No description provided for @pcDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" goes to the computer\'s Recycle Bin, where it can be got back.'**
+  String pcDeleteBody(String title);
+
+  /// No description provided for @pcDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer could not delete it. It may be open there.'**
+  String get pcDeleteFailed;
+
+  /// No description provided for @pcDeleteMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'This clip is no longer on the computer.'**
+  String get pcDeleteMissing;
+
+  /// No description provided for @pcDeleteNoBin.
+  ///
+  /// In en, this message translates to:
+  /// **'Not deleted: its drive on the computer has no Recycle Bin.'**
+  String get pcDeleteNoBin;
+
+  /// No description provided for @pcDeleteNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'The computer does not let the phone delete. Turn it on there in Settings › Phone.'**
+  String get pcDeleteNotAllowed;
+
+  /// No description provided for @pcDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete from {name}?'**
+  String pcDeleteTitle(String name);
+
+  /// No description provided for @pcDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'In the computer\'s Recycle Bin: {title}'**
+  String pcDeleted(String title);
+
   /// No description provided for @pcDestPhone.
   ///
   /// In en, this message translates to:
@@ -3721,6 +3769,18 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Done on the computer: {title}'**
   String pcDoneOnPc(String title);
+
+  /// No description provided for @pcDownloadsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 download for the computer} other{{count} downloads for the computer}}'**
+  String pcDownloadsCount(int count);
+
+  /// No description provided for @pcDownloadsSheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads on the computer'**
+  String get pcDownloadsSheet;
 
   /// No description provided for @pcEmptyLibrary.
   ///
@@ -3859,6 +3919,18 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Allow'**
   String get pcLinkAllow;
+
+  /// No description provided for @pcLinkAllowDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Let the phone delete clips'**
+  String get pcLinkAllowDelete;
+
+  /// No description provided for @pcLinkAllowDeleteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A clip deleted from the phone goes to this computer\'s Recycle Bin, where you can get it back. On a drive with no Recycle Bin it is not deleted.'**
+  String get pcLinkAllowDeleteHint;
 
   /// No description provided for @pcLinkCodeHint.
   ///
@@ -4004,11 +4076,29 @@ abstract class VhLocalizations {
   /// **'Phone'**
   String get pcLinkTitle;
 
+  /// No description provided for @pcListEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'None of this list\'s clips is on the computer any more.'**
+  String get pcListEmpty;
+
   /// No description provided for @pcListen.
   ///
   /// In en, this message translates to:
   /// **'Listen'**
   String get pcListen;
+
+  /// No description provided for @pcLists.
+  ///
+  /// In en, this message translates to:
+  /// **'Lists on the computer'**
+  String get pcLists;
+
+  /// No description provided for @pcListsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No list on the computer has clips in it.'**
+  String get pcListsEmpty;
 
   /// No description provided for @pcNow.
   ///

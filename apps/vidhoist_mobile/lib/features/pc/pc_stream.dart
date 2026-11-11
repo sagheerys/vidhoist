@@ -68,12 +68,15 @@ Map<String, String> pcCopiesOnPhone(WidgetRef ref) => {
 
 /// Plays [tapped] from the computer's list [items], in their order, as the
 /// library plays its own: audio in the background, a video in the player.
+/// [video] says which for a whole list, where one video in it opens the
+/// player.
 Future<void> playFromPc(
   BuildContext context,
   WidgetRef ref,
   List<PcItem> items,
-  PcItem tapped,
-) async {
+  PcItem tapped, {
+  bool? video,
+}) async {
   final proxy = ref.read(pcStreamProxyProvider);
   await proxy.start();
   ref.read(playbackResolverProvider).endpoint = pcStreamEndpoint(proxy);
@@ -84,7 +87,7 @@ Future<void> playFromPc(
   ];
   final index = items.indexWhere((i) => i.id == tapped.id);
   if (index < 0) return;
-  if (tapped.isAudio) {
+  if (!(video ?? !tapped.isAudio)) {
     await ref.read(audioHandlerProvider).playItems(queue, startIndex: index);
     return;
   }

@@ -22,19 +22,37 @@ const pcLinkDevicesKey = 'pc_link_devices';
 const _certSecret = 'pc_link_cert';
 const _keySecret = 'pc_link_key';
 
-/// The keys a backup leaves out.
-const pcLinkDeviceOnlyKeys = {pcLinkEnabledKey, pcLinkDevicesKey};
+/// "Let the phone delete clips", off until the owner turns it on, and
+/// device-only too: a backup must not carry that permission to another
+/// computer.
+const pcLinkDeleteKey = 'pc_link_allow_delete';
 
-final pcLinkEnabledProvider = NotifierProvider<PcLinkEnabledNotifier, bool>(
-  PcLinkEnabledNotifier.new,
+/// The keys a backup leaves out.
+const pcLinkDeviceOnlyKeys = {
+  pcLinkEnabledKey,
+  pcLinkDevicesKey,
+  pcLinkDeleteKey,
+};
+
+final pcLinkEnabledProvider = NotifierProvider<PcLinkSwitch, bool>(
+  () => PcLinkSwitch(pcLinkEnabledKey),
 );
 
-class PcLinkEnabledNotifier extends Notifier<bool> {
+final pcLinkDeleteProvider = NotifierProvider<PcLinkSwitch, bool>(
+  () => PcLinkSwitch(pcLinkDeleteKey),
+);
+
+/// A switch of the link's, off until turned on, kept under [key].
+class PcLinkSwitch extends Notifier<bool> {
+  PcLinkSwitch(this.key);
+
+  final String key;
+
   @override
   bool build() {
     ref
         .read(keyValueStoreProvider)
-        .getBool(pcLinkEnabledKey)
+        .getBool(key)
         .then((saved) => state = saved ?? false, onError: (_) {});
     return false;
   }
@@ -43,9 +61,7 @@ class PcLinkEnabledNotifier extends Notifier<bool> {
     state = on;
     return ref
         .read(prefsMutexProvider)
-        .run(
-          () => ref.read(keyValueStoreProvider).setBool(pcLinkEnabledKey, on),
-        );
+        .run(() => ref.read(keyValueStoreProvider).setBool(key, on));
   }
 }
 

@@ -2143,12 +2143,59 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
+  String get pcDelete => 'Delete from the computer';
+
+  @override
+  String pcDeleteBody(String title) {
+    return '\"$title\" goes to the computer\'s Recycle Bin, where it can be got back.';
+  }
+
+  @override
+  String get pcDeleteFailed =>
+      'The computer could not delete it. It may be open there.';
+
+  @override
+  String get pcDeleteMissing => 'This clip is no longer on the computer.';
+
+  @override
+  String get pcDeleteNoBin =>
+      'Not deleted: its drive on the computer has no Recycle Bin.';
+
+  @override
+  String get pcDeleteNotAllowed =>
+      'The computer does not let the phone delete. Turn it on there in Settings › Phone.';
+
+  @override
+  String pcDeleteTitle(String name) {
+    return 'Delete from $name?';
+  }
+
+  @override
+  String pcDeleted(String title) {
+    return 'In the computer\'s Recycle Bin: $title';
+  }
+
+  @override
   String get pcDestPhone => 'This phone';
 
   @override
   String pcDoneOnPc(String title) {
     return 'Done on the computer: $title';
   }
+
+  @override
+  String pcDownloadsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count downloads for the computer',
+      one: '1 download for the computer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pcDownloadsSheet => 'Downloads on the computer';
 
   @override
   String get pcEmptyLibrary => 'No downloads on the computer yet.';
@@ -2233,6 +2280,13 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcLinkAllow => 'Allow';
+
+  @override
+  String get pcLinkAllowDelete => 'Let the phone delete clips';
+
+  @override
+  String get pcLinkAllowDeleteHint =>
+      'A clip deleted from the phone goes to this computer\'s Recycle Bin, where you can get it back. On a drive with no Recycle Bin it is not deleted.';
 
   @override
   String get pcLinkCodeHint =>
@@ -2334,7 +2388,17 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pcLinkTitle => 'Phone';
 
   @override
+  String get pcListEmpty =>
+      'None of this list\'s clips is on the computer any more.';
+
+  @override
   String get pcListen => 'Listen';
+
+  @override
+  String get pcLists => 'Lists on the computer';
+
+  @override
+  String get pcListsEmpty => 'No list on the computer has clips in it.';
 
   @override
   String get pcNow => 'On the computer now';

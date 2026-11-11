@@ -2177,12 +2177,61 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String get pcDelete => 'احذف من الكمبيوتر';
+
+  @override
+  String pcDeleteBody(String title) {
+    return 'يذهب «$title» إلى سلة المحذوفات في الكمبيوتر، ويمكن استرجاعه منها.';
+  }
+
+  @override
+  String get pcDeleteFailed =>
+      'تعذّر الحذف على الكمبيوتر، وقد يكون المقطع مفتوحاً هناك.';
+
+  @override
+  String get pcDeleteMissing => 'لم يعد هذا المقطع على الكمبيوتر.';
+
+  @override
+  String get pcDeleteNoBin =>
+      'لم يُحذف: القرص الذي عليه في الكمبيوتر بلا سلة محذوفات.';
+
+  @override
+  String get pcDeleteNotAllowed =>
+      'الكمبيوتر لا يسمح للجوال بالحذف. فعّله هناك من الإعدادات › الجوال.';
+
+  @override
+  String pcDeleteTitle(String name) {
+    return 'حذف من $name؟';
+  }
+
+  @override
+  String pcDeleted(String title) {
+    return 'في سلة محذوفات الكمبيوتر: $title';
+  }
+
+  @override
   String get pcDestPhone => 'هذا الجوال';
 
   @override
   String pcDoneOnPc(String title) {
     return 'انتهى على الكمبيوتر: $title';
   }
+
+  @override
+  String pcDownloadsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تحميلاً للكمبيوتر',
+      few: '$count تحميلات للكمبيوتر',
+      two: 'تحميلان للكمبيوتر',
+      one: 'تحميل واحد للكمبيوتر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pcDownloadsSheet => 'تحميلات الكمبيوتر';
 
   @override
   String get pcEmptyLibrary => 'لا تنزيلات على الكمبيوتر بعد.';
@@ -2267,6 +2316,13 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcLinkAllow => 'اسمح';
+
+  @override
+  String get pcLinkAllowDelete => 'اسمح للجوال بحذف المقاطع';
+
+  @override
+  String get pcLinkAllowDeleteHint =>
+      'المقطع الذي يُحذف من الجوال يذهب إلى سلة المحذوفات في هذا الكمبيوتر، فيمكنك استرجاعه منها. وعلى قرص بلا سلة محذوفات لا يُحذف.';
 
   @override
   String get pcLinkCodeHint =>
@@ -2370,7 +2426,16 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pcLinkTitle => 'الجوال';
 
   @override
+  String get pcListEmpty => 'لم يعد أي مقطع من هذه القائمة على الكمبيوتر.';
+
+  @override
   String get pcListen => 'استمع';
+
+  @override
+  String get pcLists => 'قوائم الكمبيوتر';
+
+  @override
+  String get pcListsEmpty => 'لا قائمة على الكمبيوتر فيها مقاطع.';
 
   @override
   String get pcNow => 'يُنزَّل على الكمبيوتر الآن';

@@ -10,7 +10,10 @@ import 'package:vh_ui/vh_ui.dart';
 import '../downloads_library/library_providers.dart';
 import '../shared/error_text.dart';
 import 'pc_copy.dart';
+import 'pc_errors.dart';
 import 'pc_link_state.dart';
+import 'pc_lists.dart';
+import 'pc_pairing_store.dart';
 import 'pc_stream.dart';
 
 /// The links of the computer's clips that are copied to this phone.
@@ -22,7 +25,8 @@ final pcOnPhoneProvider = Provider<Set<String>>(
 );
 
 /// A clip in the computer's library. A tap plays it from the computer, as
-/// a clip of the phone's own plays; its menu copies it to the phone.
+/// a clip of the phone's own plays; its menu copies it to the phone, or,
+/// where the owner allowed it, puts it in the computer's Recycle Bin.
 class PcItemRow extends ConsumerWidget {
   const PcItemRow({super.key, required this.item, required this.items});
 
@@ -73,6 +77,10 @@ class PcItemRow extends ConsumerWidget {
   }) async {
     final l10n = context.vhl;
     final copying = ref.read(pcCopiesProvider).containsKey(item.id);
+    // Offered only where the owner allowed it on the computer, which asks
+    // again before it deletes.
+    final canDelete = ref.read(pcViewProvider).status?.canDelete ?? false;
+    final danger = VhThemeX.of(context).palette.err;
     final chosen = await showVhSheet<_Action>(
       context: context,
       useSafeArea: true,
@@ -108,6 +116,12 @@ class PcItemRow extends ConsumerWidget {
                 onPhone ? VhIcons.check : VhIcons.download,
                 onPhone ? l10n.pcOnPhone : l10n.pcCopyToPhone,
               ),
+            if (canDelete)
+              ListTile(
+                leading: VhIcon(VhIcons.trash, color: danger),
+                title: Text(l10n.pcDelete, style: TextStyle(color: danger)),
+                onTap: () => Navigator.of(sheet).pop(_Action.delete),
+              ),
             const SizedBox(height: VhSpace.md),
           ],
         );
@@ -130,11 +144,60 @@ class PcItemRow extends ConsumerWidget {
           case PcCopyEnd.stopped:
             break;
         }
+      case _Action.delete:
+        await _delete(context, ref);
     }
+  }
+
+  /// Asks first, naming the computer and saying where the clip goes, then
+  /// says what became of it.
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final l10n = context.vhl;
+    final name =
+        ref.read(pcViewProvider).status?.name ??
+        ref.read(pcPairingProvider)?.name ??
+        l10n.pcTab;
+    final sure = await showVhConfirm(
+      context,
+      title: l10n.pcDeleteTitle(name),
+      message: l10n.pcDeleteBody(item.title),
+      confirmLabel: l10n.delete,
+      cancelLabel: l10n.cancel,
+      destructive: true,
+      preview: VhDialogClip(
+        title: item.title,
+        thumbnail: PcThumb(
+          url: item.thumbnail,
+          coverId: item.hasCover ? item.id : null,
+        ),
+      ),
+    );
+    if (!sure || !context.mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+    final outcome = await ref.read(pcViewProvider.notifier).delete(item.id);
+    if (!context.mounted) return;
+    if (outcome == PcDeleteOutcome.deleted) forgetPcLists(ref);
+    showVhSnackOn(
+      messenger,
+      switch (outcome) {
+        PcDeleteOutcome.deleted => l10n.pcDeleted(item.title),
+        PcDeleteOutcome.notAllowed => l10n.pcDeleteNotAllowed,
+        PcDeleteOutcome.missing => l10n.pcDeleteMissing,
+        PcDeleteOutcome.noRecycleBin => l10n.pcDeleteNoBin,
+        PcDeleteOutcome.failed => l10n.pcDeleteFailed,
+        null => pcFailureText(
+          l10n,
+          ref.read(pcViewProvider).failure ?? PcLinkFailure.unreachable,
+        ),
+      },
+      type: outcome == PcDeleteOutcome.deleted
+          ? VhSnackType.success
+          : VhSnackType.error,
+    );
   }
 }
 
-enum _Action { play, copy, stop }
+enum _Action { play, copy, stop, delete }
 
 /// A web thumbnail, or a cover the computer keeps, fetched through the link
 /// and held for this run.

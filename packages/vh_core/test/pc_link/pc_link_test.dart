@@ -68,6 +68,35 @@ class FakeHost implements PcLinkHost {
           {'lang': 'ar', 'url': 'https://example.com/a'},
         ]
       : const [];
+
+  @override
+  Future<List<PcList>> lists() async => const [
+    PcList(id: 'l1', name: 'Evening', count: 2, coverId: 'i1'),
+  ];
+
+  @override
+  Future<PcList?> list(String id) async => id == 'l1'
+      ? const PcList(
+          id: 'l1',
+          name: 'Evening',
+          count: 2,
+          items: [
+            PcItem(id: 'i2', title: 'Clip 2'),
+            PcItem(id: 'i0', title: 'Clip 0'),
+          ],
+        )
+      : null;
+
+  /// What [delete] answers for a clip there; tests change it.
+  var deleting = PcDeleteOutcome.deleted;
+  final deleted = <String>[];
+
+  @override
+  Future<PcDeleteOutcome> delete(String id) async {
+    if (!id.startsWith('i')) return PcDeleteOutcome.missing;
+    if (deleting == PcDeleteOutcome.deleted) deleted.add(id);
+    return deleting;
+  }
 }
 
 void main() {
@@ -208,6 +237,36 @@ void main() {
     expect(host.submitted, isEmpty);
   });
 
+  test('the saved lists, and one with its clips in its order', () async {
+    final client = PcLinkClient(await pairPhone());
+    addTearDown(client.close);
+    final lists = await client.lists();
+    expect(lists.single.name, 'Evening');
+    expect(lists.single.count, 2);
+    expect(lists.single.coverId, 'i1');
+    expect(lists.single.items, isEmpty, reason: 'the clips come with one');
+    final one = await client.list('l1');
+    expect([for (final i in one!.items) i.id], ['i2', 'i0']);
+    expect(await client.list('gone'), isNull);
+  });
+
+  test('a delete says what became of it', () async {
+    final client = PcLinkClient(await pairPhone());
+    addTearDown(client.close);
+    expect(await client.delete('i0'), PcDeleteOutcome.deleted);
+    expect(host.deleted, ['i0']);
+    expect(await client.delete('x9'), PcDeleteOutcome.missing);
+    for (final refusal in [
+      PcDeleteOutcome.notAllowed,
+      PcDeleteOutcome.noRecycleBin,
+      PcDeleteOutcome.failed,
+    ]) {
+      host.deleting = refusal;
+      expect(await client.delete('i1'), refusal);
+    }
+    expect(host.deleted, ['i0'], reason: 'a refusal deletes nothing');
+  });
+
   group('a scan of the network', () {
     Future<(int, String)> raw(
       String method,
@@ -236,10 +295,32 @@ void main() {
           '/v1/library/i0/cover',
           '/v1/library/i0/file',
           '/v1/library/i0/transcripts',
+          PcLink.listsPath,
+          '/v1/lists/l1',
         ]) {
           expect(await raw('GET', path), (404, ''), reason: path);
         }
         expect(await raw('POST', PcLink.pairPath), (404, ''));
+      },
+    );
+
+    test(
+      '**the guard**: a delete without the secret deletes nothing',
+      () async {
+        host.deleting = PcDeleteOutcome.deleted;
+        await pairPhone();
+        final id = window.devices.single.id;
+        expect(await raw('DELETE', '/v1/library/i0'), (404, ''));
+        final (code, body) = await raw(
+          'DELETE',
+          '/v1/library/i0',
+          headers: {
+            PcLink.deviceHeader: id,
+            'authorization': 'Bearer ${newSecret()}',
+          },
+        );
+        expect((code, body), (401, ''));
+        expect(host.deleted, isEmpty);
       },
     );
 
@@ -507,5 +588,25 @@ void main() {
     expect(back.extension, 'webm');
     // An older computer sends neither.
     expect(PcItem.fromJson({'id': 'x', 'title': 't'})!.url, isNull);
+  });
+
+  test('deleting is off unless the computer says, and a list survives', () {
+    const on = PcStatus(name: 'PC', version: '1', canDelete: true);
+    expect(PcStatus.fromJson(on.toJson())!.canDelete, isTrue);
+    expect(PcStatus.fromJson({'name': 'PC'})!.canDelete, isFalse);
+    const list = PcList(
+      id: 'l',
+      name: 'n',
+      count: 1,
+      thumbnail: 'https://i/t.jpg',
+      items: [PcItem(id: 'a', title: 'A')],
+    );
+    final back = PcList.fromJson(list.toJson())!;
+    expect(
+      (back.name, back.count, back.thumbnail),
+      ('n', 1, 'https://i/t.jpg'),
+    );
+    expect(back.items.single.id, 'a');
+    expect(PcList.fromJson({'id': 'l'}), isNull);
   });
 }

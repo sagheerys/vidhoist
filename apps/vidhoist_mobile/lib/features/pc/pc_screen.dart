@@ -6,8 +6,11 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import 'pc_errors.dart';
+import 'pc_downloads.dart';
 import 'pc_item_row.dart';
 import 'pc_link_state.dart';
+import 'pc_lists.dart';
+import 'pc_lists_screen.dart';
 import 'pc_outbox_section.dart';
 import 'pc_route_picker.dart';
 import 'pc_pairing_store.dart';
@@ -44,6 +47,11 @@ class _PcScreenState extends ConsumerState<PcScreen> {
     super.dispose();
   }
 
+  Future<void> _refresh() {
+    ref.invalidate(pcListsProvider);
+    return _view.refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.vhl;
@@ -51,21 +59,23 @@ class _PcScreenState extends ConsumerState<PcScreen> {
     final text = Theme.of(context).textTheme;
     final view = ref.watch(pcViewProvider);
     final pairing = ref.watch(pcPairingProvider);
-    final live = view.live;
+    // The lists are asked for again when the computer is back.
+    ref.listen(pcViewProvider.select((v) => v.online), (was, now) {
+      if (now && was == false) ref.invalidate(pcListsProvider);
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.pcTab),
         actions: [
           IconButton(
             tooltip: l10n.refresh,
-            onPressed: () =>
-                unawaited(ref.read(pcViewProvider.notifier).refresh()),
+            onPressed: () => unawaited(_refresh()),
             icon: const VhIcon(VhIcons.refresh),
           ),
         ],
       ),
       body: VhPullRefresh(
-        onRefresh: () => ref.read(pcViewProvider.notifier).refresh(),
+        onRefresh: _refresh,
         child: ListView(
           padding: const EdgeInsets.only(bottom: 120),
           children: [
@@ -96,11 +106,8 @@ class _PcScreenState extends ConsumerState<PcScreen> {
                   style: text.bodySmall?.copyWith(color: p.ink2),
                 ),
               ),
-            const PcOutboxSection(),
-            if (live.isNotEmpty) ...[
-              PcHeader(title: '${l10n.pcNow} · ${live.length}'),
-              for (final task in live) _TaskRow(task: task),
-            ],
+            const PcDownloadsStrip(),
+            const PcListsLine(),
             PcHeader(
               title: view.total == 0
                   ? l10n.pcLibrary
@@ -264,47 +271,6 @@ class _Pill extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// A download on the computer, drawn as the phone's own downloads are:
-/// its progress, and a way to stop it.
-class _TaskRow extends ConsumerWidget {
-  const _TaskRow({required this.task});
-
-  final PcTask task;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.vhl;
-    final phase = task.phase;
-    final measured = phase == 'downloading' || phase == 'postprocessing';
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: VhSpace.lg,
-        vertical: VhSpace.xxs,
-      ),
-      child: VhDownloadProgressCard(
-        // A new phase starts its own count, as on the phone's own cards.
-        key: ValueKey('${task.id}-$phase'),
-        title: task.title ?? task.url,
-        statusText: switch (phase) {
-          'queued' => l10n.queuedSection,
-          'preparing' => l10n.enginePreparing,
-          'postprocessing' => l10n.enginePostprocessing,
-          'paused' => l10n.enginePaused,
-          _ => l10n.downloadingTitle,
-        },
-        detail: phase == 'downloading' && task.speed != null
-            ? vhFormatTransferRate(task.speed!)
-            : null,
-        progress: measured ? task.progress / 100 : null,
-        waiting: phase == 'queued',
-        thumbnail: PcThumb(url: task.thumbnail),
-        onCancel: () =>
-            unawaited(ref.read(pcViewProvider.notifier).cancel(task.id)),
       ),
     );
   }

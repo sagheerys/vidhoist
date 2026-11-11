@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'pc_certificate.dart';
+import 'pc_link_http.dart';
 import 'pc_link_models.dart';
 import 'pc_link_wire.dart';
 import 'pc_pairing.dart';
@@ -33,6 +34,16 @@ abstract interface class PcLinkHost {
   /// Every transcript kept for [id], each as its JSON: the phone reads them
   /// with the transcripts package, which this one does not know.
   Future<List<Object?>> transcripts(String id);
+
+  /// The saved lists with at least one clip that is a file here.
+  Future<List<PcList>> lists();
+
+  /// One list with those clips, in its order; null when there is none.
+  Future<PcList?> list(String id);
+
+  /// Deletes the library clip [id] **to the Recycle Bin**, and only if the
+  /// owner let phones delete; never anything else.
+  Future<PcDeleteOutcome> delete(String id);
 }
 
 /// The computer's end of the link: HTTPS on the home network.
@@ -40,10 +51,11 @@ abstract interface class PcLinkHost {
 /// **A scan finds a closed door with no sign on it.** Every path answers an
 /// empty 404 to anyone without a paired device's secret, the certificate
 /// names nobody, and `/v1/pair` exists only while the owner shows a code.
-/// What a paired phone may do is narrow: read the downloads and library,
-/// queue a web link, cancel a download, fetch a cover, and read a library
-/// clip's file and transcripts by its id. Nothing reaches the computer's
-/// settings, files outside the library, or a command line.
+/// What a paired phone may do is narrow: read the downloads, library and
+/// saved lists, queue a web link, cancel a download, fetch a cover, read a
+/// library clip's file and transcripts by its id, and, only where the owner
+/// allowed it, send one library clip to the Recycle Bin. Nothing reaches
+/// the computer's settings, files outside the library, or a command line.
 class PcLinkServer {
   PcLinkServer({
     required this.certificate,
@@ -134,7 +146,7 @@ class PcLinkServer {
 
     final device = pairing.verify(
       request.headers.value(PcLink.deviceHeader),
-      _bearer(request),
+      pcBearer(request),
     );
     if (device == null) {
       // A phone that was paired and then forgotten learns so; anyone else
@@ -143,25 +155,25 @@ class PcLinkServer {
       response.statusCode = claimed
           ? HttpStatus.unauthorized
           : HttpStatus.notFound;
-      await _drain(request);
+      await pcDrain(request);
       return;
     }
     unawaited(pairing.touch(device));
 
     final segments = request.uri.pathSegments;
     if (method == 'GET' && path == PcLink.statusPath) {
-      return _json(response, host.status().toJson());
+      return pcWriteJson(response, host.status().toJson());
     }
     if (method == 'GET' && path == PcLink.downloadsPath) {
-      return _json(response, {
+      return pcWriteJson(response, {
         'tasks': [for (final task in host.tasks()) task.toJson()],
       });
     }
     if (method == 'POST' && path == PcLink.downloadsPath) {
-      final body = await _readJson(request);
+      final body = await pcReadJsonRequest(request);
       final url = body?['url'];
       final quality = body?['quality'];
-      if (url is! String || !_isWebLink(url)) {
+      if (url is! String || !pcIsWebLink(url)) {
         response.statusCode = HttpStatus.badRequest;
         return;
       }
@@ -171,7 +183,7 @@ class PcLinkServer {
         return;
       }
       onLog?.call('link: ${device.name} queued a link');
-      return _json(response, task.toJson());
+      return pcWriteJson(response, task.toJson());
     }
     if (method == 'POST' &&
         segments.length == 4 &&
@@ -189,7 +201,27 @@ class PcLinkServer {
         limit: int.tryParse(q['limit'] ?? '')?.clamp(1, 500) ?? 100,
         query: q['q'],
       );
-      return _json(response, page.toJson());
+      return pcWriteJson(response, page.toJson());
+    }
+    if (method == 'GET' && path == PcLink.listsPath) {
+      return pcWriteJson(response, {
+        'lists': [for (final list in await host.lists()) list.toJson()],
+      });
+    }
+    if (method == 'GET' &&
+        segments.length == 3 &&
+        '/${segments[0]}/${segments[1]}' == PcLink.listsPath) {
+      final list = await host.list(segments[2]);
+      if (list == null) {
+        response.statusCode = HttpStatus.notFound;
+        return;
+      }
+      return pcWriteJson(response, list.toJson());
+    }
+    if (method == 'DELETE' &&
+        segments.length == 3 &&
+        '/${segments[0]}/${segments[1]}' == PcLink.libraryPath) {
+      return _delete(segments[2], device, response);
     }
     final inLibrary =
         segments.length == 4 &&
@@ -203,7 +235,7 @@ class PcLinkServer {
       return _file(segments[2], request, response);
     }
     if (method == 'GET' && inLibrary && segments[3] == 'transcripts') {
-      return _json(response, {
+      return pcWriteJson(response, {
         'transcripts': await host.transcripts(segments[2]),
       });
     }
@@ -213,10 +245,10 @@ class PcLinkServer {
   Future<void> _pair(HttpRequest request, HttpResponse response) async {
     if (!pairing.isOpen) {
       response.statusCode = HttpStatus.notFound;
-      await _drain(request);
+      await pcDrain(request);
       return;
     }
-    final body = await _readJson(request);
+    final body = await pcReadJsonRequest(request);
     final code = body?['code'];
     final nonce = body?['nonce'];
     final phone = body?['name'];
@@ -232,14 +264,36 @@ class PcLinkServer {
     if (result.refusal != null) {
       onLog?.call('link: pairing refused (${result.refusal!.name})');
       response.statusCode = HttpStatus.forbidden;
-      return _json(response, {'error': result.refusal!.name});
+      return pcWriteJson(response, {'error': result.refusal!.name});
     }
     onLog?.call('link: paired ${result.device!.name}');
-    return _json(response, {
+    return pcWriteJson(response, {
       'deviceId': result.device!.id,
       'secret': result.secret,
       'name': name,
     });
+  }
+
+  Future<void> _delete(
+    String id,
+    PcDevice device,
+    HttpResponse response,
+  ) async {
+    final outcome = await host.delete(id);
+    switch (outcome) {
+      case PcDeleteOutcome.deleted:
+        onLog?.call('link: ${device.name} deleted a clip to the Recycle Bin');
+        response.statusCode = HttpStatus.noContent;
+      case PcDeleteOutcome.missing:
+        response.statusCode = HttpStatus.notFound;
+      case PcDeleteOutcome.notAllowed:
+      case PcDeleteOutcome.noRecycleBin:
+      case PcDeleteOutcome.failed:
+        response.statusCode = outcome == PcDeleteOutcome.notAllowed
+            ? HttpStatus.forbidden
+            : HttpStatus.conflict;
+        return pcWriteJson(response, {'error': outcome.name});
+    }
   }
 
   Future<void> _cover(String id, HttpResponse response) async {
@@ -268,46 +322,5 @@ class PcLinkServer {
       return;
     }
     await servePcFile(file, request, response);
-  }
-
-  static String? _bearer(HttpRequest request) {
-    final value = request.headers.value(HttpHeaders.authorizationHeader);
-    if (value == null || !value.startsWith('Bearer ')) return null;
-    return value.substring(7).trim();
-  }
-
-  static bool _isWebLink(String url) {
-    final uri = Uri.tryParse(url.trim());
-    return uri != null &&
-        (uri.isScheme('http') || uri.isScheme('https')) &&
-        uri.host.isNotEmpty;
-  }
-
-  static Future<Map<String, Object?>?> _readJson(HttpRequest request) async {
-    if ((request.contentLength) > PcLink.maxBody) return null;
-    final bytes = <int>[];
-    await for (final chunk in request) {
-      bytes.addAll(chunk);
-      if (bytes.length > PcLink.maxBody) return null;
-    }
-    try {
-      final value = jsonDecode(utf8.decode(bytes));
-      return value is Map<String, Object?> ? value : null;
-    } on FormatException {
-      return null;
-    }
-  }
-
-  static Future<void> _drain(HttpRequest request) async {
-    try {
-      await request.drain<void>();
-    } on Object {
-      // Nothing to keep.
-    }
-  }
-
-  static Future<void> _json(HttpResponse response, Object value) async {
-    response.headers.contentType = ContentType.json;
-    response.write(jsonEncode(value));
   }
 }
