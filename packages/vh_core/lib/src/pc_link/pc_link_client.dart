@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'pc_certificate.dart';
 import 'pc_link_api.dart';
+import 'pc_link_http.dart';
 import 'pc_link_models.dart';
+import 'pc_link_pair.dart';
 import 'pc_reach.dart';
 import 'pc_link_wire.dart';
 
@@ -14,7 +15,7 @@ import 'pc_link_wire.dart';
 /// handshake before a byte of the request leaves the phone.
 class PcLinkClient implements PcLinkApi {
   PcLinkClient(this.pairing, {this.timeout = const Duration(seconds: 6)}) {
-    _http = _pinnedClient((fp) {
+    _http = pcPinnedClient((fp) {
       final match = fp == pairing.fingerprint;
       if (!match) _sawWrongCertificate = true;
       return match;
@@ -41,78 +42,14 @@ class PcLinkClient implements PcLinkApi {
     required String phoneName,
     required void Function(String check) onCheck,
     String? fingerprint,
-  }) async {
-    final nonce = newSecret();
-    String? seen;
-    var wrong = false;
-    final http = _pinnedClient((fp) {
-      if (fingerprint != null && fp != fingerprint) {
-        wrong = true;
-        return false;
-      }
-      // Typed by hand, any certificate is accepted *for comparison*: the
-      // owner compares the four digits it yields with the computer's.
-      if (seen == null) {
-        seen = fp;
-        onCheck(pairingCheck(fingerprint: fp, code: code, nonce: nonce));
-      }
-      return fp == seen;
-    }, const Duration(seconds: 6));
-    try {
-      final request = await http
-          .postUrl(
-            Uri(scheme: 'https', host: host, port: port, path: PcLink.pairPath),
-          )
-          .timeout(const Duration(seconds: 8));
-      request.headers.contentType = ContentType.json;
-      request.write(
-        jsonEncode({'code': code, 'nonce': nonce, 'name': phoneName}),
-      );
-      final response = await request.close().timeout(
-        PcLink.approvalWait + const Duration(seconds: 10),
-      );
-      final body = await _readBody(response);
-      if (response.statusCode == HttpStatus.notFound) {
-        throw const PcLinkException(PcLinkFailure.pairingClosed);
-      }
-      final json = _decode(body);
-      if (response.statusCode == HttpStatus.forbidden) {
-        throw PcLinkException(switch (json is Map ? json['error'] : null) {
-          'wrongCode' => PcLinkFailure.wrongCode,
-          'closed' => PcLinkFailure.pairingClosed,
-          _ => PcLinkFailure.pairingDenied,
-        });
-      }
-      if (response.statusCode != HttpStatus.ok ||
-          json is! Map ||
-          seen == null) {
-        throw PcLinkException(
-          PcLinkFailure.badResponse,
-          '${response.statusCode}',
-        );
-      }
-      final deviceId = json['deviceId'];
-      final secret = json['secret'];
-      if (deviceId is! String || secret is! String) {
-        throw const PcLinkException(PcLinkFailure.badResponse);
-      }
-      return PcPairing(
-        host: host,
-        port: port,
-        fingerprint: seen!,
-        deviceId: deviceId,
-        secret: secret,
-        name: json['name'] as String? ?? host,
-      );
-    } on PcLinkException {
-      rethrow;
-    } on Object catch (e) {
-      if (wrong) throw const PcLinkException(PcLinkFailure.wrongCertificate);
-      throw PcLinkException(PcLinkFailure.unreachable, '$e');
-    } finally {
-      http.close(force: true);
-    }
-  }
+  }) => pcPair(
+    host: host,
+    port: port,
+    code: code,
+    phoneName: phoneName,
+    onCheck: onCheck,
+    fingerprint: fingerprint,
+  );
 
   /// The first of [hosts], in their order, where the computer with
   /// [fingerprint] answers on [port]; see [pcReach].
@@ -156,7 +93,7 @@ class PcLinkClient implements PcLinkApi {
         code == HttpStatus.unprocessableEntity) {
       throw const PcLinkException(PcLinkFailure.refused);
     }
-    final task = PcTask.fromJson(_decode(body));
+    final task = PcTask.fromJson(pcDecodeJson(body));
     if (code != HttpStatus.ok || task == null) {
       throw PcLinkException(PcLinkFailure.badResponse, '$code');
     }
@@ -222,9 +159,54 @@ class PcLinkClient implements PcLinkApi {
     if (code != HttpStatus.ok) {
       throw PcLinkException(PcLinkFailure.badResponse, '$code');
     }
-    final json = _decode(body);
+    final json = pcDecodeJson(body);
     final list = json is Map ? json['transcripts'] : null;
     return list is List ? list : const [];
+  }
+
+  @override
+  Future<List<PcList>> lists() async {
+    final (code, body) = await _send('GET', PcLink.listsPath);
+    // An older computer has no lists to give.
+    if (code == HttpStatus.notFound) return const [];
+    if (code != HttpStatus.ok) {
+      throw PcLinkException(PcLinkFailure.badResponse, '$code');
+    }
+    final json = pcDecodeJson(body);
+    final raw = json is Map ? json['lists'] : null;
+    return [
+      if (raw is List)
+        for (final entry in raw) ?PcList.fromJson(entry),
+    ];
+  }
+
+  @override
+  Future<PcList?> list(String id) async {
+    final (code, body) = await _send(
+      'GET',
+      '${PcLink.listsPath}/${Uri.encodeComponent(id)}',
+    );
+    if (code == HttpStatus.notFound) return null;
+    if (code != HttpStatus.ok) {
+      throw PcLinkException(PcLinkFailure.badResponse, '$code');
+    }
+    return PcList.fromJson(pcDecodeJson(body));
+  }
+
+  @override
+  Future<PcDeleteOutcome> delete(String id) async {
+    final (code, body) = await _send(
+      'DELETE',
+      '${PcLink.libraryPath}/${Uri.encodeComponent(id)}',
+    );
+    if (code == HttpStatus.noContent) return PcDeleteOutcome.deleted;
+    if (code == HttpStatus.notFound) return PcDeleteOutcome.missing;
+    final json = pcDecodeJson(body);
+    final error = json is Map ? json['error'] : null;
+    return PcLink.deleteRefusals[error] ??
+        (code == HttpStatus.forbidden
+            ? PcDeleteOutcome.notAllowed
+            : PcDeleteOutcome.failed);
   }
 
   @override
@@ -235,7 +217,7 @@ class PcLinkClient implements PcLinkApi {
     if (code != HttpStatus.ok) {
       throw PcLinkException(PcLinkFailure.badResponse, '$code');
     }
-    return _decode(body);
+    return pcDecodeJson(body);
   }
 
   Future<(int, Uint8List)> _send(
@@ -248,7 +230,7 @@ class PcLinkClient implements PcLinkApi {
     try {
       return (
         response.statusCode,
-        await _readBody(response).timeout(timeout * 4),
+        await pcReadBody(response).timeout(timeout * 4),
       );
     } on Object catch (e) {
       throw _failure(e);
@@ -300,35 +282,4 @@ class PcLinkClient implements PcLinkApi {
         : PcLinkFailure.unreachable,
     '$e',
   );
-
-  static HttpClient _pinnedClient(
-    bool Function(String fp) accept,
-    Duration timeout,
-  ) {
-    // No trusted roots: every certificate goes through the callback, so a
-    // certificate some authority signed cannot slip past the pin.
-    return HttpClient(context: SecurityContext(withTrustedRoots: false))
-      ..connectionTimeout = timeout
-      ..idleTimeout = const Duration(seconds: 15)
-      ..userAgent = null
-      ..badCertificateCallback = (cert, host, port) =>
-          accept(fingerprintOf(cert.der));
-  }
-
-  static Future<Uint8List> _readBody(HttpClientResponse response) async {
-    final builder = BytesBuilder(copy: false);
-    await for (final chunk in response) {
-      builder.add(chunk);
-    }
-    return builder.takeBytes();
-  }
-
-  static Object? _decode(Uint8List body) {
-    if (body.isEmpty) return null;
-    try {
-      return jsonDecode(utf8.decode(body));
-    } on FormatException {
-      return null;
-    }
-  }
 }

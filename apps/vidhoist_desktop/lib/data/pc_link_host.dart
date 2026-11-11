@@ -6,13 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/library.dart';
 
+import 'clip_delete.dart';
 import 'downloads_data.dart';
 import 'library_data.dart';
+import 'lists_data.dart';
+import 'pc_link_data.dart';
 import 'transcripts_data.dart';
 
-/// What a paired phone sees of this computer: its downloads and the clips
-/// that are files here, newest first. Read fresh on each call, so the phone
-/// never sees a stale list.
+/// What a paired phone sees of this computer: its downloads, the clips
+/// that are files here, newest first, and the saved lists made of them.
+/// Read fresh on each call, so the phone never sees a stale list.
 class DesktopPcHost implements PcLinkHost {
   DesktopPcHost(
     this._ref, {
@@ -37,6 +40,7 @@ class DesktopPcHost implements PcLinkHost {
     version: version,
     active: (_engine?.tasks ?? const []).where(isUnderWay).length,
     addresses: _addresses(),
+    canDelete: _ref.read(pcLinkDeleteProvider),
   );
 
   @override
@@ -104,6 +108,64 @@ class DesktopPcHost implements PcLinkHost {
     final store = _ref.read(transcriptStoreProvider);
     if (item == null || store == null) return const [];
     return [for (final t in await store.readFor(item.canonicalUrl)) t.toJson()];
+  }
+
+  @override
+  Future<List<PcList>> lists() async {
+    final byUrl = await _filesByUrl();
+    return [
+      for (final list in await _ref.read(playlistsProvider.future))
+        ?_listOf(list, byUrl, withItems: false),
+    ];
+  }
+
+  @override
+  Future<PcList?> list(String id) async {
+    final lists = await _ref.read(playlistsProvider.future);
+    final list = lists.where((l) => l.id == id).firstOrNull;
+    if (list == null) return null;
+    return _listOf(list, await _filesByUrl(), withItems: true);
+  }
+
+  /// [list] as the phone sees it: only the clips that are files here, in
+  /// its order; null when none is, as there is nothing there to play.
+  PcList? _listOf(
+    SavedPlaylist list,
+    Map<String, LibraryItem> byUrl, {
+    required bool withItems,
+  }) {
+    final items = [for (final entry in list.items) ?byUrl[entry.canonicalUrl]];
+    if (items.isEmpty) return null;
+    final first = pcItemOf(items.first);
+    return PcList(
+      id: list.id,
+      name: list.name,
+      count: items.length,
+      thumbnail: first.thumbnail,
+      coverId: first.hasCover ? first.id : null,
+      items: withItems ? [for (final item in items) pcItemOf(item)] : const [],
+    );
+  }
+
+  Future<Map<String, LibraryItem>> _filesByUrl() async => {
+    for (final item in await _files(null)) item.canonicalUrl: item,
+  };
+
+  /// **Asked again here, not trusted from the phone**: the owner's switch,
+  /// then a clip of the library by its id; its file goes to the Recycle Bin.
+  @override
+  Future<PcDeleteOutcome> delete(String id) async {
+    if (!_ref.read(pcLinkDeleteProvider)) return PcDeleteOutcome.notAllowed;
+    final item = await _item(id);
+    if (item == null) return PcDeleteOutcome.missing;
+    try {
+      await deleteClipFile(_ref, item, fromPhone: true);
+      return PcDeleteOutcome.deleted;
+    } on NoRecycleBinException {
+      return PcDeleteOutcome.noRecycleBin;
+    } on Object {
+      return PcDeleteOutcome.failed;
+    }
   }
 
   Future<LibraryItem?> _item(String id) async {

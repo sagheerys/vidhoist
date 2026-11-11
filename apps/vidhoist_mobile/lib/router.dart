@@ -1,3 +1,4 @@
+import 'features/pc/pc_lists_screen.dart';
 import 'features/pc/pc_screen.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -98,7 +99,25 @@ final router = GoRouter(
         // The paired computer, last so that the branches before it keep
         // their numbers; the shell shows its tab only once paired.
         StatefulShellBranch(
-          routes: [GoRoute(path: '/pc', builder: (_, _) => const PcScreen())],
+          routes: [
+            GoRoute(
+              path: '/pc',
+              builder: (_, _) => const PcScreen(),
+              routes: [
+                GoRoute(
+                  path: 'lists',
+                  builder: (_, _) => const PcListsScreen(),
+                  routes: [
+                    GoRoute(
+                      path: ':id',
+                      builder: (_, state) =>
+                          PcListScreen(id: state.pathParameters['id']!),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     ),

@@ -12,6 +12,7 @@ import 'package:vidhoist_desktop/data/pc_link_host.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/settings/phone_pane.dart';
 import 'package:vidhoist_desktop/features/settings/phone_qr.dart';
+import 'package:vidhoist_desktop/features/settings/simple_panes.dart';
 
 import 'desktop_matrix.dart';
 
@@ -36,6 +37,12 @@ class _NoHost implements PcLinkHost {
   Future<File?> file(String id) async => null;
   @override
   Future<List<Object?>> transcripts(String id) async => const [];
+  @override
+  Future<List<PcList>> lists() async => const [];
+  @override
+  Future<PcList?> list(String id) async => null;
+  @override
+  Future<PcDeleteOutcome> delete(String id) async => PcDeleteOutcome.missing;
 }
 
 const _addresses = [
@@ -117,6 +124,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(l.pcLinkReceive), findsOneWidget);
     expect(find.text(l.pcLinkPairPhone), findsNothing);
+    expect(find.text(l.pcLinkAllowDelete), findsNothing);
     expect(find.textContaining('192.168.1.24'), findsNothing);
   });
 
@@ -126,6 +134,24 @@ void main() {
     await tester.tap(find.byType(VhSwitch));
     await tester.pumpAndSettle();
     expect(await store.getBool(pcLinkEnabledKey), isTrue);
+  });
+
+  testWidgets('deleting from the phone: off, offered with the link, saved', (
+    tester,
+  ) async {
+    await turnOn(tester);
+    expect(find.text(l.pcLinkAllowDelete), findsOneWidget);
+    final line = find.ancestor(
+      of: find.text(l.pcLinkAllowDelete),
+      matching: find.byType(SwitchLine),
+    );
+    expect(tester.widget<SwitchLine>(line).value, isFalse);
+    await tester.ensureVisible(line);
+    await tester.tap(
+      find.descendant(of: line, matching: find.byType(VhSwitch)),
+    );
+    await tester.pumpAndSettle();
+    expect(await store.getBool(pcLinkDeleteKey), isTrue);
   });
 
   testWidgets('a code shows, then the owner allows the phone by its digits', (
@@ -257,7 +283,10 @@ void main() {
   test('**the guard**: the status a phone reads carries the addresses '
       'of this computer, for its choice of route', () {
     final container = ProviderContainer(
-      overrides: [downloadEngineProvider.overrideWithValue(null)],
+      overrides: [
+        downloadEngineProvider.overrideWithValue(null),
+        keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
+      ],
     );
     addTearDown(container.dispose);
     final host = container.read(
@@ -276,7 +305,7 @@ void main() {
   test('a backup leaves the link out', () {
     expect(
       pcLinkDeviceOnlyKeys,
-      containsAll([pcLinkEnabledKey, pcLinkDevicesKey]),
+      containsAll([pcLinkEnabledKey, pcLinkDevicesKey, pcLinkDeleteKey]),
     );
     expect(desktopBackupDeviceOnlyKeys, containsAll(pcLinkDeviceOnlyKeys));
   });

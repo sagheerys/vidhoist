@@ -59,6 +59,15 @@ abstract interface class PcLinkApi {
 
   /// Every transcript the computer keeps for [id], as JSON.
   Future<List<Object?>> transcripts(String id);
+
+  /// The computer's saved lists; none from a computer older than them.
+  Future<List<PcList>> lists();
+
+  /// One list with its clips; null when the computer has no such list.
+  Future<PcList?> list(String id);
+
+  /// Asks the computer to put clip [id] in its Recycle Bin.
+  Future<PcDeleteOutcome> delete(String id);
   void close();
 }
 

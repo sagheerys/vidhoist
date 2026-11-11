@@ -201,6 +201,16 @@ class _SessionState extends ConsumerState<_Session> {
               onPressed: () => unawaited(_pairing.revoke(device.id)),
             ),
           ),
+        const SizedBox(height: VhSpace.sm),
+        // Off until turned on: a lost phone must not be able to empty the
+        // library, and the Recycle Bin keeps what one does delete.
+        SwitchLine(
+          title: l.pcLinkAllowDelete,
+          hint: l.pcLinkAllowDeleteHint,
+          value: ref.watch(pcLinkDeleteProvider),
+          onChanged: (on) =>
+              unawaited(ref.read(pcLinkDeleteProvider.notifier).set(on)),
+        ),
       ],
     );
   }

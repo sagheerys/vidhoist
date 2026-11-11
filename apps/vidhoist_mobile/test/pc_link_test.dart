@@ -82,6 +82,7 @@ class FakeApi implements PcLinkApi {
       version: '1.0.0',
       active: 1,
       addresses: addresses,
+      canDelete: canDelete,
     );
   }
 
@@ -162,6 +163,35 @@ class FakeApi implements PcLinkApi {
   Future<List<Object?>> transcripts(String id) async {
     _check();
     return kept[id] ?? const [];
+  }
+
+  /// The computer's saved lists, and each with its clips by id.
+  List<PcList> savedLists = const [];
+  Map<String, PcList> listClips = const {};
+
+  @override
+  Future<List<PcList>> lists() async {
+    _check();
+    return savedLists;
+  }
+
+  @override
+  Future<PcList?> list(String id) async {
+    _check();
+    return listClips[id];
+  }
+
+  /// Whether the owner let phones delete there, and what a delete answers.
+  bool canDelete = false;
+  PcDeleteOutcome deleting = PcDeleteOutcome.deleted;
+  final deleted = <String>[];
+
+  @override
+  Future<PcDeleteOutcome> delete(String id) async {
+    _check();
+    if (!canDelete) return PcDeleteOutcome.notAllowed;
+    if (deleting == PcDeleteOutcome.deleted) deleted.add(id);
+    return deleting;
   }
 
   @override
@@ -646,8 +676,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('HOME-PC'), findsOneWidget);
       expect(find.text(l.pcConnected), findsOneWidget);
-      expect(find.text('${l.pcNow} · 1'), findsOneWidget);
+      // One download shows its card alone, as one of the phone's own does.
       expect(find.text('38%'), findsOneWidget);
+      expect(find.text(l.pcDownloadsCount(1)), findsNothing);
       expect(find.text('${l.pcLibrary} · 312'), findsOneWidget);
       expect(find.text('Rust for TypeScript devs'), findsOneWidget);
       // The page asks again on its own while something downloads.

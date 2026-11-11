@@ -305,6 +305,31 @@ class PcViewNotifier extends Notifier<PcView> {
     await refresh(library: false);
   }
 
+  /// Asks the computer to put clip [id] in its Recycle Bin; the library is
+  /// read again when it did. Null when the computer did not answer.
+  Future<PcDeleteOutcome?> delete(String id) async {
+    final client = _client;
+    if (client == null) return null;
+    try {
+      final outcome = await client.delete(id);
+      if (outcome == PcDeleteOutcome.deleted ||
+          outcome == PcDeleteOutcome.missing) {
+        state = state.copyWith(
+          items: [
+            for (final item in state.items)
+              if (item.id != id) item,
+          ],
+          total: (state.total - 1).clamp(0, 1 << 30),
+        );
+        unawaited(refresh());
+      }
+      return outcome;
+    } on PcLinkException catch (e) {
+      state = state.copyWith(failure: e.failure);
+      return null;
+    }
+  }
+
   void _schedule() {
     _timer?.cancel();
     final busy = state.live.isNotEmpty;

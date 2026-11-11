@@ -124,6 +124,18 @@ All notable changes to VidHoist. The format follows
   notice in the app says when one is done, with Play. The phone asks only
   while the app is in front and something runs there; no phone
   notification, which would need a service running in the background.
+- The Computer tab stays short (owner's request, 2026-11-11): two or more
+  downloads there, with the links waiting to be sent, fold into one line
+  that opens them in a sheet, as the phone's own downloads do; one keeps
+  its card.
+- The computer's saved lists on the phone, in the Computer tab: one line
+  however many there are, a page of them, and each list's clips that are
+  files there, in order, to play all or shuffled. They are read only; the
+  phone's own lists are unchanged.
+- Delete a clip on the computer from the phone, only once the owner turns
+  on "Let the phone delete clips" on Windows (off, and left out of
+  backups): it goes to the computer's Recycle Bin after a confirmation
+  naming the computer, and a drive with no Recycle Bin is left alone.
 
 ### Fixed
 - The player's "Next" list, the mini player and the media notification
@@ -161,6 +173,9 @@ All notable changes to VidHoist. The format follows
   the phone app has; the filter never matched the Windows app before.
 
 ### Changed
+- Deleting a clip on Windows puts its file in the Recycle Bin instead of
+  deleting it for good, so a slip can be undone; on a drive with no
+  Recycle Bin it is deleted as before.
 - The app's name is written VidHoist, with its capital H, wherever it
   is shown: under the icon, in the window title, in the installer and
   in every text. Folders, ids and release files keep their spelling,
