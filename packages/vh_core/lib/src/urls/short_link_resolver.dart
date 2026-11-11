@@ -30,7 +30,8 @@ class ShortLinkResolver {
         current = Uri.parse(current).resolve(next).toString();
       }
     } catch (_) {
-      return url; // resolution failed, so the original URL goes to the server unchanged.
+      // Unresolved, the link goes to yt-dlp as given: it follows most itself.
+      return url;
     }
 
     final resolvedIsHttps = current.toLowerCase().startsWith('https://');
