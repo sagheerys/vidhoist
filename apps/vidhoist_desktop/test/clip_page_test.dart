@@ -104,6 +104,28 @@ void main() {
     return h;
   }
 
+  // Copied to look it up elsewhere.
+  testWidgets('**the guard**: the title on the clip page and in the details '
+      'panel can be selected and copied', (tester) async {
+    await onVideo(tester);
+    Finder selectable(Finder within) => find.ancestor(
+      of: find.descendant(
+        of: within,
+        matching: find.text('Homelab Hour - Ep. 12'),
+      ),
+      matching: find.byType(SelectionArea),
+    );
+    expect(selectable(find.byType(ClipPage)), findsOneWidget);
+    await tester.tap(
+      find.descendant(
+        of: find.byType(DesktopRightPanel),
+        matching: find.text('Details'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(selectable(find.byType(DesktopRightPanel)), findsOneWidget);
+  });
+
   testWidgets('audio only puts the cover in place of the picture', (
     tester,
   ) async {

@@ -121,8 +121,16 @@ class _VhVideoControlsState extends State<VhVideoControls> {
   /// Clear of the bottom bar while it shows, near the edge when it hides:
   /// above the light sheet, which overlaps the small player by 14px.
   double get _captionLift => _visible && !_locked
-      ? (widget.fullscreen ? VhSpace.xs : VhSpace.xl) + 76
+      ? _barBottom + _barHeight + VhSpace.xs
       : (widget.fullscreen ? VhSpace.lg : VhSpace.xxl);
+
+  /// The slider's track sits in the middle of its 32: from here it is 20
+  /// above the video's bottom, 6 clear of the light sheet over it.
+  double get _barBottom => widget.fullscreen ? 0 : VhSpace.xxs;
+
+  /// The bottom bar's row of 32-high buttons and its 32-high slider, which
+  /// prints no times of its own: the row above shows them.
+  static const double _barHeight = 64;
 
   /// In a corner of the screen the picture shows alone: no control fits
   /// there, and the system draws its own.
@@ -206,12 +214,17 @@ class _VhVideoControlsState extends State<VhVideoControls> {
         child: Center(child: VhVideoCenterControls(session: widget.session)),
       ),
       PositionedDirectional(
-        // Above the rounded edge of the light sheet, which overlaps the
-        // video by 14px.
-        bottom: widget.fullscreen ? VhSpace.xs : VhSpace.xl,
-        start: VhSpace.md,
-        end: VhSpace.md,
+        // In full screen the thin bar rests on the screen's bottom edge;
+        // under the video, just above the details sheet, whose rounded
+        // top overlaps the video by 14px.
+        bottom: _barBottom,
+        // Under the video the bar runs edge to edge, as the picture does;
+        // full screen keeps a margin, so a phone's rounded corners do not
+        // cut its ends.
+        start: widget.fullscreen ? VhSpace.md : 0,
+        end: widget.fullscreen ? VhSpace.md : 0,
         child: VhVideoBottomBar(
+          rowInset: widget.fullscreen ? 0 : VhSpace.md,
           session: widget.session,
           onQueue: widget.onQueue,
           extra: widget.extra,

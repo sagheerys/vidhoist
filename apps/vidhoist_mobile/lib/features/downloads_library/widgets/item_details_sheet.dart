@@ -34,19 +34,32 @@ class _DetailsSheet extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final p = VhThemeX.of(context).palette;
 
-    Widget row(String label, String value) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 110,
-            child: Text(label, style: text.bodySmall!.copyWith(color: p.ink3)),
+    Widget row(String label, String value, {bool selectable = false}) =>
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 110,
+                child: Text(
+                  label,
+                  style: text.bodySmall!.copyWith(color: p.ink3),
+                ),
+              ),
+              Expanded(
+                child: selectable
+                    ? VhForeignText(
+                        value,
+                        overflow: null,
+                        selectable: true,
+                        style: text.bodyMedium,
+                      )
+                    : Text(value, style: text.bodyMedium),
+              ),
+            ],
           ),
-          Expanded(child: Text(value, style: text.bodyMedium)),
-        ],
-      ),
-    );
+        );
 
     return SafeArea(
       child: Padding(
@@ -62,7 +75,8 @@ class _DetailsSheet extends ConsumerWidget {
           children: [
             VhSectionHeader(title: l10n.details),
             const SizedBox(height: VhSpace.sm),
-            row(l10n.titleLabel, item.title),
+            // Selectable, to copy it.
+            row(l10n.titleLabel, item.title, selectable: true),
             row(l10n.fileSize, vhFormatSize(item.sizeBytes)),
             // **What the file actually is** (asked 2026-09-25), read from
             // its header.

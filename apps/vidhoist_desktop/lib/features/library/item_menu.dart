@@ -23,6 +23,7 @@ enum ItemChoice {
   copyLink,
   copyFile,
   showInFolder,
+  openWith,
   openOriginal,
   addToList,
   tags,
@@ -79,12 +80,20 @@ List<DesktopMenuEntry<ItemChoice>> itemMenuEntries(
         l.desktopCopyFile,
         shortcut: ClipKeys.copyFile,
       ),
-    if (hasFile)
+    if (hasFile) ...[
       DesktopMenuEntry(
         ItemChoice.showInFolder,
         VhIcons.folder,
         l.desktopShowInFolder,
       ),
+      // Another player of the user's choice (VLC, ...), for a file on
+      // this computer: a web link has nothing for it to open.
+      DesktopMenuEntry(
+        ItemChoice.openWith,
+        VhIcons.playback,
+        l.desktopOpenWith,
+      ),
+    ],
     DesktopMenuEntry(
       ItemChoice.openOriginal,
       VhIcons.external,
@@ -137,6 +146,8 @@ Future<void> showItemMenu(
       await copyFileOf(context, item);
     case ItemChoice.showInFolder:
       if (file != null) await ref.read(desktopFoldersProvider).reveal(file);
+    case ItemChoice.openWith:
+      if (file != null) await ref.read(desktopFoldersProvider).openWith(file);
     case ItemChoice.openOriginal:
       await ref.read(clipActionsProvider).openOriginal(item.canonicalUrl);
     case ItemChoice.addToList:

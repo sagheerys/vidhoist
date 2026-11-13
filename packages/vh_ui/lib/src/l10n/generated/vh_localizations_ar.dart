@@ -480,7 +480,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopBackupHint =>
-      'يحتفظ هذا الكمبيوتر بآخر سبع نسخ احتياطية، بين كل نسخة والتي تليها ساعة على الأقل، في مجلده الخاص.';
+      'يحتفظ هذا الكمبيوتر بآخر سبع نسخ احتياطية، بين كل نسخة والتي تليها ساعة على الأقل، في Downloads\\VidHoist\\Backups، فتبقى إن حُذف التطبيق.';
 
   @override
   String get desktopBackupsNone => 'لا نسخة بعد';
@@ -933,11 +933,11 @@ class VhLocalizationsAr extends VhLocalizations {
       'تلميحان قصيران، يظهر كل منهما مرة واحدة: الاختصارات مع أول مقطع، وأيقونة الساعة مع أول إغلاق.';
 
   @override
-  String get desktopImportFromPhone => 'استيراد من الجوال…';
+  String get desktopImportFromPhone => 'استيراد نسخة احتياطية أو نصوص…';
 
   @override
   String get desktopImportHint =>
-      'نسخة احتياطية أو ملف نصوص من VidHoist على جهاز آخر، تختاره هنا أو تُفلته على النافذة. يُضاف إلى ما هنا ولا يستبدل شيئاً.';
+      'نسخة احتياطية أو ملف نصوص من VidHoist، تختاره هنا أو تُفلته على النافذة. نسخة الجوال تُضاف إلى ما هنا، ونسخة هذا الكمبيوتر تُستعاد كاملة بعد سؤالك.';
 
   @override
   String desktopImportedBackup(int tagged, int lists, int positions) {
@@ -1159,10 +1159,16 @@ class VhLocalizationsAr extends VhLocalizations {
       'حين تنسخ رابط مقطع في برنامج آخر، يعرض عليك إشعارٌ إضافته. لا يُنظر إلا في الروابط، ولا يُحفظ منها شيء.';
 
   @override
+  String get desktopOpenBackup => 'فتح النسخ الاحتياطي';
+
+  @override
   String get desktopOpenChannels => 'افتح القنوات';
 
   @override
   String get desktopOpenInExplorer => 'فتح في مستكشف الملفات';
+
+  @override
+  String get desktopOpenWith => 'فتح بمشغّل آخر…';
 
   @override
   String get desktopPaletteClose => 'للإغلاق';
@@ -1247,6 +1253,30 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopReadingRoom => 'غرفة القراءة';
 
   @override
+  String get desktopRecoverLibrary => 'مقاطع موجودة في المجلد';
+
+  @override
+  String get desktopRecoverLibraryAction => 'ابحث في المجلد';
+
+  @override
+  String get desktopRecoverLibraryHint =>
+      'بعد إعادة التثبيت: يعيد إلى المكتبة المقاطع الموجودة في مجلد التنزيلات وغابت عنها. لا تُمسّ الملفات.';
+
+  @override
+  String desktopRecovered(int count) {
+    return 'أُعيد إلى المكتبة: $count';
+  }
+
+  @override
+  String get desktopRecoveredNothing =>
+      'لا شيء يُضاف: كل مقاطع المجلد في المكتبة.';
+
+  @override
+  String desktopRecoveredSome(int count, int left) {
+    return 'أُعيد إلى المكتبة: $count. تُرك ما لا يُعرف رابطه: $left';
+  }
+
+  @override
   String get desktopRemoveFromList => 'أزله من القائمة';
 
   @override
@@ -1254,7 +1284,15 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopRestoreBody =>
-      'تصبح وسوم هذا الكمبيوتر وقوائمه وإعداداته كما في النسخة، ولا تُمسّ الملفات المنزّلة.';
+      'تصبح مكتبة هذا الكمبيوتر وقنواته المتابَعة ووسومه وقوائمه وإعداداته كما في النسخة، ولا تُمسّ الملفات المنزّلة.';
+
+  @override
+  String desktopRestoreOfferBody(String when) {
+    return 'في Downloads\\VidHoist\\Backups نسخة احتياطية لهذا الكمبيوتر فيها مكتبته وقنواته المتابَعة وقوائمه ووسومه وإعداداته ونصوصه المحفوظة. أحدثها $when. ولا تُمسّ ملفاتك المنزّلة في الحالتين.';
+  }
+
+  @override
+  String get desktopRestoreOfferTitle => 'استعادة نسختك الاحتياطية؟';
 
   @override
   String get desktopRestoreTitle => 'استعادة هذه النسخة؟';
@@ -1335,6 +1373,9 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopShowPanel => 'إظهار اللوحة الجانبية';
+
+  @override
+  String get desktopStartFresh => 'ابدأ من جديد';
 
   @override
   String get desktopStartWithWindows => 'التشغيل مع بدء Windows';
@@ -1428,18 +1469,18 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopTranscriptsDeleteBody =>
-      'تُحذف من هذا الكمبيوتر، ولا يعيدها إلا ملف صدّرته.';
-
-  @override
-  String get desktopTranscriptsExportHint => 'كلها في ملف واحد يستورده الجوال.';
+      'تُحذف من هذا الكمبيوتر ومن نسخته الاحتياطية، ولا يعيدها إلا ملف صدّرته.';
 
   @override
   String get desktopTranscriptsHelp =>
       'يحفظ VidHoist ما يُقال في كل مقطع يوتيوب تضيفه، فيجد البحث (Ctrl+K) ما قيل داخل مقاطعك لا عناوينها وحدها. وتبقى النصوص على هذا الكمبيوتر.';
 
   @override
-  String get desktopTranscriptsImportHint =>
-      'ملف نصوص من الجوال، يضيف ما ينقص هنا ولا يحذف شيئاً.';
+  String get desktopTranscriptsMove => 'من الجوال وإليه';
+
+  @override
+  String get desktopTranscriptsMoveHint =>
+      'النصوص تنتقل مع النسخة الاحتياطية: «تصدير للجوال» يأخذها، و«استيراد» هناك يُدخلها ويضيف ما ينقص هنا.';
 
   @override
   String get desktopTrayOnClose => 'يبقى التشغيل في الدرج عند إغلاق النافذة';
@@ -1925,7 +1966,16 @@ class VhLocalizationsAr extends VhLocalizations {
       'تعذّر تحديث yt-dlp. تحقّق من الاتصال وأعد المحاولة.';
 
   @override
+  String get mobileEngineUpdateMissed => 'تعذّر التحديث';
+
+  @override
+  String get mobileEngineUpdated => 'محدَّث';
+
+  @override
   String get mobileEngineUpdating => 'جارٍ التحديث…';
+
+  @override
+  String get mobileEngineVersionLabel => 'نسخة yt-dlp';
 
   @override
   String get mobileEngineVersionUnknown => 'يظهر إصداره بعد أول تحديث';
@@ -2836,6 +2886,16 @@ class VhLocalizationsAr extends VhLocalizations {
   String get restoreFailed => 'فشلت الاستعادة: ملف النسخة الاحتياطية غير صالح';
 
   @override
+  String get restorePickBody =>
+      'في هذا الجوال تنزيلات VidHoist بلا إعدادات، كما يحدث بعد إعادة التثبيت. إن كانت لديك نسخة احتياطية فاخترها؛ يكتبها التطبيق في Download/VidHoist/backups.';
+
+  @override
+  String get restorePickChoose => 'اختر نسخة';
+
+  @override
+  String get restorePickTitle => 'استعادة إعداداتك؟';
+
+  @override
   String get restoreSettings => 'استعادة جميع البيانات';
 
   @override
@@ -2970,7 +3030,38 @@ class VhLocalizationsAr extends VhLocalizations {
   String get shareLogs => 'مشاركة السجلات';
 
   @override
+  String get shareOpening => 'جارٍ فتح قائمة المشاركة…';
+
+  @override
+  String get shareOpeningHint => 'الملف الكبير يحتاج بضع ثوانٍ لتسليمه.';
+
+  @override
   String get shareSelected => 'مشاركة المحدد';
+
+  @override
+  String get sharedLinksAdd => 'أضفها';
+
+  @override
+  String get sharedLinksBody => 'يُنزَّل كل رابط منها إلى هذا الجوال.';
+
+  @override
+  String sharedLinksCapped(int max) {
+    return 'أُضيف أول $max رابطاً فقط.';
+  }
+
+  @override
+  String sharedLinksTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'إضافة $count رابط؟',
+      many: 'إضافة $count رابطاً؟',
+      few: 'إضافة $count روابط؟',
+      two: 'إضافة رابطين؟',
+      one: 'إضافة رابط واحد؟',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get shortsFilter => 'قِصار';
@@ -3283,9 +3374,6 @@ class VhLocalizationsAr extends VhLocalizations {
       'حين تضيف مقطع يوتيوب، يجلب التطبيق نصّه من سيرفرك قبل تنزيله، بلغة التطبيق وبالإنجليزية، وقد يستغرق ذلك حتى 40 ثانية، ثم يحفظه في هذا الجوال وحده. أما المقاطع الموجودة في مكتبتك فلا تُشمل إلا إن كان سيرفرك يحفظ ملف الترجمة بجانب كل منها (يشرح دليل الإعداد طريقة ذلك). ويمكنك إيقاف الميزة متى شئت.';
 
   @override
-  String get transcriptsExport => 'تصدير';
-
-  @override
   String transcriptsExported(Object path) {
     return 'حُفظت النصوص في: $path';
   }
@@ -3293,9 +3381,6 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String get transcriptsHelp =>
       'يحفظ التطبيق ما يُقال في كل مقطع يوتيوب تضيفه، فيبحث بحث المكتبة في كلام مقاطعك لا في عناوينها وحدها.\n\nيُجلب الكلام من سيرفرك قبيل التنزيل ويُحفظ في هذا الجوال، ولا تشمله النسخة الاحتياطية الكاملة. لنقله إلى جوال آخر استعمل «تصدير» هنا و«استيراد» هناك، والاستيراد يضيف إلى الموجود ولا يحذف شيئاً.\n\nوإن ضبطت سيرفرك ليحفظ ملف الترجمة بجانب كل مقطع (سطر واحد في إعداداته يشرحه دليل الإعداد)، شُمل كل ما ينزّله من ذلك الحين، بما فيه مقاطع الاشتراكات والمواقع الأخرى، إذ يقرأ التطبيق تلك الملفات تلقائياً بلغة التطبيق وبالإنجليزية.';
-
-  @override
-  String get transcriptsImport => 'استيراد';
 
   @override
   String get transcriptsImportInvalid => 'هذا الملف لا يحوي نصوصاً.';
@@ -3382,6 +3467,11 @@ class VhLocalizationsAr extends VhLocalizations {
   String get updateDownloadFailed => 'تعذّر تنزيل التحديث';
 
   @override
+  String updateDownloadedMb(String done, String total) {
+    return '$done من $total ميغابايت';
+  }
+
+  @override
   String get updateDownloading => 'جارٍ تنزيل التحديث…';
 
   @override
@@ -3419,6 +3509,11 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String updateVersionAvailable(String version) {
     return 'الإصدار $version متاح';
+  }
+
+  @override
+  String updateVersionTitle(String version) {
+    return 'الإصدار $version';
   }
 
   @override

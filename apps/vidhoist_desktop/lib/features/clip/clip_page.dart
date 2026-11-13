@@ -278,12 +278,12 @@ class _ClipLayout extends ConsumerWidget {
               children: [
                 AspectRatio(aspectRatio: 16 / 9, child: stage),
                 const SizedBox(height: VhSpace.lg),
-                Text(
+                // Its own direction, the interface's side: the line is as
+                // wide as the stage. Selectable, to copy it.
+                VhForeignText(
                   item.title,
-                  // Its own direction, the interface's side: the line is
-                  // as wide as the stage.
-                  textDirection: vhForeignLine(context, item.title).$1,
-                  textAlign: vhForeignLine(context, item.title).$2,
+                  overflow: null,
+                  selectable: true,
                   style: text.titleLarge?.copyWith(color: p.ink),
                 ),
                 const SizedBox(height: VhSpace.xxs),

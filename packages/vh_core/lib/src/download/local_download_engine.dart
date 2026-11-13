@@ -105,10 +105,22 @@ class LocalDownloadEngine {
       quality: quality.applyRule(url),
       isBatchMember: isBatchMember,
       folder: folder,
+      thumbnail: waitingCover(url),
     );
     _enqueue(task);
     onLog?.call('submit ${task.quality.wire} $url');
     return task;
+  }
+
+  /// The cover a task shows while it waits its turn, before yt-dlp has
+  /// looked at it; the probe's own cover replaces it, and a probe with
+  /// none keeps it. **YouTube only**: its cover is known from the link
+  /// alone, with no request until the picture is drawn. Any other site
+  /// would need a lookup per link, a real cost for a queue of a hundred,
+  /// so those wait for the probe as before.
+  static String? waitingCover(String url) {
+    final id = UrlKit.youtubeVideoId(url);
+    return id == null ? null : 'https://i.ytimg.com/vi/$id/mqdefault.jpg';
   }
 
   /// Queues again what the last run left unfinished; the number restored.

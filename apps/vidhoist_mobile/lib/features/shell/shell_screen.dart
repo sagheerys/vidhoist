@@ -30,6 +30,7 @@ import '../update/update_sheet.dart';
 import '../update/update_state.dart';
 import '../update/whats_new_prompt.dart';
 import 'share_landing.dart';
+import 'shared_links.dart';
 import 'shell_tabs.dart';
 
 /// The shell: three bottom destinations plus the floating layer holding
@@ -179,7 +180,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
   }
 
   /// An external share opens `/` and starts rule 2 (several links are
-  /// submitted one after another).
+  /// asked about once, then started together).
   Future<void> _onSharedUrls(List<String> shared) async {
     if (!mounted || shared.isEmpty) return;
     // Each step is logged, without the link: a share that showed nothing
@@ -193,8 +194,10 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     // single clip and all twenty downloaded with no selection screen. A
     // link that is not short costs no wait.
     final resolver = ref.read(shortLinkResolverProvider);
+    final capped = shared.length > maxSharedLinks;
     final urls = [
-      for (final url in shared) await resolver.resolveForRouting(url),
+      for (final url in shared.take(maxSharedLinks))
+        await resolver.resolveForRouting(url),
     ];
     note(
       'share checked in ${DateTime.now().difference(started).inMilliseconds}ms',
@@ -219,22 +222,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
       openAddSheet(context, ref, initialUrl: urls.first);
       return;
     }
-    final engine = ref.read(downloadEngineProvider);
-    if (engine == null) return note('share dropped: no engine');
-    note('share of ${urls.length} links');
-    final quality = ref.read(settingsProvider).quality;
-    for (final url in urls) {
-      if (PlaylistDetector.isPlaylist(url)) {
-        GoRouter.of(context).push('/batch', extra: url);
-      } else {
-        engine.submit(url, quality, isBatchMember: true);
-      }
-    }
-    showVhSnack(
-      context,
-      context.vhl.downloadStarted,
-      type: VhSnackType.success,
-    );
+    await submitSharedLinks(context, ref, urls, capped: capped, note: note);
   }
 
   /// A playlist **in its own right**, not a video inside a playlist.

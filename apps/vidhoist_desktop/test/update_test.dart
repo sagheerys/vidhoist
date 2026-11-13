@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
@@ -10,27 +11,32 @@ import 'package:vh_core/vh_core.dart';
 
 /// `releases/latest` as GitHub answers it, for a release of all three
 /// apps whose installer is served by [setupUrl].
-String latest(String version, String setupUrl, {int size = 4000}) =>
-    jsonEncode({
-      'tag_name': 'v$version',
-      'draft': false,
-      'prerelease': false,
-      'body': '## Fixed\n- Faster.',
-      'html_url': 'https://github.com/x/y/releases/tag/v$version',
-      'assets': [
-        {
-          'name': 'Vidhoist-v$version.apk',
-          'browser_download_url':
-              'https://github.com/x/y/releases/download/v1/super.apk',
-          'size': 1,
-        },
-        {
-          'name': installerNameFor(version),
-          'browser_download_url': setupUrl,
-          'size': size,
-        },
-      ],
-    });
+String latest(
+  String version,
+  String setupUrl, {
+  int size = 4000,
+  String? digest,
+}) => jsonEncode({
+  'tag_name': 'v$version',
+  'draft': false,
+  'prerelease': false,
+  'body': '## Fixed\n- Faster.',
+  'html_url': 'https://github.com/x/y/releases/tag/v$version',
+  'assets': [
+    {
+      'name': 'Vidhoist-v$version.apk',
+      'browser_download_url':
+          'https://github.com/x/y/releases/download/v1/super.apk',
+      'size': 1,
+    },
+    {
+      'name': installerNameFor(version),
+      'browser_download_url': setupUrl,
+      'size': size,
+      'digest': ?digest,
+    },
+  ],
+});
 
 void main() {
   late HttpServer server;
@@ -150,6 +156,30 @@ void main() {
     await update.checkNow();
     await update.install();
     expect(c.read(updateProvider).failure, UpdateFailure.install);
+  });
+
+  test("**the guard**: an installer whose hash is not the release's is "
+      'never started', () async {
+    // The file is run as it is; one altered on the way keeps its `MZ` and
+    // its size, so only the hash GitHub recorded at upload tells.
+    final c = containerFor(
+      latest('0.2.0', setupUrl(), digest: 'sha256:${'0' * 64}'),
+    );
+    final update = c.read(updateProvider.notifier);
+    await update.checkNow();
+    expect(c.read(updateProvider).release!.sha256, '0' * 64);
+    await update.install();
+    expect(started, isEmpty);
+    expect(c.read(updateProvider).failure, UpdateFailure.download);
+  });
+
+  test("an installer matching the release's hash is started", () async {
+    final hash = sha256.convert(served).toString().toUpperCase();
+    final c = containerFor(latest('0.2.0', setupUrl(), digest: 'sha256:$hash'));
+    final update = c.read(updateProvider.notifier);
+    await update.checkNow();
+    await update.install();
+    expect(started, hasLength(1));
   });
 
   test('the same version or an older one is no update', () async {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:vh_core/vh_core.dart';
 
 import 'engine_locator.dart';
@@ -23,7 +24,7 @@ class EngineUpdater {
     required this.install,
     Future<String> Function(Uri url)? getText,
     Future<RunResult> Function(String exe, List<String> args)? run,
-  }) : _getText = getText ?? _httpText,
+  }) : _getText = getText ?? httpText,
        _run = run ?? _runProcess;
 
   final EnginePaths Function() locate;
@@ -165,7 +166,11 @@ class EngineUpdater {
     return null;
   }
 
-  static Future<String> _httpText(Uri url) async {
+  /// GitHub's answer about a release, or its checksum list. Both are
+  /// small; read whole, a server that kept sending would grow the string
+  /// until the app ran out of memory, so the read stops at the ceiling.
+  @visibleForTesting
+  static Future<String> httpText(Uri url) async {
     final client = HttpClient()..userAgent = 'VidHoist';
     try {
       final request = await client.getUrl(url);
@@ -174,9 +179,11 @@ class EngineUpdater {
       if (response.statusCode != HttpStatus.ok) {
         throw HttpException('HTTP ${response.statusCode}', uri: url);
       }
-      return await response.transform(utf8.decoder).join();
+      return utf8.decode(
+        await readCappedResponse(response, httpGetCeiling, uri: url),
+      );
     } finally {
-      client.close();
+      client.close(force: true);
     }
   }
 

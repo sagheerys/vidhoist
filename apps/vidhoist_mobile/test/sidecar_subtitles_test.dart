@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
+import 'package:vh_transcripts/vh_transcripts.dart' show maxSubtitleFileBytes;
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:vidhoist_mobile/features/player/sidecar_subtitles.dart';
@@ -40,6 +41,17 @@ void main() {
     expect(await readSidecarSubtitles(video), isEmpty);
     put('Clip [abc].en.vtt', 'WEBVTT\n');
     expect(await readSidecarSubtitles(video), isEmpty);
+  });
+
+  test('**the guard**: a file too large to be subtitles is skipped unread, '
+      'and the others still show', () async {
+    // Anything can sit beside a clip under a subtitle's name; read whole,
+    // it sat in the phone's memory several times over.
+    final video = put('Clip [abc].mp4');
+    put('Clip [abc].en.vtt', vtt);
+    put('Clip [abc].ar.vtt', '$arVtt${' ' * maxSubtitleFileBytes}');
+    final tracks = await readSidecarSubtitles(video);
+    expect(tracks.keys, ['en']);
   });
 
   test('the files to delete with a clip are its subtitles, nothing else', () {

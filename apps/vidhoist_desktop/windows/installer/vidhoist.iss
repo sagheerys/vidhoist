@@ -87,6 +87,12 @@ MinVersion=10.0
 UninstallDisplayName={#AppName}
 UninstallDisplayIcon={app}\{#AppExe}
 SetupIconFile=..\runner\resources\app_icon.ico
+; **Windows is told the icons changed** when the install ends. Explorer keeps
+; a desktop shortcut's picture in its own cache, keyed by the program's path,
+; which an update does not change: after the new mark (2026-11-11) the Start
+; menu showed it and the desktop kept the old one until the cache was
+; rebuilt by hand.
+ChangesAssociations=yes
 WizardStyle=modern dynamic
 ; Drawn by tool/make_icons.py --windows, one size per display scale.
 WizardImageFile=wizard_large_*.bmp
@@ -134,8 +140,8 @@ english.AboutLink=About the developer and the project: github.com/sagheerys/vidh
 arabic.AboutLink=عن المطوّر والمشروع: github.com/sagheerys/vidhoist
 english.AppRunning={#AppName} is still running. Close it, including from its icon by the clock, then click OK.
 arabic.AppRunning=ما زال {#AppName} يعمل. أغلقه، ومن أيقونته بجانب الساعة أيضاً، ثم انقر «موافق».
-english.DeleteData=Also delete the {#AppName} settings, tags, playlists and saved transcripts on this computer?%n%nYour downloaded files stay as they are.
-arabic.DeleteData=هل تحذف أيضاً إعدادات {#AppName} ووسومك وقوائمك والنصوص المحفوظة على هذا الكمبيوتر؟%n%nتبقى ملفاتك المنزَّلة كما هي.
+english.DeleteData=Also delete what {#AppName} keeps on this computer: the library list, followed channels, tags, playlists, settings and saved transcripts?%n%nYour downloaded files and the backups in the Backups folder beside them stay, so a reinstall can restore everything.
+arabic.DeleteData=هل تحذف أيضاً ما يحفظه {#AppName} على هذا الكمبيوتر: قائمة المكتبة والقنوات المتابَعة والوسوم والقوائم والإعدادات والنصوص المحفوظة؟%n%nتبقى ملفاتك المنزَّلة والنسخ الاحتياطية في مجلد Backups بجانبها، فيستعيد التثبيت التالي كل شيء.
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked

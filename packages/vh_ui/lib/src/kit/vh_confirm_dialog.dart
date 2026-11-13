@@ -75,27 +75,31 @@ class VhConfirmDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                VhSpace.pagePad,
-                VhSpace.pagePad,
-                VhSpace.pagePad,
-                VhSpace.md,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: text.titleLarge),
-                  const SizedBox(height: VhSpace.xs),
-                  Text(
-                    message,
-                    style: text.bodyMedium!.copyWith(color: p.ink2),
-                  ),
-                  if (preview != null) ...[
-                    const SizedBox(height: VhSpace.md),
-                    preview!,
+            // Scrolls when it cannot fit (the largest text on a small
+            // phone), so the buttons below always stay on screen.
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(
+                  VhSpace.pagePad,
+                  VhSpace.pagePad,
+                  VhSpace.pagePad,
+                  VhSpace.md,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: text.titleLarge),
+                    const SizedBox(height: VhSpace.xs),
+                    Text(
+                      message,
+                      style: text.bodyMedium!.copyWith(color: p.ink2),
+                    ),
+                    if (preview != null) ...[
+                      const SizedBox(height: VhSpace.md),
+                      preview!,
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
             Divider(height: 1, color: p.line),

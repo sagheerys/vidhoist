@@ -214,7 +214,7 @@ class LibraryBackfill {
           .writeAsString(translating ? _askedAll : 'own tracks only');
 
   Future<bool> _save(HistoryItem clip, String language, String text) async {
-    final segments = SubtitleParser.parse(text);
+    final segments = await SubtitleParser.parseAway(text);
     if (segments.isEmpty) return false;
     final transcript = Transcript(
       canonicalUrl: clip.canonicalUrl,

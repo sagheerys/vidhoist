@@ -28,11 +28,18 @@ class AccountsFields extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(l10n.accountsHint, style: text.bodySmall?.copyWith(color: p.ink2)),
+        Text(
+          l10n.accountsHint,
+          style: text.bodySmall?.copyWith(
+            color: p.ink2,
+            fontSize: VhEmphasis.explain,
+          ),
+        ),
         const SizedBox(height: VhSpace.sm),
         AccountRiskNote(text: l10n.accountsBanRisk),
         const SizedBox(height: VhSpace.sm),
-        for (final site in LoginSite.values)
+        for (final (i, site) in LoginSite.values.indexed) ...[
+          if (i > 0) const Divider(),
           _SiteRow(
             site: site,
             signedIn: signedIn.contains(site),
@@ -43,6 +50,7 @@ class AccountsFields extends ConsumerWidget {
                 ? null
                 : () => unawaited(_forget(context, ref, site)),
           ),
+        ],
         if (signedIn.isNotEmpty) ...[
           const SizedBox(height: VhSpace.sm),
           Align(
@@ -56,7 +64,13 @@ class AccountsFields extends ConsumerWidget {
           ),
         ],
         const SizedBox(height: VhSpace.md),
-        Text(l10n.accountsHelp, style: text.bodySmall?.copyWith(color: p.ink3)),
+        Text(
+          l10n.accountsHelp,
+          style: text.bodySmall?.copyWith(
+            color: p.ink3,
+            fontSize: VhEmphasis.explain,
+          ),
+        ),
       ],
     );
   }
@@ -91,7 +105,8 @@ class AccountRiskNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = VhThemeX.of(context).palette;
-    final style = Theme.of(context).textTheme.bodySmall;
+    final style = Theme.of(context).textTheme.bodySmall
+        ?.copyWith(fontSize: VhEmphasis.explain);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -106,9 +121,14 @@ class AccountRiskNote extends StatelessWidget {
   }
 }
 
-/// One site: its name and state beside the icon, and under them the one
-/// action that fits. The button sits under the words rather than beside
-/// them so that the largest text on the narrowest phone still fits.
+/// One site: its name and state beside the icon, and its one action at the
+/// end of the row.
+///
+/// **Beside the words when it fits, under them when it does not** (design
+/// round 2026-11-11): under every name, six buttons pushed Vimeo and "clear
+/// all" below the fold on a common phone. [OverflowBar] keeps the old
+/// stacking as the fallback, so the largest text on the narrowest phone
+/// still fits.
 class _SiteRow extends StatelessWidget {
   const _SiteRow({
     required this.site,
@@ -126,37 +146,63 @@ class _SiteRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.vhl;
     final text = Theme.of(context).textTheme;
+    final p = VhThemeX.of(context).palette;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: VhSpace.sm),
+      padding: const EdgeInsets.symmetric(vertical: VhSpace.xxs),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // On the name's line whichever way the bar lays out: the words
+          // block is as tall as the button, so it starts at the top in
+          // both.
           const Padding(
-            padding: EdgeInsets.only(top: 2),
+            padding: EdgeInsets.only(top: VhSpace.xxs),
             child: VhIcon(VhIcons.globe),
           ),
           const SizedBox(width: VhSpace.md),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: OverflowBar(
+              spacing: VhSpace.md,
+              alignment: MainAxisAlignment.spaceBetween,
+              overflowAlignment: OverflowBarAlignment.start,
+              overflowSpacing: VhSpace.xxs,
               children: [
-                Text(
-                  site.label,
-                  textDirection: TextDirection.ltr,
-                  style: text.bodyMedium,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: VhSpace.xxs),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        site.label,
+                        textDirection: TextDirection.ltr,
+                        style: text.bodyMedium,
+                      ),
+                      Text(
+                        signedIn ? l10n.accountSignedIn : l10n.accountSignedOut,
+                        style: text.bodySmall?.copyWith(
+                          fontSize: VhEmphasis.explain,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  signedIn ? l10n.accountSignedIn : l10n.accountSignedOut,
-                  style: text.bodySmall,
-                ),
-                const SizedBox(height: VhSpace.xs),
                 if (signedIn)
                   TextButton(
                     onPressed: onSignOut,
                     child: Text(l10n.accountSignOut),
                   )
                 else
+                  // **The soft accent, not the filled one** (design round
+                  // 2026-11-11): the theme paints every FilledButton,
+                  // tonal included, in the full accent, so five sign-ins
+                  // made five coloured actions on one screen. Pale accent
+                  // with its dark ink keeps them buttons without competing.
                   FilledButton.tonal(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: p.accentSoft,
+                      foregroundColor: p.accentInk,
+                    ),
                     onPressed: onSignIn,
                     child: Text(l10n.accountSignIn),
                   ),

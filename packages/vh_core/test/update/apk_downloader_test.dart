@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:pointycastle/digests/sha256.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
@@ -59,6 +60,57 @@ void main() {
     // **No leftovers**: a surviving `.part` makes the next launch believe
     // an update is ready.
     expect(part().existsSync(), isFalse);
+  });
+
+  String sha256Of(Uint8List bytes) => [
+    for (final b in SHA256Digest().process(bytes))
+      b.toRadixString(16).padLeft(2, '0'),
+  ].join();
+
+  test(
+    "**the guard**: a file whose hash is not the release's is refused",
+    () async {
+      // The signature and the size are all an altered file was checked
+      // for, and it keeps both.
+      final body = fakeApk(40000);
+      final altered = fakeApk(40000)..[39999] = 1;
+      handler = (r) async {
+        r.response.headers.contentLength = altered.length;
+        r.response.add(altered);
+      };
+      await expectLater(
+        ApkDownloader().download(
+          url: url(),
+          savePath: savePath,
+          expectedSize: body.length,
+          sha256: sha256Of(body),
+        ),
+        throwsA(
+          isA<UpdateDownloadException>().having(
+            (e) => e.reason,
+            'reason',
+            'checksum mismatch',
+          ),
+        ),
+      );
+      expect(File(savePath).existsSync(), isFalse);
+      expect(part().existsSync(), isFalse);
+    },
+  );
+
+  test('the right hash, in either case, passes', () async {
+    final body = fakeApk(40000);
+    handler = (r) async {
+      r.response.headers.contentLength = body.length;
+      r.response.add(body);
+    };
+    final path = await ApkDownloader().download(
+      url: url(),
+      savePath: savePath,
+      expectedSize: body.length,
+      sha256: sha256Of(body).toUpperCase(),
+    );
+    expect(File(path).lengthSync(), body.length);
   });
 
   test('**the guard**: an HTML page with status 200 is refused and never handed to the installer', () async {

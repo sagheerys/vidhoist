@@ -123,7 +123,7 @@ class _ItemActionsSheet extends ConsumerWidget {
             tile(
               VhIcons.share,
               l10n.share,
-              () => run(() => actions.share([item])),
+              () => run(() => actions.share(host, [item])),
             ),
             // An external player gets a file path: everything here is
             // local, so no URL ever leaves the app.

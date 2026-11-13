@@ -31,7 +31,9 @@ Future<List<Transcript>> readSidecarTranscripts({
       }
       final language = Transcript.baseLanguage(rest[0]);
       if (!seen.add(language)) continue;
-      final segments = SubtitleParser.parse(await entry.readAsString());
+      // Off the drawing thread when large, and skipped unread when too
+      // large to be subtitles: anything can sit beside a clip.
+      final segments = await readSubtitleFile(entry);
       if (segments.isEmpty) continue;
       found.add(
         Transcript(

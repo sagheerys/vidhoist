@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'data/appearance_data.dart';
 import 'data/backup_data.dart';
+import 'data/backup_folder.dart';
 import 'data/choices_data.dart';
 import 'data/clip_handover.dart';
 import 'data/copied_links.dart';
@@ -256,7 +257,10 @@ Future<void> main(List<String> args) async {
         ),
         clipboardPortProvider.overrideWithValue(WindowsClipboard()),
         backupFolderProvider.overrideWithValue(
-          Directory('${roaming.path}/backup'),
+          await desktopBackupFolder(
+            const WindowsFolders(),
+            roaming: roaming.path,
+          ),
         ),
         secretStoreProvider.overrideWithValue(secrets),
         ...engineOverrides(

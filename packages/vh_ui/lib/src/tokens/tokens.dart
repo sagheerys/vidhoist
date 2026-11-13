@@ -225,6 +225,25 @@ class VhTypeScale {
   static const desktop = VhTypeScale(headline: 24, body: 14, secondary: 12.5);
 }
 
+/// What a screen puts first (design round 2026-11-11): the one number it
+/// is about, its one main action, and the paragraph that explains a choice.
+/// Used only where the owner approved the drawn screen, so the rest of the
+/// app keeps the sizes above.
+abstract final class VhEmphasis {
+  /// The number a sheet is about: a percent while something downloads.
+  static const double figure = 56;
+
+  /// The same inside a card, or where other text shares the line: a version.
+  static const double figureInCard = 40;
+
+  /// The main action's height, full width: one shape wherever it appears.
+  static const double action = 56;
+
+  /// A paragraph that decides something, a step above [VhTypeScale.secondary]
+  /// so it is read rather than skimmed.
+  static const double explain = 13;
+}
+
 /// Spacing for a pointer rather than a finger: rows a mouse can still hit
 /// comfortably at a third less height than a thumb needs.
 class VhDensity {

@@ -10,6 +10,7 @@ class UpdateRelease {
     required this.tag,
     required this.apkUrl,
     required this.apkSize,
+    this.sha256,
     this.notes = '',
     this.pageUrl = '',
     this.publishedAt,
@@ -24,6 +25,11 @@ class UpdateRelease {
 
   /// The file size in bytes, or `0` when GitHub did not declare one.
   final int apkSize;
+
+  /// The file's SHA-256 as GitHub records it at upload (lowercase hex), or
+  /// `null` for a release that carries none. The download is checked
+  /// against it, so a file changed on its way here is never installed.
+  final String? sha256;
 
   /// The release notes, raw Markdown as written.
   final String notes;
@@ -103,7 +109,12 @@ class UpdateRelease {
       // the Windows installer that shares the release, or Windows an APK.
       if (!lower.endsWith(ending) || !lower.contains(marker)) continue;
       final size = asset['size'];
-      matching.add((name: lower, url: url, size: size is int ? size : 0));
+      matching.add((
+        name: lower,
+        url: url,
+        size: size is int ? size : 0,
+        sha256: _sha256Of(asset['digest']),
+      ));
     }
     final chosen = abis.isEmpty
         ? matching.firstOrNull
@@ -114,6 +125,7 @@ class UpdateRelease {
       tag: tag,
       apkUrl: chosen.url,
       apkSize: chosen.size,
+      sha256: chosen.sha256,
       notes: decoded['body'] is String ? decoded['body'] as String : '',
       pageUrl: switch (UrlKit.webUri(decoded['html_url']?.toString())) {
         final page? when fromGitHub(page) => page.toString(),
@@ -153,6 +165,18 @@ class UpdateRelease {
     }
     return null;
   }
+
+  /// `sha256:<64 hex>`, as GitHub's API writes an asset's digest.
+  static String? _sha256Of(Object? digest) {
+    if (digest is! String) return null;
+    final match = _digestPattern.firstMatch(digest.trim());
+    return match?.group(1)!.toLowerCase();
+  }
+
+  static final _digestPattern = RegExp(
+    r'^sha256:([0-9a-f]{64})$',
+    caseSensitive: false,
+  );
 }
 
-typedef _Asset = ({String name, String url, int size});
+typedef _Asset = ({String name, String url, int size, String? sha256});

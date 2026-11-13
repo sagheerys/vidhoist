@@ -63,9 +63,11 @@ class _ChannelsScreenState extends ConsumerState<ChannelsScreen> {
     } else {
       body = VhReadableWidth(
         child: ListView(
-          padding: const EdgeInsets.only(
+          // Clear of "Follow a channel" and the navigation buttons under
+          // it, which would otherwise sit on the last card.
+          padding: EdgeInsets.only(
             top: VhSpace.xs,
-            bottom: VhSpace.xxl * 3,
+            bottom: vhFabClearance(context),
           ),
           children: [for (final sub in subs) ChannelCard(sub: sub)],
         ),

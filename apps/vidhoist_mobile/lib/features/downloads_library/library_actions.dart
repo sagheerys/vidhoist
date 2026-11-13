@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart' show vhShareWithNotice;
 import 'package:share_plus/share_plus.dart';
 
 import '../../di.dart';
@@ -77,13 +79,14 @@ class LibraryActions {
   }
 
   /// Shares the file itself: nothing is downloaded, since everything here
-  /// is local.
-  Future<void> share(List<LocalItem> items) async {
+  /// is local. [context] carries the notice shown while Android copies a
+  /// large file before its share menu opens.
+  Future<void> share(BuildContext context, List<LocalItem> items) async {
     final files = [
       for (final item in items)
         if (File(item.path).existsSync()) XFile(item.path),
     ];
-    if (files.isEmpty) return;
-    await Share.shareXFiles(files);
+    if (files.isEmpty || !context.mounted) return;
+    await vhShareWithNotice(context, () => Share.shareXFiles(files));
   }
 }

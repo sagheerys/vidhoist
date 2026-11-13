@@ -106,9 +106,11 @@ class VhVideoInfoSheet extends StatelessWidget {
     final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     return [
+      // Copied to search for it elsewhere.
       VhForeignText(
         item.title,
         maxLines: 2,
+        selectable: true,
         style: text.titleMedium!.copyWith(fontSize: 16),
       ),
       if (subtitleBuilder != null) ...[

@@ -133,7 +133,10 @@ class VhVideoTopBar extends StatelessWidget {
   }
 }
 
-/// The bottom bar: progress, times, play modes and the queue button.
+/// The bottom bar: the time, play modes and the queue button in one row,
+/// then a thin bar along the bottom edge of the picture, so less of the
+/// picture and the subtitle above it is covered (in full screen and under
+/// the video alike).
 class VhVideoBottomBar extends StatelessWidget {
   const VhVideoBottomBar({
     super.key,
@@ -143,6 +146,7 @@ class VhVideoBottomBar extends StatelessWidget {
     this.extra,
     this.chapters = const [],
     this.onChapters,
+    this.rowInset = 0,
   });
 
   final VhVideoSession session;
@@ -157,6 +161,10 @@ class VhVideoBottomBar extends StatelessWidget {
   final List<VhChapter> chapters;
   final VoidCallback? onChapters;
 
+  /// Room at each end of the row only, where the bar under it runs to the
+  /// edges of the picture.
+  final double rowInset;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.vhl;
@@ -164,87 +172,97 @@ class VhVideoBottomBar extends StatelessWidget {
     final inkMuted = VhPalette.serverCardInk.withValues(alpha: 0.85);
     final value = session.controller?.value;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    final slider = VhProgressSlider(
+      position: session.position,
+      duration: session.duration,
+      buffered: value == null || value.buffered.isEmpty
+          ? null
+          : value.buffered.last.end,
+      dark: true,
+      showRemaining: false,
+      // The row above already says "0:12 / 0:36"; the slider's own pair
+      // would say it a second time.
+      showTimes: false,
+      thin: true,
+      marks: [for (final chapter in chapters) chapter.start],
+      onSeek: session.seek,
+    );
+    final row = Padding(
+      padding: EdgeInsets.symmetric(horizontal: rowInset),
+      child: _row(context, l10n, text, inkMuted),
+    );
+    return Column(mainAxisSize: MainAxisSize.min, children: [row, slider]);
+  }
+
+  Widget _row(
+    BuildContext context,
+    VhLocalizations l10n,
+    TextTheme text,
+    Color inkMuted,
+  ) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: VhSpace.sm),
+    child: Row(
       children: [
-        VhProgressSlider(
-          position: session.position,
-          duration: session.duration,
-          buffered: value == null || value.buffered.isEmpty
-              ? null
-              : value.buffered.last.end,
-          dark: true,
-          showRemaining: false,
-          marks: [for (final chapter in chapters) chapter.start],
-          onSeek: session.seek,
+        Text(
+          // Isolated left to right: in an Arabic line the pair read
+          // "3:02 / 1:20", the length before the position (field
+          // report 2026-10-04).
+          vhLtrRun(
+            '${vhFormatDuration(session.position)} / '
+            '${vhFormatDuration(session.duration ?? Duration.zero)}',
+          ),
+          // A counter live on every frame. Without fixed-width digits
+          // the text stretches and shrinks and the whole line dances
+          // (review 2026-09-02).
+          style: text.labelSmall!.copyWith(color: inkMuted).tabular,
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: VhSpace.sm),
-          child: Row(
-            children: [
-              Text(
-                // Isolated left to right: in an Arabic line the pair read
-                // "3:02 / 1:20", the length before the position (field
-                // report 2026-10-04).
-                vhLtrRun(
-                  '${vhFormatDuration(session.position)} / '
-                  '${vhFormatDuration(session.duration ?? Duration.zero)}',
-                ),
-                // A counter live on every frame. Without fixed-width digits
-                // the text stretches and shrinks and the whole line dances
-                // (review 2026-09-02).
-                style: text.labelSmall!.copyWith(color: inkMuted).tabular,
-              ),
-              Expanded(
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: chapters.isEmpty || onChapters == null
-                      ? null
-                      : VhChapterLabel(
-                          chapters: chapters,
-                          position: session.position,
-                          onTap: onChapters!,
-                        ),
-                ),
-              ),
-              VhVideoIconButton(
-                icon: vhPlayModeIcon(session.playMode),
-                onTap: () => session.setPlayMode(session.playMode.next),
-                tooltip: vhPlayModeLabel(context, session.playMode),
-                size: 32,
-                active: session.playMode != PlayMode.autoNext,
-              ),
-              const SizedBox(width: VhSpace.xxs + 2),
-              VhVideoIconButton(
-                icon: VhIcons.shuffle,
-                onTap: () => session.setShuffle(!session.shuffleEnabled),
-                tooltip: l10n.shuffle,
-                size: 32,
-                active: session.shuffleEnabled,
-              ),
-              if (extra case final extra?) ...[
-                const SizedBox(width: VhSpace.xxs + 2),
-                // In the style of its neighbours: beside repeat and shuffle,
-                // which light up when on, a filled button read as switched
-                // on.
-                VhVideoIconButton(
-                  icon: extra.icon,
-                  onTap: extra.onTap,
-                  tooltip: extra.label,
-                  size: 32,
-                ),
-              ],
-              const SizedBox(width: VhSpace.xxs + 2),
-              VhVideoIconButton(
-                icon: VhIcons.queue,
-                onTap: onQueue,
-                tooltip: l10n.queueLabel,
-                size: 32,
-              ),
-            ],
+        Expanded(
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: chapters.isEmpty || onChapters == null
+                ? null
+                : VhChapterLabel(
+                    chapters: chapters,
+                    position: session.position,
+                    onTap: onChapters!,
+                  ),
           ),
         ),
+        VhVideoIconButton(
+          icon: vhPlayModeIcon(session.playMode),
+          onTap: () => session.setPlayMode(session.playMode.next),
+          tooltip: vhPlayModeLabel(context, session.playMode),
+          size: 32,
+          active: session.playMode != PlayMode.autoNext,
+        ),
+        const SizedBox(width: VhSpace.xxs + 2),
+        VhVideoIconButton(
+          icon: VhIcons.shuffle,
+          onTap: () => session.setShuffle(!session.shuffleEnabled),
+          tooltip: l10n.shuffle,
+          size: 32,
+          active: session.shuffleEnabled,
+        ),
+        if (extra case final extra?) ...[
+          const SizedBox(width: VhSpace.xxs + 2),
+          // In the style of its neighbours: beside repeat and shuffle,
+          // which light up when on, a filled button read as switched
+          // on.
+          VhVideoIconButton(
+            icon: extra.icon,
+            onTap: extra.onTap,
+            tooltip: extra.label,
+            size: 32,
+          ),
+        ],
+        const SizedBox(width: VhSpace.xxs + 2),
+        VhVideoIconButton(
+          icon: VhIcons.queue,
+          onTap: onQueue,
+          tooltip: l10n.queueLabel,
+          size: 32,
+        ),
       ],
-    );
-  }
+    ),
+  );
 }

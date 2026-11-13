@@ -452,7 +452,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopBackupHint =>
-      'This computer keeps its last seven backups, at least an hour apart, in its own folder.';
+      'This computer keeps its last seven backups, at least an hour apart, in Downloads\\VidHoist\\Backups, where they outlast an uninstall.';
 
   @override
   String get desktopBackupsNone => 'No backup yet';
@@ -910,11 +910,11 @@ class VhLocalizationsEn extends VhLocalizations {
       'Two short tips, each shown once: the shortcuts at the first clip, the icon by the clock at the first close.';
 
   @override
-  String get desktopImportFromPhone => 'Import from the phone…';
+  String get desktopImportFromPhone => 'Import a backup or transcripts…';
 
   @override
   String get desktopImportHint =>
-      'A backup or transcripts file from VidHoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.';
+      'A backup or transcripts file from VidHoist, chosen here or dropped on the window. A phone\'s is added to what is here; a backup of this computer is restored whole, after asking.';
 
   @override
   String desktopImportedBackup(int tagged, int lists, int positions) {
@@ -1129,10 +1129,16 @@ class VhLocalizationsEn extends VhLocalizations {
       'When you copy a video link in another app, a notification offers to add it. Only links are looked at, and none is saved.';
 
   @override
+  String get desktopOpenBackup => 'Open Backup';
+
+  @override
   String get desktopOpenChannels => 'Open channels';
 
   @override
   String get desktopOpenInExplorer => 'Open in Explorer';
+
+  @override
+  String get desktopOpenWith => 'Open in another player…';
 
   @override
   String get desktopPaletteClose => 'to close';
@@ -1217,6 +1223,30 @@ class VhLocalizationsEn extends VhLocalizations {
   String get desktopReadingRoom => 'Reading room';
 
   @override
+  String get desktopRecoverLibrary => 'Clips already in the folder';
+
+  @override
+  String get desktopRecoverLibraryAction => 'Look in the folder';
+
+  @override
+  String get desktopRecoverLibraryHint =>
+      'After a reinstall: puts back in the library the clips that are in the downloads folder but no longer listed. The files are not touched.';
+
+  @override
+  String desktopRecovered(int count) {
+    return 'Put back in the library: $count';
+  }
+
+  @override
+  String get desktopRecoveredNothing =>
+      'Nothing to add: every clip in the folder is in the library.';
+
+  @override
+  String desktopRecoveredSome(int count, int left) {
+    return 'Put back in the library: $count. Left out, their link unknown: $left';
+  }
+
+  @override
   String get desktopRemoveFromList => 'Remove from the list';
 
   @override
@@ -1224,7 +1254,15 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopRestoreBody =>
-      'This computer\'s tags, lists and settings become what the backup holds. The downloaded files are not touched.';
+      'This computer\'s library, followed channels, tags, lists and settings become what the backup holds. The downloaded files are not touched.';
+
+  @override
+  String desktopRestoreOfferBody(String when) {
+    return 'Downloads\\VidHoist\\Backups holds a backup of this computer: its library, followed channels, playlists, tags, settings and saved transcripts. The newest was made $when. Your downloaded files are not touched either way.';
+  }
+
+  @override
+  String get desktopRestoreOfferTitle => 'Restore your backup?';
 
   @override
   String get desktopRestoreTitle => 'Restore this backup?';
@@ -1302,6 +1340,9 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopShowPanel => 'Show side panel';
+
+  @override
+  String get desktopStartFresh => 'Start fresh';
 
   @override
   String get desktopStartWithWindows => 'Start with Windows';
@@ -1392,19 +1433,18 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopTranscriptsDeleteBody =>
-      'They are removed from this computer. Only a file you exported can bring them back.';
-
-  @override
-  String get desktopTranscriptsExportHint =>
-      'All of them in one file a phone can import.';
+      'They are removed from this computer and from its backup. Only a file you exported can bring them back.';
 
   @override
   String get desktopTranscriptsHelp =>
       'VidHoist keeps the words said in each YouTube clip you add, so a search (Ctrl+K) also finds what was said inside your clips, not only their titles. They stay on this computer.';
 
   @override
-  String get desktopTranscriptsImportHint =>
-      'A transcripts file from a phone. It adds what is missing here and deletes nothing.';
+  String get desktopTranscriptsMove => 'To or from a phone';
+
+  @override
+  String get desktopTranscriptsMoveHint =>
+      'Transcripts travel with the backup: Export for the phone takes them, and Import there brings them in, adding what is missing here.';
 
   @override
   String get desktopTrayOnClose =>
@@ -1889,7 +1929,16 @@ class VhLocalizationsEn extends VhLocalizations {
       'Couldn\'t update yt-dlp. Check the connection and try again.';
 
   @override
+  String get mobileEngineUpdateMissed => 'Update failed';
+
+  @override
+  String get mobileEngineUpdated => 'Updated';
+
+  @override
   String get mobileEngineUpdating => 'Updating…';
+
+  @override
+  String get mobileEngineVersionLabel => 'yt-dlp version';
 
   @override
   String get mobileEngineVersionUnknown =>
@@ -2793,6 +2842,16 @@ class VhLocalizationsEn extends VhLocalizations {
   String get restoreFailed => 'Restore failed: the backup file is not valid';
 
   @override
+  String get restorePickBody =>
+      'This phone has VidHoist downloads but no settings, as after a reinstall. If you kept a backup, choose it: the app writes them to Download/VidHoist/backups.';
+
+  @override
+  String get restorePickChoose => 'Choose a backup';
+
+  @override
+  String get restorePickTitle => 'Bring back your settings?';
+
+  @override
   String get restoreSettings => 'Restore all data';
 
   @override
@@ -2921,7 +2980,36 @@ class VhLocalizationsEn extends VhLocalizations {
   String get shareLogs => 'Share logs';
 
   @override
+  String get shareOpening => 'Opening the share menu…';
+
+  @override
+  String get shareOpeningHint =>
+      'A large file takes a few seconds to hand over.';
+
+  @override
   String get shareSelected => 'Share selected';
+
+  @override
+  String get sharedLinksAdd => 'Add them';
+
+  @override
+  String get sharedLinksBody => 'Each one downloads to this phone.';
+
+  @override
+  String sharedLinksCapped(int max) {
+    return 'Only the first $max links were added.';
+  }
+
+  @override
+  String sharedLinksTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Add $count links?',
+      one: 'Add 1 link?',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get shortsFilter => 'Shorts';
@@ -3225,9 +3313,6 @@ class VhLocalizationsEn extends VhLocalizations {
       'Before each YouTube clip you add is downloaded, the app fetches its words from your server, in the app\'s language and in English (up to 40 seconds), and keeps them on this phone only. Clips already in your library are included only if your server saved their subtitles beside them (the setup guide shows how). You can turn this off at any time.';
 
   @override
-  String get transcriptsExport => 'Export';
-
-  @override
   String transcriptsExported(Object path) {
     return 'Transcripts saved to: $path';
   }
@@ -3235,9 +3320,6 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get transcriptsHelp =>
       'The app keeps the words said in each YouTube clip you add, so a library search also finds what was said inside your clips, not only their titles.\n\nThe words are fetched from your server just before the download and kept on this phone; the full backup does not include them. To move them to another phone, use Export here and Import there. An import adds to what is already here and deletes nothing.\n\nA server set to write subtitles beside each clip (one line in its configuration; the setup guide shows it) covers everything it downloads from then on, subscriptions and other sites included: the app reads those files on its own, in the app\'s language and in English.';
-
-  @override
-  String get transcriptsImport => 'Import';
 
   @override
   String get transcriptsImportInvalid => 'This file holds no transcripts.';
@@ -3321,6 +3403,11 @@ class VhLocalizationsEn extends VhLocalizations {
   String get updateDownloadFailed => 'Couldn\'t download the update';
 
   @override
+  String updateDownloadedMb(String done, String total) {
+    return '$done of $total MB';
+  }
+
+  @override
   String get updateDownloading => 'Downloading update…';
 
   @override
@@ -3358,6 +3445,11 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String updateVersionAvailable(String version) {
     return 'Version $version is available';
+  }
+
+  @override
+  String updateVersionTitle(String version) {
+    return 'Version $version';
   }
 
   @override

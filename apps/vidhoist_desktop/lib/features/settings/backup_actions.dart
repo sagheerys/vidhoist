@@ -12,7 +12,8 @@ import '../../data/folders_data.dart';
 bool isBackupText(String text) =>
     BackupMerge.looksLikeBackup(text) || TranscriptBundle.decode(text) != null;
 
-/// Adds a phone's file to this computer and says what it brought.
+/// Adds a phone's file to this computer and says what it brought; a
+/// computer's own backup is restored whole once the person says so.
 Future<ImportOutcome> importFromPhone(
   BuildContext context,
   WidgetRef ref,
@@ -21,7 +22,21 @@ Future<ImportOutcome> importFromPhone(
   final outcome = await ref.read(backupsProvider).importFile(contents);
   if (!context.mounted) return outcome;
   final l = context.vhl;
+  if (outcome case ComputerBackup(:final contents)) {
+    final sure = await showVhConfirm(
+      context,
+      title: l.desktopRestoreTitle,
+      message: l.desktopRestoreBody,
+      confirmLabel: l.desktopRestore,
+      cancelLabel: l.cancel,
+    );
+    if (!sure || !context.mounted) return outcome;
+    await ref.read(backupsProvider).restoreText(contents);
+    if (context.mounted) showVhNotice(context, message: l.desktopRestored);
+    return outcome;
+  }
   final (message, kind) = switch (outcome) {
+    ComputerBackup() => (l.desktopRestored, VhNoticeKind.done),
     MergedBackup(:final result) when result.changedNothing => (
       l.desktopImportedNothing,
       VhNoticeKind.info,

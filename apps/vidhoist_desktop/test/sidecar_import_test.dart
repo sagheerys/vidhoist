@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vh_transcripts/vh_transcripts.dart' show maxSubtitleFileBytes;
 import 'package:vidhoist_desktop/data/sidecar_import.dart';
 
 /// yt-dlp writes a clip's subtitles beside it (`<name>.<language>.vtt`);
@@ -43,6 +44,22 @@ void main() {
     );
     expect(found.single.language, 'en');
   });
+
+  test(
+    '**the guard**: a file too large to be subtitles is skipped unread',
+    () async {
+      // Anything can sit beside a clip under a subtitle's name; read whole,
+      // it sat in memory several times over.
+      final clip = put('Clip [abc].mp4', 'media');
+      put('Clip [abc].en.vtt', vtt);
+      put('Clip [abc].ar.vtt', '$vtt${' ' * maxSubtitleFileBytes}');
+      final found = await readSidecarTranscripts(
+        mediaPath: clip.path,
+        canonicalUrl: 'u',
+      );
+      expect(found.map((t) => t.language), ['en']);
+    },
+  );
 
   test('an empty or unreadable track is skipped', () async {
     final clip = put('Clip [abc].mp4', 'media');
