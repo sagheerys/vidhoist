@@ -204,7 +204,12 @@ class _StatusCard extends StatelessWidget {
                       runSpacing: VhSpace.xxs,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        _Pill(online: view.online),
+                        VhStatusPill(
+                          label: view.online
+                              ? l10n.pcConnected
+                              : l10n.pcOffline,
+                          good: view.online,
+                        ),
                         if (route case final route?)
                           Text(
                             route,
@@ -222,54 +227,6 @@ class _StatusCard extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Pill extends StatelessWidget {
-  const _Pill({required this.online});
-
-  final bool online;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.vhl;
-    final p = VhThemeX.of(context).palette;
-    final text = Theme.of(context).textTheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: online ? p.offlineSoft : p.cardAlt,
-        borderRadius: BorderRadius.circular(VhRadius.pill),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: VhSpace.sm,
-          vertical: VhSpace.xxs,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: online ? p.ok : p.ink3,
-                shape: BoxShape.circle,
-              ),
-              child: const SizedBox.square(dimension: 7),
-            ),
-            const SizedBox(width: VhSpace.xs),
-            Flexible(
-              child: Text(
-                online ? l10n.pcConnected : l10n.pcOffline,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: text.labelMedium?.copyWith(
-                  color: online ? p.offlineInk : p.ink2,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

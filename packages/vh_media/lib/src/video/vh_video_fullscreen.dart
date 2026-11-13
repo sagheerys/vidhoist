@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vh_ui/vh_ui.dart';
@@ -117,11 +119,33 @@ class _VhVideoFullscreenPageState extends State<VhVideoFullscreenPage> {
   void dispose() {
     widget.session.removeListener(_lockForShape);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    // **We do not lock portrait here**: the portrait player beneath us is
-    // still alive and owns the policy. Locking from here pinned the whole
-    // app to portrait forever.
-    VhOrientation.allow();
+    // **Not a plain portrait lock**: the portrait player beneath us is still
+    // alive and owns the policy, and a lock from here pinned the whole app
+    // to portrait forever. Upright until the phone is, then free.
+    _release();
     super.dispose();
+  }
+
+  bool _released = false;
+  bool _watchingPop = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_watchingPop) return;
+    // Completes as the page is popped, by the button, back or a tilt.
+    final popped = ModalRoute.of(context)?.popped;
+    if (popped == null) return;
+    _watchingPop = true;
+    unawaited(popped.then((_) => _release()));
+  }
+
+  /// Once, as the page starts to leave: at the pop, not after its
+  /// transition, so the page beneath never lies on its side meanwhile.
+  void _release() {
+    if (_released) return;
+    _released = true;
+    unawaited(VhOrientation.afterFullscreen());
   }
 
   /// **Leave fullscreen first, then open the playlist**, or the picture
@@ -142,7 +166,7 @@ class _VhVideoFullscreenPageState extends State<VhVideoFullscreenPage> {
     // under the immersive mode and the landscape lock for the length of
     // the animation. Dispose repeating both is harmless.
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    VhOrientation.allow();
+    _release();
     Navigator.of(context).pop();
     // After the frame that removes this route from the top.
     WidgetsBinding.instance.addPostFrameCallback((_) => show());

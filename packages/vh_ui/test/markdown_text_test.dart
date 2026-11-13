@@ -112,6 +112,30 @@ Full list: [CHANGELOG](https://github.com/x/y/blob/main/CHANGELOG.md)
       expect(blocks.single.spans.any((s) => s.bold), isFalse);
     });
 
+    test('**the guard**: a picture leaves nothing behind, alone, linked or '
+        'as HTML', () {
+      // A screenshot on the release page read as "!The library" in the
+      // update sheet.
+      final blocks = vhParseMarkdown(
+        'Before\n\n'
+        '![The library](https://github.com/x/shot.png)\n\n'
+        '[![badge](https://img.shields.io/b.svg)](https://github.com/x)\n'
+        '<img src="https://github.com/x/a.png" width="300">\n\n'
+        'Text ![inline](https://x/y.png) goes on',
+      );
+      expect(blocks.map((b) => b.text), ['Before', 'Text goes on']);
+      final all = blocks.map((b) => b.text).join();
+      expect(all.contains('!'), isFalse);
+      expect(all.contains('http'), isFalse);
+    });
+
+    test('an exclamation in a sentence is still a sentence', () {
+      expect(
+        vhParseMarkdown('Done! [see](https://x)').single.text,
+        'Done! see',
+      );
+    });
+
     test('empty in, empty out', () {
       expect(vhParseMarkdown(''), isEmpty);
       expect(vhParseMarkdown('\n\n   \n'), isEmpty);

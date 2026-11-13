@@ -55,9 +55,9 @@ Future<Map<String, List<VhCaptionLine>>> readSidecarSubtitles(
   final tracks = <String, List<VhCaptionLine>>{};
   for (final file in sidecarSubtitleFiles(mediaPath)) {
     try {
-      final lines = captionLinesOf(
-        SubtitleParser.parse(await file.readAsString()),
-      );
+      // Off the drawing thread when large, and skipped unread when too
+      // large to be subtitles: anything can sit beside a clip.
+      final lines = captionLinesOf(await readSubtitleFile(file));
       if (lines.isNotEmpty) tracks[_languageOf(file, stem)!] = lines;
     } on FileSystemException {
       // A file gone since the listing, or unreadable: the others still show.

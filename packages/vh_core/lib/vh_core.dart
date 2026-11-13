@@ -56,6 +56,7 @@ export 'src/storage/artwork_index.dart';
 export 'src/storage/cover_keeper.dart';
 export 'src/storage/batch_playlist_collector.dart';
 export 'src/storage/key_value_store.dart';
+export 'src/storage/library_recovery.dart';
 export 'src/storage/local_history_store.dart';
 export 'src/storage/memory_key_value_store.dart';
 export 'src/storage/offline_index.dart';

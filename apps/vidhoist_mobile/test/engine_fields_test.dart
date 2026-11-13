@@ -115,6 +115,8 @@ void main() {
     expect(bridge.updates, 1);
     expect(find.text('2026.11.01'), findsOneWidget);
     expect(find.text(t.mobileEngineUpToDate), findsOneWidget);
+    // The card says how the version stands, once there is something to say.
+    expect(find.text(t.mobileEngineUpdated), findsOneWidget);
   });
 
   testWidgets('a failed update says so', (tester) async {
@@ -125,6 +127,28 @@ void main() {
     await tester.tap(find.text(t.mobileEngineUpdate));
     await tester.pumpAndSettle();
     expect(find.text(t.mobileEngineUpdateFailed), findsOneWidget);
+    // **The guard**: a failed update is never shown as "updated".
+    expect(find.text(t.mobileEngineUpdateMissed), findsOneWidget);
+    expect(find.text(t.mobileEngineUpdated), findsNothing);
+  });
+
+  testWidgets('before any update the card claims nothing', (tester) async {
+    await tester.pumpWidget(host());
+    await tester.pumpAndSettle();
+    final t = l10n(tester);
+    expect(find.text(t.mobileEngineVersionLabel), findsOneWidget);
+    expect(find.byType(VhStatusPill), findsNothing);
+  });
+
+  testWidgets('the two actions share one shape: full width, one height', (
+    tester,
+  ) async {
+    await tester.pumpWidget(host());
+    await tester.pumpAndSettle();
+    final update = tester.getSize(find.byType(FilledButton));
+    final repair = tester.getSize(find.byType(OutlinedButton));
+    expect(update, repair);
+    expect(update.height, VhEmphasis.action);
   });
 
   testWidgets('the repair puts back a clean yt-dlp and names it', (

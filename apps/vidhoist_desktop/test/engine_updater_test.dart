@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vidhoist_desktop/platform/engine_locator.dart';
@@ -190,6 +193,46 @@ void main() {
         install: (asset) async {},
       );
       expect((await none.repair()).error, 'no yt-dlp to repair');
+    });
+  });
+
+  group('the fetch itself', () {
+    late HttpServer server;
+
+    /// Sends [chunks] blocks of 64KB with no length declared.
+    late int chunks;
+
+    setUp(() async {
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      server.listen((request) async {
+        final block = Uint8List(64 * 1024)..fillRange(0, 64 * 1024, 0x20);
+        try {
+          for (var i = 0; i < chunks; i++) {
+            request.response.add(block);
+            await request.response.flush();
+          }
+          await request.response.close();
+        } on Object {
+          // The app hung up, which is what the ceiling is for.
+        }
+      });
+    });
+    tearDown(() => server.close(force: true));
+
+    Uri here() => Uri.parse('http://127.0.0.1:${server.port}/latest');
+
+    test('**the guard**: an answer that never ends is cut at the ceiling, '
+        'not read into memory', () async {
+      chunks = httpGetCeiling ~/ (64 * 1024) + 4;
+      await expectLater(
+        EngineUpdater.httpText(here()),
+        throwsA(isA<HttpException>()),
+      );
+    });
+
+    test('an answer of an ordinary size is read whole', () async {
+      chunks = 2;
+      expect((await EngineUpdater.httpText(here())).length, 128 * 1024);
     });
   });
 }

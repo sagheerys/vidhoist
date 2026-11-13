@@ -7,6 +7,7 @@ export 'src/chapters.dart';
 export 'src/reading.dart';
 export 'src/search_text.dart';
 export 'src/spoken_language.dart';
+export 'src/subtitle_file.dart';
 export 'src/subtitle_parser.dart';
 export 'src/transcript.dart';
 export 'src/transcript_bundle.dart';

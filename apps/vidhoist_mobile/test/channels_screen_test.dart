@@ -164,6 +164,29 @@ void main() {
     expect(kept!.single.enabled, isFalse);
   });
 
+  testWidgets('**the guard**: scrolled to the end, the last card clears '
+      '"Follow a channel" above the navigation buttons', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(384, 823);
+    // The buttons are both padding and view padding, as on a device: the
+    // floating button stands above the latter.
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.reset);
+    final c = container();
+    await tester.runAsync(() => followSome(c));
+    await tester.pumpWidget(app(c));
+    await tester.pumpAndSettle();
+    // The list's end is its bottom padding above the screen's edge: the
+    // last card stops there once scrolled all the way.
+    final list = tester.widget<ListView>(find.byType(ListView));
+    final listEnd =
+        tester.getRect(find.byType(ListView)).bottom -
+        list.padding!.resolve(TextDirection.ltr).bottom;
+    final fab = tester.getRect(find.byType(FloatingActionButton));
+    expect(listEnd, lessThanOrEqualTo(fab.top));
+  });
+
   testWidgets('the card: its letter and name, no clips', (tester) async {
     final c = container();
     await tester.runAsync(() => followSome(c));

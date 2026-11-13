@@ -46,8 +46,11 @@ class StatsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.vhl;
     final stats = ref.watch(libraryStatsProvider);
-    return switch (stats) {
-      AsyncData(:final value) when value.count > 0 => LayoutBuilder(
+    // **The last figures stay while new ones are counted.** The library
+    // refreshes every few seconds, and a page swapped for a spinner each
+    // time threw a reader scrolled down back to the top.
+    return switch (stats.valueOrNull) {
+      final value? when value.count > 0 => LayoutBuilder(
         builder: (context, box) {
           final left = [_bySite(context, value), _byMonth(context, value)];
           final right = [
@@ -78,21 +81,21 @@ class StatsPage extends ConsumerWidget {
           );
         },
       ),
-      AsyncData() => Center(
+      _? => Center(
         child: VhEmptyFrame(
           title: l.noVideosFound,
           message: l.desktopEmptyLibraryMessage,
         ),
       ),
-      AsyncError(:final error) => Center(
+      null when stats.hasError => Center(
         child: VhEmptyFrame(
           title: l.failed,
-          message: l.errorGeneric('$error'),
+          message: l.errorGeneric('${stats.error}'),
           actionLabel: l.retry,
           onAction: () => ref.invalidate(libraryStatsProvider),
         ),
       ),
-      _ => const Center(child: VhSpinner()),
+      null => const Center(child: VhSpinner()),
     };
   }
 

@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import '../resolvers/http_fetch.dart';
 import 'pc_certificate.dart';
 import 'pc_link_wire.dart';
 
@@ -21,13 +22,15 @@ HttpClient pcPinnedClient(bool Function(String fp) accept, Duration timeout) =>
       ..badCertificateCallback = (cert, host, port) =>
           accept(fingerprintOf(cert.der));
 
-Future<Uint8List> pcReadBody(HttpClientResponse response) async {
-  final builder = BytesBuilder(copy: false);
-  await for (final chunk in response) {
-    builder.add(chunk);
-  }
-  return builder.takeBytes();
-}
+/// An answer from the computer, refused past [pcMaxAnswer]. The computer is
+/// pinned, but a broken or replaced one that kept sending would otherwise
+/// fill the phone's memory.
+Future<Uint8List> pcReadBody(HttpClientResponse response) =>
+    readCappedResponse(response, pcMaxAnswer);
+
+/// Far above any answer the computer gives: its answers are short JSON
+/// lists, and a ceiling this loose never cuts a real one.
+const int pcMaxAnswer = 16 * 1024 * 1024;
 
 /// The JSON in [body], or null for none or a malformed one.
 Object? pcDecodeJson(Uint8List body) {

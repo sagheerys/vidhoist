@@ -222,7 +222,14 @@ void main() {
   });
 
   group('the real player: the reported defect', () {
-    setUp(() => VideoPlayerPlatform.instance = FakeVideoPlatform());
+    // A phone held upright, unless a test holds it otherwise.
+    late Stream<String> Function() sensor;
+    setUp(() {
+      VideoPlayerPlatform.instance = FakeVideoPlatform();
+      sensor = VhOrientation.physical;
+      VhOrientation.physical = () => Stream.value('portrait');
+    });
+    tearDown(() => VhOrientation.physical = sensor);
 
     VhVideoSession newSession() {
       final store = MemoryKeyValueStore();
@@ -335,6 +342,63 @@ void main() {
       opened.$1.currentState!.pop();
       await settle(tester);
       // Leaving gives rotation back to the player, as for landscape.
+      expect(locks.last, predicate<List<String>>(isFree));
+      await closeAll(tester, opened);
+    });
+
+    // Left with the button while the phone was still held sideways, the
+    // portrait page lay on its side until the phone was turned by hand.
+    testWidgets('**the guard**: leaving full screen stands the player upright, '
+        'and rotation comes back once the phone is held upright', (
+      tester,
+    ) async {
+      final held = StreamController<String>.broadcast();
+      VhOrientation.physical = () => held.stream;
+      addTearDown(() => unawaited(held.close()));
+      final opened = await openFullscreen(tester, const Size(1920, 1080));
+      expect(locks.last, predicate<List<String>>(isLandscapeLock));
+
+      opened.$1.currentState!.pop();
+      await tester.pump();
+      expect(locks.last, predicate<List<String>>(isPortraitLock));
+
+      // Still sideways in the hand: it stays upright.
+      held.add('landscape');
+      await settle(tester);
+      expect(locks.last, predicate<List<String>>(isPortraitLock));
+
+      // Turned upright: a later tilt may open full screen again.
+      held.add('portrait');
+      await settle(tester);
+      expect(locks.last, predicate<List<String>>(isFree));
+
+      // Leaving the player puts the app's own lock back, and an old reading
+      // does not undo it.
+      final count = locks.length;
+      opened.$1.currentState!.popUntil((route) => route.isFirst);
+      await settle(tester);
+      held.add('portrait');
+      await settle(tester);
+      expect(locks.skip(count).last, predicate<List<String>>(isPortraitLock));
+      await tester.pump(const Duration(seconds: 10));
+      await tester.runAsync(opened.$2.dispose);
+    });
+
+    // The desktop and a phone without the native side have nothing on the
+    // channel: rotation must come back rather than stay pinned upright.
+    testWidgets('with nothing on the sensor channel, leaving full screen '
+        'gives rotation back', (tester) async {
+      VhOrientation.physical = sensor;
+      final opened = await openFullscreen(tester, const Size(1920, 1080));
+      opened.$1.currentState!.pop();
+      // The engine's "nobody here" answers outside the test's clock.
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 20)),
+        );
+      }
+      await settle(tester);
       expect(locks.last, predicate<List<String>>(isFree));
       await closeAll(tester, opened);
     });

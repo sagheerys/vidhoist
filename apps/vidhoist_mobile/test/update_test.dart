@@ -20,7 +20,7 @@ import 'device_matrix.dart';
 /// The core is tested in `vh_core/test/update`; what is tested here belongs
 /// to the app: the silent policy, skipping a version, and what the settings
 /// row displays.
-String releaseJson({String tag = 'v9.9.9'}) => json.encode({
+String releaseJson({String tag = 'v9.9.9', String? digest}) => json.encode({
   'tag_name': tag,
   'draft': false,
   'prerelease': false,
@@ -32,6 +32,7 @@ String releaseJson({String tag = 'v9.9.9'}) => json.encode({
       'browser_download_url':
           'https://github.com/x/y/releases/download/v1/app.apk',
       'size': 12582912,
+      'digest': ?digest,
     },
   ],
 });
@@ -196,6 +197,22 @@ void main() {
     expect(c.read(updateControllerProvider).phase, UpdatePhase.idle);
   });
 
+  test('**the guard**: the APK is checked against the hash GitHub lists '
+      'for it', () async {
+    // The phone installs the file as it is; without the hash, one altered
+    // on the way keeps its ZIP signature and its size and passes.
+    final hash = 'ab' * 32;
+    final recorder = _RecordingDownloader();
+    final c = container(
+      body: releaseJson(digest: 'sha256:${hash.toUpperCase()}'),
+      downloader: recorder,
+    );
+    await c.read(updateControllerProvider.notifier).checkSilently();
+    await c.read(updateControllerProvider.notifier).download();
+    expect(recorder.hashes, [hash]);
+    expect(c.read(updateControllerProvider).phase, UpdatePhase.ready);
+  });
+
   group('sweeping the update file', () {
     File apkFile() => File('${cacheDir.path}/${VhConstants.updateApkFileName}');
 
@@ -315,7 +332,13 @@ void main() {
       await tester.pumpAndSettle();
       final l10n = tester.element(find.byType(UpdateSheet)).vhl;
 
-      expect(find.text(l10n.updateVersionAvailable('9.9.9')), findsOneWidget);
+      // The version is the sheet's one large figure; a screen reader still
+      // hears the whole sentence.
+      expect(find.text('9.9.9'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel(l10n.updateVersionAvailable('9.9.9')),
+        findsOneWidget,
+      );
       // 12582912 bytes is exactly 12.0 MB: the size is displayed, not
       // guessed.
       expect(find.text(l10n.updateSizeMb('12.0')), findsOneWidget);
@@ -361,6 +384,18 @@ void main() {
         // **The guard**: the colour comes from the palette; Material's
         // default track comes out greenish over the app's cream ground.
         expect(bar.valueColor!.value, VhThemeX.of(context).palette.accent);
+        // The percent is the one number, with how much of the size is in.
+        expect(find.text('42%'), findsOneWidget);
+        expect(
+          find.text(
+            '${l10n.updateDownloading} ${l10n.updateDownloadedMb('5.0', '12.0')}',
+          ),
+          findsOneWidget,
+        );
+        // The title names the version; the version figure and the notes
+        // step aside so the two numbers do not compete.
+        expect(find.text(l10n.updateVersionTitle('9.9.9')), findsOneWidget);
+        expect(find.text('9.9.9'), findsNothing);
         expect(find.text(l10n.cancel), findsOneWidget);
         expect(find.text(l10n.updateNow), findsNothing);
       },
@@ -385,11 +420,31 @@ class _StuckDownloader extends ApkDownloader {
     required String url,
     required String savePath,
     int expectedSize = 0,
+    String? sha256,
     void Function(double progress)? onProgress,
     DownloadCancelToken? cancel,
   }) {
     onProgress?.call(0.42);
     return Completer<String>().future;
+  }
+}
+
+/// A download that succeeds at once and keeps the hash it was asked to
+/// check.
+class _RecordingDownloader extends ApkDownloader {
+  final hashes = <String?>[];
+
+  @override
+  Future<String> download({
+    required String url,
+    required String savePath,
+    int expectedSize = 0,
+    String? sha256,
+    void Function(double progress)? onProgress,
+    DownloadCancelToken? cancel,
+  }) async {
+    hashes.add(sha256);
+    return savePath;
   }
 }
 

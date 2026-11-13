@@ -7,6 +7,7 @@ import '../models/history_item.dart';
 import '../models/history_response.dart';
 import '../models/quality.dart';
 import 'key_value_store.dart';
+import 'library_recovery.dart';
 
 /// One finished download, as kept on this device.
 class LocalHistoryEntry {
@@ -76,6 +77,43 @@ class LocalHistoryStore {
     await _write(records);
     return _entry(json);
   });
+
+  /// Records files found already in the download folder
+  /// ([LibraryRecovery]), each with the fields a download records, so the
+  /// library, its playlists and the resume positions read them as any
+  /// other. Returns how many were added.
+  Future<int> recordRecovered(List<RecoveredFile> files) =>
+      _mutex.run(() async {
+        if (files.isEmpty) return 0;
+        final records = await _read();
+        final have = {for (final r in records) r['path']};
+        var added = 0;
+        for (final f in files) {
+          if (have.contains(f.path)) continue;
+          records.add(
+            <String, Object?>{
+              'id': 'recovered:${f.path}',
+              'url': f.url,
+              'title': f.title,
+              'filename': _basename(f.path),
+              'uploader': f.uploader,
+              'thumbnail': f.thumbnail,
+              'status': 'finished',
+              'timestamp': f.modified.millisecondsSinceEpoch,
+              'quality': f.isAudio ? Quality.audio.wire : Quality.best.wire,
+              'format': _extension(f.path),
+              'size': f.sizeBytes,
+              'download_type': f.isAudio ? 'audio' : 'video',
+              'folder': f.folder,
+              'path': f.path,
+              'info_json': f.infoJsonPath,
+            }..removeWhere((_, v) => v == null),
+          );
+          added++;
+        }
+        if (added > 0) await _write(records);
+        return added;
+      });
 
   /// Every record, newest first.
   Future<List<LocalHistoryEntry>> entries() async {

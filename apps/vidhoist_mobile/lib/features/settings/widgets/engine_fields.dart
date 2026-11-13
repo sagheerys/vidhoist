@@ -12,6 +12,11 @@ import 'settings_fields.dart';
 /// breaks old builds within months,
 /// `docs/ENGINE.md` finding 12), a repair for when that is not enough
 /// (plan item R5), and IPv4.
+///
+/// **The version is the news, so it comes first and largest** (design round
+/// 2026-11-11), in a card with how it stands. Under it the two actions in
+/// one shape, full width: the filled one for the update, the outlined one
+/// for the repair, whose explanation sits under the button it explains.
 class EngineFields extends ConsumerStatefulWidget {
   const EngineFields({super.key});
 
@@ -27,58 +32,65 @@ class _EngineFieldsState extends ConsumerState<EngineFields> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.vhl;
+    final x = VhThemeX.of(context);
+    final p = x.palette;
     final text = Theme.of(context).textTheme;
     final settings = ref.watch(settingsProvider);
+    final preparer = ref.read(enginePreparerProvider);
     final status =
-        ref.watch(engineStatusProvider).valueOrNull ??
-        ref.read(enginePreparerProvider).status;
+        ref.watch(engineStatusProvider).valueOrNull ?? preparer.status;
     final busy = status.isBusy;
+    const action = Size.fromHeight(VhEmphasis.action);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: const VhIcon(VhIcons.bolt),
-          title: const Text('yt-dlp'),
-          subtitle: Text(
-            status.version?.toString() ?? l10n.mobileEngineVersionUnknown,
-            textDirection: status.version == null ? null : TextDirection.ltr,
-            style: text.bodySmall,
+        _Card(
+          child: _Version(status: status, updateEvery: preparer.updateEvery),
+        ),
+        const SizedBox(height: VhSpace.md),
+        FilledButton.icon(
+          style: FilledButton.styleFrom(minimumSize: action),
+          onPressed: busy ? null : () => unawaited(_update(context)),
+          icon: const VhIcon(VhIcons.refresh, size: 20),
+          label: Text(
+            busy && !_repairing
+                ? l10n.mobileEngineUpdating
+                : l10n.mobileEngineUpdate,
           ),
         ),
-        if (status.updatedAt case final at?)
-          Text(
-            l10n.mobileEngineLastUpdate(vhTimeAgo(context, at)),
-            style: text.bodySmall,
-          ),
         const SizedBox(height: VhSpace.sm),
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: FilledButton.tonal(
-            onPressed: busy ? null : () => unawaited(_update(context)),
-            child: Text(
-              busy && !_repairing
-                  ? l10n.mobileEngineUpdating
-                  : l10n.mobileEngineUpdate,
+        OutlinedButton.icon(
+          // The second action in the first one's shape, in the ink: the
+          // accent stays with the update alone.
+          style: OutlinedButton.styleFrom(
+            minimumSize: action,
+            foregroundColor: p.ink,
+            side: BorderSide(color: p.line2, width: x.hairline),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(VhRadius.field),
             ),
+            textStyle: text.labelLarge,
           ),
+          onPressed: busy ? null : () => unawaited(_repair(context)),
+          icon: const VhIcon(VhIcons.bolt, size: 20),
+          label: Text(_repairing ? l10n.engineRepairing : l10n.engineRepair),
         ),
-        const SizedBox(height: VhSpace.md),
-        Text(l10n.engineRepairHint, style: text.bodySmall),
         const SizedBox(height: VhSpace.xs),
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: OutlinedButton(
-            onPressed: busy ? null : () => unawaited(_repair(context)),
-            child: Text(_repairing ? l10n.engineRepairing : l10n.engineRepair),
+        Text(
+          l10n.engineRepairHint,
+          style: text.bodySmall?.copyWith(
+            color: p.ink2,
+            fontSize: VhEmphasis.explain,
           ),
         ),
         const SizedBox(height: VhSpace.md),
-        SettingsSwitchTile(
-          title: l10n.mobileEngineIpv4,
-          subtitle: l10n.mobileEngineIpv4Help,
-          value: settings.forceIpv4,
-          onChanged: ref.read(settingsProvider.notifier).setForceIpv4,
+        _Card(
+          child: SettingsSwitchTile(
+            title: l10n.mobileEngineIpv4,
+            subtitle: l10n.mobileEngineIpv4Help,
+            value: settings.forceIpv4,
+            onChanged: ref.read(settingsProvider.notifier).setForceIpv4,
+          ),
         ),
       ],
     );
@@ -114,6 +126,92 @@ class _EngineFieldsState extends ConsumerState<EngineFields> {
       messenger,
       ok ? l10n.mobileEngineUpToDate : l10n.mobileEngineUpdateFailed,
       type: ok ? VhSnackType.success : VhSnackType.error,
+    );
+  }
+}
+
+/// A white card on the page's ground, as the settings home groups its rows.
+class _Card extends StatelessWidget {
+  const _Card({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final x = VhThemeX.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: x.palette.card,
+        borderRadius: BorderRadius.circular(VhRadius.card),
+        border: Border.all(color: x.palette.line, width: x.hairline),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: VhSpace.lg,
+          vertical: VhSpace.md,
+        ),
+        // A tile paints its ink on the nearest Material: its own here, so
+        // the switch row's press stays inside the card.
+        child: Material(type: MaterialType.transparency, child: child),
+      ),
+    );
+  }
+}
+
+/// yt-dlp's version as the page's one figure, with how it stands beside
+/// its label and when it was last updated beneath.
+class _Version extends StatelessWidget {
+  const _Version({required this.status, required this.updateEvery});
+
+  final EngineStatus status;
+
+  /// How often the app updates yt-dlp by itself: an update older than this
+  /// is no longer called "updated".
+  final Duration updateEvery;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.vhl;
+    final p = VhThemeX.of(context).palette;
+    final text = Theme.of(context).textTheme;
+    final quiet = text.bodySmall?.copyWith(
+      color: p.ink2,
+      fontSize: VhEmphasis.explain,
+    );
+    final at = status.updatedAt;
+    // **Only what the app knows**: "updated" means the last update worked
+    // and is within the app's own weekly round, not that no newer yt-dlp
+    // exists this minute.
+    final fresh =
+        at != null &&
+        !status.updateFailed &&
+        DateTime.now().difference(at) < updateEvery;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(child: Text(l10n.mobileEngineVersionLabel, style: quiet)),
+            if (status.updateFailed)
+              VhStatusPill(label: l10n.mobileEngineUpdateMissed, good: false)
+            else if (fresh)
+              VhStatusPill(label: l10n.mobileEngineUpdated, good: true),
+          ],
+        ),
+        const SizedBox(height: VhSpace.xxs),
+        if (status.version case final version?)
+          VhFigure(version.toString(), size: VhEmphasis.figureInCard)
+        else
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),
+            child: Text(l10n.mobileEngineVersionUnknown, style: text.bodyLarge),
+          ),
+        if (at != null)
+          Text(
+            l10n.mobileEngineLastUpdate(vhTimeAgo(context, at)),
+            style: quiet,
+          ),
+      ],
     );
   }
 }

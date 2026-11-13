@@ -70,11 +70,92 @@ abstract final class VhOrientation {
     DeviceOrientation.landscapeRight,
   ];
 
-  static Future<void> lockPortrait() =>
-      SystemChrome.setPreferredOrientations(portrait);
-  static Future<void> lockLandscape() =>
-      SystemChrome.setPreferredOrientations(landscape);
-  static Future<void> allow() => SystemChrome.setPreferredOrientations(free);
+  static Future<void> lockPortrait() {
+    _stopWaiting();
+    return SystemChrome.setPreferredOrientations(portrait);
+  }
+
+  static Future<void> lockLandscape() {
+    _stopWaiting();
+    return SystemChrome.setPreferredOrientations(landscape);
+  }
+
+  static Future<void> allow() {
+    _stopWaiting();
+    return SystemChrome.setPreferredOrientations(free);
+  }
+
+  /// **Leaving full screen stands the player upright at once**, as YouTube
+  /// does, and gives rotation back only once the phone itself is held
+  /// upright. Given back at once, a phone still held sideways kept the
+  /// portrait page lying on its side until it was turned by hand. Given
+  /// back never, a tilt would no longer open full screen.
+  ///
+  /// A phone that cannot tell how it is held (and the desktop, and tests,
+  /// where nothing answers on the channel) gets rotation back at once, as
+  /// before: never pinned to portrait.
+  static Future<void> afterFullscreen() async {
+    if (largeScreen) return allow();
+    await lockPortrait();
+    _waiting = physical().listen(
+      (held) {
+        if (held == 'portrait') unawaited(allow());
+      },
+      onError: (Object _) => unawaited(allow()),
+      cancelOnError: true,
+    );
+  }
+
+  /// How the phone is held, from its motion sensor: "portrait" or
+  /// "landscape". Replaced in tests.
+  static Stream<String> Function() physical = _sensor;
+
+  /// The event channel's protocol by hand, rather than `EventChannel`:
+  /// that one reports a missing native side as an app error, where here it
+  /// is only a device that cannot tell, an error on the stream.
+  static Stream<String> _sensor() {
+    const name = 'vh/orientation';
+    const codec = StandardMethodCodec();
+    const control = MethodChannel(name);
+    final messenger = ServicesBinding.instance.defaultBinaryMessenger;
+    late final StreamController<String> readings;
+    readings = StreamController<String>(
+      onListen: () async {
+        messenger.setMessageHandler(name, (data) async {
+          if (data == null) return null;
+          try {
+            readings.add(codec.decodeEnvelope(data) as String);
+          } on PlatformException catch (e) {
+            readings.addError(e);
+          }
+          return null;
+        });
+        try {
+          await control.invokeMethod<void>('listen');
+        } on Object catch (e) {
+          messenger.setMessageHandler(name, null);
+          readings.addError(e);
+        }
+      },
+      onCancel: () async {
+        messenger.setMessageHandler(name, null);
+        try {
+          await control.invokeMethod<void>('cancel');
+        } on Object {
+          // Nothing listens on the other side: nothing to stop.
+        }
+      },
+    );
+    return readings.stream;
+  }
+
+  static StreamSubscription<String>? _waiting;
+
+  /// Any decision taken since replaces the wait for an upright phone.
+  static void _stopWaiting() {
+    unawaited(_waiting?.cancel());
+    _waiting = null;
+  }
 }
 
 /// **The rotation scope around the portrait player**: it unlocks portrait

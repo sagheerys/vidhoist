@@ -59,6 +59,9 @@ void main() {
         ItemChoice.copyLink,
         ItemChoice.copyFile,
         ItemChoice.showInFolder,
+        // Another player of the user's choice, for the file on this
+        // computer.
+        ItemChoice.openWith,
         ItemChoice.openOriginal,
         ItemChoice.addToList,
         ItemChoice.tags,

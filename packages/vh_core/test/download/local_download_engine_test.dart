@@ -616,4 +616,67 @@ void main() {
       },
     );
   });
+
+  group('a task waiting its turn', () {
+    test(
+      'a YouTube link shows its cover before yt-dlp has looked at it',
+      () async {
+        // Only the clip being downloaded had a picture; the rest of the queue
+        // was a column of blanks.
+        final h = Harness(backend: FakeBackend(hold: true));
+        final first = h.engine.submit(other, Quality.best);
+        final task = h.engine.submit(
+          'look https://youtu.be/dQw4w9WgXcQ',
+          Quality.best,
+          isBatchMember: true,
+        );
+        expect(
+          task.thumbnail,
+          'https://i.ytimg.com/vi/dQw4w9WgXcQ/mqdefault.jpg',
+        );
+        expect(first.thumbnail, isNull);
+        h.engine.cancel(first.id);
+        h.engine.cancel(task.id);
+      },
+    );
+
+    test(
+      "the probe's cover replaces it, and a probe without one keeps it",
+      () async {
+        final h = Harness(
+          backend: FakeBackend(
+            scripts: {
+              yt: const FakeScript(
+                info: {
+                  'id': 'aqz-KE-bpKQ',
+                  'title': 't',
+                  'webpage_url': yt,
+                  'thumbnail': 'https://i.ytimg.com/vi/aqz-KE-bpKQ/maxres.jpg',
+                },
+              ),
+            },
+          ),
+        );
+        final probed = h.engine.submit(yt, Quality.best);
+        expect(
+          (await h.until(probed.id, TaskPhase.completed)).thumbnail,
+          'https://i.ytimg.com/vi/aqz-KE-bpKQ/maxres.jpg',
+        );
+        const bare = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+        final kept = h.engine.submit(bare, Quality.best);
+        expect(
+          (await h.until(kept.id, TaskPhase.completed)).thumbnail,
+          LocalDownloadEngine.waitingCover(bare),
+        );
+      },
+    );
+
+    test('any other site invents nothing and waits for the probe', () {
+      expect(
+        LocalDownloadEngine.waitingCover('https://www.tiktok.com/@a/video/1'),
+        isNull,
+      );
+      expect(LocalDownloadEngine.waitingCover(other), isNull);
+    });
+  });
 }

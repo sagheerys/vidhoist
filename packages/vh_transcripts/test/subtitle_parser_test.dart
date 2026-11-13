@@ -30,6 +30,91 @@ void main() {
     expect(segments, hasLength(1));
   });
 
+  test('cues out of order are put in order; broken timings are dropped', () {
+    // A file listing its cues backwards, or with ends before starts, fed
+    // search, chapters and the line under the picture nonsense.
+    const srt = """
+1
+00:00:20,000 --> 00:00:22,000
+third
+
+2
+00:00:00,000 --> 00:00:02,000
+first
+
+3
+00:00:10,000 --> 00:00:12,000
+second
+
+4
+00:00:30,000 --> 00:00:25,000
+backwards
+
+5
+1000:00:00,000 --> 1000:00:01,000
+a thousand hours in
+""";
+    final segments = SubtitleParser.parse(srt);
+    expect(segments.map((s) => s.text), ['first', 'second', 'third']);
+  });
+
+  test('cues that start together keep the order the file gave them', () {
+    const srt =
+        '1\n00:00:05,000 --> 00:00:06,000\nlater\n\n'
+        '2\n00:00:01,000 --> 00:00:02,000\none\n\n'
+        '3\n00:00:01,000 --> 00:00:03,000\ntwo\n';
+    expect(SubtitleParser.parse(srt).map((s) => s.text), [
+      'one',
+      'two',
+      'later',
+    ]);
+  });
+
+  test('a large file read on another thread reads the same', () async {
+    // The library backfill read every clip's subtitles on the thread that
+    // draws the app.
+    final srt = StringBuffer();
+    String t(int x) =>
+        '00:${(x ~/ 60 % 60).toString().padLeft(2, '0')}:'
+        '${(x % 60).toString().padLeft(2, '0')},000';
+    for (var i = 0; i < 3000; i++) {
+      final s = i * 2;
+      srt.write('${i + 1}\n${t(s)} --> ${t(s + 1)}\nline number $i\n\n');
+    }
+    final text = srt.toString();
+    expect(text.length, greaterThan(SubtitleParser.awayFrom));
+    final away = await SubtitleParser.parseAway(text);
+    final here = SubtitleParser.parse(text);
+    expect(away.length, here.length);
+    expect(away.last.text, here.last.text);
+    expect(away.last.start, here.last.start);
+  });
+
+  group('a subtitle file on disk', () {
+    late Directory dir;
+    setUp(() => dir = Directory.systemTemp.createTempSync('vh_subs_'));
+    tearDown(() => dir.deleteSync(recursive: true));
+
+    test('is read into cues', () async {
+      final file = File('${dir.path}/a.en.srt')
+        ..writeAsStringSync('1\n00:00:01,000 --> 00:00:02,000\nhello\n');
+      expect((await readSubtitleFile(file)).single.text, 'hello');
+    });
+
+    test('**the guard**: one past the ceiling is skipped unread', () async {
+      // A file anyone with write access to the downloads folder can leave
+      // beside a clip; read whole it sat in memory several times over.
+      final file = File('${dir.path}/a.en.srt');
+      final sink = file.openSync(mode: FileMode.write)
+        ..writeStringSync('1\n00:00:01,000 --> 00:00:02,000\nhello\n');
+      sink
+        ..setPositionSync(maxSubtitleFileBytes)
+        ..writeStringSync('\n')
+        ..closeSync();
+      expect(await readSubtitleFile(file), isEmpty);
+    });
+  });
+
   test('tags are still taken out around stray brackets', () {
     const vtt =
         'WEBVTT\n\n00:01.000 --> 00:02.000\n'

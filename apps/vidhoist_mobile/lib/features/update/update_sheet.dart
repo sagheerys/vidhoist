@@ -15,6 +15,9 @@ void showUpdateSheet(BuildContext context) {
   );
 }
 
+/// **One number first** (design round 2026-11-11): the sheet leads with the
+/// one figure it is about, the version on offer, then the percent while it
+/// downloads ([VhFigure]).
 class UpdateSheet extends ConsumerWidget {
   const UpdateSheet({super.key});
 
@@ -27,6 +30,12 @@ class UpdateSheet extends ConsumerWidget {
     final release = state.release;
 
     if (release == null) return const SizedBox.shrink();
+
+    final version = release.version.toString();
+    // While it downloads, the percent is the one number: the title names
+    // the version and the notes step aside, so the two figures never
+    // compete.
+    final downloading = state.phase == UpdatePhase.downloading;
 
     return ConstrainedBox(
       // **The sheet's ceiling is a fraction of the screen, not a fixed
@@ -65,25 +74,31 @@ class UpdateSheet extends ConsumerWidget {
                         const SizedBox(width: VhSpace.sm),
                         Expanded(
                           child: Text(
-                            l10n.updateAvailable,
+                            downloading
+                                ? l10n.updateVersionTitle(version)
+                                : l10n.updateAvailable,
                             style: text.titleMedium,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: VhSpace.xs),
-                    Text(
-                      l10n.updateVersionAvailable(release.version.toString()),
-                      style: text.bodyMedium!.copyWith(color: p.ink2),
-                    ),
-                    if (release.sizeMb != null) ...[
-                      const SizedBox(height: VhSpace.xxs),
-                      Text(
-                        l10n.updateSizeMb(release.sizeMb!.toStringAsFixed(1)),
-                        style: text.bodySmall!.copyWith(color: p.ink3),
+                    if (!downloading) ...[
+                      const SizedBox(height: VhSpace.lg),
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: VhFigure(
+                          version,
+                          size: VhEmphasis.figureInCard,
+                          semanticsLabel: l10n.updateVersionAvailable(version),
+                        ),
                       ),
+                      if (release.sizeMb != null)
+                        Text(
+                          l10n.updateSizeMb(release.sizeMb!.toStringAsFixed(1)),
+                          style: text.bodySmall!.copyWith(color: p.ink3),
+                        ),
                     ],
-                    if (release.notes.trim().isNotEmpty) ...[
+                    if (!downloading && release.notes.trim().isNotEmpty) ...[
                       const SizedBox(height: VhSpace.lg),
                       VhSectionHeader(title: l10n.updateWhatsNew),
                       const SizedBox(height: VhSpace.xs),
@@ -152,20 +167,32 @@ class _Actions extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final controller = ref.read(updateControllerProvider.notifier);
 
+    final mainAction = FilledButton.styleFrom(
+      minimumSize: const Size.fromHeight(VhEmphasis.action),
+    );
+
     if (state.phase == UpdatePhase.downloading) {
+      final percent = (state.progress * 100).floor().clamp(0, 100);
+      final sizeMb = state.release?.sizeMb;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: VhFigure('$percent', unit: '%', semanticsLabel: '$percent%'),
+          ),
           Text(
-            l10n.updateDownloading,
+            sizeMb == null
+                ? l10n.updateDownloading
+                : '${l10n.updateDownloading} ${l10n.updateDownloadedMb((sizeMb * state.progress).toStringAsFixed(1), sizeMb.toStringAsFixed(1))}',
             style: text.bodySmall!.copyWith(color: p.ink2),
           ),
-          const SizedBox(height: VhSpace.sm),
+          const SizedBox(height: VhSpace.lg),
           ClipRRect(
             borderRadius: BorderRadius.circular(VhRadius.pill),
             child: LinearProgressIndicator(
               value: state.progress,
-              minHeight: 7,
+              minHeight: 8,
               // **Both colours come from the palette explicitly**:
               // Material's default track is derived from
               // `secondaryContainer` and comes out greenish over the app's
@@ -189,6 +216,7 @@ class _Actions extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FilledButton.icon(
+            style: mainAction,
             onPressed: () => _install(context, ref),
             icon: const VhIcon(VhIcons.offline, size: 18),
             label: Text(l10n.updateInstall),
@@ -221,6 +249,7 @@ class _Actions extends ConsumerWidget {
           const SizedBox(height: VhSpace.sm),
         ],
         FilledButton.icon(
+          style: mainAction,
           onPressed: controller.download,
           icon: const VhIcon(VhIcons.download, size: 18),
           label: Text(l10n.updateNow),

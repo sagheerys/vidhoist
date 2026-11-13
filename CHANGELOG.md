@@ -136,8 +136,82 @@ All notable changes to VidHoist. The format follows
   on "Let the phone delete clips" on Windows (off, and left out of
   backups): it goes to the computer's Recycle Bin after a confirmation
   naming the computer, and a drive with no Recycle Bin is left alone.
+- Copy a clip's title: select it in the clip's details on the phone and in
+  the player's info sheet, and on the clip's page and in the details panel
+  on Windows.
+- YouTube clips waiting their turn in the download queue show their cover
+  instead of a blank, until yt-dlp brings its own.
+- A slimmer video bar on the phone: under the video and in full screen the
+  time and buttons sit in one row, with a thin progress bar along the
+  bottom edge, so less of the picture and its subtitles is covered.
+- On Windows, the floating window can be made larger: drag its edges to
+  grow the picture, keeping its shape, up to half the screen.
+- On Windows, the search in the title bar grows into the search in its own
+  place instead of a separate box appearing at the top of the window.
+- On Windows, "Open in another player…" in a clip's right-click menu opens
+  it in VLC or any player installed.
+- Sharing several links to the phone at once asks first ("Add 7 links?"),
+  and takes at most 50 from one share; a single link works as before.
+- A phone reinstalled with VidHoist downloads but no settings offers, once,
+  to choose a backup with the system's file picker: Android hides the old
+  install's backup files from the new one, so the restore it offered never
+  appeared.
 
 ### Fixed
+- **The last clip in a batch download could not be unticked** on the
+  phone: the "Download selected" button covered its checkbox. The list now
+  scrolls clear of it, and the followed-channels list clear of its button.
+- Leaving full screen stands the player upright at once, even while the
+  phone is still held sideways; turning it sideways opens full screen again
+  once it has been held upright.
+- A pause before the share menu with a large file: a line now says the
+  share menu is being opened instead of the app seeming to freeze.
+- Download errors cut short: tap a failed download's reason to read all of
+  it, on both apps.
+- On Windows, library statistics no longer flicker and jump to the top each
+  time the library refreshes.
+- Pictures in "What's new" showed as a stray `!` and their caption; they
+  are left out of the sheet.
+- Confirmation dialogs at the largest text size scroll their words instead
+  of pushing the buttons off a small screen.
+- Long subtitle files are read off the main thread; subtitle files with
+  broken timings are put in order or skipped, and transcript search stays
+  quick on a file whose lines all share one time.
+- On Windows, the "Start with Windows" entry quotes the program's path, and
+  an unquoted entry left by an earlier version is written again.
+- **On Windows, an uninstall that deleted the app's data took the backups
+  with it** (owner's report, 2026-11-12): the library list and the
+  followed channels were gone and no backup was left to restore. Backups
+  now live in `Downloads\VidHoist\Backups`, beside the downloads, as the
+  phone's do; those in the old place are carried over at the next start.
+  The uninstaller's question now names everything it deletes and says the
+  backups stay.
+- On Windows, a backup of the computer itself, chosen or dropped, is
+  restored whole after asking (library and channels included). It used to
+  be merged like a phone's, which brought back the playlists alone.
+- On Windows, the first start after an install offers the newest backup
+  when there is one, before the welcome: restored, the library, followed
+  channels, playlists, tags and settings come back in one answer. No
+  automatic backup is written until that first start is settled, so an
+  empty install never becomes the newest copy.
+- On Windows, the saved transcripts are kept beside the backups
+  (`Backups\transcripts.json`) and come back with every restore; they are
+  files of their own, which the backup itself never carried.
+- Settings › Transcripts on Windows no longer has an Import and Export of
+  its own beside Backup's: it took a computer's full backup too and offered
+  to restore everything. Transcripts now move to and from a phone under
+  Backup alone, and the pane links there ("Open Backup"). Backup's import is
+  titled for what it takes ("Import a backup or transcripts…"), and its
+  "Export for the phone" carries the transcripts. "Delete all" also removes
+  the copy beside the backups, so a later restore no longer brings back
+  what was deleted.
+- Settings › Backup on Windows can put back in the library the clips
+  already in the downloads folder ("Clips already in the folder"): after a
+  reinstall the files were all there, but unlisted. A clip's link comes from
+  the `.info.json` beside it, a playlist that names the file, or the YouTube
+  id in its name; a file whose link cannot be told is left out and counted.
+- The Windows installer tells Explorer the icons changed, so a desktop
+  shortcut shows the new mark too, not only the Start menu.
 - The player's "Next" list, the mini player and the media notification
   show the covers the computer keeps for its clips (owner's report,
   2026-11-10): they come through the phone's local proxy.
@@ -173,6 +247,24 @@ All notable changes to VidHoist. The format follows
   the phone app has; the filter never matched the Windows app before.
 
 ### Changed
+- A new mark: a strip of film folded into the letter V, its front arm
+  carrying four perforations, the back arm in the accent, with a clear gap
+  along the fold. It replaces the window with the download arrow on the
+  phone's launcher (themed icon included), the Windows icon, the tray, the
+  title bar, About, the installer and the brand files. Still generated by
+  `tool/icons/vidhoist_kit.py`; the boards the owner chose from are in
+  `docs/design/mockups-2026-11-11-logo*`.
+- On the phone, Settings › Accounts puts each site's sign-in at the end of
+  its row, in the soft accent, so the six sites and "clear all" fit one
+  screen; the button drops under the name only when the row is too narrow.
+  The update sheet leads with the version as one large figure, and while it
+  downloads shows the percent and how much of the size is in.
+- On the phone, Settings › Download engine shows yt-dlp's version as the
+  page's one large figure, in a card that says how it stands ("Updated"
+  while the last update worked and is within the app's weekly round,
+  "Update failed" when it did not). The update and the repair are two
+  buttons of one shape, full width, and the repair's explanation sits under
+  the button it explains.
 - Deleting a clip on Windows puts its file in the Recycle Bin instead of
   deleting it for good, so a slip can be undone; on a drive with no
   Recycle Bin it is deleted as before.
@@ -203,6 +295,17 @@ All notable changes to VidHoist. The format follows
   the phone. Each device keeps its own library, so there was little
   for it to carry; a backup moves channels, lists, tags and settings
   from one device to the other.
+
+### Security
+- **Updates are checked against GitHub's own fingerprint.** The downloaded
+  APK or Windows installer must match the SHA-256 GitHub records for it,
+  or it is not installed. Both apps.
+- Answers read from the network stop at a ceiling (5 MB for pages and
+  release notes, more for YouTube's playlist answers and the paired
+  computer's), so an endless answer cannot fill the device's memory; a
+  subtitle file over 5 MB is skipped.
+- Shared logs hide more: IPv6 addresses, `C:/` paths written with either
+  slash, and host names in the Windows player's lines.
 
 ## [1.0.0] - 2026-11-07
 

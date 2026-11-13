@@ -14,7 +14,8 @@ import 'shell_state.dart';
 import 'video_surface.dart';
 import 'window_controls.dart';
 
-/// The small card's two sizes: sound alone, and a picture at 16:9.
+/// The small card's two sizes: sound alone, and a picture at 16:9. The
+/// picture is where it starts: its edges stretch it up to half the screen.
 abstract final class DesktopMiniSize {
   static const audio = Size(360, 96);
   static const video = Size(360, 203);
@@ -52,7 +53,10 @@ void toggleMiniWindow(WidgetRef ref, GoRouter router) {
     ref.read(playerProvider).state,
     audioOnly: ref.read(audioOnlyProvider),
   );
-  controls.setMini(picture ? DesktopMiniSize.video : DesktopMiniSize.audio);
+  controls.setMini(
+    picture ? DesktopMiniSize.video : DesktopMiniSize.audio,
+    stretch: picture,
+  );
 }
 
 /// Whether the card shows a picture: a video playing with its picture on.
@@ -91,7 +95,9 @@ class _DesktopMiniWindowState extends ConsumerState<DesktopMiniWindow> {
     if (size == _asked) return;
     _asked = size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && widget.controls.mini.value) widget.controls.setMini(size);
+      if (mounted && widget.controls.mini.value) {
+        widget.controls.setMini(size, stretch: size == DesktopMiniSize.video);
+      }
     });
   }
 

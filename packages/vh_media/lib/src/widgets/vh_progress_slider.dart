@@ -17,6 +17,8 @@ class VhProgressSlider extends StatefulWidget {
     this.dark = false,
     this.showRemaining = true,
     this.marks = const [],
+    this.showTimes = true,
+    this.thin = false,
   });
 
   final Duration position;
@@ -33,6 +35,15 @@ class VhProgressSlider extends StatefulWidget {
 
   /// Where chapters begin: the track is cut there.
   final List<Duration> marks;
+
+  /// The two times under the track; off where the bar shows the time in
+  /// a row of its own.
+  final bool showTimes;
+
+  /// A hairline track with a small handle that grows under the finger,
+  /// for a bar that runs along the bottom edge of the picture instead of
+  /// over it.
+  final bool thin;
 
   @override
   State<VhProgressSlider> createState() => _VhProgressSliderState();
@@ -55,6 +66,11 @@ class _VhProgressSliderState extends State<VhProgressSlider> {
         ? p.miniInk.withValues(alpha: 0.25)
         : p.ink.withValues(alpha: 0.1);
     final timeColor = onDark ? p.miniInkMuted : p.ink3;
+    final dragging = _dragValue != null;
+    final trackHeight = widget.thin ? 3.0 : (onDark ? 4.0 : 5.0);
+    final thumbRadius = widget.thin
+        ? (dragging ? 7.0 : 5.0)
+        : (onDark ? 5.5 : 7.5);
 
     // **Media time runs left to right in every language**. A timeline is a tape
     // moving past, not a sentence being read: Samsung Music, the system's media
@@ -69,7 +85,10 @@ class _VhProgressSliderState extends State<VhProgressSlider> {
         children: [
           SliderTheme(
             data: SliderThemeData(
-              trackHeight: onDark ? 4 : 5,
+              trackHeight: trackHeight,
+              // The thin track runs to both ends of what holds it, with no
+              // margin kept for the handle.
+              padding: widget.thin ? EdgeInsets.zero : null,
               activeTrackColor: p.accent,
               inactiveTrackColor: trackInactive,
               secondaryActiveTrackColor: trackInactive,
@@ -77,7 +96,7 @@ class _VhProgressSliderState extends State<VhProgressSlider> {
               // A neutral veil under the finger, not an orange halo.
               overlayColor: p.ink.withValues(alpha: vhPressVeil),
               thumbShape: RoundSliderThumbShape(
-                enabledThumbRadius: onDark ? 5.5 : 7.5,
+                enabledThumbRadius: thumbRadius,
               ),
               overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
               trackShape: VhChapterTrackShape([
@@ -87,46 +106,54 @@ class _VhProgressSliderState extends State<VhProgressSlider> {
                       mark.inMilliseconds / maxMs,
               ]),
             ),
-            child: Slider(
-              value: maxMs < 1 ? 0 : value.clamp(0, maxMs),
-              max: maxMs < 1 ? 1 : maxMs,
-              secondaryTrackValue: widget.buffered?.inMilliseconds
-                  .clamp(0, maxMs < 1 ? 1 : maxMs.toInt())
-                  .toDouble(),
-              onChanged: maxMs < 1
-                  ? null
-                  : (v) => setState(() => _dragValue = v),
-              onChangeEnd: (v) {
-                widget.onSeek(Duration(milliseconds: v.round()));
-                setState(() => _dragValue = null);
-              },
+            child: SizedBox(
+              // As tall as the slider with its margins was, so a finger
+              // still finds the thin track easily.
+              height: widget.thin ? _thinHeight : null,
+              child: Slider(
+                value: maxMs < 1 ? 0 : value.clamp(0, maxMs),
+                max: maxMs < 1 ? 1 : maxMs,
+                secondaryTrackValue: widget.buffered?.inMilliseconds
+                    .clamp(0, maxMs < 1 ? 1 : maxMs.toInt())
+                    .toDouble(),
+                onChanged: maxMs < 1
+                    ? null
+                    : (v) => setState(() => _dragValue = v),
+                onChangeEnd: (v) {
+                  widget.onSeek(Duration(milliseconds: v.round()));
+                  setState(() => _dragValue = null);
+                },
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: VhSpace.sm),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  vhFormatDuration(Duration(milliseconds: value.round())),
-                  style: _timeStyle(context, timeColor),
-                ),
-                Text(
-                  widget.showRemaining
-                      ? vhFormatRemaining(
-                          Duration(milliseconds: value.round()),
-                          widget.duration,
-                        )
-                      : vhFormatDuration(total),
-                  style: _timeStyle(context, timeColor),
-                ),
-              ],
+          if (widget.showTimes)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: VhSpace.sm),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    vhFormatDuration(Duration(milliseconds: value.round())),
+                    style: _timeStyle(context, timeColor),
+                  ),
+                  Text(
+                    widget.showRemaining
+                        ? vhFormatRemaining(
+                            Duration(milliseconds: value.round()),
+                            widget.duration,
+                          )
+                        : vhFormatDuration(total),
+                    style: _timeStyle(context, timeColor),
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
   }
+
+  static const double _thinHeight = 32;
 
   /// **It used to ask for `tabularFigures` and never get them**: the style
   /// inherits the Tajawal body font, which has no `tnum` table at all

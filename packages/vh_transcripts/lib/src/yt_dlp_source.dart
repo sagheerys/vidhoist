@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:vh_core/vh_core.dart' show ErrorClassifier, YtDlpErrorKind;
 
+import 'subtitle_file.dart';
 import 'subtitle_source.dart';
 
 /// Subtitles fetched by yt-dlp on the computer running it.
@@ -87,7 +88,8 @@ class YtDlpSource implements SubtitleSource {
     ]);
     return {
       for (final track in tracks)
-        if (File('$base.$track.srt') case final file when file.existsSync())
+        if (File('$base.$track.srt') case final file
+            when file.existsSync() && file.lengthSync() <= maxSubtitleFileBytes)
           track: await file.readAsString(),
     };
   }

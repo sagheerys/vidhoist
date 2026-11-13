@@ -41,6 +41,10 @@ abstract class DesktopFolders {
 
   /// Opens Explorer on the folder [path].
   Future<void> open(String path);
+
+  /// Windows' "Open with" for the file at [path], so the user plays it in
+  /// a player of their own (VLC, say); nothing where there is no Windows.
+  Future<void> openWith(String path) async {}
 }
 
 class NoFolders extends DesktopFolders {

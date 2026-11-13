@@ -58,6 +58,8 @@ void main() {
     final h = await open(tester, playing: song);
     await ctrl(tester, LogicalKeyboardKey.keyM);
     expect(h.controls.calls, contains('mini 360x96'));
+    // The sound strip keeps its one size.
+    expect(h.controls.stretchable, isFalse);
     expect(find.byType(DesktopMiniWindow), findsOneWidget);
     expect(find.byType(LibraryPage), findsNothing);
 
@@ -70,6 +72,9 @@ void main() {
     final h = await open(tester, playing: video);
     await ctrl(tester, LogicalKeyboardKey.keyM);
     expect(h.controls.calls, contains('mini 360x203'));
+    // The picture can be dragged larger by its edges; it used to be locked
+    // at one size.
+    expect(h.controls.stretchable, isTrue);
   });
 
   testWidgets('**the guard**: the small card answers only its own keys; Esc '

@@ -815,7 +815,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopBackupHint.
   ///
   /// In en, this message translates to:
-  /// **'This computer keeps its last seven backups, at least an hour apart, in its own folder.'**
+  /// **'This computer keeps its last seven backups, at least an hour apart, in Downloads\\VidHoist\\Backups, where they outlast an uninstall.'**
   String get desktopBackupHint;
 
   /// No description provided for @desktopBackupsNone.
@@ -1589,13 +1589,13 @@ abstract class VhLocalizations {
   /// No description provided for @desktopImportFromPhone.
   ///
   /// In en, this message translates to:
-  /// **'Import from the phone…'**
+  /// **'Import a backup or transcripts…'**
   String get desktopImportFromPhone;
 
   /// No description provided for @desktopImportHint.
   ///
   /// In en, this message translates to:
-  /// **'A backup or transcripts file from VidHoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.'**
+  /// **'A backup or transcripts file from VidHoist, chosen here or dropped on the window. A phone\'s is added to what is here; a backup of this computer is restored whole, after asking.'**
   String get desktopImportHint;
 
   /// No description provided for @desktopImportedBackup.
@@ -1934,6 +1934,12 @@ abstract class VhLocalizations {
   /// **'When you copy a video link in another app, a notification offers to add it. Only links are looked at, and none is saved.'**
   String get desktopOfferCopiedLinksHint;
 
+  /// No description provided for @desktopOpenBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Backup'**
+  String get desktopOpenBackup;
+
   /// No description provided for @desktopOpenChannels.
   ///
   /// In en, this message translates to:
@@ -1945,6 +1951,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Open in Explorer'**
   String get desktopOpenInExplorer;
+
+  /// No description provided for @desktopOpenWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in another player…'**
+  String get desktopOpenWith;
 
   /// No description provided for @desktopPaletteClose.
   ///
@@ -2090,6 +2102,42 @@ abstract class VhLocalizations {
   /// **'Reading room'**
   String get desktopReadingRoom;
 
+  /// No description provided for @desktopRecoverLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Clips already in the folder'**
+  String get desktopRecoverLibrary;
+
+  /// No description provided for @desktopRecoverLibraryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Look in the folder'**
+  String get desktopRecoverLibraryAction;
+
+  /// No description provided for @desktopRecoverLibraryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'After a reinstall: puts back in the library the clips that are in the downloads folder but no longer listed. The files are not touched.'**
+  String get desktopRecoverLibraryHint;
+
+  /// No description provided for @desktopRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Put back in the library: {count}'**
+  String desktopRecovered(int count);
+
+  /// No description provided for @desktopRecoveredNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to add: every clip in the folder is in the library.'**
+  String get desktopRecoveredNothing;
+
+  /// No description provided for @desktopRecoveredSome.
+  ///
+  /// In en, this message translates to:
+  /// **'Put back in the library: {count}. Left out, their link unknown: {left}'**
+  String desktopRecoveredSome(int count, int left);
+
   /// No description provided for @desktopRemoveFromList.
   ///
   /// In en, this message translates to:
@@ -2105,8 +2153,20 @@ abstract class VhLocalizations {
   /// No description provided for @desktopRestoreBody.
   ///
   /// In en, this message translates to:
-  /// **'This computer\'s tags, lists and settings become what the backup holds. The downloaded files are not touched.'**
+  /// **'This computer\'s library, followed channels, tags, lists and settings become what the backup holds. The downloaded files are not touched.'**
   String get desktopRestoreBody;
+
+  /// No description provided for @desktopRestoreOfferBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads\\VidHoist\\Backups holds a backup of this computer: its library, followed channels, playlists, tags, settings and saved transcripts. The newest was made {when}. Your downloaded files are not touched either way.'**
+  String desktopRestoreOfferBody(String when);
+
+  /// No description provided for @desktopRestoreOfferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore your backup?'**
+  String get desktopRestoreOfferTitle;
 
   /// No description provided for @desktopRestoreTitle.
   ///
@@ -2233,6 +2293,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Show side panel'**
   String get desktopShowPanel;
+
+  /// No description provided for @desktopStartFresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Start fresh'**
+  String get desktopStartFresh;
 
   /// No description provided for @desktopStartWithWindows.
   ///
@@ -2387,14 +2453,8 @@ abstract class VhLocalizations {
   /// No description provided for @desktopTranscriptsDeleteBody.
   ///
   /// In en, this message translates to:
-  /// **'They are removed from this computer. Only a file you exported can bring them back.'**
+  /// **'They are removed from this computer and from its backup. Only a file you exported can bring them back.'**
   String get desktopTranscriptsDeleteBody;
-
-  /// No description provided for @desktopTranscriptsExportHint.
-  ///
-  /// In en, this message translates to:
-  /// **'All of them in one file a phone can import.'**
-  String get desktopTranscriptsExportHint;
 
   /// No description provided for @desktopTranscriptsHelp.
   ///
@@ -2402,11 +2462,17 @@ abstract class VhLocalizations {
   /// **'VidHoist keeps the words said in each YouTube clip you add, so a search (Ctrl+K) also finds what was said inside your clips, not only their titles. They stay on this computer.'**
   String get desktopTranscriptsHelp;
 
-  /// No description provided for @desktopTranscriptsImportHint.
+  /// No description provided for @desktopTranscriptsMove.
   ///
   /// In en, this message translates to:
-  /// **'A transcripts file from a phone. It adds what is missing here and deletes nothing.'**
-  String get desktopTranscriptsImportHint;
+  /// **'To or from a phone'**
+  String get desktopTranscriptsMove;
+
+  /// No description provided for @desktopTranscriptsMoveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcripts travel with the backup: Export for the phone takes them, and Import there brings them in, adding what is missing here.'**
+  String get desktopTranscriptsMoveHint;
 
   /// No description provided for @desktopTrayOnClose.
   ///
@@ -3236,11 +3302,29 @@ abstract class VhLocalizations {
   /// **'Couldn\'t update yt-dlp. Check the connection and try again.'**
   String get mobileEngineUpdateFailed;
 
+  /// No description provided for @mobileEngineUpdateMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Update failed'**
+  String get mobileEngineUpdateMissed;
+
+  /// No description provided for @mobileEngineUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated'**
+  String get mobileEngineUpdated;
+
   /// No description provided for @mobileEngineUpdating.
   ///
   /// In en, this message translates to:
   /// **'Updating…'**
   String get mobileEngineUpdating;
+
+  /// No description provided for @mobileEngineVersionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'yt-dlp version'**
+  String get mobileEngineVersionLabel;
 
   /// No description provided for @mobileEngineVersionUnknown.
   ///
@@ -4748,6 +4832,24 @@ abstract class VhLocalizations {
   /// **'Restore failed: the backup file is not valid'**
   String get restoreFailed;
 
+  /// No description provided for @restorePickBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone has VidHoist downloads but no settings, as after a reinstall. If you kept a backup, choose it: the app writes them to Download/VidHoist/backups.'**
+  String get restorePickBody;
+
+  /// No description provided for @restorePickChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a backup'**
+  String get restorePickChoose;
+
+  /// No description provided for @restorePickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring back your settings?'**
+  String get restorePickTitle;
+
   /// No description provided for @restoreSettings.
   ///
   /// In en, this message translates to:
@@ -4958,11 +5060,47 @@ abstract class VhLocalizations {
   /// **'Share logs'**
   String get shareLogs;
 
+  /// No description provided for @shareOpening.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening the share menu…'**
+  String get shareOpening;
+
+  /// No description provided for @shareOpeningHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A large file takes a few seconds to hand over.'**
+  String get shareOpeningHint;
+
   /// No description provided for @shareSelected.
   ///
   /// In en, this message translates to:
   /// **'Share selected'**
   String get shareSelected;
+
+  /// No description provided for @sharedLinksAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add them'**
+  String get sharedLinksAdd;
+
+  /// No description provided for @sharedLinksBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Each one downloads to this phone.'**
+  String get sharedLinksBody;
+
+  /// No description provided for @sharedLinksCapped.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the first {max} links were added.'**
+  String sharedLinksCapped(int max);
+
+  /// No description provided for @sharedLinksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Add 1 link?} other{Add {count} links?}}'**
+  String sharedLinksTitle(int count);
 
   /// No description provided for @shortsFilter.
   ///
@@ -5468,12 +5606,6 @@ abstract class VhLocalizations {
   /// **'Before each YouTube clip you add is downloaded, the app fetches its words from your server, in the app\'s language and in English (up to 40 seconds), and keeps them on this phone only. Clips already in your library are included only if your server saved their subtitles beside them (the setup guide shows how). You can turn this off at any time.'**
   String get transcriptsEnableBody;
 
-  /// No description provided for @transcriptsExport.
-  ///
-  /// In en, this message translates to:
-  /// **'Export'**
-  String get transcriptsExport;
-
   /// No description provided for @transcriptsExported.
   ///
   /// In en, this message translates to:
@@ -5485,12 +5617,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'The app keeps the words said in each YouTube clip you add, so a library search also finds what was said inside your clips, not only their titles.\n\nThe words are fetched from your server just before the download and kept on this phone; the full backup does not include them. To move them to another phone, use Export here and Import there. An import adds to what is already here and deletes nothing.\n\nA server set to write subtitles beside each clip (one line in its configuration; the setup guide shows it) covers everything it downloads from then on, subscriptions and other sites included: the app reads those files on its own, in the app\'s language and in English.'**
   String get transcriptsHelp;
-
-  /// No description provided for @transcriptsImport.
-  ///
-  /// In en, this message translates to:
-  /// **'Import'**
-  String get transcriptsImport;
 
   /// No description provided for @transcriptsImportInvalid.
   ///
@@ -5624,6 +5750,12 @@ abstract class VhLocalizations {
   /// **'Couldn\'t download the update'**
   String get updateDownloadFailed;
 
+  /// No description provided for @updateDownloadedMb.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} MB'**
+  String updateDownloadedMb(String done, String total);
+
   /// No description provided for @updateDownloading.
   ///
   /// In en, this message translates to:
@@ -5695,6 +5827,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Version {version} is available'**
   String updateVersionAvailable(String version);
+
+  /// No description provided for @updateVersionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String updateVersionTitle(String version);
 
   /// No description provided for @updateWhatsNew.
   ///

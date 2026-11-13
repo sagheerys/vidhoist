@@ -272,6 +272,25 @@ backups are never planted on this device (`BackupService`).
 - Dated names, the last seven kept, written atomically (`.tmp` then
   rename); one identical to the newest is not written. A restore shows the
   dates; it never restores the newest blindly.
+- **Kept beside the downloads, never inside the app's own data**: the
+  phone in `Download/VidHoist/backups`, Windows in
+  `Downloads\VidHoist\Backups` (Windows' Downloads, not the folder chosen
+  in Settings). Until 2026-11-12 Windows kept them in
+  `%APPDATA%\Vidhoist\backup`, and the uninstaller's "delete the app's
+  data" took them too; they are carried over at the next start.
+- A full backup of a computer, chosen or dropped on Windows, is restored
+  whole after a confirmation; a phone's backup, or the shared part a
+  computer exports "for the phone", is merged (`BackupMerge`).
+- Windows keeps its saved transcripts beside the backups
+  (`Backups\transcripts.json`, one copy kept current) and adds them back on
+  every restore. The first start after an install offers the newest backup
+  before the welcome, and no automatic backup is written until that first
+  start is settled (`desktop_welcomed`).
+- **The library can be rebuilt from the download folder**
+  (`LibraryRecovery`): a file's link comes from its `.info.json`, then from
+  a playlist entry that names the file, then from a YouTube id at the end
+  of its name (eleven characters, the last one of sixteen; Instagram's
+  shortcodes share the alphabet). A file with none of these is left out.
 - Android's own backup leaves out `FlutterSecureStorage.xml`: its contents
   are encrypted with a key that does not travel.
 

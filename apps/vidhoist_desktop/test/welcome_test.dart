@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/appearance_data.dart';
+import 'package:vidhoist_desktop/data/backup_data.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/data/engine_fetch_data.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
@@ -85,6 +86,78 @@ void main() {
     expect(find.text(l.desktopWelcomeTitle), findsNothing);
   });
 
+  group('the first start after a reinstall, with a backup waiting', () {
+    final newest = BackupFile(
+      path: r'C:\Downloads\VidHoist\Backups\vidhoist_2026-11-11_200000.json',
+      name: 'vidhoist_2026-11-11_200000.json',
+      at: DateTime.now().subtract(const Duration(hours: 3)),
+      sizeBytes: 4096,
+    );
+
+    testWidgets('**the guard**: the backup is offered before the welcome, '
+        'and restoring it skips the welcome (owner report 2026-11-12)', (
+      tester,
+    ) async {
+      ShellHarness.useWindow(tester, const Size(1440, 900));
+      quietClipboard(tester);
+      final restored = <BackupFile>[];
+      final h = harness(
+        more: [
+          backupsProvider.overrideWith(
+            (ref) => _Backups(ref, [newest], restored),
+          ),
+        ],
+      );
+      await tester.pumpWidget(h.app());
+      await tester.pumpAndSettle();
+      expect(find.text(l.desktopRestoreOfferTitle), findsOneWidget);
+      expect(find.text(l.desktopWelcomeTitle), findsNothing);
+
+      await tester.tap(find.text(l.desktopRestore));
+      await tester.pumpAndSettle();
+      expect(restored, [newest]);
+      expect(find.text(l.desktopWelcomeTitle), findsNothing);
+      expect(await h.store.getBool(welcomedKey), isTrue);
+    });
+
+    testWidgets('starting fresh goes on to the welcome, and restores nothing', (
+      tester,
+    ) async {
+      ShellHarness.useWindow(tester, const Size(1440, 900));
+      quietClipboard(tester);
+      final restored = <BackupFile>[];
+      await tester.pumpWidget(
+        harness(
+          more: [
+            backupsProvider.overrideWith(
+              (ref) => _Backups(ref, [newest], restored),
+            ),
+          ],
+        ).app(),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l.desktopStartFresh));
+      await tester.pumpAndSettle();
+      expect(restored, isEmpty);
+      expect(find.text(l.desktopWelcomeTitle), findsOneWidget);
+    });
+
+    testWidgets('with no backup, the welcome as before', (tester) async {
+      ShellHarness.useWindow(tester, const Size(1440, 900));
+      quietClipboard(tester);
+      await tester.pumpWidget(
+        harness(
+          more: [
+            backupsProvider.overrideWith((ref) => _Backups(ref, const [], [])),
+          ],
+        ).app(),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text(l.desktopRestoreOfferTitle), findsNothing);
+      expect(find.text(l.desktopWelcomeTitle), findsOneWidget);
+    });
+  });
+
   testWidgets('it fetches ffmpeg and Deno when asked', (tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     quietClipboard(tester);
@@ -139,6 +212,24 @@ void main() {
       );
     });
   }
+}
+
+/// Backups that exist without a disk: [list] gives [files], and a restore
+/// is recorded rather than read.
+class _Backups extends DesktopBackups {
+  _Backups(super.ref, this.files, this.restored);
+
+  final List<BackupFile> files;
+  final List<BackupFile> restored;
+
+  @override
+  Future<List<BackupFile>> list() async => files;
+
+  @override
+  Future<void> restore(BackupFile file) async => restored.add(file);
+
+  @override
+  Future<BackupFile?> backUpNow() async => null;
 }
 
 class _Fetches extends EngineFetchNotifier {

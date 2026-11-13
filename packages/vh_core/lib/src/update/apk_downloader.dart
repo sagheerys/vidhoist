@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:pointycastle/digests/sha256.dart';
 
 /// An update download failure. **A type of its own, separate from download
 /// errors**: it comes from GitHub, and its message never passes through
@@ -57,11 +60,15 @@ class ApkDownloader {
   ///
   /// [expectedSize] comes from the release data: a mismatch means a
   /// truncated file, from a network drop that ends the stream without an
-  /// error.
+  /// error. [sha256], when the release gives one, must match the bytes
+  /// received: the file is installed (run, on Windows) as it is, and one
+  /// altered between GitHub and here keeps its signature and its size.
+  /// `null` skips the check, for a release that lists no hash.
   Future<String> download({
     required String url,
     required String savePath,
     int expectedSize = 0,
+    String? sha256,
     void Function(double progress)? onProgress,
     DownloadCancelToken? cancel,
   }) async {
@@ -84,6 +91,9 @@ class ApkDownloader {
           ? response.contentLength
           : expectedSize;
       sink = part.openWrite();
+      // Hashed as it streams: holding a 40MB file to hash it at the end
+      // would cost the phone that much memory.
+      final digest = SHA256Digest();
       var received = 0;
       var checkedMagic = false;
       await for (final chunk in response) {
@@ -102,6 +112,11 @@ class ApkDownloader {
           }
         }
         sink.add(chunk);
+        digest.update(
+          chunk is Uint8List ? chunk : Uint8List.fromList(chunk),
+          0,
+          chunk.length,
+        );
         received += chunk.length;
         if (onProgress != null && total > 0) {
           onProgress((received / total).clamp(0.0, 1.0));
@@ -116,6 +131,9 @@ class ApkDownloader {
       if (expectedSize > 0 && received != expectedSize) {
         throw const UpdateDownloadException('size mismatch');
       }
+      if (sha256 != null && _hex(digest) != sha256.toLowerCase()) {
+        throw const UpdateDownloadException('checksum mismatch');
+      }
       final target = File(savePath);
       if (target.existsSync()) await target.delete();
       await part.rename(savePath);
@@ -127,5 +145,11 @@ class ApkDownloader {
     } finally {
       client.close(force: true);
     }
+  }
+
+  static String _hex(SHA256Digest digest) {
+    final out = Uint8List(digest.digestSize);
+    digest.doFinal(out, 0);
+    return [for (final b in out) b.toRadixString(16).padLeft(2, '0')].join();
   }
 }

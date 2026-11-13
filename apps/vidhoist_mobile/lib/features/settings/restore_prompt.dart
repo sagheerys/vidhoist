@@ -5,13 +5,13 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../engine/welcome_screen.dart';
-import '../downloads_library/library_providers.dart';
-import '../playlists/playlists_providers.dart';
 import 'auto_backup.dart';
+import 'restore_from_file.dart';
 
 /// Rule 1, step 4: on the first launch after a reinstall, if an
 /// automatic backup is found on disk, it offers "restore your previous
-/// data?".
+/// data?". When none can be listed, as after a reinstall, the user is
+/// offered to pick one instead ([maybeOfferPickedRestore]).
 ///
 /// It is offered once only (the `auto_restore_offered` key), so it does not
 /// follow the user at every launch after they decline.
@@ -20,8 +20,14 @@ Future<void> maybeOfferAutoRestore(BuildContext context, WidgetRef ref) async {
   if (await store.getBool('auto_restore_offered') ?? false) return;
   // A fresh install only, the run that showed the welcome screen: on any
   // later launch the backup on disk is one the app itself just wrote, and
-  // offering it is noise.
-  if (!ref.read(welcomedThisRunProvider)) return;
+  // offering it is noise. Settings that Google's backup brought back skip
+  // the welcome screen, so they are asked nothing.
+  if (!ref.read(welcomedThisRunProvider)) {
+    if (await store.getBool(restorePickPendingKey) ?? false) {
+      if (context.mounted) await maybeOfferPickedRestore(context, ref, store);
+    }
+    return;
+  }
 
   final backup = ref.read(autoBackupProvider);
   // **The newest copy from the rotation** (decision 2026-09-04): it used to
@@ -30,7 +36,15 @@ Future<void> maybeOfferAutoRestore(BuildContext context, WidgetRef ref) async {
   // can be orphaned, and dated, so an older one can be reached from the
   // backup screen if the newest is the problem.
   final latest = await backup.latest();
-  if (latest == null) return;
+  if (latest == null) {
+    // After a reinstall the folder's copies are no longer listed: the user
+    // is offered the picker instead, now or on a later start.
+    await ref
+        .read(prefsMutexProvider)
+        .run(() => store.setBool(restorePickPendingKey, true));
+    if (context.mounted) await maybeOfferPickedRestore(context, ref, store);
+    return;
+  }
 
   await ref
       .read(prefsMutexProvider)
@@ -59,9 +73,7 @@ Future<void> maybeOfferAutoRestore(BuildContext context, WidgetRef ref) async {
 
   try {
     await backup.restore(latest);
-    await ref.read(settingsProvider.notifier).reloadFromStore();
-    ref.invalidate(localMediaProvider);
-    ref.invalidate(playlistsProvider);
+    await refreshAfterRestore(ref);
     if (context.mounted) {
       showVhSnack(context, l10n.autoRestoreSuccess, type: VhSnackType.success);
     }

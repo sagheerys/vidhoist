@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vh_transcripts/vh_transcripts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-import '../../data/folders_data.dart';
+import '../../data/backup_data.dart';
 import '../../data/subtitles_data.dart';
 import '../../data/transcripts_data.dart';
+import '../../router.dart';
 import '../clip/caption_controls.dart';
-import 'backup_actions.dart';
 import 'simple_panes.dart';
 import '../../shell/folded_text.dart';
 
@@ -24,8 +24,9 @@ final transcriptsSummaryProvider = FutureProvider.autoDispose<(int, int)>((
   return (index.length, await store.sizeBytes());
 });
 
-/// The words kept for each clip: how many, moving them to and from a
-/// phone, and removing them all.
+/// The words kept for each clip: how many, and removing them all. Moving
+/// them to and from a phone is under Backup alone: two imports, one here
+/// and one there, left which to use a guess.
 class TranscriptsPane extends ConsumerWidget {
   const TranscriptsPane({super.key});
 
@@ -59,78 +60,27 @@ class TranscriptsPane extends ConsumerWidget {
           title: l.transcriptsClips(summary?.$1 ?? 0),
           value: summary == null || none ? null : vhFormatSize(summary.$2),
         ),
-        Wrap(
-          spacing: VhSpace.md,
-          runSpacing: VhSpace.xs,
-          children: [
-            VhLinkButton(
-              label: l.transcriptsExport,
-              icon: VhIcons.saveTo,
-              onPressed: none ? null : () => unawaited(_export(context, ref)),
-            ),
-            VhLinkButton(
-              label: l.transcriptsImport,
-              icon: VhIcons.download,
-              onPressed: () => unawaited(_import(context, ref)),
-            ),
-            VhLinkButton(
-              label: l.transcriptsDeleteAll,
-              danger: true,
-              icon: VhIcons.trash,
-              onPressed: none
-                  ? null
-                  : () => unawaited(_deleteAll(context, ref)),
-            ),
-          ],
-        ),
-        const SizedBox(height: VhSpace.xs),
-        // Each note opens with its button's name: two loose lines under
-        // three buttons left which said what to guess.
-        for (final (name, hint) in [
-          (l.transcriptsExport, l.desktopTranscriptsExportHint),
-          (l.transcriptsImport, l.desktopTranscriptsImportHint),
-        ])
-          Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: name,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
-                ),
-                TextSpan(text: ' · $hint'),
-              ],
-            ),
-            style: text.labelSmall?.copyWith(color: p.ink3),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: VhLinkButton(
+            label: l.transcriptsDeleteAll,
+            danger: true,
+            icon: VhIcons.trash,
+            onPressed: none ? null : () => unawaited(_deleteAll(context, ref)),
           ),
+        ),
+        const SizedBox(height: VhSpace.md),
+        SettingLine(
+          title: l.desktopTranscriptsMove,
+          hint: l.desktopTranscriptsMoveHint,
+          trailing: VhLinkButton(
+            label: l.desktopOpenBackup,
+            icon: VhIcons.backup,
+            onPressed: () => context.go(DesktopSettingsPane.backup.route),
+          ),
+        ),
       ],
     );
-  }
-
-  /// Every transcript in the phone's import file, saved where the user
-  /// chooses.
-  Future<void> _export(BuildContext context, WidgetRef ref) async {
-    final store = ref.read(transcriptStoreProvider);
-    if (store == null) return;
-    final all = await store.readAll().toList();
-    final folders = ref.read(desktopFoldersProvider);
-    const name = 'transcripts.json';
-    final saved = await folders.saveText(
-      name: name,
-      text: TranscriptBundle.encode(all),
-    );
-    if (saved == null || !context.mounted) return;
-    final l = context.vhl;
-    showVhNotice(
-      context,
-      message: l.desktopExported(name),
-      actionLabel: l.desktopShowInFolder,
-      onAction: () => unawaited(folders.reveal(saved)),
-    );
-  }
-
-  Future<void> _import(BuildContext context, WidgetRef ref) async {
-    await chooseAndImport(context, ref);
-    ref.invalidate(transcriptsSummaryProvider);
   }
 
   Future<void> _deleteAll(BuildContext context, WidgetRef ref) async {
@@ -145,6 +95,7 @@ class TranscriptsPane extends ConsumerWidget {
     );
     if (!sure) return;
     await ref.read(transcriptStoreProvider)?.clear();
+    await ref.read(backupsProvider).forgetTranscripts();
     ref
       ..invalidate(transcriptIndexProvider)
       ..invalidate(transcriptForProvider)

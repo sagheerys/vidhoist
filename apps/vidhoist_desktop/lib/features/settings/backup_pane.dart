@@ -42,6 +42,27 @@ class _BackupPaneState extends ConsumerState<BackupPane> {
     if (mounted) showVhNotice(context, message: l.desktopRestored);
   }
 
+  Future<void> _recover() async {
+    final result = await ref.read(backupsProvider).recoverLibrary();
+    if (result == null || !mounted) return;
+    final l = context.vhl;
+    final (message, kind) = switch (result) {
+      LibraryRecoveryResult(added: 0, unknown: 0) => (
+        l.desktopRecoveredNothing,
+        VhNoticeKind.info,
+      ),
+      LibraryRecoveryResult(:final added, unknown: 0) => (
+        l.desktopRecovered(added),
+        VhNoticeKind.done,
+      ),
+      LibraryRecoveryResult(:final added, :final unknown) => (
+        l.desktopRecoveredSome(added, unknown),
+        added == 0 ? VhNoticeKind.info : VhNoticeKind.done,
+      ),
+    };
+    showVhNotice(context, message: message, kind: kind);
+  }
+
   Future<void> _export() async {
     final folder = await ref.read(backupsProvider).exportForPhone();
     if (folder == null || !mounted) return;
@@ -71,6 +92,14 @@ class _BackupPaneState extends ConsumerState<BackupPane> {
           trailing: VhLinkButton(
             label: l.desktopExportForPhone,
             onPressed: () => unawaited(_export()),
+          ),
+        ),
+        SettingLine(
+          title: l.desktopRecoverLibrary,
+          hint: l.desktopRecoverLibraryHint,
+          trailing: VhLinkButton(
+            label: l.desktopRecoverLibraryAction,
+            onPressed: () => unawaited(_recover()),
           ),
         ),
         const SizedBox(height: VhSpace.lg),

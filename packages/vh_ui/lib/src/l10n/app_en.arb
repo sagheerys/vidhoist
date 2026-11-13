@@ -452,6 +452,20 @@
       }
     }
   },
+  "@sharedLinksCapped": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "@sharedLinksTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@showChannel": {
     "placeholders": {
       "channel": {
@@ -684,7 +698,7 @@
   "@desktopAddLinks": {"placeholders": {"count": {"type": "int"}}},
   "desktopBack": "Back",
   "desktopBackUpNow": "Back up now",
-  "desktopBackupHint": "This computer keeps its last seven backups, at least an hour apart, in its own folder.",
+  "desktopBackupHint": "This computer keeps its last seven backups, at least an hour apart, in Downloads\\VidHoist\\Backups, where they outlast an uninstall.",
   "desktopBackupsNone": "No backup yet",
   "desktopBrowserButton": "“To VidHoist” button in the browser",
   "desktopBrowserButtonCopied": "Code copied. Make a new bookmark and paste it as its address (URL).",
@@ -827,8 +841,8 @@
   "desktopHints": "Show tips",
   "desktopHintsAgain": "Show them again",
   "desktopHintsHint": "Two short tips, each shown once: the shortcuts at the first clip, the icon by the clock at the first close.",
-  "desktopImportFromPhone": "Import from the phone…",
-  "desktopImportHint": "A backup or transcripts file from VidHoist on another device, chosen here or dropped on the window. It is added to what is here; nothing is replaced.",
+  "desktopImportFromPhone": "Import a backup or transcripts…",
+  "desktopImportHint": "A backup or transcripts file from VidHoist, chosen here or dropped on the window. A phone's is added to what is here; a backup of this computer is restored whole, after asking.",
   "desktopImportedBackup": "Added from the phone. Tags: {tagged} · lists: {lists} · resume points: {positions}",
   "@desktopImportedBackup": {"placeholders": {"tagged": {"type": "int"}, "lists": {"type": "int"}, "positions": {"type": "int"}}},
   "desktopImportedNothing": "Nothing new: this computer already had all of it.",
@@ -892,8 +906,10 @@
   "desktopNotifyArrivalsHint": "A Windows notice when new clips from the channels you follow are downloaded.",
   "desktopOfferCopiedLinks": "Offer links I copy",
   "desktopOfferCopiedLinksHint": "When you copy a video link in another app, a notification offers to add it. Only links are looked at, and none is saved.",
+  "desktopOpenBackup": "Open Backup",
   "desktopOpenChannels": "Open channels",
   "desktopOpenInExplorer": "Open in Explorer",
+  "desktopOpenWith": "Open in another player…",
   "desktopPaletteClose": "to close",
   "desktopPaletteCommands": "Commands",
   "desktopPaletteHint": "Search titles and what was said, or type > for commands",
@@ -922,9 +938,20 @@
   "desktopReadingNextMatch": "Next match",
   "desktopReadingPreviousMatch": "Previous match",
   "desktopReadingRoom": "Reading room",
+  "desktopRecoverLibrary": "Clips already in the folder",
+  "desktopRecoverLibraryAction": "Look in the folder",
+  "desktopRecoverLibraryHint": "After a reinstall: puts back in the library the clips that are in the downloads folder but no longer listed. The files are not touched.",
+  "desktopRecovered": "Put back in the library: {count}",
+  "@desktopRecovered": {"placeholders": {"count": {"type": "int"}}},
+  "desktopRecoveredNothing": "Nothing to add: every clip in the folder is in the library.",
+  "desktopRecoveredSome": "Put back in the library: {count}. Left out, their link unknown: {left}",
+  "@desktopRecoveredSome": {"placeholders": {"count": {"type": "int"}, "left": {"type": "int"}}},
   "desktopRemoveFromList": "Remove from the list",
   "desktopRestore": "Restore",
-  "desktopRestoreBody": "This computer's tags, lists and settings become what the backup holds. The downloaded files are not touched.",
+  "desktopRestoreBody": "This computer's library, followed channels, tags, lists and settings become what the backup holds. The downloaded files are not touched.",
+  "desktopRestoreOfferBody": "Downloads\\VidHoist\\Backups holds a backup of this computer: its library, followed channels, playlists, tags, settings and saved transcripts. The newest was made {when}. Your downloaded files are not touched either way.",
+  "@desktopRestoreOfferBody": {"placeholders": {"when": {"type": "String"}}},
+  "desktopRestoreOfferTitle": "Restore your backup?",
   "desktopRestoreTitle": "Restore this backup?",
   "desktopRestored": "Backup restored",
   "desktopRevealAfterDownload": "Show in Explorer when done",
@@ -949,6 +976,7 @@
   "desktopShortsHint": "↑ ↓ or the wheel for the next short · double-click to favorite",
   "desktopShowInFolder": "Show in folder",
   "desktopShowPanel": "Show side panel",
+  "desktopStartFresh": "Start fresh",
   "desktopStartWithWindows": "Start with Windows",
   "desktopStartWithWindowsHint": "Opens when you sign in: in the tray when it keeps playing there, otherwise minimized.",
   "desktopStartWithWindowsRefused": "Windows did not let the app start with it.",
@@ -981,10 +1009,10 @@
   "desktopTheater": "Theater",
   "desktopTranscriptFirst": "Fetch its transcript first",
   "desktopTranscriptHint": "Follows playback · click a line to jump",
-  "desktopTranscriptsDeleteBody": "They are removed from this computer. Only a file you exported can bring them back.",
-  "desktopTranscriptsExportHint": "All of them in one file a phone can import.",
+  "desktopTranscriptsDeleteBody": "They are removed from this computer and from its backup. Only a file you exported can bring them back.",
   "desktopTranscriptsHelp": "VidHoist keeps the words said in each YouTube clip you add, so a search (Ctrl+K) also finds what was said inside your clips, not only their titles. They stay on this computer.",
-  "desktopTranscriptsImportHint": "A transcripts file from a phone. It adds what is missing here and deletes nothing.",
+  "desktopTranscriptsMove": "To or from a phone",
+  "desktopTranscriptsMoveHint": "Transcripts travel with the backup: Export for the phone takes them, and Import there brings them in, adding what is missing here.",
   "desktopTrayOnClose": "Keep playing in the tray when the window closes",
   "desktopTrayOnCloseHint": "Closing the window keeps the sound playing; quit from the icon by the clock.",
   "desktopTrayOpen": "Open VidHoist",
@@ -1133,7 +1161,10 @@
   "mobileEngineUpToDate": "yt-dlp is up to date",
   "mobileEngineUpdate": "Update yt-dlp",
   "mobileEngineUpdateFailed": "Couldn't update yt-dlp. Check the connection and try again.",
+  "mobileEngineUpdateMissed": "Update failed",
+  "mobileEngineUpdated": "Updated",
   "mobileEngineUpdating": "Updating…",
+  "mobileEngineVersionLabel": "yt-dlp version",
   "mobileEngineVersionUnknown": "Its version shows after the first update",
   "mobileSettingsEngine": "Download engine",
   "mobileSettingsGroupEngine": "Engine",
@@ -1400,6 +1431,9 @@
   "restoreConfirm": "Restore data from the backup file? This overwrites current playlists, tags and settings.",
   "restoreData": "Restore",
   "restoreFailed": "Restore failed: the backup file is not valid",
+  "restorePickBody": "This phone has VidHoist downloads but no settings, as after a reinstall. If you kept a backup, choose it: the app writes them to Download/VidHoist/backups.",
+  "restorePickChoose": "Choose a backup",
+  "restorePickTitle": "Bring back your settings?",
   "restoreSettings": "Restore all data",
   "restoreSuccess": "Data restored successfully",
   "resultsFound": "{count, plural, =1{1 result} other{{count} results}}",
@@ -1435,7 +1469,13 @@
   "settingsValueWifiOnly": "Wi‑Fi only",
   "share": "Share",
   "shareLogs": "Share logs",
+  "shareOpening": "Opening the share menu…",
+  "shareOpeningHint": "A large file takes a few seconds to hand over.",
   "shareSelected": "Share selected",
+  "sharedLinksAdd": "Add them",
+  "sharedLinksBody": "Each one downloads to this phone.",
+  "sharedLinksCapped": "Only the first {max} links were added.",
+  "sharedLinksTitle": "{count, plural, =1{Add 1 link?} other{Add {count} links?}}",
   "shortsFilter": "Shorts",
   "showChannel": "Everything from {channel}",
   "shuffle": "Shuffle",
@@ -1527,10 +1567,8 @@
   "transcriptsDisableTitle": "Stop searching inside clips?",
   "transcriptsEnable": "Turn on",
   "transcriptsEnableBody": "Before each YouTube clip you add is downloaded, the app fetches its words from your server, in the app's language and in English (up to 40 seconds), and keeps them on this phone only. Clips already in your library are included only if your server saved their subtitles beside them (the setup guide shows how). You can turn this off at any time.",
-  "transcriptsExport": "Export",
   "transcriptsExported": "Transcripts saved to: {path}",
   "transcriptsHelp": "The app keeps the words said in each YouTube clip you add, so a library search also finds what was said inside your clips, not only their titles.\n\nThe words are fetched from your server just before the download and kept on this phone; the full backup does not include them. To move them to another phone, use Export here and Import there. An import adds to what is already here and deletes nothing.\n\nA server set to write subtitles beside each clip (one line in its configuration; the setup guide shows it) covers everything it downloads from then on, subscriptions and other sites included: the app reads those files on its own, in the app's language and in English.",
-  "transcriptsImport": "Import",
   "transcriptsImportInvalid": "This file holds no transcripts.",
   "transcriptsImported": "{count, plural, =1{Imported 1 transcript} other{Imported {count} transcripts}}",
   "transcriptsKeep": "Stop and keep",
@@ -1553,6 +1591,17 @@
   "updateCheckFailed": "Couldn't check for updates",
   "updateChecking": "Checking…",
   "updateDownloadFailed": "Couldn't download the update",
+  "updateDownloadedMb": "{done} of {total} MB",
+  "@updateDownloadedMb": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
   "updateDownloading": "Downloading update…",
   "updateFailedToStart": "Couldn't open the installer",
   "updateInstall": "Install",
@@ -1565,6 +1614,14 @@
   "updateSkipVersion": "Skip this version",
   "updateUpToDate": "You're on the latest version",
   "updateVersionAvailable": "Version {version} is available",
+  "updateVersionTitle": "Version {version}",
+  "@updateVersionTitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "updateWhatsNew": "What's new",
   "updates": "Updates",
   "username": "Username",
