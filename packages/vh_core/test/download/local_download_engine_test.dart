@@ -19,6 +19,7 @@ class Harness {
     this.gate,
     bool Function()? compatible,
     List<String> Function()? subtitles,
+    DownloadTuning Function()? tuning,
     bool refresh = false,
   }) : backend = backend ?? FakeBackend() {
     engine = LocalDownloadEngine(
@@ -34,6 +35,7 @@ class Harness {
       gateRecheck: const Duration(milliseconds: 5),
       compatibleVideo: compatible,
       subtitleLanguages: subtitles,
+      tuning: tuning,
       onCompleted: completed.add,
       onLog: log.add,
       sizeOf: (_) async => 1234,
@@ -465,6 +467,30 @@ void main() {
     await h.until(h.engine.submit(other, Quality.best).id, TaskPhase.completed);
     expect(h.backend.requests.map((r) => r.compatible), [false, true]);
     expect(h.backend.requests.first.subtitleLanguages, ['ar.*']);
+  });
+
+  test('the audio format, speed limit and pieces at once reach yt-dlp, '
+      'read as each download starts', () async {
+    var tuning = const DownloadTuning();
+    final h = Harness(tuning: () => tuning);
+    await h.until(h.engine.submit(yt, Quality.audio).id, TaskPhase.completed);
+    tuning = const DownloadTuning(
+      audioFormat: AudioFormat.mp3,
+      rateLimit: '2M',
+      concurrentFragments: 4,
+    );
+    await h.until(
+      h.engine.submit(other, Quality.audio).id,
+      TaskPhase.completed,
+    );
+
+    final [before, after] = [for (final r in h.backend.requests) r.toSpec()];
+    expect(before.audioFormat, AudioFormat.m4a);
+    expect(before.rateLimit, isNull);
+    expect(before.concurrentFragments, isNull);
+    expect(after.audioFormat, AudioFormat.mp3);
+    expect(after.rateLimit, '2M');
+    expect(after.concurrentFragments, 4);
   });
 
   group('across launches', () {

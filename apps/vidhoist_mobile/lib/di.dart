@@ -247,6 +247,7 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
     // clip looks torn on phones. This asks for H.264/AAC instead.
     compatibleVideo: () => ref.read(settingsProvider).compatiblePlayback,
     subtitleLanguages: () => ref.read(settingsProvider).subtitleLanguages,
+    tuning: () => ref.read(settingsProvider).tuning,
   );
   ref.onDispose(() {
     alive = false;

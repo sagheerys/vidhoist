@@ -164,6 +164,30 @@ abstract class VhLocalizations {
   /// **'Cookies deleted'**
   String get accountsCleared;
 
+  /// No description provided for @accountsFileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported from a browser as a cookies.txt file (Netscape format), for any site, including those not listed above. It joins the sign-ins already here, and stays on this phone.'**
+  String get accountsFileHint;
+
+  /// No description provided for @accountsFilePick.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a cookies file'**
+  String get accountsFilePick;
+
+  /// No description provided for @accountsFileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Or import a cookies file'**
+  String get accountsFileTitle;
+
+  /// No description provided for @accountsFromFile.
+  ///
+  /// In en, this message translates to:
+  /// **'From a cookies file'**
+  String get accountsFromFile;
+
   /// No description provided for @accountsHelp.
   ///
   /// In en, this message translates to:
@@ -296,6 +320,30 @@ abstract class VhLocalizations {
   /// **'{count} channels'**
   String audioChannels(int count);
 
+  /// No description provided for @audioFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio format'**
+  String get audioFormat;
+
+  /// No description provided for @audioFormatM4a.
+  ///
+  /// In en, this message translates to:
+  /// **'M4A: plays everywhere'**
+  String get audioFormatM4a;
+
+  /// No description provided for @audioFormatMp3.
+  ///
+  /// In en, this message translates to:
+  /// **'MP3: for older players and cars'**
+  String get audioFormatMp3;
+
+  /// No description provided for @audioFormatOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'As the site sends it, unconverted'**
+  String get audioFormatOriginal;
+
   /// No description provided for @audioMono.
   ///
   /// In en, this message translates to:
@@ -427,6 +475,42 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Batch download'**
   String get batchTitle;
+
+  /// No description provided for @batteryAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get batteryAllow;
+
+  /// No description provided for @batteryFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery saving leaves downloads alone, even with the app out of sight.'**
+  String get batteryFree;
+
+  /// No description provided for @batteryRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery saving can stop a long download while the app is out of sight.'**
+  String get batteryRestricted;
+
+  /// No description provided for @batteryStateFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed'**
+  String get batteryStateFree;
+
+  /// No description provided for @batteryStateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted'**
+  String get batteryStateLimited;
+
+  /// No description provided for @batteryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads in the background'**
+  String get batteryTitle;
 
   /// No description provided for @bitrateKbps.
   ///
@@ -2750,6 +2834,12 @@ abstract class VhLocalizations {
   /// **'Downloading'**
   String get downloadingTitle;
 
+  /// No description provided for @downloadsAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get downloadsAdvanced;
+
   /// No description provided for @editSubscription.
   ///
   /// In en, this message translates to:
@@ -2977,6 +3067,18 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load playlist'**
   String get failedToLoadPlaylist;
+
+  /// No description provided for @fastStreams.
+  ///
+  /// In en, this message translates to:
+  /// **'Faster segmented streams'**
+  String get fastStreams;
+
+  /// No description provided for @fastStreamsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetches {count} pieces at once from sites that cut a video into pieces, such as X. Some sites slow down many requests at once.'**
+  String fastStreamsHelp(int count);
 
   /// No description provided for @favorites.
   ///
@@ -4669,6 +4771,24 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Quote'**
   String get quoteTitle;
+
+  /// No description provided for @rateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed limit'**
+  String get rateLimit;
+
+  /// No description provided for @rateLimitNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No limit'**
+  String get rateLimitNone;
+
+  /// No description provided for @rateLimitValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{mb} MB/s'**
+  String rateLimitValue(int mb);
 
   /// No description provided for @readingAsMarkdownHint.
   ///

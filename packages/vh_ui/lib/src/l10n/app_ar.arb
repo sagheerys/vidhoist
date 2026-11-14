@@ -87,9 +87,23 @@
       }
     }
   },
+  "@fastStreamsHelp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@queueItemsCount": {
     "placeholders": {
       "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@rateLimitValue": {
+    "placeholders": {
+      "mb": {
         "type": "int"
       }
     }
@@ -161,6 +175,10 @@
   "accountsBanRisk": "يُفضّل استخدام حساب ثانوي: التنزيل الكثيف قد يعرّض الحساب لتقييد مؤقت من الموقع.",
   "accountsClearAll": "حذف كل الكوكيز",
   "accountsCleared": "حُذفت الكوكيز",
+  "accountsFileHint": "ملف cookies.txt مصدَّر من متصفح (بصيغة Netscape)، لأي موقع، حتى غير المذكور أعلاه. يُضاف إلى ما سجّلت دخوله هنا، ويبقى على هذا الجوال.",
+  "accountsFilePick": "اختر ملف كوكيز",
+  "accountsFileTitle": "أو استورد ملف كوكيز",
+  "accountsFromFile": "من ملف كوكيز",
   "accountsHelp": "تنتهي صلاحية تسجيل الدخول بعد مدة؛ فإن عاد موقع يرفض، سجّل الدخول مرة أخرى. الخروج من موقع يُخرج متصفح التطبيق من المواقع الأخرى أيضاً، وتبقى تنزيلاتها تعمل كما كانت.",
   "accountsHint": "للمواقع التي ترفض التحميل بلا تسجيل دخول. تسجّل الدخول في صفحة الموقع نفسها داخل التطبيق، وما يتركه يبقى على هذا الجوال حيث يقرؤه yt-dlp في كل تنزيل، ولا يذهب إلى أي مكان آخر.",
   "activeDownloads": "التحميلات النشطة",
@@ -183,6 +201,10 @@
   "appTitle": "VidHoist",
   "appearanceAndLanguage": "المظهر واللغة",
   "audioChannels": "{count, plural, =1{قناة واحدة} =2{قناتان} few{{count} قنوات} many{{count} قناة} other{{count} قناة}}",
+  "audioFormat": "صيغة الصوت",
+  "audioFormatM4a": "M4A: يعمل في كل مكان",
+  "audioFormatMp3": "MP3: للمشغّلات القديمة والسيارات",
+  "audioFormatOriginal": "كما يرسله الموقع، بلا تحويل",
   "audioMono": "أحادي",
   "audioOnly": "صوت فقط",
   "audioStereo": "ستيريو",
@@ -205,6 +227,12 @@
   "batchSelectedOf": "حُدِّد {selected} من {total}",
   "batchThisVideoOnly": "تحميل هذا المقطع فقط",
   "batchTitle": "التحميل الدفعي",
+  "batteryAllow": "سماح",
+  "batteryFree": "توفير البطارية لا يوقف التنزيلات، حتى والتطبيق في الخلفية.",
+  "batteryRestricted": "توفير البطارية قد يوقف التنزيل الطويل والتطبيق في الخلفية.",
+  "batteryStateFree": "مسموح",
+  "batteryStateLimited": "مقيّد",
+  "batteryTitle": "التنزيل في الخلفية",
   "bitrateKbps": "{value} كيلوبت/ث",
   "bitrateMbps": "{value} ميغابت/ث",
   "builtWith": "بُني باستخدام",
@@ -606,6 +634,7 @@
   "downloadStartedQuality": "بدأ التحميل · {quality}",
   "downloading": "جارٍ التحميل…",
   "downloadingTitle": "جارٍ التنزيل",
+  "downloadsAdvanced": "متقدّم",
   "editSubscription": "تعديل",
   "emptyFilteredMessage": "أزل مرشّحاً من الأعلى لترى مكتبتك كلها.",
   "emptyFilteredTitle": "لا شيء بهذه المرشّحات",
@@ -644,6 +673,8 @@
   "externalPlayerShort": "مشغل خارجي",
   "failed": "فشل",
   "failedToLoadPlaylist": "تعذّر فتح القائمة",
+  "fastStreams": "تسريع البث المقطّع",
+  "fastStreamsHelp": "ينزّل {count} أجزاء معاً من المواقع التي تقطّع المقطع أجزاءً، مثل X. بعض المواقع تُبطئ الطلبات الكثيرة في وقت واحد.",
   "favorites": "المفضلة",
   "file": "الملف",
   "fileName": "اسم الملف",
@@ -926,6 +957,9 @@
   "quoteMomentLink": "انسخ رابط هذه اللحظة",
   "quotePlayFrom": "شغّل من هنا",
   "quoteTitle": "اقتباس",
+  "rateLimit": "حدّ السرعة",
+  "rateLimitNone": "بلا حدّ",
+  "rateLimitValue": "{mb} ميغابايت/ث",
   "readingAsMarkdownHint": "عند كل فقرة وقتها برابط إلى لحظتها",
   "readingAsPdfHint": "للطباعة أو الحفظ",
   "readingAsSrtHint": "سطراً سطراً بأوقاته، لأي مشغّل",

@@ -46,4 +46,47 @@ void main() {
     );
     expect(const PhoneSettings(subtitles: false).subtitleLanguages, isEmpty);
   });
+
+  test('**the guard**: the audio format, speed limit and pieces at once '
+      'stay as set and reach the engine as one tuning', () async {
+    final store = MemoryKeyValueStore();
+    final fresh = await PhoneSettings.load(store);
+    expect(fresh.tuning.audioFormat, AudioFormat.m4a);
+    expect(fresh.tuning.rateLimit, isNull);
+    expect(fresh.tuning.concurrentFragments, isNull);
+
+    final c = ProviderContainer(
+      overrides: [
+        keyValueStoreProvider.overrideWithValue(store),
+        secretStoreProvider.overrideWithValue(_NoSecrets()),
+        initialSettingsProvider.overrideWithValue(fresh),
+      ],
+    );
+    addTearDown(c.dispose);
+    final settings = c.read(settingsProvider.notifier);
+    await settings.setAudioFormat(AudioFormat.mp3);
+    await settings.setRateLimit('2M');
+    await settings.setFastStreams(true);
+
+    final again = (await PhoneSettings.load(store)).tuning;
+    expect(again.audioFormat, AudioFormat.mp3);
+    expect(again.rateLimit, '2M');
+    expect(again.concurrentFragments, PhoneSettings.fastPieces);
+
+    await settings.setRateLimit(null);
+    expect(c.read(settingsProvider).rateLimit, isNull);
+    expect((await PhoneSettings.load(store)).rateLimit, isNull);
+  });
+
+  test(
+    'a stored value this build does not know reads as the default',
+    () async {
+      final store = MemoryKeyValueStore();
+      await store.setString('audio_format', 'flac');
+      await store.setString('download_rate_limit', '3K');
+      final read = await PhoneSettings.load(store);
+      expect(read.audioFormat, AudioFormat.m4a);
+      expect(read.rateLimit, isNull);
+    },
+  );
 }

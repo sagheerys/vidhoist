@@ -153,6 +153,23 @@ void main() {
       expect(probed.copyWith(quality: Quality.best).infoJsonPath, '/c/p.json');
     });
 
+    test('the tuning survives a retry at another quality', () {
+      const request = DownloadRequest(
+        taskId: 't',
+        url: 'u',
+        folder: '/out',
+        tuning: DownloadTuning(
+          audioFormat: AudioFormat.original,
+          rateLimit: '5M',
+          concurrentFragments: 4,
+        ),
+      );
+      final spec = request.copyWith(quality: Quality.q480).toSpec();
+      expect(spec.audioFormat, AudioFormat.original);
+      expect(spec.rateLimit, '5M');
+      expect(spec.concurrentFragments, 4);
+    });
+
     test('the cover goes inside the file unless the app says not to', () {
       const request = DownloadRequest(taskId: 't', url: 'u', folder: '/out');
       expect(request.toSpec().embedThumbnail, isTrue);

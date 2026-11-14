@@ -16,24 +16,41 @@ final webCookieJarProvider = Provider<WebCookieJar>(
   (ref) => const MethodChannelWebCookieJar(),
 );
 
-/// The sites signed in, read off the cookies file each time it changes:
-/// the file is the truth, so a file written by yt-dlp itself (it writes
-/// its jar back after a run) reads the same. Read in one go: the file is
-/// a few lines, and a loading state for it would only flicker the rows.
-final signedInSitesProvider = Provider<Set<LoginSite>>((ref) {
+/// The cookie names each site has in the cookies file, read off it each
+/// time it changes: the file is the truth, so a file written by yt-dlp
+/// itself (it writes its jar back after a run) reads the same. Read in one
+/// go: the file is a few lines, and a loading state for it would only
+/// flicker the rows.
+final cookieNamesProvider = Provider<Map<String, Set<String>>>((ref) {
   final path = ref.watch(cookiesFileProvider);
   if (path == null) return const {};
   try {
     final file = File(path);
     if (!file.existsSync()) return const {};
-    final names = CookieFiles.names(file.readAsBytesSync());
-    return {
-      for (final site in LoginSite.values)
-        if (site.signedInPer(names)) site,
-    };
+    return CookieFiles.names(file.readAsBytesSync());
   } on FileSystemException {
     return const {};
   }
+});
+
+/// The sites signed in, from a sign-in here or from an imported file.
+final signedInSitesProvider = Provider<Set<LoginSite>>((ref) {
+  final names = ref.watch(cookieNamesProvider);
+  return {
+    for (final site in LoginSite.values)
+      if (site.signedInPer(names)) site,
+  };
+});
+
+/// The sites an imported file brought that have no row of their own: a
+/// file exported from a browser carries whatever sites it was signed in
+/// to, and each must be seen to be removable.
+final fileOnlySitesProvider = Provider<List<String>>((ref) {
+  final listed = {for (final site in LoginSite.values) site.domain};
+  return [
+    for (final site in ref.watch(cookieNamesProvider).keys)
+      if (!listed.contains(site)) site,
+  ]..sort();
 });
 
 /// The sign-ins, or null where nothing can be kept.
@@ -43,7 +60,7 @@ final accountsProvider = Provider<Accounts?>((ref) {
   return Accounts(
     path: path,
     jar: ref.watch(webCookieJarProvider),
-    onChanged: () => ref.invalidate(signedInSitesProvider),
+    onChanged: () => ref.invalidate(cookieNamesProvider),
   );
 });
 
@@ -83,6 +100,31 @@ class Accounts {
     return true;
   }
 
+  /// **A cookies file the person exported from a browser** (Netscape's
+  /// format, `cookies.txt`), merged over what is kept: for someone who
+  /// would rather not sign in inside the app, or for a site with no row.
+  /// The sites it carried, or null, and nothing written, when it holds no
+  /// cookie at all: a JSON export or a random text file must not replace
+  /// a working file.
+  Future<List<String>?> importFile(List<int> picked) async {
+    final fresh = CookieFiles.merge([picked]);
+    if (fresh == null) return null;
+    final file = File(path);
+    final old = file.existsSync() ? file.readAsBytesSync() : null;
+    final merged = CookieFiles.merge([?old, fresh])!;
+    file.parent.createSync(recursive: true);
+    file.writeAsBytesSync(merged, flush: true);
+    onChanged();
+    return CookieFiles.sites(fresh);
+  }
+
+  /// Drops [site]'s rows (as `CookieFiles.sites` names it) and leaves the
+  /// browser alone: what a file brought, the browser never held.
+  Future<void> forgetSite(String site) async {
+    _drop(site);
+    onChanged();
+  }
+
   /// Whether the browser already holds a signed-in session for [site],
   /// without keeping anything.
   Future<bool> signedInBrowser(LoginSite site) async {
@@ -93,17 +135,20 @@ class Accounts {
   /// Drops [site]'s rows from the file, and the browser's session with
   /// them; the file goes when nothing is left in it.
   Future<void> forget(LoginSite site) async {
-    final file = File(path);
-    if (file.existsSync()) {
-      final left = CookieFiles.without(file.readAsBytesSync(), site.domain);
-      if (left == null) {
-        _delete(file);
-      } else {
-        file.writeAsBytesSync(left, flush: true);
-      }
-    }
+    _drop(site.domain);
     await jar.clear();
     onChanged();
+  }
+
+  void _drop(String site) {
+    final file = File(path);
+    if (!file.existsSync()) return;
+    final left = CookieFiles.without(file.readAsBytesSync(), site);
+    if (left == null) {
+      _delete(file);
+    } else {
+      file.writeAsBytesSync(left, flush: true);
+    }
   }
 
   /// Every sign-in goes: the file and the browser's jar.

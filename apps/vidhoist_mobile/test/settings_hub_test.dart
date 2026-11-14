@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_mobile/di.dart';
+import 'package:vidhoist_mobile/features/settings/battery_freedom.dart';
 import 'package:vidhoist_mobile/features/settings/settings_hub.dart';
 import 'package:vidhoist_mobile/features/settings/settings_page.dart';
 import 'package:vidhoist_mobile/features/settings/settings_screen.dart';
@@ -22,13 +23,19 @@ import 'device_matrix.dart';
 /// page. On a tablet held sideways the same rows open in two panes
 /// (approved 2026-10-10).
 void main() {
-  Widget host({PhoneSettings settings = const PhoneSettings()}) {
+  Widget host({
+    PhoneSettings settings = const PhoneSettings(),
+    BatteryFreedom? battery,
+  }) {
     final container = ProviderContainer(
       overrides: [
         keyValueStoreProvider.overrideWithValue(MemoryKeyValueStore()),
         secretStoreProvider.overrideWithValue(MemorySecretStore()),
         prefsMutexProvider.overrideWithValue(PrefsMutex()),
         initialSettingsProvider.overrideWithValue(settings),
+        batteryFreedomProvider.overrideWithValue(
+          battery ?? _Battery(free: true),
+        ),
         // The logs and backup pages read the log on opening.
         loggerProvider.overrideWithValue(
           VhLogger(filePath: '${Directory.systemTemp.path}/mtf_settings.log'),
@@ -232,4 +239,73 @@ void main() {
         tester.getRect(find.byType(VhSettingsGroup).last).bottom;
     expect(gap, lessThanOrEqualTo(VhSpace.xl + 1));
   });
+
+  group('battery saving', () {
+    Widget downloads(BatteryFreedom battery) {
+      final app = host(battery: battery) as UncontrolledProviderScope;
+      return UncontrolledProviderScope(
+        container: app.container,
+        child: MaterialApp(
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          theme: vhTheme(VhVariant.phone, Brightness.light),
+          home: const SettingsPage(SettingsPane.downloads),
+        ),
+      );
+    }
+
+    testWidgets('**the guard**: the settings home carries no battery banner, '
+        'restricted or not', (tester) async {
+      await tester.pumpWidget(host(battery: _Battery(free: false)));
+      await tester.pumpAndSettle();
+      final l10n = tester.element(find.byType(SettingsScreen)).vhl;
+      expect(find.text(l10n.batteryTitle), findsNothing);
+      expect(find.text(l10n.batteryRestricted), findsNothing);
+    });
+
+    testWidgets('**the guard**: Downloads › Advanced says it is restricted, '
+        'Allow opens the dialog of Android, and the row then reads allowed', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(600, 2400);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      final battery = _Battery(free: false);
+      await tester.pumpWidget(downloads(battery));
+      await tester.pumpAndSettle();
+      final l10n = tester.element(find.byType(BatteryTile)).vhl;
+      expect(find.text(l10n.batteryStateLimited), findsOneWidget);
+      expect(find.text(l10n.batteryRestricted), findsOneWidget);
+
+      await tester.tap(find.text(l10n.batteryAllow));
+      await tester.pumpAndSettle();
+      expect(battery.asked, 1);
+      expect(find.text(l10n.batteryStateFree), findsOneWidget);
+      expect(find.text(l10n.batteryFree), findsOneWidget);
+      expect(find.text(l10n.batteryAllow), findsNothing);
+    });
+
+    testWidgets('**device matrix**: Downloads holds while restricted', (
+      tester,
+    ) async {
+      await expectNoOverflow(tester, () => downloads(_Battery(free: false)));
+    });
+  });
+}
+
+/// Android's answer, scripted: restricted until asked, allowed after.
+class _Battery implements BatteryFreedom {
+  _Battery({required this.free});
+
+  bool free;
+  var asked = 0;
+
+  @override
+  Future<bool> isFree() async => free;
+
+  @override
+  Future<bool> ask() async {
+    asked++;
+    return free = true;
+  }
 }

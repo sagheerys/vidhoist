@@ -47,6 +47,19 @@ class VhLocalizationsEn extends VhLocalizations {
   String get accountsCleared => 'Cookies deleted';
 
   @override
+  String get accountsFileHint =>
+      'Exported from a browser as a cookies.txt file (Netscape format), for any site, including those not listed above. It joins the sign-ins already here, and stays on this phone.';
+
+  @override
+  String get accountsFilePick => 'Choose a cookies file';
+
+  @override
+  String get accountsFileTitle => 'Or import a cookies file';
+
+  @override
+  String get accountsFromFile => 'From a cookies file';
+
+  @override
   String get accountsHelp =>
       'A sign-in expires after a while; when a site starts refusing again, sign in once more. Signing out of one site also signs the in-app browser out of the others, whose downloads go on as they were.';
 
@@ -129,6 +142,18 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
+  String get audioFormat => 'Audio format';
+
+  @override
+  String get audioFormatM4a => 'M4A: plays everywhere';
+
+  @override
+  String get audioFormatMp3 => 'MP3: for older players and cars';
+
+  @override
+  String get audioFormatOriginal => 'As the site sends it, unconverted';
+
+  @override
   String get audioMono => 'Mono';
 
   @override
@@ -203,6 +228,26 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get batchTitle => 'Batch download';
+
+  @override
+  String get batteryAllow => 'Allow';
+
+  @override
+  String get batteryFree =>
+      'Battery saving leaves downloads alone, even with the app out of sight.';
+
+  @override
+  String get batteryRestricted =>
+      'Battery saving can stop a long download while the app is out of sight.';
+
+  @override
+  String get batteryStateFree => 'Allowed';
+
+  @override
+  String get batteryStateLimited => 'Restricted';
+
+  @override
+  String get batteryTitle => 'Downloads in the background';
 
   @override
   String bitrateKbps(String value) {
@@ -1600,6 +1645,9 @@ class VhLocalizationsEn extends VhLocalizations {
   String get downloadingTitle => 'Downloading';
 
   @override
+  String get downloadsAdvanced => 'Advanced';
+
+  @override
   String get editSubscription => 'Edit';
 
   @override
@@ -1737,6 +1785,14 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get failedToLoadPlaylist => 'Failed to load playlist';
+
+  @override
+  String get fastStreams => 'Faster segmented streams';
+
+  @override
+  String fastStreamsHelp(int count) {
+    return 'Fetches $count pieces at once from sites that cut a video into pieces, such as X. Some sites slow down many requests at once.';
+  }
 
   @override
   String get favorites => 'Favorites';
@@ -2747,6 +2803,17 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get quoteTitle => 'Quote';
+
+  @override
+  String get rateLimit => 'Speed limit';
+
+  @override
+  String get rateLimitNone => 'No limit';
+
+  @override
+  String rateLimitValue(int mb) {
+    return '$mb MB/s';
+  }
 
   @override
   String get readingAsMarkdownHint =>

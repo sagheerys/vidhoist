@@ -168,6 +168,23 @@ void main() {
       expect(valueOf(args, '-r'), '2M');
     });
 
+    test('pieces of a stream fetched together, only when asked for', () {
+      final fast = CommandBuilder.download(
+        const DownloadSpec(url: 'u', folder: 'f', concurrentFragments: 4),
+        android,
+      );
+      expect(valueOf(fast, '-N'), '4');
+      expect(fast.indexOf('-N'), lessThan(fast.indexOf('--')));
+
+      for (final n in [null, 1]) {
+        final plain = CommandBuilder.download(
+          DownloadSpec(url: 'u', folder: 'f', concurrentFragments: n),
+          android,
+        );
+        expect(plain, isNot(contains('-N')), reason: 'n = $n');
+      }
+    });
+
     test("cookies from a browser's own store, on probes too", () {
       const setup = EngineSetup(
         platform: HostPlatform.windows,

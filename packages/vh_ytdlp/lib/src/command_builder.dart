@@ -52,6 +52,7 @@ class DownloadSpec {
     this.embedThumbnail = true,
     this.playlistItems,
     this.rateLimit,
+    this.concurrentFragments,
   }) : assert(
          (url == null) != (infoJsonPath == null),
          'a download starts from a link or from an info JSON, not both',
@@ -89,6 +90,11 @@ class DownloadSpec {
 
   /// `-r`, such as `2M`.
   final String? rateLimit;
+
+  /// `-N`: how many pieces of a stream cut into pieces (HLS, DASH, as X
+  /// and many sites serve) are fetched at once. One at a time, each
+  /// piece waits on the last one's round trip; null keeps yt-dlp's one.
+  final int? concurrentFragments;
 }
 
 /// The argument lists handed to yt-dlp, the executable itself left out.
@@ -205,6 +211,7 @@ abstract final class CommandBuilder {
       '--ignore-errors',
     ],
     if (spec.rateLimit case final rate?) ...['-r', rate],
+    if (spec.concurrentFragments case final n? when n > 1) ...['-N', '$n'],
     if (spec.playlistItems case final items?) ...[
       '--yes-playlist',
       '--playlist-items',

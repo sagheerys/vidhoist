@@ -207,6 +207,54 @@ void main() {
       expect(container.read(signedInSitesProvider), isEmpty);
     });
 
+    test('**the guard**: a cookies file the person picked is merged over '
+        'the sign-ins, a listed site reads signed in, and the rest show '
+        'on their own', () async {
+      final container = ProviderContainer(
+        overrides: [
+          cookiesFileProvider.overrideWithValue(accounts.path),
+          webCookieJarProvider.overrideWithValue(jar),
+        ],
+      );
+      addTearDown(container.dispose);
+      jar.pages['https://vimeo.com/'] = 'vimeo=v';
+      final wired = container.read(accountsProvider)!;
+      await wired.keep(LoginSite.vimeo);
+
+      final picked = utf8.encode(
+        '# Netscape HTTP Cookie File\n'
+        '#HttpOnly_.x.com\tTRUE\t/\tTRUE\t0\tauth_token\ta\n'
+        '.x.com\tTRUE\t/\tTRUE\t0\tct0\tc\n'
+        '.example.org\tTRUE\t/\tFALSE\t0\tsid\ts\n',
+      );
+      expect(await wired.importFile(picked), ['example.org', 'x.com']);
+      expect(container.read(signedInSitesProvider), {
+        LoginSite.vimeo,
+        LoginSite.x,
+      });
+      expect(container.read(fileOnlySitesProvider), ['example.org']);
+
+      // Removing what a file brought leaves the browser signed in.
+      await wired.forgetSite('example.org');
+      expect(container.read(fileOnlySitesProvider), isEmpty);
+      expect(container.read(signedInSitesProvider), hasLength(2));
+      expect(jar.cleared, 0);
+    });
+
+    test(
+      'a file with no cookie in it is refused and nothing is touched',
+      () async {
+        jar.pages['https://vimeo.com/'] = 'vimeo=v';
+        await accounts.keep(LoginSite.vimeo);
+        final before = file().readAsStringSync();
+        expect(
+          await accounts.importFile(utf8.encode('{"cookies": []}')),
+          isNull,
+        );
+        expect(file().readAsStringSync(), before);
+      },
+    );
+
     test('with no file path there are no accounts and no sites', () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);

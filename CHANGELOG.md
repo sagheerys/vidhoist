@@ -6,6 +6,20 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- On the phone, Settings › Downloads › Advanced: the audio format for
+  "audio only" (M4A as before, MP3, or as the site sends it), a speed limit
+  (none, 1, 2, 5 or 10 MB/s), and faster segmented streams (yt-dlp's `-N 4`,
+  off until turned on) for sites such as X that serve videos in pieces.
+- Settings › Downloads › Advanced › Downloads in the background: whether
+  battery saving may stop a long download, as a state pill, and while
+  restricted an "Allow" that opens Android's own dialog to exempt the app.
+  Nothing on the settings home.
+- Settings › Accounts › Or import a cookies file: a `cookies.txt` exported
+  from a browser (Netscape format), for anyone who would rather not sign in
+  inside the app, or for a site with no row. It joins the sign-ins in the
+  one file yt-dlp reads; a listed site reads signed in, and any other site
+  it brought is listed on its own and can be removed. A file with no
+  cookie in it is refused and nothing is changed.
 - "Download on the computer", off until turned on: on Windows, Settings ›
   Phone receives from a paired phone over the home network; on the phone,
   Settings › Computer pairs with it (a code shown on the computer, then four
