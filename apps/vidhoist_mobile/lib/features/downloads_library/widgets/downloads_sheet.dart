@@ -150,7 +150,11 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
                     ),
                   TextButton(
                     onPressed: () {
-                      engine?.submit(task.effectiveUrl, task.quality);
+                      engine?.submit(
+                        task.effectiveUrl,
+                        task.quality,
+                        clip: task.clip,
+                      );
                       // The old card does not linger beside the new
                       // attempt.
                       engine?.forget(task.id);

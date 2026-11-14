@@ -6,6 +6,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../../di.dart';
 import 'download_tuning_fields.dart';
+import 'subtitle_download_fields.dart';
 import 'help_button.dart';
 import '../../player/caption_style.dart';
 import '../../storage/storage_location_tile.dart';
@@ -143,6 +144,7 @@ class DownloadFields extends ConsumerWidget {
           value: settings.subtitles,
           onChanged: notifier.setSubtitles,
         ),
+        if (settings.subtitles) const SubtitleDownloadFields(),
         const DownloadTuningFields(),
       ],
     );

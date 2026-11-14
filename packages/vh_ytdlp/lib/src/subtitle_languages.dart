@@ -7,11 +7,14 @@
 /// (`ar-SA`), a translation's source lower case, so the patterns tell them
 /// apart.
 abstract final class SubtitleLanguages {
-  /// The language itself, its original track (`ar-orig`) and its regions.
+  /// The language itself, its original track (`ar-orig`), its regions,
+  /// and its scripts: Chinese comes only as `zh-Hans` or `zh-Hant`, a
+  /// capital and three small letters, which no translation's source is.
   static List<String> patternsFor(String language) => [
     language,
     '$language-orig',
     '$language-[A-Z]+',
+    '$language-[A-Z][a-z]{3}',
   ];
 
   /// [patternsFor] each of [languages], in order, each once.

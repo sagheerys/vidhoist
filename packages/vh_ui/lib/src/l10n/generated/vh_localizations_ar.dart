@@ -377,6 +377,31 @@ class VhLocalizationsAr extends VhLocalizations {
   String get clearLogsConfirm => 'حذف كل سجلّات التشخيص؟';
 
   @override
+  String get clipEndAfterStart => 'بعد وقت البداية';
+
+  @override
+  String get clipFrom => 'من';
+
+  @override
+  String get clipMinuteDown => 'دقيقة أقل';
+
+  @override
+  String get clipMinuteUp => 'دقيقة أكثر';
+
+  @override
+  String get clipOnly => 'جزء من المقطع فقط';
+
+  @override
+  String get clipOnlyHelp =>
+      'من وقت إلى آخر، بلا بقية المقطع. ويأتي بلا ترجمة.';
+
+  @override
+  String get clipTimeHint => 'بالأرقام وحدها: 130 تعني 1:30';
+
+  @override
+  String get clipTo => 'إلى';
+
+  @override
   String get clipboardFound => 'رابط جاهز في الحافظة';
 
   @override
@@ -1686,6 +1711,13 @@ class VhLocalizationsAr extends VhLocalizations {
   String get editSubscription => 'تعديل';
 
   @override
+  String get embedSubtitles => 'الترجمة داخل ملف الفيديو أيضاً';
+
+  @override
+  String get embedSubtitlesHelp =>
+      'لتظهر في المشغّلات الأخرى. مشغّل VidHoist يعرضها في الحالتين.';
+
+  @override
   String get emptyFilteredMessage => 'أزل مرشّحاً من الأعلى لترى مكتبتك كلها.';
 
   @override
@@ -2057,7 +2089,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get mobileSubtitlesHelp =>
-      'الترجمة العربية والإنجليزية إن وُجدت، تُحفظ بجانب المقطع وتظهر في المشغّل.';
+      'الترجمة باللغات التالية إن وُجدت، تُحفظ بجانب المقطع وتظهر في المشغّل.';
 
   @override
   String get mobileSubtitlesSizeLarger => 'أكبر';
@@ -3246,6 +3278,13 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String get subscriptionsSubtitle =>
       'مقاطع القنوات التي تتابعها، تُنزَّل تلقائياً';
+
+  @override
+  String get subtitleLangs => 'لغات الترجمة';
+
+  @override
+  String get subtitleLangsHelp =>
+      'تُنزَّل حين يوفّرها المقطع. تبقى لغة واحدة مختارة على الأقل.';
 
   @override
   String get subtitles => 'الترجمة على الفيديو';

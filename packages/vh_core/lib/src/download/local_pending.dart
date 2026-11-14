@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:vh_ytdlp/vh_ytdlp.dart' show ClipRange;
+
 import '../models/download_task.dart';
 import '../models/quality.dart';
 import '../storage/key_value_store.dart';
@@ -30,6 +32,7 @@ class LocalPendingStore {
       'url': task.inputUrl,
       'quality': task.quality.wire,
       'folder': ?task.folder,
+      'clip': ?task.clip?.wire,
       if (task.isBatchMember) 'batch': true,
       if (task.phase == TaskPhase.paused) 'paused': true,
       'title': ?task.title,
@@ -56,6 +59,7 @@ class LocalPendingStore {
           inputUrl: url,
           quality: Quality.fromWire(r['quality'] as String?),
           folder: r['folder'] as String?,
+          clip: ClipRange.fromWire(r['clip'] as String?),
           isBatchMember: r['batch'] == true,
           phase: r['paused'] == true ? TaskPhase.paused : TaskPhase.queued,
           title: r['title'] as String?,

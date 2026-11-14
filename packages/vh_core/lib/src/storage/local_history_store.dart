@@ -55,8 +55,11 @@ class LocalHistoryStore {
     final when = at ?? DateTime.now();
     final json = <String, Object?>{
       'id': task.id,
-      'url': info?.webpageUrl ?? task.effectiveUrl,
-      'title': info?.title ?? task.title,
+      // A stretch is kept under its own key and title (`withProbe`).
+      'url': task.clip == null
+          ? info?.webpageUrl ?? task.effectiveUrl
+          : task.canonicalUrl ?? task.effectiveUrl,
+      'title': task.clip == null ? info?.title ?? task.title : task.title,
       'filename': _basename(path),
       'uploader': info?.uploader,
       'thumbnail': info?.thumbnail ?? task.thumbnail,

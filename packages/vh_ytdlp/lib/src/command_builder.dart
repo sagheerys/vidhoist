@@ -1,3 +1,4 @@
+import 'clip_range.dart';
 import 'format_selector.dart';
 
 /// Which app the command is for: the two differ in file names and in what
@@ -49,10 +50,12 @@ class DownloadSpec {
     this.audioFormat = AudioFormat.m4a,
     this.nameTemplate = defaultNameTemplate,
     this.subtitleLanguages = const [],
+    this.embedSubtitles = false,
     this.embedThumbnail = true,
     this.playlistItems,
     this.rateLimit,
     this.concurrentFragments,
+    this.clip,
   }) : assert(
          (url == null) != (infoJsonPath == null),
          'a download starts from a link or from an info JSON, not both',
@@ -78,6 +81,12 @@ class DownloadSpec {
   /// Patterns for `--sub-langs`, such as `ar.*`; empty fetches none.
   final List<String> subtitleLanguages;
 
+  /// The subtitles also inside the file, for players that read no file
+  /// beside it. The files beside it stay: the app's own player and
+  /// transcript read those, and yt-dlp keeps them when `--write-subs` asked
+  /// for them.
+  final bool embedSubtitles;
+
   /// The cover inside the file, where it outlives the site deleting it
   /// and travels with the file. Nothing else is written beside it but the
   /// subtitles: no info JSON (links signed for this device's address) and
@@ -95,6 +104,19 @@ class DownloadSpec {
   /// and many sites serve) are fetched at once. One at a time, each
   /// piece waits on the last one's round trip; null keeps yt-dlp's one.
   final int? concurrentFragments;
+
+  /// A stretch of the video alone; null for all of it.
+  final ClipRange? clip;
+
+  /// [nameTemplate], with the stretch ahead of the extension when there is
+  /// one ([ClipRange.fileTag]).
+  String get outputTemplate => switch (clip) {
+    final clip? => nameTemplate.replaceFirst(
+      '.%(ext)s',
+      ' ${clip.fileTag}.%(ext)s',
+    ),
+    null => nameTemplate,
+  };
 }
 
 /// The argument lists handed to yt-dlp, the executable itself left out.
@@ -184,7 +206,7 @@ abstract final class CommandBuilder {
     '-P',
     spec.folder,
     '-o',
-    spec.nameTemplate,
+    spec.outputTemplate,
     if (setup.platform == HostPlatform.windows) '--windows-filenames',
     ...FormatSelector.args(
       spec.choice,
@@ -207,11 +229,13 @@ abstract final class CommandBuilder {
       spec.subtitleLanguages.join(','),
       '--sub-format',
       'vtt/srt/best',
+      if (spec.embedSubtitles) '--embed-subs',
       // A refused subtitle track must not fail the video it belongs to.
       '--ignore-errors',
     ],
     if (spec.rateLimit case final rate?) ...['-r', rate],
     if (spec.concurrentFragments case final n? when n > 1) ...['-N', '$n'],
+    if (spec.clip case final clip?) ...['--download-sections', clip.section],
     if (spec.playlistItems case final items?) ...[
       '--yes-playlist',
       '--playlist-items',

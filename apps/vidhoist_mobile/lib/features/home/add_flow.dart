@@ -14,6 +14,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../shared/error_text.dart';
+import 'clip_fields.dart';
 import 'link_preview_view.dart';
 
 /// Converts the core's platform into its presentation type, since vh_ui
@@ -107,6 +108,13 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
   bool? _pcReachable;
   late var _toPc = ref.read(sendToPcProvider);
 
+  /// Only a stretch ([ClipFields]); its times show what is wrong only
+  /// once a download was asked for.
+  var _clipOn = false;
+  var _clipErrors = false;
+  final _clipFrom = TextEditingController();
+  final _clipTo = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -123,6 +131,8 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
   @override
   void dispose() {
     _controller.dispose();
+    _clipFrom.dispose();
+    _clipTo.dispose();
     super.dispose();
   }
 
@@ -159,8 +169,11 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
       qualities: qualities,
       selectedQuality: _quality,
       onQualitySelected: (value) => setState(() => _quality = value),
-      extra: showPc
-          ? PcDestination(
+      extra: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (showPc)
+            PcDestination(
               pcName: pc.name,
               toPc: _toPc,
               away: _pcReachable == false,
@@ -168,8 +181,19 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
                 setState(() => _toPc = value);
                 unawaited(ref.read(sendToPcProvider.notifier).set(value));
               },
-            )
-          : null,
+            ),
+          // The computer is told a link and a quality, nothing more: a
+          // stretch sent there would come back whole.
+          if (!toPc)
+            ClipFields(
+              on: _clipOn,
+              onChanged: (on) => setState(() => _clipOn = on),
+              from: _clipFrom,
+              to: _clipTo,
+              showErrors: _clipErrors,
+            ),
+        ],
+      ),
       startLabel: toPc ? l10n.pcSendToPc : l10n.startDownload,
       onStart: () => unawaited(_submit(toPc: toPc)),
     );
@@ -180,6 +204,11 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
     final input = UrlKit.extractUrl(_controller.text);
     if (!input.startsWith('http')) {
       showVhSnack(context, l10n.invalidUrl, type: VhSnackType.error);
+      return;
+    }
+    final clip = _clipOn && !toPc ? ClipFields.read(_clipFrom, _clipTo) : null;
+    if (_clipOn && !toPc && clip == null) {
+      setState(() => _clipErrors = true);
       return;
     }
     Navigator.pop(context, true);
@@ -213,7 +242,7 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
       );
       return;
     }
-    engine.submit(url, Quality.fromWire(_quality));
+    engine.submit(url, Quality.fromWire(_quality), clip: clip);
     showVhSnackOn(
       widget.messenger,
       l10n.downloadStarted,

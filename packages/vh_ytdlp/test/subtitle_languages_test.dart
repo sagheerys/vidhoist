@@ -25,6 +25,16 @@ void main() {
     expect(asked(en, 'en-de-DE'), isFalse);
   });
 
+  test('a language written in two scripts is asked for in both', () {
+    final zh = SubtitleLanguages.patternsFor('zh');
+    for (final code in ['zh', 'zh-Hans', 'zh-Hant', 'zh-TW']) {
+      expect(asked(zh, code), isTrue, reason: code);
+    }
+    for (final code in ['zh-en', 'zh-Hans-en', 'zh-Hansx']) {
+      expect(asked(zh, code), isFalse, reason: code);
+    }
+  });
+
   test('several languages in order, each once', () {
     expect(SubtitleLanguages.patterns(['ar', 'en', 'ar']), [
       ...SubtitleLanguages.patternsFor('ar'),

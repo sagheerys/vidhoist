@@ -162,12 +162,14 @@ void main() {
           audioFormat: AudioFormat.original,
           rateLimit: '5M',
           concurrentFragments: 4,
+          embedSubtitles: true,
         ),
       );
       final spec = request.copyWith(quality: Quality.q480).toSpec();
       expect(spec.audioFormat, AudioFormat.original);
       expect(spec.rateLimit, '5M');
       expect(spec.concurrentFragments, 4);
+      expect(spec.embedSubtitles, isTrue);
     });
 
     test('the cover goes inside the file unless the app says not to', () {

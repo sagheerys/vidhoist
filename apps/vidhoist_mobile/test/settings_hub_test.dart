@@ -13,6 +13,7 @@ import 'package:vidhoist_mobile/features/settings/settings_sections.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:vidhoist_mobile/features/settings/widgets/engine_fields.dart';
 import 'package:vidhoist_mobile/features/settings/widgets/settings_fields.dart';
+import 'package:vidhoist_mobile/features/settings/widgets/subtitle_download_fields.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
@@ -240,7 +241,7 @@ void main() {
     expect(gap, lessThanOrEqualTo(VhSpace.xl + 1));
   });
 
-  group('battery saving', () {
+  group('Settings › Downloads', () {
     Widget downloads(BatteryFreedom battery) {
       final app = host(battery: battery) as UncontrolledProviderScope;
       return UncontrolledProviderScope(
@@ -283,6 +284,39 @@ void main() {
       expect(find.text(l10n.batteryStateFree), findsOneWidget);
       expect(find.text(l10n.batteryFree), findsOneWidget);
       expect(find.text(l10n.batteryAllow), findsNothing);
+    });
+
+    testWidgets('**the guard**: a language chip adds or drops that language, '
+        'the last one stays, and the subtitles can go inside the video', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(600, 2400);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(downloads(_Battery(free: true)));
+      await tester.pumpAndSettle();
+      final scope = ProviderScope.containerOf(
+        tester.element(find.byType(SubtitleDownloadFields)),
+      );
+      final l10n = tester.element(find.byType(SubtitleDownloadFields)).vhl;
+      await tester.tap(find.text('Français'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('العربية'));
+      await tester.pumpAndSettle();
+      expect(scope.read(settingsProvider).subtitleLangs, ['en', 'fr']);
+      await tester.tap(find.text('English'));
+      await tester.tap(find.text('Français'));
+      await tester.pumpAndSettle();
+      expect(scope.read(settingsProvider).subtitleLangs, ['fr']);
+
+      await tester.tap(find.text(l10n.embedSubtitles));
+      await tester.pumpAndSettle();
+      expect(scope.read(settingsProvider).tuning.embedSubtitles, isTrue);
+
+      // Subtitles off: the languages leave with them.
+      await tester.tap(find.text(l10n.mobileSubtitles));
+      await tester.pumpAndSettle();
+      expect(find.byType(SubtitleDownloadFields), findsNothing);
     });
 
     testWidgets('**device matrix**: Downloads holds while restricted', (

@@ -47,6 +47,52 @@ void main() {
     expect(const PhoneSettings(subtitles: false).subtitleLanguages, isEmpty);
   });
 
+  test('**the guard**: the subtitle languages chosen are the ones asked '
+      'for, stay as set, and the last one cannot go', () async {
+    final store = MemoryKeyValueStore();
+    final c = ProviderContainer(
+      overrides: [
+        keyValueStoreProvider.overrideWithValue(store),
+        secretStoreProvider.overrideWithValue(_NoSecrets()),
+        initialSettingsProvider.overrideWithValue(
+          await PhoneSettings.load(store),
+        ),
+      ],
+    );
+    addTearDown(c.dispose);
+    final notifier = c.read(settingsProvider.notifier);
+    await notifier.toggleSubtitleLang('fr');
+    await notifier.toggleSubtitleLang('ar');
+    await notifier.toggleSubtitleLang('en');
+    expect(c.read(settingsProvider).subtitleLangs, ['fr']);
+    await notifier.toggleSubtitleLang('fr');
+    expect(c.read(settingsProvider).subtitleLangs, ['fr']);
+    expect(
+      c.read(settingsProvider).subtitleLanguages,
+      SubtitleLanguages.patterns(['fr']),
+    );
+    expect((await PhoneSettings.load(store)).subtitleLangs, ['fr']);
+  });
+
+  test('a stored language this build does not offer is dropped, and none '
+      'left reads as Arabic and English', () async {
+    final store = MemoryKeyValueStore();
+    await store.setStringList('download_subtitle_languages', ['xx', 'de']);
+    expect((await PhoneSettings.load(store)).subtitleLangs, ['de']);
+    await store.setStringList('download_subtitle_languages', ['xx']);
+    expect((await PhoneSettings.load(store)).subtitleLangs, ['ar', 'en']);
+  });
+
+  test('subtitles go inside the video only when asked and only while they '
+      'are fetched at all', () async {
+    final store = MemoryKeyValueStore();
+    expect((await PhoneSettings.load(store)).tuning.embedSubtitles, isFalse);
+    await store.setBool('download_embed_subtitles', true);
+    final on = await PhoneSettings.load(store);
+    expect(on.tuning.embedSubtitles, isTrue);
+    expect(on.copyWith(subtitles: false).tuning.embedSubtitles, isFalse);
+  });
+
   test('**the guard**: the audio format, speed limit and pieces at once '
       'stay as set and reach the engine as one tuning', () async {
     final store = MemoryKeyValueStore();
