@@ -141,8 +141,9 @@ final autoRetryProvider = Provider<void>((ref) {
       if (!(task.error?.isRetryable ?? false)) continue;
       // The old card was retried, so it does not stay on screen as a second
       // failure.
-      if (!retried.add(task.inputUrl)) continue;
-      engine.submit(task.inputUrl, task.quality);
+      // A stretch and the whole video of one link are two downloads.
+      if (!retried.add('${task.inputUrl} ${task.clip?.wire}')) continue;
+      engine.submit(task.inputUrl, task.quality, clip: task.clip);
       // The old card was retried, so it does not stay on screen as a second
       // failure.
       engine.forget(task.id);

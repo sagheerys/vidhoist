@@ -6,6 +6,19 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- On the phone, "Only a part of the video" in the download sheet: from one
+  time to another, fetched alone with yt-dlp's `--download-sections`. Each
+  time is typed as digits alone, the colon put in as they come (`130` is
+  `1:30`; Samsung's number pad has no colon), or moved a minute at a time
+  with the arrows beside it, held to keep moving. The part gets its own file name, and its
+  own place in the library beside the whole video (its link marked
+  `#t=start,end`, its range after the title). It comes without subtitles,
+  which yt-dlp does not cut. Hidden while the link goes to the computer.
+- On the phone, Settings › Downloads › Download subtitles: the languages
+  fetched (sixteen, Arabic and English as before), and "Subtitles inside
+  the video too" (`--embed-subs`, off until turned on) for other players;
+  the files beside the video stay for the app's player and transcript.
+  Chinese subtitles, which come as `zh-Hans` or `zh-Hant`, are found too.
 - On the phone, Settings › Downloads › Advanced: the audio format for
   "audio only" (M4A as before, MP3, or as the site sends it), a speed limit
   (none, 1, 2, 5 or 10 MB/s), and faster segmented streams (yt-dlp's `-N 4`,
@@ -172,6 +185,11 @@ All notable changes to VidHoist. The format follows
   appeared.
 
 ### Fixed
+- **The status bar still showed the old icon** (the window with the arrow)
+  beside the battery and the network whenever the phone app had a
+  notification up. It is now the folded ribbon, made by
+  `tool/icons/vidhoist_kit.py` like every other icon, and white on clear so
+  Android tints it to the bar as it does every app's.
 - **"Continue with Google" on X stopped on a blank page** in Settings ›
   Accounts on the phone, and kept nothing. Google opens in a window of its
   own and hands the answer back to the page that opened it; the in-app

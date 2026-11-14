@@ -128,6 +128,50 @@ void main() {
       );
       expect(valueOf(args, '--sub-langs'), 'ar.*,en.*');
       expect(args, containsAll(['--write-auto-subs', '--ignore-errors']));
+      expect(args, isNot(contains('--embed-subs')));
+    });
+
+    test('**the guard**: a stretch of a video is fetched alone under a '
+        'name of its own, so the whole video never stands in for it', () {
+      // With one name for both, `--no-overwrites` would find the whole
+      // video already there and hand it back as the stretch.
+      final whole = CommandBuilder.download(link, android);
+      expect(whole, isNot(contains('--download-sections')));
+      final part = CommandBuilder.download(
+        DownloadSpec(
+          url: 'u',
+          folder: 'f',
+          clip: ClipRange.tryParse('2:00', '5:30'),
+        ),
+        android,
+      );
+      expect(valueOf(part, '--download-sections'), '*120-330');
+      expect(valueOf(part, '-o'), '%(title).80B [%(id)s] 2m00s-5m30s.%(ext)s');
+      expect(valueOf(whole, '-o'), DownloadSpec.defaultNameTemplate);
+      expect(part.indexOf('--download-sections'), lessThan(part.indexOf('--')));
+    });
+
+    test('subtitles go inside the file only when asked, and only with '
+        'subtitles to put there', () {
+      final embedded = CommandBuilder.download(
+        const DownloadSpec(
+          url: 'u',
+          folder: 'f',
+          subtitleLanguages: ['ar.*'],
+          embedSubtitles: true,
+        ),
+        android,
+      );
+      expect(embedded, containsAll(['--write-subs', '--embed-subs']));
+      expect(
+        embedded.indexOf('--embed-subs'),
+        lessThan(embedded.indexOf('--')),
+      );
+      final none = CommandBuilder.download(
+        const DownloadSpec(url: 'u', folder: 'f', embedSubtitles: true),
+        android,
+      );
+      expect(none, isNot(contains('--embed-subs')));
     });
 
     test('**the guard**: nothing lands beside the file but its subtitles; '

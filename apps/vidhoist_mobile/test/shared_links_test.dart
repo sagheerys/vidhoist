@@ -128,6 +128,7 @@ class _Engine implements LocalDownloadEngine {
     Quality quality, {
     bool isBatchMember = false,
     String? folder,
+    ClipRange? clip,
   }) {
     urls.add(url);
     return DownloadTask(inputUrl: url, quality: quality, folder: folder);

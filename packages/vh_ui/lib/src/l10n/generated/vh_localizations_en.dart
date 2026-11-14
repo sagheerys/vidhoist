@@ -351,6 +351,31 @@ class VhLocalizationsEn extends VhLocalizations {
   String get clearLogsConfirm => 'Delete all diagnostic logs?';
 
   @override
+  String get clipEndAfterStart => 'After the start';
+
+  @override
+  String get clipFrom => 'From';
+
+  @override
+  String get clipMinuteDown => 'A minute earlier';
+
+  @override
+  String get clipMinuteUp => 'A minute later';
+
+  @override
+  String get clipOnly => 'Only a part of the video';
+
+  @override
+  String get clipOnlyHelp =>
+      'From one time to another, without the rest. It comes without subtitles.';
+
+  @override
+  String get clipTimeHint => 'Digits alone: 130 is 1:30';
+
+  @override
+  String get clipTo => 'To';
+
+  @override
   String get clipboardFound => 'A link is ready in your clipboard';
 
   @override
@@ -1651,6 +1676,13 @@ class VhLocalizationsEn extends VhLocalizations {
   String get editSubscription => 'Edit';
 
   @override
+  String get embedSubtitles => 'Subtitles inside the video too';
+
+  @override
+  String get embedSubtitlesHelp =>
+      'So other players show them. VidHoist\'s own player shows them either way.';
+
+  @override
   String get emptyFilteredMessage =>
       'Clear a filter above to see your whole library.';
 
@@ -2022,7 +2054,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get mobileSubtitlesHelp =>
-      'Arabic and English subtitles, when the video has them, saved beside it and shown in the player.';
+      'Subtitles in the languages below, when the video has them, saved beside it and shown in the player.';
 
   @override
   String get mobileSubtitlesSizeLarger => 'Larger';
@@ -3194,6 +3226,13 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get subscriptionsSubtitle =>
       'New videos from channels you follow, downloaded by themselves';
+
+  @override
+  String get subtitleLangs => 'Subtitle languages';
+
+  @override
+  String get subtitleLangsHelp =>
+      'Fetched when the video has them. One at least stays chosen.';
 
   @override
   String get subtitles => 'Subtitles';

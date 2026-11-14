@@ -67,6 +67,79 @@ void main() {
     await tester.tap(find.text('Start download'));
     await tester.pumpAndSettle();
     expect(engine.qualities, [Quality.q360]);
+    expect(engine.clips, [null]);
+  });
+
+  group('only a part of the video', () {
+    const yt = 'https://www.youtube.com/watch?v=jNQXAC9IVRw';
+
+    Future<void> typed(WidgetTester tester, String from, String to) async {
+      await open(tester, yt);
+      expect(find.widgetWithText(TextField, 'From'), findsNothing);
+      await tester.tap(find.text('Only a part of the video'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.widgetWithText(TextField, 'From'), from);
+      await tester.enterText(find.widgetWithText(TextField, 'To'), to);
+      await tester.tap(find.text('Start download'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('**the guard**: the stretch typed goes with the download', (
+      tester,
+    ) async {
+      await typed(tester, '1:30', '٢:٤٥');
+      expect(engine.clips, [
+        const ClipRange(Duration(seconds: 90), Duration(seconds: 165)),
+      ]);
+      expect(find.text('Start download'), findsNothing);
+    });
+
+    testWidgets('times that do not read keep the sheet open and say why', (
+      tester,
+    ) async {
+      await typed(tester, '2:00', '1:00');
+      expect(engine.qualities, isEmpty);
+      expect(find.text('After the start'), findsOneWidget);
+      await tester.enterText(find.widgetWithText(TextField, 'From'), 'soon');
+      await tester.pump();
+      expect(find.text('Digits alone: 130 is 1:30'), findsOneWidget);
+    });
+
+    // Samsung's number pad has no colon: before this, `130` read as 130
+    // seconds, and a time past a minute could not be typed there.
+    testWidgets('**the guard**: digits alone are a time, the colon put in', (
+      tester,
+    ) async {
+      await typed(tester, '130', '٢٤٥');
+      expect(engine.clips, [
+        const ClipRange(Duration(seconds: 90), Duration(seconds: 165)),
+      ]);
+    });
+
+    testWidgets('the arrows move a minute; "to" starts from "from"', (
+      tester,
+    ) async {
+      await open(tester, yt);
+      await tester.tap(find.text('Only a part of the video'));
+      await tester.pumpAndSettle();
+      Finder arrow(String field, String label) => find.descendant(
+        of: find.widgetWithText(TextField, field),
+        matching: find.bySemanticsLabel(label),
+      );
+      await tester.tap(arrow('From', 'A minute earlier'));
+      await tester.tap(arrow('From', 'A minute later'));
+      await tester.tap(arrow('From', 'A minute later'));
+      await tester.pump();
+      expect(find.text('2:00'), findsOneWidget);
+      await tester.tap(arrow('To', 'A minute later'));
+      await tester.pump();
+      expect(find.text('3:00'), findsOneWidget);
+      await tester.tap(find.text('Start download'));
+      await tester.pumpAndSettle();
+      expect(engine.clips, [
+        const ClipRange(Duration(minutes: 2), Duration(minutes: 3)),
+      ]);
+    });
   });
 
   testWidgets('another video site offers the heights too', (tester) async {
@@ -146,6 +219,7 @@ class _OpensSheetState extends ConsumerState<_OpensSheet> {
 
 class _Engine implements LocalDownloadEngine {
   final qualities = <Quality>[];
+  final clips = <ClipRange?>[];
 
   @override
   DownloadTask submit(
@@ -153,8 +227,10 @@ class _Engine implements LocalDownloadEngine {
     Quality quality, {
     bool isBatchMember = false,
     String? folder,
+    ClipRange? clip,
   }) {
     qualities.add(quality);
+    clips.add(clip);
     return DownloadTask(inputUrl: url, quality: quality, folder: folder);
   }
 

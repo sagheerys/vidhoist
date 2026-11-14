@@ -16,6 +16,7 @@ class FakeEngine extends Fake implements LocalDownloadEngine {
     Quality quality, {
     bool isBatchMember = false,
     String? folder,
+    ClipRange? clip,
   }) {
     final task = DownloadTask(
       inputUrl: text,

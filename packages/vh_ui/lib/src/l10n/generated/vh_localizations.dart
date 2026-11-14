@@ -662,6 +662,54 @@ abstract class VhLocalizations {
   /// **'Delete all diagnostic logs?'**
   String get clearLogsConfirm;
 
+  /// No description provided for @clipEndAfterStart.
+  ///
+  /// In en, this message translates to:
+  /// **'After the start'**
+  String get clipEndAfterStart;
+
+  /// No description provided for @clipFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get clipFrom;
+
+  /// No description provided for @clipMinuteDown.
+  ///
+  /// In en, this message translates to:
+  /// **'A minute earlier'**
+  String get clipMinuteDown;
+
+  /// No description provided for @clipMinuteUp.
+  ///
+  /// In en, this message translates to:
+  /// **'A minute later'**
+  String get clipMinuteUp;
+
+  /// No description provided for @clipOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only a part of the video'**
+  String get clipOnly;
+
+  /// No description provided for @clipOnlyHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'From one time to another, without the rest. It comes without subtitles.'**
+  String get clipOnlyHelp;
+
+  /// No description provided for @clipTimeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Digits alone: 130 is 1:30'**
+  String get clipTimeHint;
+
+  /// No description provided for @clipTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get clipTo;
+
   /// No description provided for @clipboardFound.
   ///
   /// In en, this message translates to:
@@ -2846,6 +2894,18 @@ abstract class VhLocalizations {
   /// **'Edit'**
   String get editSubscription;
 
+  /// No description provided for @embedSubtitles.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtitles inside the video too'**
+  String get embedSubtitles;
+
+  /// No description provided for @embedSubtitlesHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'So other players show them. VidHoist\'s own player shows them either way.'**
+  String get embedSubtitlesHelp;
+
   /// No description provided for @emptyFilteredMessage.
   ///
   /// In en, this message translates to:
@@ -3473,7 +3533,7 @@ abstract class VhLocalizations {
   /// No description provided for @mobileSubtitlesHelp.
   ///
   /// In en, this message translates to:
-  /// **'Arabic and English subtitles, when the video has them, saved beside it and shown in the player.'**
+  /// **'Subtitles in the languages below, when the video has them, saved beside it and shown in the player.'**
   String get mobileSubtitlesHelp;
 
   /// No description provided for @mobileSubtitlesSizeLarger.
@@ -5437,6 +5497,18 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'New videos from channels you follow, downloaded by themselves'**
   String get subscriptionsSubtitle;
+
+  /// No description provided for @subtitleLangs.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtitle languages'**
+  String get subtitleLangs;
+
+  /// No description provided for @subtitleLangsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetched when the video has them. One at least stays chosen.'**
+  String get subtitleLangsHelp;
 
   /// No description provided for @subtitles.
   ///

@@ -65,6 +65,7 @@ class DownloadTuning {
     this.audioFormat = AudioFormat.m4a,
     this.rateLimit,
     this.concurrentFragments,
+    this.embedSubtitles = false,
   });
 
   /// What "audio only" is saved as.
@@ -75,6 +76,9 @@ class DownloadTuning {
 
   /// yt-dlp's `-N`; null for one piece at a time.
   final int? concurrentFragments;
+
+  /// The subtitles also inside the file (`--embed-subs`).
+  final bool embedSubtitles;
 }
 
 /// One download as the engine asks for it.
@@ -89,6 +93,7 @@ class DownloadRequest {
     this.subtitleLanguages = const [],
     this.playlistItems,
     this.tuning = const DownloadTuning(),
+    this.clip,
   });
 
   /// The task this download belongs to, the key for [DownloadBackend.cancel].
@@ -108,6 +113,10 @@ class DownloadRequest {
   final List<int>? playlistItems;
   final DownloadTuning tuning;
 
+  /// A stretch alone. It comes without subtitles: yt-dlp fetches them
+  /// whole, and their times would then run ahead of the stretch's.
+  final ClipRange? clip;
+
   /// The quality in `vh_ytdlp`'s terms.
   FormatChoice get formatChoice => switch (quality) {
     Quality.best => FormatChoice.best,
@@ -126,12 +135,14 @@ class DownloadRequest {
     folder: folder,
     choice: formatChoice,
     compatible: compatible,
-    subtitleLanguages: subtitleLanguages,
+    subtitleLanguages: clip == null ? subtitleLanguages : const [],
     playlistItems: playlistItems,
     embedThumbnail: embedThumbnail,
     audioFormat: tuning.audioFormat,
     rateLimit: tuning.rateLimit,
     concurrentFragments: tuning.concurrentFragments,
+    embedSubtitles: tuning.embedSubtitles,
+    clip: clip,
   );
 
   DownloadRequest copyWith({
@@ -147,6 +158,7 @@ class DownloadRequest {
     subtitleLanguages: subtitleLanguages,
     playlistItems: playlistItems,
     tuning: tuning,
+    clip: clip,
   );
 }
 

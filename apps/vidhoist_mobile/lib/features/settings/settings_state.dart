@@ -5,6 +5,7 @@ import 'package:vh_media/vh_media.dart'
     show VhCaptionBackground, VhPictureInPicture;
 
 import '../../di.dart';
+import 'subtitle_languages.dart';
 
 /// The phone's settings. Storage key names are fixed: a renamed key would
 /// leave saved settings and backups behind.
@@ -27,6 +28,8 @@ class PhoneSettings {
     this.audioFormat = AudioFormat.m4a,
     this.rateLimit,
     this.fastStreams = false,
+    this.subtitleLangs = defaultSubtitleLangs,
+    this.embedSubtitles = false,
   });
 
   /// What "audio only" is saved as: M4A plays everywhere, MP3 is what
@@ -48,11 +51,22 @@ class PhoneSettings {
   /// Enough to hide each piece's round trip, few enough for a phone.
   static const fastPieces = 4;
 
-  /// The three above, as the engine reads them at each download.
+  /// The languages subtitles are fetched in, in the order chosen; never
+  /// empty, since turning [subtitles] off is how none are fetched.
+  final List<String> subtitleLangs;
+
+  static const defaultSubtitleLangs = ['ar', 'en'];
+
+  /// The subtitles also inside the video, for players that read no file
+  /// beside it. Off unless turned on: the app's own player needs none.
+  final bool embedSubtitles;
+
+  /// The above, as the engine reads them at each download.
   DownloadTuning get tuning => DownloadTuning(
     audioFormat: audioFormat,
     rateLimit: rateLimit,
     concurrentFragments: fastStreams ? fastPieces : null,
+    embedSubtitles: subtitles && embedSubtitles,
   );
 
   /// The memory card new downloads go to, by its id (`PhoneVolume.id`);
@@ -97,10 +111,10 @@ class PhoneSettings {
   /// Never renamed: a renamed key shows the welcome screen again.
   static const welcomedKey = 'engine_welcome_done';
 
-  /// What `--sub-langs` asks for: the app's two languages, without their
+  /// What `--sub-langs` asks for: the chosen languages, without their
   /// machine translations (`SubtitleLanguages`).
   List<String> get subtitleLanguages =>
-      subtitles ? SubtitleLanguages.patterns(const ['ar', 'en']) : const [];
+      subtitles ? SubtitleLanguages.patterns(subtitleLangs) : const [];
 
   final Quality quality;
 
@@ -149,6 +163,8 @@ class PhoneSettings {
     AudioFormat? audioFormat,
     String? rateLimit,
     bool? fastStreams,
+    List<String>? subtitleLangs,
+    bool? embedSubtitles,
 
     /// Distinguishes "clear the language" from "do not change it": `null`
     /// alone is not enough. The same for the card.
@@ -175,6 +191,8 @@ class PhoneSettings {
     audioFormat: audioFormat ?? this.audioFormat,
     rateLimit: clearRateLimit ? null : (rateLimit ?? this.rateLimit),
     fastStreams: fastStreams ?? this.fastStreams,
+    subtitleLangs: subtitleLangs ?? this.subtitleLangs,
+    embedSubtitles: embedSubtitles ?? this.embedSubtitles,
   );
 
   /// Loads the initial snapshot before runApp.
@@ -204,7 +222,21 @@ class PhoneSettings {
         _ => null,
       },
       fastStreams: await store.getBool('download_fast_streams') ?? false,
+      subtitleLangs: _subtitleLangs(
+        await store.getStringList('download_subtitle_languages'),
+      ),
+      embedSubtitles: await store.getBool('download_embed_subtitles') ?? false,
     );
+  }
+
+  /// Codes this build does not offer are dropped; none left reads as the
+  /// default, so a stored list can never fetch nothing with the switch on.
+  static List<String> _subtitleLangs(List<String>? stored) {
+    final known = [
+      for (final code in {...?stored})
+        if (subtitleLanguageNames.containsKey(code)) code,
+    ];
+    return known.isEmpty ? defaultSubtitleLangs : known;
   }
 
   /// A stored name this build does not know reads as the default, never
@@ -277,6 +309,22 @@ class SettingsNotifier extends Notifier<PhoneSettings> {
   Future<void> setSubtitles(bool enabled) async {
     await _mutex.run(() => _store.setBool('download_subtitles', enabled));
     state = state.copyWith(subtitles: enabled);
+  }
+
+  /// Adds or removes [code]; the last language left stays.
+  Future<void> toggleSubtitleLang(String code) async {
+    final now = [...state.subtitleLangs];
+    if (!now.remove(code)) now.add(code);
+    if (now.isEmpty) return;
+    await _mutex.run(
+      () => _store.setStringList('download_subtitle_languages', now),
+    );
+    state = state.copyWith(subtitleLangs: now);
+  }
+
+  Future<void> setEmbedSubtitles(bool enabled) async {
+    await _mutex.run(() => _store.setBool('download_embed_subtitles', enabled));
+    state = state.copyWith(embedSubtitles: enabled);
   }
 
   Future<void> setCaptionSize(int size) async {

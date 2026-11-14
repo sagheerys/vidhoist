@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io' show File, FileSystemException;
 
-import 'package:vh_ytdlp/vh_ytdlp.dart' show YtDlpError;
+import 'package:vh_ytdlp/vh_ytdlp.dart' show ClipRange, YtDlpError;
 
 import '../api/api_exceptions.dart';
 import '../backend/download_backend.dart';
@@ -100,6 +100,7 @@ class LocalDownloadEngine {
     Quality quality, {
     bool isBatchMember = false,
     String? folder,
+    ClipRange? clip,
   }) {
     final url = UrlKit.extractUrl(text);
     final task = DownloadTask(
@@ -107,6 +108,7 @@ class LocalDownloadEngine {
       quality: quality.applyRule(url),
       isBatchMember: isBatchMember,
       folder: folder,
+      clip: clip,
       thumbnail: waitingCover(url),
     );
     _enqueue(task);
@@ -247,13 +249,7 @@ class LocalDownloadEngine {
     var task = _set(_tasks[id]!.copyWith(phase: TaskPhase.preparing));
     final probe = _probes[id] ??= await backend.probe(task.effectiveUrl);
     if (_stopped(id)) return;
-    task = _set(
-      task.copyWith(
-        title: probe.info.title,
-        thumbnail: probe.info.thumbnail,
-        canonicalUrl: probe.info.webpageUrl,
-      ),
-    );
+    task = _set(task.withProbe(probe.info));
     unawaited(_record(task));
     while (startGate != null && !startGate!() && !_stopped(id)) {
       _set(_tasks[id]!.copyWith(phase: TaskPhase.waitingForNetwork));
@@ -274,6 +270,7 @@ class LocalDownloadEngine {
       infoJsonPath: _probes[id]?.infoJsonPath,
       subtitleLanguages: subtitleLanguages?.call() ?? const [],
       tuning: tuning?.call() ?? const DownloadTuning(),
+      clip: task.clip,
     );
     _set(task.copyWith(phase: TaskPhase.downloading, progress: 0));
     while (true) {

@@ -920,6 +920,7 @@ class _Engine implements LocalDownloadEngine {
     Quality quality, {
     bool isBatchMember = false,
     String? folder,
+    ClipRange? clip,
   }) {
     qualities.add(quality);
     return DownloadTask(inputUrl: url, quality: quality, folder: folder);

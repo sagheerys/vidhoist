@@ -493,6 +493,59 @@ void main() {
     expect(after.concurrentFragments, 4);
   });
 
+  group('a stretch of a video', () {
+    final clip = ClipRange.tryParse('2:00', '5:30');
+
+    test('**the guard**: it reaches yt-dlp, without subtitles, and the '
+        'library keeps it under a key and title of its own, beside the '
+        'whole video', () async {
+      final h = Harness(subtitles: () => ['ar.*']);
+      final whole = h.engine.submit(yt, Quality.best);
+      await h.until(whole.id, TaskPhase.completed);
+      final part = h.engine.submit(yt, Quality.best, clip: clip);
+      final done = await h.until(part.id, TaskPhase.completed);
+
+      final request = h.backend.requests.last;
+      expect(request.clip, clip);
+      expect(request.toSpec().subtitleLanguages, isEmpty);
+      expect(h.backend.requests.first.toSpec().subtitleLanguages, ['ar.*']);
+      expect(done.canonicalUrl, '$yt#t=120,330');
+      expect(done.title, 'Title of $yt · 2:00–5:30');
+
+      final urls = [
+        for (final e in await h.history.entries()) e.item.canonicalUrl,
+      ];
+      expect(urls, unorderedEquals([yt, '$yt#t=120,330']));
+    });
+
+    test('it survives the app being closed before it starts', () async {
+      final store = MemoryKeyValueStore();
+      await LocalPendingStore(store).put(
+        DownloadTask(id: 'a', inputUrl: yt, quality: Quality.best, clip: clip),
+      );
+      expect((await LocalPendingStore(store).load()).single.clip, clip);
+    });
+
+    test('it moves without a figure until one arrives, never "0%"', () {
+      final task = DownloadTask(
+        inputUrl: yt,
+        quality: Quality.best,
+        clip: clip,
+        phase: TaskPhase.downloading,
+      );
+      expect(task.hasKnownProgress, isFalse);
+      expect(task.copyWith(progress: 0.4).hasKnownProgress, isTrue);
+      expect(
+        DownloadTask(
+          inputUrl: yt,
+          quality: Quality.best,
+          phase: TaskPhase.downloading,
+        ).hasKnownProgress,
+        isTrue,
+      );
+    });
+  });
+
   group('across launches', () {
     test('what was left is queued again, a paused one stays paused', () async {
       final store = MemoryKeyValueStore();

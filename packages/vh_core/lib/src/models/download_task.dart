@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+import 'package:vh_ytdlp/vh_ytdlp.dart' show ClipRange, InfoJson;
 
 import '../api/api_exceptions.dart';
 import 'quality.dart';
@@ -58,6 +59,7 @@ class DownloadTask {
     this.error,
     this.isBatchMember = false,
     this.folder,
+    this.clip,
     DateTime? createdAt,
   }) : id = id ?? _uuid.v4(),
        createdAt = createdAt ?? DateTime.now();
@@ -103,15 +105,24 @@ class DownloadTask {
   /// Fixed for the task's life, so a retry saves where the first attempt
   /// was meant to.
   final String? folder;
+
+  /// A stretch of the video alone; null for all of it. Fixed for the
+  /// task's life, like [folder].
+  final ClipRange? clip;
   final DateTime createdAt;
 
   /// **Does this phase have known progress?** A waiting task and one held
   /// by the network gate do not move, so showing "0%" over them is a lie
   /// that suggests a hang (the same reasoning as `waitingForNetwork`).
+  ///
+  /// A stretch is cut by ffmpeg, which may say nothing of how far it has
+  /// come; until a figure arrives, it moves without one rather than sit at
+  /// a "0%" that reads as stuck.
   bool get hasKnownProgress =>
       phase != TaskPhase.queued &&
       phase != TaskPhase.waitingForNetwork &&
-      phase != TaskPhase.preparing;
+      phase != TaskPhase.preparing &&
+      !(clip != null && phase == TaskPhase.downloading && progress == 0);
 
   bool get isFinished =>
       phase == TaskPhase.completed ||
@@ -148,6 +159,7 @@ class DownloadTask {
     error: error ?? this.error,
     isBatchMember: isBatchMember,
     folder: folder,
+    clip: clip,
     createdAt: createdAt,
   );
 }
@@ -160,6 +172,23 @@ class DownloadTask {
 /// excluded**: excluding them made "3 downloads" show 90% because only one
 /// was running and the rest were queued. An empty group, or one with no
 /// progress at all, yields `null` for an indeterminate bar.
+extension DownloadTaskProbe on DownloadTask {
+  /// What yt-dlp read of the link. A stretch takes the whole video's
+  /// link marked with its range as its key ([ClipRange.tagUrl]) and its
+  /// range after the title, so the library holds it beside the whole
+  /// video, never in its place.
+  DownloadTask withProbe(InfoJson info) {
+    final clip = this.clip;
+    final url = info.webpageUrl;
+    final title = info.title;
+    return copyWith(
+      title: clip == null || title == null ? title : '$title · ${clip.label}',
+      thumbnail: info.thumbnail,
+      canonicalUrl: clip == null || url == null ? url : clip.tagUrl(url),
+    );
+  }
+}
+
 double? averageTaskProgress(List<DownloadTask> tasks) {
   if (tasks.isEmpty) return null;
   if (!tasks.any((t) => t.hasKnownProgress)) return null;
