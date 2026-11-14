@@ -25,6 +25,7 @@ class MainActivity : AudioServiceActivity() {
         UpdateInstaller.register(this, flutterEngine)
         ShareInbox.register(flutterEngine.dartExecutor.binaryMessenger)
         CookieJar.register(flutterEngine.dartExecutor.binaryMessenger)
+        SignInPopups.register(this, flutterEngine)
         YtDlpBridge.register(applicationContext, flutterEngine)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,

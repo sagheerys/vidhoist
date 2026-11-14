@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/accounts/accounts_state.dart';
 import 'package:vidhoist_mobile/features/accounts/cookie_jar.dart';
 import 'package:vidhoist_mobile/features/accounts/login_sites.dart';
+import 'package:vidhoist_mobile/features/accounts/session_watch.dart';
 import 'package:vh_core/vh_core.dart';
 
 /// The in-app browser's jar, scripted: what each page's cookies are, and
@@ -116,6 +117,19 @@ void main() {
       expect(changes, 0);
     });
 
+    test('**the guard**: X is kept only once `ct0` is there beside '
+        '`auth_token`; yt-dlp sends both, and X refuses one alone', () async {
+      jar.pages['https://x.com/'] = 'guest_id=g; auth_token=a';
+      expect(await accounts.keep(LoginSite.x), isFalse);
+      expect(file().existsSync(), isFalse);
+
+      jar.pages['https://x.com/'] = 'guest_id=g; auth_token=a; ct0=c';
+      expect(await accounts.keep(LoginSite.x), isTrue);
+      final text = utf8.decode(file().readAsBytesSync());
+      expect(text, contains('	auth_token	a'));
+      expect(text, contains('	ct0	c'));
+    });
+
     test('keeps the signed-in site in a file yt-dlp reads', () async {
       jar.pages['https://www.youtube.com/'] = 'SID=s1; LOGIN_INFO=l';
       jar.pages['https://www.google.com/'] = 'NID=n';
@@ -198,6 +212,39 @@ void main() {
       addTearDown(container.dispose);
       expect(container.read(accountsProvider), isNull);
       expect(container.read(signedInSitesProvider), isEmpty);
+    });
+  });
+
+  group('SessionWatch', () {
+    test('**the guard**: asks again and again with no page loading, and '
+        'not once stopped', () async {
+      var asked = 0;
+      final watch = SessionWatch(
+        () async => asked++,
+        every: const Duration(milliseconds: 5),
+      )..start();
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+      watch.stop();
+      expect(asked, greaterThan(2));
+      expect(watch.watching, isFalse);
+
+      final before = asked;
+      await Future<void>.delayed(const Duration(milliseconds: 30));
+      expect(asked, before);
+    });
+
+    test('a second start keeps one clock', () async {
+      var asked = 0;
+      final watch =
+          SessionWatch(
+              () async => asked++,
+              every: const Duration(milliseconds: 20),
+            )
+            ..start()
+            ..start();
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      watch.stop();
+      expect(asked, inInclusiveRange(0, 3));
     });
   });
 }

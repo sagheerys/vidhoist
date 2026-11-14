@@ -66,10 +66,11 @@ class Accounts {
 
   /// Reads [site]'s cookies from the browser and keeps them beside the
   /// other sites'. False, and nothing written, when the browser has no
-  /// signed-in session for the site yet.
+  /// signed-in session for the site yet, or not all of it
+  /// ([LoginSite.alsoNeeded]).
   Future<bool> keep(LoginSite site) async {
     final fresh = CookieFiles.fromHeaders(await jar.headers(site.pages));
-    if (fresh == null || !site.signedInPer(CookieFiles.names(fresh))) {
+    if (fresh == null || !site.readyPer(CookieFiles.names(fresh))) {
       return false;
     }
     final file = File(path);

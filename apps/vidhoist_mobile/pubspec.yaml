@@ -49,6 +49,8 @@ dependencies:
   # The sign-in page of Settings › Accounts: the site's own login inside
   # the app, whose cookies then go to yt-dlp (`CookieJar.kt`).
   webview_flutter: ^4.14.1
+  # Its WebView's id, so `SignInPopups.kt` can give the page real pop-ups.
+  webview_flutter_android: ^4.14.1
 
 dev_dependencies:
   flutter_test:
