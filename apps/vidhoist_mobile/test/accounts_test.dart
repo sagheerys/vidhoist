@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/accounts/accounts_state.dart';
 import 'package:vidhoist_mobile/features/accounts/cookie_jar.dart';
 import 'package:vidhoist_mobile/features/accounts/login_sites.dart';
+import 'package:vidhoist_mobile/features/accounts/session_watch.dart';
 import 'package:vh_core/vh_core.dart';
 
 /// The in-app browser's jar, scripted: what each page's cookies are, and
@@ -116,6 +117,19 @@ void main() {
       expect(changes, 0);
     });
 
+    test('**the guard**: X is kept only once `ct0` is there beside '
+        '`auth_token`; yt-dlp sends both, and X refuses one alone', () async {
+      jar.pages['https://x.com/'] = 'guest_id=g; auth_token=a';
+      expect(await accounts.keep(LoginSite.x), isFalse);
+      expect(file().existsSync(), isFalse);
+
+      jar.pages['https://x.com/'] = 'guest_id=g; auth_token=a; ct0=c';
+      expect(await accounts.keep(LoginSite.x), isTrue);
+      final text = utf8.decode(file().readAsBytesSync());
+      expect(text, contains('	auth_token	a'));
+      expect(text, contains('	ct0	c'));
+    });
+
     test('keeps the signed-in site in a file yt-dlp reads', () async {
       jar.pages['https://www.youtube.com/'] = 'SID=s1; LOGIN_INFO=l';
       jar.pages['https://www.google.com/'] = 'NID=n';
@@ -193,11 +207,92 @@ void main() {
       expect(container.read(signedInSitesProvider), isEmpty);
     });
 
+    test('**the guard**: a cookies file the person picked is merged over '
+        'the sign-ins, a listed site reads signed in, and the rest show '
+        'on their own', () async {
+      final container = ProviderContainer(
+        overrides: [
+          cookiesFileProvider.overrideWithValue(accounts.path),
+          webCookieJarProvider.overrideWithValue(jar),
+        ],
+      );
+      addTearDown(container.dispose);
+      jar.pages['https://vimeo.com/'] = 'vimeo=v';
+      final wired = container.read(accountsProvider)!;
+      await wired.keep(LoginSite.vimeo);
+
+      final picked = utf8.encode(
+        '# Netscape HTTP Cookie File\n'
+        '#HttpOnly_.x.com\tTRUE\t/\tTRUE\t0\tauth_token\ta\n'
+        '.x.com\tTRUE\t/\tTRUE\t0\tct0\tc\n'
+        '.example.org\tTRUE\t/\tFALSE\t0\tsid\ts\n',
+      );
+      expect(await wired.importFile(picked), ['example.org', 'x.com']);
+      expect(container.read(signedInSitesProvider), {
+        LoginSite.vimeo,
+        LoginSite.x,
+      });
+      expect(container.read(fileOnlySitesProvider), ['example.org']);
+
+      // Removing what a file brought leaves the browser signed in.
+      await wired.forgetSite('example.org');
+      expect(container.read(fileOnlySitesProvider), isEmpty);
+      expect(container.read(signedInSitesProvider), hasLength(2));
+      expect(jar.cleared, 0);
+    });
+
+    test(
+      'a file with no cookie in it is refused and nothing is touched',
+      () async {
+        jar.pages['https://vimeo.com/'] = 'vimeo=v';
+        await accounts.keep(LoginSite.vimeo);
+        final before = file().readAsStringSync();
+        expect(
+          await accounts.importFile(utf8.encode('{"cookies": []}')),
+          isNull,
+        );
+        expect(file().readAsStringSync(), before);
+      },
+    );
+
     test('with no file path there are no accounts and no sites', () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       expect(container.read(accountsProvider), isNull);
       expect(container.read(signedInSitesProvider), isEmpty);
+    });
+  });
+
+  group('SessionWatch', () {
+    test('**the guard**: asks again and again with no page loading, and '
+        'not once stopped', () async {
+      var asked = 0;
+      final watch = SessionWatch(
+        () async => asked++,
+        every: const Duration(milliseconds: 5),
+      )..start();
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+      watch.stop();
+      expect(asked, greaterThan(2));
+      expect(watch.watching, isFalse);
+
+      final before = asked;
+      await Future<void>.delayed(const Duration(milliseconds: 30));
+      expect(asked, before);
+    });
+
+    test('a second start keeps one clock', () async {
+      var asked = 0;
+      final watch =
+          SessionWatch(
+              () async => asked++,
+              every: const Duration(milliseconds: 20),
+            )
+            ..start()
+            ..start();
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      watch.stop();
+      expect(asked, inInclusiveRange(0, 3));
     });
   });
 }

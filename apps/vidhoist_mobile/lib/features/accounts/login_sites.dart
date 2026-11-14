@@ -21,10 +21,24 @@ enum LoginSite {
   tiktok('TikTok', 'https://www.tiktok.com/login', [
     'https://www.tiktok.com/',
   ], 'sessionid'),
-  x('X', 'https://x.com/i/flow/login', ['https://x.com/'], 'auth_token'),
+  // `ct0` too: yt-dlp sends it with every call X answers for a signed-in
+  // person, and a sign-in kept before it arrived was refused.
+  x(
+    'X',
+    'https://x.com/i/flow/login',
+    ['https://x.com/'],
+    'auth_token',
+    alsoNeeded: ['ct0'],
+  ),
   vimeo('Vimeo', 'https://vimeo.com/log_in', ['https://vimeo.com/'], 'vimeo');
 
-  const LoginSite(this.label, this.loginUrl, this.pages, this.sessionCookie);
+  const LoginSite(
+    this.label,
+    this.loginUrl,
+    this.pages,
+    this.sessionCookie, {
+    this.alsoNeeded = const [],
+  });
 
   /// The name as the site writes it, the same in every language.
   final String label;
@@ -39,6 +53,10 @@ enum LoginSite {
   /// The cookie a signed-in session has and a visitor has not.
   final String sessionCookie;
 
+  /// Cookies that come with the session and that downloads need as well;
+  /// a sign-in is kept only once they are there.
+  final List<String> alsoNeeded;
+
   /// The site as `CookieFiles.sites` names it (`youtube.com`).
   String get domain {
     final host = Uri.parse(pages.first).host;
@@ -50,6 +68,11 @@ enum LoginSite {
   /// site's signed-in session.
   bool signedInPer(Map<String, Set<String>> names) =>
       names[domain]?.contains(sessionCookie) ?? false;
+
+  /// Whether a cookies file holds everything downloads need from this
+  /// site: the session and [alsoNeeded].
+  bool readyPer(Map<String, Set<String>> names) =>
+      signedInPer(names) && alsoNeeded.every(names[domain]!.contains);
 
   static LoginSite? byName(String name) {
     for (final site in values) {

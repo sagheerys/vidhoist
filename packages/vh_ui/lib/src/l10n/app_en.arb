@@ -69,6 +69,13 @@
       }
     }
   },
+  "@fastStreamsHelp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@framesPerSecond": {
     "placeholders": {
       "count": {
@@ -410,6 +417,13 @@
       }
     }
   },
+  "@rateLimitValue": {
+    "placeholders": {
+      "mb": {
+        "type": "int"
+      }
+    }
+  },
   "@removeUnavailable": {
     "placeholders": {
       "count": {
@@ -568,6 +582,10 @@
   "accountsBanRisk": "Better use a secondary account: heavy downloading can get an account restricted by the site for a while.",
   "accountsClearAll": "Delete all cookies",
   "accountsCleared": "Cookies deleted",
+  "accountsFileHint": "Exported from a browser as a cookies.txt file (Netscape format), for any site, including those not listed above. It joins the sign-ins already here, and stays on this phone.",
+  "accountsFilePick": "Choose a cookies file",
+  "accountsFileTitle": "Or import a cookies file",
+  "accountsFromFile": "From a cookies file",
   "accountsHelp": "A sign-in expires after a while; when a site starts refusing again, sign in once more. Signing out of one site also signs the in-app browser out of the others, whose downloads go on as they were.",
   "accountsHint": "For the sites that refuse a download without a login. You sign in on the site's own page inside the app; what it leaves stays on this phone, where yt-dlp reads it for every download, and goes nowhere else.",
   "activeDownloads": "Active downloads",
@@ -590,6 +608,10 @@
   "appTitle": "VidHoist",
   "appearanceAndLanguage": "Appearance & language",
   "audioChannels": "{count} channels",
+  "audioFormat": "Audio format",
+  "audioFormatM4a": "M4A: plays everywhere",
+  "audioFormatMp3": "MP3: for older players and cars",
+  "audioFormatOriginal": "As the site sends it, unconverted",
   "audioMono": "Mono",
   "audioOnly": "Audio only",
   "audioStereo": "Stereo",
@@ -612,6 +634,12 @@
   "batchSelectedOf": "{selected} of {total} selected",
   "batchThisVideoOnly": "Download this video only",
   "batchTitle": "Batch download",
+  "batteryAllow": "Allow",
+  "batteryFree": "Battery saving leaves downloads alone, even with the app out of sight.",
+  "batteryRestricted": "Battery saving can stop a long download while the app is out of sight.",
+  "batteryStateFree": "Allowed",
+  "batteryStateLimited": "Restricted",
+  "batteryTitle": "Downloads in the background",
   "bitrateKbps": "{value} kb/s",
   "bitrateMbps": "{value} Mb/s",
   "builtWith": "Built with",
@@ -1069,6 +1097,7 @@
   "downloadStartedQuality": "Download started · {quality}",
   "downloading": "Downloading…",
   "downloadingTitle": "Downloading",
+  "downloadsAdvanced": "Advanced",
   "editSubscription": "Edit",
   "emptyFilteredMessage": "Clear a filter above to see your whole library.",
   "emptyFilteredTitle": "Nothing matches these filters",
@@ -1107,6 +1136,8 @@
   "externalPlayerShort": "Another player",
   "failed": "Failed",
   "failedToLoadPlaylist": "Failed to load playlist",
+  "fastStreams": "Faster segmented streams",
+  "fastStreamsHelp": "Fetches {count} pieces at once from sites that cut a video into pieces, such as X. Some sites slow down many requests at once.",
   "favorites": "Favorites",
   "file": "File",
   "fileName": "File name",
@@ -1397,6 +1428,9 @@
   "quoteMomentLink": "Copy link to this moment",
   "quotePlayFrom": "Play from here",
   "quoteTitle": "Quote",
+  "rateLimit": "Speed limit",
+  "rateLimitNone": "No limit",
+  "rateLimitValue": "{mb} MB/s",
   "readingAsMarkdownHint": "Each paragraph with its time, linked to its moment",
   "readingAsPdfHint": "To print or keep",
   "readingAsSrtHint": "Line by line with its times, for any player",

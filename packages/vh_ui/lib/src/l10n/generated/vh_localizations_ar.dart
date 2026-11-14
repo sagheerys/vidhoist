@@ -47,6 +47,19 @@ class VhLocalizationsAr extends VhLocalizations {
   String get accountsCleared => 'حُذفت الكوكيز';
 
   @override
+  String get accountsFileHint =>
+      'ملف cookies.txt مصدَّر من متصفح (بصيغة Netscape)، لأي موقع، حتى غير المذكور أعلاه. يُضاف إلى ما سجّلت دخوله هنا، ويبقى على هذا الجوال.';
+
+  @override
+  String get accountsFilePick => 'اختر ملف كوكيز';
+
+  @override
+  String get accountsFileTitle => 'أو استورد ملف كوكيز';
+
+  @override
+  String get accountsFromFile => 'من ملف كوكيز';
+
+  @override
   String get accountsHelp =>
       'تنتهي صلاحية تسجيل الدخول بعد مدة؛ فإن عاد موقع يرفض، سجّل الدخول مرة أخرى. الخروج من موقع يُخرج متصفح التطبيق من المواقع الأخرى أيضاً، وتبقى تنزيلاتها تعمل كما كانت.';
 
@@ -140,6 +153,18 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String get audioFormat => 'صيغة الصوت';
+
+  @override
+  String get audioFormatM4a => 'M4A: يعمل في كل مكان';
+
+  @override
+  String get audioFormatMp3 => 'MP3: للمشغّلات القديمة والسيارات';
+
+  @override
+  String get audioFormatOriginal => 'كما يرسله الموقع، بلا تحويل';
+
+  @override
   String get audioMono => 'أحادي';
 
   @override
@@ -224,6 +249,26 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get batchTitle => 'التحميل الدفعي';
+
+  @override
+  String get batteryAllow => 'سماح';
+
+  @override
+  String get batteryFree =>
+      'توفير البطارية لا يوقف التنزيلات، حتى والتطبيق في الخلفية.';
+
+  @override
+  String get batteryRestricted =>
+      'توفير البطارية قد يوقف التنزيل الطويل والتطبيق في الخلفية.';
+
+  @override
+  String get batteryStateFree => 'مسموح';
+
+  @override
+  String get batteryStateLimited => 'مقيّد';
+
+  @override
+  String get batteryTitle => 'التنزيل في الخلفية';
 
   @override
   String bitrateKbps(String value) {
@@ -1635,6 +1680,9 @@ class VhLocalizationsAr extends VhLocalizations {
   String get downloadingTitle => 'جارٍ التنزيل';
 
   @override
+  String get downloadsAdvanced => 'متقدّم';
+
+  @override
   String get editSubscription => 'تعديل';
 
   @override
@@ -1771,6 +1819,14 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get failedToLoadPlaylist => 'تعذّر فتح القائمة';
+
+  @override
+  String get fastStreams => 'تسريع البث المقطّع';
+
+  @override
+  String fastStreamsHelp(int count) {
+    return 'ينزّل $count أجزاء معاً من المواقع التي تقطّع المقطع أجزاءً، مثل X. بعض المواقع تُبطئ الطلبات الكثيرة في وقت واحد.';
+  }
 
   @override
   String get favorites => 'المفضلة';
@@ -2789,6 +2845,17 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get quoteTitle => 'اقتباس';
+
+  @override
+  String get rateLimit => 'حدّ السرعة';
+
+  @override
+  String get rateLimitNone => 'بلا حدّ';
+
+  @override
+  String rateLimitValue(int mb) {
+    return '$mb ميغابايت/ث';
+  }
 
   @override
   String get readingAsMarkdownHint => 'عند كل فقرة وقتها برابط إلى لحظتها';

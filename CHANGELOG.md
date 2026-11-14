@@ -6,6 +6,20 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- On the phone, Settings › Downloads › Advanced: the audio format for
+  "audio only" (M4A as before, MP3, or as the site sends it), a speed limit
+  (none, 1, 2, 5 or 10 MB/s), and faster segmented streams (yt-dlp's `-N 4`,
+  off until turned on) for sites such as X that serve videos in pieces.
+- Settings › Downloads › Advanced › Downloads in the background: whether
+  battery saving may stop a long download, as a state pill, and while
+  restricted an "Allow" that opens Android's own dialog to exempt the app.
+  Nothing on the settings home.
+- Settings › Accounts › Or import a cookies file: a `cookies.txt` exported
+  from a browser (Netscape format), for anyone who would rather not sign in
+  inside the app, or for a site with no row. It joins the sign-ins in the
+  one file yt-dlp reads; a listed site reads signed in, and any other site
+  it brought is listed on its own and can be removed. A file with no
+  cookie in it is refused and nothing is changed.
 - "Download on the computer", off until turned on: on Windows, Settings ›
   Phone receives from a paired phone over the home network; on the phone,
   Settings › Computer pairs with it (a code shown on the computer, then four
@@ -158,6 +172,17 @@ All notable changes to VidHoist. The format follows
   appeared.
 
 ### Fixed
+- **"Continue with Google" on X stopped on a blank page** in Settings ›
+  Accounts on the phone, and kept nothing. Google opens in a window of its
+  own and hands the answer back to the page that opened it; the in-app
+  browser loaded that window in the page's place, so no one was left to
+  answer. Pop-ups now open as real windows above the sign-in page, close
+  when the site closes them or on Back, and sit clear of the status bar
+  and keyboard; the same holds for "Continue with Google" or Apple on the
+  other sites. The sign-in screen also looks for the session when the
+  address changes and every two seconds, not only when a page loads, and
+  keeps X only once both cookies yt-dlp sends (`auth_token` and `ct0`)
+  are there.
 - **The last clip in a batch download could not be unticked** on the
   phone: the "Download selected" button covered its checkbox. The list now
   scrolls clear of it, and the followed-channels list clear of its button.

@@ -58,6 +58,25 @@ class ProbeResult {
   final String? infoJsonPath;
 }
 
+/// **How downloads are made, past their quality**: the person's settings,
+/// read as each download starts so a change needs no new engine.
+class DownloadTuning {
+  const DownloadTuning({
+    this.audioFormat = AudioFormat.m4a,
+    this.rateLimit,
+    this.concurrentFragments,
+  });
+
+  /// What "audio only" is saved as.
+  final AudioFormat audioFormat;
+
+  /// yt-dlp's `-r`, such as `2M`; null for no limit.
+  final String? rateLimit;
+
+  /// yt-dlp's `-N`; null for one piece at a time.
+  final int? concurrentFragments;
+}
+
 /// One download as the engine asks for it.
 class DownloadRequest {
   const DownloadRequest({
@@ -69,6 +88,7 @@ class DownloadRequest {
     this.infoJsonPath,
     this.subtitleLanguages = const [],
     this.playlistItems,
+    this.tuning = const DownloadTuning(),
   });
 
   /// The task this download belongs to, the key for [DownloadBackend.cancel].
@@ -86,6 +106,7 @@ class DownloadRequest {
   final String? infoJsonPath;
   final List<String> subtitleLanguages;
   final List<int>? playlistItems;
+  final DownloadTuning tuning;
 
   /// The quality in `vh_ytdlp`'s terms.
   FormatChoice get formatChoice => switch (quality) {
@@ -108,6 +129,9 @@ class DownloadRequest {
     subtitleLanguages: subtitleLanguages,
     playlistItems: playlistItems,
     embedThumbnail: embedThumbnail,
+    audioFormat: tuning.audioFormat,
+    rateLimit: tuning.rateLimit,
+    concurrentFragments: tuning.concurrentFragments,
   );
 
   DownloadRequest copyWith({
@@ -122,6 +146,7 @@ class DownloadRequest {
     infoJsonPath: infoJsonPath == null ? this.infoJsonPath : infoJsonPath(),
     subtitleLanguages: subtitleLanguages,
     playlistItems: playlistItems,
+    tuning: tuning,
   );
 }
 

@@ -24,7 +24,36 @@ class PhoneSettings {
     this.captionBackground = 0,
     this.welcomed = false,
     this.downloadVolume,
+    this.audioFormat = AudioFormat.m4a,
+    this.rateLimit,
+    this.fastStreams = false,
   });
+
+  /// What "audio only" is saved as: M4A plays everywhere, MP3 is what
+  /// older players and cars ask for, the original skips the conversion.
+  final AudioFormat audioFormat;
+
+  /// The download speed cap as yt-dlp's `-r` takes it, one of
+  /// [rateLimits]; null for none. For a shared connection, or a plan that
+  /// slows down past a daily amount.
+  final String? rateLimit;
+
+  static const rateLimits = ['1M', '2M', '5M', '10M'];
+
+  /// Streams cut into pieces (X, and many sites' HLS or DASH) fetched
+  /// [fastPieces] pieces at a time. Off unless turned on: more requests
+  /// at once is what some sites throttle.
+  final bool fastStreams;
+
+  /// Enough to hide each piece's round trip, few enough for a phone.
+  static const fastPieces = 4;
+
+  /// The three above, as the engine reads them at each download.
+  DownloadTuning get tuning => DownloadTuning(
+    audioFormat: audioFormat,
+    rateLimit: rateLimit,
+    concurrentFragments: fastStreams ? fastPieces : null,
+  );
 
   /// The memory card new downloads go to, by its id (`PhoneVolume.id`);
   /// null for the phone's own storage. About this phone, so kept out of
@@ -117,11 +146,15 @@ class PhoneSettings {
     int? captionBackground,
     bool? welcomed,
     String? downloadVolume,
+    AudioFormat? audioFormat,
+    String? rateLimit,
+    bool? fastStreams,
 
     /// Distinguishes "clear the language" from "do not change it": `null`
     /// alone is not enough. The same for the card.
     bool clearLocale = false,
     bool clearDownloadVolume = false,
+    bool clearRateLimit = false,
   }) => PhoneSettings(
     quality: quality ?? this.quality,
     quickDownload: quickDownload ?? this.quickDownload,
@@ -139,6 +172,9 @@ class PhoneSettings {
     downloadVolume: clearDownloadVolume
         ? null
         : (downloadVolume ?? this.downloadVolume),
+    audioFormat: audioFormat ?? this.audioFormat,
+    rateLimit: clearRateLimit ? null : (rateLimit ?? this.rateLimit),
+    fastStreams: fastStreams ?? this.fastStreams,
   );
 
   /// Loads the initial snapshot before runApp.
@@ -162,7 +198,22 @@ class PhoneSettings {
       captionBackground: await store.getInt('caption_background') ?? 0,
       welcomed: await store.getBool(welcomedKey) ?? false,
       downloadVolume: await store.getString(downloadVolumeKey),
+      audioFormat: _audioFormat(await store.getString('audio_format')),
+      rateLimit: switch (await store.getString('download_rate_limit')) {
+        final rate? when rateLimits.contains(rate) => rate,
+        _ => null,
+      },
+      fastStreams: await store.getBool('download_fast_streams') ?? false,
     );
+  }
+
+  /// A stored name this build does not know reads as the default, never
+  /// as an error at launch.
+  static AudioFormat _audioFormat(String? wire) {
+    for (final format in AudioFormat.values) {
+      if (format.wire == wire) return format;
+    }
+    return AudioFormat.m4a;
   }
 }
 
@@ -246,6 +297,26 @@ class SettingsNotifier extends Notifier<PhoneSettings> {
           : _store.setString(PhoneSettings.downloadVolumeKey, id),
     );
     state = state.copyWith(downloadVolume: id, clearDownloadVolume: id == null);
+  }
+
+  Future<void> setAudioFormat(AudioFormat format) async {
+    await _mutex.run(() => _store.setString('audio_format', format.wire));
+    state = state.copyWith(audioFormat: format);
+  }
+
+  /// One of [PhoneSettings.rateLimits]; null for no limit.
+  Future<void> setRateLimit(String? rate) async {
+    await _mutex.run(
+      () => rate == null
+          ? _store.remove('download_rate_limit')
+          : _store.setString('download_rate_limit', rate),
+    );
+    state = state.copyWith(rateLimit: rate, clearRateLimit: rate == null);
+  }
+
+  Future<void> setFastStreams(bool enabled) async {
+    await _mutex.run(() => _store.setBool('download_fast_streams', enabled));
+    state = state.copyWith(fastStreams: enabled);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {

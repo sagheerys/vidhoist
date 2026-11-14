@@ -38,6 +38,7 @@ class LocalDownloadEngine {
     this.gateRecheck = const Duration(seconds: 15),
     this.compatibleVideo,
     this.subtitleLanguages,
+    this.tuning,
     this.onCompleted,
     this.onLog,
     Future<int?> Function(String path)? sizeOf,
@@ -69,6 +70,7 @@ class LocalDownloadEngine {
   /// engine.
   final bool Function()? compatibleVideo;
   final List<String> Function()? subtitleLanguages;
+  final DownloadTuning Function()? tuning;
 
   final void Function(DownloadTask task)? onCompleted;
   final void Function(String message)? onLog;
@@ -271,6 +273,7 @@ class LocalDownloadEngine {
       compatible: compatibleVideo?.call() ?? false,
       infoJsonPath: _probes[id]?.infoJsonPath,
       subtitleLanguages: subtitleLanguages?.call() ?? const [],
+      tuning: tuning?.call() ?? const DownloadTuning(),
     );
     _set(task.copyWith(phase: TaskPhase.downloading, progress: 0));
     while (true) {

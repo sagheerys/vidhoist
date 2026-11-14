@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/accounts/accounts_fields.dart';
 import 'package:vidhoist_mobile/features/accounts/accounts_state.dart';
+import 'package:vidhoist_mobile/features/accounts/cookie_file_fields.dart';
 import 'package:vidhoist_mobile/features/accounts/login_sites.dart';
 import 'package:vidhoist_mobile/features/downloads_library/widgets/downloads_sheet.dart';
 import 'package:vidhoist_mobile/features/settings/settings_page.dart';
@@ -153,6 +155,66 @@ void main() {
       accountsSummary(en, {LoginSite.vimeo, LoginSite.youtube}),
       en.settingsValueSignedIn(vhLtrRun('YouTube · Vimeo')),
     );
+  });
+
+  group('a cookies file instead of a sign-in', () {
+    final exported = utf8.encode(
+      '# Netscape HTTP Cookie File\n'
+      '#HttpOnly_.x.com\tTRUE\t/\tTRUE\t0\tauth_token\ta\n'
+      '.x.com\tTRUE\t/\tTRUE\t0\tct0\tc\n'
+      '.example.org\tTRUE\t/\tFALSE\t0\tsid\ts\n',
+    );
+
+    Future<VhLocalizations> pick(WidgetTester tester, List<int>? file) async {
+      // Tall enough for the whole page: the import sits below six sites.
+      tester.view.physicalSize = const Size(600, 1800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        app(
+          const SettingsPage(SettingsPane.accounts),
+          extra: [cookiesPickerProvider.overrideWithValue(() async => file)],
+        ),
+      );
+      await tester.pumpAndSettle();
+      final l10n = tester.element(find.byType(AccountsFields)).vhl;
+      await tester.tap(find.text(l10n.accountsFilePick));
+      await tester.pumpAndSettle();
+      return l10n;
+    }
+
+    testWidgets('**the guard**: it is kept, its listed site reads signed in, '
+        'and a site with no row shows on its own, removable', (tester) async {
+      final l10n = await pick(tester, exported);
+      expect(
+        find.text(l10n.desktopCookiesKeptFor(vhLtrRun('example.org · x.com'))),
+        findsOneWidget,
+      );
+      final scope = ProviderScope.containerOf(
+        tester.element(find.byType(AccountsFields)),
+      );
+      expect(scope.read(signedInSitesProvider), {LoginSite.x});
+      expect(find.text('example.org'), findsOneWidget);
+
+      await tester.tap(find.text(l10n.remove));
+      await tester.pumpAndSettle();
+      expect(find.text('example.org'), findsNothing);
+      expect(scope.read(signedInSitesProvider), {LoginSite.x});
+      expect(jar.cleared, 0);
+    });
+
+    testWidgets('a file with no cookie in it is refused, and says so', (
+      tester,
+    ) async {
+      final l10n = await pick(tester, utf8.encode('{"cookies": []}'));
+      expect(find.text(l10n.cookiesNotNetscape), findsOneWidget);
+      expect(File(path).existsSync(), isFalse);
+    });
+
+    testWidgets('choosing nothing changes nothing', (tester) async {
+      await pick(tester, null);
+      expect(File(path).existsSync(), isFalse);
+    });
   });
 
   testWidgets('the page holds at every size, both languages', (tester) async {
