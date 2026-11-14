@@ -172,6 +172,11 @@ All notable changes to VidHoist. The format follows
   appeared.
 
 ### Fixed
+- **The status bar still showed the old icon** (the window with the arrow)
+  beside the battery and the network whenever the phone app had a
+  notification up. It is now the folded ribbon, made by
+  `tool/icons/vidhoist_kit.py` like every other icon, and white on clear so
+  Android tints it to the bar as it does every app's.
 - **"Continue with Google" on X stopped on a blank page** in Settings ›
   Accounts on the phone, and kept nothing. Google opens in a window of its
   own and hands the answer back to the page that opened it; the in-app
