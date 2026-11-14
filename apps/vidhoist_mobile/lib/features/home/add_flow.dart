@@ -14,7 +14,9 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../shared/error_text.dart';
-import 'clip_fields.dart';
+
+import 'package:vh_media/vh_media.dart' show ClipFields;
+
 import 'link_preview_view.dart';
 
 /// Converts the core's platform into its presentation type, since vh_ui

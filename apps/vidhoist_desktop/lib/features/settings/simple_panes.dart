@@ -13,6 +13,7 @@ import '../../data/keep_awake_data.dart';
 import '../../shell/pill.dart';
 import 'appearance_pane.dart';
 import 'browser_button.dart';
+import 'download_choice_lines.dart';
 import '../../shell/folded_text.dart';
 
 /// One setting: its name, a line saying what it does, and its control at
@@ -121,8 +122,8 @@ class SwitchLine extends StatelessWidget {
   );
 }
 
-/// How links are added: the quality an add starts with, and the
-/// transcript first.
+/// How links are added: the quality an add starts with, how files are
+/// fetched and saved, and the transcript first with its languages.
 class DownloadsPane extends ConsumerWidget {
   const DownloadsPane({super.key});
 
@@ -130,6 +131,7 @@ class DownloadsPane extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.vhl;
     final quality = ref.watch(defaultQualityProvider);
+    final transcripts = ref.watch(transcriptsFirstProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -147,13 +149,15 @@ class DownloadsPane extends ConsumerWidget {
               ),
           ],
         ),
+        const DownloadTuningLines(),
         SwitchLine(
           title: l.desktopTranscriptFirst,
           hint: l.transcriptsSearchHelp,
-          value: ref.watch(transcriptsFirstProvider),
+          value: transcripts,
           onChanged: (on) =>
               unawaited(ref.read(transcriptsFirstProvider.notifier).set(on)),
         ),
+        if (transcripts) const SubtitleChoiceLines(),
         SwitchLine(
           title: l.desktopKeepAwake,
           hint: l.desktopKeepAwakeHint,

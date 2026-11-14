@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart' show ClipFields;
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/choices_data.dart';
@@ -39,6 +40,13 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
   );
   final _removed = <String>{};
 
+  /// Only a stretch ([ClipFields]), for one video; its times show what
+  /// is wrong only once a download was asked for.
+  var _clipOn = false;
+  var _clipErrors = false;
+  final _clipFrom = TextEditingController();
+  final _clipTo = TextEditingController();
+
   /// The links sent, each with its task, so its line follows it.
   Map<String, String> _tasks = const {};
 
@@ -47,6 +55,8 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
   @override
   void dispose() {
     _field.dispose();
+    _clipFrom.dispose();
+    _clipTo.dispose();
     super.dispose();
   }
 
@@ -79,6 +89,9 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
     final l = context.vhl;
     final engine = ref.read(downloadEngineProvider);
     if (engine == null) return _notice(l.engineErrMissing);
+    final clip = _clipOn ? ClipFields.read(_clipFrom, _clipTo) : null;
+    // Times that do not read keep the dialog open, saying why.
+    if (_clipOn && clip == null) return setState(() => _clipErrors = true);
     final navigator = Navigator.of(context);
     final resolved = await ShortLinkResolver().resolveForRouting(url);
     if (!mounted) return;
@@ -90,6 +103,7 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
       url,
       _choice.qualityFor(resolved),
       folder: _choice.folderPath,
+      clip: clip,
     );
     navigator.pop();
     _notice(l.downloadStarted, kind: VhNoticeKind.done);
@@ -176,6 +190,18 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
                       url != null &&
                       UrlKit.youtubeVideoId(url) != null,
                   onChanged: (choice) => setState(() => _choice = choice),
+                ),
+              // One video alone: a stretch means nothing across several
+              // links or a playlist.
+              if (single?.state case final state?
+                  when state != LinkState.playlist)
+                ClipFields(
+                  on: _clipOn,
+                  onChanged: (on) => setState(() => _clipOn = on),
+                  from: _clipFrom,
+                  to: _clipTo,
+                  showErrors: _clipErrors,
+                  checkbox: true,
                 ),
             ],
           ),

@@ -10,6 +10,7 @@ import '../identity.dart';
 import 'backup_folder.dart';
 import 'backup_outcomes.dart';
 import 'channels_data.dart';
+import 'download_choices_data.dart';
 import 'engine_data.dart';
 import 'first_start.dart';
 import 'folders_data.dart';
@@ -257,7 +258,8 @@ class DesktopBackups {
       ..invalidate(libraryItemsProvider)
       ..invalidate(playlistsProvider)
       ..invalidate(tagCountsProvider)
-      ..invalidate(channelsProvider);
+      ..invalidate(channelsProvider)
+      ..invalidate(downloadChoicesProvider);
   }
 }
 

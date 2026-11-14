@@ -37,6 +37,8 @@ export 'src/stores/playback_prefs.dart';
 export 'src/video/reels_handle.dart';
 export 'src/video/reels_overlay.dart';
 export 'src/video/shorts_lane.dart';
+export 'src/widgets/clip_fields.dart';
+export 'src/widgets/clip_time_field.dart';
 export 'src/widgets/media_time.dart';
 export 'src/widgets/vh_audio_parts.dart';
 export 'src/widgets/vh_breathing_glow.dart';

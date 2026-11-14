@@ -9,7 +9,8 @@ import 'package:vh_ui/vh_ui.dart';
 /// `0:01`, `130` is `1:30`, `10305` is `1:03:05`.
 ///
 /// Samsung's number pad has no colon (seen on the owner's phone), and the
-/// full keyboard hides it a page away; the colon is therefore never typed.
+/// full keyboard hides it a page away; the colon is therefore never
+/// needed. Typed anyway, as on a computer, it changes nothing.
 class ClipTimeFormatter extends TextInputFormatter {
   const ClipTimeFormatter();
 
@@ -45,7 +46,7 @@ class ClipTimeFormatter extends TextInputFormatter {
 }
 
 /// One of the two times: typed by hand, or moved a minute at a time with
-/// the arrows beside it (held, they keep moving).
+/// the arrows beside it (held, they keep moving) or the keyboard's ↑ ↓.
 class ClipTimeField extends StatelessWidget {
   const ClipTimeField({
     super.key,
@@ -80,6 +81,18 @@ class ClipTimeField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.vhl;
+    // ↑ and ↓ on a computer's keyboard step as the arrows do; the field
+    // is one line, so they had nothing else to do there.
+    return CallbackShortcuts(
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.arrowUp): () => _step(1),
+        const SingleActivator(LogicalKeyboardKey.arrowDown): () => _step(-1),
+      },
+      child: _field(l10n),
+    );
+  }
+
+  Widget _field(VhLocalizations l10n) {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,

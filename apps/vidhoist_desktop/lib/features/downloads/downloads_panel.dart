@@ -146,6 +146,8 @@ class DownloadsPanel extends ConsumerWidget {
                                   t.effectiveUrl,
                                   t.quality,
                                   folder: t.folder,
+                                  // A stretch retried stays a stretch.
+                                  clip: t.clip,
                                 );
                                 engine.forget(t.id);
                               },
@@ -187,8 +189,11 @@ class _TaskLine extends StatelessWidget {
       error: failed,
       // Waiting is not working: only a clip being fetched moves, and a
       // paused one keeps its bar where it stopped.
+      // A stretch cut by ffmpeg tells no amount: the sliding strip, not a
+      // bar stuck at nothing.
       progress: switch (task.phase) {
-        TaskPhase.downloading || TaskPhase.paused => task.progress,
+        TaskPhase.downloading ||
+        TaskPhase.paused => task.hasKnownProgress ? task.progress : -1,
         TaskPhase.queued || TaskPhase.failed => null,
         _ => -1,
       },
