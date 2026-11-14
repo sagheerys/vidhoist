@@ -5,7 +5,6 @@ import 'package:vh_media/vh_media.dart'
     show VhCaptionBackground, VhPictureInPicture;
 
 import '../../di.dart';
-import 'subtitle_languages.dart';
 
 /// The phone's settings. Storage key names are fixed: a renamed key would
 /// leave saved settings and backups behind.
@@ -41,15 +40,14 @@ class PhoneSettings {
   /// slows down past a daily amount.
   final String? rateLimit;
 
-  static const rateLimits = ['1M', '2M', '5M', '10M'];
+  static const rateLimits = DownloadChoices.rateLimits;
 
   /// Streams cut into pieces (X, and many sites' HLS or DASH) fetched
   /// [fastPieces] pieces at a time. Off unless turned on: more requests
   /// at once is what some sites throttle.
   final bool fastStreams;
 
-  /// Enough to hide each piece's round trip, few enough for a phone.
-  static const fastPieces = 4;
+  static const fastPieces = DownloadChoices.fastPieces;
 
   /// The languages subtitles are fetched in, in the order chosen; never
   /// empty, since turning [subtitles] off is how none are fetched.
@@ -198,6 +196,7 @@ class PhoneSettings {
   /// Loads the initial snapshot before runApp.
   static Future<PhoneSettings> load(KeyValueStore store) async {
     final themeName = await store.getString('theme_mode');
+    final choices = await DownloadChoices.load(store);
     return PhoneSettings(
       quality: Quality.fromWire(await store.getString('video_quality')),
       quickDownload: await store.getBool('quick_download_enabled') ?? false,
@@ -216,36 +215,12 @@ class PhoneSettings {
       captionBackground: await store.getInt('caption_background') ?? 0,
       welcomed: await store.getBool(welcomedKey) ?? false,
       downloadVolume: await store.getString(downloadVolumeKey),
-      audioFormat: _audioFormat(await store.getString('audio_format')),
-      rateLimit: switch (await store.getString('download_rate_limit')) {
-        final rate? when rateLimits.contains(rate) => rate,
-        _ => null,
-      },
-      fastStreams: await store.getBool('download_fast_streams') ?? false,
-      subtitleLangs: _subtitleLangs(
-        await store.getStringList('download_subtitle_languages'),
-      ),
-      embedSubtitles: await store.getBool('download_embed_subtitles') ?? false,
+      audioFormat: choices.audioFormat,
+      rateLimit: choices.rateLimit,
+      fastStreams: choices.fastStreams,
+      subtitleLangs: choices.subtitleLangs ?? defaultSubtitleLangs,
+      embedSubtitles: choices.embedSubtitles,
     );
-  }
-
-  /// Codes this build does not offer are dropped; none left reads as the
-  /// default, so a stored list can never fetch nothing with the switch on.
-  static List<String> _subtitleLangs(List<String>? stored) {
-    final known = [
-      for (final code in {...?stored})
-        if (subtitleLanguageNames.containsKey(code)) code,
-    ];
-    return known.isEmpty ? defaultSubtitleLangs : known;
-  }
-
-  /// A stored name this build does not know reads as the default, never
-  /// as an error at launch.
-  static AudioFormat _audioFormat(String? wire) {
-    for (final format in AudioFormat.values) {
-      if (format.wire == wire) return format;
-    }
-    return AudioFormat.m4a;
   }
 }
 
@@ -313,17 +288,17 @@ class SettingsNotifier extends Notifier<PhoneSettings> {
 
   /// Adds or removes [code]; the last language left stays.
   Future<void> toggleSubtitleLang(String code) async {
-    final now = [...state.subtitleLangs];
-    if (!now.remove(code)) now.add(code);
-    if (now.isEmpty) return;
+    final now = DownloadChoices.toggled(state.subtitleLangs, code);
     await _mutex.run(
-      () => _store.setStringList('download_subtitle_languages', now),
+      () => _store.setStringList(DownloadChoices.subtitleLangsKey, now),
     );
     state = state.copyWith(subtitleLangs: now);
   }
 
   Future<void> setEmbedSubtitles(bool enabled) async {
-    await _mutex.run(() => _store.setBool('download_embed_subtitles', enabled));
+    await _mutex.run(
+      () => _store.setBool(DownloadChoices.embedSubtitlesKey, enabled),
+    );
     state = state.copyWith(embedSubtitles: enabled);
   }
 
@@ -348,7 +323,9 @@ class SettingsNotifier extends Notifier<PhoneSettings> {
   }
 
   Future<void> setAudioFormat(AudioFormat format) async {
-    await _mutex.run(() => _store.setString('audio_format', format.wire));
+    await _mutex.run(
+      () => _store.setString(DownloadChoices.audioFormatKey, format.wire),
+    );
     state = state.copyWith(audioFormat: format);
   }
 
@@ -356,14 +333,16 @@ class SettingsNotifier extends Notifier<PhoneSettings> {
   Future<void> setRateLimit(String? rate) async {
     await _mutex.run(
       () => rate == null
-          ? _store.remove('download_rate_limit')
-          : _store.setString('download_rate_limit', rate),
+          ? _store.remove(DownloadChoices.rateLimitKey)
+          : _store.setString(DownloadChoices.rateLimitKey, rate),
     );
     state = state.copyWith(rateLimit: rate, clearRateLimit: rate == null);
   }
 
   Future<void> setFastStreams(bool enabled) async {
-    await _mutex.run(() => _store.setBool('download_fast_streams', enabled));
+    await _mutex.run(
+      () => _store.setBool(DownloadChoices.fastStreamsKey, enabled),
+    );
     state = state.copyWith(fastStreams: enabled);
   }
 

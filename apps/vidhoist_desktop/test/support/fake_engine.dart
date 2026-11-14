@@ -23,6 +23,7 @@ class FakeEngine extends Fake implements LocalDownloadEngine {
       quality: quality,
       isBatchMember: isBatchMember,
       folder: folder,
+      clip: clip,
     );
     submitted.add(task);
     _put(task);

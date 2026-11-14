@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vidhoist_mobile/features/home/clip_time_field.dart';
+import 'package:vh_media/vh_media.dart';
 
 /// The clip's times are typed as digits alone (Samsung's number pad has
 /// no colon); the colon is put in as they arrive.

@@ -17,6 +17,7 @@ export 'src/channels/channel_source.dart';
 export 'src/channels/channel_ticker.dart';
 export 'src/channels/local_channels.dart';
 export 'src/constants/vh_constants.dart';
+export 'src/download/download_choices.dart';
 export 'src/download/download_queue.dart';
 export 'src/download/engine_refresh.dart';
 export 'src/download/partial_sweeper.dart';

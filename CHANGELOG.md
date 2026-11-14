@@ -6,14 +6,21 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
-- On the phone, "Only a part of the video" in the download sheet: from one
-  time to another, fetched alone with yt-dlp's `--download-sections`. Each
-  time is typed as digits alone, the colon put in as they come (`130` is
-  `1:30`; Samsung's number pad has no colon), or moved a minute at a time
-  with the arrows beside it, held to keep moving. The part gets its own file name, and its
-  own place in the library beside the whole video (its link marked
-  `#t=start,end`, its range after the title). It comes without subtitles,
-  which yt-dlp does not cut. Hidden while the link goes to the computer.
+- "Only a part of the video", in the phone's download sheet and the
+  computer's add dialog for one link: from one time to another, fetched
+  alone with yt-dlp's `--download-sections`. Each time is typed as digits
+  alone, the colon put in as they come (`130` is `1:30`; Samsung's number
+  pad has no colon), or moved a minute at a time with the arrows beside
+  it, held to keep moving, or with ↑ ↓ on a computer's keyboard. The part
+  gets its own file name, and its own place in the library beside the
+  whole video (its link marked `#t=start,end`, its range after the title).
+  It comes without subtitles, which yt-dlp does not cut. Hidden while the
+  phone sends the link to the computer.
+- On Windows, Settings › Downloads offers what the phone does: the audio
+  format, a speed limit, faster segmented streams, and under "Fetch its
+  transcript first" the subtitle languages (the reader's and English until
+  chosen) and "Subtitles inside the video too". Saved under the phone's
+  keys, so a backup carries them from one to the other.
 - On the phone, Settings › Downloads › Download subtitles: the languages
   fetched (sixteen, Arabic and English as before), and "Subtitles inside
   the video too" (`--embed-subs`, off until turned on) for other players;

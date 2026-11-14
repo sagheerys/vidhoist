@@ -6,13 +6,12 @@ import 'package:vh_core/vh_core.dart';
 import '../di.dart';
 import '../identity.dart';
 import '../platform/user_folders.dart';
-import 'appearance_data.dart';
+import 'download_choices_data.dart';
 import 'engine_data.dart';
 import 'folders_data.dart';
 import 'library_data.dart';
 import 'lists_data.dart';
 import 'sidecar_import.dart';
-import 'transcripts_data.dart';
 
 /// The saved key of "fetch the transcript first", the phone's own, so a
 /// backup carries the choice either way.
@@ -78,13 +77,15 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
       mutex: ref.watch(prefsMutexProvider),
       onLog: (message) => _log(ref, message),
     ),
-    // The transcript comes with the clip itself, in the reader's language
-    // then English, when "fetch the transcript" is on.
+    // The transcript comes with the clip itself, in the languages chosen
+    // (the reader's then English until one is), when "fetch the
+    // transcript" is on.
     subtitleLanguages: () => ref.read(transcriptsFirstProvider)
-        ? SubtitleLanguages.patterns(
-            readerLanguages(ref.read(appearanceProvider).locale),
-          )
+        ? SubtitleLanguages.patterns(ref.read(subtitleLangsProvider))
         : const [],
+    tuning: () => ref
+        .read(downloadChoicesProvider)
+        .tuning(subtitles: ref.read(transcriptsFirstProvider)),
     onCompleted: (task) {
       // A download can end as the app closes, after this provider has gone.
       if (!alive) return;

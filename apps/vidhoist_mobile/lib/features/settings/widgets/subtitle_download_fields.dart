@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../../di.dart';
-import '../subtitle_languages.dart';
 import 'settings_fields.dart';
 
 /// Settings › Downloads, under "Download subtitles" while it is on: the
