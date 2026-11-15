@@ -70,12 +70,22 @@ class _VhFocusRingLayerState extends State<VhFocusRingLayer> {
   }
 
   bool _onKey(KeyEvent event) {
-    if (event is KeyDownEvent && _navigation.contains(event.logicalKey)) {
+    if (event is KeyDownEvent &&
+        _navigation.contains(event.logicalKey) &&
+        (event.logicalKey == LogicalKeyboardKey.tab || !_inField)) {
       _keyboard = true;
       _changed();
     }
     return false;
   }
+
+  /// Inside a text field the arrows move the caret, or step a clip's time,
+  /// and focus stays put: a ring there drew a second frame inside the
+  /// field's own. Tab still leaves the field and still shows it.
+  bool get _inField =>
+      _focus.primaryFocus?.context
+          ?.findAncestorStateOfType<EditableTextState>() !=
+      null;
 
   void _onPointer(PointerEvent event) {
     if (event is PointerDownEvent && _keyboard) {

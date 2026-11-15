@@ -143,6 +143,39 @@ void main() {
     expect(ring(), findsNothing);
   });
 
+  // Seen on Windows: ↑ in a clip's time field stepped the time and drew a
+  // second frame inside the field's own, as if focus had moved.
+  testWidgets('**the guard**: arrows typed in a field show no ring; Tab '
+      'still does', (tester) async {
+    await pump(
+      tester,
+      VhFocusRingLayer(
+        child: Column(
+          children: [
+            TextButton(onPressed: () {}, child: const Text('One')),
+            const TextField(),
+          ],
+        ),
+      ),
+      desktop: true,
+    );
+    await tester.tap(find.byType(TextField));
+    await tester.pumpAndSettle();
+    for (final key in [
+      LogicalKeyboardKey.arrowUp,
+      LogicalKeyboardKey.arrowDown,
+      LogicalKeyboardKey.arrowLeft,
+      LogicalKeyboardKey.arrowRight,
+    ]) {
+      await tester.sendKeyEvent(key);
+      await tester.pumpAndSettle();
+      expect(ring(), findsNothing, reason: '$key');
+    }
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pumpAndSettle();
+    expect(ring(), findsOneWidget);
+  });
+
   test('the desktop theme: thin scrollbar, tooltip after 600ms, no focus '
       'fill', () {
     final theme = vhDesktopTheme(VhVariant.desktop, Brightness.light);
