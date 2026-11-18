@@ -240,8 +240,12 @@ abstract final class CommandBuilder {
       clip.section,
       // ffmpeg fetches a stretch and yt-dlp reports nothing until it is
       // done; ffmpeg's own progress on stdout moves the bar instead.
+      // faststart moves the index before the frames: with it at the end,
+      // the phone's player drew a Facebook AV1 stretch as coloured streaks
+      // that Samsung's own player showed whole (measured 2026-11-18).
+      // Other containers ignore the flag.
       '--downloader-args',
-      'ffmpeg:-progress pipe:1',
+      'ffmpeg:-progress pipe:1 -movflags +faststart',
     ],
     if (spec.playlistItems case final items?) ...[
       '--yes-playlist',

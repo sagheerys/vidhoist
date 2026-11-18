@@ -162,11 +162,31 @@ void main() {
         ),
         android,
       );
-      expect(valueOf(part, '--downloader-args'), 'ffmpeg:-progress pipe:1');
+      expect(
+        valueOf(part, '--downloader-args'),
+        startsWith('ffmpeg:-progress pipe:1'),
+      );
       expect(
         CommandBuilder.download(link, android),
         isNot(contains('--downloader-args')),
       );
+    });
+
+    // Seen 2026-11-18: a Facebook stretch played as streaks in the app's
+    // player, whole in Samsung's; the same file with its index first
+    // played whole in both.
+    test('**the guard**: a stretch is written with its index first', () {
+      final part = CommandBuilder.download(
+        DownloadSpec(
+          url: 'u',
+          folder: 'f',
+          clip: ClipRange.tryParse('2:00', '5:30'),
+        ),
+        android,
+      );
+      final args = valueOf(part, '--downloader-args');
+      expect(args, startsWith('ffmpeg:'));
+      expect(args, contains('-movflags +faststart'));
     });
 
     test('subtitles go inside the file only when asked, and only with '
