@@ -36,6 +36,9 @@ void main() {
       expect(LoginSite.youtube.domain, 'youtube.com');
       expect(LoginSite.x.domain, 'x.com');
       expect(LoginSite.vimeo.domain, 'vimeo.com');
+      expect(LoginSite.reddit.domain, 'reddit.com');
+      expect(LoginSite.soundcloud.domain, 'soundcloud.com');
+      expect(LoginSite.youtube.domains, {'youtube.com', 'google.com'});
     });
 
     test('is signed in by its session cookie, not by any cookie', () {
@@ -239,6 +242,27 @@ void main() {
       expect(container.read(fileOnlySitesProvider), isEmpty);
       expect(container.read(signedInSitesProvider), hasLength(2));
       expect(jar.cleared, 0);
+    });
+
+    // Seen 2026-11-18: signed in to YouTube, google.com was listed as a
+    // file's site with its own Remove.
+    test('**the guard**: the Google cookies belong to the YouTube sign-in, '
+        'not to a file, and go when it is signed out', () async {
+      final container = ProviderContainer(
+        overrides: [
+          cookiesFileProvider.overrideWithValue(accounts.path),
+          webCookieJarProvider.overrideWithValue(jar),
+        ],
+      );
+      addTearDown(container.dispose);
+      jar.pages['https://www.youtube.com/'] = 'SID=s1';
+      jar.pages['https://www.google.com/'] = 'NID=n';
+      final wired = container.read(accountsProvider)!;
+      await wired.keep(LoginSite.youtube);
+      expect(container.read(fileOnlySitesProvider), isEmpty);
+
+      await wired.forget(LoginSite.youtube);
+      expect(container.read(cookieNamesProvider), isEmpty);
     });
 
     test(
