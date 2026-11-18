@@ -222,7 +222,7 @@ void main() {
     );
     expect(find.text('Copy link'), findsOneWidget);
     expect(find.text('Delete from server'), findsNothing);
-    expect(find.text('Delete video'), findsOneWidget);
+    expect(find.text('Delete clip'), findsOneWidget);
   });
 
   testWidgets('a short plays its lane in a 9:16 column, looping', (

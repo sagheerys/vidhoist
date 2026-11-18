@@ -389,7 +389,10 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
     _syncPausedStop(playing: playing);
     playbackState.add(
       playbackState.value.copyWith(
-        controls: vhMediaControls(playing: playing),
+        controls: vhMediaControls(
+          playing: playing,
+          labels: VhMediaLabels.system(),
+        ),
         systemActions: const {MediaAction.seek},
         androidCompactActionIndices: const [0, 1, 2],
         processingState: vhProcessingState(

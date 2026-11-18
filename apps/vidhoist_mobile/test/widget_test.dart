@@ -72,7 +72,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      // "All platforms" plus one chip per platform actually present.
+      // "All sites" plus one chip per platform actually present.
       expect(find.byType(ChoiceChip), findsNWidgets(3));
       expect(find.textContaining('1'), findsWidgets);
     },

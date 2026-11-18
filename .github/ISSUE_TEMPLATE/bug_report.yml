@@ -24,15 +24,15 @@ body:
     attributes:
       label: App version
       description: Settings → About shows it.
-      placeholder: "2.0.0+1"
+      placeholder: "1.0.0+16"
     validations:
       required: true
 
   - type: input
     id: device
     attributes:
-      label: Device and Android version
-      placeholder: "Galaxy S22 Ultra, Android 15"
+      label: Device and system version
+      placeholder: "Galaxy S22 Ultra, Android 16 / Windows 11 24H2"
     validations:
       required: true
 
@@ -55,10 +55,9 @@ body:
         if the link is private.
 
   - type: textarea
-    id: server
+    id: engine
     attributes:
       label: Engine
       description: >
-        The yt-dlp version shown in Settings, and anything unusual about the link or site
-        (`YTDL_OPTIONS`, `DELETE_FILE_ON_TRASHCAN`, a reverse proxy).
-        Never paste credentials or a tunnel URL.
+        The yt-dlp version shown in Settings, and anything unusual about the
+        link or site. Never paste a cookies file.

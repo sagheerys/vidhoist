@@ -113,7 +113,7 @@ abstract class VhLocalizations {
   /// No description provided for @aboutDescriptionPhone.
   ///
   /// In en, this message translates to:
-  /// **'A light, fast app that downloads video and audio from many platforms with yt-dlp, straight to your device, with no server in between. It has its own player and playlists.'**
+  /// **'A light, fast app that downloads video and audio from many sites with yt-dlp. It has its own player and playlists.'**
   String get aboutDescriptionPhone;
 
   /// No description provided for @accountSignIn.
@@ -278,16 +278,10 @@ abstract class VhLocalizations {
   /// **'All downloads finished.'**
   String get allDownloadsFinished;
 
-  /// No description provided for @allFolders.
-  ///
-  /// In en, this message translates to:
-  /// **'All folders'**
-  String get allFolders;
-
   /// No description provided for @allPlatforms.
   ///
   /// In en, this message translates to:
-  /// **'All platforms'**
+  /// **'All sites'**
   String get allPlatforms;
 
   /// No description provided for @alreadyInPlaylist.
@@ -362,12 +356,6 @@ abstract class VhLocalizations {
   /// **'Stereo'**
   String get audioStereo;
 
-  /// No description provided for @authentication.
-  ///
-  /// In en, this message translates to:
-  /// **'Authentication (optional)'**
-  String get authentication;
-
   /// No description provided for @autoBuilt.
   ///
   /// In en, this message translates to:
@@ -407,13 +395,13 @@ abstract class VhLocalizations {
   /// No description provided for @backgroundDownload.
   ///
   /// In en, this message translates to:
-  /// **'Downloading files in background...'**
+  /// **'Downloading files in the background…'**
   String get backgroundDownload;
 
   /// No description provided for @backupNote.
   ///
   /// In en, this message translates to:
-  /// **'Includes playlists, tags, the offline index, artwork links and settings. Passwords and usernames are never backed up, and media files are not included.'**
+  /// **'Includes the library, playlists, tags, followed channels and settings. Sign-ins and transcripts are kept apart, and the media files themselves are not included.'**
   String get backupNote;
 
   /// No description provided for @backupSettings.
@@ -467,7 +455,7 @@ abstract class VhLocalizations {
   /// No description provided for @batchThisVideoOnly.
   ///
   /// In en, this message translates to:
-  /// **'Download this video only'**
+  /// **'Download this clip only'**
   String get batchThisVideoOnly;
 
   /// No description provided for @batchTitle.
@@ -571,12 +559,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'https://www.youtube.com/@name'**
   String get channelUrlHint;
-
-  /// No description provided for @chapterCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 chapter} other{{count} chapters}}'**
-  String chapterCount(int count);
 
   /// No description provided for @chapterNumber.
   ///
@@ -818,12 +800,6 @@ abstract class VhLocalizations {
   /// **'Cookies'**
   String get cookies;
 
-  /// No description provided for @cookiesHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'In your browser, use an extension that exports cookies in the Netscape format (one file per platform) and pick the files here. The server then uses them for every download, and yt-dlp decides when it needs them. Cookies expire, so a download that starts failing again usually means a fresh export is due.'**
-  String get cookiesHelp;
-
   /// No description provided for @cookiesNotNetscape.
   ///
   /// In en, this message translates to:
@@ -833,14 +809,8 @@ abstract class VhLocalizations {
   /// No description provided for @cookiesSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'For the platforms that will not download without a login'**
+  /// **'For the sites that will not download without a login'**
   String get cookiesSubtitle;
-
-  /// No description provided for @cookiesWhat.
-  ///
-  /// In en, this message translates to:
-  /// **'Some platforms refuse to hand a video over unless the request looks like a signed-in browser. A cookies file exported from your browser gives the server that.'**
-  String get cookiesWhat;
 
   /// No description provided for @copiedToClipboard.
   ///
@@ -872,12 +842,6 @@ abstract class VhLocalizations {
   /// **'Create playlist'**
   String get createPlaylist;
 
-  /// No description provided for @creator.
-  ///
-  /// In en, this message translates to:
-  /// **'Creator'**
-  String get creator;
-
   /// No description provided for @defaultQuality.
   ///
   /// In en, this message translates to:
@@ -893,7 +857,7 @@ abstract class VhLocalizations {
   /// No description provided for @deleteMultipleConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Delete {count} video(s)?\n\nThis will remove the files from your device.'**
+  /// **'{count, plural, =1{Delete 1 clip?\n\nIts file is removed from your device.} other{Delete {count} clips?\n\nTheir files are removed from your device.}}'**
   String deleteMultipleConfirm(int count);
 
   /// No description provided for @deletePlaylistConfirm.
@@ -917,13 +881,13 @@ abstract class VhLocalizations {
   /// No description provided for @deleteTagConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Delete the tag \"{tag}\" from all items? The videos themselves are not deleted.'**
+  /// **'Delete the tag \"{tag}\" from all items? The clips themselves are not deleted.'**
   String deleteTagConfirm(Object tag);
 
   /// No description provided for @deleteVideo.
   ///
   /// In en, this message translates to:
-  /// **'Delete video'**
+  /// **'Delete clip'**
   String get deleteVideo;
 
   /// No description provided for @deleteVideoConfirm.
@@ -1091,13 +1055,13 @@ abstract class VhLocalizations {
   /// No description provided for @desktopChannelsLater.
   ///
   /// In en, this message translates to:
-  /// **'Not in this version'**
+  /// **'Needs the download engine'**
   String get desktopChannelsLater;
 
   /// No description provided for @desktopChannelsLaterBody.
   ///
   /// In en, this message translates to:
-  /// **'Following a channel needs a scheduler on this computer, and that comes in a later version. The clips you download stay in the library.'**
+  /// **'Following a channel needs yt-dlp on this computer. Set it up in Settings › Engine, and your channels show here.'**
   String get desktopChannelsLaterBody;
 
   /// No description provided for @desktopChapters.
@@ -1247,7 +1211,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopDesktopSection.
   ///
   /// In en, this message translates to:
-  /// **'Desktop'**
+  /// **'Windows'**
   String get desktopDesktopSection;
 
   /// No description provided for @desktopDiscover.
@@ -1319,7 +1283,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopDiscoverDragOutLine.
   ///
   /// In en, this message translates to:
-  /// **'Onto a folder or another app, as a file.'**
+  /// **'Drop it on a folder or another app, and it arrives there as a file.'**
   String get desktopDiscoverDragOutLine;
 
   /// No description provided for @desktopDiscoverExport.
@@ -1361,7 +1325,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopDiscoverMiniLine.
   ///
   /// In en, this message translates to:
-  /// **'A small card above every other window, by the clock.'**
+  /// **'A small card above every other window, in the bottom corner of the screen.'**
   String get desktopDiscoverMiniLine;
 
   /// No description provided for @desktopDiscoverReading.
@@ -1439,7 +1403,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopDownloadFolderHint.
   ///
   /// In en, this message translates to:
-  /// **'Your own files: saved here, then the app leaves them alone.'**
+  /// **'Downloads are saved here as ordinary files, to open, move or back up like any other.'**
   String get desktopDownloadFolderHint;
 
   /// No description provided for @desktopDownloads.
@@ -1451,7 +1415,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopDownloadsEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Nothing is downloading. Add a link, or make a clip available offline.'**
+  /// **'Nothing is downloading. Add a link to start.'**
   String get desktopDownloadsEmpty;
 
   /// No description provided for @desktopDownloadsRunning.
@@ -1493,7 +1457,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopEngineDenoHint.
   ///
   /// In en, this message translates to:
-  /// **'Solves YouTube\'s check, for every format it offers'**
+  /// **'Answers YouTube\'s check, so every quality it offers can be downloaded'**
   String get desktopEngineDenoHint;
 
   /// No description provided for @desktopEngineFetch.
@@ -2723,7 +2687,7 @@ abstract class VhLocalizations {
   /// No description provided for @desktopWelcomeMessage.
   ///
   /// In en, this message translates to:
-  /// **'Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp. Nothing goes through a server.'**
+  /// **'Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp.'**
   String get desktopWelcomeMessage;
 
   /// No description provided for @desktopWelcomeStart.
@@ -2825,7 +2789,7 @@ abstract class VhLocalizations {
   /// No description provided for @disclaimerText.
   ///
   /// In en, this message translates to:
-  /// **'This app downloads media with yt-dlp. The developer is not responsible for how users utilize this tool. Please respect copyright laws and terms of service of content platforms.'**
+  /// **'This app downloads media with yt-dlp. The developer is not responsible for how users utilize this tool. Please respect copyright laws and the terms of service of the sites you download from.'**
   String get disclaimerText;
 
   /// No description provided for @dismiss.
@@ -2942,12 +2906,6 @@ abstract class VhLocalizations {
   /// **'Nothing matches these filters'**
   String get emptyFilteredTitle;
 
-  /// No description provided for @emptyLibraryMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Add a video link, or pull to refresh.'**
-  String get emptyLibraryMessage;
-
   /// No description provided for @emptyPlaylist.
   ///
   /// In en, this message translates to:
@@ -2957,7 +2915,7 @@ abstract class VhLocalizations {
   /// No description provided for @emptyPlaylistMessage.
   ///
   /// In en, this message translates to:
-  /// **'Add videos from the library'**
+  /// **'Add clips from the library'**
   String get emptyPlaylistMessage;
 
   /// No description provided for @engineDownloadingProgress.
@@ -2993,7 +2951,7 @@ abstract class VhLocalizations {
   /// No description provided for @engineErrMissing.
   ///
   /// In en, this message translates to:
-  /// **'The download engine is missing or incomplete. Set it up again from Settings'**
+  /// **'The download engine is missing or incomplete. Repair it in Settings with Repair the engine'**
   String get engineErrMissing;
 
   /// No description provided for @engineErrRateLimited.
@@ -3098,16 +3056,10 @@ abstract class VhLocalizations {
   /// **'No connection to the site'**
   String get errNetwork;
 
-  /// No description provided for @errPlatformBlocked.
-  ///
-  /// In en, this message translates to:
-  /// **'The platform requires a login, which this clip cannot be downloaded without'**
-  String get errPlatformBlocked;
-
   /// No description provided for @errPlatformBlockedCookies.
   ///
   /// In en, this message translates to:
-  /// **'The platform requires login. Send it a cookies file from Settings → Cookies'**
+  /// **'The site requires a login. Choose a cookies file in Settings › Cookies'**
   String get errPlatformBlockedCookies;
 
   /// No description provided for @errorGeneric.
@@ -3188,12 +3140,6 @@ abstract class VhLocalizations {
   /// **'File'**
   String get file;
 
-  /// No description provided for @fileName.
-  ///
-  /// In en, this message translates to:
-  /// **'File name'**
-  String get fileName;
-
   /// No description provided for @fileSize.
   ///
   /// In en, this message translates to:
@@ -3247,12 +3193,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Follow a channel'**
   String get followChannel;
-
-  /// No description provided for @followingChannel.
-  ///
-  /// In en, this message translates to:
-  /// **'Following'**
-  String get followingChannel;
 
   /// No description provided for @format.
   ///
@@ -3662,12 +3602,6 @@ abstract class VhLocalizations {
   /// **'Stop at end'**
   String get modeStopAtEnd;
 
-  /// No description provided for @moreChips.
-  ///
-  /// In en, this message translates to:
-  /// **'More · {count}'**
-  String moreChips(int count);
-
   /// No description provided for @navLibrary.
   ///
   /// In en, this message translates to:
@@ -3749,7 +3683,7 @@ abstract class VhLocalizations {
   /// No description provided for @noDownloadsMessage.
   ///
   /// In en, this message translates to:
-  /// **'Downloaded videos will appear here.\nShare a video link or use the Add URL button.'**
+  /// **'Downloaded clips will appear here.\nShare a link or use the Add link button.'**
   String get noDownloadsMessage;
 
   /// No description provided for @noExternalPlayer.
@@ -3785,7 +3719,7 @@ abstract class VhLocalizations {
   /// No description provided for @noPlaylistsMessage.
   ///
   /// In en, this message translates to:
-  /// **'Create a playlist to organize your videos'**
+  /// **'Create a playlist to organize your clips'**
   String get noPlaylistsMessage;
 
   /// No description provided for @noResults.
@@ -3806,12 +3740,6 @@ abstract class VhLocalizations {
   /// **'The download engine is not ready'**
   String get noServerTitle;
 
-  /// No description provided for @noTagsYet.
-  ///
-  /// In en, this message translates to:
-  /// **'No tags yet. Create one below.'**
-  String get noTagsYet;
-
   /// No description provided for @noVideosFound.
   ///
   /// In en, this message translates to:
@@ -3827,7 +3755,7 @@ abstract class VhLocalizations {
   /// No description provided for @notAffiliated.
   ///
   /// In en, this message translates to:
-  /// **'Not affiliated with yt-dlp or with any content platform, and not endorsed by them.'**
+  /// **'Not affiliated with yt-dlp or with any site, and not endorsed by them.'**
   String get notAffiliated;
 
   /// No description provided for @nothingHereYet.
@@ -3896,12 +3824,6 @@ abstract class VhLocalizations {
   /// **'A folder inside the download folder, which Explorer and other apps see too. Only what arrives from now on goes there; what is already downloaded stays where it is.'**
   String get ownFolderNote;
 
-  /// No description provided for @password.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get password;
-
   /// No description provided for @pasteUrlHint.
   ///
   /// In en, this message translates to:
@@ -3935,7 +3857,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcBadQr.
   ///
   /// In en, this message translates to:
-  /// **'This is not a VidHoist pairing code.'**
+  /// **'This is not a VidHoist pairing QR code.'**
   String get pcBadQr;
 
   /// No description provided for @pcCertificate.
@@ -4217,7 +4139,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcLinkCodeHint.
   ///
   /// In en, this message translates to:
-  /// **'On the phone: Settings › Computer › Scan the code. Or type this address and code there. It works once, for two minutes.'**
+  /// **'On the phone: Settings › Computer › Scan the QR code. Or type this address and code there. It works once, for two minutes.'**
   String get pcLinkCodeHint;
 
   /// No description provided for @pcLinkCodeLeft.
@@ -4343,7 +4265,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcLinkSecurity.
   ///
   /// In en, this message translates to:
-  /// **'Nothing passes through any server of ours: the phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer\'s certificate alone. Anyone else on the network finds a closed door.'**
+  /// **'The phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer\'s certificate alone. Anyone else on the network finds a closed door.'**
   String get pcLinkSecurity;
 
   /// No description provided for @pcLinkStarting.
@@ -4445,14 +4367,8 @@ abstract class VhLocalizations {
   /// No description provided for @pcPairIntro.
   ///
   /// In en, this message translates to:
-  /// **'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the code it shows.'**
+  /// **'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the QR code it shows.'**
   String get pcPairIntro;
-
-  /// No description provided for @pcPairStart.
-  ///
-  /// In en, this message translates to:
-  /// **'Pair with a computer'**
-  String get pcPairStart;
 
   /// No description provided for @pcPaired.
   ///
@@ -4517,7 +4433,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcScanButton.
   ///
   /// In en, this message translates to:
-  /// **'Scan the code'**
+  /// **'Scan the QR code'**
   String get pcScanButton;
 
   /// No description provided for @pcScanFailed.
@@ -4529,7 +4445,7 @@ abstract class VhLocalizations {
   /// No description provided for @pcScanPrompt.
   ///
   /// In en, this message translates to:
-  /// **'Point the camera at the code on the computer\'s screen'**
+  /// **'Point the camera at the QR code on the computer\'s screen'**
   String get pcScanPrompt;
 
   /// No description provided for @pcSendToPc.
@@ -4580,12 +4496,6 @@ abstract class VhLocalizations {
   /// **'Away: sent when it is back'**
   String get pcWillSend;
 
-  /// No description provided for @percentValue.
-  ///
-  /// In en, this message translates to:
-  /// **'{percent}%'**
-  String percentValue(Object percent);
-
   /// No description provided for @pickAnotherFile.
   ///
   /// In en, this message translates to:
@@ -4607,7 +4517,7 @@ abstract class VhLocalizations {
   /// No description provided for @pictureInPictureHelp.
   ///
   /// In en, this message translates to:
-  /// **'When you leave the app while a video plays, it stays in a corner of the screen'**
+  /// **'When you leave the app while a clip plays, it stays in a corner of the screen'**
   String get pictureInPictureHelp;
 
   /// No description provided for @pinPlaylist.
@@ -4619,7 +4529,7 @@ abstract class VhLocalizations {
   /// No description provided for @platform.
   ///
   /// In en, this message translates to:
-  /// **'Platform'**
+  /// **'Site'**
   String get platform;
 
   /// No description provided for @platformCount.
@@ -4724,12 +4634,6 @@ abstract class VhLocalizations {
   /// **'Playlists'**
   String get playlists;
 
-  /// No description provided for @preferences.
-  ///
-  /// In en, this message translates to:
-  /// **'Preferences'**
-  String get preferences;
-
   /// No description provided for @previous.
   ///
   /// In en, this message translates to:
@@ -4781,7 +4685,7 @@ abstract class VhLocalizations {
   /// No description provided for @qualityHelper.
   ///
   /// In en, this message translates to:
-  /// **'Used by quick download, by whole-playlist downloads, and by \"Download now\" in the clipboard bar, and it is the preselected option in the add-link sheet. So it matters whether or not quick download is on.'**
+  /// **'Used by quick download, by whole-playlist downloads, and by \"Download\" in the clipboard bar, and it is the preselected option in the add-link sheet. So it matters whether or not quick download is on.'**
   String get qualityHelper;
 
   /// No description provided for @qualityReading.
@@ -4841,32 +4745,8 @@ abstract class VhLocalizations {
   /// No description provided for @quickDownloadHelp.
   ///
   /// In en, this message translates to:
-  /// **'A shared or pasted link starts downloading immediately at the default quality, with no sheet. Numeric qualities are YouTube-only: anything else downloads at best quality, and an \"audio only\" default applies everywhere.'**
+  /// **'A shared or pasted link starts downloading at once at the default quality, with no sheet. A site that lacks that quality gives its best, and \"Audio only\" works on every site.'**
   String get quickDownloadHelp;
-
-  /// No description provided for @quoteExtendHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Touch another line to take it in'**
-  String get quoteExtendHint;
-
-  /// No description provided for @quoteMomentLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Copy link to this moment'**
-  String get quoteMomentLink;
-
-  /// No description provided for @quotePlayFrom.
-  ///
-  /// In en, this message translates to:
-  /// **'Play from here'**
-  String get quotePlayFrom;
-
-  /// No description provided for @quoteTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Quote'**
-  String get quoteTitle;
 
   /// No description provided for @rateLimit.
   ///
@@ -4885,66 +4765,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'{mb} MB/s'**
   String rateLimitValue(int mb);
-
-  /// No description provided for @readingAsMarkdownHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Each paragraph with its time, linked to its moment'**
-  String get readingAsMarkdownHint;
-
-  /// No description provided for @readingAsPdfHint.
-  ///
-  /// In en, this message translates to:
-  /// **'To print or keep'**
-  String get readingAsPdfHint;
-
-  /// No description provided for @readingAsSrtHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Line by line with its times, for any player'**
-  String get readingAsSrtHint;
-
-  /// No description provided for @readingAsText.
-  ///
-  /// In en, this message translates to:
-  /// **'Text to read'**
-  String get readingAsText;
-
-  /// No description provided for @readingAsTextHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Paragraphs without times, to paste anywhere'**
-  String get readingAsTextHint;
-
-  /// No description provided for @readingHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap a sentence to hear it from there'**
-  String get readingHint;
-
-  /// No description provided for @readingMinutes.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{About a minute to read} other{About {count} minutes to read}}'**
-  String readingMinutes(int count);
-
-  /// No description provided for @readingRead.
-  ///
-  /// In en, this message translates to:
-  /// **'Read'**
-  String get readingRead;
-
-  /// No description provided for @readingShare.
-  ///
-  /// In en, this message translates to:
-  /// **'Share the text'**
-  String get readingShare;
-
-  /// No description provided for @readingTextSize.
-  ///
-  /// In en, this message translates to:
-  /// **'Text size'**
-  String get readingTextSize;
 
   /// No description provided for @reelsEndBack.
   ///
@@ -5078,12 +4898,6 @@ abstract class VhLocalizations {
   /// **'Data restored successfully'**
   String get restoreSuccess;
 
-  /// No description provided for @resultsFound.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 result} other{{count} results}}'**
-  String resultsFound(int count);
-
   /// No description provided for @resumeSubscription.
   ///
   /// In en, this message translates to:
@@ -5095,12 +4909,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
-
-  /// No description provided for @retryAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Retry all'**
-  String get retryAll;
 
   /// No description provided for @saveSettings.
   ///
@@ -5117,7 +4925,7 @@ abstract class VhLocalizations {
   /// No description provided for @searchVideos.
   ///
   /// In en, this message translates to:
-  /// **'Search videos...'**
+  /// **'Search clips…'**
   String get searchVideos;
 
   /// No description provided for @seekBackward10.
@@ -5192,12 +5000,6 @@ abstract class VhLocalizations {
   /// **'Playback'**
   String get settingsPlayback;
 
-  /// No description provided for @settingsSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings saved successfully'**
-  String get settingsSaved;
-
   /// No description provided for @settingsTranscripts.
   ///
   /// In en, this message translates to:
@@ -5228,18 +5030,6 @@ abstract class VhLocalizations {
   /// **'Not set up yet'**
   String get settingsValueNotSet;
 
-  /// No description provided for @settingsValueOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Off'**
-  String get settingsValueOff;
-
-  /// No description provided for @settingsValueOn.
-  ///
-  /// In en, this message translates to:
-  /// **'On'**
-  String get settingsValueOn;
-
   /// No description provided for @settingsValueQuick.
   ///
   /// In en, this message translates to:
@@ -5251,12 +5041,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Signed in: {sites}'**
   String settingsValueSignedIn(String sites);
-
-  /// No description provided for @settingsValueSubtitlesShown.
-  ///
-  /// In en, this message translates to:
-  /// **'subtitles shown'**
-  String get settingsValueSubtitlesShown;
 
   /// No description provided for @settingsValueWifiOnly.
   ///
@@ -5324,12 +5108,6 @@ abstract class VhLocalizations {
   /// **'Shorts'**
   String get shortsFilter;
 
-  /// No description provided for @showChannel.
-  ///
-  /// In en, this message translates to:
-  /// **'Everything from {channel}'**
-  String showChannel(String channel);
-
   /// No description provided for @shuffle.
   ///
   /// In en, this message translates to:
@@ -5354,16 +5132,10 @@ abstract class VhLocalizations {
   /// **'Smart playlists'**
   String get smartPlaylists;
 
-  /// No description provided for @sortAndFilter.
-  ///
-  /// In en, this message translates to:
-  /// **'Sort and filter'**
-  String get sortAndFilter;
-
   /// No description provided for @sortAndPlatform.
   ///
   /// In en, this message translates to:
-  /// **'Sort and platform'**
+  /// **'Sort and site'**
   String get sortAndPlatform;
 
   /// No description provided for @sortBy.
@@ -5471,7 +5243,7 @@ abstract class VhLocalizations {
   /// No description provided for @streamingOnline.
   ///
   /// In en, this message translates to:
-  /// **'Streaming online'**
+  /// **'Playing over the network'**
   String get streamingOnline;
 
   /// No description provided for @subscriptionAdded.
@@ -5513,7 +5285,7 @@ abstract class VhLocalizations {
   /// No description provided for @subscriptions.
   ///
   /// In en, this message translates to:
-  /// **'Subscriptions'**
+  /// **'Channels'**
   String get subscriptions;
 
   /// No description provided for @subscriptionsEmpty.
@@ -5588,18 +5360,6 @@ abstract class VhLocalizations {
   /// **'Hide subtitles'**
   String get subtitlesHide;
 
-  /// No description provided for @subtitlesInShorts.
-  ///
-  /// In en, this message translates to:
-  /// **'Subtitles in shorts'**
-  String get subtitlesInShorts;
-
-  /// No description provided for @subtitlesInShortsHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'Off unless you turn it on: many shorts already carry their words in the picture.'**
-  String get subtitlesInShortsHelp;
-
   /// No description provided for @subtitlesLanguage.
   ///
   /// In en, this message translates to:
@@ -5641,18 +5401,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Small'**
   String get subtitlesSizeSmall;
-
-  /// No description provided for @tagActionsHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Long-press a tag to rename or delete it.'**
-  String get tagActionsHint;
-
-  /// No description provided for @tagFilterHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap a tag to show its clips, again to hide them, and once more to let it go.'**
-  String get tagFilterHint;
 
   /// No description provided for @tagLimitReached.
   ///
@@ -5738,54 +5486,6 @@ abstract class VhLocalizations {
   /// **'Transcript'**
   String get transcript;
 
-  /// No description provided for @transcriptFind.
-  ///
-  /// In en, this message translates to:
-  /// **'Search the transcript'**
-  String get transcriptFind;
-
-  /// No description provided for @transcriptFull.
-  ///
-  /// In en, this message translates to:
-  /// **'Full transcript'**
-  String get transcriptFull;
-
-  /// No description provided for @transcriptMatches.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No matches} =1{1 match} other{{count} matches}}'**
-  String transcriptMatches(int count);
-
-  /// No description provided for @transcriptNextMatch.
-  ///
-  /// In en, this message translates to:
-  /// **'Next match'**
-  String get transcriptNextMatch;
-
-  /// No description provided for @transcriptPeekHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap for the whole text'**
-  String get transcriptPeekHint;
-
-  /// No description provided for @transcriptPreviousMatch.
-  ///
-  /// In en, this message translates to:
-  /// **'Previous match'**
-  String get transcriptPreviousMatch;
-
-  /// No description provided for @transcriptSaidMore.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Said once more} other{Said {count} more times}}'**
-  String transcriptSaidMore(int count);
-
-  /// No description provided for @transcriptSwitchLanguage.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch the transcript language'**
-  String get transcriptSwitchLanguage;
-
   /// No description provided for @transcriptsClips.
   ///
   /// In en, this message translates to:
@@ -5798,95 +5498,17 @@ abstract class VhLocalizations {
   /// **'Delete all'**
   String get transcriptsDeleteAll;
 
-  /// No description provided for @transcriptsDeleteBody.
-  ///
-  /// In en, this message translates to:
-  /// **'They are removed from this phone. Only a file you exported can bring them back.'**
-  String get transcriptsDeleteBody;
-
   /// No description provided for @transcriptsDeleteTitle.
   ///
   /// In en, this message translates to:
   /// **'Delete every transcript?'**
   String get transcriptsDeleteTitle;
 
-  /// No description provided for @transcriptsDisableBody.
-  ///
-  /// In en, this message translates to:
-  /// **'The saved transcripts ({size}) stay on this phone unless you delete them.'**
-  String transcriptsDisableBody(String size);
-
-  /// No description provided for @transcriptsDisableTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop searching inside clips?'**
-  String get transcriptsDisableTitle;
-
-  /// No description provided for @transcriptsEnable.
-  ///
-  /// In en, this message translates to:
-  /// **'Turn on'**
-  String get transcriptsEnable;
-
-  /// No description provided for @transcriptsEnableBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Before each YouTube clip you add is downloaded, the app fetches its words from your server, in the app\'s language and in English (up to 40 seconds), and keeps them on this phone only. Clips already in your library are included only if your server saved their subtitles beside them (the setup guide shows how). You can turn this off at any time.'**
-  String get transcriptsEnableBody;
-
-  /// No description provided for @transcriptsExported.
-  ///
-  /// In en, this message translates to:
-  /// **'Transcripts saved to: {path}'**
-  String transcriptsExported(Object path);
-
-  /// No description provided for @transcriptsHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'The app keeps the words said in each YouTube clip you add, so a library search also finds what was said inside your clips, not only their titles.\n\nThe words are fetched from your server just before the download and kept on this phone; the full backup does not include them. To move them to another phone, use Export here and Import there. An import adds to what is already here and deletes nothing.\n\nA server set to write subtitles beside each clip (one line in its configuration; the setup guide shows it) covers everything it downloads from then on, subscriptions and other sites included: the app reads those files on its own, in the app\'s language and in English.'**
-  String get transcriptsHelp;
-
-  /// No description provided for @transcriptsImportInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'This file holds no transcripts.'**
-  String get transcriptsImportInvalid;
-
-  /// No description provided for @transcriptsImported.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Imported 1 transcript} other{Imported {count} transcripts}}'**
-  String transcriptsImported(int count);
-
-  /// No description provided for @transcriptsKeep.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop and keep'**
-  String get transcriptsKeep;
-
-  /// No description provided for @transcriptsSaidInside.
-  ///
-  /// In en, this message translates to:
-  /// **'Said inside clips'**
-  String get transcriptsSaidInside;
-
-  /// No description provided for @transcriptsSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Search inside clips'**
-  String get transcriptsSearch;
-
   /// No description provided for @transcriptsSearchHelp.
   ///
   /// In en, this message translates to:
   /// **'Keeps the words of every YouTube clip you add, so you can search what was said.'**
   String get transcriptsSearchHelp;
-
-  /// No description provided for @transcriptsStopAndDelete.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop and delete'**
-  String get transcriptsStopAndDelete;
 
   /// No description provided for @tryAgain.
   ///
@@ -6074,12 +5696,6 @@ abstract class VhLocalizations {
   /// **'Updates'**
   String get updates;
 
-  /// No description provided for @username.
-  ///
-  /// In en, this message translates to:
-  /// **'Username'**
-  String get username;
-
   /// No description provided for @version.
   ///
   /// In en, this message translates to:
@@ -6181,24 +5797,6 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Nothing downloads over mobile data. Downloads wait for Wi-Fi, and one under way when Wi-Fi drops is paused and goes on by itself when it returns.'**
   String get wifiOnlyHelp;
-
-  /// No description provided for @yourChannels.
-  ///
-  /// In en, this message translates to:
-  /// **'Your channels'**
-  String get yourChannels;
-
-  /// No description provided for @yourChannelsHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Followed in Settings or the player'**
-  String get yourChannelsHint;
-
-  /// No description provided for @yourLibrary.
-  ///
-  /// In en, this message translates to:
-  /// **'Your library'**
-  String get yourLibrary;
 
   /// No description provided for @yourPlaylists.
   ///

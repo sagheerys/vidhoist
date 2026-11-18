@@ -22,7 +22,7 @@ SOURCE = 'https://github.com/sagheerys/vidhoist'
 PREFACE = {
     'en': [
         ('h', 'Terms of use and license'),
-        ('p', 'Vidhoist is free, open-source software by '
+        ('p', 'VidHoist is free, open-source software by '
               f'{DEVELOPER["en"]}. It downloads video and audio with yt-dlp, '
               'on this computer.'),
         ('b', 'License: the GNU General Public License, version 3, below. '
@@ -38,15 +38,15 @@ PREFACE = {
               "respecting its owners' rights and the terms of the sites it "
               'comes from.'),
         ('b', 'Third-party libraries and their licenses: in the app, under '
-              'Settings → About → Open-source licenses.'),
+              'Settings › About › Open-source licenses.'),
         ('p', f'Developer: {DEVELOPER["en"]}'),
         ('l', f'Project page: {PAGE}'),
         ('l', f'Source and issues: {SOURCE}'),
     ],
     'ar': [
         ('h', 'شروط الاستخدام والرخصة'),
-        ('p', 'Vidhoist برنامج حرّ مفتوح المصدر من '
-              f'{DEVELOPER["ar"]}، يحمّل الفيديو والصوت بـyt-dlp على هذا الكمبيوتر.'),
+        ('p', 'VidHoist برنامج حرّ مفتوح المصدر من '
+              f'{DEVELOPER["ar"]}، ينزّل الفيديو والصوت بـyt-dlp على هذا الكمبيوتر.'),
         ('b', 'الرخصة: رخصة جنو العمومية العامة، الإصدار الثالث (GNU GPL v3)، '
               'ونصها أدناه. لك أن تستعمل البرنامج وتنسخه وتعدّله وتنشره '
               'بشروطها، والنص الإنجليزي هو المعتمد.'),
@@ -58,7 +58,7 @@ PREFACE = {
         ('b', 'المحتوى: أنت المسؤول عمّا تنزّله، وعن احترام حقوق أصحابه '
               'وشروط المواقع التي يأتي منها.'),
         ('b', 'مكتبات الطرف الثالث ورخصها: في البرنامج نفسه، من الإعدادات '
-              '← عن التطبيق ← تراخيص البرمجيات مفتوحة المصدر.'),
+              '› عن التطبيق › تراخيص البرمجيات مفتوحة المصدر.'),
         ('p', f'المطوّر: {DEVELOPER["ar"]}'),
         ('l', f'صفحة المشروع: {PAGE}'),
         ('l', f'المصدر والبلاغات: {SOURCE}'),

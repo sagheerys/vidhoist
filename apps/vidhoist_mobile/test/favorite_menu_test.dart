@@ -65,7 +65,7 @@ void main() {
     await pump(tester, clip());
     await tester.tap(byVhIcon(VhIcons.moreVert));
     await tester.pumpAndSettle();
-    final delete = find.text('حذف الفيديو');
+    final delete = find.text('حذف المقطع');
     await tester.ensureVisible(delete);
     await tester.tap(delete);
     await tester.pumpAndSettle();

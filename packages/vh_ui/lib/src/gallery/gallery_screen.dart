@@ -132,11 +132,11 @@ class VhGalleryScreen extends StatelessWidget {
           ),
           const SizedBox(height: VhSpace.xl),
 
-          const VhSectionHeader(title: 'تحميل جارٍ', trailing: 'بطاقة حية'),
+          const VhSectionHeader(title: 'تنزيل جارٍ', trailing: 'بطاقة حية'),
           const SizedBox(height: VhSpace.md),
           VhDownloadProgressCard(
             title: 'أنشودة الفجر — نسخة المسجد الكبير',
-            statusText: 'يسحب من السيرفر · 64٪',
+            statusText: 'جارٍ التنزيل · 64٪',
             progress: 0.64,
             onCancel: () {},
           ),
@@ -211,7 +211,7 @@ class VhGalleryScreen extends StatelessWidget {
                 label: const Text('خطأ'),
                 onPressed: () => showVhSnack(
                   context,
-                  'تعذر الوصول للسيرفر',
+                  'تعذّر الاتصال بالموقع',
                   type: VhSnackType.error,
                 ),
               ),
@@ -230,8 +230,8 @@ class VhGalleryScreen extends StatelessWidget {
 
           const VhSectionHeader(title: 'حالة فارغة'),
           VhEmptyState(
-            title: 'لا سيرفر بعد',
-            message: 'أدخل رابط سيرفر Vidhoist من الإعدادات لبدء التحميل',
+            title: 'لا تنزيلات بعد',
+            message: 'الصق رابطاً لتبدأ أول تنزيل',
             actionLabel: 'فتح الإعدادات',
             onAction: () {},
           ),
@@ -263,7 +263,7 @@ class VhGalleryScreen extends StatelessWidget {
         ],
         selectedQuality: 'best',
         onQualitySelected: (_) {},
-        startLabel: 'ابدأ التحميل',
+        startLabel: 'ابدأ التنزيل',
         onStart: () => Navigator.pop(sheetContext),
       ),
       // A development gallery, but a leak is still a leak: the controller

@@ -17,7 +17,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get aboutDescriptionPhone =>
-      'تطبيق خفيف وسريع لتحميل الفيديو والصوت من مختلف المنصات بـyt-dlp، إلى جهازك مباشرة بلا سيرفر بينهما، وفيه مشغل مدمج وقوائم تشغيل.';
+      'تطبيق خفيف وسريع لتنزيل الفيديو والصوت من مواقع كثيرة بـyt-dlp، وفيه مشغّل مدمج وقوائم تشغيل.';
 
   @override
   String get accountSignIn => 'تسجيل الدخول';
@@ -65,26 +65,26 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get accountsHint =>
-      'للمواقع التي ترفض التحميل بلا تسجيل دخول. تسجّل الدخول في صفحة الموقع نفسها داخل التطبيق، وما يتركه يبقى على هذا الجوال حيث يقرؤه yt-dlp في كل تنزيل، ولا يذهب إلى أي مكان آخر.';
+      'للمواقع التي ترفض التنزيل بلا تسجيل دخول. تسجّل الدخول في صفحة الموقع نفسها داخل التطبيق، وما يتركه يبقى على هذا الجوال حيث يقرؤه yt-dlp في كل تنزيل، ولا يذهب إلى أي مكان آخر.';
 
   @override
-  String get activeDownloads => 'التحميلات النشطة';
+  String get activeDownloads => 'التنزيلات النشطة';
 
   @override
   String activeDownloadsCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count تحميلاً جارياً',
-      few: '$count تحميلات جارية',
-      two: 'تحميلان جاريان',
-      one: 'تحميل واحد جارٍ',
+      other: '$count تنزيلاً جارياً',
+      few: '$count تنزيلات جارية',
+      two: 'تنزيلان جاريان',
+      one: 'تنزيل واحد جارٍ',
     );
     return '$_temp0';
   }
 
   @override
-  String get activeDownloadsSheet => 'التحميلات الجارية';
+  String get activeDownloadsSheet => 'التنزيلات الجارية';
 
   @override
   String get activeNow => 'نشط الآن';
@@ -118,13 +118,10 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
-  String get allDownloadsFinished => 'اكتملت جميع التحميلات';
+  String get allDownloadsFinished => 'اكتملت جميع التنزيلات';
 
   @override
-  String get allFolders => 'كل المجلدات';
-
-  @override
-  String get allPlatforms => 'كل المنصات';
+  String get allPlatforms => 'كل المواقع';
 
   @override
   String get alreadyInPlaylist => 'موجود في القائمة';
@@ -174,9 +171,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get audioStereo => 'ستيريو';
 
   @override
-  String get authentication => 'تسجيل الدخول (اختياري)';
-
-  @override
   String get autoBuilt => 'تلقائية';
 
   @override
@@ -195,14 +189,14 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get autoRetryHelp =>
-      'إذا فشل تحميل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه الموقع فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.';
+      'إذا فشل تنزيل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه الموقع فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.';
 
   @override
-  String get backgroundDownload => 'جارٍ تحميل الملفات في الخلفية…';
+  String get backgroundDownload => 'جارٍ تنزيل الملفات في الخلفية…';
 
   @override
   String get backupNote =>
-      'تشمل النسخة القوائم والوسوم وفهرس المقاطع المتاحة دون اتصال وروابط الأغلفة والإعدادات، ولا تشمل أبداً اسم المستخدم وكلمة المرور، ولا ملفات الوسائط نفسها.';
+      'تشمل النسخة المكتبة والقوائم والوسوم والقنوات المتابَعة والإعدادات. أما تسجيلات الدخول والنصوص فتُحفظ منفصلة، ولا تشمل النسخة ملفات الوسائط نفسها.';
 
   @override
   String get backupSettings => 'نسخ جميع البيانات احتياطياً';
@@ -231,7 +225,7 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
-  String get batchDownloadSelected => 'تحميل المحدد';
+  String get batchDownloadSelected => 'تنزيل المحدد';
 
   @override
   String get batchLoading => 'جارٍ قراءة القائمة…';
@@ -245,10 +239,10 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
-  String get batchThisVideoOnly => 'تحميل هذا المقطع فقط';
+  String get batchThisVideoOnly => 'تنزيل هذا المقطع فقط';
 
   @override
-  String get batchTitle => 'التحميل الدفعي';
+  String get batchTitle => 'التنزيل الدفعي';
 
   @override
   String get batteryAllow => 'سماح';
@@ -306,20 +300,6 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get channelUrlHint => 'https://www.youtube.com/@name';
-
-  @override
-  String chapterCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count فصل',
-      many: '$count فصلاً',
-      few: '$count فصول',
-      two: 'فصلان',
-      one: 'فصل واحد',
-    );
-    return '$_temp0';
-  }
 
   @override
   String chapterNumber(int number) {
@@ -395,10 +375,10 @@ class VhLocalizationsAr extends VhLocalizations {
       'الموقع لا يذكر طول المقطع، فلن تُقارَن الأوقات به';
 
   @override
-  String get clipMinuteDown => 'دقيقة أقل';
+  String get clipMinuteDown => 'دقيقة أبكر';
 
   @override
-  String get clipMinuteUp => 'دقيقة أكثر';
+  String get clipMinuteUp => 'دقيقة لاحقاً';
 
   @override
   String get clipOnly => 'جزء من المقطع فقط';
@@ -441,7 +421,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get compatiblePlaybackHelp =>
-      'يطلب صيغة H.264/AAC التي تشغّلها كل الهواتف بعتادها مباشرة. وإن أطفأته أتاح لك أعلى دقة، لكن يوتيوب قد يرسل حينها صيغة AV1 فتظهر الصورة مشوّشة على أجهزة كثيرة.';
+      'يطلب صيغة H.264/AAC التي تشغّلها كل الجوالات بعتادها مباشرة. وإن أطفأته أتاح لك أعلى دقة، لكن يوتيوب قد يرسل حينها صيغة AV1 فتظهر الصورة مشوّشة على أجهزة كثيرة.';
 
   @override
   String get completed => 'مكتمل';
@@ -463,19 +443,11 @@ class VhLocalizationsAr extends VhLocalizations {
   String get cookies => 'الكوكيز';
 
   @override
-  String get cookiesHelp =>
-      'ثبّت في متصفحك إضافة تصدّر الكوكيز بصيغة Netscape، وصدّر ملفاً لكل منصة، ثم اختر الملفات هنا. سيستعملها السيرفر بعد ذلك في كل تحميل، ويقرر yt-dlp متى يحتاج إليها. وللكوكيز مدة صلاحية، فإذا عاد التحميل إلى الفشل فغالباً حان وقت تصديرها من جديد.';
-
-  @override
   String get cookiesNotNetscape =>
       'لا يحوي أيٌّ من هذه الملفات كوكيز بصيغة Netscape';
 
   @override
-  String get cookiesSubtitle => 'للمنصات التي ترفض التحميل بلا تسجيل دخول';
-
-  @override
-  String get cookiesWhat =>
-      'بعض المنصات لا تسمح بتحميل المقطع إلا إذا بدا الطلب قادماً من متصفح سُجّل فيه الدخول، وملف الكوكيز المصدَّر من متصفحك يمنح السيرفر هذه الصفة.';
+  String get cookiesSubtitle => 'للمواقع التي ترفض التنزيل بلا تسجيل دخول';
 
   @override
   String get copiedToClipboard => 'نُسِخ إلى الحافظة';
@@ -494,9 +466,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get createPlaylist => 'إنشاء قائمة';
 
   @override
-  String get creator => 'صانع المحتوى';
-
-  @override
   String get defaultQuality => 'جودة الفيديو الافتراضية';
 
   @override
@@ -504,7 +473,16 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String deleteMultipleConfirm(int count) {
-    return 'حذف $count فيديو؟\n\nستُزال الملفات من جهازك.';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'حذف $count مقطع؟\n\nستُزال ملفاتها من جهازك.',
+      many: 'حذف $count مقطعاً؟\n\nستُزال ملفاتها من جهازك.',
+      few: 'حذف $count مقاطع؟\n\nستُزال ملفاتها من جهازك.',
+      two: 'حذف مقطعين؟\n\nسيُزال ملفاهما من جهازك.',
+      one: 'حذف مقطع واحد؟\n\nسيُزال ملفه من جهازك.',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -520,11 +498,11 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String deleteTagConfirm(Object tag) {
-    return 'حذف الوسم «$tag» من كل العناصر؟ لن تُحذف الفيديوهات نفسها.';
+    return 'حذف الوسم «$tag» من كل العناصر؟ لن تُحذف المقاطع نفسها.';
   }
 
   @override
-  String get deleteVideo => 'حذف الفيديو';
+  String get deleteVideo => 'حذف المقطع';
 
   @override
   String deleteVideoConfirm(Object title) {
@@ -635,11 +613,11 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopChannelsInLibrary => 'قنوات في مكتبتك';
 
   @override
-  String get desktopChannelsLater => 'ليست في هذا الإصدار';
+  String get desktopChannelsLater => 'تحتاج محرّك التنزيل';
 
   @override
   String get desktopChannelsLaterBody =>
-      'متابعة القنوات تحتاج مُجدولاً على هذا الكمبيوتر، ويأتي في إصدار لاحق. ما تنزّله من مقاطع يبقى في المكتبة.';
+      'متابعة القنوات تحتاج yt-dlp على هذا الكمبيوتر. جهّزه من الإعدادات › المحرّك، فتظهر قنواتك هنا.';
 
   @override
   String get desktopChapters => 'الفصول';
@@ -674,7 +652,7 @@ class VhLocalizationsAr extends VhLocalizations {
       'استعمل في متصفحك إضافةً تصدّر الكوكيز بصيغة Netscape (ملف لكل موقع)، واختر الملفات هنا معاً. يستعملها yt-dlp بعدها في كل تنزيل. تنتهي صلاحية الكوكيز، فإن عاد تنزيل يفشل فالأغلب أن الوقت حان لتصديرها من جديد.';
 
   @override
-  String get desktopCookiesKept => 'الكوكيز محفوظة على هذا الحاسوب';
+  String get desktopCookiesKept => 'الكوكيز محفوظة على هذا الكمبيوتر';
 
   @override
   String desktopCookiesKeptFor(String sites) {
@@ -683,7 +661,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopCookiesLocalHint =>
-      'للمواقع التي تطلب تسجيل الدخول. يقرؤها yt-dlp على هذا الحاسوب ولا تذهب إلى أي مكان آخر.';
+      'للمواقع التي تطلب تسجيل الدخول. يقرؤها yt-dlp على هذا الكمبيوتر ولا تذهب إلى أي مكان آخر.';
 
   @override
   String get desktopCookiesNone => 'بلا';
@@ -731,7 +709,7 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
-  String get desktopDesktopSection => 'سطح المكتب';
+  String get desktopDesktopSection => 'ويندوز';
 
   @override
   String get desktopDiscover => 'اكتشف VidHoist';
@@ -770,7 +748,8 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopDiscoverDragOut => 'اسحب مقطعاً إلى الخارج';
 
   @override
-  String get desktopDiscoverDragOutLine => 'إلى مجلد أو برنامج آخر، ملفاً.';
+  String get desktopDiscoverDragOutLine =>
+      'أفلته في مجلد أو برنامج آخر، فيصل إليه ملفاً.';
 
   @override
   String get desktopDiscoverExport => 'صدّر النص';
@@ -795,7 +774,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopDiscoverMiniLine =>
-      'بطاقة صغيرة فوق كل النوافذ، بجانب الساعة.';
+      'بطاقة صغيرة فوق كل النوافذ، في الزاوية السفلية من الشاشة.';
 
   @override
   String get desktopDiscoverReading =>
@@ -840,14 +819,13 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopDownloadFolderHint =>
-      'ملفاتك الخاصة: تُحفظ هنا، ثم لا يتدخل فيها التطبيق.';
+      'تُحفظ التنزيلات هنا ملفاتٍ عادية، تفتحها أو تنقلها أو تنسخها كأي ملف آخر.';
 
   @override
-  String get desktopDownloads => 'التحميلات';
+  String get desktopDownloads => 'التنزيلات';
 
   @override
-  String get desktopDownloadsEmpty =>
-      'لا شيء قيد التحميل. أضف رابطاً، أو أتِح مقطعاً دون اتصال.';
+  String get desktopDownloadsEmpty => 'لا شيء قيد التنزيل. أضف رابطاً ليبدأ.';
 
   @override
   String get desktopDownloadsRunning => 'جارية';
@@ -870,7 +848,8 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopEngine => 'المحرّك';
 
   @override
-  String get desktopEngineDenoHint => 'يحلّ فحص يوتيوب لتظهر كل صيغه';
+  String get desktopEngineDenoHint =>
+      'يجتاز فحص يوتيوب، لتتاح كل الجودات التي يعرضها';
 
   @override
   String get desktopEngineFetch => 'نزّل';
@@ -904,7 +883,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopEngineMissing =>
-      'yt-dlp غير موجود على هذا الحاسوب. أعد تثبيت VidHoist، أو نزّله من هنا.';
+      'yt-dlp غير موجود على هذا الكمبيوتر. أعد تثبيت VidHoist، أو نزّله من هنا.';
 
   @override
   String get desktopEngineOnFirstUse => 'يُنزَّل مع أول تنزيل يحتاجه';
@@ -1105,7 +1084,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopKeyZoomReset => 'الواجهة بحجمها المعتاد';
 
   @override
-  String get desktopLanguageSystemHint => 'يتبع لغة Windows.';
+  String get desktopLanguageSystemHint => 'يتبع لغة ويندوز.';
 
   @override
   String desktopLastArrival(String when) {
@@ -1138,7 +1117,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String desktopLinksDropped(int count, int limit) {
-    return 'تُؤخذ أول $limit رابط فقط، وتُرك الباقي: $count.';
+    return 'أُخذت الروابط الأولى فقط ($limit)، وتُرك الباقي ($count).';
   }
 
   @override
@@ -1193,7 +1172,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopNoFavoritesTitle => 'لا مفضلة بعد';
 
   @override
-  String get desktopNoMatchMessage => 'ألغِ أحد الاختيارات لترى أكثر.';
+  String get desktopNoMatchMessage => 'ألغِ إحدى التصفيات لترى أكثر.';
 
   @override
   String get desktopNoMatchTitle => 'لا شيء يطابق هذه التصفية';
@@ -1236,7 +1215,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopNotifyArrivalsHint =>
-      'إشعار من Windows حين تُنزَّل مقاطع جديدة من القنوات التي تتابعها.';
+      'إشعار من ويندوز حين تُنزَّل مقاطع جديدة من القنوات التي تتابعها.';
 
   @override
   String get desktopOfferCopiedLinks => 'اعرض عليّ الروابط التي أنسخها';
@@ -1465,7 +1444,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopStartFresh => 'ابدأ من جديد';
 
   @override
-  String get desktopStartWithWindows => 'التشغيل مع بدء Windows';
+  String get desktopStartWithWindows => 'التشغيل مع بدء ويندوز';
 
   @override
   String get desktopStartWithWindowsHint =>
@@ -1473,7 +1452,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopStartWithWindowsRefused =>
-      'لم يسمح Windows للتطبيق بالبدء معه.';
+      'لم يسمح ويندوز للتطبيق بالبدء معه.';
 
   @override
   String get desktopStats => 'إحصاءات المكتبة';
@@ -1485,7 +1464,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopStatsByMonth => 'حسب شهر الإضافة';
 
   @override
-  String get desktopStatsBySite => 'حسب المنصة';
+  String get desktopStatsBySite => 'حسب الموقع';
 
   @override
   String get desktopStatsClips => 'المقاطع';
@@ -1623,7 +1602,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopWelcomeMessage =>
-      'الصق رابطاً من يوتيوب أو أي موقع آخر، فينزّله VidHoist إلى هذا الحاسوب بمحرّك yt-dlp، دون المرور بأي خادم.';
+      'الصق رابطاً من يوتيوب أو أي موقع آخر، فينزّله VidHoist إلى هذا الكمبيوتر بمحرّك yt-dlp.';
 
   @override
   String get desktopWelcomeStart => 'ابدأ';
@@ -1678,7 +1657,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get disclaimerText =>
-      'يحمّل هذا التطبيق الوسائط بـyt-dlp، والمطوّر غير مسؤول عن طريقة استخدامه. يُرجى احترام حقوق النشر وشروط استخدام منصات المحتوى.';
+      'ينزّل هذا التطبيق الوسائط بـyt-dlp، والمطوّر غير مسؤول عن طريقة استخدامه. يُرجى احترام حقوق النشر وشروط استخدام المواقع التي تنزّل منها.';
 
   @override
   String get dismiss => 'تجاهل';
@@ -1690,33 +1669,33 @@ class VhLocalizationsAr extends VhLocalizations {
   String get download => 'تنزيل';
 
   @override
-  String get downloadComplete => 'اكتمل التحميل';
+  String get downloadComplete => 'اكتمل التنزيل';
 
   @override
   String get downloadCompleteTitle => 'اكتمل';
 
   @override
-  String get downloadDate => 'تاريخ التحميل';
+  String get downloadDate => 'تاريخ التنزيل';
 
   @override
-  String get downloadFailed => 'فشل التحميل';
+  String get downloadFailed => 'فشل التنزيل';
 
   @override
   String get downloadFailedTitle => 'فشل التنزيل';
 
   @override
-  String get downloadNow => 'تحميل';
+  String get downloadNow => 'تنزيل';
 
   @override
-  String get downloadStarted => 'بدأ التحميل…';
+  String get downloadStarted => 'بدأ التنزيل…';
 
   @override
   String downloadStartedQuality(Object quality) {
-    return 'بدأ التحميل · $quality';
+    return 'بدأ التنزيل · $quality';
   }
 
   @override
-  String get downloading => 'جارٍ التحميل…';
+  String get downloading => 'جارٍ التنزيل…';
 
   @override
   String get downloadingTitle => 'جارٍ التنزيل';
@@ -1735,19 +1714,17 @@ class VhLocalizationsAr extends VhLocalizations {
       'لتظهر في المشغّلات الأخرى. مشغّل VidHoist يعرضها في الحالتين.';
 
   @override
-  String get emptyFilteredMessage => 'أزل مرشّحاً من الأعلى لترى مكتبتك كلها.';
+  String get emptyFilteredMessage =>
+      'ألغِ إحدى التصفيات في الأعلى لترى مكتبتك كلها.';
 
   @override
-  String get emptyFilteredTitle => 'لا شيء بهذه المرشّحات';
-
-  @override
-  String get emptyLibraryMessage => 'أضِف رابط فيديو، أو اسحب للتحديث.';
+  String get emptyFilteredTitle => 'لا شيء يطابق هذه التصفية';
 
   @override
   String get emptyPlaylist => 'قائمة فارغة';
 
   @override
-  String get emptyPlaylistMessage => 'أضِف فيديوهات من المكتبة';
+  String get emptyPlaylistMessage => 'أضِف مقاطع من المكتبة';
 
   @override
   String engineDownloadingProgress(Object percent) {
@@ -1770,7 +1747,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get engineErrMissing =>
-      'محرّك التنزيل مفقود أو ناقص. أعد تجهيزه من الإعدادات';
+      'محرّك التنزيل مفقود أو ناقص. أصلحه من الإعدادات بزر «أصلح المحرّك»';
 
   @override
   String get engineErrRateLimited => 'الموقع يحدّ الطلبات الآن. حاول بعد قليل';
@@ -1830,12 +1807,8 @@ class VhLocalizationsAr extends VhLocalizations {
   String get errNetwork => 'تعذّر الاتصال بالموقع';
 
   @override
-  String get errPlatformBlocked =>
-      'المنصة تطلب تسجيل الدخول، ولا يُنزَّل هذا المقطع بدونه';
-
-  @override
   String get errPlatformBlockedCookies =>
-      'المنصة تطلب تسجيل الدخول. ارفع ملف كوكيز من الإعدادات ← الكوكيز';
+      'الموقع يطلب تسجيل الدخول. اختر ملف كوكيز من الإعدادات › الكوكيز';
 
   @override
   String errorGeneric(Object message) {
@@ -1892,9 +1865,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get file => 'الملف';
 
   @override
-  String get fileName => 'اسم الملف';
-
-  @override
   String get fileSize => 'حجم الملف';
 
   @override
@@ -1907,7 +1877,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get filterVideo => 'فيديو';
 
   @override
-  String get filtersOn => 'مرشّحات مفعّلة';
+  String get filtersOn => 'التصفية مفعّلة';
 
   @override
   String get folder => 'المجلد';
@@ -1921,9 +1891,6 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get followChannel => 'تابِع قناة';
-
-  @override
-  String get followingChannel => 'تتابعها';
 
   @override
   String get format => 'الصيغة';
@@ -1976,7 +1943,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get languageSystem => 'النظام';
 
   @override
-  String get languageSystemHint => 'يتبع لغة هاتفك';
+  String get languageSystemHint => 'يتبع لغة جوالك';
 
   @override
   String lastBackup(String when) {
@@ -2037,7 +2004,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get mediaAccessMessage =>
-      'تنزيلاتك محفوظة في مجلد Download في هاتفك، وأندرويد يطلب إذنك قبل أن يعرضها التطبيق.';
+      'تنزيلاتك محفوظة في مجلد Download في جوالك، وأندرويد يطلب إذنك قبل أن يعرضها التطبيق.';
 
   @override
   String get mediaAccessOpenSettings => 'فتح الإعدادات';
@@ -2165,15 +2132,10 @@ class VhLocalizationsAr extends VhLocalizations {
   String get modeStopAtEnd => 'التوقف في النهاية';
 
   @override
-  String moreChips(int count) {
-    return 'المزيد · $count';
-  }
-
-  @override
   String get navLibrary => 'المكتبة';
 
   @override
-  String get navMyDownloads => 'تحميلاتي';
+  String get navMyDownloads => 'تنزيلاتي';
 
   @override
   String get navPlaylists => 'القوائم';
@@ -2206,11 +2168,11 @@ class VhLocalizationsAr extends VhLocalizations {
   String get noBackupsYet => 'لا توجد نسخ بعد';
 
   @override
-  String get noDownloads => 'لا توجد تحميلات';
+  String get noDownloads => 'لا توجد تنزيلات';
 
   @override
   String get noDownloadsMessage =>
-      'ستظهر هنا الفيديوهات التي تحمّلها.\nشارك رابط فيديو أو اضغط زر «إضافة رابط».';
+      'ستظهر هنا المقاطع التي تنزّلها.\nشارك رابطاً أو اضغط زر «إضافة رابط».';
 
   @override
   String get noExternalPlayer => 'لا يوجد مشغل خارجي على الجهاز';
@@ -2228,7 +2190,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get noPlayableSource => 'لا مصدر لتشغيل هذا العنصر';
 
   @override
-  String get noPlaylistsMessage => 'أنشئ قائمة لتنظيم فيديوهاتك';
+  String get noPlaylistsMessage => 'أنشئ قائمة لتنظيم مقاطعك';
 
   @override
   String get noResults => 'لا نتائج';
@@ -2240,9 +2202,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get noServerTitle => 'محرك التنزيل غير جاهز';
 
   @override
-  String get noTagsYet => 'لا وسوم بعد، أنشئ أول وسم من الأسفل.';
-
-  @override
   String get noVideosFound => 'مكتبتك فارغة';
 
   @override
@@ -2250,7 +2209,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get notAffiliated =>
-      'لا صلة للتطبيق بمشروع yt-dlp ولا بأي منصة محتوى، ولا يحظى بتأييدها.';
+      'لا صلة للتطبيق بمشروع yt-dlp ولا بأي موقع، ولا يحظى بتأييدها.';
 
   @override
   String get nothingHereYet => 'لا يوجد شيء بعد';
@@ -2288,9 +2247,6 @@ class VhLocalizationsAr extends VhLocalizations {
       'مجلد داخل مجلد التنزيل، تراه في المستكشف وفي أي برنامج آخر. يذهب إليه ما ينزل من الآن فقط، وما نزل قبله يبقى مكانه.';
 
   @override
-  String get password => 'كلمة المرور';
-
-  @override
   String get pasteUrlHint => 'الصق الرابط هنا…';
 
   @override
@@ -2307,7 +2263,7 @@ class VhLocalizationsAr extends VhLocalizations {
       'اكتب العنوان كما يعرضه الكمبيوتر، مثلاً 192.168.1.24.';
 
   @override
-  String get pcBadQr => 'هذا ليس باركود اقتران من VidHoist.';
+  String get pcBadQr => 'هذا ليس رمز QR للاقتران من VidHoist.';
 
   @override
   String get pcCertificate => 'شهادة الكمبيوتر';
@@ -2385,16 +2341,16 @@ class VhLocalizationsAr extends VhLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count تحميلاً للكمبيوتر',
-      few: '$count تحميلات للكمبيوتر',
-      two: 'تحميلان للكمبيوتر',
-      one: 'تحميل واحد للكمبيوتر',
+      other: '$count تنزيلاً للكمبيوتر',
+      few: '$count تنزيلات للكمبيوتر',
+      two: 'تنزيلان للكمبيوتر',
+      one: 'تنزيل واحد للكمبيوتر',
     );
     return '$_temp0';
   }
 
   @override
-  String get pcDownloadsSheet => 'تحميلات الكمبيوتر';
+  String get pcDownloadsSheet => 'تنزيلات الكمبيوتر';
 
   @override
   String get pcEmptyLibrary => 'لا تنزيلات على الكمبيوتر بعد.';
@@ -2489,7 +2445,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcLinkCodeHint =>
-      'على الجوال: الإعدادات › الكمبيوتر › امسح الباركود. أو اكتب هناك العنوان والرمز. يعمل مرة واحدة ولمدة دقيقتين.';
+      'على الجوال: الإعدادات › الكمبيوتر › امسح رمز QR. أو اكتب هناك العنوان والرمز. يعمل مرة واحدة ولمدة دقيقتين.';
 
   @override
   String pcLinkCodeLeft(int seconds) {
@@ -2580,7 +2536,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcLinkSecurity =>
-      'لا يمر شيء بأي خادم لنا: الجوال يكلّم هذا الكمبيوتر مباشرة، داخل شبكتك أو عبر Tailscale الخاص بك. يقترن مرة واحدة بالرمز وبموافقتك هنا، وبعدها يقدّم مفتاحه الخاص مع كل طلب، عبر اتصال مشفّر بشهادة هذا الكمبيوتر وحدها. ومن سواه على الشبكة يجد باباً مغلقاً.';
+      'الجوال يكلّم هذا الكمبيوتر مباشرة، داخل شبكتك أو عبر Tailscale الخاص بك. يقترن مرة واحدة بالرمز وبموافقتك هنا، وبعدها يقدّم مفتاحه الخاص مع كل طلب، عبر اتصال مشفّر بشهادة هذا الكمبيوتر وحدها. ومن سواه على الشبكة يجد باباً مغلقاً.';
 
   @override
   String get pcLinkStarting => 'يبدأ…';
@@ -2638,10 +2594,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcPairIntro =>
-      'إن كان VidHoist يعمل على كمبيوترك بويندوز، يستطيع هذا الجوال أن يرسل إليه الروابط ويعرض تنزيلاته ومكتبته. على الكمبيوتر فعّل الإعدادات › الجوال واضغط «اربط جوالاً»، ثم امسح الباركود الذي يظهر.';
-
-  @override
-  String get pcPairStart => 'اربط بكمبيوتر';
+      'إن كان VidHoist يعمل على كمبيوترك بويندوز، يستطيع هذا الجوال أن يرسل إليه الروابط ويعرض تنزيلاته ومكتبته. على الكمبيوتر فعّل الإعدادات › الجوال واضغط «اربط جوالاً»، ثم امسح رمز QR الذي يظهر.';
 
   @override
   String pcPaired(String name) {
@@ -2690,13 +2643,13 @@ class VhLocalizationsAr extends VhLocalizations {
       'تظهر طرق الاتصال الأخرى هنا بعد أول رد من الكمبيوتر.';
 
   @override
-  String get pcScanButton => 'امسح الباركود';
+  String get pcScanButton => 'امسح رمز QR';
 
   @override
   String get pcScanFailed => 'تعذّر فتح الكاميرا.';
 
   @override
-  String get pcScanPrompt => 'وجّه الكاميرا إلى الباركود على شاشة الكمبيوتر';
+  String get pcScanPrompt => 'وجّه الكاميرا إلى رمز QR على شاشة الكمبيوتر';
 
   @override
   String get pcSendToPc => 'أرسل إلى الكمبيوتر';
@@ -2737,28 +2690,23 @@ class VhLocalizationsAr extends VhLocalizations {
   String get pcWillSend => 'غائب: يُرسل حين يعود';
 
   @override
-  String percentValue(Object percent) {
-    return '$percent٪';
-  }
-
-  @override
   String get pickAnotherFile => 'من ملف آخر…';
 
   @override
-  String get pickAnotherFileSubtitle => 'نسخة من هاتف آخر أو من إصدار سابق';
+  String get pickAnotherFileSubtitle => 'نسخة من جوال آخر أو من إصدار سابق';
 
   @override
   String get pictureInPicture => 'صورة داخل صورة';
 
   @override
   String get pictureInPictureHelp =>
-      'حين تخرج من التطبيق والفيديو يعمل، يبقى في زاوية الشاشة';
+      'حين تخرج من التطبيق والمقطع يعمل، يبقى في زاوية الشاشة';
 
   @override
   String get pinPlaylist => 'تثبيت في الصدارة';
 
   @override
-  String get platform => 'المنصّة';
+  String get platform => 'الموقع';
 
   @override
   String platformCount(Object name, int count) {
@@ -2817,9 +2765,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get playlists => 'قوائم التشغيل';
 
   @override
-  String get preferences => 'التفضيلات';
-
-  @override
   String get previous => 'السابق';
 
   @override
@@ -2845,7 +2790,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get qualityHelper =>
-      'تُعتمد هذه الجودة في التحميل السريع، وفي تحميل القائمة كاملة، وفي «حمّل الآن» من شريط الحافظة، وتكون محددة مسبقاً في نافذة إضافة الرابط؛ لذا يسري أثرها سواء أكان التحميل السريع مفعّلاً أم لا.';
+      'تُعتمد هذه الجودة في التنزيل السريع، وفي تنزيل القائمة كاملة، وفي زر «تنزيل» من شريط الحافظة، وتكون محددة مسبقاً في نافذة إضافة الرابط؛ لذا يسري أثرها سواء أكان التنزيل السريع مفعّلاً أم لا.';
 
   @override
   String get qualityReading => 'جارٍ قراءة الملف…';
@@ -2885,23 +2830,11 @@ class VhLocalizationsAr extends VhLocalizations {
   String get queuedSection => 'بالانتظار';
 
   @override
-  String get quickDownload => 'التحميل السريع';
+  String get quickDownload => 'التنزيل السريع';
 
   @override
   String get quickDownloadHelp =>
-      'حين تشارك رابطاً أو تلصقه يبدأ تحميله فوراً بالجودة الافتراضية دون أي نافذة. الجودات الرقمية خاصة بيوتيوب، فما سواه يُحمَّل بأفضل جودة، أما «صوت فقط» فيسري على كل المنصات.';
-
-  @override
-  String get quoteExtendHint => 'المس سطراً آخر لتوسيع الاقتباس';
-
-  @override
-  String get quoteMomentLink => 'انسخ رابط هذه اللحظة';
-
-  @override
-  String get quotePlayFrom => 'شغّل من هنا';
-
-  @override
-  String get quoteTitle => 'اقتباس';
+      'حين تشارك رابطاً أو تلصقه يبدأ تنزيله فوراً بالجودة الافتراضية دون أي نافذة. والموقع الذي لا يوفّر تلك الجودة يُنزَّل منه الأفضل، و«صوت فقط» يسري على كل المواقع.';
 
   @override
   String get rateLimit => 'حدّ السرعة';
@@ -2913,47 +2846,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String rateLimitValue(int mb) {
     return '$mb ميغابايت/ث';
   }
-
-  @override
-  String get readingAsMarkdownHint => 'عند كل فقرة وقتها برابط إلى لحظتها';
-
-  @override
-  String get readingAsPdfHint => 'للطباعة أو الحفظ';
-
-  @override
-  String get readingAsSrtHint => 'سطراً سطراً بأوقاته، لأي مشغّل';
-
-  @override
-  String get readingAsText => 'نص للقراءة';
-
-  @override
-  String get readingAsTextHint => 'فقرات بلا أوقات، يُلصق في أي تطبيق';
-
-  @override
-  String get readingHint => 'انقر جملة لتسمعها من هناك';
-
-  @override
-  String readingMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'نحو $count دقيقة قراءة',
-      many: 'نحو $count دقيقة قراءة',
-      few: 'نحو $count دقائق قراءة',
-      two: 'نحو دقيقتين قراءة',
-      one: 'نحو دقيقة قراءة',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get readingRead => 'اقرأ';
-
-  @override
-  String get readingShare => 'شارك النص';
-
-  @override
-  String get readingTextSize => 'مقاس الخط';
 
   @override
   String get reelsEndBack => 'عودة للمكتبة';
@@ -3026,27 +2918,10 @@ class VhLocalizationsAr extends VhLocalizations {
   String get restoreSuccess => 'استُعيدت البيانات بنجاح';
 
   @override
-  String resultsFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count نتيجة',
-      few: '$count نتائج',
-      two: 'نتيجتان',
-      one: 'نتيجة واحدة',
-      zero: 'لا نتائج',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get resumeSubscription => 'استئناف';
 
   @override
   String get retry => 'إعادة المحاولة';
-
-  @override
-  String get retryAll => 'أعد محاولة الكل';
 
   @override
   String get saveSettings => 'حفظ الإعدادات';
@@ -3055,13 +2930,13 @@ class VhLocalizationsAr extends VhLocalizations {
   String get searchLogs => 'بحث في السجلّات…';
 
   @override
-  String get searchVideos => 'بحث في الفيديوهات…';
+  String get searchVideos => 'بحث في المقاطع…';
 
   @override
-  String get seekBackward10 => 'إرجاع ١٠ ثوانٍ';
+  String get seekBackward10 => 'إرجاع 10 ثوانٍ';
 
   @override
-  String get seekForward10 => 'تقديم ١٠ ثوانٍ';
+  String get seekForward10 => 'تقديم 10 ثوانٍ';
 
   @override
   String get selectAll => 'تحديد الكل';
@@ -3086,7 +2961,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get settingsBackup => 'النسخ الاحتياطي';
 
   @override
-  String get settingsDownloads => 'التحميل';
+  String get settingsDownloads => 'التنزيل';
 
   @override
   String get settingsGroupApp => 'التطبيق';
@@ -3096,9 +2971,6 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get settingsPlayback => 'التشغيل';
-
-  @override
-  String get settingsSaved => 'حُفظت الإعدادات';
 
   @override
   String get settingsTranscripts => 'النصوص والترجمة';
@@ -3128,21 +3000,12 @@ class VhLocalizationsAr extends VhLocalizations {
   String get settingsValueNotSet => 'لم يُضبط بعد';
 
   @override
-  String get settingsValueOff => 'معطّل';
-
-  @override
-  String get settingsValueOn => 'مفعّل';
-
-  @override
   String get settingsValueQuick => 'سريع';
 
   @override
   String settingsValueSignedIn(String sites) {
     return 'مسجّل: $sites';
   }
-
-  @override
-  String get settingsValueSubtitlesShown => 'الترجمة ظاهرة';
 
   @override
   String get settingsValueWifiOnly => 'Wi‑Fi فقط';
@@ -3170,7 +3033,7 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String sharedLinksCapped(int max) {
-    return 'أُضيف أول $max رابطاً فقط.';
+    return 'أُضيفت الروابط الأولى فقط ($max).';
   }
 
   @override
@@ -3191,11 +3054,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get shortsFilter => 'قِصار';
 
   @override
-  String showChannel(String channel) {
-    return 'كل مقاطع $channel';
-  }
-
-  @override
   String get shuffle => 'تشغيل عشوائي';
 
   @override
@@ -3208,10 +3066,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get smartPlaylists => 'قوائم ذكية';
 
   @override
-  String get sortAndFilter => 'الترتيب والتصفية';
-
-  @override
-  String get sortAndPlatform => 'الترتيب والمنصة';
+  String get sortAndPlatform => 'الترتيب والموقع';
 
   @override
   String get sortBy => 'ترتيب حسب';
@@ -3244,7 +3099,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get sourceCode => 'الشيفرة المصدرية';
 
   @override
-  String get startDownload => 'ابدأ التحميل';
+  String get startDownload => 'ابدأ التنزيل';
 
   @override
   String get status => 'الحالة';
@@ -3267,7 +3122,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get storagePhone => 'ذاكرة الجوال';
 
   @override
-  String get streamingOnline => 'يُبثّ من الإنترنت';
+  String get streamingOnline => 'يُشغَّل عبر الشبكة';
 
   @override
   String subscriptionAdded(String name) {
@@ -3291,7 +3146,7 @@ class VhLocalizationsAr extends VhLocalizations {
   String get subscriptionQualityNote => 'لا تُغيَّر بعد المتابعة.';
 
   @override
-  String get subscriptions => 'الاشتراكات';
+  String get subscriptions => 'القنوات';
 
   @override
   String get subscriptionsEmpty => 'لا قنوات متابَعة بعد';
@@ -3334,13 +3189,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get subtitlesHide => 'إخفاء الترجمة';
 
   @override
-  String get subtitlesInShorts => 'الترجمة في الشورتس';
-
-  @override
-  String get subtitlesInShortsHelp =>
-      'معطّلة افتراضياً، لأن كثيراً من الشورتس يُكتب كلامها على الصورة أصلاً.';
-
-  @override
   String get subtitlesLanguage => 'لغة الترجمة';
 
   @override
@@ -3363,15 +3211,8 @@ class VhLocalizationsAr extends VhLocalizations {
   String get subtitlesSizeSmall => 'صغير';
 
   @override
-  String get tagActionsHint => 'اضغط مطوّلاً على وسم لإعادة تسميته أو حذفه.';
-
-  @override
-  String get tagFilterHint =>
-      'اضغط الوسم لإظهار مقاطعه، ومرة ثانية لإخفائها، وثالثة لإلغائه.';
-
-  @override
   String tagLimitReached(int max) {
-    return 'الحد الأقصى $max وسماً. احذف وسماً من «إدارة الوسوم» لتضيف غيره.';
+    return 'الحد الأقصى للوسوم $max. احذف وسماً من «إدارة الوسوم» لتضيف غيره.';
   }
 
   @override
@@ -3418,53 +3259,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get transcript => 'النص';
 
   @override
-  String get transcriptFind => 'ابحث في النص';
-
-  @override
-  String get transcriptFull => 'النص الكامل';
-
-  @override
-  String transcriptMatches(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count موضع',
-      many: '$count موضعاً',
-      few: '$count مواضع',
-      two: 'موضعان',
-      one: 'موضع واحد',
-      zero: 'لا مواضع',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get transcriptNextMatch => 'الموضع التالي';
-
-  @override
-  String get transcriptPeekHint => 'اضغط للنص كاملاً';
-
-  @override
-  String get transcriptPreviousMatch => 'الموضع السابق';
-
-  @override
-  String transcriptSaidMore(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'قيلت $count مرة أخرى',
-      many: 'قيلت $count مرة أخرى',
-      few: 'قيلت $count مرات أخرى',
-      two: 'قيلت مرتين أخريين',
-      one: 'قيلت مرة أخرى',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get transcriptSwitchLanguage => 'بدّل لغة النص';
-
-  @override
   String transcriptsClips(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3483,68 +3277,11 @@ class VhLocalizationsAr extends VhLocalizations {
   String get transcriptsDeleteAll => 'حذف الكل';
 
   @override
-  String get transcriptsDeleteBody =>
-      'تُحذف من هذا الجوال، ولا يعيدها إلا ملف صدّرته.';
-
-  @override
   String get transcriptsDeleteTitle => 'حذف كل النصوص؟';
-
-  @override
-  String transcriptsDisableBody(String size) {
-    return 'النصوص المحفوظة ($size) تبقى في هذا الجوال ما لم تحذفها.';
-  }
-
-  @override
-  String get transcriptsDisableTitle => 'إيقاف البحث داخل المقاطع؟';
-
-  @override
-  String get transcriptsEnable => 'تفعيل';
-
-  @override
-  String get transcriptsEnableBody =>
-      'حين تضيف مقطع يوتيوب، يجلب التطبيق نصّه من سيرفرك قبل تنزيله، بلغة التطبيق وبالإنجليزية، وقد يستغرق ذلك حتى 40 ثانية، ثم يحفظه في هذا الجوال وحده. أما المقاطع الموجودة في مكتبتك فلا تُشمل إلا إن كان سيرفرك يحفظ ملف الترجمة بجانب كل منها (يشرح دليل الإعداد طريقة ذلك). ويمكنك إيقاف الميزة متى شئت.';
-
-  @override
-  String transcriptsExported(Object path) {
-    return 'حُفظت النصوص في: $path';
-  }
-
-  @override
-  String get transcriptsHelp =>
-      'يحفظ التطبيق ما يُقال في كل مقطع يوتيوب تضيفه، فيبحث بحث المكتبة في كلام مقاطعك لا في عناوينها وحدها.\n\nيُجلب الكلام من سيرفرك قبيل التنزيل ويُحفظ في هذا الجوال، ولا تشمله النسخة الاحتياطية الكاملة. لنقله إلى جوال آخر استعمل «تصدير» هنا و«استيراد» هناك، والاستيراد يضيف إلى الموجود ولا يحذف شيئاً.\n\nوإن ضبطت سيرفرك ليحفظ ملف الترجمة بجانب كل مقطع (سطر واحد في إعداداته يشرحه دليل الإعداد)، شُمل كل ما ينزّله من ذلك الحين، بما فيه مقاطع الاشتراكات والمواقع الأخرى، إذ يقرأ التطبيق تلك الملفات تلقائياً بلغة التطبيق وبالإنجليزية.';
-
-  @override
-  String get transcriptsImportInvalid => 'هذا الملف لا يحوي نصوصاً.';
-
-  @override
-  String transcriptsImported(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'استُورد $count نص',
-      many: 'استُورد $count نصاً',
-      few: 'استُورد $count نصوص',
-      two: 'استُورد نصّان',
-      one: 'استُورد نص واحد',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get transcriptsKeep => 'إيقاف والاحتفاظ بالنصوص';
-
-  @override
-  String get transcriptsSaidInside => 'قيل داخل المقاطع';
-
-  @override
-  String get transcriptsSearch => 'البحث داخل المقاطع';
 
   @override
   String get transcriptsSearchHelp =>
       'يحفظ ما يُقال في كل مقطع يوتيوب تضيفه، لتبحث في كلامه لا في عنوانه وحده.';
-
-  @override
-  String get transcriptsStopAndDelete => 'إيقاف وحذف';
 
   @override
   String get tryAgain => 'حاول مرة أخرى';
@@ -3654,9 +3391,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get updates => 'التحديثات';
 
   @override
-  String get username => 'اسم المستخدم';
-
-  @override
   String get version => 'الإصدار';
 
   @override
@@ -3705,20 +3439,11 @@ class VhLocalizationsAr extends VhLocalizations {
       'ما تغيّر في هذا الإصدار تجده في صفحة الإصدار.';
 
   @override
-  String get wifiOnly => 'التحميل عبر Wi‑Fi فقط';
+  String get wifiOnly => 'التنزيل عبر Wi‑Fi فقط';
 
   @override
   String get wifiOnlyHelp =>
       'لا يُنزَّل شيء عبر بيانات الجوّال. تنتظر التنزيلات شبكة Wi‑Fi، وما كان جارياً حين تنقطع يتوقف مؤقتاً ثم يُستأنف وحده عند عودتها.';
-
-  @override
-  String get yourChannels => 'قنواتك';
-
-  @override
-  String get yourChannelsHint => 'تابعتها من الإعدادات أو من المشغّل';
-
-  @override
-  String get yourLibrary => 'مكتبتك';
 
   @override
   String get yourPlaylists => 'قوائمك';

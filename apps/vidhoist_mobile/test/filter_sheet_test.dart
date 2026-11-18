@@ -66,8 +66,8 @@ void main() {
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Sort and platform'), findsOneWidget);
-    expect(find.text('All platforms'), findsOneWidget);
+    expect(find.text('Sort and site'), findsOneWidget);
+    expect(find.text('All sites'), findsOneWidget);
     final youtube = find.textContaining('YouTube');
     await tester.ensureVisible(youtube);
     await tester.tap(youtube);
@@ -99,7 +99,7 @@ void main() {
       app(
         Consumer(
           builder: (context, ref, _) => VhFilterButton(
-            tooltip: 'Sort and platform',
+            tooltip: 'Sort and site',
             active: ref.watch(
               libraryViewProvider.select((o) => o.platform != null),
             ),

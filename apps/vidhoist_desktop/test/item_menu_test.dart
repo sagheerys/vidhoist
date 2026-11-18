@@ -122,7 +122,7 @@ void main() {
       await rightClick(tester, find.text('Night Drive'));
       expect(find.text('Copy link'), findsOneWidget);
       expect(find.text('Delete from server'), findsNothing);
-      await tester.tap(find.text('Delete video'));
+      await tester.tap(find.text('Delete clip'));
       await tester.pumpAndSettle();
       // Cancelled: nothing goes.
       expect(find.textContaining('remove the file'), findsOneWidget);

@@ -404,13 +404,6 @@
       }
     }
   },
-  "@percentValue": {
-    "placeholders": {
-      "percent": {
-        "type": "Object"
-      }
-    }
-  },
   "@platformCount": {
     "placeholders": {
       "name": {
@@ -446,13 +439,6 @@
     }
   },
   "@removeUnavailable": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@resultsFound": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -501,13 +487,6 @@
       }
     }
   },
-  "@showChannel": {
-    "placeholders": {
-      "channel": {
-        "type": "String"
-      }
-    }
-  },
   "@subscriptionAdded": {
     "placeholders": {
       "name": {
@@ -522,42 +501,7 @@
       }
     }
   },
-  "@transcriptMatches": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@transcriptSaidMore": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "@transcriptsClips": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@transcriptsDisableBody": {
-    "placeholders": {
-      "size": {
-        "type": "String"
-      }
-    }
-  },
-  "@transcriptsExported": {
-    "placeholders": {
-      "path": {
-        "type": "Object"
-      }
-    }
-  },
-  "@transcriptsImported": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -594,7 +538,7 @@
   },
   "about": "About",
   "aboutApp": "About the app",
-  "aboutDescriptionPhone": "A light, fast app that downloads video and audio from many platforms with yt-dlp, straight to your device, with no server in between. It has its own player and playlists.",
+  "aboutDescriptionPhone": "A light, fast app that downloads video and audio from many sites with yt-dlp. It has its own player and playlists.",
   "accountSignIn": "Sign in",
   "accountSignOut": "Sign out",
   "accountSignedIn": "Signed in",
@@ -622,8 +566,7 @@
   "addedToFavorites": "Added to favorites",
   "addedToPlaylistCount": "{count} added to the playlist",
   "allDownloadsFinished": "All downloads finished.",
-  "allFolders": "All folders",
-  "allPlatforms": "All platforms",
+  "allPlatforms": "All sites",
   "alreadyInPlaylist": "Already added",
   "alreadySubscribed": "This channel is already followed",
   "appTitle": "VidHoist",
@@ -636,15 +579,14 @@
   "audioMono": "Mono",
   "audioOnly": "Audio only",
   "audioStereo": "Stereo",
-  "authentication": "Authentication (optional)",
   "autoBuilt": "Automatic",
   "autoCheckUpdates": "Check automatically",
   "autoCheckUpdatesHelp": "Looks for a new version in the background about twice a day.",
   "autoRestoreSuccess": "Data restored from the backup.",
   "autoRetry": "Retry when the network returns",
   "autoRetryHelp": "Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.",
-  "backgroundDownload": "Downloading files in background...",
-  "backupNote": "Includes playlists, tags, the offline index, artwork links and settings. Passwords and usernames are never backed up, and media files are not included.",
+  "backgroundDownload": "Downloading files in the background…",
+  "backupNote": "Includes the library, playlists, tags, followed channels and settings. Sign-ins and transcripts are kept apart, and the media files themselves are not included.",
   "backupSettings": "Back up all data",
   "backupSettingsSubtitle": "Seven dated copies that refresh themselves. Restore any of them, or export one to share",
   "backupSuccess": "Backup saved to: {path}",
@@ -653,7 +595,7 @@
   "batchLoading": "Reading the playlist…",
   "batchNothingSelected": "Select at least one item",
   "batchSelectedOf": "{selected} of {total} selected",
-  "batchThisVideoOnly": "Download this video only",
+  "batchThisVideoOnly": "Download this clip only",
   "batchTitle": "Batch download",
   "batteryAllow": "Allow",
   "batteryFree": "Battery saving leaves downloads alone, even with the app out of sight.",
@@ -671,14 +613,6 @@
   "channelCheckFailed": "Not checked this time. VidHoist tries again by itself.",
   "channelUrl": "Link to a channel, a playlist or one of its videos",
   "channelUrlHint": "https://www.youtube.com/@name",
-  "chapterCount": "{count, plural, =1{1 chapter} other{{count} chapters}}",
-  "@chapterCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "chapterNumber": "Chapter {number}",
   "@chapterNumber": {
     "placeholders": {
@@ -733,24 +667,21 @@
   "continueAsAudioNo": "No, stop",
   "continueAsAudioTitle": "Continue in the background?",
   "cookies": "Cookies",
-  "cookiesHelp": "In your browser, use an extension that exports cookies in the Netscape format (one file per platform) and pick the files here. The server then uses them for every download, and yt-dlp decides when it needs them. Cookies expire, so a download that starts failing again usually means a fresh export is due.",
   "cookiesNotNetscape": "None of these files holds cookies in the Netscape format",
-  "cookiesSubtitle": "For the platforms that will not download without a login",
-  "cookiesWhat": "Some platforms refuse to hand a video over unless the request looks like a signed-in browser. A cookies file exported from your browser gives the server that.",
+  "cookiesSubtitle": "For the sites that will not download without a login",
   "copiedToClipboard": "Copied to clipboard",
   "copyright": "© 2026 Yasir Sagheer",
   "couldNotLoadPlaylist": "Couldn't load this playlist. Check the URL and your connection.",
   "create": "Create",
   "createPlaylist": "Create playlist",
-  "creator": "Creator",
   "defaultQuality": "Default video quality",
   "delete": "Delete",
-  "deleteMultipleConfirm": "Delete {count} video(s)?\n\nThis will remove the files from your device.",
+  "deleteMultipleConfirm": "{count, plural, =1{Delete 1 clip?\n\nIts file is removed from your device.} other{Delete {count} clips?\n\nTheir files are removed from your device.}}",
   "deletePlaylistConfirm": "Delete \"{name}\"?",
   "deleteSelected": "Delete selected",
   "deleteTag": "Delete tag",
-  "deleteTagConfirm": "Delete the tag \"{tag}\" from all items? The videos themselves are not deleted.",
-  "deleteVideo": "Delete video",
+  "deleteTagConfirm": "Delete the tag \"{tag}\" from all items? The clips themselves are not deleted.",
+  "deleteVideo": "Delete clip",
   "deleteVideoConfirm": "Delete \"{title}\"?\n\nThis will remove the file from your device.",
   "deletedCount": "{count} deleted",
   "deletedTitle": "Deleted: {title}",
@@ -779,8 +710,8 @@
   "desktopChannelClips": "In your library",
   "desktopChannels": "Channels",
   "desktopChannelsInLibrary": "Channels in your library",
-  "desktopChannelsLater": "Not in this version",
-  "desktopChannelsLaterBody": "Following a channel needs a scheduler on this computer, and that comes in a later version. The clips you download stay in the library.",
+  "desktopChannelsLater": "Needs the download engine",
+  "desktopChannelsLaterBody": "Following a channel needs yt-dlp on this computer. Set it up in Settings › Engine, and your channels show here.",
   "desktopChapters": "Chapters",
   "desktopCheckAll": "Check all",
   "desktopChooseClip": "Select",
@@ -806,7 +737,7 @@
   "desktopDefaultQualityHint": "What each add starts with; you can still change it for each link.",
   "desktopDeleteSelectedConfirm": "{count, plural, =1{Delete 1 clip? Its file on this computer is deleted.} other{Delete {count} clips? Their files on this computer are deleted.}}",
   "@desktopDeleteSelectedConfirm": {"placeholders": {"count": {"type": "int"}}},
-  "desktopDesktopSection": "Desktop",
+  "desktopDesktopSection": "Windows",
   "desktopDiscover": "Discover VidHoist",
   "desktopDiscoverAddLink": "Paste or drop a link",
   "desktopDiscoverAddLinkLine": "Ctrl+V anywhere, or drop a link on the window, to add it.",
@@ -818,14 +749,14 @@
   "desktopDiscoverChoose": "Choose many",
   "desktopDiscoverChooseLine": "The round mark, or Ctrl or Shift with a click; then add them to a list or delete them together.",
   "desktopDiscoverDragOut": "Drag a clip out",
-  "desktopDiscoverDragOutLine": "Onto a folder or another app, as a file.",
+  "desktopDiscoverDragOutLine": "Drop it on a folder or another app, and it arrives there as a file.",
   "desktopDiscoverExport": "Export a transcript",
   "desktopDiscoverExportLine": "As text, or as SRT subtitles for another player.",
   "desktopDiscoverHint": "Everything the app can do, a line each, with its keys.",
   "desktopDiscoverLibrary": "The library",
   "desktopDiscoverListening": "For sound: a quiet room with the cover large, in full screen.",
   "desktopDiscoverMini": "Small window",
-  "desktopDiscoverMiniLine": "A small card above every other window, by the clock.",
+  "desktopDiscoverMiniLine": "A small card above every other window, in the bottom corner of the screen.",
   "desktopDiscoverReading": "The transcript as an article: click a sentence to hear it from there.",
   "desktopDiscoverSaid": "What was said",
   "desktopDiscoverSearch": "Search what was said",
@@ -838,16 +769,16 @@
   "desktopDiscoverTry": "Try it",
   "desktopDiscoverWatching": "Watching and listening",
   "desktopDownloadFolder": "Download folder",
-  "desktopDownloadFolderHint": "Your own files: saved here, then the app leaves them alone.",
+  "desktopDownloadFolderHint": "Downloads are saved here as ordinary files, to open, move or back up like any other.",
   "desktopDownloads": "Downloads",
-  "desktopDownloadsEmpty": "Nothing is downloading. Add a link, or make a clip available offline.",
+  "desktopDownloadsEmpty": "Nothing is downloading. Add a link to start.",
   "desktopDownloadsRunning": "Under way",
   "desktopDragToReorder": "Drag to reorder",
   "desktopDropLinks": "Drop to add",
   "desktopEmptyLibraryLocal": "Add a link, and the clip appears here once it is downloaded.",
   "desktopEmptyLibraryMessage": "Add a link, and the clip appears here once it is downloaded.",
   "desktopEngine": "Engine",
-  "desktopEngineDenoHint": "Solves YouTube's check, for every format it offers",
+  "desktopEngineDenoHint": "Answers YouTube's check, so every quality it offers can be downloaded",
   "desktopEngineFetch": "Fetch",
   "desktopEngineFetchCorrupt": "The file that arrived was not the published one, so it was not used.",
   "desktopEngineFetchFailed": "Could not be fetched. Check the connection and try again.",
@@ -1091,7 +1022,7 @@
   "@desktopVolumeLevel": {"placeholders": {"percent": {"type": "int"}}},
   "desktopWelcomeFetchNow": "Fetch them now",
   "desktopWelcomeHelpers": "ffmpeg (joins picture and sound) and Deno (needed by YouTube) come down by themselves at the first download, about 160 MB. You can fetch them now instead.",
-  "desktopWelcomeMessage": "Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp. Nothing goes through a server.",
+  "desktopWelcomeMessage": "Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp.",
   "desktopWelcomeStart": "Start",
   "desktopWelcomeTitle": "Welcome to VidHoist",
   "desktopWhatsNewAllFeatures": "Everything VidHoist can do",
@@ -1116,7 +1047,7 @@
   "diagnosticLogs": "Diagnostic logs",
   "diagnosticLogsSubtitle": "View, search, and share app logs (redacted)",
   "disclaimer": "Disclaimer",
-  "disclaimerText": "This app downloads media with yt-dlp. The developer is not responsible for how users utilize this tool. Please respect copyright laws and terms of service of content platforms.",
+  "disclaimerText": "This app downloads media with yt-dlp. The developer is not responsible for how users utilize this tool. Please respect copyright laws and the terms of service of the sites you download from.",
   "dismiss": "Dismiss",
   "done": "Done",
   "download": "Download",
@@ -1136,15 +1067,14 @@
   "embedSubtitlesHelp": "So other players show them. VidHoist's own player shows them either way.",
   "emptyFilteredMessage": "Clear a filter above to see your whole library.",
   "emptyFilteredTitle": "Nothing matches these filters",
-  "emptyLibraryMessage": "Add a video link, or pull to refresh.",
   "emptyPlaylist": "Empty playlist",
-  "emptyPlaylistMessage": "Add videos from the library",
+  "emptyPlaylistMessage": "Add clips from the library",
   "engineDownloadingProgress": "Downloading · {percent}%",
   "engineErrDiskFull": "Not enough storage space for this file",
   "engineErrFailed": "Download failed: {reason}",
   "engineErrFormat": "This quality is not available for this video",
   "engineErrGeoBlocked": "Not available in your country",
-  "engineErrMissing": "The download engine is missing or incomplete. Set it up again from Settings",
+  "engineErrMissing": "The download engine is missing or incomplete. Repair it in Settings with Repair the engine",
   "engineErrRateLimited": "The site is limiting requests. Try again in a while",
   "engineErrUnavailable": "This video is unavailable, private or removed",
   "engineErrUnsupported": "This link is not supported",
@@ -1162,8 +1092,7 @@
   "errClipPastEnd": "The part starts after the video ends ({length})",
   "errClipPastEndUnknown": "The part starts after the video ends",
   "errNetwork": "No connection to the site",
-  "errPlatformBlocked": "The platform requires a login, which this clip cannot be downloaded without",
-  "errPlatformBlockedCookies": "The platform requires login. Send it a cookies file from Settings → Cookies",
+  "errPlatformBlockedCookies": "The site requires a login. Choose a cookies file in Settings › Cookies",
   "errorGeneric": "Error: {message}",
   "every30Minutes": "Every 30 minutes",
   "everyHours": "{count, plural, =1{Every hour} other{Every {count} hours}}",
@@ -1177,7 +1106,6 @@
   "fastStreamsHelp": "Fetches {count} pieces at once from sites that cut a video into pieces, such as X. Some sites slow down many requests at once.",
   "favorites": "Favorites",
   "file": "File",
-  "fileName": "File name",
   "fileSize": "File size",
   "filterAll": "All",
   "filterAudio": "Audio",
@@ -1187,7 +1115,6 @@
   "foldersHelp": "A folder is made inside the download folder, and the clip is saved straight into it, where Explorer and any other app see it. Leave it at \"No folder\" and the clip goes to the top of the download folder.",
   "follow": "Follow",
   "followChannel": "Follow a channel",
-  "followingChannel": "Following",
   "format": "Format",
   "framesPerSecond": "{count} fps",
   "helpAboutField": "About this field",
@@ -1256,14 +1183,6 @@
   "modeRepeatAll": "Repeat all",
   "modeRepeatOne": "Repeat one",
   "modeStopAtEnd": "Stop at end",
-  "moreChips": "More · {count}",
-  "@moreChips": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "navLibrary": "Library",
   "navMyDownloads": "My downloads",
   "navPlaylists": "Playlists",
@@ -1277,20 +1196,19 @@
   "next": "Next",
   "noBackupsYet": "No backups yet",
   "noDownloads": "No downloads",
-  "noDownloadsMessage": "Downloaded videos will appear here.\nShare a video link or use the Add URL button.",
+  "noDownloadsMessage": "Downloaded clips will appear here.\nShare a link or use the Add link button.",
   "noExternalPlayer": "No external player on this device",
   "noFolder": "No folder",
   "noFolderHint": "At the top of the downloads",
   "noLogsFound": "No logs found",
   "noPlayableSource": "This item has no playable source",
-  "noPlaylistsMessage": "Create a playlist to organize your videos",
+  "noPlaylistsMessage": "Create a playlist to organize your clips",
   "noResults": "No results",
   "noResultsMessage": "No items match your search.",
   "noServerTitle": "The download engine is not ready",
-  "noTagsYet": "No tags yet. Create one below.",
   "noVideosFound": "Your library is empty",
   "noWarranty": "Provided as is, without any warranty.",
-  "notAffiliated": "Not affiliated with yt-dlp or with any content platform, and not endorsed by them.",
+  "notAffiliated": "Not affiliated with yt-dlp or with any site, and not endorsed by them.",
   "nothingHereYet": "Nothing here yet",
   "nowPlaying": "Now playing",
   "nowPlayingCollapse": "Fold the player panel",
@@ -1302,13 +1220,12 @@
   "openOriginalLink": "Open original link",
   "ownFolder": "Save in its own folder",
   "ownFolderNote": "A folder inside the download folder, which Explorer and other apps see too. Only what arrives from now on goes there; what is already downloaded stays where it is.",
-  "password": "Password",
   "pasteUrlHint": "Paste the link here…",
   "pause": "Pause",
   "pauseSubscription": "Pause",
   "pcAddressLabel": "Address",
   "pcBadAddress": "Type the address as the computer shows it, for example 192.168.1.24.",
-  "pcBadQr": "This is not a VidHoist pairing code.",
+  "pcBadQr": "This is not a VidHoist pairing QR code.",
   "pcCertificate": "Computer's certificate",
   "pcCodeLabel": "Code",
   "pcConnected": "Connected",
@@ -1355,7 +1272,7 @@
   "pcLinkAllow": "Allow",
   "pcLinkAllowDelete": "Let the phone delete clips",
   "pcLinkAllowDeleteHint": "A clip deleted from the phone goes to this computer's Recycle Bin, where you can get it back. On a drive with no Recycle Bin it is not deleted.",
-  "pcLinkCodeHint": "On the phone: Settings › Computer › Scan the code. Or type this address and code there. It works once, for two minutes.",
+  "pcLinkCodeHint": "On the phone: Settings › Computer › Scan the QR code. Or type this address and code there. It works once, for two minutes.",
   "pcLinkCodeLeft": "{seconds} s left",
   "pcLinkCodeTitle": "Pairing code",
   "pcLinkDeny": "Refuse",
@@ -1376,7 +1293,7 @@
   "pcLinkRequest": "{name} asks to pair",
   "pcLinkRequestHint": "Allow only if the phone shows the same four digits.",
   "pcLinkRevoke": "Unpair",
-  "pcLinkSecurity": "Nothing passes through any server of ours: the phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer's certificate alone. Anyone else on the network finds a closed door.",
+  "pcLinkSecurity": "The phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer's certificate alone. Anyone else on the network finds a closed door.",
   "pcLinkStarting": "Starting…",
   "pcLinkTitle": "Phone",
   "pcListEmpty": "None of this list's clips is on the computer any more.",
@@ -1393,8 +1310,7 @@
   "pcOutboxTitle": "Waiting to send ({count})",
   "pcPairButton": "Pair",
   "pcPairCheck": "Check that the computer shows {check}, then allow the phone there.",
-  "pcPairIntro": "If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the code it shows.",
-  "pcPairStart": "Pair with a computer",
+  "pcPairIntro": "If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the QR code it shows.",
   "pcPaired": "Paired with {name}",
   "pcPortLabel": "Port",
   "pcQueued": "It goes to {name} when it is back.",
@@ -1405,9 +1321,9 @@
   "pcRouteTailscale": "Tailscale",
   "pcRouteTitle": "Connect through",
   "pcRouteWaiting": "The computer's other routes show here once it answers.",
-  "pcScanButton": "Scan the code",
+  "pcScanButton": "Scan the QR code",
   "pcScanFailed": "The camera could not be opened.",
-  "pcScanPrompt": "Point the camera at the code on the computer's screen",
+  "pcScanPrompt": "Point the camera at the QR code on the computer's screen",
   "pcSendToPc": "Send to the computer",
   "pcSent": "Sent to {name}",
   "pcSentMany": "{count, plural, =1{1 clip sent to {name}} other{{count} clips sent to {name}}}",
@@ -1416,13 +1332,12 @@
   "pcVia": "Through {route}",
   "pcWatch": "Watch",
   "pcWillSend": "Away: sent when it is back",
-  "percentValue": "{percent}%",
   "pickAnotherFile": "From another file…",
   "pickAnotherFileSubtitle": "A backup from another phone or an older version",
   "pictureInPicture": "Picture in picture",
-  "pictureInPictureHelp": "When you leave the app while a video plays, it stays in a corner of the screen",
+  "pictureInPictureHelp": "When you leave the app while a clip plays, it stays in a corner of the screen",
   "pinPlaylist": "Pin to top",
-  "platform": "Platform",
+  "platform": "Site",
   "platformCount": "{name} · {count}",
   "platformOther": "Other",
   "play": "Play",
@@ -1440,7 +1355,6 @@
   "playlistNameHint": "My playlist",
   "playlistOf": "{current} / {total}",
   "playlists": "Playlists",
-  "preferences": "Preferences",
   "previous": "Previous",
   "quality": "Quality",
   "quality1080": "Up to 1080p",
@@ -1449,7 +1363,7 @@
   "quality720": "Up to 720p",
   "qualityAudio": "Audio",
   "qualityBest": "Best",
-  "qualityHelper": "Used by quick download, by whole-playlist downloads, and by \"Download now\" in the clipboard bar, and it is the preselected option in the add-link sheet. So it matters whether or not quick download is on.",
+  "qualityHelper": "Used by quick download, by whole-playlist downloads, and by \"Download\" in the clipboard bar, and it is the preselected option in the add-link sheet. So it matters whether or not quick download is on.",
   "qualityReading": "Reading the file…",
   "qualityUnavailable": "Unavailable",
   "qualityVideo": "Video",
@@ -1460,31 +1374,10 @@
   "queued": "Queued",
   "queuedSection": "Waiting",
   "quickDownload": "Quick download",
-  "quickDownloadHelp": "A shared or pasted link starts downloading immediately at the default quality, with no sheet. Numeric qualities are YouTube-only: anything else downloads at best quality, and an \"audio only\" default applies everywhere.",
-  "quoteExtendHint": "Touch another line to take it in",
-  "quoteMomentLink": "Copy link to this moment",
-  "quotePlayFrom": "Play from here",
-  "quoteTitle": "Quote",
+  "quickDownloadHelp": "A shared or pasted link starts downloading at once at the default quality, with no sheet. A site that lacks that quality gives its best, and \"Audio only\" works on every site.",
   "rateLimit": "Speed limit",
   "rateLimitNone": "No limit",
   "rateLimitValue": "{mb} MB/s",
-  "readingAsMarkdownHint": "Each paragraph with its time, linked to its moment",
-  "readingAsPdfHint": "To print or keep",
-  "readingAsSrtHint": "Line by line with its times, for any player",
-  "readingAsText": "Text to read",
-  "readingAsTextHint": "Paragraphs without times, to paste anywhere",
-  "readingHint": "Tap a sentence to hear it from there",
-  "readingMinutes": "{count, plural, =1{About a minute to read} other{About {count} minutes to read}}",
-  "@readingMinutes": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "readingRead": "Read",
-  "readingShare": "Share the text",
-  "readingTextSize": "Text size",
   "reelsEndBack": "Back to library",
   "reelsEndContinue": "Continue the rest of the list",
   "reelsEndReplay": "Replay from the start",
@@ -1507,13 +1400,11 @@
   "restorePickTitle": "Bring back your settings?",
   "restoreSettings": "Restore all data",
   "restoreSuccess": "Data restored successfully",
-  "resultsFound": "{count, plural, =1{1 result} other{{count} results}}",
   "resumeSubscription": "Resume",
   "retry": "Retry",
-  "retryAll": "Retry all",
   "saveSettings": "Save settings",
   "searchLogs": "Search logs…",
-  "searchVideos": "Search videos...",
+  "searchVideos": "Search clips…",
   "seekBackward10": "Back 10 seconds",
   "seekForward10": "Forward 10 seconds",
   "selectAll": "Select all",
@@ -1526,17 +1417,13 @@
   "settingsGroupApp": "App",
   "settingsGroupData": "Data",
   "settingsPlayback": "Playback",
-  "settingsSaved": "Settings saved successfully",
   "settingsTranscripts": "Transcripts & subtitles",
   "settingsValueChannels": "{count, plural, =0{No channels yet} =1{1 channel} other{{count} channels}}",
   "settingsValueCompatOff": "Best compatibility: off",
   "settingsValueCompatOn": "Best compatibility: on",
   "settingsValueNotSet": "Not set up yet",
-  "settingsValueOff": "Off",
-  "settingsValueOn": "On",
   "settingsValueQuick": "quick",
   "settingsValueSignedIn": "Signed in: {sites}",
-  "settingsValueSubtitlesShown": "subtitles shown",
   "settingsValueWifiOnly": "Wi‑Fi only",
   "share": "Share",
   "shareLogs": "Share logs",
@@ -1548,13 +1435,11 @@
   "sharedLinksCapped": "Only the first {max} links were added.",
   "sharedLinksTitle": "{count, plural, =1{Add 1 link?} other{Add {count} links?}}",
   "shortsFilter": "Shorts",
-  "showChannel": "Everything from {channel}",
   "shuffle": "Shuffle",
   "signInRequired": "Sign-in required",
   "size": "Size",
   "smartPlaylists": "Smart playlists",
-  "sortAndFilter": "Sort and filter",
-  "sortAndPlatform": "Sort and platform",
+  "sortAndPlatform": "Sort and site",
   "sortBy": "Sort by",
   "sortLargest": "Largest",
   "sortNameAZ": "Name A–Z",
@@ -1572,14 +1457,14 @@
   "storageLocationHelp": "Clips already downloaded stay where they are and still show in the library. A memory card needs Android 11 or later.",
   "storageNoCard": "No memory card in this phone",
   "storagePhone": "Phone storage",
-  "streamingOnline": "Streaming online",
+  "streamingOnline": "Playing over the network",
   "subscriptionAdded": "Now following {name}",
   "subscriptionName": "Name",
   "subscriptionPaused": "Paused",
   "subscriptionQuality": "Quality for this channel",
   "subscriptionQualityHelp": "The quality is set when you follow and can't be changed afterwards. To change it: Check now, then unfollow and follow again.\n\n\"Best\" can mean 4K in the AV1 format, which an older computer may play with stutters: choose 1080p if it does.",
   "subscriptionQualityNote": "Can't be changed after following.",
-  "subscriptions": "Subscriptions",
+  "subscriptions": "Channels",
   "subscriptionsEmpty": "No channels followed yet",
   "subscriptionsEmptyBody": "Follow a channel and each new video downloads into your library by itself, while VidHoist is open or in the tray. What is already on the channel is not downloaded.",
   "subscriptionsSubtitle": "New videos from channels you follow, downloaded by themselves",
@@ -1592,8 +1477,6 @@
   "subtitlesBackgroundNone": "None",
   "subtitlesBackgroundSolid": "Dark",
   "subtitlesHide": "Hide subtitles",
-  "subtitlesInShorts": "Subtitles in shorts",
-  "subtitlesInShortsHelp": "Off unless you turn it on: many shorts already carry their words in the picture.",
   "subtitlesLanguage": "Subtitle language",
   "subtitlesShow": "Show subtitles",
   "subtitlesShowHelp": "Over the video, for clips that have a transcript. The CC button in the player does the same.",
@@ -1601,8 +1484,6 @@
   "subtitlesSizeLarge": "Large",
   "subtitlesSizeMedium": "Medium",
   "subtitlesSizeSmall": "Small",
-  "tagActionsHint": "Long-press a tag to rename or delete it.",
-  "tagFilterHint": "Tap a tag to show its clips, again to hide them, and once more to let it go.",
   "tagLimitReached": "You can have up to {max} tags. Remove one in Manage tags to add another.",
   "@tagLimitReached": {
     "placeholders": {
@@ -1624,31 +1505,10 @@
   "titleLabel": "Title",
   "totalDuration": "Total: {duration}",
   "transcript": "Transcript",
-  "transcriptFind": "Search the transcript",
-  "transcriptFull": "Full transcript",
-  "transcriptMatches": "{count, plural, =0{No matches} =1{1 match} other{{count} matches}}",
-  "transcriptNextMatch": "Next match",
-  "transcriptPeekHint": "Tap for the whole text",
-  "transcriptPreviousMatch": "Previous match",
-  "transcriptSaidMore": "{count, plural, =1{Said once more} other{Said {count} more times}}",
-  "transcriptSwitchLanguage": "Switch the transcript language",
   "transcriptsClips": "{count, plural, =0{No clips yet} =1{1 clip} other{{count} clips}}",
   "transcriptsDeleteAll": "Delete all",
-  "transcriptsDeleteBody": "They are removed from this phone. Only a file you exported can bring them back.",
   "transcriptsDeleteTitle": "Delete every transcript?",
-  "transcriptsDisableBody": "The saved transcripts ({size}) stay on this phone unless you delete them.",
-  "transcriptsDisableTitle": "Stop searching inside clips?",
-  "transcriptsEnable": "Turn on",
-  "transcriptsEnableBody": "Before each YouTube clip you add is downloaded, the app fetches its words from your server, in the app's language and in English (up to 40 seconds), and keeps them on this phone only. Clips already in your library are included only if your server saved their subtitles beside them (the setup guide shows how). You can turn this off at any time.",
-  "transcriptsExported": "Transcripts saved to: {path}",
-  "transcriptsHelp": "The app keeps the words said in each YouTube clip you add, so a library search also finds what was said inside your clips, not only their titles.\n\nThe words are fetched from your server just before the download and kept on this phone; the full backup does not include them. To move them to another phone, use Export here and Import there. An import adds to what is already here and deletes nothing.\n\nA server set to write subtitles beside each clip (one line in its configuration; the setup guide shows it) covers everything it downloads from then on, subscriptions and other sites included: the app reads those files on its own, in the app's language and in English.",
-  "transcriptsImportInvalid": "This file holds no transcripts.",
-  "transcriptsImported": "{count, plural, =1{Imported 1 transcript} other{Imported {count} transcripts}}",
-  "transcriptsKeep": "Stop and keep",
-  "transcriptsSaidInside": "Said inside clips",
-  "transcriptsSearch": "Search inside clips",
   "transcriptsSearchHelp": "Keeps the words of every YouTube clip you add, so you can search what was said.",
-  "transcriptsStopAndDelete": "Stop and delete",
   "tryAgain": "Try again",
   "undo": "Undo",
   "unfollow": "Unfollow",
@@ -1697,7 +1557,6 @@
   },
   "updateWhatsNew": "What's new",
   "updates": "Updates",
-  "username": "Username",
   "version": "Version",
   "videoAdded": "Added to playlist",
   "videoPlayer": "Video player",
@@ -1722,9 +1581,6 @@
   "whatsNewUnavailable": "What changed in this version is on the release page.",
   "wifiOnly": "Download over Wi-Fi only",
   "wifiOnlyHelp": "Nothing downloads over mobile data. Downloads wait for Wi-Fi, and one under way when Wi-Fi drops is paused and goes on by itself when it returns.",
-  "yourChannels": "Your channels",
-  "yourChannelsHint": "Followed in Settings or the player",
-  "yourLibrary": "Your library",
   "yourPlaylists": "Your playlists",
   "yourTags": "Your tags",
   "ytdlpCredit": "The downloader VidHoist runs"

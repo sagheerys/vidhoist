@@ -117,7 +117,7 @@ void main() {
     await open(tester, library: _library);
     // **The guard**: no row of platform pills, no dot before a count.
     expect(find.text('YouTube · 3'), findsNothing);
-    await tester.tap(find.text('Platform'));
+    await tester.tap(find.text('Site'));
     await tester.pumpAndSettle();
     final youtube = tester.getTopLeft(find.text('YouTube').last);
     final tiktok = tester.getTopLeft(find.text('TikTok').last);
@@ -160,11 +160,11 @@ void main() {
           if (!i.favorite) i,
       ],
     );
-    expect(find.text('Platform'), findsOneWidget);
+    expect(find.text('Site'), findsOneWidget);
     GoRouter.of(tester.element(find.byType(DesktopSidebar)))
         .go(DesktopRoutes.favorites);
     await tester.pumpAndSettle();
-    expect(find.text('Platform'), findsNothing);
+    expect(find.text('Site'), findsNothing);
   });
 
   testWidgets('no "Offline" place: on a computer every clip is a file', (
@@ -255,7 +255,7 @@ void main() {
     await open(tester, library: _library);
     await tester.tap(find.text('Audio'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Platform'));
+    await tester.tap(find.text('Site'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('TikTok').last);
     await tester.pumpAndSettle();
