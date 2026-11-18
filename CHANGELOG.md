@@ -14,8 +14,10 @@ All notable changes to VidHoist. The format follows
   it, held to keep moving, or with ↑ ↓ on a computer's keyboard. The part
   gets its own file name, and its own place in the library beside the
   whole video (its link marked `#t=start,end`, its range after the title).
-  It comes without subtitles, which yt-dlp does not cut. Hidden while the
-  phone sends the link to the computer.
+  It comes without subtitles, which yt-dlp does not cut, and with its index
+  before the frames (`-movflags +faststart`): left at the end, the phone's
+  player drew a Facebook part as streaks. Hidden while the phone sends the
+  link to the computer.
 - On Windows, Settings › Downloads offers what the phone does: the audio
   format, a speed limit, faster segmented streams, and under "Fetch its
   transcript first" the subtitle languages (the reader's and English until
