@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,13 +48,16 @@ class ClipTimeFormatter extends TextInputFormatter {
 
 /// One of the two times: typed by hand, or moved a minute at a time with
 /// the arrows beside it (held, they keep moving) or the keyboard's ↑ ↓.
-class ClipTimeField extends StatelessWidget {
+class ClipTimeField extends StatefulWidget {
   const ClipTimeField({
     super.key,
     required this.controller,
     required this.label,
     this.error,
     this.startAt,
+    this.max,
+    this.fitsMax = false,
+    this.onStepped,
   });
 
   final TextEditingController controller;
@@ -64,15 +68,72 @@ class ClipTimeField extends StatelessWidget {
   /// "from", so the first press lands a minute after the start.
   final Duration? Function()? startAt;
 
+  /// The video's length, once known: the arrows go no further.
+  final Duration? max;
+
+  /// A time already past [max] when it arrives comes back to it: the end
+  /// field's, since a start at the very end is no stretch at all and stays
+  /// wrong, saying so.
+  final bool fitsMax;
+
+  /// An arrow moved the time: the end field fills an empty start with it.
+  final VoidCallback? onStepped;
+
+  @override
+  State<ClipTimeField> createState() => _ClipTimeFieldState();
+}
+
+class _ClipTimeFieldState extends State<ClipTimeField>
+    with SingleTickerProviderStateMixin {
+  /// **An arrow pressed at the edge shakes the time and reddens it**
+  /// (asked 2026-11-17): held at the video's end the number simply stopped
+  /// changing, and nothing said why.
+  late final _bump = AnimationController(vsync: this, duration: _bumpTime);
+
+  static const _bumpTime = Duration(milliseconds: 520);
+
+  @override
+  void dispose() {
+    _bump.dispose();
+    super.dispose();
+  }
+
+  // The length is read while the times can already be typed; one typed
+  // past it is brought back as an arrow held there would be, after the
+  // frame, since the field above rebuilds on the change.
+  @override
+  void didUpdateWidget(ClipTimeField old) {
+    super.didUpdateWidget(old);
+    if (widget.fitsMax && old.max == null && widget.max != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _fit());
+    }
+  }
+
+  void _fit() {
+    final max = widget.max;
+    final now = ClipRange.parseTime(widget.controller.text);
+    if (!mounted || max == null || now == null || now <= max) return;
+    _bump.forward(from: 0);
+    _show(max);
+  }
+
   void _step(int minutes) {
     final now =
-        ClipRange.parseTime(controller.text) ??
-        startAt?.call() ??
+        ClipRange.parseTime(widget.controller.text) ??
+        widget.startAt?.call() ??
         Duration.zero;
     var next = now + Duration(minutes: minutes);
-    if (next.isNegative) next = Duration.zero;
-    final text = ClipRange.clock(next);
-    controller.value = TextEditingValue(
+    var held = false;
+    if (next.isNegative) (next, held) = (Duration.zero, true);
+    if (widget.max case final max? when next > max) (next, held) = (max, true);
+    if (held) _bump.forward(from: 0);
+    _show(next);
+    widget.onStepped?.call();
+  }
+
+  void _show(Duration time) {
+    final text = ClipRange.clock(time);
+    widget.controller.value = TextEditingValue(
       text: text,
       selection: TextSelection.collapsed(offset: text.length),
     );
@@ -81,6 +142,8 @@ class ClipTimeField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.vhl;
+    final still = MediaQuery.disableAnimationsOf(context);
+    final red = VhThemeX.of(context).palette.err;
     // ↑ and ↓ on a computer's keyboard step as the arrows do; the field
     // is one line, so they had nothing else to do there.
     return CallbackShortcuts(
@@ -88,21 +151,37 @@ class ClipTimeField extends StatelessWidget {
         const SingleActivator(LogicalKeyboardKey.arrowUp): () => _step(1),
         const SingleActivator(LogicalKeyboardKey.arrowDown): () => _step(-1),
       },
-      child: _field(l10n),
+      child: AnimatedBuilder(
+        animation: _bump,
+        builder: (context, field) {
+          final t = _bump.value;
+          final bumping = _bump.isAnimating;
+          // Three swings that fade out; with reduced motion, the colour
+          // alone says it.
+          final dx = still || !bumping
+              ? 0.0
+              : math.sin(t * math.pi * 6) * 5 * (1 - t);
+          return Transform.translate(
+            offset: Offset(dx, 0),
+            child: _field(l10n, bumping ? red : null),
+          );
+        },
+      ),
     );
   }
 
-  Widget _field(VhLocalizations l10n) {
+  Widget _field(VhLocalizations l10n, Color? color) {
     return TextField(
-      controller: controller,
+      controller: widget.controller,
       keyboardType: TextInputType.number,
       inputFormatters: const [ClipTimeFormatter()],
       // A time reads left to right in Arabic too.
       textDirection: TextDirection.ltr,
+      style: color == null ? null : TextStyle(color: color),
       decoration: InputDecoration(
-        labelText: label,
+        labelText: widget.label,
         hintText: '0:00',
-        errorText: error,
+        errorText: widget.error,
         errorMaxLines: 2,
         suffixIcon: Column(
           mainAxisSize: MainAxisSize.min,

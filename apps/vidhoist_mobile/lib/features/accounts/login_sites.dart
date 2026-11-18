@@ -30,7 +30,16 @@ enum LoginSite {
     'auth_token',
     alsoNeeded: ['ct0'],
   ),
-  vimeo('Vimeo', 'https://vimeo.com/log_in', ['https://vimeo.com/'], 'vimeo');
+  vimeo('Vimeo', 'https://vimeo.com/log_in', ['https://vimeo.com/'], 'vimeo'),
+  // Asked 2026-11-18: Reddit refuses some posts to a visitor, and a
+  // SoundCloud account reaches what a visitor cannot; yt-dlp reads these
+  // two cookies for each.
+  reddit('Reddit', 'https://www.reddit.com/login/', [
+    'https://www.reddit.com/',
+  ], 'reddit_session'),
+  soundcloud('SoundCloud', 'https://soundcloud.com/signin', [
+    'https://soundcloud.com/',
+  ], 'oauth_token');
 
   const LoginSite(
     this.label,
@@ -58,9 +67,14 @@ enum LoginSite {
   final List<String> alsoNeeded;
 
   /// The site as `CookieFiles.sites` names it (`youtube.com`).
-  String get domain {
-    final host = Uri.parse(pages.first).host;
-    final labels = host.split('.');
+  String get domain => _domainOf(pages.first);
+
+  /// Every site its sign-in keeps cookies for: YouTube's are Google's too,
+  /// and those are its own, not a file's, nor removable apart from it.
+  Set<String> get domains => {for (final page in pages) _domainOf(page)};
+
+  static String _domainOf(String page) {
+    final labels = Uri.parse(page).host.split('.');
     return labels.skip(labels.length - 2).join('.');
   }
 

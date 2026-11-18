@@ -31,6 +31,82 @@ void main() {
       expect(finished.path, endsWith('[aqz-KE-bpKQ].mp4'));
     });
 
+    // Seen 2026-11-17: a stretch's bar stood still, then the file was done.
+    test('**the guard**: a stretch moves with the progress ffmpeg gives, '
+        'and the whole video sizes do not send it back', () async {
+      List<String> block(int us, int bytes, [String state = 'continue']) => [
+        'frame=97',
+        'total_size=$bytes',
+        'out_time_us=$us',
+        'out_time_ms=$us',
+        'speed=2.00x',
+        'progress=$state',
+      ];
+      final events = await readDownloadRun(
+        Stream.fromIterable([
+          '[vh-parts] 90000000 [80000000, 10000000]',
+          '[download] Destination: c.mp4',
+          ...block(30000000, 1000),
+          ...block(60000000, 2000),
+          ...block(120000000, 4000, 'end'),
+          '[vh] finished 4000 4000 NA 2.3 1700 NA NA 396+258',
+          r'[vh-file] C:\out\a [x] 1m00s-3m00s.mp4',
+        ]),
+        Future.value((exitCode: 0, stderr: '')),
+        clip: const Duration(minutes: 2),
+      ).toList();
+      final seen = [
+        for (final e in events.whereType<BackendProgress>()) e.progress,
+      ];
+      expect([for (final p in seen) p.fraction], [0.25, 0.5, 1, 1]);
+      expect(seen.first.downloadedBytes, 1000);
+      // 90 s of the stretch left at twice playing speed.
+      expect(seen.first.eta, 45);
+      expect(events.last, isA<BackendFinished>());
+    });
+
+    // Seen 2026-11-18: an Instagram video 24 s long, asked from 1:00 to
+    // 2:00, left a 4 s file that would not play, and yt-dlp exited 0.
+    test('**the guard**: a stretch that starts past the end fails, says '
+        'how long the video is, and leaves no file', () async {
+      final folder = Directory.systemTemp.createTempSync('vh_past_end');
+      addTearDown(() => folder.deleteSync(recursive: true));
+      final broken = File('${folder.path}/a [x] 1m00s-2m00s.mp4')
+        ..writeAsBytesSync([0, 1, 2]);
+      final events = await readDownloadRun(
+        Stream.fromIterable([
+          '[download] Destination: ${broken.path}',
+          'total_size=1019474',
+          'out_time_us=-35783333',
+          'progress=end',
+          '[vh] finished 1019474 1019474 NA 1 NA NA NA',
+          '[vh-file] ${broken.path}',
+        ]),
+        Future.value((
+          exitCode: 0,
+          stderr:
+              '  Duration: 00:00:24.22, start: 0.000000, bitrate: 1671 kb/s\n'
+              '  Duration: 00:00:24.21, start: 0.000000, bitrate: 68 kb/s\n',
+        )),
+        clip: const Duration(minutes: 1),
+      ).toList();
+      final failed = events.last as BackendFailed;
+      expect(failed.error.kind, YtDlpErrorKind.clipPastEnd);
+      expect(
+        failed.error.length,
+        const Duration(seconds: 24, milliseconds: 220),
+      );
+      expect(broken.existsSync(), isFalse);
+      expect(
+        EngineFailureException.from(failed.error),
+        isA<ClipPastEndException>().having(
+          (e) => e.length,
+          'length',
+          const Duration(seconds: 24, milliseconds: 220),
+        ),
+      );
+    });
+
     test('announced parts and post-processing come through', () async {
       final events = await read(
         [

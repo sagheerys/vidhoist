@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -85,6 +86,87 @@ void main() {
       expect(
         h.engine.submitted.single.clip,
         const ClipRange(Duration(seconds: 90), Duration(seconds: 165)),
+      );
+    });
+
+    // Seen: 10:00 to 20:00 was accepted for a 16:52 video, and yt-dlp then
+    // failed with no reason a person could act on.
+    testWidgets('**the guard**: a time past the video keeps the dialog '
+        'open, naming its length', (tester) async {
+      final h = await open(tester);
+      h.engine.length = const Duration(minutes: 16, seconds: 52);
+      await tester.tap(
+        find.descendant(
+          of: find.byType(DesktopSidebar),
+          matching: find.text('Add link'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).first, _yt);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Only a part of the video'));
+      await tester.pumpAndSettle();
+      expect(find.text('The video is 16:52 long'), findsOneWidget);
+      await tester.enterText(find.widgetWithText(TextField, 'From'), '1000');
+      await tester.enterText(find.widgetWithText(TextField, 'To'), '2000');
+      await tester.tap(find.widgetWithText(FilledButton, 'Start download'));
+      await tester.pumpAndSettle();
+      expect(h.engine.submitted, isEmpty);
+      expect(find.text('The video ends at 16:52'), findsOneWidget);
+    });
+
+    Future<ShellHarness> dialog(WidgetTester tester) async {
+      final h = await open(tester);
+      await tester.tap(
+        find.descendant(
+          of: find.byType(DesktopSidebar),
+          matching: find.text('Add link'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return h;
+    }
+
+    // Asked 2026-11-18: before the length came, any time could be typed.
+    testWidgets('**the guard**: the length is read once the link stops '
+        'changing, before a part is asked for', (tester) async {
+      final h = await dialog(tester);
+      await tester.enterText(find.byType(TextField).first, _yt);
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(h.engine.lengthsAsked, isEmpty);
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+      expect(h.engine.lengthsAsked, [_yt]);
+    });
+
+    testWidgets('**the guard**: Start pressed while it is read waits for '
+        'it, and an end past it comes back to it', (tester) async {
+      final h = await dialog(tester);
+      final reading = h.engine.reading = Completer<Duration?>();
+      await tester.enterText(find.byType(TextField).first, _yt);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Only a part of the video'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.widgetWithText(TextField, 'From'), '1000');
+      await tester.enterText(find.widgetWithText(TextField, 'To'), '2000');
+      await tester.tap(find.widgetWithText(FilledButton, 'Start download'));
+      await tester.pump();
+      expect(find.text("Reading the video's length…"), findsOneWidget);
+      expect(h.engine.submitted, isEmpty);
+
+      reading.complete(const Duration(minutes: 16, seconds: 52));
+      await tester.pumpAndSettle();
+      expect(h.engine.submitted, isEmpty);
+      expect(find.text('16:52'), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Start download'));
+      await tester.pumpAndSettle();
+      expect(
+        h.engine.submitted.single.clip,
+        const ClipRange(
+          Duration(minutes: 10),
+          Duration(minutes: 16, seconds: 52),
+        ),
       );
     });
 

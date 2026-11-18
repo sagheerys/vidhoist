@@ -34,6 +34,20 @@
       }
     }
   },
+  "@clipLength": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
+  "@clipPastEnd": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
+      }
+    }
+  },
   "@desktopCookiesKeptFor": {
     "placeholders": {
       "sites": {
@@ -66,6 +80,13 @@
     "placeholders": {
       "version": {
         "type": "String"
+      }
+    }
+  },
+  "@errClipPastEnd": {
+    "placeholders": {
+      "length": {
+        "type": "Object"
       }
     }
   },
@@ -688,10 +709,14 @@
   "clearLogsConfirm": "Delete all diagnostic logs?",
   "clipEndAfterStart": "After the start",
   "clipFrom": "From",
+  "clipLength": "The video is {length} long",
+  "clipLengthReading": "Reading the video's length…",
+  "clipLengthUnknown": "The site does not say how long the video is, so the times are not checked",
   "clipMinuteDown": "A minute earlier",
   "clipMinuteUp": "A minute later",
   "clipOnly": "Only a part of the video",
   "clipOnlyHelp": "From one time to another, without the rest. It comes without subtitles.",
+  "clipPastEnd": "The video ends at {length}",
   "clipTimeHint": "Digits alone: 130 is 1:30",
   "clipTo": "To",
   "clipboardFound": "A link is ready in your clipboard",
@@ -1134,6 +1159,8 @@
   "engineRepairing": "Repairing…",
   "engineResume": "Resume",
   "enterFullscreen": "Fullscreen",
+  "errClipPastEnd": "The part starts after the video ends ({length})",
+  "errClipPastEndUnknown": "The part starts after the video ends",
   "errNetwork": "No connection to the site",
   "errPlatformBlocked": "The platform requires a login, which this clip cannot be downloaded without",
   "errPlatformBlockedCookies": "The platform requires login. Send it a cookies file from Settings → Cookies",

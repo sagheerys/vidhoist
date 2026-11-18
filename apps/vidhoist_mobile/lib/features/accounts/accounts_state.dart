@@ -46,7 +46,7 @@ final signedInSitesProvider = Provider<Set<LoginSite>>((ref) {
 /// file exported from a browser carries whatever sites it was signed in
 /// to, and each must be seen to be removable.
 final fileOnlySitesProvider = Provider<List<String>>((ref) {
-  final listed = {for (final site in LoginSite.values) site.domain};
+  final listed = {for (final site in LoginSite.values) ...site.domains};
   return [
     for (final site in ref.watch(cookieNamesProvider).keys)
       if (!listed.contains(site)) site,
@@ -135,7 +135,7 @@ class Accounts {
   /// Drops [site]'s rows from the file, and the browser's session with
   /// them; the file goes when nothing is left in it.
   Future<void> forget(LoginSite site) async {
-    _drop(site.domain);
+    site.domains.forEach(_drop);
     await jar.clear();
     onChanged();
   }

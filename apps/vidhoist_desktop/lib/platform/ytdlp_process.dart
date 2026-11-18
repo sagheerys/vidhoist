@@ -173,10 +173,14 @@ class ProcessYtDlpBackend implements DownloadBackend {
         .forEach(errors.write);
     final exit = process.exitCode.then((code) async {
       await readingErrors;
-      return (exitCode: code, stderr: errors.toString());
+      final stderr = errors.toString();
+      if (code != 0) onLog?.call('yt-dlp exited $code:\n${stderrTail(stderr)}');
+      return (exitCode: code, stderr: stderr);
     });
+    final clip = request.clip?.length;
+    final events = readDownloadRun(_lines(process), exit, clip: clip);
     try {
-      await for (final event in readDownloadRun(_lines(process), exit)) {
+      await for (final event in events) {
         if (_cancelled.contains(request.taskId)) break;
         yield event;
       }
@@ -228,6 +232,19 @@ class ProcessYtDlpBackend implements DownloadBackend {
   Future<UpdateOutcome> repairEngine() async =>
       await repairer?.call() ??
       const UpdateOutcome(updated: false, error: 'nothing can repair yt-dlp');
+
+  /// The last lines of a failed run's stderr, for the diagnostics log. The
+  /// error shown keeps one line, and when the frozen build crashes that
+  /// line only says it crashed: the reason is in the traceback above it.
+  /// ffmpeg's running counters are left out, and each line is cut short.
+  static String stderrTail(String stderr, {int lines = 15}) {
+    final kept = [
+      for (final line in const LineSplitter().convert(stderr))
+        if (line.trim().isNotEmpty && !line.startsWith('frame='))
+          line.length > 300 ? '${line.substring(0, 300)}…' : line,
+    ];
+    return kept.skip(kept.length > lines ? kept.length - lines : 0).join('\n');
+  }
 
   Stream<String> _lines(Process process) => process.stdout
       .transform(const Utf8Decoder(allowMalformed: true))

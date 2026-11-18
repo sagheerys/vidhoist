@@ -73,6 +73,18 @@ final class EngineFailureException extends VhApiException {
   static VhApiException from(YtDlpError error) => switch (error.kind) {
     YtDlpErrorKind.network => NetworkException(error.message),
     YtDlpErrorKind.signInRequired => PlatformBlockedException(error.message),
+    YtDlpErrorKind.clipPastEnd => ClipPastEndException(error.length),
     final kind => EngineFailureException(kind, error.message),
   };
+}
+
+/// A stretch asked to start at or past the end of a video [length] long.
+/// Caught before yt-dlp runs where the site gives the length: handed such
+/// a stretch, it fails with only ffmpeg's "Invalid argument". Where the
+/// site gives none it is found after the run, and [length] is what ffmpeg
+/// read, or null when it said nothing.
+final class ClipPastEndException extends VhApiException {
+  ClipPastEndException(this.length) : super('clip past $length');
+
+  final Duration? length;
 }

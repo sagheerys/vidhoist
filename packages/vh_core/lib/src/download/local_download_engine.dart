@@ -10,6 +10,7 @@ import '../models/quality.dart';
 import '../storage/local_history_store.dart';
 import '../urls/url_kit.dart';
 import 'download_queue.dart';
+import 'early_probe.dart';
 import 'engine_refresh.dart';
 import 'local_pending.dart';
 
@@ -80,6 +81,7 @@ class LocalDownloadEngine {
   final _tasks = <String, DownloadTask>{};
   final _running = <String>{};
   final _probes = <String, ProbeResult>{};
+  late final _early = EarlyProbe(backend.probe);
 
   /// Why a running task is being stopped: [TaskPhase.cancelled] or
   /// [TaskPhase.paused].
@@ -114,6 +116,18 @@ class LocalDownloadEngine {
     _enqueue(task);
     onLog?.call('submit ${task.quality.wire} $url');
     return task;
+  }
+
+  /// How long the video at [url] is, or null when yt-dlp cannot say (a
+  /// live stream, a failed read). The add screen asks it once a stretch
+  /// is wanted; the download of the same link then starts from this
+  /// reading ([EarlyProbe]).
+  Future<Duration?> lengthOf(String url) async {
+    try {
+      return (await _early.read(UrlKit.extractUrl(url))).info.duration;
+    } on Object {
+      return null;
+    }
   }
 
   /// The cover a task shows while it waits its turn, before yt-dlp has
@@ -247,9 +261,13 @@ class LocalDownloadEngine {
 
   Future<void> _prepare(String id) async {
     var task = _set(_tasks[id]!.copyWith(phase: TaskPhase.preparing));
-    final probe = _probes[id] ??= await backend.probe(task.effectiveUrl);
+    final url = task.effectiveUrl;
+    final probe = _probes[id] ??=
+        await (_early.take(url) ?? backend.probe(url));
     if (_stopped(id)) return;
+    final asked = task.clip;
     task = _set(task.withProbe(probe.info));
+    if (task.clip != asked) onLog?.call('clip cut to ${task.clip?.wire}');
     unawaited(_record(task));
     while (startGate != null && !startGate!() && !_stopped(id)) {
       _set(_tasks[id]!.copyWith(phase: TaskPhase.waitingForNetwork));

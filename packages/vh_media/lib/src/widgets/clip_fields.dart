@@ -9,8 +9,11 @@ import 'clip_time_field.dart';
 /// phone's sheet or the computer's add dialog opens: a stretch is a
 /// choice for one link, not a habit.
 ///
-/// The times are typed or stepped, not dragged: neither knows a video's
-/// length before yt-dlp has read it, and a typed `1:30` is exact.
+/// The times are typed or stepped, not dragged: a typed `1:30` is exact.
+/// Once yt-dlp has read the video's [length], it is shown, the arrows stop
+/// there, an end typed past it before it was known comes back to it, and
+/// a time typed past it afterwards is wrong at once: a stretch past the
+/// end fails in yt-dlp with no reason a person could act on.
 class ClipFields extends StatelessWidget {
   const ClipFields({
     super.key,
@@ -20,6 +23,9 @@ class ClipFields extends StatelessWidget {
     required this.to,
     this.showErrors = false,
     this.checkbox = false,
+    this.length,
+    this.readingLength = false,
+    this.lengthUnknown = false,
   });
 
   final bool on;
@@ -35,11 +41,35 @@ class ClipFields extends StatelessWidget {
   /// its other choice for one link, "fetch its transcript first".
   final bool checkbox;
 
-  /// The stretch typed, or null while the times do not read.
+  /// How long the video is, once read; null before, or when it cannot be.
+  final Duration? length;
+
+  /// The length is being read.
+  final bool readingLength;
+
+  /// It was read and the site gave none (Instagram, a live stream): said,
+  /// so a time past the end is not taken for one checked.
+  final bool lengthUnknown;
+
+  /// The stretch typed, or null while the times do not read or run past
+  /// the video's [length].
   static ClipRange? read(
     TextEditingController from,
-    TextEditingController to,
-  ) => ClipRange.tryParse(from.text, to.text);
+    TextEditingController to, {
+    Duration? length,
+  }) {
+    final range = ClipRange.tryParse(from.text, to.text);
+    if (range == null || length == null) return range;
+    return range.within(length) == range ? range : null;
+  }
+
+  /// **An end stepped with no start starts the stretch at 0:00** (asked
+  /// 2026-11-18): the arrows already count the end from the beginning,
+  /// and the start left empty was refused at Start.
+  void _startAtZero() {
+    if (from.text.trim().isNotEmpty) return;
+    from.text = ClipRange.clock(Duration.zero);
+  }
 
   // Rebuilt as the times are typed: a mistake shown stays only while it
   // is still a mistake.
@@ -55,13 +85,30 @@ class ClipFields extends StatelessWidget {
     final p = VhThemeX.of(context).palette;
     final start = ClipRange.parseTime(from.text);
     final end = ClipRange.parseTime(to.text);
-    final fromError = showErrors && start == null ? l10n.clipTimeHint : null;
-    final toError = !showErrors
+    final length = this.length;
+    final pastEnd = length == null
+        ? null
+        : l10n.clipPastEnd(ClipRange.clock(length));
+    final fromError = start != null && length != null && start >= length
+        ? pastEnd
+        : showErrors && start == null
+        ? l10n.clipTimeHint
+        : null;
+    final toError = end != null && length != null && end > length
+        ? pastEnd
+        : !showErrors
         ? null
         : end == null
         ? l10n.clipTimeHint
         : start != null && end <= start
         ? l10n.clipEndAfterStart
+        : null;
+    final told = readingLength
+        ? l10n.clipLengthReading
+        : length != null
+        ? l10n.clipLength(ClipRange.clock(length))
+        : lengthUnknown
+        ? l10n.clipLengthUnknown
         : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -101,6 +148,7 @@ class ClipFields extends StatelessWidget {
                   controller: from,
                   label: l10n.clipFrom,
                   error: fromError,
+                  max: length,
                 ),
               ),
               const SizedBox(width: VhSpace.sm),
@@ -110,10 +158,22 @@ class ClipFields extends StatelessWidget {
                   label: l10n.clipTo,
                   error: toError,
                   startAt: () => ClipRange.parseTime(from.text),
+                  max: length,
+                  fitsMax: true,
+                  onStepped: _startAtZero,
                 ),
               ),
             ],
           ),
+          if (told != null)
+            Padding(
+              padding: const EdgeInsets.only(top: VhSpace.xs),
+              child: Text(
+                told,
+                key: const ValueKey('clipLength'),
+                style: text.labelSmall?.copyWith(color: p.ink3),
+              ),
+            ),
         ],
       ],
     );

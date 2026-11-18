@@ -108,6 +108,40 @@ void main() {
       expect(failed.error.kind, YtDlpErrorKind.unavailable);
     });
 
+    // A clip failed on Windows with only "[PYI-31540:ERROR] Failed to
+    // execute script '__main__'" in the log: the traceback that says why
+    // was dropped.
+    test('**the guard**: a failed run leaves its last stderr lines in the '
+        'log', () async {
+      final logged = <String>[];
+      final starter = FakeStarter((s) {
+        s.process.complain('Traceback (most recent call last):\n');
+        s.process.complain('frame=  120 fps= 30 size=  1024KiB\n');
+        s.process.complain('OSError: [Errno 22] Invalid argument\n');
+        s.process.complain("[PYI-31540:ERROR] Failed to execute script\n");
+        s.process.end(1);
+      });
+      await ProcessYtDlpBackend(
+        engine: () async => run,
+        probeFolder: cache,
+        start: starter.call,
+        tree: FakeTree(),
+        onLog: logged.add,
+      ).download(request).toList();
+      final entry = logged.single;
+      expect(entry, contains('OSError: [Errno 22] Invalid argument'));
+      expect(entry, contains('Traceback'));
+      expect(entry, isNot(contains('frame=')));
+    });
+
+    test('the tail keeps the last lines, each cut short', () {
+      final long = List.generate(20, (i) => 'line $i').join('\n');
+      final tail = ProcessYtDlpBackend.stderrTail(long);
+      expect(tail.split('\n'), hasLength(15));
+      expect(tail, startsWith('line 5'));
+      expect(ProcessYtDlpBackend.stderrTail('x' * 400).length, lessThan(310));
+    });
+
     test('each process is tied to the tree, and let go when it ends', () async {
       final tree = FakeTree();
       final starter = FakeStarter((s) {

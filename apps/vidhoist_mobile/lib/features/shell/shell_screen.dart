@@ -195,9 +195,15 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     // link that is not short costs no wait.
     final resolver = ref.read(shortLinkResolverProvider);
     final capped = shared.length > maxSharedLinks;
+    final waits =
+        shared.length > 1 ||
+        shareWaitsForLink(
+          shared.first,
+          quick: ref.read(settingsProvider).quickDownload,
+        );
     final urls = [
       for (final url in shared.take(maxSharedLinks))
-        await resolver.resolveForRouting(url),
+        waits ? await resolver.resolveForRouting(url) : url,
     ];
     note(
       'share checked in ${DateTime.now().difference(started).inMilliseconds}ms',

@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
@@ -266,6 +269,68 @@ void main() {
         );
       },
       timeout: const Timeout(Duration(seconds: 30)),
+    );
+  });
+
+  // Field report 2026-11-17: TikTok's sheet came seconds late. A TikTok
+  // link's last hop is the video page itself, which was read whole.
+  group('one hop on the network', () {
+    late HttpServer server;
+    late List<HttpResponse> held;
+
+    setUp(() async {
+      held = [];
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      server.listen((request) {
+        final response = request.response;
+        if (request.uri.path == '/short') {
+          response.statusCode = HttpStatus.movedPermanently;
+          response.headers.set(HttpHeaders.locationHeader, '/video');
+        }
+        // A page whose body keeps coming: the headers are all a hop needs.
+        response.write('<html>${'x' * 4096}');
+        unawaited(response.flush());
+        held.add(response);
+      });
+    });
+
+    tearDown(() async {
+      await server.close(force: true);
+    });
+
+    String at(String path) => 'http://127.0.0.1:${server.port}$path';
+
+    test(
+      '**the guard**: the Location is read without waiting for the body',
+      () async {
+        expect(
+          await ioRedirectStep(at('/short'))
+              .timeout(const Duration(seconds: 3)),
+          '/video',
+        );
+      },
+    );
+
+    test('**the guard**: the page at the end is not read whole', () async {
+      expect(
+        await ioRedirectStep(at('/video')).timeout(const Duration(seconds: 3)),
+        isNull,
+      );
+    });
+  });
+
+  test('only a SoundCloud short link may hide a playlist', () {
+    expect(
+      ShortLinkResolver.mayHidePlaylist('https://on.soundcloud.com/abc'),
+      isTrue,
+    );
+    expect(
+      ShortLinkResolver.mayHidePlaylist('https://vm.tiktok.com/ZMabc/'),
+      isFalse,
+    );
+    expect(
+      ShortLinkResolver.mayHidePlaylist('https://soundcloud.com/a/sets/b'),
+      isFalse,
     );
   });
 }

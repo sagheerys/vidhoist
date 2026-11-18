@@ -17,6 +17,7 @@ import '../shared/error_text.dart';
 
 import 'package:vh_media/vh_media.dart' show ClipFields;
 
+import 'clip_length.dart';
 import 'link_preview_view.dart';
 
 /// Converts the core's platform into its presentation type, since vh_ui
@@ -117,11 +118,42 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
   final _clipFrom = TextEditingController();
   final _clipTo = TextEditingController();
 
+  /// The link whose length is read: the one in the field once it has
+  /// stopped changing, so typing a link letter by letter starts no probe
+  /// per letter.
+  late var _settled = UrlKit.extractUrl(_url);
+  Timer? _settle;
+
+  /// Start was pressed while the length was still read.
+  var _waiting = false;
+
   @override
   void initState() {
     super.initState();
+    if (UrlKit.needsResolution(_url)) unawaited(_follow(_url));
     if (ref.read(pcPairingProvider) == null) return;
     unawaited(_lookForPc());
+  }
+
+  /// A shared short link opens the sheet at once and is followed here,
+  /// so the preview and the download see where it leads; a link the user
+  /// changed meanwhile is theirs.
+  Future<void> _follow(String asked) async {
+    final url = await ref
+        .read(shortLinkResolverProvider)
+        .resolveForRouting(asked);
+    if (!mounted || url == asked || _controller.text != asked) return;
+    _controller.text = url;
+    setState(() => _url = _settled = url);
+  }
+
+  void _changed(String value) {
+    setState(() => _url = value);
+    _settle?.cancel();
+    _settle = Timer(
+      settleTime,
+      () => setState(() => _settled = UrlKit.extractUrl(value)),
+    );
   }
 
   Future<void> _lookForPc() async {
@@ -132,6 +164,7 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
 
   @override
   void dispose() {
+    _settle?.cancel();
     _controller.dispose();
     _clipFrom.dispose();
     _clipTo.dispose();
@@ -159,12 +192,18 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
     final pc = ref.watch(pcPairingProvider);
     final showPc = pc != null && _pcReachable != null && offerPc(ref, _url);
     final toPc = showPc && _toPc;
+    final link = UrlKit.extractUrl(_url);
+    // A stretch wanted is read at once: the link is no longer being typed.
+    final length =
+        !toPc && (link == _settled || _clipOn) && readsLength(link, _clipOn)
+        ? ref.watch(clipLengthProvider(link))
+        : null;
 
     return VhUrlInputSheet(
       title: l10n.addUrl,
       urlHint: l10n.pasteUrlHint,
       controller: _controller,
-      onUrlChanged: (value) => setState(() => _url = value),
+      onUrlChanged: _changed,
       preview: linkPreviewFor(ref, _url),
       platform: platformKindOf(platform),
       platformLabel: platform == MediaPlatform.other ? null : platform.label,
@@ -193,6 +232,10 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
               from: _clipFrom,
               to: _clipTo,
               showErrors: _clipErrors,
+              length: length?.valueOrNull,
+              readingLength: length?.isLoading ?? false,
+              lengthUnknown:
+                  length is AsyncData<Duration?> && length.value == null,
             ),
         ],
       ),
@@ -201,14 +244,36 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
     );
   }
 
+  /// The stretch typed, checked against the length: Start pressed while
+  /// it is still read waits for it, a probe the download then starts from.
+  /// Past [lengthWait] the times go unchecked, and the download cuts the
+  /// end itself ([DownloadTask.withProbe]).
+  Future<ClipRange?> _readClip(String url) async {
+    _settle?.cancel();
+    setState(() {
+      _settled = url;
+      _waiting = true;
+    });
+    // The engine, not the provider: it hands back the reading the sheet
+    // already started rather than a second one.
+    final engine = ref.read(downloadEngineProvider);
+    final length = await engine
+        ?.lengthOf(url)
+        .timeout(lengthWait, onTimeout: () => null);
+    if (mounted) setState(() => _waiting = false);
+    return ClipFields.read(_clipFrom, _clipTo, length: length);
+  }
+
   Future<void> _submit({bool toPc = false}) async {
     final l10n = widget.l10n;
     final input = UrlKit.extractUrl(_controller.text);
+    if (_waiting) return;
     if (!input.startsWith('http')) {
       showVhSnack(context, l10n.invalidUrl, type: VhSnackType.error);
       return;
     }
-    final clip = _clipOn && !toPc ? ClipFields.read(_clipFrom, _clipTo) : null;
+    final clip = _clipOn && !toPc ? await _readClip(input) : null;
+    if (!mounted) return;
     if (_clipOn && !toPc && clip == null) {
       setState(() => _clipErrors = true);
       return;

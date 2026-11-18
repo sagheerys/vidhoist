@@ -30,13 +30,18 @@ enum YtDlpErrorKind {
   /// The network failed: no route, no name resolution, a timeout.
   network,
 
+  /// A stretch that starts after the video ends, on a site that never said
+  /// how long the video is: yt-dlp still exits 0, with a file of a few
+  /// broken seconds (Instagram, measured 2026-11-18).
+  clipPastEnd,
+
   /// Anything else; the message is shown as it is.
   failed,
 }
 
 /// A failed yt-dlp run, classified.
 class YtDlpError implements Exception {
-  const YtDlpError(this.kind, this.message, {this.extractor});
+  const YtDlpError(this.kind, this.message, {this.extractor, this.length});
 
   final YtDlpErrorKind kind;
 
@@ -45,6 +50,10 @@ class YtDlpError implements Exception {
 
   /// yt-dlp's name for the site, from `ERROR: [youtube] …`.
   final String? extractor;
+
+  /// For [YtDlpErrorKind.clipPastEnd], the video's length as ffmpeg read
+  /// it, when it said.
+  final Duration? length;
 
   /// A height ceiling on a site that lists no heights is refused rather
   /// than ignored; the app tries again once with the best format.
