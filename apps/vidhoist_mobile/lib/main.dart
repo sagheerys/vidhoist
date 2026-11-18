@@ -80,9 +80,10 @@ Future<void> main() async {
       prefs: PlaybackPrefs(store: store, mutex: mutex),
       stateStore: AudioStateStore(store: store, mutex: mutex),
     ),
-    config: const AudioServiceConfig(
+    config: AudioServiceConfig(
       androidNotificationChannelId: 'com.yasir.vidhoist.audio',
-      androidNotificationChannelName: 'VidHoist',
+      // In the phone's language, as Android's settings list it.
+      androidNotificationChannelName: VhMediaLabels.system().channel,
       // **`false` is forced by the package**, whose own assertion says an
       // ongoing flag "will make no effect with androidStopForegroundOnPause
       // set to false": a live foreground service already makes its

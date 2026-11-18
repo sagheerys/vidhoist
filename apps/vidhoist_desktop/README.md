@@ -4,8 +4,8 @@ The desktop app: a three-column shell (navigation, library, downloads) with a
 local library of tags, lists, transcripts and covers, a tray icon and a
 `vidhoist://add?url=` link handler for the browser button.
 
-- Identity: `lib/identity.dart` (`Vidhoist`, which also names
-  `%APPDATA%\Vidhoist`), `windows/runner/Runner.rc`, and the installer
+- Identity: `lib/identity.dart` (`VidHoist`; Windows ignores case, so
+  the folder stays `%APPDATA%\Vidhoist`), `windows/runner/Runner.rc`, and the installer
   `windows/installer/vidhoist.iss` with its own AppId. None of these change
   after the first release.
 - Brand files in `brand/`, the Windows icon, the tray icons and the installer
@@ -15,5 +15,5 @@ local library of tags, lists, transcripts and covers, a tray icon and a
 - Tests: `flutter test --no-pub`; window sizes and font scales are covered by
   `test/desktop_matrix.dart`.
 
-The download engine is being moved from a Vidhoist server to `yt-dlp.exe`
-beside the app; see `docs/blueprint/REPORT.md` at the repository root.
+Downloads run with `yt-dlp.exe` beside the app; see `docs/ENGINE.md` at the
+repository root.

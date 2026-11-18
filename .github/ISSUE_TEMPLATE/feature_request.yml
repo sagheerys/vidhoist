@@ -8,9 +8,8 @@ body:
         Write in English or Arabic — both are read.
         اكتب بالعربية أو بالإنجليزية، كلتاهما مقروءة.
 
-        The two apps share one engine and one design; the phone keeps a
-        download folder, the desktop keeps a fuller library. Say which one
-        you have in mind, or both.
+        The two apps share one engine and one design. Say which one you
+        have in mind, or both.
 
   - type: dropdown
     id: app
@@ -19,7 +18,6 @@ body:
       options:
         - VidHoist for Android
         - VidHoist for Windows
-        - Both
         - Both
     validations:
       required: true

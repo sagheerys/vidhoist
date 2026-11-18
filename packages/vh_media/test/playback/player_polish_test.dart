@@ -86,6 +86,50 @@ void main() {
   });
 
   group('the notification close button', () {
+    // Found 2026-11-18: TalkBack read every button in English on an
+    // Arabic phone, and Android listed the channel as "VidHoist".
+    test('**the guard**: the buttons and the channel follow the phone '
+        'language', () {
+      final ar = VhMediaLabels.forLanguage('ar');
+      expect(vhMediaControls(playing: true, labels: ar).map((c) => c.label), [
+        'السابق',
+        'إيقاف مؤقت',
+        'التالي',
+        'إغلاق',
+      ]);
+      expect(vhMediaControls(playing: false, labels: ar)[1].label, 'تشغيل');
+      expect(ar.channel, 'التشغيل');
+      final en = VhMediaLabels.forLanguage('en');
+      expect(vhMediaControls(playing: false, labels: en).map((c) => c.label), [
+        'Previous',
+        'Play',
+        'Next',
+        'Close',
+      ]);
+      expect(en.channel, 'Playback');
+      expect(VhMediaLabels.forLanguage('fr'), same(en));
+    });
+
+    test('the buttons keep their actions and icons', () {
+      final controls = vhMediaControls(playing: true);
+      expect(controls.map((c) => c.action), [
+        MediaAction.skipToPrevious,
+        MediaAction.pause,
+        MediaAction.skipToNext,
+        MediaAction.stop,
+      ]);
+      expect(
+        controls.first.androidIcon,
+        MediaControl.skipToPrevious.androidIcon,
+      );
+      expect(controls[1].androidIcon, MediaControl.pause.androidIcon);
+      expect(controls[2].androidIcon, MediaControl.skipToNext.androidIcon);
+      expect(
+        vhMediaControls(playing: false)[1].androidIcon,
+        MediaControl.play.androidIcon,
+      );
+    });
+
     test('stop keeps its action and is drawn as a close mark', () {
       for (final playing in [true, false]) {
         final last = vhMediaControls(playing: playing).last;

@@ -129,8 +129,8 @@ class _VhGalleryState extends State<VhGallery> {
               child: VhConfirmDialog(
                 title: t('حذف المقطع؟', 'Delete the clip?'),
                 message: t(
-                  'سيُحذف الملف من السيرفر نهائياً، ولا يمكن التراجع.',
-                  'The file is removed from the server for good.',
+                  'سيُحذف الملف من جهازك نهائياً، ولا يمكن التراجع.',
+                  'The file is removed from your device for good.',
                 ),
                 confirmLabel: t('احذف', 'Delete'),
                 cancelLabel: t('إلغاء', 'Cancel'),

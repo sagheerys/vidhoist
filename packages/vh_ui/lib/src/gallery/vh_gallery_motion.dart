@@ -58,7 +58,10 @@ class VhGalleryMotion extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(t('يحمّل… 62٪', 'Loading… 62%'), style: text.bodySmall),
+                  Text(
+                    t('جارٍ الفتح… 62٪', 'Loading… 62%'),
+                    style: text.bodySmall,
+                  ),
                   const VhProgressBar(value: 0.62),
                 ],
               ),
@@ -87,7 +90,7 @@ class VhGalleryMotion extends StatelessWidget {
               ),
               notice(
                 VhNoticeKind.failed,
-                t('تعذّر الوصول إلى السيرفر', 'Could not reach the server'),
+                t('تعذّر الاتصال بالموقع', 'Could not reach the site'),
               ),
               notice(VhNoticeKind.info, t('نُسخ الرابط', 'Link copied')),
             ],

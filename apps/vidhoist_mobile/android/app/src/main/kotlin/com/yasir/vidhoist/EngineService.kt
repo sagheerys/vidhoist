@@ -38,7 +38,7 @@ class EngineService : Service() {
         private val runs = AtomicInteger(0)
 
         @Volatile
-        private var title = "Vidhoist"
+        private var title = "VidHoist"
 
         @Volatile
         private var text = ""

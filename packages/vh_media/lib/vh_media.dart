@@ -9,6 +9,7 @@ export 'src/models/play_mode.dart';
 export 'src/models/playback_source.dart';
 export 'src/models/playlist_item.dart';
 export 'src/playback/audio_handler.dart';
+export 'src/playback/playback_state_mapping.dart' show VhMediaLabels;
 export 'src/playback/just_audio_port.dart';
 export 'src/playback/media_item_mapper.dart';
 export 'src/playback/media_player_port.dart';

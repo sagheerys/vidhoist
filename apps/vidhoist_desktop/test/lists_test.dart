@@ -153,7 +153,7 @@ void main() {
 
     await tester.tap(find.text('Delete').first);
     await tester.pumpAndSettle();
-    expect(find.textContaining('The videos themselves'), findsOneWidget);
+    expect(find.textContaining('The clips themselves'), findsOneWidget);
     await tester.tap(find.text('Delete').last);
     await tester.pumpAndSettle();
     expect(await tags.urlsWithTag('lab'), isEmpty);

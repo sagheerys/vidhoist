@@ -17,7 +17,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get aboutDescriptionPhone =>
-      'A light, fast app that downloads video and audio from many platforms with yt-dlp, straight to your device, with no server in between. It has its own player and playlists.';
+      'A light, fast app that downloads video and audio from many sites with yt-dlp. It has its own player and playlists.';
 
   @override
   String get accountSignIn => 'Sign in';
@@ -119,10 +119,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get allDownloadsFinished => 'All downloads finished.';
 
   @override
-  String get allFolders => 'All folders';
-
-  @override
-  String get allPlatforms => 'All platforms';
+  String get allPlatforms => 'All sites';
 
   @override
   String get alreadyInPlaylist => 'Already added';
@@ -163,9 +160,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get audioStereo => 'Stereo';
 
   @override
-  String get authentication => 'Authentication (optional)';
-
-  @override
   String get autoBuilt => 'Automatic';
 
   @override
@@ -186,11 +180,11 @@ class VhLocalizationsEn extends VhLocalizations {
       'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.';
 
   @override
-  String get backgroundDownload => 'Downloading files in background...';
+  String get backgroundDownload => 'Downloading files in the background…';
 
   @override
   String get backupNote =>
-      'Includes playlists, tags, the offline index, artwork links and settings. Passwords and usernames are never backed up, and media files are not included.';
+      'Includes the library, playlists, tags, followed channels and settings. Sign-ins and transcripts are kept apart, and the media files themselves are not included.';
 
   @override
   String get backupSettings => 'Back up all data';
@@ -224,7 +218,7 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
-  String get batchThisVideoOnly => 'Download this video only';
+  String get batchThisVideoOnly => 'Download this clip only';
 
   @override
   String get batchTitle => 'Batch download';
@@ -285,17 +279,6 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get channelUrlHint => 'https://www.youtube.com/@name';
-
-  @override
-  String chapterCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count chapters',
-      one: '1 chapter',
-    );
-    return '$_temp0';
-  }
 
   @override
   String chapterNumber(int number) {
@@ -437,20 +420,12 @@ class VhLocalizationsEn extends VhLocalizations {
   String get cookies => 'Cookies';
 
   @override
-  String get cookiesHelp =>
-      'In your browser, use an extension that exports cookies in the Netscape format (one file per platform) and pick the files here. The server then uses them for every download, and yt-dlp decides when it needs them. Cookies expire, so a download that starts failing again usually means a fresh export is due.';
-
-  @override
   String get cookiesNotNetscape =>
       'None of these files holds cookies in the Netscape format';
 
   @override
   String get cookiesSubtitle =>
-      'For the platforms that will not download without a login';
-
-  @override
-  String get cookiesWhat =>
-      'Some platforms refuse to hand a video over unless the request looks like a signed-in browser. A cookies file exported from your browser gives the server that.';
+      'For the sites that will not download without a login';
 
   @override
   String get copiedToClipboard => 'Copied to clipboard';
@@ -469,9 +444,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get createPlaylist => 'Create playlist';
 
   @override
-  String get creator => 'Creator';
-
-  @override
   String get defaultQuality => 'Default video quality';
 
   @override
@@ -479,7 +451,14 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String deleteMultipleConfirm(int count) {
-    return 'Delete $count video(s)?\n\nThis will remove the files from your device.';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Delete $count clips?\n\nTheir files are removed from your device.',
+      one: 'Delete 1 clip?\n\nIts file is removed from your device.',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -495,11 +474,11 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String deleteTagConfirm(Object tag) {
-    return 'Delete the tag \"$tag\" from all items? The videos themselves are not deleted.';
+    return 'Delete the tag \"$tag\" from all items? The clips themselves are not deleted.';
   }
 
   @override
-  String get deleteVideo => 'Delete video';
+  String get deleteVideo => 'Delete clip';
 
   @override
   String deleteVideoConfirm(Object title) {
@@ -608,11 +587,11 @@ class VhLocalizationsEn extends VhLocalizations {
   String get desktopChannelsInLibrary => 'Channels in your library';
 
   @override
-  String get desktopChannelsLater => 'Not in this version';
+  String get desktopChannelsLater => 'Needs the download engine';
 
   @override
   String get desktopChannelsLaterBody =>
-      'Following a channel needs a scheduler on this computer, and that comes in a later version. The clips you download stay in the library.';
+      'Following a channel needs yt-dlp on this computer. Set it up in Settings › Engine, and your channels show here.';
 
   @override
   String get desktopChapters => 'Chapters';
@@ -701,7 +680,7 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
-  String get desktopDesktopSection => 'Desktop';
+  String get desktopDesktopSection => 'Windows';
 
   @override
   String get desktopDiscover => 'Discover VidHoist';
@@ -742,7 +721,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopDiscoverDragOutLine =>
-      'Onto a folder or another app, as a file.';
+      'Drop it on a folder or another app, and it arrives there as a file.';
 
   @override
   String get desktopDiscoverExport => 'Export a transcript';
@@ -767,7 +746,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopDiscoverMiniLine =>
-      'A small card above every other window, by the clock.';
+      'A small card above every other window, in the bottom corner of the screen.';
 
   @override
   String get desktopDiscoverReading =>
@@ -813,14 +792,14 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopDownloadFolderHint =>
-      'Your own files: saved here, then the app leaves them alone.';
+      'Downloads are saved here as ordinary files, to open, move or back up like any other.';
 
   @override
   String get desktopDownloads => 'Downloads';
 
   @override
   String get desktopDownloadsEmpty =>
-      'Nothing is downloading. Add a link, or make a clip available offline.';
+      'Nothing is downloading. Add a link to start.';
 
   @override
   String get desktopDownloadsRunning => 'Under way';
@@ -844,7 +823,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopEngineDenoHint =>
-      'Solves YouTube\'s check, for every format it offers';
+      'Answers YouTube\'s check, so every quality it offers can be downloaded';
 
   @override
   String get desktopEngineFetch => 'Fetch';
@@ -1588,7 +1567,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get desktopWelcomeMessage =>
-      'Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp. Nothing goes through a server.';
+      'Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp.';
 
   @override
   String get desktopWelcomeStart => 'Start';
@@ -1643,7 +1622,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get disclaimerText =>
-      'This app downloads media with yt-dlp. The developer is not responsible for how users utilize this tool. Please respect copyright laws and terms of service of content platforms.';
+      'This app downloads media with yt-dlp. The developer is not responsible for how users utilize this tool. Please respect copyright laws and the terms of service of the sites you download from.';
 
   @override
   String get dismiss => 'Dismiss';
@@ -1707,13 +1686,10 @@ class VhLocalizationsEn extends VhLocalizations {
   String get emptyFilteredTitle => 'Nothing matches these filters';
 
   @override
-  String get emptyLibraryMessage => 'Add a video link, or pull to refresh.';
-
-  @override
   String get emptyPlaylist => 'Empty playlist';
 
   @override
-  String get emptyPlaylistMessage => 'Add videos from the library';
+  String get emptyPlaylistMessage => 'Add clips from the library';
 
   @override
   String engineDownloadingProgress(Object percent) {
@@ -1736,7 +1712,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get engineErrMissing =>
-      'The download engine is missing or incomplete. Set it up again from Settings';
+      'The download engine is missing or incomplete. Repair it in Settings with Repair the engine';
 
   @override
   String get engineErrRateLimited =>
@@ -1799,12 +1775,8 @@ class VhLocalizationsEn extends VhLocalizations {
   String get errNetwork => 'No connection to the site';
 
   @override
-  String get errPlatformBlocked =>
-      'The platform requires a login, which this clip cannot be downloaded without';
-
-  @override
   String get errPlatformBlockedCookies =>
-      'The platform requires login. Send it a cookies file from Settings → Cookies';
+      'The site requires a login. Choose a cookies file in Settings › Cookies';
 
   @override
   String errorGeneric(Object message) {
@@ -1858,9 +1830,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get file => 'File';
 
   @override
-  String get fileName => 'File name';
-
-  @override
   String get fileSize => 'File size';
 
   @override
@@ -1887,9 +1856,6 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get followChannel => 'Follow a channel';
-
-  @override
-  String get followingChannel => 'Following';
 
   @override
   String get format => 'Format';
@@ -2130,11 +2096,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get modeStopAtEnd => 'Stop at end';
 
   @override
-  String moreChips(int count) {
-    return 'More · $count';
-  }
-
-  @override
   String get navLibrary => 'Library';
 
   @override
@@ -2175,7 +2136,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get noDownloadsMessage =>
-      'Downloaded videos will appear here.\nShare a video link or use the Add URL button.';
+      'Downloaded clips will appear here.\nShare a link or use the Add link button.';
 
   @override
   String get noExternalPlayer => 'No external player on this device';
@@ -2193,7 +2154,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get noPlayableSource => 'This item has no playable source';
 
   @override
-  String get noPlaylistsMessage => 'Create a playlist to organize your videos';
+  String get noPlaylistsMessage => 'Create a playlist to organize your clips';
 
   @override
   String get noResults => 'No results';
@@ -2205,9 +2166,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get noServerTitle => 'The download engine is not ready';
 
   @override
-  String get noTagsYet => 'No tags yet. Create one below.';
-
-  @override
   String get noVideosFound => 'Your library is empty';
 
   @override
@@ -2215,7 +2173,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get notAffiliated =>
-      'Not affiliated with yt-dlp or with any content platform, and not endorsed by them.';
+      'Not affiliated with yt-dlp or with any site, and not endorsed by them.';
 
   @override
   String get nothingHereYet => 'Nothing here yet';
@@ -2253,9 +2211,6 @@ class VhLocalizationsEn extends VhLocalizations {
       'A folder inside the download folder, which Explorer and other apps see too. Only what arrives from now on goes there; what is already downloaded stays where it is.';
 
   @override
-  String get password => 'Password';
-
-  @override
   String get pasteUrlHint => 'Paste the link here…';
 
   @override
@@ -2272,7 +2227,7 @@ class VhLocalizationsEn extends VhLocalizations {
       'Type the address as the computer shows it, for example 192.168.1.24.';
 
   @override
-  String get pcBadQr => 'This is not a VidHoist pairing code.';
+  String get pcBadQr => 'This is not a VidHoist pairing QR code.';
 
   @override
   String get pcCertificate => 'Computer\'s certificate';
@@ -2452,7 +2407,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcLinkCodeHint =>
-      'On the phone: Settings › Computer › Scan the code. Or type this address and code there. It works once, for two minutes.';
+      'On the phone: Settings › Computer › Scan the QR code. Or type this address and code there. It works once, for two minutes.';
 
   @override
   String pcLinkCodeLeft(int seconds) {
@@ -2541,7 +2496,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcLinkSecurity =>
-      'Nothing passes through any server of ours: the phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer\'s certificate alone. Anyone else on the network finds a closed door.';
+      'The phone talks to this computer directly, on your network or over your Tailscale. It pairs once, with the code and your approval here; after that it presents its own key with every request, over a connection encrypted with this computer\'s certificate alone. Anyone else on the network finds a closed door.';
 
   @override
   String get pcLinkStarting => 'Starting…';
@@ -2600,10 +2555,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pcPairIntro =>
-      'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the code it shows.';
-
-  @override
-  String get pcPairStart => 'Pair with a computer';
+      'If VidHoist runs on your Windows computer, this phone can send it links and show its downloads and library. On the computer, turn on Settings › Phone and press Pair a phone, then scan the QR code it shows.';
 
   @override
   String pcPaired(String name) {
@@ -2650,14 +2602,14 @@ class VhLocalizationsEn extends VhLocalizations {
       'The computer\'s other routes show here once it answers.';
 
   @override
-  String get pcScanButton => 'Scan the code';
+  String get pcScanButton => 'Scan the QR code';
 
   @override
   String get pcScanFailed => 'The camera could not be opened.';
 
   @override
   String get pcScanPrompt =>
-      'Point the camera at the code on the computer\'s screen';
+      'Point the camera at the QR code on the computer\'s screen';
 
   @override
   String get pcSendToPc => 'Send to the computer';
@@ -2696,11 +2648,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get pcWillSend => 'Away: sent when it is back';
 
   @override
-  String percentValue(Object percent) {
-    return '$percent%';
-  }
-
-  @override
   String get pickAnotherFile => 'From another file…';
 
   @override
@@ -2712,13 +2659,13 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get pictureInPictureHelp =>
-      'When you leave the app while a video plays, it stays in a corner of the screen';
+      'When you leave the app while a clip plays, it stays in a corner of the screen';
 
   @override
   String get pinPlaylist => 'Pin to top';
 
   @override
-  String get platform => 'Platform';
+  String get platform => 'Site';
 
   @override
   String platformCount(Object name, int count) {
@@ -2777,9 +2724,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get playlists => 'Playlists';
 
   @override
-  String get preferences => 'Preferences';
-
-  @override
   String get previous => 'Previous';
 
   @override
@@ -2805,7 +2749,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get qualityHelper =>
-      'Used by quick download, by whole-playlist downloads, and by \"Download now\" in the clipboard bar, and it is the preselected option in the add-link sheet. So it matters whether or not quick download is on.';
+      'Used by quick download, by whole-playlist downloads, and by \"Download\" in the clipboard bar, and it is the preselected option in the add-link sheet. So it matters whether or not quick download is on.';
 
   @override
   String get qualityReading => 'Reading the file…';
@@ -2847,19 +2791,7 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get quickDownloadHelp =>
-      'A shared or pasted link starts downloading immediately at the default quality, with no sheet. Numeric qualities are YouTube-only: anything else downloads at best quality, and an \"audio only\" default applies everywhere.';
-
-  @override
-  String get quoteExtendHint => 'Touch another line to take it in';
-
-  @override
-  String get quoteMomentLink => 'Copy link to this moment';
-
-  @override
-  String get quotePlayFrom => 'Play from here';
-
-  @override
-  String get quoteTitle => 'Quote';
+      'A shared or pasted link starts downloading at once at the default quality, with no sheet. A site that lacks that quality gives its best, and \"Audio only\" works on every site.';
 
   @override
   String get rateLimit => 'Speed limit';
@@ -2871,45 +2803,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String rateLimitValue(int mb) {
     return '$mb MB/s';
   }
-
-  @override
-  String get readingAsMarkdownHint =>
-      'Each paragraph with its time, linked to its moment';
-
-  @override
-  String get readingAsPdfHint => 'To print or keep';
-
-  @override
-  String get readingAsSrtHint => 'Line by line with its times, for any player';
-
-  @override
-  String get readingAsText => 'Text to read';
-
-  @override
-  String get readingAsTextHint => 'Paragraphs without times, to paste anywhere';
-
-  @override
-  String get readingHint => 'Tap a sentence to hear it from there';
-
-  @override
-  String readingMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'About $count minutes to read',
-      one: 'About a minute to read',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get readingRead => 'Read';
-
-  @override
-  String get readingShare => 'Share the text';
-
-  @override
-  String get readingTextSize => 'Text size';
 
   @override
   String get reelsEndBack => 'Back to library';
@@ -2982,24 +2875,10 @@ class VhLocalizationsEn extends VhLocalizations {
   String get restoreSuccess => 'Data restored successfully';
 
   @override
-  String resultsFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count results',
-      one: '1 result',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get resumeSubscription => 'Resume';
 
   @override
   String get retry => 'Retry';
-
-  @override
-  String get retryAll => 'Retry all';
 
   @override
   String get saveSettings => 'Save settings';
@@ -3008,7 +2887,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get searchLogs => 'Search logs…';
 
   @override
-  String get searchVideos => 'Search videos...';
+  String get searchVideos => 'Search clips…';
 
   @override
   String get seekBackward10 => 'Back 10 seconds';
@@ -3051,9 +2930,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get settingsPlayback => 'Playback';
 
   @override
-  String get settingsSaved => 'Settings saved successfully';
-
-  @override
   String get settingsTranscripts => 'Transcripts & subtitles';
 
   @override
@@ -3078,21 +2954,12 @@ class VhLocalizationsEn extends VhLocalizations {
   String get settingsValueNotSet => 'Not set up yet';
 
   @override
-  String get settingsValueOff => 'Off';
-
-  @override
-  String get settingsValueOn => 'On';
-
-  @override
   String get settingsValueQuick => 'quick';
 
   @override
   String settingsValueSignedIn(String sites) {
     return 'Signed in: $sites';
   }
-
-  @override
-  String get settingsValueSubtitlesShown => 'subtitles shown';
 
   @override
   String get settingsValueWifiOnly => 'Wi‑Fi only';
@@ -3139,11 +3006,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get shortsFilter => 'Shorts';
 
   @override
-  String showChannel(String channel) {
-    return 'Everything from $channel';
-  }
-
-  @override
   String get shuffle => 'Shuffle';
 
   @override
@@ -3156,10 +3018,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get smartPlaylists => 'Smart playlists';
 
   @override
-  String get sortAndFilter => 'Sort and filter';
-
-  @override
-  String get sortAndPlatform => 'Sort and platform';
+  String get sortAndPlatform => 'Sort and site';
 
   @override
   String get sortBy => 'Sort by';
@@ -3215,7 +3074,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get storagePhone => 'Phone storage';
 
   @override
-  String get streamingOnline => 'Streaming online';
+  String get streamingOnline => 'Playing over the network';
 
   @override
   String subscriptionAdded(String name) {
@@ -3239,7 +3098,7 @@ class VhLocalizationsEn extends VhLocalizations {
   String get subscriptionQualityNote => 'Can\'t be changed after following.';
 
   @override
-  String get subscriptions => 'Subscriptions';
+  String get subscriptions => 'Channels';
 
   @override
   String get subscriptionsEmpty => 'No channels followed yet';
@@ -3282,13 +3141,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get subtitlesHide => 'Hide subtitles';
 
   @override
-  String get subtitlesInShorts => 'Subtitles in shorts';
-
-  @override
-  String get subtitlesInShortsHelp =>
-      'Off unless you turn it on: many shorts already carry their words in the picture.';
-
-  @override
   String get subtitlesLanguage => 'Subtitle language';
 
   @override
@@ -3309,13 +3161,6 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get subtitlesSizeSmall => 'Small';
-
-  @override
-  String get tagActionsHint => 'Long-press a tag to rename or delete it.';
-
-  @override
-  String get tagFilterHint =>
-      'Tap a tag to show its clips, again to hide them, and once more to let it go.';
 
   @override
   String tagLimitReached(int max) {
@@ -3366,47 +3211,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get transcript => 'Transcript';
 
   @override
-  String get transcriptFind => 'Search the transcript';
-
-  @override
-  String get transcriptFull => 'Full transcript';
-
-  @override
-  String transcriptMatches(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count matches',
-      one: '1 match',
-      zero: 'No matches',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get transcriptNextMatch => 'Next match';
-
-  @override
-  String get transcriptPeekHint => 'Tap for the whole text';
-
-  @override
-  String get transcriptPreviousMatch => 'Previous match';
-
-  @override
-  String transcriptSaidMore(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Said $count more times',
-      one: 'Said once more',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get transcriptSwitchLanguage => 'Switch the transcript language';
-
-  @override
   String transcriptsClips(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3422,65 +3226,11 @@ class VhLocalizationsEn extends VhLocalizations {
   String get transcriptsDeleteAll => 'Delete all';
 
   @override
-  String get transcriptsDeleteBody =>
-      'They are removed from this phone. Only a file you exported can bring them back.';
-
-  @override
   String get transcriptsDeleteTitle => 'Delete every transcript?';
-
-  @override
-  String transcriptsDisableBody(String size) {
-    return 'The saved transcripts ($size) stay on this phone unless you delete them.';
-  }
-
-  @override
-  String get transcriptsDisableTitle => 'Stop searching inside clips?';
-
-  @override
-  String get transcriptsEnable => 'Turn on';
-
-  @override
-  String get transcriptsEnableBody =>
-      'Before each YouTube clip you add is downloaded, the app fetches its words from your server, in the app\'s language and in English (up to 40 seconds), and keeps them on this phone only. Clips already in your library are included only if your server saved their subtitles beside them (the setup guide shows how). You can turn this off at any time.';
-
-  @override
-  String transcriptsExported(Object path) {
-    return 'Transcripts saved to: $path';
-  }
-
-  @override
-  String get transcriptsHelp =>
-      'The app keeps the words said in each YouTube clip you add, so a library search also finds what was said inside your clips, not only their titles.\n\nThe words are fetched from your server just before the download and kept on this phone; the full backup does not include them. To move them to another phone, use Export here and Import there. An import adds to what is already here and deletes nothing.\n\nA server set to write subtitles beside each clip (one line in its configuration; the setup guide shows it) covers everything it downloads from then on, subscriptions and other sites included: the app reads those files on its own, in the app\'s language and in English.';
-
-  @override
-  String get transcriptsImportInvalid => 'This file holds no transcripts.';
-
-  @override
-  String transcriptsImported(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Imported $count transcripts',
-      one: 'Imported 1 transcript',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get transcriptsKeep => 'Stop and keep';
-
-  @override
-  String get transcriptsSaidInside => 'Said inside clips';
-
-  @override
-  String get transcriptsSearch => 'Search inside clips';
 
   @override
   String get transcriptsSearchHelp =>
       'Keeps the words of every YouTube clip you add, so you can search what was said.';
-
-  @override
-  String get transcriptsStopAndDelete => 'Stop and delete';
 
   @override
   String get tryAgain => 'Try again';
@@ -3590,9 +3340,6 @@ class VhLocalizationsEn extends VhLocalizations {
   String get updates => 'Updates';
 
   @override
-  String get username => 'Username';
-
-  @override
   String get version => 'Version';
 
   @override
@@ -3646,15 +3393,6 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get wifiOnlyHelp =>
       'Nothing downloads over mobile data. Downloads wait for Wi-Fi, and one under way when Wi-Fi drops is paused and goes on by itself when it returns.';
-
-  @override
-  String get yourChannels => 'Your channels';
-
-  @override
-  String get yourChannelsHint => 'Followed in Settings or the player';
-
-  @override
-  String get yourLibrary => 'Your library';
 
   @override
   String get yourPlaylists => 'Your playlists';

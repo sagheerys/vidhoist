@@ -1,22 +1,20 @@
 # VidHoist
 
 **Download video and audio from the web, straight to your device, with yt-dlp
-inside the app.** No server to run, no account, no ads. Android and Windows,
-Arabic and English, day and night.
+inside the app.** No sign-up, no ads, no tracking: what you download stays
+between you and the site. Android and Windows, Arabic and English, day and
+night.
 
 > **Status: 1.0.0, a beta.** VidHoist is a fork of
 > [vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) by the same
-> author. The interface, the local library, the players, transcripts, backups
-> and self-update come from there; the downloads now run on the device with
-> yt-dlp, and nothing needs a server. How the engine runs on each platform is
-> in [docs/ENGINE.md](docs/ENGINE.md); why and how the server went, in
-> [docs/blueprint/REPORT.md](docs/blueprint/REPORT.md) (Arabic).
+> author, and has gone its own way since. How the engine runs on each
+> platform is in [docs/ENGINE.md](docs/ENGINE.md).
 
 | | VidHoist for Android | VidHoist for Windows |
 |---|---|---|
 | Folder | `apps/vidhoist_mobile` | `apps/vidhoist_desktop` |
 | Engine | yt-dlp and ffmpeg inside the app (`youtubedl-android`) | `yt-dlp.exe` beside the app; ffmpeg fetched on first need |
-| Library | the download folder, scanned locally | a local library with tags, lists and transcripts |
+| Library | the download folder, with playlists, tags and transcripts | a local library with tags, lists and transcripts |
 | Install | APK from Releases, self-updating | Inno Setup installer, self-updating |
 
 <p>
@@ -25,13 +23,6 @@ Arabic and English, day and night.
   <img src="docs/screenshots/android-subtitles-ar.png" width="200" alt="Subtitle size and background, in Arabic">
   <img src="docs/screenshots/android-transcript-ar-dark.png" width="200" alt="The transcript at night, in Arabic">
 </p>
-
-## Why a fork
-
-Its parent needed a self-hosted server to download anything. Many people want
-the same app without running anything: paste a link, pick a quality, keep the
-file. VidHoist is that app: yt-dlp runs on the phone or the computer itself,
-and VidHoist has gone its own way since.
 
 ## Building
 
@@ -45,7 +36,8 @@ cd apps/vidhoist_mobile  && flutter build apk --debug
 cd apps/vidhoist_desktop && flutter build windows --debug
 ```
 
-Tests: `dart test` in `packages/vh_core` and `packages/vh_transcripts`;
+Tests: `dart test` in `packages/vh_core`, `packages/vh_transcripts` and
+`packages/vh_ytdlp`;
 `flutter test --no-pub` in `packages/vh_media`, `packages/vh_ui`,
 `apps/vidhoist_mobile` and `apps/vidhoist_desktop`.
 
@@ -62,17 +54,15 @@ packages/vh_core         pure Dart: models, storage, download engine, backup, up
 packages/vh_media        players, mini player, media session
 packages/vh_ui           the design system, tokens, icons, EN/AR strings
 packages/vh_transcripts  subtitles and transcript search
-third_party/             two patched plugins, see PATCHES.md in each
+packages/vh_ytdlp        pure Dart: yt-dlp commands and reading its output
+third_party/             three patched plugins, see PATCHES.md in each
 docs/                    architecture, blueprint, decisions (docs/adr)
 ```
 
-The package prefix `mt_` is kept from the parent project so fixes can still be
-carried across; the apps and everything a user sees say VidHoist.
-
 ## Licence
 
-GPL-3.0, like the project it comes from. Copyright © 2025–2026 Yasir Sagheer.
-VidHoist is not affiliated with yt-dlp or with any content platform. Respect
+GPL-3.0, like the project it comes from. Copyright © 2026 Yasir Sagheer.
+VidHoist is not affiliated with yt-dlp or with any site. Respect
 copyright and the terms of the sites you download from.
 
 ---
@@ -81,11 +71,10 @@ copyright and the terms of the sites you download from.
 
 ## بالعربية
 
-**VidHoist** يحمّل الفيديو والصوت من الإنترنت إلى جهازك مباشرة بمحرّك yt-dlp
-داخل التطبيق: بلا سيرفر، بلا حساب، بلا إعلانات. لأندرويد وويندوز، بالعربية
+**VidHoist** ينزّل الفيديو والصوت من الإنترنت إلى جهازك مباشرة بمحرّك yt-dlp
+داخل التطبيق: بلا تسجيل، بلا إعلانات، بلا تتبّع. لأندرويد وويندوز، بالعربية
 والإنجليزية. المشروع نسخة مشتقّة من
 [vidhoist-mobile](https://github.com/sagheerys/vidhoist-mobile) للمؤلّف نفسه، وهذا
-إصداره الأول 1.0.0 (تجريبي): الواجهة والمكتبة والمشغّلات تعمل، والتنزيل يجري
-على الجهاز بـyt-dlp بلا سيرفر. التفاصيل في [README.ar.md](README.ar.md).
+إصداره الأول 1.0.0 (تجريبي). التفاصيل في [README.ar.md](README.ar.md).
 
 </div>

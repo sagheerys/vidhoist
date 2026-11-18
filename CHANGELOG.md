@@ -299,6 +299,13 @@ All notable changes to VidHoist. The format follows
   the phone app has; the filter never matched the Windows app before.
 
 ### Changed
+- The wording, read through in both languages: no string speaks of a server
+  any more; one word for each thing in Arabic (تنزيل throughout, الكمبيوتر,
+  الجوال, رمز QR, تصفية, المواقع); quick download says a height applies on
+  every site, as it does; and 68 strings nothing showed any more are gone.
+- The phone's playback notification speaks the phone's language: its
+  buttons as TalkBack reads them, and its kind in Android's settings
+  ("Playback" rather than "VidHoist").
 - A new mark: a strip of film folded into the letter V, its front arm
   carrying four perforations, the back arm in the accent, with a clear gap
   along the fold. It replaces the window with the download arrow on the

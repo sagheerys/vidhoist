@@ -9,7 +9,7 @@
     <string name="shortcut_paste_short">Paste link</string>
     <string name="shortcut_paste_long">Paste a link and download</string>
     <string name="shortcut_shorts_short">Shorts</string>
-    <string name="shortcut_shorts_long">Open shorts</string>
+    <string name="shortcut_shorts_long">Open Shorts</string>
     <string name="shortcut_audio_short">Audio</string>
     <string name="shortcut_audio_long">Open audio library</string>
     <!-- The download engine's foreground notification, in Android's list of

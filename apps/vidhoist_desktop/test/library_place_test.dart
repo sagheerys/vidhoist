@@ -112,7 +112,7 @@ void main() {
         kind: PointerDeviceKind.mouse,
       );
       await tester.pumpAndSettle();
-      final delete = find.text('Delete video');
+      final delete = find.text('Delete clip');
       expect(delete, findsOneWidget);
       final menu = tester.getRect(
         find

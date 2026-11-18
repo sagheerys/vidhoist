@@ -28,11 +28,12 @@ cd packages/vh_core  && dart test
 cd packages/vh_media && flutter test --no-pub
 cd packages/vh_ui    && flutter test --no-pub
 cd packages/vh_transcripts && dart test
+cd packages/vh_ytdlp && dart test
 cd apps/vidhoist_mobile  && flutter test --no-pub
 cd apps/vidhoist_desktop && flutter test --no-pub
 ```
 
-All six suites must be green, and the total must not go **down**. A test that
+All seven suites must be green, and the total must not go **down**. A test that
 starts failing means either the code is wrong or a contract changed on purpose —
 the second case needs saying so in the pull request, not deleting the test.
 

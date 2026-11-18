@@ -1,3 +1,5 @@
+import 'dart:ui' show PlatformDispatcher;
+
 import 'package:audio_service/audio_service.dart';
 
 import '../models/play_mode.dart';
@@ -9,22 +11,94 @@ import 'media_player_port.dart';
 
 /// The notification and lock-screen buttons. The order is the display
 /// order, and `androidCompactActionIndices` points at the first three.
-List<MediaControl> vhMediaControls({required bool playing}) => [
-  MediaControl.skipToPrevious,
-  if (playing) MediaControl.pause else MediaControl.play,
-  MediaControl.skipToNext,
-  vhCloseControl,
+List<MediaControl> vhMediaControls({
+  required bool playing,
+  VhMediaLabels labels = VhMediaLabels.en,
+}) => [
+  MediaControl(
+    androidIcon: 'drawable/audio_service_skip_previous',
+    label: labels.previous,
+    action: MediaAction.skipToPrevious,
+  ),
+  if (playing)
+    MediaControl(
+      androidIcon: 'drawable/audio_service_pause',
+      label: labels.pause,
+      action: MediaAction.pause,
+    )
+  else
+    MediaControl(
+      androidIcon: 'drawable/audio_service_play_arrow',
+      label: labels.play,
+      action: MediaAction.play,
+    ),
+  MediaControl(
+    androidIcon: 'drawable/audio_service_skip_next',
+    label: labels.next,
+    action: MediaAction.skipToNext,
+  ),
+  vhCloseControl(labels),
 ];
 
 /// **Stop, drawn as a close mark** (design review 2026-09-25): the square
 /// stop icon looked out of place among music players, while the button
 /// itself is needed, because a paused session keeps its notification. Same
 /// action, another icon; the drawable ships in each app's resources.
-const MediaControl vhCloseControl = MediaControl(
-  androidIcon: 'drawable/$vhCloseIcon',
-  label: 'Close',
-  action: MediaAction.stop,
-);
+MediaControl vhCloseControl([VhMediaLabels labels = VhMediaLabels.en]) =>
+    MediaControl(
+      androidIcon: 'drawable/$vhCloseIcon',
+      label: labels.close,
+      action: MediaAction.stop,
+    );
+
+/// What TalkBack reads for each notification button. audio_service names
+/// them in English only, so an Arabic phone heard "Previous" and "Close"
+/// (found 2026-11-18). They follow the phone's language, as the
+/// notification itself does, since the handler has no app context.
+class VhMediaLabels {
+  const VhMediaLabels({
+    required this.previous,
+    required this.play,
+    required this.pause,
+    required this.next,
+    required this.close,
+    required this.channel,
+  });
+
+  final String previous;
+  final String play;
+  final String pause;
+  final String next;
+  final String close;
+
+  /// The playback notification's kind in Android's settings, beside
+  /// "Downloads in progress"; it used to read "VidHoist".
+  final String channel;
+
+  static const en = VhMediaLabels(
+    previous: 'Previous',
+    play: 'Play',
+    pause: 'Pause',
+    next: 'Next',
+    close: 'Close',
+    channel: 'Playback',
+  );
+
+  static const ar = VhMediaLabels(
+    previous: 'السابق',
+    play: 'تشغيل',
+    pause: 'إيقاف مؤقت',
+    next: 'التالي',
+    close: 'إغلاق',
+    channel: 'التشغيل',
+  );
+
+  static VhMediaLabels forLanguage(String code) => code == 'ar' ? ar : en;
+
+  /// The phone's own language.
+  static VhMediaLabels system() =>
+      forLanguage(PlatformDispatcher.instance.locale.languageCode);
+}
 
 /// The resource name both apps must ship under `res/drawable`.
 const String vhCloseIcon = 'ic_mt_close';
