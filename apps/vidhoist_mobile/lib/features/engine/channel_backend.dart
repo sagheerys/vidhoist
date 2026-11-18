@@ -169,7 +169,11 @@ class ChannelYtDlpBackend implements DownloadBackend {
       }
     }
 
-    await for (final event in readDownloadRun(lines.stream, execute())) {
+    await for (final event in readDownloadRun(
+      lines.stream,
+      execute(),
+      clip: run.clip?.length,
+    )) {
       if (event is BackendFinished || event is BackendFailed) {
         if (stopped) return;
         if (broken case final error?) {

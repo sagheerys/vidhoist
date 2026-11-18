@@ -19,6 +19,7 @@ void main() {
         YtDlpErrorKind.formatUnavailable: l.engineErrFormat,
         YtDlpErrorKind.diskFull: l.engineErrDiskFull,
         YtDlpErrorKind.engineMissing: l.engineErrMissing,
+        YtDlpErrorKind.clipPastEnd: l.errClipPastEndUnknown,
       };
       for (final MapEntry(key: kind, value: text) in expected.entries) {
         test(kind.name, () {
@@ -35,6 +36,26 @@ void main() {
           ),
         );
         expect(text, l.engineErrFailed(vhName('Something new')));
+      });
+
+      // A stretch asked past a video's end used to reach yt-dlp, which
+      // said only "Invalid argument".
+      test('**the guard**: a stretch past the end names the length', () {
+        final text = errorText(
+          l,
+          ClipPastEndException(const Duration(minutes: 16, seconds: 52)),
+        );
+        expect(text, l.errClipPastEnd('16:52'));
+      });
+
+      // Seen 2026-11-18 on Instagram, which gives no length: the stretch
+      // is found past the end only after the run.
+      test('a stretch past the end of a video of no known length says so '
+          'without a time', () {
+        expect(
+          errorText(l, ClipPastEndException(null)),
+          l.errClipPastEndUnknown,
+        );
       });
 
       test('the sentences differ from one another', () {

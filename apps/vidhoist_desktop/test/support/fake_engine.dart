@@ -88,6 +88,20 @@ class FakeEngine extends Fake implements LocalDownloadEngine {
   @override
   Future<int> restorePending() async => 0;
 
+  /// What yt-dlp reads of a video's length; null, as for a live stream.
+  Duration? length;
+
+  /// Every link whose length was asked; while [reading] is set, the
+  /// answer waits on it.
+  final lengthsAsked = <String>[];
+  Completer<Duration?>? reading;
+
+  @override
+  Future<Duration?> lengthOf(String url) async {
+    lengthsAsked.add(url);
+    return reading?.future ?? length;
+  }
+
   @override
   Stream<DownloadTask> get updates => _updates.stream;
 

@@ -235,7 +235,14 @@ abstract final class CommandBuilder {
     ],
     if (spec.rateLimit case final rate?) ...['-r', rate],
     if (spec.concurrentFragments case final n? when n > 1) ...['-N', '$n'],
-    if (spec.clip case final clip?) ...['--download-sections', clip.section],
+    if (spec.clip case final clip?) ...[
+      '--download-sections',
+      clip.section,
+      // ffmpeg fetches a stretch and yt-dlp reports nothing until it is
+      // done; ffmpeg's own progress on stdout moves the bar instead.
+      '--downloader-args',
+      'ffmpeg:-progress pipe:1',
+    ],
     if (spec.playlistItems case final items?) ...[
       '--yes-playlist',
       '--playlist-items',

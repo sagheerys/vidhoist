@@ -151,6 +151,24 @@ void main() {
       expect(part.indexOf('--download-sections'), lessThan(part.indexOf('--')));
     });
 
+    // Seen 2026-11-17: a stretch's bar stood still, then the file was done.
+    test('**the guard**: a stretch asks ffmpeg for its progress on stdout, '
+        'a whole video does not', () {
+      final part = CommandBuilder.download(
+        DownloadSpec(
+          url: 'u',
+          folder: 'f',
+          clip: ClipRange.tryParse('2:00', '5:30'),
+        ),
+        android,
+      );
+      expect(valueOf(part, '--downloader-args'), 'ffmpeg:-progress pipe:1');
+      expect(
+        CommandBuilder.download(link, android),
+        isNot(contains('--downloader-args')),
+      );
+    });
+
     test('subtitles go inside the file only when asked, and only with '
         'subtitles to put there', () {
       final embedded = CommandBuilder.download(

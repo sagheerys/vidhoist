@@ -357,6 +357,18 @@ class VhLocalizationsEn extends VhLocalizations {
   String get clipFrom => 'From';
 
   @override
+  String clipLength(Object length) {
+    return 'The video is $length long';
+  }
+
+  @override
+  String get clipLengthReading => 'Reading the video\'s length…';
+
+  @override
+  String get clipLengthUnknown =>
+      'The site does not say how long the video is, so the times are not checked';
+
+  @override
   String get clipMinuteDown => 'A minute earlier';
 
   @override
@@ -368,6 +380,11 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get clipOnlyHelp =>
       'From one time to another, without the rest. It comes without subtitles.';
+
+  @override
+  String clipPastEnd(Object length) {
+    return 'The video ends at $length';
+  }
 
   @override
   String get clipTimeHint => 'Digits alone: 130 is 1:30';
@@ -1769,6 +1786,14 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get enterFullscreen => 'Fullscreen';
+
+  @override
+  String errClipPastEnd(Object length) {
+    return 'The part starts after the video ends ($length)';
+  }
+
+  @override
+  String get errClipPastEndUnknown => 'The part starts after the video ends';
 
   @override
   String get errNetwork => 'No connection to the site';

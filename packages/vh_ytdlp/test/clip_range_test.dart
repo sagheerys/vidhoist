@@ -48,4 +48,30 @@ void main() {
     expect(ClipRange.fromWire('9-3'), isNull);
     expect(ClipRange.fromWire('junk'), isNull);
   });
+
+  // Seen: 10:00 to 20:00 asked of a 16:52 video; past its end, yt-dlp
+  // fails with only ffmpeg's "Invalid argument".
+  test('**the guard**: a stretch is fitted inside the video length', () {
+    const length = Duration(minutes: 16, seconds: 52);
+    const inside = ClipRange(Duration(minutes: 10), Duration(minutes: 15));
+    expect(inside.within(length), same(inside));
+    expect(
+      const ClipRange(
+        Duration(minutes: 10),
+        Duration(minutes: 20),
+      ).within(length),
+      const ClipRange(Duration(minutes: 10), length),
+    );
+    expect(
+      const ClipRange(
+        Duration(minutes: 17),
+        Duration(minutes: 20),
+      ).within(length),
+      isNull,
+    );
+    expect(
+      const ClipRange(length, Duration(minutes: 20)).within(length),
+      isNull,
+    );
+  });
 }

@@ -14,6 +14,7 @@ import '../../shell/shell_metrics.dart';
 import '../library/platform_label.dart';
 import 'add_options.dart';
 import 'batch_dialog.dart';
+import 'clip_length.dart';
 import 'link_lines.dart';
 import 'link_preview_card.dart';
 import 'links_view.dart';
@@ -47,13 +48,28 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
   final _clipFrom = TextEditingController();
   final _clipTo = TextEditingController();
 
+  /// The one link whose length is read, once the field stopped changing:
+  /// typed letter by letter, it starts no probe per letter.
+  String? _settled;
+  Timer? _settle;
+
+  /// Start was pressed while the length was still read.
+  var _waiting = false;
+
   /// The links sent, each with its task, so its line follows it.
   Map<String, String> _tasks = const {};
 
   bool get _sent => _tasks.isNotEmpty;
 
   @override
+  void initState() {
+    super.initState();
+    _settled = _read().lines.singleOrNull?.url;
+  }
+
+  @override
   void dispose() {
+    _settle?.cancel();
     _field.dispose();
     _clipFrom.dispose();
     _clipTo.dispose();
@@ -89,7 +105,9 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
     final l = context.vhl;
     final engine = ref.read(downloadEngineProvider);
     if (engine == null) return _notice(l.engineErrMissing);
-    final clip = _clipOn ? ClipFields.read(_clipFrom, _clipTo) : null;
+    if (_waiting) return;
+    final clip = _clipOn ? await _readClip(engine, url) : null;
+    if (!mounted) return;
     // Times that do not read keep the dialog open, saying why.
     if (_clipOn && clip == null) return setState(() => _clipErrors = true);
     final navigator = Navigator.of(context);
@@ -109,6 +127,31 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
     _notice(l.downloadStarted, kind: VhNoticeKind.done);
   }
 
+  /// The stretch typed, checked against the length: Start pressed while
+  /// it is still read waits for it, a probe the download then starts from.
+  /// Past [lengthWait] the times go unchecked, and the download cuts the
+  /// end itself ([DownloadTask.withProbe]).
+  Future<ClipRange?> _readClip(LocalDownloadEngine engine, String url) async {
+    _settle?.cancel();
+    setState(() {
+      _settled = url;
+      _waiting = true;
+    });
+    final length = await engine
+        .lengthOf(url)
+        .timeout(lengthWait, onTimeout: () => null);
+    if (mounted) setState(() => _waiting = false);
+    return ClipFields.read(_clipFrom, _clipTo, length: length);
+  }
+
+  void _changed() {
+    setState(() => _tasks = const {});
+    _settle?.cancel();
+    _settle = Timer(settleTime, () {
+      if (mounted) setState(() => _settled = _read().lines.singleOrNull?.url);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = context.vhl;
@@ -120,6 +163,13 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
     final heights =
         lines.isNotEmpty && lines.every((line) => !line.platform.isAudioOnly);
     final canSubmit = many ? read.ready.isNotEmpty && !_sent : url != null;
+    final length =
+        url != null &&
+            (url == _settled || _clipOn) &&
+            single?.state != LinkState.playlist &&
+            readsLength(url, _clipOn)
+        ? ref.watch(clipLengthProvider(url))
+        : null;
 
     return AlertDialog(
       title: Text(l.addUrl),
@@ -141,7 +191,7 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
                   maxLines: many ? 4 : 2,
                   keyboardType: TextInputType.url,
                   textDirection: TextDirection.ltr,
-                  onChanged: (_) => setState(() => _tasks = const {}),
+                  onChanged: (_) => _changed(),
                   decoration: InputDecoration(
                     hintText: l.pasteUrlHint,
                     hintTextDirection: TextDirection.ltr,
@@ -202,6 +252,10 @@ class _AddDialogState extends ConsumerState<_AddDialog> {
                   to: _clipTo,
                   showErrors: _clipErrors,
                   checkbox: true,
+                  length: length?.valueOrNull,
+                  readingLength: length?.isLoading ?? false,
+                  lengthUnknown:
+                      length is AsyncData<Duration?> && length.value == null,
                 ),
             ],
           ),

@@ -143,6 +143,7 @@ class DownloadTask {
     double? Function()? speed,
     int? Function()? eta,
     VhApiException? error,
+    ClipRange? clip,
   }) => DownloadTask(
     id: id,
     inputUrl: inputUrl,
@@ -159,7 +160,7 @@ class DownloadTask {
     error: error ?? this.error,
     isBatchMember: isBatchMember,
     folder: folder,
-    clip: clip,
+    clip: clip ?? this.clip,
     createdAt: createdAt,
   );
 }
@@ -177,14 +178,24 @@ extension DownloadTaskProbe on DownloadTask {
   /// link marked with its range as its key ([ClipRange.tagUrl]) and its
   /// range after the title, so the library holds it beside the whole
   /// video, never in its place.
+  ///
+  /// The stretch is fitted inside the length read ([ClipRange.within]):
+  /// its end brought back to it, or [ClipPastEndException] when it starts
+  /// at the end or past it. The add screen stops both once it knows the
+  /// length; this catches a stretch asked before it did.
   DownloadTask withProbe(InfoJson info) {
-    final clip = this.clip;
+    final length = info.duration;
+    final asked = this.clip;
+    final clip = asked == null || length == null
+        ? asked
+        : asked.within(length) ?? (throw ClipPastEndException(length));
     final url = info.webpageUrl;
     final title = info.title;
     return copyWith(
       title: clip == null || title == null ? title : '$title · ${clip.label}',
       thumbnail: info.thumbnail,
       canonicalUrl: clip == null || url == null ? url : clip.tagUrl(url),
+      clip: clip,
     );
   }
 }

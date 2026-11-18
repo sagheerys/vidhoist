@@ -518,6 +518,76 @@ void main() {
       expect(urls, unorderedEquals([yt, '$yt#t=120,330']));
     });
 
+    FakeBackend lasting(int seconds) => FakeBackend(
+      scripts: {
+        yt: FakeScript(
+          info: {
+            'id': 'v',
+            'title': 'T',
+            'webpage_url': yt,
+            'duration': seconds,
+          },
+        ),
+      },
+    );
+
+    // Seen: 10:00 to 20:00 asked of a 16:52 video. Past its end yt-dlp
+    // fails with only ffmpeg's "Invalid argument".
+    test('**the guard**: an end past the video is brought back to its '
+        'length, and a start past it is refused before yt-dlp', () async {
+      final h = Harness(backend: lasting(1012));
+      final long = ClipRange.tryParse('10:00', '20:00');
+      final cut = h.engine.submit(yt, Quality.best, clip: long);
+      final done = await h.until(cut.id, TaskPhase.completed);
+      expect(h.backend.requests.single.clip?.wire, '600-1012');
+      expect(done.canonicalUrl, '$yt#t=600,1012');
+
+      final past = h.engine.submit(
+        yt,
+        Quality.best,
+        clip: ClipRange.tryParse('17:00', '20:00'),
+      );
+      final failed = await h.until(past.id, TaskPhase.failed);
+      expect(
+        failed.error,
+        isA<ClipPastEndException>().having(
+          (e) => e.length,
+          'length',
+          const Duration(seconds: 1012),
+        ),
+      );
+      expect(h.backend.requests, hasLength(1));
+    });
+
+    test('**the guard**: the length read for the add screen is the probe '
+        'its download starts from', () async {
+      final h = Harness(backend: lasting(1012));
+      expect(await h.engine.lengthOf(yt), const Duration(seconds: 1012));
+      expect(await h.engine.lengthOf(yt), const Duration(seconds: 1012));
+      final task = h.engine.submit(yt, Quality.best, clip: clip);
+      await h.until(task.id, TaskPhase.completed);
+      expect(h.backend.probes, [yt]);
+      // Taken once: the next download of the link reads it afresh.
+      final again = h.engine.submit(yt, Quality.best);
+      await h.until(again.id, TaskPhase.completed);
+      expect(h.backend.probes, [yt, yt]);
+    });
+
+    test('a length that cannot be read is null, and not kept', () async {
+      final h = Harness(
+        backend: FakeBackend(
+          scripts: {
+            yt: const FakeScript(
+              probeError: YtDlpError(YtDlpErrorKind.network, 'offline'),
+            ),
+          },
+        ),
+      );
+      expect(await h.engine.lengthOf(yt), isNull);
+      expect(await h.engine.lengthOf(yt), isNull);
+      expect(h.backend.probes, [yt, yt]);
+    });
+
     test('it survives the app being closed before it starts', () async {
       final store = MemoryKeyValueStore();
       await LocalPendingStore(store).put(

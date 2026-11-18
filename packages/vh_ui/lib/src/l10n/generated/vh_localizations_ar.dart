@@ -383,6 +383,18 @@ class VhLocalizationsAr extends VhLocalizations {
   String get clipFrom => 'من';
 
   @override
+  String clipLength(Object length) {
+    return 'طول المقطع $length';
+  }
+
+  @override
+  String get clipLengthReading => 'يُقرأ طول المقطع…';
+
+  @override
+  String get clipLengthUnknown =>
+      'الموقع لا يذكر طول المقطع، فلن تُقارَن الأوقات به';
+
+  @override
   String get clipMinuteDown => 'دقيقة أقل';
 
   @override
@@ -394,6 +406,11 @@ class VhLocalizationsAr extends VhLocalizations {
   @override
   String get clipOnlyHelp =>
       'من وقت إلى آخر، بلا بقية المقطع. ويأتي بلا ترجمة.';
+
+  @override
+  String clipPastEnd(Object length) {
+    return 'ينتهي المقطع عند $length';
+  }
 
   @override
   String get clipTimeHint => 'بالأرقام وحدها: 130 تعني 1:30';
@@ -1800,6 +1817,14 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get enterFullscreen => 'ملء الشاشة';
+
+  @override
+  String errClipPastEnd(Object length) {
+    return 'يبدأ الجزء بعد نهاية المقطع ($length)';
+  }
+
+  @override
+  String get errClipPastEndUnknown => 'يبدأ الجزء بعد نهاية المقطع';
 
   @override
   String get errNetwork => 'تعذّر الاتصال بالموقع';

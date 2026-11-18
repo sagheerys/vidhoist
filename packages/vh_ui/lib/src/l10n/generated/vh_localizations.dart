@@ -674,6 +674,24 @@ abstract class VhLocalizations {
   /// **'From'**
   String get clipFrom;
 
+  /// No description provided for @clipLength.
+  ///
+  /// In en, this message translates to:
+  /// **'The video is {length} long'**
+  String clipLength(Object length);
+
+  /// No description provided for @clipLengthReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading the video\'s length…'**
+  String get clipLengthReading;
+
+  /// No description provided for @clipLengthUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'The site does not say how long the video is, so the times are not checked'**
+  String get clipLengthUnknown;
+
   /// No description provided for @clipMinuteDown.
   ///
   /// In en, this message translates to:
@@ -697,6 +715,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'From one time to another, without the rest. It comes without subtitles.'**
   String get clipOnlyHelp;
+
+  /// No description provided for @clipPastEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'The video ends at {length}'**
+  String clipPastEnd(Object length);
 
   /// No description provided for @clipTimeHint.
   ///
@@ -3055,6 +3079,18 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Fullscreen'**
   String get enterFullscreen;
+
+  /// No description provided for @errClipPastEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'The part starts after the video ends ({length})'**
+  String errClipPastEnd(Object length);
+
+  /// No description provided for @errClipPastEndUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'The part starts after the video ends'**
+  String get errClipPastEndUnknown;
 
   /// No description provided for @errNetwork.
   ///

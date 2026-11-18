@@ -8,6 +8,7 @@
 library;
 
 export 'src/channel_feed.dart';
+export 'src/clip_progress.dart';
 export 'src/clip_range.dart';
 export 'src/command_builder.dart';
 export 'src/engine_version.dart';

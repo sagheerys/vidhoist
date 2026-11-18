@@ -19,6 +19,18 @@ class ClipRange {
     return ClipRange(start, end);
   }
 
+  /// This stretch inside a video [length] long: the end brought back to
+  /// the length, or null when it starts at the end or past it. yt-dlp
+  /// handed a stretch past the end fails with only "Invalid argument"
+  /// from ffmpeg.
+  ClipRange? within(Duration length) {
+    if (start >= length) return null;
+    return end <= length ? this : ClipRange(start, length);
+  }
+
+  /// How long the stretch plays.
+  Duration get length => end - start;
+
   /// `ss`, `m:ss` or `h:mm:ss`; past the first part, each part under 60.
   static Duration? parseTime(String text) {
     final parts = westernDigits(text.trim()).split(':');

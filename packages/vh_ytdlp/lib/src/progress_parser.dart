@@ -27,7 +27,7 @@ sealed class YtDlpLine {
     if (_after(line, CommandBuilder.progressTag) case final rest?) {
       return ProgressLine.tryParse(rest) ?? OtherLine(line);
     }
-    return OtherLine(line);
+    return FfmpegLine.tryParse(line) ?? OtherLine(line);
   }
 
   static String? _after(String line, String tag) =>
@@ -170,6 +170,27 @@ final class FileLine extends YtDlpLine {
   const FileLine(this.path);
 
   final String path;
+}
+
+/// One `key=value` line of ffmpeg's `-progress pipe:1`, which a stretch
+/// prints instead of yt-dlp's progress: yt-dlp hands a stretch to ffmpeg,
+/// whose stdout is yt-dlp's own, and reports nothing until it is done
+/// (measured 2026-11-17). Only the keys the stretch's progress needs.
+final class FfmpegLine extends YtDlpLine {
+  const FfmpegLine(this.key, this.value);
+
+  final String key;
+  final String value;
+
+  static const _keys = {'out_time_us', 'total_size', 'speed', 'progress'};
+
+  static FfmpegLine? tryParse(String line) {
+    final at = line.indexOf('=');
+    if (at <= 0) return null;
+    final key = line.substring(0, at);
+    if (!_keys.contains(key)) return null;
+    return FfmpegLine(key, line.substring(at + 1).trim());
+  }
 }
 
 /// Anything else yt-dlp printed.

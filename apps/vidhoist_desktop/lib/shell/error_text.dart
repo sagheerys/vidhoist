@@ -11,6 +11,10 @@ String errorText(VhLocalizations l, Object error) => switch (error) {
     kind,
     detail,
   ),
+  ClipPastEndException(length: final length?) => l.errClipPastEnd(
+    ClipRange.clock(length),
+  ),
+  ClipPastEndException() => l.errClipPastEndUnknown,
   CancelledException() => l.cancel,
   _ => l.errorGeneric(error.toString()),
 };
@@ -31,6 +35,8 @@ String engineErrorText(
   YtDlpErrorKind.formatUnavailable => l.engineErrFormat,
   YtDlpErrorKind.diskFull => l.engineErrDiskFull,
   YtDlpErrorKind.engineMissing => l.engineErrMissing,
+  // Arrives as ClipPastEndException, worded there.
+  YtDlpErrorKind.clipPastEnd => l.errClipPastEndUnknown,
   // These two arrive as NetworkException and PlatformBlockedException,
   // and are worded there; here only if a caller passes them directly.
   YtDlpErrorKind.network => l.errNetwork,
