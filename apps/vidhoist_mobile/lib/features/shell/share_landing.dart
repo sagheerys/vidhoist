@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vh_core/vh_core.dart';
 
 /// **Back to the library tab, and only then what the share opens.**
 ///
@@ -12,3 +13,11 @@ Future<void> landOnLibrary(StatefulNavigationShell shell) async {
   shell.goBranch(0);
   await WidgetsBinding.instance.endOfFrame;
 }
+
+/// **Whether a shared link is followed before anything shows** (field
+/// report 2026-11-17: TikTok's sheet came seconds late). Following a short
+/// link costs up to five seconds; the sheet follows it itself once open.
+/// Waiting is worth it only when the link may be a playlist, or when it
+/// downloads at once with no sheet, under the address it will be filed by.
+bool shareWaitsForLink(String url, {required bool quick}) =>
+    quick || ShortLinkResolver.mayHidePlaylist(url);

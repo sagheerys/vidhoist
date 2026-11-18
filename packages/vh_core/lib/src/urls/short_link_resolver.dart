@@ -55,11 +55,22 @@ class ShortLinkResolver {
   Future<String> resolveForRouting(String url) =>
       resolve(url)
           .timeout(VhConstants.routingResolveTimeout, onTimeout: () => url);
+
+  /// A short link that may turn out to be a playlist once followed, so the
+  /// choice between the sheet and the playlist screen waits for it. Of the
+  /// short links, only SoundCloud's leads to one the app tells apart.
+  static bool mayHidePlaylist(String url) =>
+      UrlKit.needsResolution(url) &&
+      url.toLowerCase().contains('on.soundcloud.com');
 }
 
 /// The default dart:io implementation: a GET with no automatic following,
 /// reading the Location header only and closing the response without
 /// pulling the body.
+///
+/// The body used to be drained: the last hop of a TikTok link is the video
+/// page itself, some 440 KB (measured 2026-11-17), read whole on a phone's
+/// connection while the share waited for the sheet.
 Future<String?> ioRedirectStep(String url) async {
   final client = HttpClient()
     ..connectionTimeout = VhConstants.testConnectionTimeout;
@@ -67,7 +78,6 @@ Future<String?> ioRedirectStep(String url) async {
     final request = await client.getUrl(Uri.parse(url));
     request.followRedirects = false;
     final response = await request.close();
-    await response.drain<void>();
     if (response.statusCode >= 300 && response.statusCode < 400) {
       return response.headers.value(HttpHeaders.locationHeader);
     }
