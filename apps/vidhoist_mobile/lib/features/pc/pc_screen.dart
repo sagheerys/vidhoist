@@ -7,11 +7,11 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'pc_errors.dart';
 import 'pc_downloads.dart';
-import 'pc_item_row.dart';
+import 'pc_browse.dart';
+import 'pc_library_section.dart';
 import 'pc_link_state.dart';
 import 'pc_lists.dart';
 import 'pc_lists_screen.dart';
-import 'pc_outbox_section.dart';
 import 'pc_route_picker.dart';
 import 'pc_pairing_store.dart';
 
@@ -79,55 +79,57 @@ class _PcScreenState extends ConsumerState<PcScreen> {
         // A column of reading width on a tablet, as the other pages keep:
         // stretched, a row's title and its menu stood a screen apart.
         child: VhReadableWidth(
-          child: ListView(
-            padding: const EdgeInsets.only(bottom: 120),
-            children: [
-              _StatusCard(
-                view: view,
-                name: view.status?.name ?? pairing?.name ?? '',
-                route: pairing == null
-                    ? null
-                    : l10n.pcVia(pcRouteName(l10n, pairing, pairing.host)),
-              ),
-              if (!view.online && view.failure != null)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    VhSpace.lg,
-                    0,
-                    VhSpace.lg,
-                    VhSpace.md,
-                  ),
-                  child: Text(
-                    view.failure == PcLinkFailure.unreachable
-                        ? [
-                            l10n.pcOfflineMessage,
-                            // Tailscale known but not in use: the way out.
-                            if (pairing != null && pcTailscaleUnused(pairing))
-                              l10n.pcOfflineRoute,
-                          ].join(' ')
-                        : pcFailureText(l10n, view.failure!),
-                    style: text.bodySmall?.copyWith(color: p.ink2),
-                  ),
+          // Near the end of the list, the next page of the library.
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (event) => pcLoadMoreNear(event, ref),
+            child: CustomScrollView(
+              slivers: [
+                SliverList.list(
+                  children: [
+                    _StatusCard(
+                      view: view,
+                      name: view.status?.name ?? pairing?.name ?? '',
+                      route: pairing == null
+                          ? null
+                          : l10n.pcVia(
+                              pcRouteName(l10n, pairing, pairing.host),
+                            ),
+                    ),
+                    if (!view.online && view.failure != null)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          VhSpace.lg,
+                          0,
+                          VhSpace.lg,
+                          VhSpace.md,
+                        ),
+                        child: Text(
+                          view.failure == PcLinkFailure.unreachable
+                              ? [
+                                  l10n.pcOfflineMessage,
+                                  // Tailscale known but not in use: the way out.
+                                  if (pairing != null &&
+                                      pcTailscaleUnused(pairing))
+                                    l10n.pcOfflineRoute,
+                                ].join(' ')
+                              : pcFailureText(l10n, view.failure!),
+                          style: text.bodySmall?.copyWith(color: p.ink2),
+                        ),
+                      ),
+                    const PcDownloadsStrip(),
+                    const PcListsLine(),
+                  ],
                 ),
-              const PcDownloadsStrip(),
-              const PcListsLine(),
-              PcHeader(
-                title: view.total == 0
-                    ? l10n.pcLibrary
-                    : '${l10n.pcLibrary} · ${view.total}',
-              ),
-              if (view.items.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.all(VhSpace.xl),
-                  child: Text(
-                    l10n.pcEmptyLibrary,
-                    textAlign: TextAlign.center,
-                    style: text.bodyMedium?.copyWith(color: p.ink2),
-                  ),
+                ...pcLibrarySlivers(
+                  context,
+                  ref,
+                  browse: ref.watch(pcBrowseProvider),
+                  sorts: view.status?.sorts ?? false,
                 ),
-              for (final item in view.items)
-                PcItemRow(item: item, items: view.items),
-            ],
+                // Clear of the navigation buttons under the page.
+                const SliverToBoxAdapter(child: SizedBox(height: 120)),
+              ],
+            ),
           ),
         ),
       ),

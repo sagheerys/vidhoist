@@ -30,6 +30,8 @@ class _NoHost implements PcLinkHost {
     int offset = 0,
     int limit = 100,
     String? query,
+    PcLibrarySort sort = PcLibrarySort.newest,
+    PcLibraryKind kind = PcLibraryKind.all,
   }) async => const PcLibraryPage(items: [], total: 0);
   @override
   Future<File?> cover(String id) async => null;

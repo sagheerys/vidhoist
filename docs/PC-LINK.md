@@ -281,11 +281,11 @@ carries `Authorization: Bearer <secret>` and `x-vh-device: <deviceId>`.
 | Request | Authentication | Response |
 |---|---|---|
 | `POST /v1/pair` `{code, nonce, name}` | The code, while it is showing | `{deviceId, secret, name}` once allowed on the computer; 403 `{error: closed\|wrongCode\|denied}`; 400 for a malformed body (the nonce must be at least 16 characters); an empty 404 when no code is showing |
-| `GET /v1/status` | Bearer secret + `x-vh-device` | `{name, version, active, addresses?, canDelete?}` |
+| `GET /v1/status` | Bearer secret + `x-vh-device` | `{name, version, active, addresses?, canDelete?, sorts?}`; `sorts` says the library below understands `sort` and `kind` |
 | `GET /v1/downloads` | Same | `{tasks: [...]}`: running ones, then the last 20 finished |
 | `POST /v1/downloads` `{url, quality}` | Same | The task; 400 for anything but an `http`/`https` URL; 422 if the app refuses it. `quality` defaults to `best` |
 | `POST /v1/downloads/<id>/cancel` | Same | 204 or 404 |
-| `GET /v1/library?offset&limit&q` | Same | `{items, total}`: files on the computer only, newest first. `limit` defaults to 100, at most 500 |
+| `GET /v1/library?offset&limit&q&sort&kind` | Same | `{items, total}`: files on the computer only. `q` matches every word in the title or channel, ignoring case, Arabic marks and letter variants; `sort` is `newest` (the default), `oldest`, `title` or `size`; `kind` is `video` or `audio`. `limit` defaults to 100, at most 500. The phone reads it a page of 100 at a time as its list scrolls, and offers sorting only when `/v1/status` says `sorts` |
 | `GET /v1/library/<id>/cover` | Same | The saved cover image (JPEG, PNG or WebP), or 404 |
 | `GET`/`HEAD /v1/library/<id>/file` | Same | The clip's file: 200 whole, 206 for the requested range (`Range: bytes=…`), 416 for a range past the end, or 404 |
 | `GET /v1/library/<id>/transcripts` | Same | `{transcripts: [...]}` in the phone's format (`Transcript.toJson`) |

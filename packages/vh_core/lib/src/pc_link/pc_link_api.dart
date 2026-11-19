@@ -49,6 +49,8 @@ abstract interface class PcLinkApi {
     int offset = 0,
     int limit = 100,
     String? query,
+    PcLibrarySort sort = PcLibrarySort.newest,
+    PcLibraryKind kind = PcLibraryKind.all,
   });
   Future<Uint8List?> cover(String id);
 

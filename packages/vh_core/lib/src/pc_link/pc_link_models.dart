@@ -13,6 +13,7 @@ class PcStatus {
     this.active = 0,
     this.addresses = const [],
     this.canDelete = false,
+    this.sorts = false,
   });
 
   final String name;
@@ -25,6 +26,11 @@ class PcStatus {
   /// phone offers it only then. False from a computer older than that.
   final bool canDelete;
 
+  /// The library can be sorted and filtered, and its search ignores Arabic
+  /// marks; the phone offers sorting only then. False from a computer older
+  /// than that, which answers newest first whatever is asked.
+  final bool sorts;
+
   /// Where the computer can be reached now, sorted: the phone keeps them
   /// for the user to choose the route, and learns a changed one here.
   final List<PcAddress> addresses;
@@ -36,6 +42,7 @@ class PcStatus {
     if (addresses.isNotEmpty)
       'addresses': [for (final a in addresses) a.toJson()],
     if (canDelete) 'canDelete': true,
+    if (sorts) 'sorts': true,
   };
 
   static PcStatus? fromJson(Object? json) {
@@ -46,6 +53,7 @@ class PcStatus {
       active: json['active'] as int? ?? 0,
       addresses: PcAddress.listFromJson(json['addresses']),
       canDelete: json['canDelete'] == true,
+      sorts: json['sorts'] == true,
     );
   }
 }
@@ -270,6 +278,12 @@ class PcItem {
 }
 
 /// A page of the library: [total] tells the phone how many there are.
+/// The order the phone asks the computer's library in.
+enum PcLibrarySort { newest, oldest, title, size }
+
+/// Which of the computer's clips the phone asks for.
+enum PcLibraryKind { all, video, audio }
+
 class PcLibraryPage {
   const PcLibraryPage({required this.items, required this.total});
 

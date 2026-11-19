@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/library.dart';
+import 'package:vh_transcripts/vh_transcripts.dart';
 
 import 'clip_delete.dart';
 import 'downloads_data.dart';
@@ -41,6 +42,7 @@ class DesktopPcHost implements PcLinkHost {
     active: (_engine?.tasks ?? const []).where(isUnderWay).length,
     addresses: _addresses(),
     canDelete: _ref.read(pcLinkDeleteProvider),
+    sorts: true,
   );
 
   @override
@@ -79,8 +81,15 @@ class DesktopPcHost implements PcLinkHost {
     int offset = 0,
     int limit = 100,
     String? query,
+    PcLibrarySort sort = PcLibrarySort.newest,
+    PcLibraryKind kind = PcLibraryKind.all,
   }) async {
-    final items = await _files(query);
+    final items = pcLibraryOrder(
+      await _ref.read(libraryItemsProvider.future),
+      query: query,
+      sort: sort,
+      kind: kind,
+    );
     final page = items.skip(offset).take(limit);
     return PcLibraryPage(
       items: [for (final item in page) pcItemOf(item)],
@@ -148,7 +157,10 @@ class DesktopPcHost implements PcLinkHost {
   }
 
   Future<Map<String, LibraryItem>> _filesByUrl() async => {
-    for (final item in await _files(null)) item.canonicalUrl: item,
+    for (final item in pcLibraryOrder(
+      await _ref.read(libraryItemsProvider.future),
+    ))
+      item.canonicalUrl: item,
   };
 
   /// **Asked again here, not trusted from the phone**: the user's switch,
@@ -169,29 +181,61 @@ class DesktopPcHost implements PcLinkHost {
   }
 
   Future<LibraryItem?> _item(String id) async {
-    for (final item in await _files(null)) {
+    for (final item in pcLibraryOrder(
+      await _ref.read(libraryItemsProvider.future),
+    )) {
       if (pcItemId(item) == id) return item;
     }
     return null;
   }
+}
 
-  Future<List<LibraryItem>> _files(String? query) async {
-    final all = await _ref.read(libraryItemsProvider.future);
-    final q = query?.trim().toLowerCase() ?? '';
-    final files = [
-      for (final item in all)
-        if (item.localPath != null &&
-            (q.isEmpty ||
-                item.title.toLowerCase().contains(q) ||
-                (item.uploader?.toLowerCase().contains(q) ?? false)))
-          item,
-    ];
-    final epoch = DateTime.fromMillisecondsSinceEpoch(0);
-    files.sort(
-      (a, b) => (b.timestamp ?? epoch).compareTo(a.timestamp ?? epoch),
-    );
-    return files;
-  }
+/// The clips a phone may see (those with a file here), as it asked for
+/// them. Every word of [query] must be in the title or the channel, folded
+/// as the library's own search folds them, so a word typed without its
+/// marks or hamza finds the title written with them.
+List<LibraryItem> pcLibraryOrder(
+  List<LibraryItem> all, {
+  String? query,
+  PcLibrarySort sort = PcLibrarySort.newest,
+  PcLibraryKind kind = PcLibraryKind.all,
+}) {
+  final words = SearchText.wordsOf(query ?? '');
+  final files = [
+    for (final item in all)
+      if (item.localPath != null &&
+          switch (kind) {
+            PcLibraryKind.all => true,
+            PcLibraryKind.video => !item.isAudio,
+            PcLibraryKind.audio => item.isAudio,
+          } &&
+          _says(item, words))
+        item,
+  ];
+  final epoch = DateTime.fromMillisecondsSinceEpoch(0);
+  int newest(LibraryItem a, LibraryItem b) =>
+      (b.timestamp ?? epoch).compareTo(a.timestamp ?? epoch);
+  files.sort(switch (sort) {
+    PcLibrarySort.newest => newest,
+    PcLibrarySort.oldest => (a, b) => newest(b, a),
+    PcLibrarySort.title => (a, b) {
+      final byTitle = SearchText.fold(a.title)
+          .compareTo(SearchText.fold(b.title));
+      return byTitle != 0 ? byTitle : newest(a, b);
+    },
+    // A clip whose size is not known goes last rather than first.
+    PcLibrarySort.size => (a, b) {
+      final bySize = (b.sizeBytes ?? -1).compareTo(a.sizeBytes ?? -1);
+      return bySize != 0 ? bySize : newest(a, b);
+    },
+  });
+  return files;
+}
+
+bool _says(LibraryItem item, List<String> words) {
+  if (words.isEmpty) return true;
+  final text = SearchText.fold('${item.title} ${item.uploader ?? ''}');
+  return words.every(text.contains);
 }
 
 /// A clip's id on the link: stable for its link, and saying nothing about

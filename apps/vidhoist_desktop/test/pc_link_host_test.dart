@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/library.dart';
 import 'package:vh_transcripts/vh_transcripts.dart';
 import 'package:vidhoist_desktop/data/downloads_data.dart';
@@ -81,5 +82,69 @@ void main() {
     expect(item.toJson().toString(), isNot(contains(dir.path)));
     expect(pcItemOf(web).url, 'https://youtu.be/abc');
     expect(pcItemOf(web).extension, 'webm');
+  });
+
+  group('the library as the phone asks for it', () {
+    LibraryItem clip(
+      String title, {
+      String? uploader,
+      int day = 1,
+      int? size,
+      bool audio = false,
+      bool file = true,
+    }) => LibraryItem(
+      canonicalUrl: 'https://youtu.be/$title',
+      title: title,
+      uploader: uploader,
+      timestamp: DateTime(2026, 11, day),
+      sizeBytes: size,
+      isAudio: audio,
+      localPath: file ? '/clips/$title' : null,
+    );
+
+    final all = [
+      clip('رحلة إلى أسوان', uploader: 'قناة السفر', day: 3, size: 900),
+      clip('Rust for beginners', day: 5, size: 300),
+      clip('بودكاست التاريخ', day: 1, audio: true),
+      clip('Only on the web', day: 9, file: false),
+    ];
+    List<String> titles(List<LibraryItem> items) => [
+      for (final i in items) i.title,
+    ];
+
+    test('**the guard**: a word typed without its hamza or marks finds the '
+        'title written with them, in the channel too', () {
+      expect(titles(pcLibraryOrder(all, query: 'اسوان')), ['رحلة إلى أسوان']);
+      expect(titles(pcLibraryOrder(all, query: 'السَّفر')), ['رحلة إلى أسوان']);
+      expect(titles(pcLibraryOrder(all, query: 'RUST beginners')), [
+        'Rust for beginners',
+      ]);
+    });
+
+    test('**the guard**: each order and kind, files on the computer only', () {
+      expect(titles(pcLibraryOrder(all)), [
+        'Rust for beginners',
+        'رحلة إلى أسوان',
+        'بودكاست التاريخ',
+      ]);
+      expect(
+        titles(pcLibraryOrder(all, sort: PcLibrarySort.oldest)).first,
+        'بودكاست التاريخ',
+      );
+      expect(
+        titles(pcLibraryOrder(all, sort: PcLibrarySort.title)).first,
+        'Rust for beginners',
+      );
+      // A size not known goes last.
+      expect(titles(pcLibraryOrder(all, sort: PcLibrarySort.size)), [
+        'رحلة إلى أسوان',
+        'Rust for beginners',
+        'بودكاست التاريخ',
+      ]);
+      expect(titles(pcLibraryOrder(all, kind: PcLibraryKind.audio)), [
+        'بودكاست التاريخ',
+      ]);
+      expect(pcLibraryOrder(all, kind: PcLibraryKind.video), hasLength(2));
+    });
   });
 }
