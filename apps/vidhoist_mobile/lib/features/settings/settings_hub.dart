@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_ui/vh_ui.dart';
 
+import '../update/update_pending_row.dart';
 import 'settings_page.dart';
 import 'settings_sections.dart';
 
@@ -33,6 +34,7 @@ class SettingsHub extends ConsumerWidget {
               VhSpace.xl,
             ),
             children: [
+              const UpdatePendingRow(),
               for (final (title, entries) in settingsGroups(context, ref))
                 VhSettingsGroup(
                   title: title,

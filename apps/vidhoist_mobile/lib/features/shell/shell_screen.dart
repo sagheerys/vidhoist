@@ -55,8 +55,8 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
   /// check finishes, and stacking a sheet over a sheet swallows the user's
   /// touch and hides what they were doing.
   ///
-  /// Once per run: the "updates" row in settings stays as a witness in the
-  /// accent colour for anyone who closed the sheet.
+  /// Once per run: for anyone who closed the sheet, the update stays
+  /// offered by a dot on Settings and a row at the top of it.
   bool _updatePrompted = false;
 
   /// "What's new" comes first, and an update offer waits for the next
@@ -332,6 +332,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
             l10n,
             tabs,
             pcRunning: ref.watch(pcRunningProvider),
+            updatePending: ref.watch(updatePendingProvider),
           ),
           selectedIndex: tabs.contains(branch) ? tabs.indexOf(branch) : 0,
           onSelected: (i) => widget.navigationShell.goBranch(tabs[i]),

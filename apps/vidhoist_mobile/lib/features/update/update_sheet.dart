@@ -263,11 +263,12 @@ class _Actions extends ConsumerWidget {
         Wrap(
           alignment: WrapAlignment.spaceBetween,
           children: [
+            // "Later" closes the sheet and nothing more: the update stays
+            // offered by the dot on Settings and the row at its top. It
+            // used to forget the release for the session, so one tap by
+            // mistake hid every trace of it.
             TextButton(
-              onPressed: () {
-                controller.dismiss();
-                Navigator.of(context).maybePop();
-              },
+              onPressed: () => Navigator.of(context).maybePop(),
               child: Text(l10n.updateLater),
             ),
             TextButton(

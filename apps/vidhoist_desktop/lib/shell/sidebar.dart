@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart' show SavedPlaylist;
 import 'package:vh_ui/vh_ui.dart';
 
 import '../data/saved_searches.dart';
+import '../data/update_data.dart';
 import '../features/folders/folder_tree.dart';
 import '../router.dart';
 import 'engine_line.dart';
@@ -188,12 +190,22 @@ class DesktopSidebar extends StatelessWidget {
           ),
         ),
         SidebarEngineLine(narrow: narrow),
-        // Its toggle is in the title bar, above it.
-        item(
-          DesktopPlace.settings,
-          VhIcons.settings,
-          l.navSettings,
-          DesktopRoutes.settings,
+        // Its toggle is in the title bar, above it. A dot while an update
+        // waits, which the notice at start said only for a few seconds.
+        Consumer(
+          builder: (context, ref, _) {
+            final release = ref.watch(updateProvider).release;
+            return SidebarItem(
+              icon: VhIcons.settings,
+              label: l.navSettings,
+              narrow: narrow,
+              selected: current == DesktopPlace.settings && !onPinned,
+              onTap: () => onGo(DesktopRoutes.settings),
+              dot: release == null
+                  ? null
+                  : l.updateVersionAvailable(release.version.toString()),
+            );
+          },
         ),
       ],
     );
