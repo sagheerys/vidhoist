@@ -88,7 +88,7 @@ final networkGateProvider = Provider<NetworkGate>((ref) {
 /// for Wi-Fi, not that they were paused by hand.
 final wifiPausedProvider = StateProvider<Set<String>>((ref) => const {});
 
-/// **"Wi-Fi only" pauses rather than cancels** (REPORT §5.5): a download
+/// **"Wi-Fi only" pauses rather than cancels**: a download
 /// that loses Wi-Fi keeps its partial file, and goes on by itself when
 /// Wi-Fi comes back. One paused by hand is left as it is.
 final wifiPauseProvider = Provider<void>((ref) {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/vh_theme.dart';
 
 /// Platform kinds **as far as presentation is concerned**. vh_ui does not
-/// know vh_core (dependency rule 6), so the app converts `MediaPlatform`
+/// know vh_core (the dependency rule), so the app converts `MediaPlatform`
 /// into this type.
 enum VhPlatformKind {
   youtube('YT', Color(0xFFA8442F)),

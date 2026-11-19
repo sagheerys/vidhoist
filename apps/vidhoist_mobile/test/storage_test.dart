@@ -158,7 +158,7 @@ void main() {
     });
   });
 
-  group('a rename Android refuses, as on the owner phone', () {
+  group('a rename Android refuses, as on a real phone', () {
     late Directory parent;
 
     setUp(() async {

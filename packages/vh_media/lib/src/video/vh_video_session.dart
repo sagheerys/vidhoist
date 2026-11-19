@@ -75,8 +75,7 @@ class VhVideoSession extends ChangeNotifier {
   Duration get position => _controller?.value.position ?? Duration.zero;
   Duration? get duration => _controller?.value.duration;
 
-  /// Opening a list in the player: the list shown at the moment of the tap
-  /// (rule 4).
+  /// Opening a list in the player: the list shown at the moment of the tap.
   Future<void> open(
     List<PlaylistItem> items, {
     int startIndex = 0,

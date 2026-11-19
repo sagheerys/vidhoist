@@ -189,10 +189,10 @@ enum LibraryViewMode {
   cards,
 }
 
-/// The saved sort options (video_sort_option, §5.1).
+/// The saved sort options (saved under `video_sort_option`).
 enum LibrarySort { newest, oldest, nameAZ, nameZA, largest, smallest }
 
-/// Building the view: pure, testable logic (TRD §3.2).
+/// Building the view: pure, testable logic.
 List<LibraryItem> buildLibraryView(
   List<LibraryItem> items, {
   LibraryScope scope = LibraryScope.all,
@@ -227,8 +227,8 @@ List<LibraryItem> buildLibraryView(
       MediaTypeFilter.all => true,
       MediaTypeFilter.audio => item.isAudio,
       // Video leaves the shorts to their own chip, so every clip is under
-      // one type and video without the shorts can be had (owner's
-      // choice, 2026-11-05). A clip of unknown shape stays a video.
+      // one type and video without the shorts can be had. A clip of
+      // unknown shape stays a video.
       MediaTypeFilter.video => !item.isAudio && !item.isShortForm,
       // Shorts: portrait, short, and only where the dimensions are known.
       MediaTypeFilter.shorts => item.isShortForm,

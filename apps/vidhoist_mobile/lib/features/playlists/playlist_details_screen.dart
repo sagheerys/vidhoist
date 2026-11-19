@@ -12,7 +12,7 @@ import '../player/playback_providers.dart';
 import 'playlist_dialogs.dart';
 import 'playlists_providers.dart';
 
-/// A saved playlist's details (rule 7, step 2): play all, shuffle, and the
+/// A saved playlist's details: play all, shuffle, and the
 /// headphones button. Drag to reorder, delete an item **with an undo**, and
 /// an indicator for the current one.
 class PlaylistDetailsScreen extends ConsumerWidget {
@@ -50,8 +50,8 @@ class PlaylistDetailsScreen extends ConsumerWidget {
       ),
       body: VhReadableWidth(
         child: itemsAsync.when(
-          // **A reload keeps the list on screen** (field report 2026-09-25:
-          // tapping a clip low in the list flashed and jumped to the top).
+          // **A reload keeps the list on screen** (tapping a clip low in the
+          // list used to flash and jump to the top).
           // Playing records "last played" and refreshes the playlists list,
           // which this view reads so that adding and removing show at
           // once; without this the reload swapped the list
@@ -98,7 +98,7 @@ class _Actions extends ConsumerWidget {
     Future<void> start({bool shuffle = false, bool audioOnly = false}) async {
       // **A missing item never enters the queue**: its source fails and the
       // player jumps to the next one, so the tap looks as though it played
-      // something else (field report 2026-09-04).
+      // something else.
       final visual = await ref
           .read(playlistPlayerProvider)
           .play(
@@ -174,15 +174,15 @@ class _ReorderableItems extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // **The indicator used to stick on the first clip** (screenshot
-    // 2026-09-02): `ref.watch(audioHandlerProvider)` watches a
-    // provider pinned by an override that **never emits**, and
+    // **The indicator used to stick on the first clip**:
+    // `ref.watch(audioHandlerProvider)` watches a provider pinned by an
+    // override that **never emits**, and
     // `currentItem` is a getter over mutable state, a one-off read
     // disguised as a subscription. The correct source is in the package
     // itself: the `handler.mediaItem` stream, whose id is the canonicalUrl.
     // **Current is one thing and playing is another**: the equaliser danced
     // over a paused clip because the screen knew only which item was
-    // current (field report 2026-09-04). The two streams together separate
+    // current. The two streams together separate
     // the states.
     final handler = ref.read(audioHandlerProvider);
     return StreamBuilder<String?>(
@@ -292,7 +292,7 @@ class _ReorderableItems extends ConsumerWidget {
     if (visual && context.mounted) context.push('/player');
   }
 
-  /// Deleting an item **with an undo** (rule 7): the removal is restored
+  /// Deleting an item **with an undo**: the removal is restored
   /// exactly where it was.
   void _removeWithUndo(
     BuildContext context,

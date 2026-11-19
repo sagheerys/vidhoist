@@ -6,9 +6,9 @@ import '../playlists/playlists_providers.dart';
 /// **Where an item belongs**: which playlists it is in and which tags it
 /// carries.
 ///
-/// Field report 2026-09-04: "in the clip details I want to see which
-/// playlist it was added to, and which tag it is under". The information
-/// was in the store and no screen displayed it.
+/// The clip details should say which playlist a clip was added to and
+/// which tag it is under. The information was in the store and no screen
+/// displayed it.
 ///
 /// **[tags] is always empty here**, by design rather than by oversight:
 /// the phone app has no user tags, and its index carries nothing but the

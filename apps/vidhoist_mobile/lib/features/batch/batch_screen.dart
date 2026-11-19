@@ -16,7 +16,7 @@ import '../pc/pc_send.dart';
 import '../shared/error_text.dart';
 import 'batch_providers.dart';
 
-/// The batch download screen (rule 3): a playlist preview with checkboxes,
+/// The batch download screen: a playlist preview with checkboxes,
 /// each item's duration and the selected total, a quality choice, then
 /// enqueueing.
 class BatchScreen extends ConsumerStatefulWidget {
@@ -56,8 +56,8 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
     );
   }
 
-  /// **The selection goes to the computer one link at a time** (asked
-  /// 2026-11-10), in the playlist's order: the computer takes single links
+  /// **The selection goes to the computer one link at a time**, in the
+  /// playlist's order: the computer takes single links
   /// from the phone, never a playlist.
   Future<void> _sendToPc(List<String> urls, String quality) async {
     // All read before leaving: this screen is gone once the links go.
@@ -167,7 +167,7 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
     );
   }
 
-  /// Rule 3, step 2: enqueue the selection, then return to the main screen.
+  /// Enqueue the selection, then return to the main screen.
   void _submit() {
     final l10n = context.vhl;
     if (_selected.isEmpty) {
@@ -207,8 +207,7 @@ class _BatchScreenState extends ConsumerState<BatchScreen> {
       _initialised = true;
       _playlistName = preview.title;
       _selected.addAll(preview.tracks.map((t) => t.url));
-      // SoundCloud is audio only (§4), so the quality is pinned and not
-      // shown.
+      // SoundCloud is audio only, so the quality is pinned and not shown.
       _quality = kind == PlaylistKind.soundcloud
           ? Quality.audio
           : ref.read(settingsProvider).quality;
@@ -403,7 +402,7 @@ class _QualityRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Rule 2: no heights for sound alone (a SoundCloud set).
+    // No heights for sound alone (a SoundCloud set).
     final options = heights ? Quality.values : [Quality.best, Quality.audio];
     return SizedBox(
       height: 46,

@@ -11,8 +11,7 @@ import 'widget_test.dart' show host;
 
 import 'icon_finder.dart';
 
-/// **Favourites from the menu, not an empty heart on every card** (owner's
-/// decision 2026-11-01).
+/// **Favourites from the menu, not an empty heart on every card.**
 void main() {
   LocalItem clip({bool favorite = false}) => LocalItem(
     key: 'https://youtu.be/a',

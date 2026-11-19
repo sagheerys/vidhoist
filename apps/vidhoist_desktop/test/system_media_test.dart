@@ -56,7 +56,7 @@ void main() {
       );
       for (final private in [
         'http://192.168.1.10:8081/thumbnails/a.jpg',
-        'https://vidhoist.example.com/download/a.jpg',
+        'https://example.com/download/a.jpg',
         'https://me:secret@i.ytimg.com/vi/abc/hq.jpg',
         'http://i.ytimg.com/vi/abc/hq.jpg',
         null,

@@ -10,7 +10,7 @@ import '../downloads_library/library_providers.dart';
 import '../downloads_library/local_item.dart';
 
 /// A pending play request: the list on screen at the moment of the tap, in
-/// its order and with its filtering (rule 4).
+/// its order and with its filtering.
 class PlaybackRequest {
   const PlaybackRequest({
     required this.items,

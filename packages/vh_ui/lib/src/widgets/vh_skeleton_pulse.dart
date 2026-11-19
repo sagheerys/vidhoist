@@ -3,10 +3,9 @@ import 'package:flutter/widgets.dart';
 import '../tokens/tokens.dart';
 
 /// A skeleton's slow breath while the first answer is on the way, as the
-/// big apps do (owner's request 2026-11-05: a still placeholder read as a
-/// frozen screen). The whole placeholder dims and brightens together; no
-/// light sweeps across it, which is the generated-screen mark the still
-/// skeleton was avoiding.
+/// big apps do (a still placeholder read as a frozen screen). The whole
+/// placeholder dims and brightens together; no light sweeps across it,
+/// which is the generated-screen mark the still skeleton was avoiding.
 ///
 /// It stops by itself after [breaths], fully bright: a skeleton still up
 /// by then means something slow, and a placeholder that never stops moving is

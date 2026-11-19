@@ -8,9 +8,9 @@ import 'fake_player_port.dart';
 
 import '../icon_finder.dart';
 
-/// **Tablet guards, batch 2 (2026-10-10)**: the player panel beside the
-/// library, its two tabs, and the full player's tablet forms. A phone keeps
-/// the queue and the extra as buttons that open sheets.
+/// **Tablet guards**: the player panel beside the library, its two tabs,
+/// and the full player's tablet forms. A phone keeps the queue and the
+/// extra as buttons that open sheets.
 void main() {
   late MemoryKeyValueStore store;
   late VhAudioHandler handler;

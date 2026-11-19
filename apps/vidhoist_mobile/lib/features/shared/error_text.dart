@@ -1,7 +1,7 @@
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// Turns the core's classified exceptions into translated text (TRD §3.3).
+/// Turns the core's classified exceptions into translated text.
 /// **The only place** errors are translated; there are no scattered error
 /// strings.
 String errorText(VhLocalizations l10n, Object error) => switch (error) {

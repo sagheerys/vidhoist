@@ -13,8 +13,8 @@ import 'item_actions_sheet.dart';
 
 /// The library item card: **one source for all four view modes**.
 ///
-/// Split out of `library_screen.dart` when the grid view arrived
-/// (requested 2026-09-04): two copies of the same logic diverge at the
+/// Split out of `library_screen.dart` when the grid view arrived: two
+/// copies of the same logic diverge at the
 /// first edit.
 class LibraryItemCard extends ConsumerWidget {
   const LibraryItemCard({
@@ -32,8 +32,7 @@ class LibraryItemCard extends ConsumerWidget {
   final VhMediaColumns? columns;
 
   /// The highlight is temporary by nature: any tap extinguishes it at once,
-  /// or the item stays looking "selected" forever (field report
-  /// 2026-09-02).
+  /// or the item stays looking "selected" forever.
   final VoidCallback onClearHighlight;
 
   @override
@@ -122,7 +121,7 @@ class LibraryItemCard extends ConsumerWidget {
       subtitle: subtitle,
       thumbnail: thumbnail,
       platform: platformKindOf(item.platform),
-      // **No location badge** (field report 2026-09-02): every item in this
+      // **No location badge**: every item in this
       // library is a file on the device, because the library is built by
       // scanning the folder, so "offline" on every card carries no
       // information and is visual noise.

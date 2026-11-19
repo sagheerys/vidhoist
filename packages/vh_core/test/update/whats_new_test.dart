@@ -17,7 +17,7 @@ settings and library.
 
 | | |
 |---|---|
-| **Vidhoist-Lite-2.2.1.apk** | For family and friends. |
+| **Vidhoist-2.2.1-android.apk** | For family and friends. |
 
 The details are in [CHANGELOG.md](https://example.org/CHANGELOG.md).
 

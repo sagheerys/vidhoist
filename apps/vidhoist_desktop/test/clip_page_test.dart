@@ -162,8 +162,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(h.controls.calls, contains('fullScreen true'));
     expect(find.byType(DesktopSidebar), findsNothing);
-    // The picture's own controls take the bar's place (the owner's
-    // choice, 2026-10-28).
+    // The picture's own controls take the bar's place.
     expect(find.byType(DesktopPlayerBar), findsNothing);
 
     await tester.sendKeyEvent(LogicalKeyboardKey.escape);
@@ -206,7 +205,7 @@ void main() {
     final local = LibraryItem(
       canonicalUrl: _video,
       title: 'Homelab Hour - Ep. 12',
-      localPath: r'C:\Videos\Vidhoist\Offline\homelab.mp4',
+      localPath: r'C:\Videos\VidHoist\Offline\homelab.mp4',
       timestamp: DateTime(2026, 10, 22),
       duration: _s(2500),
     );

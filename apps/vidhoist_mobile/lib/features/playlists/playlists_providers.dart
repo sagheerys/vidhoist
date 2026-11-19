@@ -24,7 +24,7 @@ class SmartList {
 const int latestSmartListSize = 30;
 
 /// The order: pinned first, then **by last played** rather than by creation
-/// date. Pure, testable logic (TRD §3.2).
+/// date. Pure, testable logic.
 List<SavedPlaylist> sortPlaylists(List<SavedPlaylist> input) {
   final all = [...input];
   all.sort((a, b) {
@@ -72,8 +72,8 @@ final smartListsProvider = Provider<List<SmartList>>(
 /// link. What does not match is built from its cached data so it does
 /// not vanish silently.
 ///
-/// Field report 2026-09-04: "when I remove a video from the playlist it
-/// stays there and will not play, or it plays a different clip". An
+/// A removed video used to stay in the playlist and not play, or play a
+/// different clip. An
 /// unmatched entry was shown like any other and entered the play queue, so
 /// its source failed and the player jumped to the next one, making the tap
 /// look as though it had played something else.
@@ -108,8 +108,8 @@ final playlistViewProvider = FutureProvider.family<PlaylistView, String>((
   id,
 ) async {
   // **Read through [playlistsProvider], not from the store directly**
-  // (field report 2026-09-25: a clip added to a playlist, or removed from
-  // it, showed only after the app was closed). Every add, remove, rename
+  // (a clip added to a playlist, or removed from it, used to show only
+  // after the app was closed). Every add, remove, rename
   // and reorder already refreshes that list; reading the store here gave
   // this view no reason to be rebuilt, so it kept its first answer for the
   // whole run.
@@ -156,7 +156,7 @@ PlaylistEntry toPlaylistEntry(LocalItem item) => PlaylistEntry(
   cachedThumb: item.thumbnail,
 );
 
-/// Playing a playlist (rule 7): the tap is "smart". All audio means
+/// Playing a playlist: the tap is "smart". All audio means
 /// background playback; anything with video opens the visual player.
 /// [audioOnly] is the headphones button, which forces the background.
 final playlistPlayerProvider = Provider((ref) => PlaylistPlayer(ref));

@@ -4,38 +4,40 @@ A map of the repository for someone who has just cloned it. It answers
 three questions: what the pieces are, which rules hold them together, and
 where a change belongs.
 
-Vidhoist was forked from vidhoist-mobile (ADR 0001), whose apps were clients
-of a Vidhoist server. Since phase 1 (2026-11-06) there is no server: both apps
-download on the device with yt-dlp. How yt-dlp runs, what was measured, and
-the traps are in [ENGINE.md](ENGINE.md).
-
-The Arabic version of this document follows the English one.
-
----
+VidHoist has no server: both apps download on the device itself with
+yt-dlp. How yt-dlp runs, what was measured, and the traps are in
+[ENGINE.md](ENGINE.md). The optional link that lets the phone send links
+to the computer is in [PC-LINK.md](PC-LINK.md).
 
 ## 1. Two apps, one repository
 
 | | **Android** (`apps/vidhoist_mobile`) | **Windows** (`apps/vidhoist_desktop`) |
 |---|---|---|
-| Came from | Vidhoist Lite | Vidhoist Ember |
 | yt-dlp runs through | youtubedl-android (`YtDlpBridge.kt`, `ChannelYtDlpBackend`), kept alive by `EngineService.kt` | `yt-dlp.exe` beside the app or in `tools\` (`ProcessYtDlpBackend`, a Job object per run), with ffmpeg and Deno fetched on first need |
 | Library | The download folder, scanned (`Download/VidHoist`, and the same folder on a memory card) | `LocalHistoryStore` and a watch on the download folder |
-| At once | One download | As set in Settings › Engine |
-| Exclusive | Wi-Fi only, share sheet, picture in picture, a sign-in page per site (Settings › Accounts) | Tags, lists, reading room, browser button, tray, channels; cookies from a file or the computer's browser (Settings › Cookies) |
+| At once | One download | One download |
+| Only here | Wi-Fi-only downloading, the share sheet, picture in picture, a sign-in page per site (Settings › Accounts) | Tags, lists, reading room, browser button, tray, channels; cookies from a file or the computer's browser (Settings › Cookies) |
+| Phone ↔ computer link | The client (Computer tab) | The server (Settings › Phone) |
 
 They are separate apps, not build flavours, with **one palette**
-(`VhPalette`, ADR 0002). They share five packages. Before changing anything
-in a shared package, ask: **does this change the other app?**
+(`VhPalette`, [ADR 0002](adr/0002-identity.md)). They share five packages.
+Before changing anything in a shared package, ask: **does this change the
+other app?**
 
 ## 2. Packages and the dependency rule
 
 ```
-apps/vidhoist_mobile ─┐
-                      ├─► packages/vh_media ─► packages/vh_core ─► packages/vh_ytdlp
-apps/vidhoist_desktop ┘            │                 ▲
-        │                          └─► packages/vh_ui│
-        └─► packages/vh_transcripts ─────────────────┘
+apps/vidhoist_mobile, apps/vidhoist_desktop
+   ├─► vh_media ──────────┬─► vh_core ─► vh_ytdlp
+   │      └─► vh_ui       │
+   ├─► vh_transcripts ────┘
+   ├─► vh_ui
+   └─► vh_core
 ```
+
+Arrows point from a package to what it imports. Nothing imports upwards:
+`vh_ytdlp` and `vh_ui` depend on no other package of this repository,
+and no package imports an app.
 
 | Package | Contains | Hard rule |
 |---|---|---|
@@ -48,29 +50,34 @@ apps/vidhoist_desktop ┘            │                 ▲
 
 Three consequences worth remembering:
 
-- **One reading of yt-dlp.** A command line is built by `CommandBuilder`
-  and what comes back is read by `vh_ytdlp` alone; the apps only start the
-  process and hand its lines to `readDownloadRun`. A download and the
-  transcript backfill classify an error the same way (`ErrorClassifier`).
+- **One reading of yt-dlp.** A command line is built by `CommandBuilder`,
+  and what comes back is parsed by `vh_ytdlp` alone. The apps only start
+  the process and hand its lines to `readDownloadRun` (in `vh_core`, which
+  uses `vh_ytdlp`'s parsers). A download and the transcript backfill
+  classify an error the same way (`ErrorClassifier`).
 - **No hard-coded UI strings.** Every user-visible string lives in
   `packages/vh_ui/lib/src/l10n/app_en.arb` and `app_ar.arb`, and both
   files change in the same commit. A parity test enforces it.
 - **No hard-coded colours or spacing.** Both come from
-  `packages/vh_ui/lib/src/tokens/`; a literal colour works in daylight and
+  `packages/vh_ui/lib/src/tokens/`. A literal colour works in daylight and
   breaks at night.
 
 ## 3. Where a feature lives
 
-An app feature is a folder under `apps/<app>/lib/features/<name>/`:
+An app feature is a folder under `apps/<app>/lib/features/<name>/`. For
+example, the Android app's self-update:
 
 ```
-features/update/
+apps/vidhoist_mobile/lib/features/update/
   update_state.dart      # Riverpod providers + the controller
-  update_channel.dart    # platform channel wrapper, if any
+  update_channel.dart    # platform channel wrapper
   update_section.dart    # widget embedded in another screen
   update_sheet.dart      # bottom sheet
-  widgets/               # anything larger than a small helper
+  whats_new_prompt.dart  # a prompt shown after an update
 ```
+
+A larger feature keeps its bigger widgets in a `widgets/` subfolder
+(for example `features/downloads_library/widgets/`).
 
 Rules of thumb:
 
@@ -79,8 +86,8 @@ Rules of thumb:
 - A widget used by both apps goes to `vh_ui`. A widget used by one app,
   or one that reads app providers, stays in the app.
 - Some files are deliberately duplicated between the two apps
-  (`error_text.dart`, `about_screen.dart`). When you edit one, edit the
-  other or say in the commit why not.
+  (`error_text.dart`, `clip_length.dart`, `open_web_link.dart`). When you
+  edit one, edit the other or say in the commit why not.
 - **Size limits: 400 lines for a screen, 300 for anything else**,
   counting code and excluding comments.
 
@@ -96,10 +103,10 @@ dialogs are pushed normally.
 
 Storage is `SharedPreferences` behind the `KeyValueStore` interface, so
 `vh_core` can be tested with `MemoryKeyValueStore`. **Every
-read-modify-write goes through `PrefsMutex`**: two concurrent flows
-without the lock read the same value and the slower one erases the
+read-modify-write goes through `PrefsMutex`**: without the lock, two
+concurrent flows read the same value and the slower one erases the
 faster one's write. The keys and the backup format are in
-[ENGINE.md §Storage](ENGINE.md#what-carried-over-storage-backups-and-keys).
+[ENGINE.md › Storage](ENGINE.md#what-carried-over-storage-backups-and-keys).
 
 ## 5. Running it
 
@@ -123,141 +130,25 @@ Deno, at pinned versions with their SHA-256, where the build expects them.
 
 - **Every fixed bug leaves a guard test** that fails on the old code.
   The proof is to reintroduce the broken code briefly and watch the test
-  fall. Tests are never weakened to let a change through.
-- **The device matrix.** `apps/*/test/device_matrix.dart` and
-  `desktop_matrix.dart` render a widget across screen sizes and text
-  scales and catch `RenderFlex overflowed` from the engine. Every new
-  screen or sheet passes through `expectNoOverflow`.
+  fail. Tests are never weakened to let a change through.
+- **The device matrix.** `apps/vidhoist_mobile/test/device_matrix.dart`
+  and `apps/vidhoist_desktop/test/desktop_matrix.dart` render a widget
+  across screen sizes and text scales and catch `RenderFlex overflowed`
+  from the engine. Every new screen or sheet passes through
+  `expectNoOverflow`.
 - **Localisation parity.** `packages/vh_ui/test/arb_parity_test.dart`
   fails if the two `.arb` files diverge in key count, translation or
   placeholders.
 - **Real output.** `packages/vh_ytdlp/test/fixtures/` holds what yt-dlp
   really printed on Windows and Android, with media links, addresses and
-  local paths replaced; the models' fixtures in `vh_core` are anonymised
+  local paths replaced. The models' fixtures in `vh_core` are anonymised
   the same way.
 
 ## 7. Deeper references
 
 - [`ENGINE.md`](ENGINE.md): the yt-dlp command line, the measurements on
-  both platforms, the traps, and what carried over from the Vidhoist days
-  (storage keys, backups, short links).
-- [`blueprint/REPORT.md`](blueprint/REPORT.md) and
-  [`blueprint/EXECUTION-PLAN.md`](blueprint/EXECUTION-PLAN.md): why the
-  server went, and the order the work was done in.
+  both platforms, the traps, the storage keys, the backup format and
+  short links.
+- [`PC-LINK.md`](PC-LINK.md): the phone ↔ computer link: who sees what,
+  pairing, the security layers and the protocol.
 - [`adr/`](adr/): the decisions that are not reopened without a new one.
-
----
-
-# البنية المعمارية
-
-خريطة المستودع لمن استنسخه للتو: ما القطع، وما القواعد التي تربطها، وأين
-يقع أي تغيير.
-
-اشتُقّ Vidhoist من vidhoist-mobile (ADR 0001)، وكان تطبيقاه عميلين لسيرفر
-Vidhoist. منذ المرحلة 1 (2026-11-06) لا سيرفر: التطبيقان ينزّلان على الجهاز
-نفسه بـyt-dlp. كيف يعمل yt-dlp وما قيس والفخاخ في [ENGINE.md](ENGINE.md).
-
-## ١ · تطبيقان في مستودع واحد
-
-| | **أندرويد** (`apps/vidhoist_mobile`) | **ويندوز** (`apps/vidhoist_desktop`) |
-|---|---|---|
-| أصله | Vidhoist Lite | Vidhoist Ember |
-| yt-dlp يعمل عبر | youtubedl-android (`YtDlpBridge.kt` و`ChannelYtDlpBackend`)، وتبقيه حياً `EngineService.kt` | `yt-dlp.exe` بجانب التطبيق أو في `tools\` (`ProcessYtDlpBackend`، بكائن Job لكل تشغيل)، وffmpeg وDeno يُنزَّلان عند أول حاجة |
-| المكتبة | مسح مجلد التنزيل (`Download/VidHoist`، ومثله على بطاقة الذاكرة) | `LocalHistoryStore` ومراقبة مجلد التنزيل |
-| التزامن | تنزيل واحد | كما يُضبط في الإعدادات › المحرّك |
-| الحصري | Wi-Fi فقط، المشاركة إلى التطبيق، الصورة داخل الصورة | الوسوم، القوائم، غرفة القراءة، زر المتصفح، الدرج؛ القنوات والمزامنة خلف مفتاح (الإعدادات › المحرّك) |
-
-تطبيقان مستقلان لا نكهتا بناء، بلوحة ألوان **واحدة** (`VhPalette`، ADR
-0002)، ويتقاسمان خمس حزم. وقبل أي تعديل في حزمة مشتركة اسأل: **هل يغيّر
-هذا سلوك التطبيق الآخر؟**
-
-## ٢ · الحزم وقاعدة الاعتماد
-
-```
-apps/vidhoist_mobile ─┐
-                      ├─► packages/vh_media ─► packages/vh_core ─► packages/vh_ytdlp
-apps/vidhoist_desktop ┘            │                 ▲
-        │                          └─► packages/vh_ui│
-        └─► packages/vh_transcripts ─────────────────┘
-```
-
-| الحزمة | تحتوي | القاعدة الصارمة |
-|---|---|---|
-| `vh_ytdlp` | أوامر yt-dlp وقراءة ما يطبعه: محدِّدات الصيغ، أسطر التقدّم والملف، ملف info.json، الأخطاء (`ErrorClassifier`)، الإصدارات | **Dart خالص، بلا اعتماديات ولا عمليات**، ويُختبر على مخرجات حقيقية |
-| `vh_core` | `DownloadBackend` (يكتبه كل تطبيق)، `LocalDownloadEngine`، `LocalHistoryStore`، `LocalPendingStore`، النماذج، التخزين، النسخ، المزامنة، أدوات الروابط، التحديث الذاتي، والربط بالكمبيوتر (`pc_link`: البروتوكول والشهادة والخادم والعميل المثبَّت) | **Dart خالص بلا Flutter**، ويُختبر بـ`dart test` |
-| `vh_media` | مشغّل الصوت والفيديو ومخازن التشغيل ونموذج المكتبة | يشغّل ملفات الجهاز |
-| `vh_ui` | الرموز التصميمية والثيمات والودجات والترجمة | لا يعرف محرّكاً ولا تطبيقاً |
-| `vh_transcripts` | قراءة الترجمات، والبحث المراعي للعربية، ومخزن النصوص، و`YtDlpSource` للمقاطع الموجودة في المكتبة | **Dart خالص** |
-| `apps/*` | الشاشات والتوجيه وحقن الاعتماديات وطريقة المنصة في تشغيل yt-dlp | يعتمد على الحزم أعلاه |
-
-ثلاث نتائج تستحق الحفظ:
-
-- **قراءة واحدة لـyt-dlp.** الأمر يبنيه `CommandBuilder` وما يعود تقرؤه
-  `vh_ytdlp` وحدها؛ التطبيقان يشغّلان العملية ويمرّران أسطرها إلى
-  `readDownloadRun` فقط. والتنزيل وجلب النصوص للمقاطع القديمة يصنّفان الخطأ
-  بالطريقة نفسها (`ErrorClassifier`).
-- **صفر نص واجهة مثبَّت.** كل نص في ملفَّي `.arb`، ويتغيّران في الدفعة
-  نفسها، وحارس آلي يفرض ذلك.
-- **صفر لون أو مسافة مثبَّتة.** كلاهما من `tokens`، والقيمة المثبتة تعمل
-  نهاراً وتنكسر ليلاً.
-
-## ٣ · أين تقع الميزة
-
-الميزة مجلَّد تحت `apps/<app>/lib/features/<name>/`. والقواعد العملية:
-
-- ما لا يحتاج Flutter ينزل إلى `vh_core` (أو `vh_ytdlp` إن كان عن نص
-  yt-dlp) ويأخذ `dart test`.
-- الودجت الذي يستعمله التطبيقان يذهب إلى `vh_ui`، وما يقرأ مزوّدات التطبيق
-  يبقى فيه.
-- ملفات مكرَّرة بين التطبيقين بقصد (`error_text.dart`، `about_screen.dart`).
-  إن عدّلت إحداها فعدّل أختها أو علّل في الإيداع لماذا لا.
-- **الحدّ: 400 سطر للشاشة و300 لغيرها**، كوداً بلا تعليقات.
-
-## ٤ · الحالة والتنقّل
-
-Riverpod يحقن الاعتماديات، و`di.dart` (ومجلد `data/` في ويندوز) هو الربط:
-تغيّر الإعدادات يعيد بناء المحرّك تلقائياً بلا تزامن يدوي.
-
-`router.dart` يحمل جدول المسارات كاملاً بـ`go_router`، ولا
-`Navigator.push` مباشر لشاشة.
-
-التخزين `SharedPreferences` خلف واجهة `KeyValueStore`، **وكل
-قراءة-تعديل-كتابة تمرّ من `PrefsMutex`**. المفاتيح وصيغة النسخ الاحتياطي في
-[ENGINE.md](ENGINE.md#what-carried-over-storage-backups-and-keys).
-
-## ٥ · التشغيل
-
-```bash
-flutter pub get                      # مرة واحدة من الجذر
-flutter analyze --no-pub             # صفر مشاكل هي البوابة
-cd packages/vh_core && dart test     # النواة Dart خالص
-cd packages/vh_transcripts && dart test
-cd packages/vh_ytdlp && dart test
-flutter test --no-pub                # في vh_media وmt_ui والتطبيقين
-flutter build apk --debug            # في apps/vidhoist_mobile
-flutter build windows --debug        # في apps/vidhoist_desktop
-```
-
-بعد تعديل أي `.arb`: `cd packages/vh_ui && flutter gen-l10n`. وعلى ويندوز
-يضع `tool/fetch-engine.ps1` كلاً من yt-dlp وffmpeg وDeno بإصدارات مثبّتة
-وSHA-256 حيث يتوقعها البناء.
-
-## ٦ · أعراف الاختبار
-
-- **كل عطل يُصلَح يترك حارساً** يفشل على الكود القديم، ولا يُضعَّف اختبار
-  قائم لتمرير تعديل.
-- **مصفوفة الأجهزة** (`device_matrix.dart` و`desktop_matrix.dart`) تلتقط
-  تجاوز الإطار عبر المقاسات ومقاييس الخط، وكل شاشة جديدة تمرّ بـ`expectNoOverflow`.
-- **تماثل الترجمة**: حارس يفشل إن اختلف الملفان في العدد أو الترجمة أو
-  المعاملات.
-- **مخرجات حقيقية** في `packages/vh_ytdlp/test/fixtures/`: ما طبعه yt-dlp
-  فعلاً على ويندوز وأندرويد، مع استبدال روابط الوسائط والعناوين والمسارات.
-
-## ٧ · المراجع الأعمق
-
-- [`ENGINE.md`](ENGINE.md): أمر yt-dlp، والقياسات على المنصتين، والفخاخ، وما
-  بقي من أيام Vidhoist (مفاتيح التخزين، النسخ، الروابط القصيرة).
-- [`blueprint/REPORT.md`](blueprint/REPORT.md) و
-  [`blueprint/EXECUTION-PLAN.md`](blueprint/EXECUTION-PLAN.md): لماذا ذهب
-  السيرفر، وبأي ترتيب جرى العمل.
-- [`adr/`](adr/): القرارات التي لا تُفتح إلا بقرار مدوَّن جديد.

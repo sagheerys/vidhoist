@@ -8,7 +8,7 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/home/handled_links.dart';
 import 'package:vidhoist_mobile/features/home/reception.dart';
 
-/// Field report 2026-10-20: the clipboard bar kept offering a link that
+/// The clipboard bar used to keep offering a link that
 /// had already been downloaded, on every return to the app and after a
 /// restart, and an older clipboard read could overwrite a newer one.
 void main() {

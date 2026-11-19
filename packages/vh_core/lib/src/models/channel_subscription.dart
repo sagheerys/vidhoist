@@ -1,6 +1,6 @@
 import 'channel_clip.dart';
 
-/// **A followed channel, as the screens show it** (§2.7).
+/// **A followed channel, as the screens show it**.
 ///
 /// `LocalChannelSource` runs the checks, keeps the ids it has already
 /// seen in a `ChannelRecord`, and queues whatever is new. This class is
@@ -49,11 +49,11 @@ class ChannelSubscription {
 
   /// **How many ids have been seen, not how many were downloaded.**
   /// It starts at the size of the channel, because subscribing marks the
-  /// existing catalogue as seen (§2.7). Labelling this "downloaded" would
+  /// existing catalogue as seen. Labelling this "downloaded" would
   /// tell someone who just subscribed that 214 files landed on their disk.
   final int seenCount;
 
-  /// Read as **seconds, not milliseconds** by [fromJson] (§2.7).
+  /// Read as **seconds, not milliseconds** by [fromJson].
   final DateTime? lastChecked;
 
   /// The last check's failure, kept until a check succeeds.

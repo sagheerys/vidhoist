@@ -26,7 +26,7 @@ import 'features/shell/shell_screen.dart';
 final router = GoRouter(
   // Tells the shell what has opened above it so it can hide the floating
   // add button, which used to be drawn over every bottom sheet and dialog,
-  // covering their content (field report).
+  // covering their content.
   observers: [VhRouteDepth.instance],
   // A first run readies the engine before anything else opens.
   redirect: (context, state) => welcomeRedirect(
@@ -131,7 +131,7 @@ final router = GoRouter(
     GoRoute(path: '/player', builder: (_, _) => const PlayerScreen()),
     GoRoute(path: '/reels', builder: (_, _) => const ReelsScreen()),
     // **The audio screen rises out of the mini player like a sheet** and is
-    // dragged down to return to it (requested 2026-09-04), rather than the
+    // dragged down to return to it, rather than the
     // horizontal slide used for every other route, because the relationship
     // here is "expanding" rather than "going deeper".
     GoRoute(
@@ -141,7 +141,7 @@ final router = GoRouter(
         child: const AudioScreen(),
         // **Non-opaque**: what is beneath stays drawn, so dragging it down
         // shows the cover and the mini player behind it rather than a black
-        // background (reported with a screenshot 2026-09-04).
+        // background.
         opaque: false,
         transitionDuration: VhMotion.sheetPage,
         reverseTransitionDuration: VhMotion.leave,

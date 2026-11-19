@@ -6,7 +6,7 @@ import '../storage/key_value_store.dart';
 ///
 /// **A store of its own rather than fields in `SuperSettings` or
 /// `PhoneSettings`**: the feature arrives behind a new path, so it touches
-/// neither settings loading nor settings saving (rule 5).
+/// neither settings loading nor settings saving.
 class UpdatePrefs {
   UpdatePrefs({required this.store, required this.mutex});
 

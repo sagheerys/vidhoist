@@ -23,7 +23,7 @@ class MediaShape {
 /// both the shorts path and the "shorts" chip in the library need them
 /// before playback. It is filled opportunistically on the first play of
 /// each clip, so the knowledge accumulates with no extra request. Storage
-/// key: `media_shape_index`, a documented addition to §5.1.
+/// key: `media_shape_index`.
 final class MediaShapeIndex extends UrlKeyedIndex<MediaShape> {
   MediaShapeIndex({required super.store, required super.mutex})
     : super(prefsKey: 'media_shape_index');

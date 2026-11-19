@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_mobile/features/shell/share_landing.dart';
 
-/// Field report 2026-10-16: a link shared while the app sat on the video
-/// player opened the add sheet, and the sheet was gone 162 ms later. The
+/// A link shared while the app sat on the video player opened the add
+/// sheet, and the sheet was gone 162 ms later. The
 /// share goes back to the library tab first, which closes the player; a
 /// sheet opened before that move is carried away with the player.
 void main() {

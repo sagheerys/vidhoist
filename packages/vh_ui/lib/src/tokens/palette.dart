@@ -92,7 +92,7 @@ class VhPalette {
   static const Color serverCardInk = Color(0xFFF0EBE4);
 
   // Always-dark constants. Full review 2026-09-02 found these hard-coded in
-  // the screens, against rule 5: every colour comes from tokens, no
+  // the screens, against the rule that every colour comes from tokens, no
   // literals.
 
   /// The far end of the charcoal playlist-card gradient, lighter than
@@ -117,8 +117,8 @@ class VhPalette {
   // VidHoist by day: white cards on a soft stone ground, the espresso
   // ink kept for warmth, and a blue accent. The ground was plain white at
   // first (2026-11-04); white on white glared and the cards had only their
-  // hairline to stand on (owner, 2026-11-06). Desktop and phone share one
-  // palette pair, so desktopDay/phoneDay are aliases.
+  // hairline to stand on. Desktop and phone share one palette pair, so
+  // desktopDay/phoneDay are aliases.
   static const VhPalette desktopDay = VhPalette(
     bg: Color(0xFFF2F1EE),
     card: Color(0xFFFFFFFF),
@@ -147,8 +147,8 @@ class VhPalette {
     grainOpacity: 0.035,
   );
 
-  // VidHoist by night: true black, as the owner asked, with lifted cards so
-  // the hairlines still read, and the blue brightened for dark ground.
+  // VidHoist by night: true black, with lifted cards so the hairlines
+  // still read, and the blue brightened for dark ground.
   static const VhPalette desktopNight = VhPalette(
     bg: Color(0xFF000000),
     card: Color(0xFF121212),

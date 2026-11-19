@@ -31,10 +31,10 @@ class VhDevice {
     // on the 600-point line where a layout switches from phone to rail.
     VhDevice('لوحي صغير 600×960', Size(600, 960)),
     VhDevice('لوحي صغير أفقي 960×600', Size(960, 600)),
-    // The owner's 8-inch tablet: the app's window as measured on it, above
+    // A real 8-inch tablet: the app's window as measured on it, above
     // the three-button bar, under Android's 600 line on both sides.
-    VhDevice('لوحي المالك 8 بوصات 593×900', Size(593, 900)),
-    VhDevice('لوحي المالك أفقي 948×544', Size(948, 544)),
+    VhDevice('لوحي 8 بوصات 593×900', Size(593, 900)),
+    VhDevice('لوحي 8 بوصات أفقي 948×544', Size(948, 544)),
     VhDevice('لوحي 800×1280', Size(800, 1280)),
     VhDevice('لوحي أفقي 1280×800', Size(1280, 800)),
     // More tablet shapes nobody here owns (2026-10-10): a 7-inch tablet on

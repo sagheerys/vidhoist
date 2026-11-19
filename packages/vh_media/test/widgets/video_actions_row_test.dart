@@ -6,10 +6,9 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../icon_finder.dart';
 
-/// **Guard: the portrait player's actions are one row of pills** (owner's
-/// request 2026-11-02, as in mobile-v2-10): the main one outlined in the
-/// ink, sharing and the original link under the ⋮, and a row too long for
-/// the screen scrolls rather than squeezes.
+/// **Guard: the portrait player's actions are one row of pills**: the main
+/// one outlined in the ink, sharing and the original link under the ⋮, and
+/// a row too long for the screen scrolls rather than squeezes.
 void main() {
   Widget host(List<VhPlayerAction> actions, {double width = 384}) =>
       MaterialApp(

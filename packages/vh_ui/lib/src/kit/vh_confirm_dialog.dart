@@ -6,7 +6,7 @@ import '../widgets/vh_desktop_app.dart';
 import '../widgets/vh_route_motion.dart';
 
 /// Each platform's own scale: the phones share this dialog with the
-/// computer since the mobile plan of 2026-11-01.
+/// computer.
 VhCorners _cornersOf(BuildContext context) =>
     VhDesktopApp.isDesktop(context) ? VhCorners.desktop : VhCorners.mobile;
 

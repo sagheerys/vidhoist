@@ -12,9 +12,8 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
-/// **Guard: the smart playlists are quiet rows, not cards** (owner's
-/// report, 2026-11-05: favourites and the latest additions were still
-/// three dark glowing cards).
+/// **Guard: the smart playlists are quiet rows, not cards** (favourites
+/// and the latest additions were still three dark glowing cards).
 void main() {
   final clip = LocalItem(
     key: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',

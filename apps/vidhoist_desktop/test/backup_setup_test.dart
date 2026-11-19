@@ -119,8 +119,7 @@ void main() {
 
     test("**the guard**: this computer's own backup, chosen as a file, is "
         'offered whole, and restoring it brings back the library and the '
-        'channels (owner report 2026-11-12: merged, it brought the playlists '
-        'alone)', () async {
+        'channels (merged, it brought the playlists alone)', () async {
       await store.setStringList(LocalHistoryStore.key, ['{"path":"C:/a.mp4"}']);
       await store.setString(LocalChannelSource.storeKey, '[{"id":"c1"}]');
       final file = await BackupService(

@@ -35,7 +35,7 @@ class LibraryScreen extends ConsumerStatefulWidget {
 class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   /// The highlight from a completion-notification tap is **temporary**. It
   /// used to be set and never cleared, so the item kept a "selected" look
-  /// forever (field report 2026-09-02).
+  /// forever.
   static const highlightDuration = Duration(seconds: 6);
   Timer? _highlightTimer;
 
@@ -146,7 +146,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     );
   }
 
-  /// **Lazy building is mandatory** (a performance lesson from phase 6):
+  /// **Lazy building is mandatory** (a performance lesson):
   /// the header is a sliver and the items are a `SliverList.builder` that
   /// builds only what is visible.
   Widget _body(
@@ -170,8 +170,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             ],
           ),
         ),
-        // **The order of the cases is deliberate** (field report
-        // 2026-09-02): every library invalidation passes through
+        // **The order of the cases is deliberate**: every library invalidation
+        // passes through
         // `AsyncLoading` **while keeping the previous data**, and matching
         // that first replaced the list with a spinner for a fraction of a
         // second, a continuous flicker during downloads, when the library
@@ -248,9 +248,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   /// **One task shows its full card; more than one collapses into a single
   /// summary line.**
   ///
-  /// Field report 2026-09-03: "several downloads all appear in the
-  /// downloads library while a button for them already sits in the header.
-  /// Find a way to stop them crowding one place."
+  /// Several downloads all appeared in the library while a button for them
+  /// already sits in the header, crowding one place.
   List<Widget> _activeStrip(VhLocalizations l10n, List<DownloadTask> active) {
     if (active.isEmpty) return const [];
     return [
@@ -288,7 +287,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     );
   }
 
-  /// Rule 4: tapping an item. Audio plays in the background immediately;
+  /// Tapping an item. Audio plays in the background immediately;
   /// video opens `/player`, and a short portrait clip opens reels. The
   /// internal play queue is **the library as displayed** at the moment of
   /// the tap, with the same sorting and filtering.

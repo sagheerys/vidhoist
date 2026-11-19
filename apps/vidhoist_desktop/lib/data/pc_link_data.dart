@@ -10,7 +10,7 @@ import '../platform/computer_name.dart';
 import 'pc_link_host.dart';
 import 'update_data.dart';
 
-/// "Receive from the phone", off until the owner turns it on: until then no
+/// "Receive from the phone", off until the user turns it on: until then no
 /// port is open on this computer. Kept on this device only.
 const pcLinkEnabledKey = 'pc_link_enabled';
 
@@ -22,7 +22,7 @@ const pcLinkDevicesKey = 'pc_link_devices';
 const _certSecret = 'pc_link_cert';
 const _keySecret = 'pc_link_key';
 
-/// "Let the phone delete clips", off until the owner turns it on, and
+/// "Let the phone delete clips", off until the user turns it on, and
 /// device-only too: a backup must not carry that permission to another
 /// computer.
 const pcLinkDeleteKey = 'pc_link_allow_delete';

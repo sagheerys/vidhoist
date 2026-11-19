@@ -16,9 +16,9 @@ import '../icons/vh_icons.dart';
 /// means "a download is running now". At zero it stands still, so the
 /// motion itself is the news.
 ///
-/// **It loops for as long as anything downloads, on every app** (the
-/// owner's decision, 2026-11-01): an arrow that dropped three times and
-/// then rested read as a download that had stopped.
+/// **It loops for as long as anything downloads, on every app**: an arrow
+/// that dropped three times and then rested read as a download that had
+/// stopped.
 ///
 /// The count changes with a short fade instead of a jump. Within the
 /// identity's rules: no bounce, durations and curves from [VhMotion], and

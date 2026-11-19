@@ -7,10 +7,10 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import '../playback/fake_video_platform.dart';
 
-/// **Guard: a clip's chapters in the video player** (mobile plan, stage
-/// 16/F): cuts in the progress bar, the one playing beside the time, and
-/// a few under the buttons with the way to all of them. The app works
-/// them out from its transcript; this package only shows them.
+/// **Guard: a clip's chapters in the video player**: cuts in the progress
+/// bar, the one playing beside the time, and a few under the buttons with
+/// the way to all of them. The app works them out from its transcript;
+/// this package only shows them.
 void main() {
   final chapters = <VhChapter>[
     for (final (i, words) in [
@@ -68,7 +68,7 @@ void main() {
     expect(all, 1);
   });
 
-  // Owner's request 2026-11-02: a way to put the chapters away.
+  // A way to put the chapters away.
   testWidgets('**the guard**: the arrow folds the chapters away and back, '
       'and the app keeps the choice', (tester) async {
     final folded = ValueNotifier(false);

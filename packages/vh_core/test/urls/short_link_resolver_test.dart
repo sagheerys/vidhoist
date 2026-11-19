@@ -272,8 +272,8 @@ void main() {
     );
   });
 
-  // Field report 2026-11-17: TikTok's sheet came seconds late. A TikTok
-  // link's last hop is the video page itself, which was read whole.
+  // TikTok's sheet came seconds late. A TikTok link's last hop is the
+  // video page itself, which was read whole.
   group('one hop on the network', () {
     late HttpServer server;
     late List<HttpResponse> held;

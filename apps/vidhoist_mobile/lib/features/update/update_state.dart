@@ -15,7 +15,7 @@ import 'update_channel.dart';
 enum UpdatePhase { idle, checking, available, downloading, ready, failed }
 
 /// The failure reason **as a code, not as text**: state carries no
-/// interface strings (TRD §3.3), and translation happens only at display
+/// interface strings, and translation happens only at display
 /// time.
 enum UpdateFailure { check, download, install }
 

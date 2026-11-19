@@ -42,7 +42,7 @@ ServerStreamEndpoint pcStreamEndpoint(PcStreamProxy proxy) =>
 ///
 /// **A cover the computer keeps comes through the proxy** ([proxy]),
 /// since the players' lists and the media notification load images by
-/// address (field report 2026-11-10: the "Next" list showed none).
+/// address; without it the "Next" list showed none.
 PlaylistItem pcPlaylistItem(
   PcItem item, {
   String? onPhone,

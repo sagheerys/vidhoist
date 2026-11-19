@@ -6,7 +6,7 @@ import '../../shell/folded_text.dart';
 
 /// The addresses a phone dials, the home network's first and named by its
 /// adapter, then Tailscale's, and the adapters other programs added folded
-/// away: six in a row read as a puzzle (owner's report, 2026-11-09).
+/// away: six in a row read as a puzzle.
 class PhoneAddresses extends StatefulWidget {
   const PhoneAddresses({
     super.key,

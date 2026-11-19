@@ -8,10 +8,10 @@ import 'folders_data.dart';
 ///
 /// They used to sit in `%APPDATA%\Vidhoist\backup`, inside the app's own
 /// data, and the uninstaller's "also delete the app's data" took them with
-/// everything they were there to bring back (owner's report 2026-11-12:
-/// after a reinstall the library and the followed channels were gone, and
-/// no backup was left to restore). Windows' own Downloads folder, not the
-/// one chosen in Settings, so the place does not move when that changes.
+/// everything they were there to bring back (after a reinstall the library
+/// and the followed channels were gone, and no backup was left to restore).
+/// Windows' own Downloads folder, not the one chosen in Settings, so the
+/// place does not move when that changes.
 ///
 /// Null downloads (no such folder) keeps the old place.
 Future<Directory> desktopBackupFolder(

@@ -9,9 +9,9 @@ import 'package:vh_ui/vh_ui.dart';
 /// but when it moves: only while playing, never for someone who turned
 /// animations off, and never asking for frames once it has settled.
 void main() {
-  // The owner, 2026-11-05: by day the glow could hardly be seen, at night
-  // it was right. Measured as the strongest ember's contrast with the
-  // ground, on the real palettes, in both apps and on both kinds of screen.
+  // By day the glow could hardly be seen, at night it was right. Measured
+  // as the strongest ember's contrast with the ground, on the real
+  // palettes, in both apps and on both kinds of screen.
   group('**the guard**: as present by day as by night', () {
     double contrast(Color a, Color b) {
       final (hi, lo) = a.computeLuminance() > b.computeLuminance()
@@ -68,7 +68,7 @@ void main() {
     ),
   );
 
-  group('the embers (the owner\'s pick, 2026-09-24)', () {
+  group('the embers', () {
     test('at rest both sit at the centre: the still halo of before', () {
       final (large, small) = VhBreathingGlow.embersAt(3.7, 0);
 

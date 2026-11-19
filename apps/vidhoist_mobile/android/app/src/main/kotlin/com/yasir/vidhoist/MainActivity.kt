@@ -109,7 +109,7 @@ class MainActivity : AudioServiceActivity() {
                 "supportedAbis" -> result.success(android.os.Build.SUPPORTED_ABIS.toList())
                 // Cards and drives a download may go to (StorageVolumes).
                 "volumes" -> result.success(StorageVolumes.list(applicationContext))
-                // The name the owner gave this phone, shown on the computer
+                // The name the user gave this phone, shown on the computer
                 // when it pairs; the model when there is none.
                 "deviceName" -> result.success(
                     android.provider.Settings.Global.getString(contentResolver, "device_name")

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// **The status bar's icon is the mark** (owner, 2026-11-14): the folded
+/// **The status bar's icon is the mark**: the folded
 /// ribbon replaced the window with the arrow on 2026-11-11, but the icon
 /// every notification puts in the status bar kept the old drawing, since
 /// nothing made it from the kit.

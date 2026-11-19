@@ -64,7 +64,7 @@ void main() {
       const raw =
           'Authorization: Basic dXNlcjpwQHNz fetching '
           'https://vidhoist.example.com/history from 192.168.1.10:8081 saved '
-          '/storage/emulated/0/Download/Vidhoist_Lite/فيديو خاص.mp4 done';
+          '/storage/emulated/0/Download/Vidhoist/فيديو خاص.mp4 done';
       final clean = VhLogger.sanitizeForShare(raw);
       expect(clean, isNot(contains('dXNlcjpw')));
       expect(clean, isNot(contains('vidhoist.example.com')));

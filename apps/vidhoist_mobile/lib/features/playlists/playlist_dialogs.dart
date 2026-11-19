@@ -15,7 +15,7 @@ Future<String?> promptPlaylistName(
 }) {
   final l10n = context.vhl;
   // The dialog owns the controller and disposes it; see
-  // `mt_text_prompt.dart`.
+  // `vh_text_prompt.dart` in vh_ui.
   return promptVhText(
     context,
     title: title ?? l10n.createPlaylist,
@@ -43,7 +43,7 @@ Future<void> showCreatePlaylistDialog(
   }
 }
 
-/// A long press on a playlist card (rule 7): pin, edit, delete.
+/// A long press on a playlist card: pin, edit, delete.
 void showPlaylistActionsSheet(
   BuildContext context,
   WidgetRef ref,
@@ -105,9 +105,8 @@ void showPlaylistActionsSheet(
               ref.invalidate(playlistsProvider);
             },
           ),
-          // **Removing dead entries with one tap** (field report
-          // 2026-09-04: "I deleted the files and they stayed in the
-          // playlist"). Deleting from inside the app now prunes the
+          // **Removing dead entries with one tap**: deleted files used to
+          // stay in the playlist. Deleting from inside the app now prunes the
           // playlists automatically, and this cures what accumulated before
           // that, or what was deleted from outside the app.
           // `read` rather than `watch`: this is a function, not a `build`,

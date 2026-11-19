@@ -108,8 +108,8 @@ Map<String, List<VhCaptionLine>> orderTracks(
 }
 
 /// A clip spoken in Arabic comes with `ar` and `ar-orig` byte for byte the
-/// same (the owner's phone, 2026-11-07); offering both put "AR" in the
-/// switch twice.
+/// same (seen on a real phone, 2026-11-07); offering both put "AR" in
+/// the switch twice.
 bool _sameLines(List<VhCaptionLine> a, List<VhCaptionLine> b) {
   if (a.length != b.length) return false;
   for (var i = 0; i < a.length; i++) {

@@ -29,7 +29,7 @@ final playlistPreviewProvider = FutureProvider.family<PlaylistPreview?, String>(
   },
 );
 
-/// Enqueues the selection into the engine's queue (rule 3, step 2): the
+/// Enqueues the selection into the engine's queue: the
 /// items go behind any single item in flight and are marked as batch
 /// members.
 final batchSubmitterProvider = Provider((ref) => BatchSubmitter(ref));

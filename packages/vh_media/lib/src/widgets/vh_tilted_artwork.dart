@@ -100,7 +100,7 @@ class VhTiltedArtwork extends StatelessWidget {
 
 /// Where the sound comes from, streamed or "playing from your device":
 /// the golden rule made visible, as a quiet grey line
-/// rather than a tinted pill over the title (mobile plan 2026-11-01).
+/// rather than a tinted pill over the title.
 class VhSourceChip extends StatelessWidget {
   const VhSourceChip({super.key, required this.local});
 

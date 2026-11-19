@@ -11,7 +11,7 @@ import io.flutter.plugin.common.MethodChannel
  * zxing-android-embedded: open source (Apache 2.0) and without Google Play
  * services, which a GPL app on any phone cannot count on. Its own screen
  * asks for the camera when opened, so the app never holds the permission
- * before the owner presses "Scan".
+ * before the user presses "Scan".
  */
 object QrScanner {
     private const val REQUEST = 0x5143

@@ -88,8 +88,8 @@ class PhoneCodeCard extends StatelessWidget {
   }
 }
 
-/// A phone that typed the code, waiting for the owner: its name and the
-/// four digits to compare with the phone's own.
+/// A phone that typed the code, waiting for the person at the computer: its
+/// name and the four digits to compare with the phone's own.
 class PhoneRequestCard extends StatelessWidget {
   const PhoneRequestCard({super.key, required this.request});
 

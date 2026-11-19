@@ -11,7 +11,7 @@ import 'vh_up_next_list.dart';
 /// a list plays, progress, drag to dismiss, and a tap that opens the audio
 /// screen.
 ///
-/// **Trap §6.5:** visibility hangs on `mediaItem != null`, not on
+/// **Trap:** visibility hangs on `mediaItem != null`, not on
 /// `processingState`, or a ghost survives the stop.
 class VhMiniPlayer extends StatelessWidget {
   const VhMiniPlayer({

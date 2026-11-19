@@ -214,9 +214,9 @@ void main() {
 
     test('**the guard**: nothing lands beside the file but its subtitles; '
         'the cover goes inside it', () {
-      // Owner, 2026-11-07: an info JSON of 1.7 MB (with links signed for
-      // this computer's address) and a loose JPG beside every video, read by
-      // nothing. The cover inside the file outlives the site deleting it.
+      // An info JSON of 1.7 MB (with links signed for this computer's
+      // address) and a loose JPG beside every video, read by nothing. The
+      // cover inside the file outlives the site deleting it.
       final video = CommandBuilder.download(link, windows);
       expect(video, isNot(contains('--write-info-json')));
       expect(video, isNot(contains('--write-thumbnail')));
@@ -302,10 +302,10 @@ void main() {
   });
 
   test('**the guard**: on Windows yt-dlp prints in UTF-8', () {
-    // Owner, 2026-11-06: a title with "/" is saved as "⧸", which yt-dlp
-    // printed without that character on Windows; the path read back did not
-    // exist and the finished video never reached the library. The Python
-    // environment variables do not reach the frozen build; --encoding does.
+    // A title with "/" is saved as "⧸", which yt-dlp printed without that
+    // character on Windows; the path read back did not exist and the
+    // finished video never reached the library. The Python environment
+    // variables do not reach the frozen build; --encoding does.
     for (final args in [
       CommandBuilder.download(
         const DownloadSpec(url: 'u', folder: 'f'),

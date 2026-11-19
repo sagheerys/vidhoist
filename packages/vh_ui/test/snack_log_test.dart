@@ -21,8 +21,8 @@ void main() {
     return context;
   }
 
-  // Owner's request 2026-10-15: every error that shows also reaches the
-  // log, including the ones nobody logged on purpose.
+  // Every error that shows also reaches the log, including the ones nobody
+  // logged on purpose.
   testWidgets('an error shown is written down once, and only errors', (
     tester,
   ) async {

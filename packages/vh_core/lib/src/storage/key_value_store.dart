@@ -46,7 +46,7 @@ extension TypedReads on KeyValueStore {
   }
 }
 
-/// The one lock for every read-modify-write against storage (rule 3): two
+/// The one lock for every read-modify-write against storage: two
 /// concurrent flows without it read the same value, and the slower one
 /// erases the faster one's write.
 class PrefsMutex {

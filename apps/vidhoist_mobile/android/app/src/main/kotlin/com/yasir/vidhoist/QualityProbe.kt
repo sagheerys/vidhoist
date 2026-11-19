@@ -7,7 +7,7 @@ import android.media.MediaFormat
  * **What a file actually is**: its video and audio tracks, from the header.
  *
  * A download records the quality it was *asked* for ("best"), never
- * what it *got* — and on the owner's phone "best" was 4K AV1, which the chip
+ * what it *got* — and on a real phone "best" was 4K AV1, which the chip
  * cannot decode in hardware. `MediaExtractor` lists the tracks without
  * decoding anything, and for a stream it reads the header with range
  * requests, so it costs one short request, only when the details sheet

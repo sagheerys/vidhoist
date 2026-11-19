@@ -42,7 +42,7 @@ abstract interface class PcLinkHost {
   Future<PcList?> list(String id);
 
   /// Deletes the library clip [id] **to the Recycle Bin**, and only if the
-  /// owner let phones delete; never anything else.
+  /// user let phones delete; never anything else.
   Future<PcDeleteOutcome> delete(String id);
 }
 
@@ -50,10 +50,10 @@ abstract interface class PcLinkHost {
 ///
 /// **A scan finds a closed door with no sign on it.** Every path answers an
 /// empty 404 to anyone without a paired device's secret, the certificate
-/// names nobody, and `/v1/pair` exists only while the owner shows a code.
+/// names nobody, and `/v1/pair` exists only while the user shows a code.
 /// What a paired phone may do is narrow: read the downloads, library and
 /// saved lists, queue a web link, cancel a download, fetch a cover, read a
-/// library clip's file and transcripts by its id, and, only where the owner
+/// library clip's file and transcripts by its id, and, only where the user
 /// allowed it, send one library clip to the Recycle Bin. Nothing reaches
 /// the computer's settings, files outside the library, or a command line.
 class PcLinkServer {

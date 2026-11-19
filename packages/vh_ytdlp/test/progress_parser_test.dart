@@ -63,7 +63,7 @@ void main() {
         '[vh] finished 100 100 NA 1 NA NA NA 251-drc',
       ) as ProgressLine;
       expect(drc.formatId, '251-drc');
-      // A line from before the format field (the batch 1 runs) is media.
+      // A line from before the format field (older runs) is media.
       final old = YtDlpLine.parse(
         '[vh] downloading 1024 124386876 NA 61791.8 2014 NA NA',
       ) as ProgressLine;

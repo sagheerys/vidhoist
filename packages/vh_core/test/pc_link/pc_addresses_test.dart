@@ -1,8 +1,8 @@
 import 'package:test/test.dart';
 import 'package:vh_core/vh_core.dart';
 
-/// Which address the owner sees first (owner's report, 2026-11-09: six in a
-/// row, from Wi-Fi, a second network, VirtualBox, WSL and Tailscale).
+/// Which address the user sees first (a computer listed six in a row,
+/// from Wi-Fi, a second network, VirtualBox, WSL and Tailscale).
 void main() {
   test('**the guard**: home first, Tailscale next, the added adapters '
       'last', () {

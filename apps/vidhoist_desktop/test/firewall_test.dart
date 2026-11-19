@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/data/firewall_data.dart';
 
 /// What Windows' firewall makes of the link, read from the check script's
-/// output as PowerShell prints it (measured on the owner's computer,
+/// output as PowerShell prints it (measured on a real computer,
 /// 2026-11-10: a home Wi-Fi Windows called "Public", let in on both).
 void main() {
   PcFirewallRule rule(String output) => parseFirewallCheck(output).rule;

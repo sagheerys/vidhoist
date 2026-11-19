@@ -19,7 +19,7 @@ enum PcLinkFailure {
   pairingClosed,
   wrongCode,
 
-  /// The owner refused on the computer, or did not answer in time.
+  /// The person at the computer refused, or did not answer in time.
   pairingDenied,
 
   /// The computer would not take the link.

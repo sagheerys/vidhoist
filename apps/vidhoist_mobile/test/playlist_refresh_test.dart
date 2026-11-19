@@ -6,8 +6,7 @@ import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/playlists/playlists_providers.dart';
 import 'package:vh_core/vh_core.dart';
 
-/// **An open playlist shows what was just added or removed** (field report
-/// 2026-09-25).
+/// **An open playlist shows what was just added or removed.**
 void main() {
   late ProviderContainer container;
 

@@ -7,7 +7,7 @@ enum MediaPlaybackState { idle, loading, buffering, ready, completed }
 /// The port through which [VhAudioHandler] talks to any real player.
 ///
 /// It exists deliberately: the queue logic, the modes, position saving and
-/// "no ghost player" are all tested without platform channels (TRD §3.2),
+/// "no ghost player" are all tested without platform channels,
 /// and the playback package stays a detail replaceable in one place.
 abstract interface class MediaPlayerPort {
   Future<void> setSource(PlaybackSource source, {Duration initialPosition});

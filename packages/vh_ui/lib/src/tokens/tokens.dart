@@ -227,8 +227,8 @@ class VhTypeScale {
 
 /// What a screen puts first (design round 2026-11-11): the one number it
 /// is about, its one main action, and the paragraph that explains a choice.
-/// Used only where the owner approved the drawn screen, so the rest of the
-/// app keeps the sizes above.
+/// Used only on the screens drawn around it, so the rest of the app keeps
+/// the sizes above.
 abstract final class VhEmphasis {
   /// The number a sheet is about: a percent while something downloads.
   static const double figure = 56;

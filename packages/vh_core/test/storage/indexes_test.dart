@@ -16,7 +16,7 @@ void main() {
   group('OfflineIndex', () {
     test('put, get and remove, keyed by canonicalUrl', () async {
       final index = OfflineIndex(store: store, mutex: mutex);
-      await index.put(url, '/storage/emulated/0/Download/Vidhoist_Super/a.mp4');
+      await index.put(url, '/storage/emulated/0/Download/Vidhoist/a.mp4');
       expect(await index.isOffline(url), isTrue);
       expect(await index.localPathOf(url), contains('a.mp4'));
       await index.removeKey(url);

@@ -15,8 +15,8 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
-/// **The heights in the phone's add sheet** (owner's decisions of
-/// 2026-11-04): a ceiling on every video site, with 360 offered here alone
+/// **The heights in the phone's add sheet**: a ceiling on every video
+/// site, with 360 offered here alone
 /// so a phone can keep its downloads small, and none for sound alone.
 void main() {
   late _Engine engine;
@@ -75,7 +75,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  // Field report 2026-11-17: a TikTok share's sheet came seconds late,
+  // A TikTok share's sheet came seconds late,
   // while its short link was followed first.
   group('a shared short link', () {
     const short = 'https://vm.tiktok.com/ZMabc123/';
@@ -183,7 +183,7 @@ void main() {
       ]);
     });
 
-    // Asked 2026-11-18: before the length came, any time could be typed;
+    // Before the length came, any time could be typed;
     // read with the sheet, it has mostly come by the first one.
     testWidgets('**the guard**: the length is read as the sheet opens, '
         'before a part is wanted, and a link typed only once it rests', (

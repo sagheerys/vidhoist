@@ -5,7 +5,7 @@
 ///   where it was.
 /// - **No subtitle file of its own**: yt-dlp writes `.ar.vtt` and
 ///   `.en.vtt` beside every video, mpv loaded one by itself and drew it
-///   under the app's captions, over the seek bar (owner, 2026-11-07).
+///   under the app's captions, over the seek bar.
 ///   The app draws the subtitles.
 const mpvEngineOptions = {
   'stream-lavf-o':

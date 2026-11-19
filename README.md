@@ -56,7 +56,7 @@ packages/vh_ui           the design system, tokens, icons, EN/AR strings
 packages/vh_transcripts  subtitles and transcript search
 packages/vh_ytdlp        pure Dart: yt-dlp commands and reading its output
 third_party/             three patched plugins, see PATCHES.md in each
-docs/                    architecture, blueprint, decisions (docs/adr)
+docs/                    architecture, engine, phone link, decisions (adr)
 ```
 
 ## Licence

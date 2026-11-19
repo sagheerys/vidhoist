@@ -37,7 +37,7 @@ VhPlatformKind platformKindOf(MediaPlatform platform) => switch (platform) {
 };
 
 /// The add dialog plus automatic routing: a playlist goes to `/batch`, a
-/// single link goes straight to the engine (rule 2).
+/// single link goes straight to the engine.
 Future<void> openAddSheet(
   BuildContext context,
   WidgetRef ref, {

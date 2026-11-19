@@ -15,7 +15,7 @@ import 'widget_test.dart' show sample;
 
 import 'icon_finder.dart';
 
-/// **One chip row above the list** (mobile plan 2026-10-31): the platform
+/// **One chip row above the list**: the platform
 /// row moved into the sort sheet, and a chosen platform shows in the first
 /// row with its way out.
 void main() {

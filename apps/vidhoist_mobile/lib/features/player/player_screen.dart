@@ -16,7 +16,7 @@ import 'transcript_sheet.dart';
 import 'playback_providers.dart';
 import '../shared/open_web_link.dart';
 
-/// The video player (rule 4): every source is local, so the actions are
+/// The video player: every source is local, so the actions are
 /// continue as audio, share and open the original link. There is no
 /// "available offline".
 class PlayerScreen extends ConsumerStatefulWidget {
@@ -81,7 +81,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
       session: session,
       artwork: artworkBuilderFor(ref),
       playlistName: request.playlistName,
-      // **Belonging in landscape** (field report 2026-09-04): there is no
+      // **Belonging in landscape**: there is no
       // info sheet there, so the line under the title is its only home.
       membershipLine: membership[session.current?.canonicalUrl]?.line(
         context.vhl,
@@ -92,7 +92,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
           sidecarCaptionsFor(ref, subtitles, item, session: session),
       actions: _actions(session, subtitles),
       onContinueAsAudio: _continueAsAudio,
-      // **Never asked twice** (field report 2026-09-02): someone who had
+      // **Never asked twice**: someone who had
       // already moved the clip to audio and then pressed back was asked
       // about a clip they were already listening to.
       shouldOfferContinueAsAudio: _shouldOfferAudio,
@@ -133,7 +133,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
             ref.read(libraryActionsProvider).toggleFavorite(item.canonicalUrl),
       ),
       // The clip's subtitles read as a transcript, searched, and played
-      // from any line (batch 6b).
+      // from any line.
       if (sidecarTracksFor(ref, subtitles, item) case final tracks?)
         VhPlayerAction(
           icon: VhIcons.transcript,
@@ -203,7 +203,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     final session = ref.read(videoSessionProvider);
     final handler = ref.read(audioHandlerProvider);
     final positions = ref.read(playbackPositionsProvider);
-    // **Handed to the background here** (field report 2026-09-03): what
+    // **Handed to the background here**: what
     // remains does not touch the session at all, and waiting for the source
     // to load, seconds on a large file, froze the screen so it looked as
     // though the button had done nothing.
@@ -218,7 +218,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     // caught defect, and a long one on a slow network).
     await session.pause();
     await positions.save(item.canonicalUrl, position, duration: duration);
-    // **Handed to the background here** (field report 2026-09-03): what
+    // **Handed to the background here**: what
     // remains does not touch the session at all, and waiting for the source
     // to load, seconds on a large file, froze the screen so it looked as
     // though the button had done nothing.

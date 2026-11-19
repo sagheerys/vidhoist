@@ -54,8 +54,8 @@ class UpdateRelease {
   ///
   /// Returns `null` rather than throwing on any anomaly: a draft, a
   /// pre-release, a release with no APK for this app, or unexpected JSON.
-  /// **An update check never troubles the user with an error** (rule 5: a
-  /// new feature does not break what works).
+  /// **An update check never troubles the user with an error**: an extra
+  /// must not break what already works.
   /// A link to GitHub itself over https: where a release's page and its
   /// files are (`https://github.com/<owner>/<repo>/releases/download/…`,
   /// measured on the published release; GitHub redirects the download

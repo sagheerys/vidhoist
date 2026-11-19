@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'pc_link_data.dart';
 
-/// The rule the app adds when the owner lets the phone in; the uninstaller
+/// The rule the app adds when the user lets the phone in; the uninstaller
 /// removes it by this name (installer_test).
 const pcFirewallRuleName = 'VidHoist phone link';
 
@@ -30,7 +30,7 @@ const PcFirewall pcFirewallUnknown = (
   publicNetwork: false,
 );
 
-/// Reads Windows' firewall and, on the owner's word, adds the rule; Windows'
+/// Reads Windows' firewall and, on the user's word, adds the rule; Windows'
 /// own in main, nothing in tests.
 abstract class FirewallPort {
   Future<PcFirewall> check();
@@ -53,7 +53,7 @@ final firewallPortProvider = Provider<FirewallPort>(
   (ref) => const NoFirewall(),
 );
 
-/// Read once each time the link starts, and again after the owner allows.
+/// Read once each time the link starts, and again after the user allows.
 final pcFirewallProvider = FutureProvider<PcFirewall>((ref) async {
   final session = await ref.watch(pcLinkProvider.future);
   if (session == null) return pcFirewallUnknown;

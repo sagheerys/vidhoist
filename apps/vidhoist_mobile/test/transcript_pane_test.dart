@@ -6,7 +6,7 @@ import 'package:vidhoist_mobile/features/player/transcript_pane.dart';
 
 import 'device_matrix.dart';
 
-/// **The transcript on the phone** (batch 6b): the subtitles line by line,
+/// **The transcript on the phone**: the subtitles line by line,
 /// the one being said lit and followed, a search that folds Arabic, and a
 /// tap that plays from a line.
 void main() {

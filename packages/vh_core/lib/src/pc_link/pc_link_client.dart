@@ -30,7 +30,8 @@ class PcLinkClient implements PcLinkApi {
   /// Pairs with the computer at [host]:[port] using the [code] on its
   /// screen. [onCheck] receives the four digits to compare with the
   /// computer's as soon as the connection is made; the call then waits,
-  /// up to [PcLink.approvalWait], for the owner to allow the phone there.
+  /// up to [PcLink.approvalWait], for the person at the computer to allow
+  /// the phone there.
   ///
   /// With [fingerprint], read from the computer's QR code, only that
   /// certificate is accepted: anything else fails the handshake with

@@ -99,7 +99,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
     return '${l10n.restoreSuccess} · ${result.keysRestored}';
   }
 
-  /// Everything the backup may have changed is reloaded (rule 8, step 1).
+  /// Everything the backup may have changed is reloaded.
   Future<void> _refreshEverything() async {
     // A picked file may predate the folder's `VidHoist` spelling.
     await rewriteStoredPaths(

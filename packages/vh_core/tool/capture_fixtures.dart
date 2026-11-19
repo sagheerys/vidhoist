@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:vh_core/vh_core.dart';
 
-/// Captures real samples (rule 8); run by hand when the platforms change.
+/// Captures real samples; run by hand when the platforms change.
 Future<void> main() async {
   final browse = await ioHttpPostJson(
     Uri.parse('https://www.youtube.com/youtubei/v1/browse?prettyPrint=false'),

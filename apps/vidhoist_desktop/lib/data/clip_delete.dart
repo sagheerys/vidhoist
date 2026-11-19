@@ -45,7 +45,7 @@ class RecycleRefusedException implements Exception {
 /// or Windows refuses a file held open. A file already gone is still
 /// forgotten.
 ///
-/// On a drive with no Recycle Bin the owner's own delete, asked for here,
+/// On a drive with no Recycle Bin the user's own delete, asked for here,
 /// goes through for good as it always did; one from a phone
 /// ([fromPhone]) throws [NoRecycleBinException] and touches nothing.
 Future<void> deleteClipFile(

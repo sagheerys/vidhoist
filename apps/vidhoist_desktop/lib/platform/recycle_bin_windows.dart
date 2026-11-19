@@ -6,7 +6,7 @@ import 'package:win32/win32.dart';
 import '../data/clip_delete.dart';
 
 /// Puts [path] in Windows' Recycle Bin, as Explorer's Delete does, so the
-/// owner can get it back. **A drive with no Recycle Bin is left alone**
+/// user can get it back. **A drive with no Recycle Bin is left alone**
 /// (a network share, some memory sticks): Windows would quietly delete
 /// for good there, so the caller decides instead.
 Recycled recycleWithWindows(String path) {

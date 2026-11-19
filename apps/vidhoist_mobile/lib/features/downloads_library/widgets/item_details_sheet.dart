@@ -78,7 +78,7 @@ class _DetailsSheet extends ConsumerWidget {
             // Selectable, to copy it.
             row(l10n.titleLabel, item.title, selectable: true),
             row(l10n.fileSize, vhFormatSize(item.sizeBytes)),
-            // **What the file actually is** (asked 2026-09-25), read from
+            // **What the file actually is**, read from
             // its header.
             VhQualityRows(
               cacheKey: item.key,
@@ -89,7 +89,7 @@ class _DetailsSheet extends ConsumerWidget {
             ),
             row(l10n.downloadDate, vhTimeAgo(context, item.modified)),
             row(l10n.platform, platformLabel(l10n, item.platform)),
-            // **Where it belongs** (field report 2026-09-04): which
+            // **Where it belongs**: which
             // playlists is this clip in? The information was in the store
             // and no screen displayed it.
             ...switch (ref
@@ -101,8 +101,8 @@ class _DetailsSheet extends ConsumerWidget {
               _ => const <Widget>[],
             },
             const SizedBox(height: VhSpace.sm),
-            // **Two actions, not a third button in reels** (decision
-            // 2026-09-05): the reels rail holds three buttons and a fourth
+            // **Two actions, not a third button in reels**: the reels rail
+            // holds three buttons and a fourth
             // crowds them, and this sheet is opened from it by the
             // "details" button anyway.
             Row(

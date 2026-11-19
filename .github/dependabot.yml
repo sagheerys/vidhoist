@@ -21,7 +21,3 @@ updates:
     directory: /apps/vidhoist_mobile/android
     schedule:
       interval: monthly
-
-  - package-ecosystem: gradle
-    schedule:
-      interval: monthly

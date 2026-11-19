@@ -8,9 +8,9 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import '../playback/fake_video_platform.dart';
 
-/// **Guard: the chosen play mode under the video is filled with the ink**
-/// (mobile plan, the video player): the action colour is for the one
-/// thing to press, so a chosen chip is ink like every other chosen chip.
+/// **Guard: the chosen play mode under the video is filled with the ink**:
+/// the action colour is for the one thing to press, so a chosen chip is
+/// ink like every other chosen chip.
 void main() {
   setUp(() {
     VideoPlayerPlatform.instance = FakeVideoPlatform();

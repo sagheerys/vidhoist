@@ -14,7 +14,7 @@ import 'pc_pairing.dart';
 ///
 /// The computer stays silent unless the asker has a reason to know it is
 /// there: a phone paired with it, which proves so with a code made from its
-/// secret, or anyone while the owner shows a pairing code (two minutes),
+/// secret, or anyone while the user shows a pairing code (two minutes),
 /// told only the computer's name and port. A stranger's probe gets nothing,
 /// as a scan of the HTTPS port gets an empty 404. The answer only says where
 /// to dial; the certificate pin and the secret decide everything after it.

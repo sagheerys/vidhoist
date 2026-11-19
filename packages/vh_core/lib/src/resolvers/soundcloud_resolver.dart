@@ -4,7 +4,7 @@ import '../models/playlist_preview.dart';
 import '../urls/playlist_detector.dart';
 import 'http_fetch.dart';
 
-/// SoundCloud (§4), **fragile by nature and isolated**: any failure
+/// SoundCloud, **fragile by nature and isolated**: any failure
 /// returns null and breaks nothing, since the link is then downloaded as it
 /// is. There are no official API keys.
 class SoundCloudResolver {

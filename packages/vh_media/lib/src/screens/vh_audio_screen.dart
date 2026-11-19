@@ -71,10 +71,10 @@ class VhAudioScreen extends StatelessWidget {
   final bool Function(PlaylistItem item)? isFavorite;
   final void Function(PlaylistItem item)? onFavorite;
 
-  /// **A glimpse under the controls on a tall phone** (mobile plan
-  /// 2026-11-01): the transcript's current lines, in place of [extra]'s
-  /// button. Null for a clip with nothing to show, and left out on a short
-  /// screen or at a large text size, where the button comes back.
+  /// **A glimpse under the controls on a tall phone**: the transcript's
+  /// current lines, in place of [extra]'s button. Null for a clip with
+  /// nothing to show, and left out on a short screen or at a large text
+  /// size, where the button comes back.
   final Widget? Function(PlaylistItem item)? peek;
 
   /// The height a phone needs before [peek] shows, in logical points: the
@@ -95,11 +95,11 @@ class VhAudioScreen extends StatelessWidget {
       // natural to drag it back. The scrubber and the buttons are
       // unaffected, since the gesture is vertical.
       //
-      // **The whole Scaffold moves, not its content** (reported with a
-      // screenshot): moving the content alone left the screen background in
-      // place, showing a dark void above it, whereas what is wanted is the
-      // cover and the mini player showing behind it like a sheet being
-      // dragged away. That is why its route is non-opaque in the router.
+      // **The whole Scaffold moves, not its content**: moving the content
+      // alone left the screen background in place, showing a dark void
+      // above it, whereas what is wanted is the cover and the mini player
+      // showing behind it like a sheet being dragged away. That is why its
+      // route is non-opaque in the router.
       final size = MediaQuery.sizeOf(context);
       final tablet = size.shortestSide >= VhBreakpoint.tabletSide;
       final sideways = size.width > size.height;

@@ -146,8 +146,8 @@ void main() {
       expect(tester.hasRunningAnimations, isFalse);
     });
 
-    // The owner's choice 2026-10-08: on a home network the check ended
-    // before the eye saw anything, and a refresh looked ignored.
+    // On a home network the check ended before the eye saw anything, and a
+    // refresh looked ignored.
     testWidgets('a quick answer still shows the arrows for a moment', (
       tester,
     ) async {

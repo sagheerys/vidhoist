@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// **Mapping an async state while preserving the previous value.**
 ///
-/// Field report 2026-09-03: "the library still flickers while loading".
+/// The library used to flicker while loading.
 /// The cause was `AsyncValue.whenData`: it dispatches on the **type** of
 /// the state rather than on whether a value exists, so on `AsyncLoading`
 /// it returns a **new empty** instance, destroying what Riverpod was

@@ -9,10 +9,9 @@ import '../playback/fake_player_port.dart';
 
 import '../icon_finder.dart';
 
-/// **The glow stays and the extras go** (mobile plan 2026-10-31): the
-/// accent is for play and progress, so the play button casts no coloured
-/// shadow, and shuffle and repeat say "on" in ink with a dot, not in a
-/// second orange glyph.
+/// **The glow stays and the extras go**: the accent is for play and
+/// progress, so the play button casts no coloured shadow, and shuffle and
+/// repeat say "on" in ink with a dot, not in a second orange glyph.
 void main() {
   late MemoryKeyValueStore store;
   late VhAudioHandler handler;

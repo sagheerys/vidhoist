@@ -110,7 +110,7 @@ void main() {
     expect(logs.where((l) => l.startsWith('share duplicate')), hasLength(1));
   });
 
-  // Field report 2026-10-15: sharing a link again after closing its sheet
+  // Sharing a link again after closing its sheet
   // did nothing at all, because it matched the last link received.
   test('the same link shared again later gets through', () async {
     var now = DateTime(2026, 10, 15, 13);

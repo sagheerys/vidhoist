@@ -24,7 +24,7 @@ class PcStreamProxy {
   PcStreamProxy(this._api, {String Function()? newToken})
     : _newToken = newToken ?? newSecret;
 
-  /// The link as it is now: the owner may change the route while a clip
+  /// The link as it is now: the user may change the route while a clip
   /// plays, and the next request takes the new one.
   final PcLinkApi? Function() _api;
   final String Function() _newToken;

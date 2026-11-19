@@ -44,8 +44,8 @@ void main() {
     expect((await read(store))!.segments.single.text, 'said in en');
   });
 
-  // Owner's decision 2026-11-04: the reader's language, then English, and
-  // nothing else. The first one kept used to stand in.
+  // The reader's language, then English, and nothing else. The first one
+  // kept used to stand in.
   test('**the guard**: only another language kept is not shown', () async {
     await store.write(said('ar'));
     await store.write(said('es'));

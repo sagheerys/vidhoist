@@ -10,8 +10,8 @@ import 'pc_link_state.dart';
 import 'pc_outbox.dart';
 import 'pc_outbox_section.dart';
 
-/// **The computer's downloads as the phone's own show** (owner's request
-/// 2026-11-11: they all showed, crowding the page): one shows its card;
+/// **The computer's downloads as the phone's own show**, so they do not
+/// crowd the page: one shows its card;
 /// more, counted with the links waiting to be sent, fold into one line
 /// that opens them in a sheet.
 class PcDownloadsStrip extends ConsumerWidget {

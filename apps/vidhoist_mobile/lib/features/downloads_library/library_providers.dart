@@ -130,14 +130,14 @@ class LibraryViewOptions {
   final LibrarySort sort;
 
   /// The saved view mode: one of four, not overlapping flags. Grid was
-  /// added on request 2026-09-04, and cards on 2026-09-08.
+  /// added on 2026-09-04, and cards on 2026-09-08.
   final LibraryViewMode mode;
 
   bool get compact => mode == LibraryViewMode.compact;
   bool get grid => mode == LibraryViewMode.grid;
   bool get cards => mode == LibraryViewMode.cards;
 
-  /// The selected item keys; a non-empty set means selection mode (rule 6).
+  /// The selected item keys; a non-empty set means selection mode.
   final Set<String> selection;
 
   bool get selecting => selection.isNotEmpty;
@@ -252,9 +252,8 @@ final libraryViewProvider =
 
 /// The list on screen after filtering and sorting.
 ///
-/// **`whenData` was erasing the retained data** (field report 2026-09-03,
-/// reproduced with a screen recording: the library was replaced by
-/// a spinner for 13 seconds during a single download). That function
+/// **`whenData` was erasing the retained data**: the library was replaced
+/// by a spinner for 13 seconds during a single download. That function
 /// dispatches on the **type** of the state rather than on whether a value
 /// exists, so on `AsyncLoading` it returns a **new empty** instance, losing
 /// whatever Riverpod held from before, and the ordering in the screen looks

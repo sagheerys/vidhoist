@@ -151,7 +151,7 @@ class DesktopPcHost implements PcLinkHost {
     for (final item in await _files(null)) item.canonicalUrl: item,
   };
 
-  /// **Asked again here, not trusted from the phone**: the owner's switch,
+  /// **Asked again here, not trusted from the phone**: the user's switch,
   /// then a clip of the library by its id; its file goes to the Recycle Bin.
   @override
   Future<PcDeleteOutcome> delete(String id) async {

@@ -181,7 +181,7 @@ class FakeApi implements PcLinkApi {
     return listClips[id];
   }
 
-  /// Whether the owner let phones delete there, and what a delete answers.
+  /// Whether the user let phones delete there, and what a delete answers.
   bool canDelete = false;
   PcDeleteOutcome deleting = PcDeleteOutcome.deleted;
   final deleted = <String>[];
@@ -564,7 +564,7 @@ void main() {
     });
   });
 
-  group('the route to the computer, the owner’s choice', () {
+  group('the route to the computer, the user’s choice', () {
     testWidgets('**the guard**: the computer’s addresses are kept, and '
         'the route in use is never switched by itself', (tester) async {
       // Saved as a real pairing is, secret apart.

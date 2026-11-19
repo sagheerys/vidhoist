@@ -25,7 +25,7 @@ Installs over the previous version and keeps your settings and library.
 
 | App | File |
 |---|---|
-| Lite | `Vidhoist-Lite-v2.2.0.apk` |
+| Lite | `VidHoist-Lite-v2.2.0.apk` |
 
 Full list: [CHANGELOG](https://github.com/x/y/blob/main/CHANGELOG.md)
 
@@ -73,7 +73,7 @@ Full list: [CHANGELOG](https://github.com/x/y/blob/main/CHANGELOG.md)
           for (final span in block.spans)
             if (span.code) span.text,
       ];
-      expect(code, ['Vidhoist-Lite-v2.2.0.apk']);
+      expect(code, ['VidHoist-Lite-v2.2.0.apk']);
     });
 
     test('a link becomes its words; the address is dropped because nothing '
@@ -87,7 +87,7 @@ Full list: [CHANGELOG](https://github.com/x/y/blob/main/CHANGELOG.md)
         'disappears', () {
       final lines = parsed().map((b) => b.text).toList();
       expect(lines, contains('App — File'));
-      expect(lines, contains('Lite — Vidhoist-Lite-v2.2.0.apk'));
+      expect(lines, contains('Lite — VidHoist-Lite-v2.2.0.apk'));
       expect(lines.any((l) => l.contains('-')), isTrue);
       expect(lines.where((l) => l.trim() == '—').isEmpty, isTrue);
     });

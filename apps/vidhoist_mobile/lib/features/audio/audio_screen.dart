@@ -46,14 +46,12 @@ class AudioScreen extends ConsumerWidget {
       handler: handler,
       artwork: artworkBuilderFor(ref),
       cover: coverBuilderFor(ref),
-      // **No source chip** (field report 2026-09-04): "playing from your
+      // **No source chip**: "playing from your
       // device" carries no information here, because everything in the
       // library is on the device.
       showSourceChip: false,
-      // **A details button instead of a queue button** (field report
-      // 2026-09-05): the queue already has its visible button at the bottom
-      // of
-      // the screen.
+      // **A details button instead of a queue button**: the queue already
+      // has its visible button at the bottom of the screen.
       onDetails: () => _showDetails(context, ref, handler),
       extra: (item) => switch (tracksOf(item)) {
         final tracks? => VhExtraAction(

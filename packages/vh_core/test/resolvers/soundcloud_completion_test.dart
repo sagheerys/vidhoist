@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 /// SoundCloud embeds the full object for only the first five or so tracks,
 /// and the rest arrive as `{id, kind}` with no `permalink_url`. The parser
 /// was dropping them silently, so an album of 432 tracks showed **5**. The
-/// sample here comes from the live site (rule 8).
+/// sample here comes from the live site.
 void main() {
   final html = File('test/fixtures/real/soundcloud_set.html')
       .readAsStringSync();

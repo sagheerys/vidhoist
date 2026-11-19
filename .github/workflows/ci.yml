@@ -89,8 +89,8 @@ jobs:
         app: [vidhoist_mobile]
 
     steps:
-      # With yt-dlp, Python and ffmpeg in the APK (batch 4) the runner ran out
-      # of disk again (2026-11-06). Toolchains this build never uses go first.
+      # With yt-dlp, Python and ffmpeg in the APK the runner ran out of disk
+      # again (2026-11-06). Toolchains this build never uses go first.
       - name: Free disk space
         run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/boost /usr/share/swift && df -h /
 

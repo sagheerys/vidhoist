@@ -10,8 +10,8 @@ import 'local_item.dart';
 /// declares it.** Declaring `READ_MEDIA_VIDEO` only makes the permission
 /// askable; until something asks, every read of the download folder fails
 /// with `PathAccessException ... Permission denied, errno = 13`, which is
-/// exactly what a phone with a fresh profile showed (field report,
-/// Galaxy S22 Ultra, 2026-09-16): the library was an error screen, and the
+/// exactly what a phone with a fresh profile showed (Galaxy S22 Ultra,
+/// 2026-09-16): the library was an error screen, and the
 /// only way out was the system settings, which most users never find.
 enum MediaAccess {
   granted,
@@ -73,7 +73,7 @@ Future<bool> _permissionIsGranted(Permission permission) =>
 
 /// **An empty folder is not the same as a hidden one.**
 ///
-/// Measured on the owner's phone (Galaxy S22 Ultra, Android 16,
+/// Measured on a real phone (Galaxy S22 Ultra, Android 16,
 /// 2026-09-16): with the media permission revoked, the folder still opened
 /// and still listed — and listed *nothing*, so 28 downloads became "no
 /// downloads yet" with no error, no dialog and no way back. Silence is the

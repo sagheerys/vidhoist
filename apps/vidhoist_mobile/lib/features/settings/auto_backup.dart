@@ -7,10 +7,10 @@ import '../../di.dart';
 import '../downloads_library/local_item.dart';
 import '../storage/media_folder_rename.dart';
 
-/// The backups folder, inside the app's media folder (§5.3).
+/// The backups folder, inside the app's media folder.
 String get phoneBackupDir => '$phoneMediaDir/backups';
 
-/// The backup name prefix, **new on purpose** (requested 2026-09-04): the
+/// The backup name prefix, **new on purpose**: the
 /// old name `vidhoist_mobile_backup.json` is owned by an earlier install, and
 /// Android 11+ refuses to let this one write over it (`errno 13`).
 const phoneBackupPrefix = 'vidhoist_mobile';
@@ -42,7 +42,7 @@ final latestBackupProvider = FutureProvider<DateTime?>((ref) async {
 /// An automatic backup after every data change, plus a restore after a
 /// reinstall.
 ///
-/// **The trap that is gone** (decision 2026-09-04): the copy used to be
+/// **The trap that is gone**: the copy used to be
 /// encrypted with a key living in secure storage, so uninstalling or
 /// clearing data wiped it and left the backup on disk **undecryptable**
 /// unless the user had exported the key, which nobody does. The file is now

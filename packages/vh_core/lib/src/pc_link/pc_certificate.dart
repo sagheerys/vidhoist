@@ -9,7 +9,7 @@ import 'der.dart';
 
 /// The computer's own TLS identity: a P-256 key and a certificate it signs
 /// itself. No authority vouches for it; the phone trusts it because it
-/// learned its [fingerprint] while the owner watched the pairing, and
+/// learned its [fingerprint] while the user watched the pairing, and
 /// refuses any other certificate afterwards (pinning, as KDE Connect and
 /// Syncthing do).
 class PcCertificate {

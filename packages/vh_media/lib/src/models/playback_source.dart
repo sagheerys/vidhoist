@@ -33,7 +33,7 @@ class PlaybackSource {
 class ServerStreamEndpoint {
   const ServerStreamEndpoint({required this.buildUrl, required this.headers});
 
-  /// May throw [UnsafeFilenameException] for a malicious filename (rule 9).
+  /// May throw [UnsafeFilenameException] for a malicious filename.
   final String Function(String serverFilename) buildUrl;
   final Map<String, String> headers;
 

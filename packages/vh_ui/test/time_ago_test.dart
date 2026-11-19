@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **The guard** (owner's report, 2026-11-10): a phone seen a moment ago
-/// read "0 seconds ago", in Arabic, on the computer.
+/// **The guard**: a phone seen a moment ago read "0 seconds ago", in
+/// Arabic, on the computer.
 void main() {
   setUpAll(initVhL10n);
 

@@ -8,7 +8,7 @@ import '../downloads_library/local_item.dart';
 import 'playlist_dialogs.dart';
 import 'playlists_providers.dart';
 
-/// "Add to a playlist": a single item or a multi-selection (rule 6), with
+/// "Add to a playlist": a single item or a multi-selection, with
 /// playlist creation from here.
 void showAddToPlaylistSheet(
   BuildContext context,
@@ -84,7 +84,7 @@ class _AddToPlaylistSheet extends ConsumerWidget {
     );
   }
 
-  /// **An "already added" mark** (field report 2026-09-03): the sheet
+  /// **An "already added" mark**: the sheet
   /// showed every playlist alike, so there was no way to know where you had
   /// put the clip a moment ago short of opening each one. The store already
   /// prevented duplicates; what was missing was saying so.

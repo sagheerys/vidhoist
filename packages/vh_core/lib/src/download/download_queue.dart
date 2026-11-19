@@ -1,4 +1,4 @@
-/// The download queue (§3). Concurrency, one at a time by default, is
+/// The download queue. Concurrency, one at a time by default, is
 /// enforced by the engine; only ordering lives here. **A single
 /// item outranks members of a batch**, and within each class it is FIFO by
 /// add order.

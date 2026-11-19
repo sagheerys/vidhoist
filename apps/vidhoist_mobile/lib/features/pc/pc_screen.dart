@@ -137,7 +137,7 @@ class _StatusCard extends StatelessWidget {
   final PcView view;
   final String name;
 
-  /// "Through Tailscale": the route the owner chose.
+  /// "Through Tailscale": the route the user chose.
   final String? route;
 
   @override

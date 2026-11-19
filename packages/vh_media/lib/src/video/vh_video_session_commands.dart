@@ -2,7 +2,7 @@ part of 'vh_video_session.dart';
 
 /// [VhVideoSession] commands: seeking, skipping, mode and speed.
 ///
-/// **A `part` file** (rule 4, the size limit): the commands touch the
+/// **A `part` file** (the file size limit): the commands touch the
 /// private `_queue` and `_playMode`, so an extension in another library
 /// will not do. The session itself keeps loading and the lifecycle, which
 /// are its essence.

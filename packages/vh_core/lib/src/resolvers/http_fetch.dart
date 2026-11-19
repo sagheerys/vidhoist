@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data' show BytesBuilder, Uint8List;
 
-/// A plain text fetch for external services (§4), **a client of its
+/// A plain text fetch for external services, **a client of its
 /// own**, so no header set elsewhere in the app can ever leak to a
 /// third-party platform.
 typedef HttpGetString = Future<String> Function(Uri uri);

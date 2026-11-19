@@ -12,10 +12,10 @@ import 'fake_video_platform.dart';
 
 import '../icon_finder.dart';
 
-/// **Guard: picture in picture stays off until the user turns it on**
-/// (mobile plan, stage 16/F): no button and no arming before, and once on,
-/// leaving the app while a video plays is what moves it to a corner, where
-/// the picture shows without its controls.
+/// **Guard: picture in picture stays off until the user turns it on**: no
+/// button and no arming before, and once on, leaving the app while a video
+/// plays is what moves it to a corner, where the picture shows without its
+/// controls.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final calls = <MethodCall>[];

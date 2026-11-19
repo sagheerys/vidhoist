@@ -108,7 +108,7 @@ void main() {
     await rotation.write('{"lite":1}', at: at(1));
     final superRotation = BackupRotation(
       directory: temp.path,
-      prefix: 'vidhoist_super',
+      prefix: 'vidhoist_desktop',
       minSpacing: Duration.zero,
     );
     await superRotation.write('{"super":1}', at: at(1));

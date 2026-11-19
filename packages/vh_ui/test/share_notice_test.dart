@@ -25,8 +25,8 @@ void main() {
   testWidgets('the notice is on screen before the file is handed over', (
     tester,
   ) async {
-    // Field report 2026-11-10: the app stood still for seconds with nothing
-    // saying why, while a large file was copied.
+    // The app once stood still for seconds with nothing saying why, while
+    // a large file was copied.
     await tester.pumpWidget(app());
     var seenFirst = false;
     final send = Completer<void>();

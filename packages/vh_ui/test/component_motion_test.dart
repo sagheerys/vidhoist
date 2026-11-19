@@ -4,8 +4,8 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-/// **Guard: the components' own motion from the mobile plan.** Each of
-/// these jumped, looped without end or vanished in a frame before.
+/// **Guard: the components' own motion.** Each of these jumped, looped
+/// without end or vanished in a frame before.
 void main() {
   Widget host(Widget child, {bool desktop = false}) {
     final body = Scaffold(body: Center(child: child));
@@ -51,8 +51,8 @@ void main() {
   group('the downloads icon', () {
     bool moving(WidgetTester tester) => tester.hasRunningAnimations;
 
-    // The owner's decision (2026-11-01): a phone arrow that rested after
-    // three drops read as a stopped download, so it loops as before.
+    // A phone arrow that rested after three drops read as a stopped
+    // download, so it loops as before.
     testWidgets('on a phone it keeps dropping while anything downloads', (
       tester,
     ) async {

@@ -31,7 +31,7 @@ void main() {
         key: 'https://www.youtube.com/watch?v=item$i',
         canonicalUrl: 'https://www.youtube.com/watch?v=item$i',
         path:
-            '/storage/emulated/0/Download/Vidhoist/item$i.'
+            '/storage/emulated/0/Download/VidHoist/item$i.'
             '${i % 3 == 0 ? 'mp3' : 'mp4'}',
         title: titles[i % titles.length],
         sizeBytes: 1000000 * (i + 1) * 37,

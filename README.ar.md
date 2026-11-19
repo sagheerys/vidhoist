@@ -63,7 +63,7 @@ packages/vh_ui           نظام التصميم: الرموز، الأيقون�
 packages/vh_transcripts  الترجمات والبحث في النصوص
 packages/vh_ytdlp        Dart خالص: أوامر yt-dlp وقراءة مخرجاته
 third_party/             ثلاث إضافات معدَّلة، انظر PATCHES.md في كلٍّ منها
-docs/                    البنية، المخطّط، القرارات (docs/adr)
+docs/                    البنية، المحرّك، ربط الجوال، القرارات (adr)
 ```
 
 <div dir="rtl">

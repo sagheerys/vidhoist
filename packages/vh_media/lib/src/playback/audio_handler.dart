@@ -25,7 +25,7 @@ part 'audio_handler_recovery.dart';
 /// local if it exists on disk and otherwise a stream with authentication
 /// headers, and the position is shared between the two.
 ///
-/// **Trap §6.5:** [stop] clears `mediaItem`, `queue` and the saved state
+/// **Trap:** [stop] clears `mediaItem`, `queue` and the saved state
 /// together, or a ghost mini player survives the stop.
 class VhAudioHandler extends BaseAudioHandler with SeekHandler {
   VhAudioHandler({
@@ -153,9 +153,9 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
   ///
   /// [currentItem] is a point-in-time snapshot: watching it through
   /// `ref.watch` on a provider pinned by an override **never updates**, so
-  /// the indicator stuck on the first clip however far the queue advanced
-  /// (screenshot 2026-09-02). Interfaces consume this stream
-  /// and then need no knowledge of `audio_service` at all.
+  /// the indicator stuck on the first clip however far the queue advanced.
+  /// Interfaces consume this stream and then need no knowledge of
+  /// `audio_service` at all.
   Stream<String?> get currentKey =>
       mediaItem.map((item) => item?.id).distinct();
 
@@ -179,13 +179,13 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
   int get currentIndex => _queue.index;
   Stream<Duration> get positionStream => player.positionStream;
 
-  /// Called once at startup: the saved preferences (§5.1).
+  /// Called once at startup: the saved preferences.
   Future<void> loadPreferences() async {
     _playMode = await prefs.playMode();
     await player.setSpeed(await prefs.speed());
   }
 
-  /// Plays the list that was on screen at the moment of the tap (rule 4).
+  /// Plays the list that was on screen at the moment of the tap.
   Future<void> playItems(
     List<PlaylistItem> items, {
     int startIndex = 0,
@@ -325,7 +325,7 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
     _broadcast();
   }
 
-  /// **Trap §6.5**: stopping clears everything that keeps the mini player
+  /// **Trap**: stopping clears everything that keeps the mini player
   /// visible.
   @override
   Future<void> stop() => _stop(forgetSession: true);

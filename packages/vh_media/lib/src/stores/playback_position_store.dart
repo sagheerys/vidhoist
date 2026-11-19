@@ -1,6 +1,6 @@
 import 'package:vh_core/vh_core.dart';
 
-/// Resume positions, keyed `playback_pos_<canonicalUrl>` (§5.1). The same
+/// Resume positions, keyed `playback_pos_<canonicalUrl>`. The same
 /// key for the stream and the local copy, so resuming is shared between
 /// them.
 class PlaybackPositionStore {

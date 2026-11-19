@@ -6,7 +6,7 @@ import '../widgets/media_time.dart';
 import 'vh_video_session.dart';
 
 /// The standalone video chrome buttons, split out of
-/// `video_control_bars.dart` when the speed button was added (rule 4, the
+/// `video_control_bars.dart` when the speed button was added (the file
 /// size limit).
 
 /// The chrome buttons over the video: semi-transparent dark squares with

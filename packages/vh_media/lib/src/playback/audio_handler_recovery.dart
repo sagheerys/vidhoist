@@ -3,7 +3,7 @@ part of 'audio_handler.dart';
 /// **Recovery and continuity**: the policy for skipping a broken item, and
 /// saving the position and the session snapshot.
 ///
-/// **A `part` file rather than its own library** (rule 4, the size limit):
+/// **A `part` file rather than its own library** (the file size limit):
 /// these functions work on the private queue (`_queue`,
 /// `_consecutiveErrors`), and an extension in another library cannot reach
 /// private members.
@@ -16,7 +16,7 @@ extension VhAudioHandlerRecovery on VhAudioHandler {
 
   /// The clip ended naturally, so the mode decides what happens next.
   ///
-  /// **Lives here rather than in the class** for the size limit (rule 4):
+  /// **Lives here rather than in the class** for the file size limit:
   /// deciding what follows an item is continuity, which is this file's
   /// subject.
   Future<void> onCompleted() async {

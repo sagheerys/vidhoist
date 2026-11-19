@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/shared/async_view.dart';
 
-/// **The "library flicker" guard (field report 2026-09-03).**
+/// **The "library flicker" guard.**
 ///
 /// The first test is the one that failed on `whenData`: a loading state
 /// carrying earlier data was converted into an empty `AsyncLoading`, so the

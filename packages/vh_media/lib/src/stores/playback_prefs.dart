@@ -2,7 +2,7 @@ import 'package:vh_core/vh_core.dart';
 
 import '../models/play_mode.dart';
 
-/// The saved player preferences (§5.1): play mode, speed, shuffle. The
+/// The saved player preferences: play mode, speed, shuffle. The
 /// play mode accepts a per-playlist sub-key (`player_play_mode_<id>`) as
 /// the schema specifies, with the general one as the default when there is
 /// no specific value.

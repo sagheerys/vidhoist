@@ -4,9 +4,9 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-/// **The download card as the plan draws it** (mobile plan 2026-11-01): the
-/// clip's picture, the download speed beside the percentage, and a task
-/// waiting its turn drawn still rather than as a moving bar.
+/// **The download card**: the clip's picture, the download speed beside
+/// the percentage, and a task waiting its turn drawn still rather than as
+/// a moving bar.
 void main() {
   Widget host(Widget child) => MaterialApp(
     localizationsDelegates: VhLocalizations.localizationsDelegates,

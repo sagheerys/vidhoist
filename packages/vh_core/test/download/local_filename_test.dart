@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   final at = DateTime(2026, 9, 1, 14, 30, 5);
 
-  group('buildLocalFilename (§2.4)', () {
+  group('buildLocalFilename', () {
     test(
       "an Arabic title survives, and the extension comes from the source name",
       () {

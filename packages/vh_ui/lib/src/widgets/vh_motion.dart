@@ -22,7 +22,7 @@ import 'vh_polish.dart';
 ///
 /// The three remaining animations:
 /// 1. [VhRevealOnce] for screen content entering once.
-/// 2. [VhSlidePageTransition] (in `mt_page_motion.dart`) for screen
+/// 2. [VhSlidePageTransition] (in `vh_page_motion.dart`) for screen
 /// changes, following text direction.
 /// 3. [VhAnimatedSwap] for content changing in place.
 

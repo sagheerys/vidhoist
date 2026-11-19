@@ -37,12 +37,12 @@ abstract final class PcLink {
 
   /// The code the computer shows: six digits, two minutes, five tries, then
   /// a new code. Five guesses out of a million is one chance in 200,000, and
-  /// the owner must still allow the phone on the computer's screen.
+  /// the person at the computer must still allow the phone on its screen.
   static const codeLength = 6;
   static const pairWindow = Duration(minutes: 2);
   static const maxAttempts = 5;
 
-  /// How long a pairing request waits for the owner's answer on the computer.
+  /// How long a pairing request waits for the user's answer on the computer.
   static const approvalWait = Duration(seconds: 90);
 
   static const maxBody = 64 * 1024;
@@ -52,7 +52,7 @@ abstract final class PcLink {
 /// them from the certificate it actually reached, the computer from its own:
 /// a machine in the middle presents another certificate, fixed before it
 /// sees the code or the phone's nonce, so its four digits differ and the
-/// owner refuses it.
+/// person at the computer refuses it.
 String pairingCheck({
   required String fingerprint,
   required String code,
@@ -106,7 +106,7 @@ class PcPairing {
     this.routes = const [],
   });
 
-  /// The address in use: the owner's choice among [routes].
+  /// The address in use: the user's choice among [routes].
   final String host;
   final int port;
   final String fingerprint;
@@ -117,7 +117,7 @@ class PcPairing {
   final String name;
 
   /// Every address the computer last said it has (home network, Tailscale…),
-  /// for the owner to switch [host] between; empty until it first answers.
+  /// for the user to switch [host] between; empty until it first answers.
   final List<PcAddress> routes;
 
   PcPairing copyWith({

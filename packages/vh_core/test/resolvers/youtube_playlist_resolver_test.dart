@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 /// The cause, proven by running it: `youtube_explode_dart` emits **zero
 /// items** for a playlist counting 19 (in 2.5.3 and 3.1.0 alike), because
 /// YouTube replaced `playlistVideoRenderer` with `lockupViewModel`. These
-/// tests run against **a real saved InnerTube response** (rule 8).
+/// tests run against **a real saved InnerTube response**.
 void main() {
   final raw = File('test/fixtures/real/youtube_browse.json').readAsStringSync();
   final browse = json.decode(raw);

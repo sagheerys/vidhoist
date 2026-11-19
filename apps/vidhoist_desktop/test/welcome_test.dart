@@ -95,9 +95,7 @@ void main() {
     );
 
     testWidgets('**the guard**: the backup is offered before the welcome, '
-        'and restoring it skips the welcome (owner report 2026-11-12)', (
-      tester,
-    ) async {
+        'and restoring it skips the welcome', (tester) async {
       ShellHarness.useWindow(tester, const Size(1440, 900));
       quietClipboard(tester);
       final restored = <BackupFile>[];

@@ -39,13 +39,6 @@ class HistoryResponse {
     ],
   );
 
-  /// The shape check (§2.1): a map carrying both `done` and `queue`.
-  /// Anything else, an HTML page for example, is not a history.
-  static bool looksLikeVidhoist(dynamic decoded) =>
-      decoded is Map &&
-      decoded.containsKey('done') &&
-      decoded.containsKey('queue');
-
   factory HistoryResponse.fromJson(Map<String, dynamic> json) =>
       HistoryResponse(
         done: _items(json['done']),

@@ -2,7 +2,7 @@ import 'package:uuid/uuid.dart';
 
 const _uuid = Uuid();
 
-/// An item inside a saved playlist, keyed by canonicalUrl (§5.1: entries
+/// An item inside a saved playlist, keyed by canonicalUrl (entries
 /// in `saved_playlists` are `{canonicalUrl, serverFilename, cachedTitle,
 /// cachedThumb}`).
 class PlaylistEntry {

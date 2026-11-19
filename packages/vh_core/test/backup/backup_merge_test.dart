@@ -144,7 +144,7 @@ void main() {
     await phone.store.setString('video_sort_option', 'oldest');
     await phone.store.setString('active_url', 'http://192.168.1.5:8086');
     await phone.store.setStringList('external_urls', [
-      'https://me:secret@vidhoist.example.com',
+      'https://me:secret@server.example.com',
     ]);
     final desk = _Device(at(0));
     final result = await desk.merge(await phone.backup());

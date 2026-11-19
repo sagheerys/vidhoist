@@ -2,7 +2,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('DownloadQueue (§3)', () {
+  group('DownloadQueue', () {
     test('a single download takes precedence over batch members', () {
       final queue = DownloadQueue()
         ..enqueue('b1', isBatchMember: true)

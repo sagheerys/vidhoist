@@ -104,7 +104,7 @@ class _PairFormState extends ConsumerState<_PairForm> {
   }
 
   /// The computer's QR code: its addresses, code and certificate in one
-  /// look, nothing typed (owner's request, 2026-11-10).
+  /// look, nothing typed.
   Future<void> _scan() async {
     final l10n = context.vhl;
     final String? read;
@@ -194,7 +194,7 @@ class _PairFormState extends ConsumerState<_PairForm> {
           ),
         ),
         // The port has its own field: the phone's number pad has a dot but
-        // no colon (owner's report, 2026-11-09), and it is rarely needed.
+        // no colon, and it is rarely needed.
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

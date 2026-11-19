@@ -14,7 +14,8 @@ import 'simple_panes.dart';
 
 /// **Settings › Phone**: "download on the computer" from this end. Off
 /// until turned on, and then a phone pairs once: a code shown here, typed
-/// there, and the owner allowing it here after comparing four digits.
+/// there, and the person at the computer allowing it here after comparing
+/// four digits.
 class PhonePane extends ConsumerWidget {
   const PhonePane({super.key});
 

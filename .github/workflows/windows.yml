@@ -124,8 +124,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed ($LASTEXITCODE)" }
           Get-Item build\installer\*.exe | Format-Table Name, Length
 
-      # Unsigned and for checking only; a release is built on the owner's
-      # machine.
+      # Unsigned and for checking only; a release is built on the
+      # maintainer's machine.
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: Vidhoist-installer

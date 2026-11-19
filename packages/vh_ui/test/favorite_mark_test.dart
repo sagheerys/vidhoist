@@ -4,10 +4,9 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-/// **A heart on favourites alone** (owner's decision 2026-11-01): a phone
-/// card no longer carries an empty heart to tap; a favourite shows a small
-/// mark instead, and a card that keeps its toggle (the computer) is as it
-/// was.
+/// **A heart on favourites alone**: a phone card no longer carries an
+/// empty heart to tap; a favourite shows a small mark instead, and a card
+/// that keeps its toggle (the computer) is as it was.
 void main() {
   Widget host(Widget child) => MaterialApp(
     localizationsDelegates: VhLocalizations.localizationsDelegates,

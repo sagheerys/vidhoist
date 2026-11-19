@@ -5,11 +5,11 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/backup_data.dart';
 
-/// **The first start after an install, with a backup waiting** (owner's
-/// report 2026-11-12): the library, the followed channels and the settings
-/// come back in one answer, instead of a welcome that starts from nothing
-/// while the backup sits in `Downloads\VidHoist\Backups` unnoticed. True
-/// when [newest] was restored.
+/// **The first start after an install, with a backup waiting**: the
+/// library, the followed channels and the settings come back in one
+/// answer, instead of a welcome that starts from nothing while the backup
+/// sits in `Downloads\VidHoist\Backups` unnoticed. True when [newest] was
+/// restored.
 Future<bool> offerRestore(
   BuildContext context,
   WidgetRef ref,

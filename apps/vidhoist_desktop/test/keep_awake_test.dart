@@ -56,7 +56,7 @@ void main() {
     expect(port.calls.last, isFalse);
   });
 
-  test('on unless the owner turned it off', () async {
+  test('on unless the user turned it off', () async {
     final store = MemoryKeyValueStore();
     final container = ProviderContainer(
       overrides: [keyValueStoreProvider.overrideWithValue(store)],

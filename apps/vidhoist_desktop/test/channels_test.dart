@@ -125,32 +125,29 @@ void main() {
       );
     });
 
-    test(
-      "the owner's real history names no channel, so nothing matches",
-      () async {
-        final raw = File(
-          '../../packages/vh_core/test/fixtures/real/history_real_done.json',
-        ).readAsStringSync();
-        final history = HistoryResponse.fromJson(
-          jsonDecode(raw) as Map<String, dynamic>,
-        );
-        final items = mergeLibrary(
-          history: history,
-          offline: const {},
-          tags: const {},
-          artwork: const {},
-          shapes: const {},
-        );
-        expect(items, isNotEmpty);
-        final match = await matchChannels(items, {
-          's1': (name: 'Eric Tech - Videos', folder: null),
-          's2': (name: 'ServersatHome - Videos', folder: null),
-        }, started: (_) async => false);
-        expect(match.stats, isEmpty);
-        expect(match.unfollowed, isEmpty);
-        expect(match.namesChannels, isFalse);
-      },
-    );
+    test('a real history names no channel, so nothing matches', () async {
+      final raw = File(
+        '../../packages/vh_core/test/fixtures/real/history_real_done.json',
+      ).readAsStringSync();
+      final history = HistoryResponse.fromJson(
+        jsonDecode(raw) as Map<String, dynamic>,
+      );
+      final items = mergeLibrary(
+        history: history,
+        offline: const {},
+        tags: const {},
+        artwork: const {},
+        shapes: const {},
+      );
+      expect(items, isNotEmpty);
+      final match = await matchChannels(items, {
+        's1': (name: 'Eric Tech - Videos', folder: null),
+        's2': (name: 'ServersatHome - Videos', folder: null),
+      }, started: (_) async => false);
+      expect(match.stats, isEmpty);
+      expect(match.unfollowed, isEmpty);
+      expect(match.namesChannels, isFalse);
+    });
   });
 
   /// The page over [subs] kept by a [FakeChannels]; with [source] false,

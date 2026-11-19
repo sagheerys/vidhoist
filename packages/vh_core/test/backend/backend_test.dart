@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
-/// The real Windows runs measured in batch 1, kept in `vh_ytdlp`.
+/// The real Windows runs, measured and kept in `vh_ytdlp`.
 String fixture(String name) =>
     File('../vh_ytdlp/test/fixtures/windows/$name').readAsStringSync();
 
@@ -139,7 +139,7 @@ void main() {
     test(
       '**the guard**: subtitles fetched first do not fill the bar',
       () async {
-        // Owner, 2026-11-07, on the phone and on Windows: the counter went
+        // Seen 2026-11-07 on a phone and on Windows: the counter went
         // from 0 to 100 at once. Two subtitle files had taken the places of
         // the video and its audio; measured on a real run with subtitles.
         final events = await read(

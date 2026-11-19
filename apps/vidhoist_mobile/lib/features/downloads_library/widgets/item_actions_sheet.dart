@@ -12,7 +12,7 @@ import '../local_item.dart';
 import 'item_details_sheet.dart';
 import '../../shared/open_web_link.dart';
 
-/// The item actions sheet (rule 5; everything here is local). Delete
+/// The item actions sheet (everything here is local). Delete
 /// comes last, isolated by a divider and in the error
 /// colour, which is a general navigation rule.
 void showItemActionsSheet(BuildContext context, WidgetRef ref, LocalItem item) {
@@ -100,9 +100,9 @@ class _ItemActionsSheet extends ConsumerWidget {
               ),
             ),
             const Divider(),
-            // **Favourites from the menu, not an empty heart on every card**
-            // (owner's decision 2026-11-01): the card shows a small heart on
-            // favourites alone, and the players keep the one-tap heart.
+            // **Favourites from the menu, not an empty heart on every card**:
+            // the card shows a small heart on favourites alone, and the players
+            // keep the one-tap heart.
             VhFavoriteTile(
               favorite: item.favorite,
               onTap: () async {
@@ -207,7 +207,7 @@ class _ItemActionsSheet extends ConsumerWidget {
   }
 }
 
-/// Bulk delete confirmation (rule 6): deletes the files from the device.
+/// Bulk delete confirmation: deletes the files from the device.
 void confirmBulkDelete(
   BuildContext context,
   WidgetRef ref,

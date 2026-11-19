@@ -12,7 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'device_matrix.dart';
 
-/// **Field report 2026-09-16 (Galaxy S22 Ultra, fresh profile):** on the
+/// **On a Galaxy S22 Ultra with a fresh profile (2026-09-16):** on the
 /// first launch the app asked for notifications and nothing else, and the
 /// library showed
 /// `PathAccessException: Exists failed, path = '/storage/emulated/0/Download/Vidhoist'
@@ -38,7 +38,7 @@ void main() {
       expect(asked, isEmpty);
     });
 
-    /// **The measurement that changed this code** (owner's phone,
+    /// **The measurement that changed this code** (a real phone,
     /// 2026-09-16): with the permission revoked the folder still opened, so
     /// a gate that trusted the folder never asked, and the library showed
     /// "no downloads yet" over 28 files.
