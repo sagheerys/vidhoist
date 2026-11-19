@@ -2382,6 +2382,17 @@ class VhLocalizationsEn extends VhLocalizations {
   }
 
   @override
+  String pcFoundCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count found',
+      one: '1 found',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String pcLastContact(String time) {
     return 'Last contact $time';
   }
@@ -2610,6 +2621,9 @@ class VhLocalizationsEn extends VhLocalizations {
   @override
   String get pcScanPrompt =>
       'Point the camera at the QR code on the computer\'s screen';
+
+  @override
+  String get pcSearchHint => 'Search the computer\'s library';
 
   @override
   String get pcSendToPc => 'Send to the computer';

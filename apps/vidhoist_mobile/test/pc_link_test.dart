@@ -83,8 +83,19 @@ class FakeApi implements PcLinkApi {
       active: 1,
       addresses: addresses,
       canDelete: canDelete,
+      sorts: sorts,
     );
   }
+
+  /// Whether the computer can sort its library for the phone.
+  bool sorts = false;
+
+  /// A library served a page at a time, searched and sorted as asked;
+  /// null serves the two fixed clips below.
+  List<PcItem>? catalog;
+
+  /// What each library request asked for: offset, search, order and kind.
+  final asked = <(int, String?, PcLibrarySort, PcLibraryKind)>[];
 
   @override
   Future<List<PcTask>> tasks() async {
@@ -113,8 +124,28 @@ class FakeApi implements PcLinkApi {
     int offset = 0,
     int limit = 100,
     String? query,
+    PcLibrarySort sort = PcLibrarySort.newest,
+    PcLibraryKind kind = PcLibraryKind.all,
   }) async {
     _check();
+    asked.add((offset, query, sort, kind));
+    if (catalog case final all?) {
+      final words = (query ?? '').toLowerCase();
+      final found = [
+        for (final item in all)
+          if (item.title.toLowerCase().contains(words) &&
+              (kind == PcLibraryKind.all ||
+                  item.isAudio == (kind == PcLibraryKind.audio)))
+            item,
+      ];
+      if (sort == PcLibrarySort.size) {
+        found.sort((a, b) => (b.sizeBytes ?? 0).compareTo(a.sizeBytes ?? 0));
+      }
+      return PcLibraryPage(
+        items: found.skip(offset).take(limit).toList(),
+        total: found.length,
+      );
+    }
     return PcLibraryPage(
       items: [
         PcItem(
@@ -770,6 +801,88 @@ void main() {
       });
     }
 
+    /// The page over a computer whose library is [catalog].
+    Future<FakeApi> openLibrary(
+      WidgetTester tester,
+      List<PcItem> catalog, {
+      bool sorts = false,
+    }) async {
+      final api = FakeApi()
+        ..catalog = catalog
+        ..sorts = sorts;
+      await tester.pumpWidget(
+        _app(
+          _overrides(
+            store: store,
+            secrets: secrets,
+            pairing: _pairing,
+            api: api,
+          ),
+          const PcScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return api;
+    }
+
+    List<PcItem> clips(int n) => [
+      for (var i = 0; i < n; i++)
+        PcItem(
+          id: 'c$i',
+          title: 'Clip ${i.toString().padLeft(3, '0')}',
+          sizeBytes: i,
+          isAudio: i.isOdd,
+        ),
+    ];
+
+    testWidgets('**the guard**: a library larger than one page is reached '
+        'to its last clip, a page at a time as it scrolls', (tester) async {
+      final api = await openLibrary(tester, clips(250));
+      expect(find.text('Library on the computer · 250'), findsOneWidget);
+      // Scrolled on until the last clip, which only a second page has.
+      for (var k = 0; k < 60 && find.text('Clip 249').evaluate().isEmpty; k++) {
+        await tester.drag(find.byType(CustomScrollView), const Offset(0, -600));
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(find.text('Clip 249'), findsOneWidget);
+      expect([for (final a in api.asked) a.$1], containsAll([0, 200]));
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('**the guard**: a search goes to the computer once typing '
+        'pauses, and its clips replace the list', (tester) async {
+      final api = await openLibrary(tester, clips(250));
+      await tester.enterText(find.byType(TextField), 'Clip 24');
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(api.asked.where((a) => a.$2 == 'Clip 24'), isEmpty);
+      await tester.pumpAndSettle(const Duration(milliseconds: 400));
+      expect(api.asked.last.$2, 'Clip 24');
+      expect(find.text('10 found'), findsOneWidget);
+      expect(find.text('Clip 000'), findsNothing);
+      await tester.enterText(find.byType(TextField), 'nothing like it');
+      await tester.pumpAndSettle(const Duration(milliseconds: 400));
+      expect(find.text('No results'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('**the guard**: the order is offered only by a computer that '
+        'can sort, and what is chosen is what it is asked', (tester) async {
+      await openLibrary(tester, clips(3));
+      expect(find.byTooltip('Sort by'), findsNothing);
+      await tester.pumpWidget(const SizedBox());
+
+      final api = await openLibrary(tester, clips(3), sorts: true);
+      await tester.tap(find.byTooltip('Sort by'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Largest'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Audio'));
+      await tester.pumpAndSettle();
+      expect(api.asked.last.$3, PcLibrarySort.size);
+      expect(api.asked.last.$4, PcLibraryKind.audio);
+      await tester.pumpWidget(const SizedBox());
+    });
+
     testWidgets('**the guard**: on a wide tablet the page keeps a column of '
         'reading width, as the other pages do', (tester) async {
       tester.view.physicalSize = const Size(1366, 854);
@@ -787,7 +900,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      final list = tester.getRect(find.byType(ListView).first);
+      final list = tester.getRect(find.byType(CustomScrollView).first);
       expect(list.width, lessThanOrEqualTo(VhBreakpoint.readable));
       // In the middle, not against one side.
       expect(list.center.dx, closeTo(1366 / 2, 1));

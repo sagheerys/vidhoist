@@ -297,6 +297,13 @@
       }
     }
   },
+  "@pcFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@pcLastContact": {
     "placeholders": {
       "time": {
@@ -1265,6 +1272,7 @@
   "pcFirewallRefused": "Nothing changed: Windows needs an administrator's permission.",
   "pcFirewallTitle": "Windows Firewall",
   "pcFound": "Found {name}. Type the code it shows.",
+  "pcFoundCount": "{count, plural, =1{1 found} other{{count} found}}",
   "pcLastContact": "Last contact {time}",
   "pcLibrary": "Library on the computer",
   "pcLinkAddress": "Address on this network",
@@ -1324,6 +1332,7 @@
   "pcScanButton": "Scan the QR code",
   "pcScanFailed": "The camera could not be opened.",
   "pcScanPrompt": "Point the camera at the QR code on the computer's screen",
+  "pcSearchHint": "Search the computer's library",
   "pcSendToPc": "Send to the computer",
   "pcSent": "Sent to {name}",
   "pcSentMany": "{count, plural, =1{1 clip sent to {name}} other{{count} clips sent to {name}}}",

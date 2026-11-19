@@ -22,6 +22,8 @@ abstract interface class PcLinkHost {
     int offset = 0,
     int limit = 100,
     String? query,
+    PcLibrarySort sort = PcLibrarySort.newest,
+    PcLibraryKind kind = PcLibraryKind.all,
   });
 
   /// The cover file kept for [id], or null.
@@ -200,6 +202,9 @@ class PcLinkServer {
         offset: int.tryParse(q['offset'] ?? '')?.clamp(0, 1 << 30) ?? 0,
         limit: int.tryParse(q['limit'] ?? '')?.clamp(1, 500) ?? 100,
         query: q['q'],
+        sort:
+            PcLibrarySort.values.asNameMap()[q['sort']] ?? PcLibrarySort.newest,
+        kind: PcLibraryKind.values.asNameMap()[q['kind']] ?? PcLibraryKind.all,
       );
       return pcWriteJson(response, page.toJson());
     }

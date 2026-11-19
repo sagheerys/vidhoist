@@ -115,11 +115,17 @@ class PcLinkClient implements PcLinkApi {
     int offset = 0,
     int limit = 100,
     String? query,
+    PcLibrarySort sort = PcLibrarySort.newest,
+    PcLibraryKind kind = PcLibraryKind.all,
   }) async => PcLibraryPage.fromJson(
     await _getJson(PcLink.libraryPath, {
       'offset': '$offset',
       'limit': '$limit',
       if (query != null && query.isNotEmpty) 'q': query,
+      // Left out at their defaults, so an older computer reads the same
+      // request it always did.
+      if (sort != PcLibrarySort.newest) 'sort': sort.name,
+      if (kind != PcLibraryKind.all) 'kind': kind.name,
     }),
   );
 

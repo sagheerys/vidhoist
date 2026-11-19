@@ -4094,6 +4094,12 @@ abstract class VhLocalizations {
   /// **'Found {name}. Type the code it shows.'**
   String pcFound(String name);
 
+  /// No description provided for @pcFoundCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 found} other{{count} found}}'**
+  String pcFoundCount(int count);
+
   /// No description provided for @pcLastContact.
   ///
   /// In en, this message translates to:
@@ -4447,6 +4453,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Point the camera at the QR code on the computer\'s screen'**
   String get pcScanPrompt;
+
+  /// No description provided for @pcSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search the computer\'s library'**
+  String get pcSearchHint;
 
   /// No description provided for @pcSendToPc.
   ///

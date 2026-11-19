@@ -2420,6 +2420,19 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String pcFoundCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نتيجة',
+      few: '$count نتائج',
+      two: 'نتيجتان',
+      one: 'نتيجة واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String pcLastContact(String time) {
     return 'آخر تواصل $time';
   }
@@ -2650,6 +2663,9 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get pcScanPrompt => 'وجّه الكاميرا إلى رمز QR على شاشة الكمبيوتر';
+
+  @override
+  String get pcSearchHint => 'ابحث في مكتبة الكمبيوتر';
 
   @override
   String get pcSendToPc => 'أرسل إلى الكمبيوتر';

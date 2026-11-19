@@ -41,17 +41,25 @@ class FakeHost implements PcLinkHost {
     int offset = 0,
     int limit = 100,
     String? query,
-  }) async => PcLibraryPage(
-    items: [
-      for (var i = offset; i < (offset + limit).clamp(0, 3); i++)
-        PcItem(
-          id: 'i$i',
-          title: 'Clip $i',
-          duration: const Duration(minutes: 4),
-        ),
-    ],
-    total: 3,
-  );
+    PcLibrarySort sort = PcLibrarySort.newest,
+    PcLibraryKind kind = PcLibraryKind.all,
+  }) async {
+    asked.add((query, sort, kind));
+    return PcLibraryPage(
+      items: [
+        for (var i = offset; i < (offset + limit).clamp(0, 3); i++)
+          PcItem(
+            id: 'i$i',
+            title: 'Clip $i',
+            duration: const Duration(minutes: 4),
+          ),
+      ],
+      total: 3,
+    );
+  }
+
+  /// What each library request asked for: the search, order and kind.
+  final asked = <(String?, PcLibrarySort, PcLibraryKind)>[];
 
   @override
   Future<File?> cover(String id) async => id == 'i0' ? coverFile : null;
@@ -193,6 +201,31 @@ void main() {
     final page = await client.library(offset: 1, limit: 5);
     expect(page.total, 3);
     expect([for (final i in page.items) i.id], ['i1', 'i2']);
+  });
+
+  test(
+    '**the guard**: the search, order and kind the phone asks for reach '
+    "the computer, and the defaults read as an older phone's request",
+    () async {
+      final client = PcLinkClient(await pairPhone());
+      addTearDown(client.close);
+      await client.library(
+        query: 'رحلة',
+        sort: PcLibrarySort.title,
+        kind: PcLibraryKind.audio,
+      );
+      await client.library();
+      expect(host.asked, [
+        ('رحلة', PcLibrarySort.title, PcLibraryKind.audio),
+        (null, PcLibrarySort.newest, PcLibraryKind.all),
+      ]);
+    },
+  );
+
+  test('the computer says when it can sort; an older one does not', () {
+    const sorting = PcStatus(name: 'PC', version: '1', sorts: true);
+    expect(PcStatus.fromJson(sorting.toJson())!.sorts, isTrue);
+    expect(PcStatus.fromJson({'name': 'PC', 'version': '1'})!.sorts, isFalse);
   });
 
   test('a cover comes through, and only a kept one', () async {
