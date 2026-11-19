@@ -340,6 +340,14 @@ abstract final class VhIcons {
     'mail',
     r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.6" y="5.6" width="16.8" height="12.8" rx="2.4"/><path d="M4.4 7.2l7.6 5.6 7.6-5.6"/></svg>''',
   );
+  static const person = VhIconData(
+    'person',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.4" r="3.6"/><path d="M5.2 19.8a6.8 6.8 0 0 1 13.6 0"/></svg>''',
+  );
+  static const at = VhIconData(
+    'at',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.3"/><path d="M15.3 9v4.4a2.3 2.3 0 0 0 4.6 0V12a7.9 7.9 0 1 0-3.2 6.4"/></svg>''',
+  );
   static const bug = VhIconData(
     'bug',
     r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7.4" y="7.8" width="9.2" height="11.6" rx="4.6"/><path d="M12 11.4v8"/><path d="M9.4 5.2l1.2 2.2"/><path d="M14.6 5.2l-1.2 2.2"/><path d="M7.4 12.6h-3"/><path d="M16.6 12.6h3"/><path d="M7.6 16.6L5 18.2"/><path d="M16.4 16.6l2.6 1.6"/></svg>''',
@@ -496,6 +504,8 @@ abstract final class VhIcons {
     clock,
     code,
     mail,
+    person,
+    at,
     bug,
     phone,
     phoneOff,

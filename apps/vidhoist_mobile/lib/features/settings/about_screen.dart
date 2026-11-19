@@ -76,13 +76,13 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: VhSpace.xxl),
             VhSectionHeader(title: l10n.developer),
             _LinkTile(
-              icon: VhIcons.code,
+              icon: VhIcons.person,
               title: l10n.developerName,
               subtitle: 'github.com/sagheerys',
               url: _github,
             ),
             _LinkTile(
-              icon: VhIcons.mail,
+              icon: VhIcons.at,
               title: 'X',
               subtitle: 'x.com/Sagheer700',
               url: _x,
@@ -96,7 +96,7 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: VhSpace.xl),
             VhSectionHeader(title: l10n.sourceCode),
             _LinkTile(
-              icon: VhIcons.folder,
+              icon: VhIcons.code,
               title: l10n.sourceCode,
               subtitle: 'sagheerys/vidhoist',
               url: _repo,
@@ -117,7 +117,7 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: VhSpace.xl),
             VhSectionHeader(title: l10n.builtWith),
             _LinkTile(
-              icon: VhIcons.offline,
+              icon: VhIcons.download,
               title: 'yt-dlp',
               subtitle: l10n.ytdlpCredit,
               url: _ytdlp,
@@ -173,8 +173,10 @@ class _LinkTile extends StatelessWidget {
   final String subtitle;
   final String url;
 
-  /// URLs are isolated as LTR so their parts do not reverse in Arabic,
-  /// while a translated description follows the language's direction.
+  /// A link is isolated as left-to-right so its parts do not reverse in
+  /// Arabic, while a translated description is left as it is. Isolated,
+  /// not given its own direction: that set the link against the far edge,
+  /// across the row from the title it belongs under.
   final bool ltrSubtitle;
 
   @override
@@ -185,11 +187,12 @@ class _LinkTile extends StatelessWidget {
       leading: VhIcon(icon, color: p.ink2),
       title: Text(title),
       subtitle: Text(
-        subtitle,
-        textDirection: ltrSubtitle ? TextDirection.ltr : null,
+        ltrSubtitle ? vhLtrRun(subtitle) : subtitle,
         style: Theme.of(context).textTheme.bodySmall,
       ),
-      trailing: const VhIcon(VhIcons.external, size: 17),
+      // Quieter than the row's own icon: it says where a tap goes, not
+      // what the row is.
+      trailing: VhIcon(VhIcons.external, size: 16, color: p.ink3),
       onTap: () =>
           launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
     );

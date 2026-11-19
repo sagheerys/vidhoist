@@ -183,6 +183,10 @@ ICONS = {
     "clock": '<circle cx="12" cy="12" r="8.4"/><path d="M12 7.6V12l3 1.8"/>',
     "code": '<path d="M8.6 7.4L4 12l4.6 4.6"/><path d="M15.4 7.4L20 12l-4.6 4.6"/><path d="M13.2 5.8l-2.4 12.4"/>',
     "mail": '<rect x="3.6" y="5.6" width="16.8" height="12.8" rx="2.4"/><path d="M4.4 7.2l7.6 5.6 7.6-5.6"/>',
+    # A person: who made the app, on its About page.
+    "person": '<circle cx="12" cy="8.4" r="3.6"/><path d="M5.2 19.8a6.8 6.8 0 0 1 13.6 0"/>',
+    # A handle on a social site, which an envelope did not say.
+    "at": '<circle cx="12" cy="12" r="3.3"/><path d="M15.3 9v4.4a2.3 2.3 0 0 0 4.6 0V12a7.9 7.9 0 1 0-3.2 6.4"/>',
     "bug": '<rect x="7.4" y="7.8" width="9.2" height="11.6" rx="4.6"/><path d="M12 11.4v8"/><path d="M9.4 5.2l1.2 2.2"/>'
            '<path d="M14.6 5.2l-1.2 2.2"/><path d="M7.4 12.6h-3"/><path d="M16.6 12.6h3"/><path d="M7.6 16.6L5 18.2"/><path d="M16.4 16.6l2.6 1.6"/>',
     "phone": '<rect x="6.8" y="3.4" width="10.4" height="17.2" rx="2.6"/><path d="M11 17.4h2"/>',

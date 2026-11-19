@@ -69,10 +69,53 @@ void main() {
   ) async {
     await open(tester);
 
-    expect(find.text('sagheerys/vidhoist'), findsOneWidget);
-    expect(find.text('vidhoist/issues'), findsOneWidget);
+    expect(find.text(vhLtrRun('sagheerys/vidhoist')), findsOneWidget);
+    expect(find.text(vhLtrRun('vidhoist/issues')), findsOneWidget);
     expect(find.text('Vidhoist'), findsNothing);
     expect(find.text('yt-dlp'), findsOneWidget);
+  });
+
+  testWidgets('**the guard**: in Arabic a link sits under its title, on '
+      'the side of its title, not against the far edge', (tester) async {
+    await open(tester);
+    for (final (title, link) in [
+      ('X', 'x.com/Sagheer700'),
+      (
+        lookupVhLocalizations(const Locale('ar')).sourceCode,
+        'sagheerys/vidhoist',
+      ),
+    ]) {
+      final row = find.ancestor(
+        of: find.text(vhLtrRun(link)),
+        matching: find.byType(ListTile),
+      );
+      final heading = tester.getRect(
+        find.descendant(of: row, matching: find.text(title)),
+      );
+      final under = tester.getRect(find.text(vhLtrRun(link)));
+      expect(under.right, closeTo(heading.right, 1), reason: link);
+    }
+  });
+
+  testWidgets('each link row has an icon that says what it is', (tester) async {
+    await open(tester);
+    VhIconData iconOf(String link) => tester
+        .widget<VhIcon>(
+          find
+              .descendant(
+                of: find.ancestor(
+                  of: find.text(vhLtrRun(link)),
+                  matching: find.byType(ListTile),
+                ),
+                matching: find.byType(VhIcon),
+              )
+              .first,
+        )
+        .icon;
+    // An envelope stood for X, and a folder for the source code.
+    expect(iconOf('x.com/Sagheer700'), VhIcons.at);
+    expect(iconOf('github.com/sagheerys'), VhIcons.person);
+    expect(iconOf('sagheerys/vidhoist'), VhIcons.code);
   });
 
   testWidgets("the app's own icon, not a generic symbol", (tester) async {

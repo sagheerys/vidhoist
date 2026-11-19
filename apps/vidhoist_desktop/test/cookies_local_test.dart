@@ -106,7 +106,14 @@ void main() {
     // The sites are read from the file first; it is open until then.
     await settle(tester);
     await tester.tap(find.text(l.desktopCookiesRemove));
-    await settle(tester);
+    // Until the deletion and the setting have both reached the disk: a
+    // fixed few turns fell short under the full suite's load.
+    await settle(
+      tester,
+      until: () async =>
+          !File(target()).existsSync() &&
+          await store.getString(EngineOptionsNotifier.cookiesFileKey) == '',
+    );
     expect(File(target()).existsSync(), isFalse);
     expect(await store.getString(EngineOptionsNotifier.cookiesFileKey), '');
   });
