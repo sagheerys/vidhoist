@@ -191,7 +191,7 @@ abstract class VhLocalizations {
   /// No description provided for @accountsHelp.
   ///
   /// In en, this message translates to:
-  /// **'A sign-in expires after a while; when a site starts refusing again, sign in once more. Signing out of one site also signs the in-app browser out of the others, whose downloads go on as they were.'**
+  /// **'A sign-in expires after a while; when a site starts refusing again, sign in once more. Signing out of one site also signs the in-app browser out of the others, whose downloads go on as they were. If a site will not let you sign in here, import a cookies file from your computer\'s browser below.'**
   String get accountsHelp;
 
   /// No description provided for @accountsHint.

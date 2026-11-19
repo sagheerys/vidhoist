@@ -18,6 +18,12 @@ and local paths replaced).
 | JavaScript for YouTube | Deno 2.9.8, and none | QuickJS bundled (`libqjs.so`), passed by the library on every request |
 | Machine | i5-9400F, 16 GB, Windows 11 | emulator, API 36.1 x86_64; then a Galaxy S22 Ultra (arm64-v8a, Android 16) on the same home network |
 
+The Windows app itself ships none of these ffmpeg builds: it fetches the
+FFmpeg 9.0.2 essentials build by Gyan Doshi on first need, pinned with its
+SHA-256 in `apps/vidhoist_desktop/lib/platform/engine_pins.dart` and
+`tool/fetch-engine.ps1`. What each app ships, with licences and sources, is
+in [THIRD-PARTY.md](THIRD-PARTY.md).
+
 ## The command line that works
 
 ```

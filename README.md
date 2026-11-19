@@ -133,6 +133,9 @@ secured: [docs/PC-LINK.md](docs/PC-LINK.md).
 - **No account, no ads, no tracking, no server of ours.** VidHoist talks to
   the sites you download from, to GitHub to check for an update, and to
   your own computer if you pair it. Nothing else.
+- **Sign-ins** happen on each site's own page inside the phone app. The
+  cookies a sign-in leaves stay on the phone, where yt-dlp reads them, and
+  are sent nowhere else.
 - **Backups** are plain JSON with no secret in them: the library's lists,
   tags, playlists, channels and settings. The last seven are kept beside
   the downloads, so an uninstall does not take them; a phone's backup
@@ -245,7 +248,7 @@ differ. The layout is right-to-left first. How to add a language is in
 VidHoist stands on [yt-dlp](https://github.com/yt-dlp/yt-dlp), which does
 the downloading, [FFmpeg](https://ffmpeg.org), and
 [Deno](https://deno.com) on Windows. On Android, yt-dlp runs through
-[youtubedl-android](https://github.com/JunkFood02/youtubedl-android), and
+[youtubedl-android](https://github.com/yausername/youtubedl-android), and
 the pairing code is read with
 [ZXing Android Embedded](https://github.com/journeyapps/zxing-android-embedded).
 The apps are built with [Flutter](https://flutter.dev), and play with
@@ -258,6 +261,11 @@ everyone behind them.
 
 GPL-3.0. Copyright © 2026 Yasir Sagheer. The plugins in `third_party/`
 keep their own licences.
+
+The programs each app carries (FFmpeg, Python, yt-dlp, libmpv and others),
+their licences and their sources are listed in
+[docs/THIRD-PARTY.md](docs/THIRD-PARTY.md); the source of every GPL and LGPL
+one is attached to each release.
 
 VidHoist is not affiliated with yt-dlp or with any site. Download only what
 you have the right to, and respect the terms of the sites you use.

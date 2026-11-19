@@ -1,6 +1,6 @@
 # audio_service 0.18.19, patched
 
-An unmodified copy of [audio_service](https://pub.dev/packages/audio_service)
+A copy of [audio_service](https://pub.dev/packages/audio_service)
 0.18.19 (MIT, see `LICENSE`), with two changes, used by both apps through
 `dependency_overrides` in the workspace `pubspec.yaml`. The `example/` and
 `test/` folders of the original are left out.

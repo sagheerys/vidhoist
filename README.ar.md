@@ -127,6 +127,8 @@ yt-dlp داخل التطبيق.** الصق الرابط أو شاركه، واخ
 - **بلا حساب، بلا إعلانات، بلا تتبّع، بلا سيرفر لنا.** يتصل VidHoist
   بالمواقع التي تنزّل منها، وبـ GitHub ليفحص التحديث، وبكمبيوترك إن ربطته.
   لا شيء غير ذلك.
+- **تسجيل الدخول** يتم في صفحة كل موقع نفسها داخل تطبيق الجوال. وما يتركه من
+  ملفات تعريف يبقى على الجوال حيث يقرؤه yt-dlp، ولا يُرسَل إلى أي مكان.
 - **النسخ الاحتياطية** ملفات JSON بلا أي سر: قوائم المكتبة والوسوم وقوائم
   التشغيل والقنوات والإعدادات. تُحفظ آخر سبع بجانب التنزيلات فلا يأخذها حذف
   التطبيق، ونسخة الجوال تُستعاد على الكمبيوتر والعكس.
@@ -256,7 +258,7 @@ python tool/comment-lint.py
 يقوم VidHoist على [yt-dlp](https://github.com/yt-dlp/yt-dlp) الذي يتولّى
 التنزيل، و[FFmpeg](https://ffmpeg.org)، و[Deno](https://deno.com) على ويندوز.
 وعلى أندرويد يعمل yt-dlp عبر
-[youtubedl-android](https://github.com/JunkFood02/youtubedl-android)، ويُقرأ
+[youtubedl-android](https://github.com/yausername/youtubedl-android)، ويُقرأ
 رمز الربط بمكتبة
 [ZXing Android Embedded](https://github.com/journeyapps/zxing-android-embedded).
 بُني التطبيقان بـ [Flutter](https://flutter.dev)، ويشغّلان الوسائط بـ
@@ -269,6 +271,10 @@ python tool/comment-lint.py
 
 GPL-3.0. حقوق النشر © 2026 Yasir Sagheer. الإضافات في `third_party/` تحتفظ
 برخصها.
+
+البرامج التي يحملها كل تطبيق (FFmpeg وPython وyt-dlp وlibmpv وغيرها) ورخصها
+ومصادرها مذكورة في [docs/THIRD-PARTY.md](docs/THIRD-PARTY.md)، ومصدر كل ما
+رخصته GPL أو LGPL مرفق مع كل إصدار.
 
 VidHoist غير مرتبط بـ yt-dlp ولا بأي موقع. نزّل ما يحق لك فقط، واحترم شروط
 المواقع التي تستعملها.
