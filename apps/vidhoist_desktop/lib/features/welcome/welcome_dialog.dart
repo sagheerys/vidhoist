@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-import '../../data/appearance_data.dart';
 import '../../data/engine_data.dart';
 import '../../data/engine_fetch_data.dart';
 import '../../data/folders_data.dart';
@@ -15,6 +14,7 @@ import '../../shell/engine_line.dart';
 import '../../shell/shell_metrics.dart';
 import '../settings/appearance_pane.dart';
 import '../settings/engine_pane.dart';
+import '../settings/language_choice.dart';
 import '../settings/simple_panes.dart';
 
 /// **The first start**: where downloads go, the language, and the engine, with ffmpeg and Deno offered at once
@@ -40,8 +40,6 @@ class WelcomeDialog extends ConsumerWidget {
     final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
     final folder = ref.watch(downloadFolderProvider).valueOrNull;
-    final look = ref.watch(appearanceProvider);
-    final appearance = ref.read(appearanceProvider.notifier);
     final paths = ref.watch(enginePathsProvider);
     final version = ref.watch(engineVersionProvider).valueOrNull?.ytDlp;
     final fetches = ref.watch(engineFetchProvider);
@@ -85,23 +83,7 @@ class WelcomeDialog extends ConsumerWidget {
               ),
               ChoiceGroup(
                 title: l.language,
-                children: [
-                  DesktopSegments(
-                    items: [
-                      DesktopSegment(
-                        label: l.languageSystem,
-                        selected: look.locale == null,
-                        onTap: () => appearance.setLocale(null),
-                      ),
-                      for (final code in appearanceLocales)
-                        DesktopSegment(
-                          label: vhLanguageName(code),
-                          selected: look.locale == code,
-                          onTap: () => appearance.setLocale(code),
-                        ),
-                    ],
-                  ),
-                ],
+                children: const [DesktopLanguageChoice()],
               ),
               SettingLine(
                 title: l.desktopEngine,

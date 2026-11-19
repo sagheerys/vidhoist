@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
+import 'package:vh_ui/vh_ui.dart';
 
 import '../di.dart';
 
@@ -10,8 +11,11 @@ import '../di.dart';
 /// the phone keeps its own.
 typedef Appearance = ({ThemeMode theme, String? locale});
 
-/// The languages on offer besides following Windows.
-const appearanceLocales = ['ar', 'en'];
+/// The languages on offer besides following Windows: every translation,
+/// in the order the phone lists them.
+final appearanceLocales = [
+  for (final locale in VhLocalizations.supportedLocales) locale.languageCode,
+]..sort();
 
 class AppearanceStore {
   AppearanceStore({required this.store, required this.mutex});

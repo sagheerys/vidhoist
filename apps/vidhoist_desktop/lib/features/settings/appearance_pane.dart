@@ -5,6 +5,7 @@ import 'package:vh_ui/vh_ui.dart';
 import '../../data/appearance_data.dart';
 import '../../shell/ui_zoom.dart';
 import 'appearance_preview.dart';
+import 'language_choice.dart';
 
 /// Day or night, the language, and the interface size. Each follows
 /// Windows (or 100%) until chosen, and each is this computer's alone.
@@ -56,23 +57,7 @@ class AppearancePane extends ConsumerWidget {
         ChoiceGroup(
           title: l.language,
           hint: look.locale == null ? l.desktopLanguageSystemHint : null,
-          children: [
-            DesktopSegments(
-              items: [
-                DesktopSegment(
-                  label: l.languageSystem,
-                  selected: look.locale == null,
-                  onTap: () => appearance.setLocale(null),
-                ),
-                for (final code in appearanceLocales)
-                  DesktopSegment(
-                    label: vhLanguageName(code),
-                    selected: look.locale == code,
-                    onTap: () => appearance.setLocale(code),
-                  ),
-              ],
-            ),
-          ],
+          children: const [DesktopLanguageChoice()],
         ),
         ChoiceGroup(
           title: l.desktopUiSize,
