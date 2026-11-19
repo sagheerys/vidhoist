@@ -13,12 +13,19 @@ void main() {
   const phones = <String, (List<Locale>, String)>{
     'English phone': ([Locale('en', 'US')], 'en'),
     'Arabic phone': ([Locale('ar', 'SA')], 'ar'),
-    'French first, Arabic second': (
-      [Locale('fr', 'FR'), Locale('ar', 'EG')],
+    'Japanese first, Arabic second': (
+      [Locale('ja', 'JP'), Locale('ar', 'EG')],
       'ar',
     ),
-    'German only': ([Locale('de', 'DE')], 'en'),
-    'French and German': ([Locale('fr', 'FR'), Locale('de', 'DE')], 'en'),
+    'Japanese only': ([Locale('ja', 'JP')], 'en'),
+    'Japanese and Korean': ([Locale('ja', 'JP'), Locale('ko', 'KR')], 'en'),
+    // The translated languages are taken as they are, not sent to English.
+    'German phone': ([Locale('de', 'DE')], 'de'),
+    'Brazilian phone': ([Locale('pt', 'BR')], 'pt'),
+    'Japanese first, Urdu second': (
+      [Locale('ja', 'JP'), Locale('ur', 'PK')],
+      'ur',
+    ),
   };
 
   for (final MapEntry(key: phone, value: (locales, expected))

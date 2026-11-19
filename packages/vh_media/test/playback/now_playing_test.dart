@@ -12,6 +12,37 @@ import '../icon_finder.dart';
 /// and the full player's tablet forms. A phone keeps the queue and the
 /// extra as buttons that open sheets.
 void main() {
+  testWidgets('**the guard**: a tab with a long label shrinks to its panel, '
+      'ellipsized, rather than spill past it', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: vhTheme(VhVariant.phone, Brightness.light),
+        home: Scaffold(
+          body: Center(
+            child: SizedBox(
+              width: 160,
+              child: Wrap(
+                children: [
+                  VhPanelTab(
+                    icon: VhIcons.queue,
+                    label: 'Als Nächstes in der Warteschlange · 12',
+                    selected: true,
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(tester.takeException(), isNull);
+    expect(
+      tester.getSize(find.byType(VhPanelTab)).width,
+      lessThanOrEqualTo(160),
+    );
+  });
+
   late MemoryKeyValueStore store;
   late VhAudioHandler handler;
 

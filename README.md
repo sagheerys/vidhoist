@@ -8,7 +8,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android%20%C2%B7%20Windows-3DDC84.svg)](#requirements)
 [![Flutter](https://img.shields.io/badge/Flutter-3.47-02569B.svg)](https://flutter.dev)
-[![Languages](https://img.shields.io/badge/languages-English%20%C2%B7%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9-7FA3FF.svg)](#translations)
+[![Languages](https://img.shields.io/badge/languages-12-7FA3FF.svg)](#translations)
 
 **Download video and audio from the web, straight to your phone or your
 computer, with yt-dlp built into the app.** Paste or share a link, pick a
@@ -16,8 +16,8 @@ quality, and the file is yours: in a library that plays it, shows its
 subtitles, reads its transcript along with you, and finds the clip by
 anything that was **said** in it, not only by its title. No account, no
 server, no ads, no tracking: what you download stays between you and the
-site. For Android phones and tablets and for Windows, in English and
-Arabic, right-to-left first, by day and by night. Free software under the
+site. For Android phones and tablets and for Windows, in twelve
+languages, right-to-left first, by day and by night. Free software under the
 GPL.
 
 | | **VidHoist for Android** | **VidHoist for Windows** |
@@ -30,7 +30,8 @@ GPL.
 | Installs | an APK from Releases, updates itself | an installer from Releases, updates itself |
 
 Both apps share the same core, media, design, transcript and yt-dlp
-packages, and both ship in **English and Arabic**.
+packages, and both ship in **twelve languages**: English, Arabic, Spanish, Portuguese (Brazil), French, German, Turkish, Russian, Indonesian, Persian, Urdu and Hindi. Each
+follows the phone's or Windows' own language unless you choose another.
 
 ## Features
 
@@ -203,7 +204,7 @@ apps/vidhoist_mobile     the Android app
 apps/vidhoist_desktop    the Windows app
 packages/vh_core         pure Dart: models, storage, the download engine, backup, update, the phone link
 packages/vh_media        the players, the mini player, the media session
-packages/vh_ui           the design system: tokens, icons, components, English and Arabic strings
+packages/vh_ui           the design system: tokens, icons, components, the strings in every language
 packages/vh_transcripts  pure Dart: subtitles, transcripts and the search over what was said
 packages/vh_ytdlp        pure Dart: yt-dlp's command lines and reading what it prints
 third_party/             three patched plugins, each with its PATCHES.md
@@ -226,9 +227,12 @@ defect leaves a test that failed before the fix.
 
 ## Translations
 
-The strings live in `packages/vh_ui/lib/src/l10n/app_en.arb` and
-`app_ar.arb`; a key is added to both at once, and a test fails when they
-differ. The layout is right-to-left first. How to add a language is in
+The strings live in `packages/vh_ui/lib/src/l10n/`: `app_en.arb` is the
+source and each language has its own `app_<code>.arb`, which a test keeps
+in step with it. English and Arabic are written with the app; the other ten
+are first translations, and corrections from native speakers are welcome.
+The layout is right-to-left first, for Arabic, Persian and Urdu alike. How
+to correct a language or add one is in
 [CONTRIBUTING.md](CONTRIBUTING.md#translations).
 
 ## Documentation

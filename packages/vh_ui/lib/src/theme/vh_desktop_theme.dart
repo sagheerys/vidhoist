@@ -16,6 +16,7 @@ ThemeData vhDesktopTheme(
   VhVariant variant,
   Brightness brightness, {
   bool highContrast = false,
+  String language = 'en',
 }) {
   const corners = VhCorners.desktop;
   // With Windows' high contrast on, every rule and border is drawn twice
@@ -27,6 +28,7 @@ ThemeData vhDesktopTheme(
     type: VhTypeScale.desktop,
     corners: corners,
     hairline: line,
+    language: language,
   );
   final p = VhPalette.of(variant, brightness);
   final hairline = BorderSide(color: p.line2, width: 1.6 * line);

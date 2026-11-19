@@ -145,15 +145,45 @@ void main() {
     }
   });
 
-  test('every message the installer adds is in English and Arabic', () {
+  /// The wizard's languages, by the name each [Languages] line gives it.
+  List<String> languages() => [
+    for (final m in RegExp(
+      r'^Name: "(\w+)"; MessagesFile:',
+      multiLine: true,
+    ).allMatches(iss))
+      m[1]!,
+  ];
+
+  test('**the guard**: every message the installer adds is in each of its '
+      'languages, and the languages Inno Setup ships are all there', () {
+    expect(
+      languages(),
+      containsAll([
+        'english',
+        'arabic',
+        'spanish',
+        'brazilianportuguese',
+        'french',
+        'german',
+        'turkish',
+        'russian',
+      ]),
+    );
     final keys = RegExp(
-      r'^(english|arabic)\.(\w+)=',
+      r'^(\w+)\.(\w+)=',
       multiLine: true,
     ).allMatches(iss).map((m) => '${m[1]}.${m[2]}').toSet();
-    final english = keys.where((k) => k.startsWith('english.'));
-    expect(english, isNotEmpty);
-    for (final key in english) {
-      expect(keys, contains(key.replaceFirst('english.', 'arabic.')));
+    final added = {
+      for (final key in keys)
+        if (key.startsWith('english.')) key.substring('english.'.length),
+    };
+    expect(added, isNotEmpty);
+    // Arabic replaces more of the stock wording; the rest add the app's
+    // own messages and its welcome.
+    for (final language in languages()) {
+      for (final key in added) {
+        expect(keys, contains('$language.$key'), reason: '$language.$key');
+      }
     }
   });
 
@@ -206,8 +236,14 @@ void main() {
     final license = const LineSplitter()
         .convert(File('../../LICENSE').readAsStringSync())
         .where((line) => line.trim().isNotEmpty);
-    for (final lang in ['en', 'ar']) {
-      expect(iss, contains('LicenseFile: "license_$lang.rtf"'));
+    final pages = [
+      for (final m in RegExp(
+        r'LicenseFile: "license_(\w+)\.rtf"',
+      ).allMatches(iss))
+        m[1]!,
+    ];
+    expect(pages, hasLength(languages().length));
+    for (final lang in pages) {
       final page = File('windows/installer/license_$lang.rtf')
           .readAsStringSync();
       expect(page, startsWith(r'{\rtf1'));

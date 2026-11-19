@@ -84,23 +84,35 @@ class _DesktopAppState extends ConsumerState<DesktopApp> {
     // layouts may take their desktop branch here and never on a phone.
     final look = ref.watch(appearanceProvider);
     final chosen = look.locale;
+    // The fonts follow the language shown (VhType.bodyFor).
+    final language = widget.locale?.languageCode ?? vhLanguageOf(chosen);
     return VhDesktopApp(
       noticeLift: DesktopShellSize.playerBar,
       child: MaterialApp.router(
         title: DesktopIdentity.displayName,
         debugShowCheckedModeBanner: false,
-        theme: vhDesktopTheme(VhVariant.desktop, Brightness.light),
-        darkTheme: vhDesktopTheme(VhVariant.desktop, Brightness.dark),
+        theme: vhDesktopTheme(
+          VhVariant.desktop,
+          Brightness.light,
+          language: language,
+        ),
+        darkTheme: vhDesktopTheme(
+          VhVariant.desktop,
+          Brightness.dark,
+          language: language,
+        ),
         // Chosen by Flutter itself while Windows' high contrast is on.
         highContrastTheme: vhDesktopTheme(
           VhVariant.desktop,
           Brightness.light,
           highContrast: true,
+          language: language,
         ),
         highContrastDarkTheme: vhDesktopTheme(
           VhVariant.desktop,
           Brightness.dark,
           highContrast: true,
+          language: language,
         ),
         themeMode: look.theme,
         locale: widget.locale ?? (chosen == null ? null : Locale(chosen)),

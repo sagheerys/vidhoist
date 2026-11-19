@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shortcut_paste_short">Bağlantı yapıştır</string>
+    <string name="shortcut_paste_long">Bağlantı yapıştır ve indir</string>
+    <string name="shortcut_shorts_short">Shorts</string>
+    <string name="shortcut_shorts_long">Shorts\'u aç</string>
+    <string name="shortcut_audio_short">Ses</string>
+    <string name="shortcut_audio_long">Ses kitaplığını aç</string>
+    <string name="engine_channel">Süren indirmeler</string>
+</resources>

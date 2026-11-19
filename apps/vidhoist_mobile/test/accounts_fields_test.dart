@@ -239,8 +239,13 @@ void main() {
       error: const EngineFailureException(YtDlpErrorKind.failed, 'x'),
     );
 
-    Future<VhLocalizations> open(WidgetTester tester, DownloadTask task) async {
-      tester.view.physicalSize = const Size(384, 823);
+    Future<VhLocalizations> open(
+      WidgetTester tester,
+      DownloadTask task, {
+      Size size = const Size(384, 823),
+      Locale? locale,
+    }) async {
+      tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       final tasks = StreamController<List<DownloadTask>>();
@@ -255,6 +260,7 @@ void main() {
               ),
             ),
           ),
+          locale: locale,
           extra: [
             downloadEngineProvider.overrideWithValue(null),
             engineTasksProvider.overrideWith((ref) => tasks.stream),
@@ -271,6 +277,21 @@ void main() {
     testWidgets('offers the sign-in beside the retry', (tester) async {
       final l10n = await open(tester, blocked);
       expect(find.text(l10n.mobileSignInNeeded), findsOneWidget);
+      expect(find.text(l10n.accountSignIn), findsOneWidget);
+      expect(find.text(l10n.retry), findsOneWidget);
+    });
+
+    testWidgets('**the guard**: in a longer language on a narrow phone, the '
+        'two buttons wrap rather than spill', (tester) async {
+      tester.platformDispatcher.textScaleFactorTestValue = 1.3;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      final l10n = await open(
+        tester,
+        blocked,
+        size: const Size(320, 640),
+        locale: const Locale('es'),
+      );
+      expect(tester.takeException(), isNull);
       expect(find.text(l10n.accountSignIn), findsOneWidget);
       expect(find.text(l10n.retry), findsOneWidget);
     });

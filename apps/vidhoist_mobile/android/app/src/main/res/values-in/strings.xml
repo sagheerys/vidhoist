@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shortcut_paste_short">Tempel tautan</string>
+    <string name="shortcut_paste_long">Tempel tautan dan unduh</string>
+    <string name="shortcut_shorts_short">Shorts</string>
+    <string name="shortcut_shorts_long">Buka Shorts</string>
+    <string name="shortcut_audio_short">Audio</string>
+    <string name="shortcut_audio_long">Buka pustaka audio</string>
+    <string name="engine_channel">Unduhan berlangsung</string>
+</resources>

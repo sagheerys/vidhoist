@@ -126,6 +126,35 @@ abstract final class VhType {
   /// The fonts live inside the vh_ui package, so every TextStyle has to
   /// pass `package`.
   static const String package = 'vh_ui';
+
+  /// The text font for [language]: Tajawal for the scripts it has, a Noto
+  /// face where it lacks letters the language needs (Turkish g-breve and
+  /// s-cedilla, Cyrillic, the Persian and Urdu letters, Devanagari).
+  /// Falling back glyph by glyph instead would mix two fonts in one word.
+  static String bodyFor(String language) => switch (language) {
+    'fa' || 'ur' => 'NotoNaskhArabic',
+    'tr' || 'ru' => 'NotoSans',
+    'hi' => 'NotoSansDevanagari',
+    _ => body,
+  };
+
+  /// The heading font for [language]: Noto Kufi Arabic carries Latin with
+  /// Turkish and the Persian and Urdu letters, but not Cyrillic or
+  /// Devanagari.
+  static String displayFor(String language) => switch (language) {
+    'ru' => 'NotoSans',
+    'hi' => 'NotoSansDevanagari',
+    _ => display,
+  };
+
+  /// For text in another script than the interface's, such as a Russian
+  /// title in the Arabic app: the app's own faces rather than whatever the
+  /// system has.
+  static const List<String> fallback = [
+    'NotoSans',
+    'NotoNaskhArabic',
+    'NotoSansDevanagari',
+  ];
 }
 
 /// The corner scale a theme is built with.

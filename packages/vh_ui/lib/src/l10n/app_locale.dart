@@ -21,6 +21,16 @@ Locale vhLocaleResolution(List<Locale>? preferred, Iterable<Locale> supported) {
   return basicLocaleListResolution(preferred, supported);
 }
 
+/// The language the app shows: the one chosen in its settings, or else the
+/// system's as [vhLocaleResolution] settles it. The theme picks its fonts
+/// by it.
+String vhLanguageOf(String? chosen) =>
+    chosen ??
+    vhLocaleResolution(
+      PlatformDispatcher.instance.locales,
+      VhLocalizations.supportedLocales,
+    ).languageCode;
+
 /// **The texts for a notification, in the language the app shows.**
 ///
 /// A notification is built outside the widget tree, so it cannot ask the

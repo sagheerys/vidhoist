@@ -18,8 +18,16 @@ class PhoneApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'VidHoist',
       debugShowCheckedModeBanner: false,
-      theme: vhTheme(VhVariant.phone, Brightness.light),
-      darkTheme: vhTheme(VhVariant.phone, Brightness.dark),
+      theme: vhTheme(
+        VhVariant.phone,
+        Brightness.light,
+        language: vhLanguageOf(localeCode),
+      ),
+      darkTheme: vhTheme(
+        VhVariant.phone,
+        Brightness.dark,
+        language: vhLanguageOf(localeCode),
+      ),
       themeMode: themeMode,
       locale: localeCode == null ? null : Locale(localeCode),
       localizationsDelegates: VhLocalizations.localizationsDelegates,

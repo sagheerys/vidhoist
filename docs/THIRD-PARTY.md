@@ -62,6 +62,7 @@ another build of libmpv.
 |---|---|---|
 | Tajawal font, (c) 2017 by Boutros International | OFL-1.1 | [packages/vh_ui/assets/fonts/OFL.txt](../packages/vh_ui/assets/fonts/OFL.txt) |
 | Noto Kufi Arabic font, Copyright 2019-2022 Google LLC | OFL-1.1 | as above |
+| Noto Sans, Noto Naskh Arabic and Noto Sans Devanagari fonts (Turkish and Russian, Persian and Urdu, Hindi), Copyright 2022 The Noto Project Authors | OFL-1.1 | as above |
 | Material Symbols (the pause and download icon shapes) | Apache-2.0 | [google/material-design-icons](https://github.com/google/material-design-icons) |
 | Tabler Icons (the queue icon shape) | MIT | [tabler/tabler-icons](https://github.com/tabler/tabler-icons) |
 | Dart and Flutter packages | BSD, MIT, Apache-2.0, Zlib, MPL-2.0 | listed with their licences inside each app |
