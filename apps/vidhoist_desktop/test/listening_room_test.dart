@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_desktop/features/listening/listening_lines.dart';
 import 'package:vidhoist_desktop/features/listening/listening_room.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
+import 'package:vidhoist_desktop/shell/ui_zoom.dart';
 import 'package:vh_media/library.dart';
 import 'package:vh_media/vh_media.dart';
 import 'package:vh_transcripts/vh_transcripts.dart';
@@ -56,12 +57,14 @@ void main() {
     WidgetTester tester, {
     String url = _song,
     bool playing = false,
+    double zoom = 1.0,
   }) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final h = ShellHarness(
       library: _library,
       withEngine: true,
       transcripts: {_song: _words},
+      zoom: UiZoom(zoom),
     );
     await tester.pumpWidget(h.app());
     final item = _library.firstWhere((i) => i.canonicalUrl == url);
@@ -183,6 +186,30 @@ void main() {
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     semantics.dispose();
   });
+
+  for (final arabic in [false, true]) {
+    testWidgets('**the guard**: the close button sits clear of the words '
+        '(${arabic ? 'Arabic, where it shares their side' : 'English'})', (
+      tester,
+    ) async {
+      if (arabic) ShellHarness.useArabic(tester);
+      // The interface at 150%: the smallest window the room opens in, where
+      // the words reach up to the corner the button holds.
+      await open(tester, zoom: 1.5);
+      await tester.tap(byLabel(arabic ? 'غرفة الاستماع' : 'Listening room'));
+      await tester.pumpAndSettle();
+      final close = tester.getRect(
+        find.descendant(
+          of: find.byType(ListeningRoom),
+          matching: find.byType(IconButton),
+        ),
+      );
+      // The lines scroll, the one being said kept in the middle, so any
+      // of them may stand at the top of their box.
+      final lines = tester.getRect(find.byType(ListeningLines));
+      expect(close.overlaps(lines), isFalse, reason: '$close over $lines');
+    });
+  }
 
   testWidgets('**the guard**: narrower than a window opens, the lines go '
       'below the cover and the player bar shrinks its end rather than spill '

@@ -5273,13 +5273,13 @@ abstract class VhLocalizations {
   /// No description provided for @subscriptionQualityHelp.
   ///
   /// In en, this message translates to:
-  /// **'The quality is set when you follow and can\'t be changed afterwards. To change it: Check now, then unfollow and follow again.\n\n\"Best\" can mean 4K in the AV1 format, which an older computer may play with stutters: choose 1080p if it does.'**
+  /// **'The quality new videos from this channel download at. You can change it later by editing the channel; videos already downloaded keep theirs.\n\n\"Best\" can mean 4K in the AV1 format, which an older computer may play with stutters: choose 1080p if it does.'**
   String get subscriptionQualityHelp;
 
   /// No description provided for @subscriptionQualityNote.
   ///
   /// In en, this message translates to:
-  /// **'Can\'t be changed after following.'**
+  /// **'Applies to new videos; those already downloaded keep theirs.'**
   String get subscriptionQualityNote;
 
   /// No description provided for @subscriptions.

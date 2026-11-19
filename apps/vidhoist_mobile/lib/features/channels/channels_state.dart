@@ -87,11 +87,13 @@ class ChannelsController {
     ChannelSubscription sub, {
     required int checkIntervalMinutes,
     required String titleRegex,
+    Quality? quality,
   }) async {
     final filter = titleRegex.trim();
     await _source.update(
       sub.id,
       checkIntervalMinutes: checkIntervalMinutes,
+      quality: quality,
       titleRegex: filter.isEmpty ? null : filter,
       clearTitleRegex: filter.isEmpty,
     );

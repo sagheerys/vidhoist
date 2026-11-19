@@ -278,6 +278,24 @@ void main() {
     expect(find.byType(AlertDialog), findsOneWidget);
   });
 
+  testWidgets('**the guard**: the quality is changed by editing the channel, '
+      'and sent only when it changed', (tester) async {
+    final channels = await open(
+      tester,
+      subs: [_sub('a', 'Alpha - Videos', checked: checked)],
+      at: DesktopRoutes.channel('a'),
+    );
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(DropdownMenu<Quality>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Audio only').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Save settings'));
+    await tester.pumpAndSettle();
+    expect(channels.calls.last, endsWith(' quality=audio'));
+  });
+
   testWidgets("a channel's page: its facts, check, edit, unfollow", (
     tester,
   ) async {

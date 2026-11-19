@@ -15,8 +15,8 @@ import '../../shell/desktop_dialog.dart';
 
 /// Following a channel, or editing one already followed: one dialog,
 /// since the fields are the same. The link cannot change on an edit (it
-/// would be another channel, with another seen-list), and the quality is
-/// asked once, when following, because it cannot be changed afterwards.
+/// would be another channel, with another seen-list); a new quality is for
+/// what is found from then on.
 ///
 /// [name] heads a follow offered from a channel the library already has
 /// clips from, and [url] fills the link with one of them: following a
@@ -53,7 +53,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
   late int _interval = nearestChannelInterval(
     widget.editing?.checkIntervalMinutes ?? 60,
   );
-  Quality _quality = Quality.best;
+  late Quality _quality = Quality.fromWire(widget.editing?.quality);
   late bool _ownFolder = widget.editing?.folder != null;
   late FolderChoice _folder = switch (widget.editing?.folder) {
     final folder? => FolderChoice(folder),
@@ -101,6 +101,7 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
           checkIntervalMinutes: _interval,
           titleRegex: filter,
           folder: _folderChange(sub),
+          quality: _quality,
         );
         message = l.done;
       } else {
@@ -182,35 +183,35 @@ class _FollowDialogState extends ConsumerState<_FollowDialog> {
                         : l.everyHours(minutes ~/ 60),
                 },
               ),
-              if (!_isEdit) ...[
-                gap,
-                DesktopChoice<Quality>(
-                  label: l.subscriptionQuality,
-                  helper: l.subscriptionQualityNote,
-                  value: _quality,
-                  onChanged: (v) => setState(() => _quality = v),
-                  choices: {
-                    Quality.best: l.qualityBest,
-                    Quality.q1080: l.quality1080,
-                    Quality.q720: l.quality720,
-                    Quality.q480: l.quality480,
-                    Quality.audio: l.audioOnly,
-                  },
-                ),
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: VhLinkButton(
-                    label: l.helpAboutField,
-                    onPressed: () => unawaited(
-                      showFolderHelp(
-                        context,
-                        l.subscriptionQuality,
-                        l.subscriptionQualityHelp,
-                      ),
+              gap,
+              DesktopChoice<Quality>(
+                label: l.subscriptionQuality,
+                helper: l.subscriptionQualityNote,
+                value: _quality,
+                onChanged: (v) => setState(() => _quality = v),
+                choices: {
+                  Quality.best: l.qualityBest,
+                  Quality.q1080: l.quality1080,
+                  Quality.q720: l.quality720,
+                  Quality.q480: l.quality480,
+                  // A channel followed on the phone may have it.
+                  Quality.q360: l.quality360,
+                  Quality.audio: l.audioOnly,
+                },
+              ),
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: VhLinkButton(
+                  label: l.helpAboutField,
+                  onPressed: () => unawaited(
+                    showFolderHelp(
+                      context,
+                      l.subscriptionQuality,
+                      l.subscriptionQualityHelp,
                     ),
                   ),
                 ),
-              ],
+              ),
               gap,
               TextField(
                 controller: _filter,

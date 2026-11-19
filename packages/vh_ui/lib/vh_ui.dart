@@ -73,6 +73,7 @@ export 'src/kit/vh_link_button.dart';
 export 'src/kit/vh_notice.dart';
 export 'src/kit/vh_progress.dart';
 export 'src/kit/vh_pull_refresh.dart';
+export 'src/kit/vh_row_button.dart';
 export 'src/kit/vh_shortcut_tooltip.dart';
 export 'src/kit/vh_status_pill.dart';
 export 'src/kit/vh_switch.dart';

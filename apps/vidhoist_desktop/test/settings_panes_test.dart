@@ -216,6 +216,22 @@ void main() {
     expect(find.text('No clips yet'), findsWidgets);
   });
 
+  testWidgets('**the guard**: a row that does something carries a button\'s '
+      'shape, and one that leads elsewhere stays a link', (tester) async {
+    await open(tester, '/settings/updates');
+    expect(find.widgetWithText(OutlinedButton, 'Check now'), findsOneWidget);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go('/settings/backup');
+    await tester.pumpAndSettle();
+    // Bold text alone read as the row's value, not as something to press.
+    expect(find.widgetWithText(OutlinedButton, 'Back up now'), findsOneWidget);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go('/settings/subscriptions');
+    await tester.pumpAndSettle();
+    expect(find.byType(VhLinkButton), findsWidgets);
+    expect(find.byType(OutlinedButton), findsNothing);
+  });
+
   testWidgets('updates: a version found shows its notes and can be skipped', (
     tester,
   ) async {

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/shell/sidebar_items.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/player_bar.dart';
@@ -11,8 +12,14 @@ import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/title_bar.dart';
 
 import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/vh_media.dart';
 
 import 'support/shell_harness.dart';
+
+const _clip = PlaylistItem(
+  canonicalUrl: 'https://youtu.be/ccccccccccc',
+  title: 'Evening Raga',
+);
 
 void main() {
   Future<ShellHarness> open(
@@ -20,19 +27,64 @@ void main() {
     Size size, {
     ShellLayout layout = const ShellLayout(),
     bool arabic = false,
+    bool loaded = false,
   }) async {
     ShellHarness.useWindow(tester, size);
     if (arabic) ShellHarness.useArabic(tester);
     final h = ShellHarness(layout: layout);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
+    // The panel folds while nothing plays; [loaded] brings it out.
+    if (loaded) {
+      h.player.showPlaying(const [_clip], playing: false);
+      await tester.pumpAndSettle();
+    }
     return h;
   }
 
   double width(WidgetTester tester, Finder f) => tester.getSize(f).width;
 
-  testWidgets('at 1440 the three columns stand side by side', (tester) async {
+  testWidgets('**the guard**: nothing playing, the panel folds by itself '
+      'and comes out with the first clip, the saved choice untouched', (
+    tester,
+  ) async {
+    final h = await open(tester, const Size(1440, 900));
+    expect(find.byType(DesktopRightPanel), findsNothing);
+    h.player.showPlaying(const [_clip], playing: false);
+    await tester.pumpAndSettle();
+    expect(find.byType(DesktopRightPanel), findsOneWidget);
+    expect(await h.store.getString(ShellLayoutStore.key), isNull);
+  });
+
+  testWidgets("**the guard**: a clip's page keeps the panel while nothing "
+      'plays: folded there, the picture grew past the window and jumped '
+      'back as it started', (tester) async {
     await open(tester, const Size(1440, 900));
+    expect(find.byType(DesktopRightPanel), findsNothing);
+    GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+        .go(DesktopRoutes.item('https://youtu.be/ccccccccccc'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DesktopRightPanel), findsOneWidget);
+  });
+
+  testWidgets('nothing playing, its button still opens the panel, and '
+      'closing it again leaves it to come out with the next clip', (
+    tester,
+  ) async {
+    final h = await open(tester, const Size(1440, 900));
+    await tester.tap(byLabel('Show side panel'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DesktopRightPanel), findsOneWidget);
+    await tester.tap(byLabel('Hide side panel'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DesktopRightPanel), findsNothing);
+    h.player.showPlaying(const [_clip], playing: false);
+    await tester.pumpAndSettle();
+    expect(find.byType(DesktopRightPanel), findsOneWidget);
+  });
+
+  testWidgets('at 1440 the three columns stand side by side', (tester) async {
+    await open(tester, const Size(1440, 900), loaded: true);
     expect(
       width(tester, find.byType(DesktopSidebar)),
       DesktopShellSize.sidebarWide,
@@ -54,7 +106,7 @@ void main() {
   testWidgets('at 1200 the sidebar narrows and the panel stays', (
     tester,
   ) async {
-    await open(tester, const Size(1200, 800));
+    await open(tester, const Size(1200, 800), loaded: true);
     expect(
       width(tester, find.byType(DesktopSidebar)),
       DesktopShellSize.sidebarNarrow,
@@ -80,7 +132,7 @@ void main() {
   });
 
   testWidgets('folding a column is saved for the next start', (tester) async {
-    final h = await open(tester, const Size(1440, 900));
+    final h = await open(tester, const Size(1440, 900), loaded: true);
     await tester.tap(byLabel('Hide side panel'));
     await tester.tap(find.byType(SidebarToggle));
     await tester.pumpAndSettle();
@@ -254,7 +306,7 @@ void main() {
   testWidgets('in Arabic the sidebar moves right and the transport does not', (
     tester,
   ) async {
-    await open(tester, const Size(1440, 900), arabic: true);
+    await open(tester, const Size(1440, 900), arabic: true, loaded: true);
     final side = tester.getRect(find.byType(DesktopSidebar));
     final panel = tester.getRect(find.byType(DesktopRightPanel));
     expect(side.left, greaterThan(panel.left));

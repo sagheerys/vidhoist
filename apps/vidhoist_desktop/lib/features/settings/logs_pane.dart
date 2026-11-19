@@ -107,17 +107,17 @@ class _LogsPaneState extends ConsumerState<LogsPane> {
           spacing: VhSpace.md,
           runSpacing: VhSpace.xs,
           children: [
-            VhLinkButton(
+            VhRowButton(
               label: l.desktopLogsSave,
               icon: VhIcons.saveTo,
               onPressed: some ? () => unawaited(_save()) : null,
             ),
-            VhLinkButton(
+            VhRowButton(
               label: l.desktopLogsCopy,
               icon: VhIcons.copy,
               onPressed: some ? () => unawaited(_copy()) : null,
             ),
-            VhLinkButton(
+            VhRowButton(
               label: l.clearLogs,
               danger: true,
               icon: VhIcons.trash,

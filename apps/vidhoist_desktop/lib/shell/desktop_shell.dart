@@ -39,6 +39,7 @@ import 'focus_regions.dart';
 import 'keyboard.dart';
 import 'mini_window.dart';
 import 'nav_history.dart';
+import 'panel_fold.dart';
 import 'panel_reveal.dart';
 import 'panel/transcript_view.dart';
 import 'player_bar.dart';
@@ -77,9 +78,14 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
   /// saved: a layer left open would cover the content on the next start.
   bool _overlayOpen = false;
 
+  /// Whether the panel stands beside the content; folded while idle.
+  late final PanelFold _fold;
+
   @override
   void initState() {
     super.initState();
+    _fold = PanelFold(ref.read(playerProvider))
+      ..addListener(() => setState(() {}));
     // The welcome or what is new: one at most (see there).
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) unawaited(startupOffers(context, ref));
@@ -95,14 +101,17 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
   @override
   void dispose() {
     _history?.dispose();
+    _fold.dispose();
     super.dispose();
   }
 
   void _togglePanel(ShellArrangement arranged, ShellLayout layout) {
     if (arranged.panelBeside) {
-      ref
-          .read(shellLayoutProvider.notifier)
-          .setPanelHidden(!layout.panelHidden);
+      _fold.toggle(
+        layout,
+        ref.read(shellLayoutProvider.notifier).setPanelHidden,
+        clipPage: placeOf(widget.location) == DesktopPlace.item,
+      );
     } else {
       setState(() => _overlayOpen = !_overlayOpen);
     }
@@ -111,6 +120,7 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
   void _showTab(PanelTab tab, ShellArrangement arranged) {
     setState(() {
       _tab = tab;
+      _fold.open();
       if (!arranged.panelBeside) _overlayOpen = true;
     });
     if (arranged.panelBeside) {
@@ -263,7 +273,9 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
         final folder = ref.watch(libraryViewProvider).folder;
         final panelShown =
             !theater &&
-            (arranged.panelBeside ? !layout.panelHidden : _overlayOpen);
+            (arranged.panelBeside
+                ? _fold.shown(layout, clipPage: place == DesktopPlace.item)
+                : _overlayOpen);
         final panel = inRegion(
           DesktopRegion.panel,
           StreamBuilder<VhPlayerState>(

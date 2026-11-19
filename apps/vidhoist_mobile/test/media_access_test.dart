@@ -217,6 +217,27 @@ void main() {
       expect(asked, greaterThan(0), reason: 'the button must ask Android');
     });
 
+    testWidgets('**the guard**: the one step the library waits on looks like '
+        'a button, both before and after Android stops asking', (tester) async {
+      await tester.pumpWidget(
+        host(
+          gate: MediaAccessGate(
+            probe: () async => false,
+            isGranted: (_) async => false,
+            ask: (_) async => true,
+            openSettings: () async => true,
+          ),
+        ),
+      );
+      await tester.pump();
+      final l10n = await VhLocalizations.delegate.load(const Locale('ar'));
+      Finder filled(String label) => find.widgetWithText(FilledButton, label);
+      expect(filled(l10n.mediaAccessGrant), findsOneWidget);
+      await tester.tap(find.text(l10n.mediaAccessGrant));
+      await tester.pumpAndSettle();
+      expect(filled(l10n.mediaAccessOpenSettings), findsOneWidget);
+    });
+
     testWidgets('when Android stops asking, it points at the settings', (
       tester,
     ) async {

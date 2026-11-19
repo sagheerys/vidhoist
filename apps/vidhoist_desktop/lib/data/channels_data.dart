@@ -149,6 +149,7 @@ class ChannelsController {
     required int checkIntervalMinutes,
     required String titleRegex,
     String? folder,
+    Quality? quality,
   }) async {
     await _source?.update(
       sub.id,
@@ -156,6 +157,8 @@ class ChannelsController {
       checkIntervalMinutes: checkIntervalMinutes == sub.checkIntervalMinutes
           ? null
           : checkIntervalMinutes,
+      // A channel saved without one is at the best, and unchanged there.
+      quality: quality == Quality.fromWire(sub.quality) ? null : quality,
       titleRegex: titleRegex.isEmpty ? null : titleRegex,
       // An emptied field is a deletion, not a field left as it was.
       clearTitleRegex: titleRegex.isEmpty && sub.titleRegex != null,

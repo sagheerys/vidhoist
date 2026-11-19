@@ -73,7 +73,7 @@ class EnginePane extends ConsumerWidget {
         value: value,
         trailing: here || (fetch?.running ?? false)
             ? null
-            : VhLinkButton(
+            : VhRowButton(
                 label: l.desktopEngineFetch,
                 icon: VhIcons.download,
                 onPressed: () => unawaited(
@@ -96,7 +96,7 @@ class EnginePane extends ConsumerWidget {
             AsyncData(:final value?) => updateOutcomeText(l, value),
             _ => null,
           },
-          trailing: VhLinkButton(
+          trailing: VhRowButton(
             label: update.isLoading
                 ? l.desktopEngineUpdating
                 : l.desktopEngineUpdate,
@@ -117,7 +117,7 @@ class EnginePane extends ConsumerWidget {
             AsyncData(:final value?) => repairOutcomeText(l, value),
             _ => null,
           },
-          trailing: VhLinkButton(
+          trailing: VhRowButton(
             label: repair.isLoading ? l.engineRepairing : l.engineRepair,
             icon: VhIcons.shield,
             onPressed: repair.isLoading || update.isLoading || !paths.ready

@@ -5,13 +5,13 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../home/quick_download.dart';
-import '../player/caption_style.dart';
+import '../shared/choice_chip_row.dart';
 import '../shared/error_text.dart';
 import 'channel_card.dart';
 import 'channels_state.dart';
 
-/// Follows a channel, or with [editing] changes how often it is read and
-/// its title filter; its quality is chosen once, when following.
+/// Follows a channel, or with [editing] changes how often it is read, the
+/// quality of what it downloads from now on, and its title filter.
 Future<void> showFollowSheet(
   BuildContext context, {
   ChannelSubscription? editing,
@@ -47,7 +47,10 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
     text: widget.editing?.titleRegex ?? '',
   );
   late int _interval = _nearest(widget.editing?.checkIntervalMinutes ?? 60);
-  late Quality _quality = ref.read(settingsProvider).quality;
+  late Quality _quality = switch (widget.editing?.quality) {
+    final wire? => Quality.fromWire(wire),
+    null => ref.read(settingsProvider).quality,
+  };
   bool _busy = false;
   String? _failure;
 
@@ -78,6 +81,7 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
           sub,
           checkIntervalMinutes: _interval,
           titleRegex: _filter.text,
+          quality: _quality,
         );
         message = l10n.done;
       } else {
@@ -149,26 +153,24 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
               ),
             ],
             label(l10n.checkEvery),
-            CaptionChoiceChips(
+            ChoiceChipRow(
               labels: [
                 for (final m in channelIntervals) channelIntervalLabel(l10n, m),
               ],
               chosen: channelIntervals.indexOf(_interval),
               onChosen: (i) => setState(() => _interval = channelIntervals[i]),
             ),
-            if (!_isEdit) ...[
-              label(l10n.subscriptionQuality),
-              CaptionChoiceChips(
-                labels: [for (final q in _qualities) qualityLabel(l10n, q)],
-                chosen: _qualities.indexOf(_quality),
-                onChosen: (i) => setState(() => _quality = _qualities[i]),
-              ),
-              const SizedBox(height: VhSpace.xs),
-              Text(
-                l10n.subscriptionQualityNote,
-                style: text.bodySmall?.copyWith(color: p.ink3),
-              ),
-            ],
+            label(l10n.subscriptionQuality),
+            ChoiceChipRow(
+              labels: [for (final q in _qualities) qualityLabel(l10n, q)],
+              chosen: _qualities.indexOf(_quality),
+              onChosen: (i) => setState(() => _quality = _qualities[i]),
+            ),
+            const SizedBox(height: VhSpace.xs),
+            Text(
+              l10n.subscriptionQualityNote,
+              style: text.bodySmall?.copyWith(color: p.ink3),
+            ),
             const SizedBox(height: VhSpace.lg),
             TextField(
               controller: _filter,

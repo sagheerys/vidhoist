@@ -146,13 +146,13 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
           trailing: Wrap(
             spacing: VhSpace.xs,
             children: [
-              VhLinkButton(
+              VhRowButton(
                 label: l.desktopCookiesChoose,
                 icon: VhIcons.cookie,
                 onPressed: _busy ? null : () => unawaited(_choose()),
               ),
               if (file != null)
-                VhLinkButton(
+                VhRowButton(
                   label: l.desktopCookiesRemove,
                   icon: VhIcons.trash,
                   danger: true,

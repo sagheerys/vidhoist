@@ -17,11 +17,14 @@ abstract interface class ChannelSource {
   });
 
   /// Null leaves a field as it is; [clearTitleRegex] empties the filter.
+  /// A new [quality] is for what is found from now on; what was downloaded
+  /// keeps its own.
   Future<void> update(
     String id, {
     String? name,
     bool? enabled,
     int? checkIntervalMinutes,
+    Quality? quality,
     String? titleRegex,
     bool clearTitleRegex = false,
     String? folder,

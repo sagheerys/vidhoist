@@ -33,11 +33,11 @@ class FoldersPane extends ConsumerWidget {
     Widget actions(String? path, Future<void> Function(String) set) => Wrap(
       spacing: VhSpace.xl,
       children: [
-        VhLinkButton(
+        VhRowButton(
           label: l.desktopChangeFolder,
           onPressed: () => unawaited(change(path, set)),
         ),
-        VhLinkButton(
+        VhRowButton(
           label: l.desktopOpenInExplorer,
           onPressed: path == null ? null : () => unawaited(folders.open(path)),
         ),

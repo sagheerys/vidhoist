@@ -55,6 +55,8 @@ class _MediaAccessViewState extends ConsumerState<MediaAccessView> {
           ? l10n.mediaAccessOpenSettings
           : l10n.mediaAccessGrant,
       onAction: _busy ? null : _act,
+      // Nothing else on the screen works until this is pressed.
+      primary: true,
     );
   }
 }

@@ -37,8 +37,9 @@ class ChannelRecord {
   /// What is listed ([channelFeedUrl]): a YouTube front page's videos tab.
   final String feedUrl;
 
-  /// [Quality.wire].
-  final String quality;
+  /// [Quality.wire]: read at each check, so a change applies to the next
+  /// clip found.
+  String quality;
   int checkIntervalMinutes;
   bool enabled;
   String? titleRegex;

@@ -154,6 +154,19 @@ void main() {
       expect(queued, isEmpty, reason: 'a second look finds nothing new');
     });
 
+    test('**the guard**: a quality changed after following is the one the '
+        'next clip downloads at, and it lasts', () async {
+      final channels = source();
+      final sub = await follow(channels);
+      await channels.update(sub.id, quality: Quality.audio);
+      expect((await source().list()).single.quality, Quality.audio.wire);
+      backend.listings[_videos] = _feed([_clip('c'), _clip('b'), _clip('a')]);
+      await channels.check();
+      expect(queued, [
+        ('https://www.youtube.com/watch?v=c', Quality.audio, null),
+      ]);
+    });
+
     test('a stream on the air waits until it is over', () async {
       final channels = source();
       await follow(channels);

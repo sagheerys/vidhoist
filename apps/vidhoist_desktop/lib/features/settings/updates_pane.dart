@@ -62,7 +62,7 @@ class UpdatesPane extends ConsumerWidget {
               : l.lastCheckedAt(vhTimeAgo(context, checked)),
           trailing: state.phase == UpdatePhase.checking
               ? Text(l.updateChecking, style: text.bodyMedium)
-              : VhLinkButton(
+              : VhRowButton(
                   label: l.checkNow,
                   onPressed: state.busy
                       ? null
