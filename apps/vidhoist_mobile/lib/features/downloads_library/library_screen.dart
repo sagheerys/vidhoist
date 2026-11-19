@@ -11,6 +11,7 @@ import '../home/network_gate.dart';
 import '../shared/error_text.dart';
 import '../player/playback_providers.dart';
 import '../storage/phone_volumes.dart';
+import '../transcripts/said_results.dart';
 import 'library_providers.dart';
 import 'local_item.dart';
 import 'media_access.dart';
@@ -154,6 +155,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     List<DownloadTask> active,
   ) {
     final itemsAsync = ref.watch(visibleLibraryProvider);
+    // A search that matches no title may still match what was said.
+    final said = ref.watch(saidResultsProvider).isNotEmpty;
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -211,6 +214,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               ),
             ),
           ],
+          AsyncValue(valueOrNull: final value?) when value.isEmpty && said =>
+            const <Widget>[],
           AsyncValue(valueOrNull: final value?) when value.isEmpty => [
             SliverToBoxAdapter(
               // **Say why it is empty**: a filter that hides
@@ -234,6 +239,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           ],
           _ => const <Widget>[],
         },
+        const SaidResultsSliver(),
         const SliverToBoxAdapter(child: SizedBox(height: 140)),
       ],
     );

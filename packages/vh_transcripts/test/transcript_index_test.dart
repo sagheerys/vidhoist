@@ -120,6 +120,16 @@ void main() {
     );
   });
 
+  test('the clips held are listed, each once whatever its languages', () {
+    final index = TranscriptIndex()
+      ..add(clip('a', ['one']))
+      ..add(clip('a', ['واحد'], language: 'ar'))
+      ..add(clip('b', ['two']));
+    expect(index.urls, unorderedEquals(['a', 'b']));
+    index.remove('a');
+    expect(index.urls, ['b']);
+  });
+
   group('words said apart', () {
     test('every word in one caption, in any order', () {
       index.add(clip('a', ['backup of the server files', 'other talk']));

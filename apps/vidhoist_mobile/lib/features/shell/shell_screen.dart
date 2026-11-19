@@ -26,6 +26,7 @@ import '../home/reception.dart';
 import '../player/playback_providers.dart';
 import '../channels/channels_state.dart';
 import '../settings/restore_prompt.dart';
+import '../transcripts/said_index.dart';
 import '../update/update_sheet.dart';
 import '../update/update_state.dart';
 import '../update/whats_new_prompt.dart';
@@ -298,6 +299,9 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     ref.watch(channelTickerProvider);
     // Links sent while the computer was away go when it answers.
     ref.watch(pcOutboxRetryProvider);
+    // What was said in each clip, read from its subtitle files for the
+    // library's search.
+    ref.watch(saidIndexingProvider);
     listenPcDone(ref, context);
     _watchEnrichment();
 

@@ -5486,6 +5486,12 @@ abstract class VhLocalizations {
   /// **'Transcript'**
   String get transcript;
 
+  /// No description provided for @transcriptSaidMore.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Said once more} other{Said {count} more times}}'**
+  String transcriptSaidMore(int count);
+
   /// No description provided for @transcriptsClips.
   ///
   /// In en, this message translates to:
@@ -5503,6 +5509,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Delete every transcript?'**
   String get transcriptsDeleteTitle;
+
+  /// No description provided for @transcriptsSaidInside.
+  ///
+  /// In en, this message translates to:
+  /// **'Said inside clips'**
+  String get transcriptsSaidInside;
 
   /// No description provided for @transcriptsSearchHelp.
   ///

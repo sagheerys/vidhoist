@@ -3259,6 +3259,20 @@ class VhLocalizationsAr extends VhLocalizations {
   String get transcript => 'النص';
 
   @override
+  String transcriptSaidMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'قيلت $count مرة أخرى',
+      many: 'قيلت $count مرة أخرى',
+      few: 'قيلت $count مرات أخرى',
+      two: 'قيلت مرتين أخريين',
+      one: 'قيلت مرة أخرى',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String transcriptsClips(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3278,6 +3292,9 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get transcriptsDeleteTitle => 'حذف كل النصوص؟';
+
+  @override
+  String get transcriptsSaidInside => 'قيل داخل المقاطع';
 
   @override
   String get transcriptsSearchHelp =>
