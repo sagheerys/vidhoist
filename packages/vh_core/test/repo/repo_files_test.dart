@@ -45,7 +45,12 @@ void main() {
       return;
     }
     final tracked = (listed.stdout as String).split('\n');
-    const internal = ['CLAUDE.md', 'docs/blueprint/', 'docs/design/'];
+    const internal = [
+      'CLAUDE.md',
+      'docs/blueprint/',
+      'docs/design/',
+      'docs/adr/0001-',
+    ];
     for (final prefix in internal) {
       expect(
         tracked.where((file) => file.startsWith(prefix)),
@@ -67,5 +72,32 @@ void main() {
       (file) => !file.contains('/') && file.toLowerCase().endsWith('.md'),
     );
     expect(rootDocs.toSet().difference(published), isEmpty);
+  });
+
+  test('no public document speaks of the project VidHoist came from: it '
+      'stands as a project of its own', () async {
+    final listed = await Process.run('git', [
+      'ls-files',
+      '*.md',
+      '*.yml',
+    ], workingDirectory: root.path);
+    if (listed.exitCode != 0) {
+      markTestSkipped('not a git checkout');
+      return;
+    }
+    // The vendored plugins keep their own documents as their authors wrote
+    // them.
+    final documents = (listed.stdout as String)
+        .split('\n')
+        .where((file) => file.isNotEmpty && !file.startsWith('third_party/'));
+    final naming = <String>[
+      for (final file in documents)
+        if (RegExp(
+          'vidhoist',
+          caseSensitive: false,
+        ).hasMatch(File(path(file)).readAsStringSync()))
+          file,
+    ];
+    expect(naming, isEmpty);
   });
 }

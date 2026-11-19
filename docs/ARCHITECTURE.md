@@ -106,7 +106,7 @@ Storage is `SharedPreferences` behind the `KeyValueStore` interface, so
 read-modify-write goes through `PrefsMutex`**: without the lock, two
 concurrent flows read the same value and the slower one erases the
 faster one's write. The keys and the backup format are in
-[ENGINE.md › Storage](ENGINE.md#what-carried-over-storage-backups-and-keys).
+[ENGINE.md › Storage](ENGINE.md#storage-backups-and-keys).
 
 ## 5. Running it
 

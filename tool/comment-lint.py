@@ -17,8 +17,8 @@ This fails (exit 1) when a comment in apps/ or packages/:
   * says where a reason came from instead of the reason: "owner's report
     2026-11-12", "field report", "screenshot 2026-09-02". The reason is
     what a reader needs; a date may stay when it dates a measured fact.
-  * names Vidhoist, the project VidHoist was forked from. The fork notice
-    lives in the README and the CHANGELOG, as the GPL asks.
+  * names Vidhoist. VidHoist is a project of its own; nothing in it speaks
+    of where its first lines came from.
   * says TODO / FIXME / XXX / HACK without an issue number (#123) or a
     link, so a note-to-self cannot outlive the person who wrote it.
   * is code that was switched off rather than deleted. Git keeps history;

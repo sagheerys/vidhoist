@@ -95,6 +95,8 @@ docs/TEST-MATRIX.md
 docs/plan/
 docs/blueprint/
 docs/design/
+# The record of where the code came from: VidHoist is its own project.
+docs/adr/0001-fork-from-vidhoist-mobile.md
 
 # The vendored plugin resolves through the workspace lock, not its own.
 third_party/*/pubspec.lock

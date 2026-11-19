@@ -2,9 +2,8 @@
 
 Measured on Windows and Android (2026-11-05/06), before any engine code
 was written. This file is the reference for the command lines, the
-measurements and the traps, and for what carried over from the Vidhoist days
-(the last section): the server contract that came before it was deleted on
-2026-11-06.
+measurements and the traps, and for how the apps keep their data (the
+last section).
 Raw stdout and stderr of the Windows runs are kept as fixtures in
 `packages/vh_ytdlp/test/fixtures/windows/` (media links, the requester's IP
 and local paths replaced).
@@ -226,10 +225,9 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 | Android first run | Initialise and update the engine on the welcome screen, before the first download |
 | An outdated yt-dlp (2026-11-08) | A failure that reads like an old build (`YtDlpError.maybeStaleEngine`: unreadable page, unsolved challenge, 403, "confirm you are on the latest version") has `EngineRefresh` update yt-dlp and the download try once more, at most once per task and once per six hours. Windows also updates weekly at start, idle, like the phone |
 
-## What carried over: storage, backups and keys
+## Storage, backups and keys
 
-The parts of the old server contract (`SERVER-API.md`, since deleted)
-that never depended on the server, as they stand now.
+How both apps keep their data.
 
 ### One key for everything
 
@@ -250,7 +248,7 @@ from the title, and an `i.ytimg.com` cover is guessed for YouTube alone.
 
 | Key | Content |
 |---|---|
-| `local_history_v1` | Every download finished here, with the fields Vidhoist's `/history` had (`url`, `title`, `filename`, `uploader`, `thumbnail`, `size`, `download_type`, `folder`, `timestamp`) plus `path` |
+| `local_history_v1` | Every download finished here, with `url`, `title`, `filename`, `uploader`, `thumbnail`, `size`, `download_type`, `folder`, `timestamp` and `path` |
 | `local_pending_v1` | Downloads not finished yet, started again at the next launch; kept out of every backup |
 | `video_quality` · `theme_mode` · `app_locale` | Default quality, theme, language |
 | `tags_index` · `artwork_index` · `saved_playlists` | Tags (favourites as a hidden system tag), covers, saved playlists |
@@ -258,16 +256,14 @@ from the title, and an `i.ytimg.com` cover is guessed for YouTube alone.
 | `compatible_playback` | H.264/AAC first (on by default), for phones that tear on AV1 |
 | `update_*` | Self-update: automatic check, last attempt, skipped version, the downloaded file's version |
 
-Old key names are kept, which is what lets a Vidhoist Lite or Super backup be
-read. `server_url`, `pending_downloads` and `server_keeps_files` from those
-backups are never planted on this device (`BackupService`).
+Keys earlier versions wrote and nothing reads now (`pending_downloads`,
+`server_keeps_files`) are never planted on this device by a restore
+(`BackupService`).
 
 ### Backups
 
 - **Plain JSON, no secret, ever**: no password, no user name, and
-  credentials inside a URL are stripped. The encrypted formats of Vidhoist
-  (`MTF1`, `MTBACKUP1`, `MTSBACKUP1`) are **read only**, with the device's
-  key if it survives.
+  credentials inside a URL are stripped.
 - The header is checked before any `json.decode`.
 - Dated names, the last seven kept, written atomically (`.tmp` then
   rename); one identical to the newest is not written. A restore shows the

@@ -20,7 +20,7 @@ void main() {
 
   group('BackupService: the plain format', () {
     test('a full round trip with every type, and no secret', () async {
-      await store.setString('server_url', 'https://vidhoist.example.com');
+      await store.setString('server_url', 'https://server.example.com');
       await store.setBool('library_compact_view', true);
       await store.setInt('player_play_mode', 2);
       await store.setDouble('player_playback_speed', 1.5);
@@ -53,7 +53,7 @@ void main() {
       expect(result.keysRestored, 5);
       expect(
         await freshStore.getString('server_url'),
-        'https://vidhoist.example.com',
+        'https://server.example.com',
       );
       expect(await freshStore.getBool('library_compact_view'), isTrue);
       expect(await freshStore.getInt('player_play_mode'), 2);
