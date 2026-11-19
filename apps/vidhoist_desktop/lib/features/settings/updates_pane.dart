@@ -188,11 +188,13 @@ class _Release extends ConsumerWidget {
                     onPressed: () => unawaited(update.install()),
                     child: Text(l.desktopUpdateInstall),
                   ),
+                  // No "Later": this pane is where an update waits, with the
+                  // dot on Settings, until it is installed or skipped. Later
+                  // forgot it until the next start.
                   VhLinkButton(
                     label: l.updateSkipVersion,
                     onPressed: () => unawaited(update.skip()),
                   ),
-                  VhLinkButton(label: l.updateLater, onPressed: update.later),
                 ],
               ),
             ],

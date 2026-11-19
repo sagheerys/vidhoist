@@ -12,6 +12,7 @@ import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
 import 'package:vidhoist_desktop/features/add/add_options.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
+import 'package:vidhoist_desktop/shell/sidebar_items.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:vh_transcripts/vh_transcripts.dart';
@@ -230,6 +231,36 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(VhLinkButton), findsWidgets);
     expect(find.byType(OutlinedButton), findsNothing);
+  });
+
+  testWidgets('**the guard**: a version found keeps a dot on Settings in the '
+      'sidebar until it is installed or skipped, with no Later to lose it', (
+    tester,
+  ) async {
+    await open(
+      tester,
+      '/settings/updates',
+      overrides: [
+        updateCheckerProvider.overrideWithValue(
+          UpdateChecker(
+            assetMarker: 'vidhoist',
+            assetExtension: '.exe',
+            fetch: (_) async => _latest('0.2.0'),
+          ),
+        ),
+      ],
+    );
+    SidebarItem settings() => tester.widget<SidebarItem>(
+      find.widgetWithText(SidebarItem, 'Settings'),
+    );
+    expect(settings().dot, isNull);
+    await tester.tap(find.text('Check now'));
+    await settle(tester);
+    expect(settings().dot, 'Version 0.2.0 is available');
+    expect(find.text('Later'), findsNothing);
+    await tester.tap(find.text('Skip this version'));
+    await settle(tester);
+    expect(settings().dot, isNull);
   });
 
   testWidgets('updates: a version found shows its notes and can be skipped', (

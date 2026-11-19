@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/di.dart';
+import 'package:vidhoist_mobile/features/shell/shell_tabs.dart';
+import 'package:vidhoist_mobile/features/update/update_pending_row.dart';
 import 'package:vidhoist_mobile/features/update/update_section.dart';
 import 'package:vidhoist_mobile/features/update/update_sheet.dart';
 import 'package:vidhoist_mobile/features/update/update_state.dart';
@@ -302,6 +304,71 @@ void main() {
         expect(title.style!.color, VhThemeX.of(context).palette.accent);
       },
     );
+
+    testWidgets('**the guard**: "Later" closes the sheet and the update stays '
+        'offered: a dot on Settings and a row at its top', (tester) async {
+      final c = container();
+      await c.read(updateControllerProvider.notifier).checkSilently();
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: c,
+          child: MaterialApp(
+            theme: vhTheme(VhVariant.phone, Brightness.light),
+            locale: const Locale('ar'),
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
+            home: Builder(
+              builder: (context) => Scaffold(
+                body: TextButton(
+                  onPressed: () => showUpdateSheet(context),
+                  child: const Text('open'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      final l10n = tester.element(find.byType(UpdateSheet)).vhl;
+      await tester.tap(find.text(l10n.updateLater));
+      await tester.pumpAndSettle();
+      expect(find.byType(UpdateSheet), findsNothing);
+      // It used to forget the release for the session, and with it every
+      // trace of the update.
+      expect(c.read(updatePendingProvider), '9.9.9');
+      final settings = shellNavItems(l10n, [
+        ShellBranch.library,
+        ShellBranch.settings,
+      ], updatePending: c.read(updatePendingProvider)).last;
+      expect(settings.dot, l10n.updateVersionAvailable('9.9.9'));
+    });
+
+    testWidgets('the row at the top of Settings opens the sheet, and is not '
+        'there without an update', (tester) async {
+      Widget host(ProviderContainer c) => UncontrolledProviderScope(
+        container: c,
+        child: MaterialApp(
+          theme: vhTheme(VhVariant.phone, Brightness.light),
+          locale: const Locale('ar'),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          home: const Scaffold(body: UpdatePendingRow()),
+        ),
+      );
+      await tester.pumpWidget(host(container()));
+      await tester.pumpAndSettle();
+      expect(find.byType(ListTile), findsNothing);
+
+      final c = container();
+      await c.read(updateControllerProvider.notifier).checkSilently();
+      await tester.pumpWidget(host(c));
+      await tester.pumpAndSettle();
+      final l10n = tester.element(find.byType(UpdatePendingRow)).vhl;
+      await tester.tap(find.text(l10n.updateVersionAvailable('9.9.9')));
+      await tester.pumpAndSettle();
+      expect(find.byType(UpdateSheet), findsOneWidget);
+    });
 
     testWidgets('**device matrix**: the row does not overflow', (tester) async {
       final c = container();

@@ -20,11 +20,13 @@ List<int> shellTabs({required bool paired}) => [
 ];
 
 /// [pcRunning] is the downloads running on the computer, counted on its
-/// tab.
+/// tab; [updatePending] puts a dot on Settings until the update offered is
+/// installed or skipped.
 List<VhNavItem> shellNavItems(
   VhLocalizations l10n,
   List<int> tabs, {
   int pcRunning = 0,
+  String? updatePending,
 }) => [
   for (final branch in tabs)
     switch (branch) {
@@ -48,6 +50,9 @@ List<VhNavItem> shellNavItems(
         icon: VhIcons.settings,
         selectedIcon: VhIcons.settings,
         label: l10n.navSettings,
+        dot: updatePending == null
+            ? null
+            : l10n.updateVersionAvailable(updatePending),
       ),
     },
 ];

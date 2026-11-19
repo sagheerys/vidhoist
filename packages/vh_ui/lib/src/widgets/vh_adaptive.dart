@@ -121,6 +121,7 @@ class VhNavItem {
     required this.selectedIcon,
     required this.label,
     this.badge = 0,
+    this.dot,
   });
 
   final VhIconData icon;
@@ -130,13 +131,24 @@ class VhNavItem {
   /// A count on the icon, such as the downloads running on the paired
   /// computer; none at zero.
   final int badge;
+
+  /// A dot on the icon, for something waiting there that has no count,
+  /// such as an update; this text says what, to a screen reader.
+  final String? dot;
 }
 
 /// [icon] with [item]'s count over its corner, in the accent: a queue is
 /// news, not an alarm, so not Material's red.
 Widget vhNavBadge(BuildContext context, VhNavItem item, Widget icon) {
-  if (item.badge <= 0) return icon;
   final p = VhThemeX.of(context).palette;
+  if (item.badge <= 0) {
+    final dot = item.dot;
+    if (dot == null) return icon;
+    return Semantics(
+      label: dot,
+      child: Badge(backgroundColor: p.accent, child: icon),
+    );
+  }
   return Badge(
     label: Text(
       item.badge > 99 ? '99+' : '${item.badge}',

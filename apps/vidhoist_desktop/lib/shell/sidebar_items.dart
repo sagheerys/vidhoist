@@ -88,6 +88,7 @@ class SidebarItem extends StatelessWidget {
     this.depth = 0,
     this.trailing,
     this.onMenu,
+    this.dot,
   });
 
   /// A right click, at where it landed; null when the place has no menu.
@@ -102,6 +103,10 @@ class SidebarItem extends StatelessWidget {
   /// A count at the line's end.
   final String? trailing;
 
+  /// A dot on the icon, for something waiting there that has no count,
+  /// such as an update; this text says what, to a screen reader.
+  final String? dot;
+
   final VhIconData icon;
   final String label;
   final bool narrow;
@@ -115,7 +120,11 @@ class SidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = VhThemeX.of(context).palette;
     final ink = selected ? p.ink : p.ink2;
-    final glyph = VhIcon(icon, size: VhDensity.desktop.icon, color: ink);
+    final icon = VhIcon(this.icon, size: VhDensity.desktop.icon, color: ink);
+    // On the icon, so it shows in the narrow sidebar too.
+    final glyph = dot == null
+        ? icon
+        : Badge(backgroundColor: p.accent, child: icon);
     final row = AnimatedContainer(
       // The fill eases from one choice to the next, as the border does.
       duration: vhMotionDuration(context, VhMotion.fast),
@@ -201,6 +210,7 @@ class SidebarItem extends StatelessWidget {
       selected: selected,
       button: true,
       label: narrow ? label : null,
+      value: dot,
       child: MenuKey(
         onMenu: onMenu,
         // A hair of space above and below: the chosen place and the one

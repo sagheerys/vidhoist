@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vh_ui/vh_ui.dart';
 
+import '../update/update_pending_row.dart';
 import 'settings_hub.dart';
 import 'settings_sections.dart';
 
@@ -45,6 +46,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             VhSpace.xl + MediaQuery.paddingOf(context).bottom,
           ),
           children: [
+            const UpdatePendingRow(),
             for (final (title, entries) in settingsGroups(context, ref))
               VhSettingsGroup(
                 title: title,

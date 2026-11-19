@@ -287,13 +287,10 @@ class UpdateNotifier extends Notifier<UpdateState> {
     final release = state.release;
     if (release == null) return;
     await _prefs.skipVersion(release.version.toString());
-    later();
+    state = state.copyWith(
+      phase: UpdatePhase.idle,
+      clearRelease: true,
+      clearFailure: true,
+    );
   }
-
-  /// Out of sight for now, offered again at the next check.
-  void later() => state = state.copyWith(
-    phase: UpdatePhase.idle,
-    clearRelease: true,
-    clearFailure: true,
-  );
 }

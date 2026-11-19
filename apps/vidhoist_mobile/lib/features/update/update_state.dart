@@ -78,6 +78,12 @@ final updatePrefsProvider = Provider(
   ),
 );
 
+/// The version an update offers until it is installed or skipped; null
+/// when there is none. The sheet's "Later" leaves it offered.
+final updatePendingProvider = Provider<String?>(
+  (ref) => ref.watch(updateControllerProvider).release?.version.toString(),
+);
+
 /// The phone's ABIs, most preferred first; read once in main.
 final deviceAbisProvider = Provider<List<String>>((ref) => const []);
 
@@ -322,12 +328,4 @@ class UpdateNotifier extends Notifier<UpdateState> {
       clearFailure: true,
     );
   }
-
-  /// "Later": hides the card for this session without muting it
-  /// permanently.
-  void dismiss() => state = state.copyWith(
-    phase: UpdatePhase.idle,
-    clearRelease: true,
-    clearFailure: true,
-  );
 }
