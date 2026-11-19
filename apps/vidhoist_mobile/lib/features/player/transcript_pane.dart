@@ -128,59 +128,70 @@ class _TranscriptPaneState extends State<TranscriptPane> {
     });
   }
 
+  /// The height below which the search gives its place to the lines and
+  /// the title scrolls away with them: a tablet's tab under the music
+  /// player, at the largest text, left the lines no room at all.
+  static const _searchRoom = 280.0;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, box) {
+      if (box.maxHeight >= _searchRoom) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _header(context),
+            _searchField(context),
+            _underSearch(context),
+            const SizedBox(height: VhSpace.xs),
+            Expanded(child: _scrolling(context, header: false)),
+          ],
+        );
+      }
+      return _scrolling(context, header: true);
+    },
+  );
+
+  /// The lines, scrolled by hand or following playback; with [header], the
+  /// title above them in the same scroll.
+  Widget _scrolling(BuildContext context, {required bool header}) {
     final chosen = _hits.isEmpty ? null : _hits[_hit];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _header(context),
-        _searchField(context),
-        _underSearch(context),
-        const SizedBox(height: VhSpace.xs),
-        Expanded(
-          child: NotificationListener<UserScrollNotification>(
-            onNotification: (n) {
-              if (n.direction != ScrollDirection.idle) {
-                _scrolledByHand = DateTime.now();
-              }
-              return false;
-            },
-            // A column, not a lazy list, so the line being said always has
-            // a place to scroll to; a transcript is a few hundred lines.
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(
-                VhSpace.sm,
-                0,
-                VhSpace.sm,
-                VhSpace.lg,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  for (final (i, line) in _segments.indexed)
-                    TranscriptLineTile(
-                      key: chosen?.line == i
-                          ? _found
-                          : (i == _now ? _current : null),
-                      start: line.start,
-                      text: line.text.trim(),
-                      current: i == _now,
-                      marks: [
-                        for (final h in _hits)
-                          if (h.line == i) (h.start, h.end),
-                      ],
-                      chosen: chosen?.line == i
-                          ? (chosen!.start, chosen.end)
-                          : null,
-                      onTap: () => widget.onSeek(line.start),
-                    ),
-                ],
-              ),
-            ),
-          ),
+    return NotificationListener<UserScrollNotification>(
+      onNotification: (n) {
+        if (n.direction != ScrollDirection.idle) {
+          _scrolledByHand = DateTime.now();
+        }
+        return false;
+      },
+      // A column, not a lazy list, so the line being said always has a
+      // place to scroll to; a transcript is a few hundred lines.
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          VhSpace.sm,
+          0,
+          VhSpace.sm,
+          VhSpace.lg,
         ),
-      ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (header) _header(context),
+            for (final (i, line) in _segments.indexed)
+              TranscriptLineTile(
+                key: chosen?.line == i ? _found : (i == _now ? _current : null),
+                start: line.start,
+                text: line.text.trim(),
+                current: i == _now,
+                marks: [
+                  for (final h in _hits)
+                    if (h.line == i) (h.start, h.end),
+                ],
+                chosen: chosen?.line == i ? (chosen!.start, chosen.end) : null,
+                onTap: () => widget.onSeek(line.start),
+              ),
+          ],
+        ),
+      ),
     );
   }
 

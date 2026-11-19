@@ -7,9 +7,10 @@ import 'package:flutter_test/flutter_test.dart';
 ///
 /// VidHoist downloads on the device and never had a server, so a string
 /// that mentions one (or reassures that there is none) only confuses
-/// someone who never expected one. And one thing gets one word: تنزيل,
-/// never تحميل beside it; الكمبيوتر, not الحاسوب; الجوال, not الهاتف;
-/// رمز QR, not باركود (asked 2026-11-18).
+/// someone who never expected one. And one thing gets one word in Arabic:
+/// one verb for downloading, one name each for the computer, the phone,
+/// the QR code and a filter (asked 2026-11-18). The banned spellings are
+/// in the patterns below.
 void main() {
   Map<String, String> strings(String lang) {
     final raw = jsonDecode(

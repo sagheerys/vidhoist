@@ -98,6 +98,9 @@ class TranscriptIndex {
 
   bool contains(String canonicalUrl) => _clips.containsKey(canonicalUrl);
 
+  /// The clips held, so a library can drop the ones it no longer has.
+  List<String> get urls => _clips.keys.toList();
+
   /// Every language kept for a clip, for reading it whole.
   List<Transcript> transcriptsFor(String canonicalUrl) => [
     for (final entry in (_clips[canonicalUrl] ?? const {}).values)

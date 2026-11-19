@@ -6,6 +6,20 @@ All notable changes to VidHoist. The format follows
 ## [Unreleased]
 
 ### Added
+- On the phone, the library's search also finds what was **said**: under
+  the title matches, "Said inside clips" lists the clips a word was spoken
+  in, up to three moments each with the word lit, and a tap plays from that
+  second. Arabic typed without its marks finds it as written. The words
+  come from the subtitle files downloaded with each clip, read once and
+  kept on the phone; nothing is asked of any site, and a deleted clip takes
+  its words with it. The computer had this already (Ctrl+K).
+- The phone's music player shows what is said in the clip it plays, as the
+  computer's listening room does: the line being said and the next under
+  the controls on a tall phone, a transcript button on a shorter one, and a
+  tab beside the queue on a tablet. A tap on a line plays from there; two
+  languages switch with one tap, the same choice as the video's subtitles.
+  A clip downloaded as sound, or a video heard as sound, brings its words
+  from the subtitle files beside it.
 - "Only a part of the video", in the phone's download sheet and the
   computer's add dialog for one link: from one time to another, fetched
   alone with yt-dlp's `--download-sections`. Each time is typed as digits

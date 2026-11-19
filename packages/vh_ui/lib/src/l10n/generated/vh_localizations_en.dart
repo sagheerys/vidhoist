@@ -3211,6 +3211,17 @@ class VhLocalizationsEn extends VhLocalizations {
   String get transcript => 'Transcript';
 
   @override
+  String transcriptSaidMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Said $count more times',
+      one: 'Said once more',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String transcriptsClips(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3227,6 +3238,9 @@ class VhLocalizationsEn extends VhLocalizations {
 
   @override
   String get transcriptsDeleteTitle => 'Delete every transcript?';
+
+  @override
+  String get transcriptsSaidInside => 'Said inside clips';
 
   @override
   String get transcriptsSearchHelp =>

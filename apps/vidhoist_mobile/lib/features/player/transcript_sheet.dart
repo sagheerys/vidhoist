@@ -16,31 +16,39 @@ Future<void> showTranscriptSheet(
   required VhVideoSession session,
   required Map<String, List<VhCaptionLine>> tracks,
   required ValueNotifier<String?> language,
-}) => showVhSheet<void>(
-  context: context,
-  isScrollControlled: true,
-  useSafeArea: true,
-  showDragHandle: true,
-  // Lighter than a dialog's: the clip goes on behind it.
-  barrierColor: Colors.black26,
-  builder: (sheet) {
-    // Above the keyboard while searching, the lines shrinking to make room
-    // rather than the search field going under it.
-    final keyboard = MediaQuery.viewInsetsOf(sheet).bottom;
-    final room = MediaQuery.sizeOf(sheet).height - keyboard;
-    return Padding(
-      padding: EdgeInsets.only(bottom: keyboard),
-      child: SizedBox(
-        height: math.min(MediaQuery.sizeOf(sheet).height * 0.62, room * 0.8),
-        child: _SessionTranscript(
-          session: session,
-          tracks: tracks,
-          language: language,
-        ),
-      ),
-    );
-  },
+}) => showTranscriptFrame(
+  context,
+  (_) =>
+      _SessionTranscript(session: session, tracks: tracks, language: language),
 );
+
+/// The sheet a transcript opens in, for the video and the music player
+/// alike, so both read the same.
+Future<void> showTranscriptFrame(BuildContext context, WidgetBuilder pane) =>
+    showVhSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      // Lighter than a dialog's: the clip goes on behind it.
+      barrierColor: Colors.black26,
+      builder: (sheet) {
+        // Above the keyboard while searching, the lines shrinking to make
+        // room rather than the search field going under it.
+        final keyboard = MediaQuery.viewInsetsOf(sheet).bottom;
+        final room = MediaQuery.sizeOf(sheet).height - keyboard;
+        return Padding(
+          padding: EdgeInsets.only(bottom: keyboard),
+          child: SizedBox(
+            height: math.min(
+              MediaQuery.sizeOf(sheet).height * 0.62,
+              room * 0.8,
+            ),
+            child: pane(sheet),
+          ),
+        );
+      },
+    );
 
 /// The pane, fed the session's position as it plays.
 class _SessionTranscript extends StatefulWidget {
