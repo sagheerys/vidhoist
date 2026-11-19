@@ -76,55 +76,59 @@ class _PcScreenState extends ConsumerState<PcScreen> {
       ),
       body: VhPullRefresh(
         onRefresh: _refresh,
-        child: ListView(
-          padding: const EdgeInsets.only(bottom: 120),
-          children: [
-            _StatusCard(
-              view: view,
-              name: view.status?.name ?? pairing?.name ?? '',
-              route: pairing == null
-                  ? null
-                  : l10n.pcVia(pcRouteName(l10n, pairing, pairing.host)),
-            ),
-            if (!view.online && view.failure != null)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  VhSpace.lg,
-                  0,
-                  VhSpace.lg,
-                  VhSpace.md,
-                ),
-                child: Text(
-                  view.failure == PcLinkFailure.unreachable
-                      ? [
-                          l10n.pcOfflineMessage,
-                          // Tailscale known but not in use: the way out.
-                          if (pairing != null && pcTailscaleUnused(pairing))
-                            l10n.pcOfflineRoute,
-                        ].join(' ')
-                      : pcFailureText(l10n, view.failure!),
-                  style: text.bodySmall?.copyWith(color: p.ink2),
-                ),
+        // A column of reading width on a tablet, as the other pages keep:
+        // stretched, a row's title and its menu stood a screen apart.
+        child: VhReadableWidth(
+          child: ListView(
+            padding: const EdgeInsets.only(bottom: 120),
+            children: [
+              _StatusCard(
+                view: view,
+                name: view.status?.name ?? pairing?.name ?? '',
+                route: pairing == null
+                    ? null
+                    : l10n.pcVia(pcRouteName(l10n, pairing, pairing.host)),
               ),
-            const PcDownloadsStrip(),
-            const PcListsLine(),
-            PcHeader(
-              title: view.total == 0
-                  ? l10n.pcLibrary
-                  : '${l10n.pcLibrary} · ${view.total}',
-            ),
-            if (view.items.isEmpty)
-              Padding(
-                padding: const EdgeInsets.all(VhSpace.xl),
-                child: Text(
-                  l10n.pcEmptyLibrary,
-                  textAlign: TextAlign.center,
-                  style: text.bodyMedium?.copyWith(color: p.ink2),
+              if (!view.online && view.failure != null)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    VhSpace.lg,
+                    0,
+                    VhSpace.lg,
+                    VhSpace.md,
+                  ),
+                  child: Text(
+                    view.failure == PcLinkFailure.unreachable
+                        ? [
+                            l10n.pcOfflineMessage,
+                            // Tailscale known but not in use: the way out.
+                            if (pairing != null && pcTailscaleUnused(pairing))
+                              l10n.pcOfflineRoute,
+                          ].join(' ')
+                        : pcFailureText(l10n, view.failure!),
+                    style: text.bodySmall?.copyWith(color: p.ink2),
+                  ),
                 ),
+              const PcDownloadsStrip(),
+              const PcListsLine(),
+              PcHeader(
+                title: view.total == 0
+                    ? l10n.pcLibrary
+                    : '${l10n.pcLibrary} · ${view.total}',
               ),
-            for (final item in view.items)
-              PcItemRow(item: item, items: view.items),
-          ],
+              if (view.items.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(VhSpace.xl),
+                  child: Text(
+                    l10n.pcEmptyLibrary,
+                    textAlign: TextAlign.center,
+                    style: text.bodyMedium?.copyWith(color: p.ink2),
+                  ),
+                ),
+              for (final item in view.items)
+                PcItemRow(item: item, items: view.items),
+            ],
+          ),
         ),
       ),
     );

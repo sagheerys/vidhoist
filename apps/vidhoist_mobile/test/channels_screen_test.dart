@@ -201,6 +201,30 @@ void main() {
     });
   }
 
+  testWidgets('**the guard**: on a tablet a choice in sight leaves its row '
+      'where it starts: the first chip whole, not pushed half off by a '
+      'choice drawn to the middle', (tester) async {
+    tester.view.physicalSize = const Size(1366, 854);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container(),
+        child: MaterialApp(
+          theme: vhTheme(VhVariant.phone, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          home: const _OpensSheet(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final row = tester.getRect(find.byType(ChoiceChipRow).first);
+    final first = tester.getRect(find.text('Every 30 minutes'));
+    expect(first.left, greaterThanOrEqualTo(row.left));
+    expect(first.right, lessThanOrEqualTo(row.right));
+  });
+
   testWidgets("**the guard**: the quality is changed from the channel's "
       'sheet, and the next clip found downloads at it', (tester) async {
     final c = container();

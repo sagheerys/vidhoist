@@ -770,6 +770,30 @@ void main() {
       });
     }
 
+    testWidgets('**the guard**: on a wide tablet the page keeps a column of '
+        'reading width, as the other pages do', (tester) async {
+      tester.view.physicalSize = const Size(1366, 854);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        _app(
+          _overrides(
+            store: store,
+            secrets: secrets,
+            pairing: _pairing,
+            api: FakeApi(),
+          ),
+          const PcScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final list = tester.getRect(find.byType(ListView).first);
+      expect(list.width, lessThanOrEqualTo(VhBreakpoint.readable));
+      // In the middle, not against one side.
+      expect(list.center.dx, closeTo(1366 / 2, 1));
+      await tester.pumpWidget(const SizedBox());
+    });
+
     testWidgets('the pairing form holds on every device, ar', (tester) async {
       await expectNoOverflow(
         tester,
