@@ -38,7 +38,14 @@ class _ChoiceChipRowState extends State<ChoiceChipRow> {
       final chip = _chips[widget.chosen].currentContext?.findRenderObject();
       // The row's own position only: the sheet around it stays put.
       if (chip == null || !_row.hasClients) return;
-      unawaited(_row.position.ensureVisible(chip, alignment: 0.5));
+      // Only when it is out of sight, and only as far as its edge: centred,
+      // a choice near the start pushed the first chip half off the row.
+      unawaited(
+        _row.position.ensureVisible(
+          chip,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+        ),
+      );
     });
   }
 
