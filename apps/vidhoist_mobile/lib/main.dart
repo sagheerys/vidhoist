@@ -28,6 +28,7 @@ import 'features/player/square_art.dart';
 /// player, runApp.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  registerVhLicenses(VhNoticeSet.android);
   // **On a phone the app is portrait and only the player rotates**;
   // `VhRotationScope` releases this lock while the
   // video player is open. A tablet is left free.

@@ -76,7 +76,7 @@ import 'shell/video_surface.dart';
 /// `--ltr` for the other theme and direction.
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  registerVhIconLicenses();
+  registerVhLicenses(VhNoticeSet.windows);
   if (args.contains('--gallery')) {
     runApp(
       DesktopGalleryApp(

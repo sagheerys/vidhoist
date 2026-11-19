@@ -26,6 +26,9 @@ dev_dependencies:
 
 flutter:
   generate: true
+  # The licence texts the licence page reads (registerVhLicenses).
+  assets:
+    - assets/licenses/
   fonts:
     - family: Tajawal
       fonts:
