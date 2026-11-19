@@ -16,12 +16,18 @@ class VhEmptyState extends StatelessWidget {
     required this.message,
     this.actionLabel,
     this.onAction,
+    this.primary = false,
   });
 
   final String title;
   final String message;
   final String? actionLabel;
   final VoidCallback? onAction;
+
+  /// For the one step that must be taken before the page can work, as a
+  /// permission is: then the action is a filled button, since a quiet link
+  /// read as one choice among none.
+  final bool primary;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +48,10 @@ class VhEmptyState extends StatelessWidget {
             ),
             if (actionLabel != null) ...[
               const SizedBox(height: VhSpace.md),
-              TextButton(onPressed: onAction, child: Text(actionLabel!)),
+              if (primary)
+                FilledButton(onPressed: onAction, child: Text(actionLabel!))
+              else
+                TextButton(onPressed: onAction, child: Text(actionLabel!)),
             ],
           ],
         ),

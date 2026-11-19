@@ -195,7 +195,7 @@ class _SessionState extends ConsumerState<_Session> {
             hint: device.lastSeen != null
                 ? l.pcLinkLastSeen(vhTimeAgo(context, device.lastSeen!))
                 : l.pcLinkPairedAt(vhTimeAgo(context, device.pairedAt)),
-            trailing: VhLinkButton(
+            trailing: VhRowButton(
               label: l.pcLinkRevoke,
               icon: VhIcons.trash,
               danger: true,

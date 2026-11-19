@@ -13,6 +13,7 @@ import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/sidebar_items.dart';
 import 'package:vidhoist_desktop/shell/title_bar.dart';
 import 'package:vidhoist_desktop/shell/ui_zoom.dart';
+import 'package:vh_media/vh_media.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import 'support/shell_harness.dart';
@@ -30,6 +31,12 @@ void main() {
     if (arabic) ShellHarness.useArabic(tester);
     final h = ShellHarness(library: const [], zoom: UiZoom(zoom));
     await tester.pumpWidget(h.app());
+    await tester.pumpAndSettle();
+    // A clip loaded: the side panel, and its button's place over it, come
+    // out only while something plays.
+    h.player.showPlaying(const [
+      PlaylistItem(canonicalUrl: 'https://youtu.be/ccccccccccc', title: 'Clip'),
+    ], playing: false);
     await tester.pumpAndSettle();
     return h;
   }

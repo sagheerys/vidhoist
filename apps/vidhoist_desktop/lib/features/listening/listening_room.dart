@@ -62,6 +62,11 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
   /// The narrowest the lines get beside the cover; narrower, they go below.
   static const double _narrowest = 420;
 
+  /// Where the room's content starts: under the close button, which keeps
+  /// its corner however the content is laid out.
+  static const double _belowClose =
+      VhSpace.md + kMinInteractiveDimension + VhSpace.xxs;
+
   /// Below this the cover is left out: a small square says nothing.
   static const double _smallest = 120;
 
@@ -110,7 +115,15 @@ class _ListeningRoomState extends ConsumerState<ListeningRoom> {
           children: [
             Positioned.fill(
               child: Padding(
-                padding: const EdgeInsets.all(VhSpace.xxl),
+                // Below the close button: the lines scroll, so any of them
+                // may stand at the top of their box, and the button sat on
+                // the first one.
+                padding: const EdgeInsets.fromLTRB(
+                  VhSpace.xxl,
+                  _belowClose,
+                  VhSpace.xxl,
+                  VhSpace.xxl,
+                ),
                 child: LayoutBuilder(
                   builder: (context, box) {
                     final cover = _CoverColumn(

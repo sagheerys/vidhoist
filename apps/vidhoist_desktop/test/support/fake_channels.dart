@@ -49,6 +49,7 @@ class FakeChannels implements ChannelSource {
     String? name,
     bool? enabled,
     int? checkIntervalMinutes,
+    Quality? quality,
     String? titleRegex,
     bool clearTitleRegex = false,
     String? folder,
@@ -56,7 +57,8 @@ class FakeChannels implements ChannelSource {
     calls.add(
       'update $id name=${name ?? '-'} enabled=${enabled ?? '-'} '
       'every=${checkIntervalMinutes ?? '-'} filter=${titleRegex ?? '-'} '
-      'clear=$clearTitleRegex folder=${folder ?? '-'}',
+      'clear=$clearTitleRegex folder=${folder ?? '-'}'
+      '${quality == null ? '' : ' quality=${quality.wire}'}',
     );
     subscriptions = [
       for (final s in subscriptions)

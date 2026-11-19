@@ -154,6 +154,7 @@ class LocalChannelSource implements ChannelSource {
     String? name,
     bool? enabled,
     int? checkIntervalMinutes,
+    Quality? quality,
     String? titleRegex,
     bool clearTitleRegex = false,
     String? folder,
@@ -165,6 +166,7 @@ class LocalChannelSource implements ChannelSource {
     if (checkIntervalMinutes != null) {
       record.checkIntervalMinutes = checkIntervalMinutes;
     }
+    if (quality != null) record.quality = quality.wire;
     if (clearTitleRegex) {
       record.titleRegex = null;
     } else if (_blankToNull(titleRegex) case final regex?) {

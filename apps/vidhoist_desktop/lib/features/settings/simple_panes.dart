@@ -240,7 +240,7 @@ class DesktopPane extends ConsumerWidget {
         if (hints.on && hints.seen.isNotEmpty)
           Align(
             alignment: AlignmentDirectional.centerEnd,
-            child: VhLinkButton(
+            child: VhRowButton(
               label: l.desktopHintsAgain,
               onPressed: () =>
                   unawaited(ref.read(hintsProvider.notifier).showAgain()),

@@ -124,8 +124,11 @@ class VhPalette {
     card: Color(0xFFFFFFFF),
     cardAlt: Color(0xFFE8E6E2), // a secondary ground, one step below bg
     ink: Color(0xFF2B211B),
-    ink2: Color(0xAD2B211B), // rgba(43,33,27,.68)
-    ink3: Color(0x732B211B), // rgba(43,33,27,.45)
+    // The quiet inks carry words, so each reads at 4.5:1 or more on every
+    // ground (palette_contrast_test); ink2 rose with ink3 to stay a step
+    // above it.
+    ink2: Color(0xC72B211B), // rgba(43,33,27,.78)
+    ink3: Color(0xA62B211B), // rgba(43,33,27,.65)
     line: Color(0x1F2B211B), // rgba(43,33,27,.12)
     line2: Color(0x332B211B), // rgba(43,33,27,.20)
     accent: Color(0xFF2457D6),
@@ -155,7 +158,7 @@ class VhPalette {
     cardAlt: Color(0xFF1C1C1C),
     ink: Color(0xFFF0EBE4),
     ink2: Color(0xA8F0EBE4), // rgba(.66)
-    ink3: Color(0x6BF0EBE4), // rgba(.42)
+    ink3: Color(0x80F0EBE4), // rgba(.50), 4.5:1 on every ground
     line: Color(0x1FF0EBE4), // rgba(.12)
     line2: Color(0x2EF0EBE4), // rgba(.18)
     accent: Color(0xFF7FA3FF),

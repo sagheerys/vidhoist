@@ -14,6 +14,7 @@ import 'package:vidhoist_mobile/features/channels/channels_screen.dart';
 import 'package:vidhoist_mobile/features/channels/channels_state.dart';
 import 'package:vidhoist_mobile/features/channels/follow_sheet.dart';
 import 'package:vidhoist_mobile/features/settings/auto_backup.dart';
+import 'package:vidhoist_mobile/features/shared/choice_chip_row.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 
 import 'device_matrix.dart';
@@ -144,6 +145,102 @@ void main() {
     expect(backups.requests, 1, reason: 'a follow is backed up');
     expect(find.byType(ChannelCard), findsOneWidget);
     expect(find.textContaining('Now following'), findsOneWidget);
+  });
+
+  for (final editing in [false, true]) {
+    testWidgets('**the guard**: how often and at what quality each stand in '
+        'one row that slides (${editing ? 'editing' : 'following'})', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(360, 780);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      final c = container();
+      // Read every 24 hours: the last chip, past the edge until scrolled.
+      const edited = ChannelSubscription(
+        id: 'UC_some',
+        name: 'Some Channel',
+        url: 'https://www.youtube.com/@Some',
+        enabled: true,
+        checkIntervalMinutes: 1440,
+      );
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: c,
+          child: MaterialApp(
+            theme: vhTheme(VhVariant.phone, Brightness.light),
+            localizationsDelegates: VhLocalizations.localizationsDelegates,
+            supportedLocales: VhLocalizations.supportedLocales,
+            home: _OpensSheet(editing: editing ? edited : null),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final rows = find.byType(ChoiceChipRow);
+      expect(rows, findsNWidgets(2));
+      for (final row in rows.evaluate()) {
+        final tops = {
+          for (final chip
+              in find
+                  .descendant(
+                    of: find.byWidget(row.widget),
+                    matching: find.byType(ChoiceChip),
+                  )
+                  .evaluate())
+            tester.getRect(find.byWidget(chip.widget)).top,
+        };
+        expect(tops, hasLength(1), reason: 'wrapped onto ${tops.length} rows');
+      }
+      if (editing) {
+        // The last interval, chosen, is brought into view, not left past
+        // the edge of the screen.
+        final chosen = tester.getRect(find.text('Every 24 hours'));
+        expect(chosen.right, lessThanOrEqualTo(360));
+        expect(chosen.left, greaterThanOrEqualTo(0));
+      }
+    });
+  }
+
+  testWidgets("**the guard**: the quality is changed from the channel's "
+      'sheet, and the next clip found downloads at it', (tester) async {
+    final c = container();
+    await tester.runAsync(() => followSome(c));
+    final sub = (await tester.runAsync(() => c.read(channelsProvider.future)))!
+        .single;
+    expect(sub.quality, Quality.q720.wire);
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: c,
+        child: MaterialApp(
+          theme: vhTheme(VhVariant.phone, Brightness.light),
+          localizationsDelegates: VhLocalizations.localizationsDelegates,
+          supportedLocales: VhLocalizations.supportedLocales,
+          home: _OpensSheet(editing: sub),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final audio = find.text('Audio only');
+    await tester.ensureVisible(audio);
+    await tester.pumpAndSettle();
+    await tester.tap(audio);
+    await tester.pumpAndSettle();
+    final save = find.widgetWithText(FilledButton, 'Save settings');
+    await tester.ensureVisible(save);
+    await tester.pumpAndSettle();
+    await tester.tap(save);
+    // The save is real work on the store: given real time, frame by frame.
+    for (var i = 0; i < 20; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 20)),
+      );
+      await tester.pump();
+    }
+    expect(find.text('Save settings'), findsNothing, reason: 'saved, closed');
+
+    backend.listings[_videos] = _feed(['b', 'a']);
+    await tester.runAsync(() => c.read(channelsControllerProvider).checkNow());
+    expect(engine.tasks.single.quality, Quality.audio);
   });
 
   testWidgets('a channel is paused and resumed from its row', (tester) async {
@@ -374,10 +471,13 @@ class _Backups implements AutoBackup {
 
 /// Opens the follow sheet once it is on screen, so the matrix measures it.
 class _OpensSheet extends ConsumerStatefulWidget {
-  const _OpensSheet({this.channel});
+  const _OpensSheet({this.channel, this.editing});
 
   /// This channel's own sheet rather than the follow sheet.
   final ChannelSubscription? channel;
+
+  /// The follow sheet changing this channel rather than following one.
+  final ChannelSubscription? editing;
 
   @override
   ConsumerState<_OpensSheet> createState() => _OpensSheetState();
@@ -390,7 +490,7 @@ class _OpensSheetState extends ConsumerState<_OpensSheet> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => switch (widget.channel) {
         final sub? => showChannelActions(context, ref, sub),
-        null => showFollowSheet(context),
+        null => showFollowSheet(context, editing: widget.editing),
       },
     );
   }

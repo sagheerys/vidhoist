@@ -63,7 +63,7 @@ void main() {
     testWidgets('**the guard**: a clip opened from far down, then the '
         'library again, is back where it was left', (tester) async {
       await open(tester, const Size(1440, 900));
-      list(tester).jumpTo(2400);
+      list(tester).jumpTo(1600);
       await tester.pumpAndSettle();
 
       router(tester).go(DesktopRoutes.item('https://youtu.be/clip0000030'));
@@ -73,13 +73,13 @@ void main() {
           .go(DesktopRoutes.library);
       await tester.pumpAndSettle();
 
-      expect(list(tester).pixels, 2400);
+      expect(list(tester).pixels, 1600);
     });
 
     testWidgets('another view of the library is another list, and starts at '
         'the top as before', (tester) async {
       await open(tester, const Size(1440, 900));
-      list(tester).jumpTo(2400);
+      list(tester).jumpTo(1600);
       await tester.pumpAndSettle();
 
       router(tester).go(DesktopRoutes.favorites);

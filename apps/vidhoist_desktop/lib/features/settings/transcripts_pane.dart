@@ -62,7 +62,7 @@ class TranscriptsPane extends ConsumerWidget {
         ),
         Align(
           alignment: AlignmentDirectional.centerStart,
-          child: VhLinkButton(
+          child: VhRowButton(
             label: l.transcriptsDeleteAll,
             danger: true,
             icon: VhIcons.trash,

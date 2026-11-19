@@ -81,7 +81,7 @@ class _BackupPaneState extends ConsumerState<BackupPane> {
         SettingLine(
           title: l.desktopImportFromPhone,
           hint: l.desktopImportHint,
-          trailing: VhLinkButton(
+          trailing: VhRowButton(
             label: l.desktopSetupChooseFile,
             onPressed: () => unawaited(chooseAndImport(context, ref)),
           ),
@@ -89,7 +89,7 @@ class _BackupPaneState extends ConsumerState<BackupPane> {
         SettingLine(
           title: l.desktopExportForPhone,
           hint: l.desktopExportForPhoneHint,
-          trailing: VhLinkButton(
+          trailing: VhRowButton(
             label: l.desktopExportForPhone,
             onPressed: () => unawaited(_export()),
           ),
@@ -97,7 +97,7 @@ class _BackupPaneState extends ConsumerState<BackupPane> {
         SettingLine(
           title: l.desktopRecoverLibrary,
           hint: l.desktopRecoverLibraryHint,
-          trailing: VhLinkButton(
+          trailing: VhRowButton(
             label: l.desktopRecoverLibraryAction,
             onPressed: () => unawaited(_recover()),
           ),
@@ -106,7 +106,7 @@ class _BackupPaneState extends ConsumerState<BackupPane> {
         SettingLine(
           title: l.settingsBackup,
           hint: l.desktopBackupHint,
-          trailing: VhLinkButton(
+          trailing: VhRowButton(
             label: l.desktopBackUpNow,
             onPressed: () => unawaited(_backUpNow()),
           ),
@@ -128,7 +128,7 @@ class _BackupPaneState extends ConsumerState<BackupPane> {
                   SettingLine(
                     title: vhTimeAgo(context, file.at),
                     hint: vhFormatSize(file.sizeBytes),
-                    trailing: VhLinkButton(
+                    trailing: VhRowButton(
                       label: l.desktopRestore,
                       onPressed: () => unawaited(_restore(file)),
                     ),

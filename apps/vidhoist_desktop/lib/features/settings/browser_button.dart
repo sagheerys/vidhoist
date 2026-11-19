@@ -83,11 +83,11 @@ class BrowserButtonLine extends StatelessWidget {
         alignment: WrapAlignment.end,
         spacing: VhSpace.sm,
         children: [
-          VhLinkButton(
+          VhRowButton(
             label: l.desktopBrowserButtonOpen,
             onPressed: () => unawaited(_open(context)),
           ),
-          VhLinkButton(
+          VhRowButton(
             label: l.desktopBrowserButtonCopy,
             onPressed: () => unawaited(_copy(context)),
           ),
