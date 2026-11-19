@@ -7,6 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/settings/appearance_pane.dart';
 import 'package:vidhoist_desktop/features/settings/appearance_preview.dart';
+import 'package:vidhoist_desktop/features/settings/language_choice.dart';
+import 'package:vidhoist_desktop/data/appearance_data.dart';
 import 'package:vidhoist_desktop/data/choices_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
@@ -85,10 +87,40 @@ void main() {
       tester,
     ) async {
       final h = await open(tester, '/settings/appearance');
-      await tester.tap(find.text('العربية'));
+      await tester.tap(find.byType(DesktopLanguageChoice));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('العربية').last);
       await tester.pumpAndSettle();
       expect(find.text('المظهر واللغة'), findsWidgets);
       expect(await h.store.getString('ember_locale'), 'ar');
+    });
+
+    /// **The guard**: the list was two hand-written segments, so ten
+    /// finished translations could only be reached through Windows' own
+    /// language, and one chosen here was dropped on the next start.
+    testWidgets('every translation is offered, and one chosen is kept', (
+      tester,
+    ) async {
+      final h = await open(tester, '/settings/appearance');
+      await tester.tap(find.byType(DesktopLanguageChoice));
+      await tester.pumpAndSettle();
+      for (final locale in VhLocalizations.supportedLocales) {
+        expect(
+          find.text(vhLanguageName(locale.languageCode)),
+          findsWidgets,
+          reason: locale.languageCode,
+        );
+      }
+      await tester.tap(find.text('Deutsch').last);
+      await tester.pumpAndSettle();
+      expect(await h.store.getString('ember_locale'), 'de');
+      final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(app.locale, const Locale('de'));
+      final kept = await AppearanceStore(
+        store: h.store,
+        mutex: PrefsMutex(),
+      ).read();
+      expect(kept.locale, 'de');
     });
 
     testWidgets('**the guard**: the preview stands right beside the '

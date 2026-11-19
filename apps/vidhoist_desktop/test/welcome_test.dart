@@ -11,6 +11,7 @@ import 'package:vidhoist_desktop/data/engine_fetch_data.dart';
 import 'package:vidhoist_desktop/data/update_data.dart';
 import 'package:vidhoist_desktop/features/welcome/startup_offers.dart';
 import 'package:vidhoist_desktop/features/welcome/welcome_dialog.dart';
+import 'package:vidhoist_desktop/features/settings/language_choice.dart';
 import 'package:vidhoist_desktop/platform/engine_locator.dart';
 
 import 'desktop_matrix.dart';
@@ -172,7 +173,9 @@ void main() {
     final h = harness();
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    await tester.tap(find.text(vhLanguageName('ar')));
+    await tester.tap(find.byType(DesktopLanguageChoice));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(vhLanguageName('ar')).last);
     await tester.pumpAndSettle();
     final element = tester.element(find.byType(WelcomeDialog));
     final container = ProviderScope.containerOf(element);
