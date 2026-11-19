@@ -1,6 +1,6 @@
 import '../constants/vh_constants.dart';
 
-/// Building the local filename (§2.4): `<CleanTitle>_<HHmmss>.<ext>`. The
+/// Building the local filename: `<CleanTitle>_<HHmmss>.<ext>`. The
 /// extension comes from the source file's name (mp4 by default), the title
 /// is truncated at 80, and Arabic and Unicode are fully supported: only
 /// characters invalid in filenames are removed.

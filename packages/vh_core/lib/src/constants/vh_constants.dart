@@ -19,7 +19,7 @@ abstract final class VhConstants {
   /// how many, rather than a queue no one meant to make.
   static const int maxLinksPerAdd = 100;
 
-  // Qualities (§2.2).
+  // Qualities.
   static const List<String> qualityWireValues = [
     'best',
     '1080',
@@ -29,13 +29,13 @@ abstract final class VhConstants {
     'audio',
   ];
 
-  // Local files (§2.4 and §5.3).
+  // Local files.
   static const String phoneFolderName = 'Vidhoist';
   static const String superFolderName = 'Vidhoist';
   static const int filenameTitleMaxLength = 80;
   static const String defaultMediaExtension = 'mp4';
 
-  // Classifying blocked-platform errors (§2.3).
+  // Classifying blocked-platform errors.
   static const List<String> platformBlockedMarkers = [
     'login',
     'sign in',
@@ -43,7 +43,7 @@ abstract final class VhConstants {
     'bot',
   ];
 
-  // Short links (§4).
+  // Short links.
   static const int maxRedirectHops = 8;
 
   /// Favourites are a hidden system tag inside TagsIndex: they enter the
@@ -59,14 +59,6 @@ abstract final class VhConstants {
 
   /// A tag's name, in characters: a chip that long still fits a phone.
   static const int maxTagLength = 24;
-
-  // `owner/name` for the releases repository. **The single switching
-  // point.**
-  //
-  // The `releases/latest` endpoint requires a **public** repository: while
-  // it is private GitHub answers 404, which is read as "no update" in
-  // silence (fail-safe). To separate releases from the code, changing this
-  // one line to an independent public releases repository is enough.
 
   /// `owner/name` for the releases repository. **The single switching
   /// point.**

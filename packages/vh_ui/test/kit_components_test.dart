@@ -11,7 +11,7 @@ void main() {
     test('**the guard**: the phones take three corners, 8 · 16 · pill', () {
       // Literal numbers on purpose: editing the mobile scale fails here
       // before it reaches every card and sheet on the phones. Changed from
-      // 16 · 10 · 28 · 13 by the owner's decision of 2026-10-31.
+      // 16 · 10 · 28 · 13 on 2026-10-31.
       final t = vhTheme(VhVariant.desktop, Brightness.light);
       expect(_radius(t.cardTheme.shape), 16);
       expect(_radius(t.chipTheme.shape), 8);

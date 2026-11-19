@@ -8,10 +8,17 @@ This fails (exit 1) when a comment in apps/ or packages/:
     translations (.arb) and in test data, never in an explanation.
     Private plan references ("م-73", "ع-1") are caught by this too: the
     plan lives in docs/plan, which is not published.
-  * points into the unpublished plan: "07 §3-b", "brief §4",
-    "02-TRD.md", "docs/plan". A visitor has none of those files; the
+  * points into the unpublished plan: "07 §3-b", "brief §4", "§2.4",
+    "02-TRD.md", "TRD §3.1", "docs/plan", "docs/blueprint", "batch 6",
+    "phase 6", "rule 3, step 2". A visitor has none of those files; the
     comment should say the reason itself. The published docs
-    (ENGINE.md and the rest of docs/) may be cited.
+    (ENGINE.md and the rest of docs/) may be cited, and so may a public
+    spec's section ("SemVer §11").
+  * says where a reason came from instead of the reason: "owner's report
+    2026-11-12", "field report", "screenshot 2026-09-02". The reason is
+    what a reader needs; a date may stay when it dates a measured fact.
+  * names Vidhoist, the project VidHoist was forked from. The fork notice
+    lives in the README and the CHANGELOG, as the GPL asks.
   * says TODO / FIXME / XXX / HACK without an issue number (#123) or a
     link, so a note-to-self cannot outlive the person who wrote it.
   * is code that was switched off rather than deleted. Git keeps history;
@@ -36,6 +43,18 @@ PRIVATE = re.compile(
     r"|\bbrief\s*§"
     r"|(?<![\w-])0\d-[A-Z][A-Z-]+\.md"
     r"|docs/plan"
+    r"|docs/blueprint|docs/design|EXECUTION-PLAN|DESIGN-BRIEF|\bREPORT(?:\.md|\s*§)"
+    r"|(?<!SemVer )§\s?\d"
+    r"|\bTRD\b"
+    r"|\b[Bb]atch \d|\b[Pp]hase \d|\b[Rr]ule \d"
+    r"|\bmobile plan\b"
+)
+# Where a reason came from, said instead of the reason.
+PROVENANCE = re.compile(
+    r"(?i)\bowner'?s? (?:report|decision|request|choice|note|pick)"
+    r"|\(owner\b|\bfield (?:report|defect)"
+    r"|\bscreenshot,? 20\d\d|reported with a screenshot"
+    r"|vidhoist"
 )
 # A line of Dart that was switched off: a statement, a declaration, or a
 # lone brace -- not a sentence that happens to end in a colon.
@@ -141,6 +160,8 @@ def check(path, source):
                 found.append(f"{at}: Arabic in a comment: {body[:90]}")
             if PRIVATE.search(row):
                 found.append(f"{at}: private plan reference: {body[:90]}")
+            if PROVENANCE.search(row):
+                found.append(f"{at}: private provenance: {body[:90]}")
             if MARKER.search(row) and not TRACKED.search(row):
                 found.append(f"{at}: untracked marker: {body[:90]}")
             if not is_doc and text.startswith("//") and CODE.match(body):

@@ -82,7 +82,7 @@ class VhUrlInputSheet extends StatelessWidget {
           children: [
             // **No drag handle here**: the theme sets `showDragHandle: true`
             // for every bottom sheet, so drawing a second one showed two bars
-            // stacked on top of each other (screenshot 2026-09-04).
+            // stacked on top of each other.
             Text(title, style: text.titleLarge),
             const SizedBox(height: VhSpace.lg),
             TextField(

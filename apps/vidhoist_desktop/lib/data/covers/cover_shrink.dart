@@ -7,7 +7,7 @@ import 'package:vh_core/vh_core.dart' show ArtworkIndex;
 
 /// The widest a kept cover is. A phone video's frame is 1080x1920 or more,
 /// and decoding hundreds of those while the library scrolls made it crawl
-/// (measured on the owner's library); a card is never wider than this at
+/// (measured on a real library); a card is never wider than this at
 /// the largest window and scale.
 const coverWidth = 640;
 

@@ -21,12 +21,12 @@ class PcStatus {
   /// Downloads under way or waiting their turn.
   final int active;
 
-  /// The owner let phones delete clips there (off until turned on); the
+  /// The user let phones delete clips there (off until turned on); the
   /// phone offers it only then. False from a computer older than that.
   final bool canDelete;
 
   /// Where the computer can be reached now, sorted: the phone keeps them
-  /// for the owner to choose the route, and learns a changed one here.
+  /// for the user to choose the route, and learns a changed one here.
   final List<PcAddress> addresses;
 
   Map<String, Object?> toJson() => {
@@ -52,10 +52,10 @@ class PcStatus {
 
 /// What became of a clip the phone asked the computer to delete.
 enum PcDeleteOutcome {
-  /// In the computer's Recycle Bin, where the owner can get it back.
+  /// In the computer's Recycle Bin, where the user can get it back.
   deleted,
 
-  /// The owner has not let phones delete there.
+  /// The user has not let phones delete there.
   notAllowed,
 
   /// No such clip there any more.

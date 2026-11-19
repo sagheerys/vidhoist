@@ -17,12 +17,10 @@ void showDownloadsSheet(BuildContext context) {
     context: context,
     useRootNavigator: true,
     isScrollControlled: true,
-    // **It does not rise into the camera cutout** (field report
-    // 2026-09-04):
-    // without this the sheet started at the very top of the screen, so the
-    // drag handle disappeared under the status bar and there was nothing
-    // left
-    // to grab to pull it down.
+    // **It does not rise into the camera cutout**: without this the sheet
+    // started at the very top of the screen, so the drag handle disappeared
+    // under the status bar and there was nothing left to grab to pull it
+    // down.
     useSafeArea: true,
     builder: (_) => const _DownloadsSheet(),
   );
@@ -40,7 +38,7 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
   /// when the last task finishes or is dismissed: the bare empty state is
   /// centred in all the height a scroll-controlled sheet allows, so the
   /// sheet used to leap to the top of the screen the moment the list
-  /// emptied (field report 2026-10-15).
+  /// emptied.
   bool _framed = false;
 
   /// Tasks that finished while the sheet was open: each stays a moment
@@ -117,10 +115,10 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
                 progress: task.hasKnownProgress ? task.progress : null,
                 isError: error,
                 action: error ? null : taskCardAction(l10n, task, engine),
-                // **A failed task is dismissed with the same close button**
-                // (field report 2026-09-03: "if a file fails to download you
-                // cannot remove it from the downloads list"). `onCancel` was
-                // null on an error, so the close mark disappeared and only
+                // **A failed task is dismissed with the same close button**:
+                // a failed download could not be removed from the list.
+                // `onCancel` was null on an error, so the close mark
+                // disappeared and only
                 // "retry" was left, and the card sat in "needs your
                 // attention" until the app was killed. `forget` had been in
                 // the engine all along and nothing in the interface called
@@ -194,9 +192,9 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
     }
     _framed = true;
 
-    // **A fixed height with a scrolling list** (field report 2026-09-04:
-    // "the downloads page is now right at the top and you cannot drag it
-    // down, and the list shrinks every time a video finishes").
+    // **A fixed height with a scrolling list**: the sheet sat right at the
+    // top where it could not be dragged down, and shrank every time a video
+    // finished.
     // `ListView(shrinkWrap: true)` made the sheet's height equal its
     // content's: seven tasks filled the screen, then it jumped upward with
     // every completion. The sheet now opens at 62% and drags between 35%
@@ -213,8 +211,8 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
           VhSpace.xl,
           vhSheetBottomPad(context, VhSpace.xxl),
         ),
-        // **The title is pinned and only the list scrolls** (field report
-        // 2026-09-04): it used to be the first item in the `ListView`, so
+        // **The title is pinned and only the list scrolls**: it used to be
+        // the first item in the `ListView`, so
         // it scrolled away with the content and vanished once there were
         // many downloads, leaving a list scrolling with no header to say
         // what it is.

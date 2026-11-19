@@ -55,9 +55,9 @@ class ShareReceiver {
 
   final void Function(List<String> urls) onUrls;
 
-  /// A trace in the diagnostic log on every reception, **prompted by field
-  /// report 2026-09-08**: "sometimes the download sheet only appears if I
-  /// try again". Without this line there is no telling whether the app lost
+  /// A trace in the diagnostic log on every reception, **because the
+  /// download sheet sometimes appeared only on a second try**. Without this
+  /// line there is no telling whether the app lost
   /// the link or it never arrived.
   final void Function(String message)? onLog;
 
@@ -71,9 +71,8 @@ class ShareReceiver {
 
   /// How long a repeat counts as the same delivery. The double delivery
   /// comes within moments; a person sharing the same link again comes
-  /// later, and means it (field report 2026-10-15: a link shared again
-  /// after its sheet was closed was ignored without a word, however long
-  /// after).
+  /// later, and means it: a link shared again after its sheet was closed
+  /// used to be ignored without a word, however long after.
   static const repeatWindow = Duration(seconds: 3);
 
   /// **Listen first, then take** what is already waiting: a share landing

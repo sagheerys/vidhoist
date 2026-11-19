@@ -37,16 +37,5 @@ void main() {
       final r = HistoryResponse.fromJson(loadFixture('history_active.json'));
       expect(r.active, hasLength(3));
     });
-
-    test('looksLikeVidhoist requires both done and queue in a map', () {
-      expect(
-        HistoryResponse.looksLikeVidhoist({'done': [], 'queue': []}),
-        isTrue,
-      );
-      expect(HistoryResponse.looksLikeVidhoist({'done': []}), isFalse);
-      expect(HistoryResponse.looksLikeVidhoist('<html></html>'), isFalse);
-      expect(HistoryResponse.looksLikeVidhoist(null), isFalse);
-      expect(HistoryResponse.looksLikeVidhoist([]), isFalse);
-    });
   });
 }

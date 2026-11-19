@@ -11,8 +11,8 @@ import 'item_actions_sheet.dart';
 import 'sort_sheet.dart';
 
 /// The library's bar: its name and three buttons, or **the search field in
-/// the name's place** once the search button is pressed (mobile plan
-/// 2026-11-01), which leaves the list a row higher on every visit. The
+/// the name's place** once the search button is pressed, which leaves the
+/// list a row higher on every visit. The
 /// field stays while a query is written, so a narrowed list never looks
 /// unexplained; the back arrow clears it.
 AppBar libraryMainBar(

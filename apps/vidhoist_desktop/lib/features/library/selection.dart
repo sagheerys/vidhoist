@@ -9,9 +9,8 @@ typedef LibrarySelection = ({Set<String> urls, String? anchor});
 /// The selection: Ctrl adds or removes one, Shift takes the run from the
 /// last one chosen, the round mark on a clip under the mouse adds or
 /// removes it, and **while any is chosen a plain click adds or removes
-/// too**. With none chosen a plain click opens the clip (the owner's
-/// choice, 2026-10-28): choosing is something asked for, not what every
-/// click does.
+/// too**. With none chosen a plain click opens the clip: choosing is
+/// something asked for, not what every click does.
 final librarySelectionProvider =
     NotifierProvider<LibrarySelectionNotifier, LibrarySelection>(
       LibrarySelectionNotifier.new,

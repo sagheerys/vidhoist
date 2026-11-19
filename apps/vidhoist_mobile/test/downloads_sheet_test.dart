@@ -10,8 +10,8 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-/// Field report 2026-10-15: when the last download finished, the open
-/// sheet leapt to the top of the screen to say there were none.
+/// When the last download finished, the open sheet used to leap to the
+/// top of the screen to say there were none.
 void main() {
   final running = DownloadTask(
     inputUrl: 'https://youtu.be/abc',

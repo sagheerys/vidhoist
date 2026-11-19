@@ -66,7 +66,7 @@ void main() {
   });
 
   test("**the guard**: an Instagram post's eleven-character id is not taken "
-      "for YouTube's (the owner's folder held two)", () async {
+      "for YouTube's (a real folder held two)", () async {
     // Ends with a character a YouTube id never ends with.
     put('Video by growwithazab [DfcylhUo7gp].mp4');
     // Ends with one it may, but carries Instagram's own caption-less title.

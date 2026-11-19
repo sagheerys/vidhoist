@@ -20,7 +20,7 @@ import 'features/settings/settings_state.dart';
 import 'features/shared/stores.dart';
 import 'features/storage/phone_volumes.dart';
 
-/// Riverpod injection (TRD §3.1): a settings change rebuilds the engine
+/// Riverpod injection: a settings change rebuilds the engine
 /// automatically, with no Completers and no manual synchronisation.
 
 /// Overridden in main once SharedPreferences is ready.
@@ -43,7 +43,7 @@ final settingsProvider = NotifierProvider<SettingsNotifier, PhoneSettings>(
   SettingsNotifier.new,
 );
 
-// The indexes (§5.5: all of them keyed by the unified item key).
+// The indexes, all of them keyed by the unified item key.
 
 /// canonicalUrl to the local path, filled after every finished download,
 /// so a clip's link stays tied to its file.
@@ -96,7 +96,7 @@ final tagsIndexProvider = Provider(
   (ref) => TagsIndex(
     store: ref.watch(keyValueStoreProvider),
     mutex: ref.watch(prefsMutexProvider),
-    // **A single choke point for the automatic backup** (2026-09-04):
+    // **A single choke point for the automatic backup**:
     // every tag write, from any screen, requests a backup, so no screen
     // can be forgotten.
     onChanged: () => unawaited(ref.read(autoBackupProvider).requestBackup()),
@@ -118,7 +118,7 @@ final playlistsStoreProvider = Provider(
   ),
 );
 
-/// Collects a playlist download into one saved playlist (asked 2026-09-02).
+/// Collects a playlist download into one saved playlist.
 final batchCollectorProvider = Provider(
   (ref) => BatchPlaylistCollector(
     playlists: ref.watch(playlistsStoreProvider),
@@ -132,11 +132,11 @@ final batchCollectorProvider = Provider(
 /// file on disk correct, the screen empty.
 final playlistsRevisionProvider = StateProvider<int>((ref) => 0);
 
-/// **Resolving short links before the routing decision** (field report
-/// 2026-09-08): `on.soundcloud.com/…` is an album that contains no
-/// `/sets/`, so it passed as a single clip and was expanded into twenty. The engine resolves for itself later, and resolving what is
-/// already resolved costs nothing (`needsResolution` returns false
-/// immediately).
+/// **Resolving short links before the routing decision**:
+/// `on.soundcloud.com/…` is an album that contains no `/sets/`, so it
+/// passed as a single clip and was expanded into twenty. The engine
+/// resolves for itself later, and resolving what is already resolved
+/// costs nothing (`needsResolution` returns false immediately).
 final shortLinkResolverProvider = Provider((ref) => ShortLinkResolver());
 
 /// youtubedl-android, through `YtDlpBridge.kt`.
@@ -243,8 +243,8 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
       if (!ref.read(settingsProvider).wifiOnly) return true;
       return ref.read(networkGateProvider).onWifi;
     },
-    // Field report 2026-09-03: YouTube at "best" gives AV1 or VP9 and the
-    // clip looks torn on phones. This asks for H.264/AAC instead.
+    // YouTube at "best" gives AV1 or VP9 and the clip looks torn on
+    // phones. This asks for H.264/AAC instead.
     compatibleVideo: () => ref.read(settingsProvider).compatiblePlayback,
     subtitleLanguages: () => ref.read(settingsProvider).subtitleLanguages,
     tuning: () => ref.read(settingsProvider).tuning,

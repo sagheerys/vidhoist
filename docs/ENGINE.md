@@ -1,10 +1,10 @@
 # The download engine: yt-dlp on Windows and Android
 
-Measured in batch 1 of the phase 1 plan (2026-11-05/06), before any engine
-code was written. This file is the reference for the command lines, the
+Measured on Windows and Android (2026-11-05/06), before any engine code
+was written. This file is the reference for the command lines, the
 measurements and the traps, and for what carried over from the Vidhoist days
-(the last section): the server contract that came before it was deleted in
-batch 6 (2026-11-06).
+(the last section): the server contract that came before it was deleted on
+2026-11-06.
 Raw stdout and stderr of the Windows runs are kept as fixtures in
 `packages/vh_ytdlp/test/fixtures/windows/` (media links, the requester's IP
 and local paths replaced).
@@ -92,14 +92,14 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 9. **Dart reads the progress line by line** from `Process.start` (first line
    about 6 s after the start, then one per update).
 10. **No console window appears when a GUI app starts a console program
-    with `Process.start`** (measured in batch 5): a Dart program switched to
+    with `Process.start`** (measured): a Dart program switched to
     the GUI subsystem, as the Flutter app is, started PowerShell, whose
     `GetConsoleWindow()` returned 0, where the same PowerShell started with a
     console of its own got a window. So neither yt-dlp nor `taskkill` nor
     `tar` needs `CREATE_NO_WINDOW` from the app; yt-dlp starts ffmpeg and
     Deno hidden itself. Still not measured: QuickJS as the runtime on
     Windows (1.8 MB instead of Deno's 94; the download of `qjs.exe` was
-    refused by the session's safety check and is left to the owner).
+    refused by the session's safety check and is still to be tried).
 
 ### Android
 
@@ -135,7 +135,7 @@ yt-dlp --no-config -4 --newline --progress --no-colors
     1080p download at 40 s and left no file behind.
 16. **What the engine adds per ABI** (arm64-v8a, compressed in the APK):
     ffmpeg 33.8 MB, Python 13.4 MB, yt-dlp 3 MB, QuickJS 0.4 MB, about
-    51 MB in all. Measured in batch 4 (`flutter build apk --release
+    51 MB in all. Measured from a release build (`flutter build apk --release
     --split-per-abi`, shrinking on): arm64-v8a 63.5 MB, armeabi-v7a 56.9 MB,
     x86_64 66.6 MB; the arm64 release build unpacked, updated and downloaded
     on the phone. The library needs `extractNativeLibs="true"` and
@@ -148,7 +148,7 @@ yt-dlp --no-config -4 --newline --progress --no-colors
     upload needs an account; the stream came instead), one TikTok post
     9.2 s. The same TikTok post as on Windows is blocked for a Saudi IP and
     TikTok warns that no impersonation target is available; the X test
-    link is dead upstream. **With the app swiped away** (batch 4): the
+    link is dead upstream. **With the app swiped away**: the
     Flutter engine is disposed (audio_service lets it go when nothing
     plays), so a foreground service tied to it stops and yt-dlp dies
     mid-file. A service of the process's own (`EngineService.kt`), held
@@ -219,7 +219,7 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 | Go on with yt-dlp on both platforms? | **Yes.** Nothing measured blocks it. |
 | JavaScript runtime on Windows | Deno, downloaded on first need rather than shipped (94 MB): it solved YouTube's challenge within seconds, where QuickJS took about 50 s on the phone. QuickJS (1.8 MB) only if a Windows measurement shows it fast |
 | Sign-ins on the phone | The site's own page in a WebView (Settings › Accounts), its cookies read from Android's jar (`CookieJar.kt`: one `Cookie:` header per page, HTTP-only included) and written as session cookies of the site (`CookieFiles.fromHeaders`, empty expiry, never `0`) into `cookies.txt` in the app's private folder, passed as `--cookies`. The WebView's agent loses `; wv` and `Version/4.0`, or Google refuses the sign-in. No `--cookies-from-browser`: Android gives no app another browser's jar |
-| Repairing the engine | A button beside the update, on both apps (`DownloadBackend.repairEngine`). Windows: yt-dlp's own `--rm-cache-dir` (its saved YouTube player code), then the current release fetched and checked against SHA2-256SUMS even when the version matches, the copy in use replaced only once the new one is whole. Phone: the library's updated copy in `no_backup/youtubedl-android/yt-dlp` and its `dlpVersion` preferences deleted, the shipped copy unpacked again, the current release fetched over it (the phone runs yt-dlp with `--no-cache-dir`, so there is no cache). Refused while anything downloads. `EngineRefresh.recordRepair` frees the next failure-driven update at once, and a repair that could not fetch leaves the update due. Pressed on the owner's phone 2026-11-09: "repaired, yt-dlp 2026.10.26" in under three seconds | A copy damaged in place reports the right version, so a plain update never replaces it; a corrupt signature cache breaks every YouTube link at once |
+| Repairing the engine | A button beside the update, on both apps (`DownloadBackend.repairEngine`). Windows: yt-dlp's own `--rm-cache-dir` (its saved YouTube player code), then the current release fetched and checked against SHA2-256SUMS even when the version matches, the copy in use replaced only once the new one is whole. Phone: the library's updated copy in `no_backup/youtubedl-android/yt-dlp` and its `dlpVersion` preferences deleted, the shipped copy unpacked again, the current release fetched over it (the phone runs yt-dlp with `--no-cache-dir`, so there is no cache). Refused while anything downloads. `EngineRefresh.recordRepair` frees the next failure-driven update at once, and a repair that could not fetch leaves the update due. Pressed on a real phone 2026-11-09: "repaired, yt-dlp 2026.10.26" in under three seconds | A copy damaged in place reports the right version, so a plain update never replaces it; a corrupt signature cache breaks every YouTube link at once |
 | ffmpeg on Windows | Downloaded on first use, or the shared build; never the 162 MB static one in the installer |
 | IPv4 | `-4` by default on both platforms, with a setting to turn it off |
 | YouTube's wait on Android | Probe once, keep the info JSON, download from it; the waiting screen says what it is doing during the probe |
@@ -228,7 +228,7 @@ yt-dlp --no-config -4 --newline --progress --no-colors
 
 ## What carried over: storage, backups and keys
 
-The parts of the old server contract (`SERVER-API.md`, deleted in batch 6)
+The parts of the old server contract (`SERVER-API.md`, since deleted)
 that never depended on the server, as they stand now.
 
 ### One key for everything

@@ -49,8 +49,7 @@ void main() {
     expect(taps, 1);
   });
 
-  // Owner's choice, 2026-11-01: each group a card as in the mock-ups, not
-  // rows laid straight on the page.
+  // Each group a card, not rows laid straight on the page.
   testWidgets('**the guard**: a group is a card with its heading inside', (
     tester,
   ) async {

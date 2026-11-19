@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// The skeleton's breath (owner's request 2026-11-05: a still placeholder
-/// read as a frozen screen, where the big apps' move).
+/// The skeleton's breath (a still placeholder read as a frozen screen,
+/// where the big apps' placeholders move).
 void main() {
   Widget host({bool still = false}) => MaterialApp(
     theme: vhTheme(VhVariant.desktop, Brightness.light),

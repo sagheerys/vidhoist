@@ -59,7 +59,7 @@ All notable changes to VidHoist. The format follows
 - "Download on the computer", off until turned on: on Windows, Settings ›
   Phone receives from a paired phone over the home network; on the phone,
   Settings › Computer pairs with it (a code shown on the computer, then four
-  digits both screens show, which the owner compares before allowing it).
+  digits both screens show, which the user compares before allowing it).
   Once paired, a Computer tab shows what the computer downloads and its
   library, and the add sheet offers to send a single link there while the
   computer answers. HTTPS with the computer's own certificate pinned on the
@@ -71,7 +71,7 @@ All notable changes to VidHoist. The format follows
   (zxing, open source, no Google Play services), tries the addresses and
   pairs on the first that answers, with the certificate pinned before the
   code is sent. Typing the address and code stays as a fallback.
-- Settings › Computer › Connect through, on the phone: the owner picks the
+- Settings › Computer › Connect through, on the phone: the user picks the
   home network or Tailscale, from the addresses the computer reports with
   every answer (no new pairing needed). The phone never switches on its
   own; the Computer page shows the route in use and, when the computer does
@@ -84,11 +84,8 @@ All notable changes to VidHoist. The format follows
 - "Copy to the phone", from a computer clip's menu: the file into the
   phone's media folder with its transcripts beside it as subtitle files,
   indexed as a download is. A copy cut off or stopped leaves nothing.
-- Design brief (`docs/blueprint/DESIGN-BRIEF.md`): the identity in one
-  table, how a screen is drawn before it is coded, and the approval log.
-  Mockups live in `docs/design/` and are built from the icon set and from
-  `tool/icons/vh_palette.py`, which reads `palette.dart`; the first set draws
-  "download on the PC" on the phone.
+- Screens are drawn as mockups before they are coded, built from the icon
+  set and from `tool/icons/vh_palette.py`, which reads `palette.dart`.
 - A warning beside the sign-ins (Accounts on the phone, Cookies on
   Windows): better a secondary account, since heavy downloading can get
   an account restricted by the site for a while.
@@ -145,7 +142,7 @@ All notable changes to VidHoist. The format follows
   it does not answer on the home network, the phone asks the network (one
   UDP broadcast, at most twice a minute), and an answer carrying the
   computer's proof moves the link there, kept, with no new pairing. The
-  route stays the owner's: never switched to or from Tailscale. The
+  route stays the user's: never switched to or from Tailscale. The
   computer stays silent to anyone not paired with it, except while it shows
   a pairing code, when "Find on the network" in the typed pairing fills in
   its address.
@@ -174,15 +171,15 @@ All notable changes to VidHoist. The format follows
   notice in the app says when one is done, with Play. The phone asks only
   while the app is in front and something runs there; no phone
   notification, which would need a service running in the background.
-- The Computer tab stays short (owner's request, 2026-11-11): two or more
-  downloads there, with the links waiting to be sent, fold into one line
+- The Computer tab stays short: two or more downloads there, with the
+  links waiting to be sent, fold into one line
   that opens them in a sheet, as the phone's own downloads do; one keeps
   its card.
 - The computer's saved lists on the phone, in the Computer tab: one line
   however many there are, a page of them, and each list's clips that are
   files there, in order, to play all or shuffled. They are read only; the
   phone's own lists are unchanged.
-- Delete a clip on the computer from the phone, only once the owner turns
+- Delete a clip on the computer from the phone, only once the user turns
   on "Let the phone delete clips" on Windows (off, and left out of
   backups): it goes to the computer's Recycle Bin after a confirmation
   naming the computer, and a drive with no Recycle Bin is left alone.
@@ -246,8 +243,8 @@ All notable changes to VidHoist. The format follows
 - On Windows, the "Start with Windows" entry quotes the program's path, and
   an unquoted entry left by an earlier version is written again.
 - **On Windows, an uninstall that deleted the app's data took the backups
-  with it** (owner's report, 2026-11-12): the library list and the
-  followed channels were gone and no backup was left to restore. Backups
+  with it**: the library list and the followed channels were gone and no
+  backup was left to restore. Backups
   now live in `Downloads\VidHoist\Backups`, beside the downloads, as the
   phone's do; those in the old place are carried over at the next start.
   The uninstaller's question now names everything it deletes and says the
@@ -279,11 +276,11 @@ All notable changes to VidHoist. The format follows
 - The Windows installer tells Explorer the icons changed, so a desktop
   shortcut shows the new mark too, not only the Start menu.
 - The player's "Next" list, the mini player and the media notification
-  show the covers the computer keeps for its clips (owner's report,
-  2026-11-10): they come through the phone's local proxy.
+  show the covers the computer keeps for its clips: they come through the
+  phone's local proxy.
 - The add-link button no longer shows over the menu of a clip in the
-  Computer tab (owner's report, 2026-11-10): every sheet now opens above
-  the whole app, where the button knows to hide.
+  Computer tab: every sheet now opens above the whole app, where the button
+  knows to hide.
 - Download on the computer, from its first try on real devices: the phone's
   pairing form has the port in a field of its own (the number pad has no
   colon, and the port is rarely needed); Windows shows the home network's
@@ -325,8 +322,7 @@ All notable changes to VidHoist. The format follows
   along the fold. It replaces the window with the download arrow on the
   phone's launcher (themed icon included), the Windows icon, the tray, the
   title bar, About, the installer and the brand files. Still generated by
-  `tool/icons/vidhoist_kit.py`; the boards the owner chose from are in
-  `docs/design/mockups-2026-11-11-logo*`.
+  `tool/icons/vidhoist_kit.py`.
 - On the phone, Settings › Accounts puts each site's sign-in at the end of
   its row, in the soft accent, so the six sites and "clear all" fit one
   screen; the button drops under the name only when the row is too narrow.
@@ -392,8 +388,8 @@ All notable changes to VidHoist. The format follows
   night), a white ground by day and a black one by night, and a mark whose
   window carries a download arrow landing in a tray. Everything is generated
   by `tool/icons/vidhoist_kit.py`.
-- `docs/blueprint/REPORT.md`: the plan for replacing the Vidhoist server with
-  yt-dlp running on the device, and `docs/adr/` for the decisions taken.
+- `docs/adr/`: the decisions taken in replacing the Vidhoist server with
+  yt-dlp running on the device.
 - `docs/ENGINE.md`: yt-dlp measured on Windows, on the Android emulator and on
   a phone before any engine code, with the real output kept as test fixtures.
 - `packages/vh_ytdlp`: the yt-dlp command lines (format selectors, IPv4 by
@@ -476,8 +472,7 @@ All notable changes to VidHoist. The format follows
   own `ErrorClassifier`, so the two never disagree about a line.
 
 ### Removed
-- **The Vidhoist server layer, in both apps and every package** (batch 6 of
-  phase 1). In `vh_core`: the API client and everything around it (address
+- **The Vidhoist server layer, in both apps and every package**. In `vh_core`: the API client and everything around it (address
   switching, LAN probe, live channel, image headers, server reasons), the
   server download pipeline (add, poll, pull, delete) with its pending pulls,
   sweeper, transfer and trashcan probe, the server's folders and version,

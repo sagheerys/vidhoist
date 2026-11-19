@@ -25,11 +25,10 @@ class _Folders extends NoFolders {
   Future<String?> downloads() async => downloadsPath;
 }
 
-/// The owner's report of 2026-11-05: Ctrl Shift C did nothing with the
-/// mouse, since the clip keys answered only a clip with keyboard focus, and
-/// a click opens a clip rather than focusing it. The two copy keys now take
-/// the one clip chosen, else the one under the mouse; the other clip keys
-/// stay with focus alone.
+/// Ctrl Shift C used to do nothing with the mouse, since the clip keys
+/// answered only a clip with keyboard focus, and a click opens a clip
+/// rather than focusing it. The two copy keys now take the one clip chosen,
+/// else the one under the mouse; the other clip keys stay with focus alone.
 void main() {
   late Directory root;
   setUp(() => root = Directory.systemTemp.createTempSync('ember_keys_'));

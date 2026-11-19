@@ -6,8 +6,7 @@ import '../downloads_library/library_actions.dart';
 import '../downloads_library/local_item.dart';
 import '../playlists/add_to_playlist_sheet.dart';
 
-/// **"Add to…": one place for every kind of belonging** (field report
-/// 2026-09-04).
+/// **"Add to…": one place for every kind of belonging.**
 ///
 /// In reels the heart was a standalone button in the rail, and "add to a
 /// playlist" had no entry point at all. One button gathers both and makes

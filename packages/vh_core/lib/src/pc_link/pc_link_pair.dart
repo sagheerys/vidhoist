@@ -24,7 +24,7 @@ Future<PcPairing> pcPair({
       return false;
     }
     // Typed by hand, any certificate is accepted *for comparison*: the
-    // owner compares the four digits it yields with the computer's.
+    // user compares the four digits it yields with the computer's.
     if (seen == null) {
       seen = fp;
       onCheck(pairingCheck(fingerprint: fp, code: code, nonce: nonce));

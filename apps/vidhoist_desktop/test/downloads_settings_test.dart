@@ -119,8 +119,7 @@ void main() {
     testWidgets('the folders pane shows the download folder', (tester) async {
       await open(tester, to: '/settings/folders');
       expect(find.byType(FoldersPane), findsOneWidget);
-      // **The guard** (owner's choice, 2026-11-05): the folder bears the
-      // app's own name.
+      // **The guard**: the folder bears the app's own name.
       expect(find.text(r'C:\Users\me\Downloads\VidHoist'), findsOneWidget);
       // There is no second folder, of offline copies, to show.
       expect(find.textContaining(r'Videos'), findsNothing);
@@ -138,8 +137,8 @@ void main() {
       tester,
     ) async {
       // The list is written by hand: a section added to the enum and the
-      // pages but not here opened by its address only, and the owner found
-      // no way to it (Phone, 2026-11-09).
+      // pages but not here opened by its address only, and the user found
+      // no way to it: the Phone section was missed that way once.
       await open(tester, to: '/settings/subscriptions');
       final listed = {
         for (final entry in tester.widgetList<PaneEntry>(

@@ -87,8 +87,7 @@ List<String> readerLanguages(String? chosen) {
 
 /// The transcript in the first of [languages] there is one for. Null when
 /// only other languages are kept: one is never put in front of the reader
-/// unasked (owner's decision 2026-11-04), and the reading room still offers
-/// the rest.
+/// unasked, and the reading room still offers the rest.
 Transcript? _pick(List<Transcript> all, List<String> languages) {
   for (final language in languages) {
     for (final t in all) {

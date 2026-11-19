@@ -103,7 +103,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(VhMediaGridCard), findsNWidgets(4));
 
-    // **The guard** (owner's choice, 2026-11-05): video leaves the shorts
+    // **The guard**: video leaves the shorts
     // to their own pill, so videos without the shorts can be had.
     await tester.tap(find.text('Video'));
     await tester.pumpAndSettle();

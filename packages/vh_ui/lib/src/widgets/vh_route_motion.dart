@@ -34,8 +34,7 @@ AnimationStyle vhNoticeMotion({required bool still}) => still
 ///
 /// It opens on the root navigator unless told otherwise: [VhRouteDepth]
 /// watches that one only, and a sheet on a tab's own navigator left the add
-/// button drawn over it (the computer library's menu, field report
-/// 2026-11-10).
+/// button drawn over it (the computer library's menu).
 Future<T?> showVhSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,

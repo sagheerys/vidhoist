@@ -10,9 +10,9 @@ import '../icons/vh_icon_data.dart';
 import '../icons/vh_icons.dart';
 
 /// One group of the settings home: **a card**, its small heading inside
-/// on top, then its rows (owner's choice, 2026-11-01, as drawn in the
-/// mobile mock-ups). The phone draws a hairline between rows; the tablet's
-/// narrow list leaves them out, since the lit row already marks its place.
+/// on top, then its rows. The phone draws a hairline between rows; the
+/// tablet's narrow list leaves them out, since the lit row already marks
+/// its place.
 class VhSettingsGroup extends StatelessWidget {
   const VhSettingsGroup({
     super.key,

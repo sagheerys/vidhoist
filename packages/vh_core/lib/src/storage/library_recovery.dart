@@ -51,11 +51,10 @@ class RecoveryScan {
   final List<String> unknown;
 }
 
-/// **Finds downloads the library has lost track of** (owner's report
-/// 2026-11-12): after an uninstall that deleted the app's data, the files
-/// were all still in the download folder, but the list pointing at them
-/// was gone, and the playlists brought back by an import pointed at
-/// nothing.
+/// **Finds downloads the library has lost track of**: after an uninstall
+/// that deleted the app's data, the files were all still in the download
+/// folder, but the list pointing at them was gone, and the playlists
+/// brought back by an import pointed at nothing.
 ///
 /// The link comes, in this order, from: the `.info.json` yt-dlp wrote
 /// beside the file (its `webpage_url`); the person's own records that name
@@ -84,7 +83,7 @@ class LibraryRecovery {
   /// A YouTube video id: eleven of these characters, **the last one from
   /// sixteen only**, since the id spells 64 bits and the eleventh character
   /// carries just four of them. An Instagram shortcode is eleven characters
-  /// of the same alphabet too (the owner's folder held two); this tells
+  /// of the same alphabet too (a real folder held two); this tells
   /// three in four of them apart, and [_instagramTitle] most of the rest.
   static final _youtubeId = RegExp(r'^[A-Za-z0-9_-]{10}[AEIMQUYcgkosw048]$');
 

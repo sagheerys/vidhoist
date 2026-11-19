@@ -95,7 +95,7 @@ class DownloadTask {
   final int? eta;
 
   /// The classified error on failure. The app turns its type into
-  /// translated text (TRD §3.3).
+  /// translated text.
   final VhApiException? error;
 
   /// A single item outranks members of a batch in the queue.

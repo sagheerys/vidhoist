@@ -1,0 +1,10 @@
+# The two forms ask for the version and the platform, which a blank issue
+# never carries; a security problem goes to the private channel instead.
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security problem
+    url: https://github.com/sagheerys/vidhoist/security/advisories/new
+    about: Privately, never as a public issue. See SECURITY.md.
+  - name: A problem with a site's downloads (yt-dlp itself)
+    url: https://github.com/yt-dlp/yt-dlp/issues
+    about: When a site changed and yt-dlp fails on its own too. Try Settings › Engine › Update yt-dlp first.

@@ -55,7 +55,7 @@ class AboutScreen extends StatelessWidget {
                   const SizedBox(height: VhSpace.xxs),
                   // **Without the build number**: `2.0.0+1` is Flutter's
                   // notation, and `+1` is an internal Android counter that
-                  // means nothing to the user (field report).
+                  // means nothing to the user.
                   FutureBuilder<PackageInfo>(
                     future: PackageInfo.fromPlatform(),
                     builder: (context, snapshot) => Text(

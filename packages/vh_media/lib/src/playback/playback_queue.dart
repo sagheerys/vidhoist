@@ -4,7 +4,7 @@ import '../models/play_mode.dart';
 import '../models/playlist_item.dart';
 
 /// The play queue: **pure logic with no Flutter and no player**, so it can
-/// be tested on its own (TRD §3.2). It holds the actual order, sequential
+/// be tested on its own. It holds the actual order, sequential
 /// or shuffled, and the current index, and answers one question: what is
 /// the next or previous item in this mode?
 class PlaybackQueue {

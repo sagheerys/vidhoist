@@ -7,13 +7,13 @@ const mediaFolderName = 'VidHoist';
 /// Where the media folder is wanted on the phone's own storage.
 const preferredMediaDir = '/storage/emulated/0/Download/$mediaFolderName';
 
-/// **The media folder as it is spelled on disk** (§5.3, ADR 0002), settled
+/// **The media folder as it is spelled on disk** (ADR 0002), settled
 /// once before runApp by [settlePhoneMediaDir]. Its contents are
 /// registered in MediaStore so they appear in the phone's gallery. A
 /// folder of its own, so no other app's files mix into the library. A
 /// memory card has one of the same name (`phone_volumes.dart`).
 ///
-/// Not a constant, learned on the owner's phone (2026-11-09): Android
+/// Not a constant, learned on a real phone (2026-11-09): Android
 /// opens `VidHoist` and `Vidhoist` alike, but lists a folder's files only
 /// under its own spelling, so a library scanning `VidHoist` while the
 /// disk said `Vidhoist` showed no downloads at all. Android refuses the
@@ -98,7 +98,7 @@ class LocalItem {
 
   /// The default title when the title index has none: the filename without
   /// its extension and without the `_HHmmss` time stamp the name builder
-  /// adds (§2.4).
+  /// adds.
   static String titleFromFilename(String filename) {
     final dot = filename.lastIndexOf('.');
     final stem = dot > 0 ? filename.substring(0, dot) : filename;
@@ -130,16 +130,16 @@ enum LibraryViewMode {
   /// Two columns with a 16:9 cover, for quick visual scanning.
   grid,
 
-  /// **One column with a wide cover** (asked 2026-09-08, the YouTube
+  /// **One column with a wide cover** (the YouTube
   /// pattern): the largest cover possible for the fewest items — for
   /// unhurried browsing, not for searching.
   cards,
 }
 
-/// The saved sort options (`video_sort_option`, §5.1).
+/// The saved sort options (`video_sort_option`).
 enum LibrarySort { newest, oldest, nameAZ, nameZA, largest, smallest }
 
-/// Building the view: pure, testable logic (TRD §3.2).
+/// Building the view: pure, testable logic.
 List<LocalItem> buildLocalLibraryView(
   List<LocalItem> items, {
   LocalScope scope = LocalScope.all,
@@ -155,8 +155,8 @@ List<LocalItem> buildLocalLibraryView(
       MediaTypeFilter.all => true,
       MediaTypeFilter.audio => item.isAudio,
       // Video leaves the shorts to their own chip, so every clip is under
-      // one type and video without the shorts can be had (owner's
-      // choice, 2026-11-05). A clip of unknown shape stays a video.
+      // one type and video without the shorts can be had. A clip of
+      // unknown shape stays a video.
       MediaTypeFilter.video => !item.isAudio && !item.isShortForm,
       // Shorts: portrait, short, and only where the dimensions are known.
       MediaTypeFilter.shorts => item.isShortForm,

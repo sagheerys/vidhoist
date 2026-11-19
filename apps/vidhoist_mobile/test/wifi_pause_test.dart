@@ -9,7 +9,7 @@ import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/home/network_gate.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 
-/// "Wi-Fi only" on the phone (REPORT §5.5): a download that loses Wi-Fi is
+/// "Wi-Fi only" on the phone: a download that loses Wi-Fi is
 /// paused, not cancelled, and goes on by itself when Wi-Fi comes back.
 void main() {
   late StreamController<List<ConnectivityResult>> network;

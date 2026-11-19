@@ -8,7 +8,7 @@ import '../engine/welcome_screen.dart';
 import 'auto_backup.dart';
 import 'restore_from_file.dart';
 
-/// Rule 1, step 4: on the first launch after a reinstall, if an
+/// On the first launch after a reinstall, if an
 /// automatic backup is found on disk, it offers "restore your previous
 /// data?". When none can be listed, as after a reinstall, the user is
 /// offered to pick one instead ([maybeOfferPickedRestore]).

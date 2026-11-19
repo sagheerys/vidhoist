@@ -4,7 +4,7 @@ import '../models/saved_playlist.dart';
 import 'key_value_store.dart';
 import 'playlist_removals.dart';
 
-/// The saved playlists store, under the `saved_playlists` key (§5.1).
+/// The saved playlists store, under the `saved_playlists` key.
 /// Every edit runs inside [PrefsMutex], and the older format
 /// (videoPaths) is read automatically.
 class PlaylistsStore {

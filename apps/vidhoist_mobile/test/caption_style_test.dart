@@ -11,7 +11,7 @@ import 'package:vidhoist_mobile/features/settings/widgets/settings_fields.dart';
 
 import 'device_matrix.dart';
 
-/// **The subtitles' size and background on the phone** (batch 6b): four
+/// **The subtitles' size and background on the phone**: four
 /// sizes and three backgrounds, in the playback settings and under a long
 /// press on CC, kept between runs.
 void main() {

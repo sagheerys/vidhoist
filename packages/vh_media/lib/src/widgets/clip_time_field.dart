@@ -9,9 +9,9 @@ import 'package:vh_ui/vh_ui.dart';
 /// **Digits in, a time out**, the way a microwave reads them: `1` is
 /// `0:01`, `130` is `1:30`, `10305` is `1:03:05`.
 ///
-/// Samsung's number pad has no colon (seen on the owner's phone), and the
-/// full keyboard hides it a page away; the colon is therefore never
-/// needed. Typed anyway, as on a computer, it changes nothing.
+/// Samsung's number pad has no colon, and the full keyboard hides it a
+/// page away; the colon is therefore never needed. Typed anyway, as on a
+/// computer, it changes nothing.
 class ClipTimeFormatter extends TextInputFormatter {
   const ClipTimeFormatter();
 

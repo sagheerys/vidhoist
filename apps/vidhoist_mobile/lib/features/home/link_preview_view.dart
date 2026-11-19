@@ -17,7 +17,7 @@ final linkPreviewProvider = FutureProvider.autoDispose
       (ref, url) => ref.read(linkPreviewResolverProvider).resolve(url),
     );
 
-/// **The add sheet's preview** (mobile plan 2026-11-01): grey blocks while
+/// **The add sheet's preview**: grey blocks while
 /// it comes, the clip once it does, and nothing for a playlist, a platform
 /// with no public endpoint, or no answer within the resolver's timeout.
 /// The download never waits for it. Pictures come from the platform's own

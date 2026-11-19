@@ -10,7 +10,7 @@ import 'media_store.dart';
 
 final mediaStoreProvider = Provider((ref) => const MediaStoreScanner());
 
-/// What happens after a download completes (rule 2, step 5): index the item
+/// What happens after a download completes: index the item
 /// under its unified key, register it in the phone's gallery, refresh the
 /// library, then take an automatic backup.
 ///

@@ -3,7 +3,7 @@ import 'url_keyed_index.dart';
 /// The title index: item key to the displayed title.
 ///
 /// The prefs key `video_title_metadata` is **kept deliberately**
-/// (§5.1: keeping legacy key names where possible makes
+/// (keeping legacy key names where possible makes
 /// importing backups easier). In a real backup it holds 48 titles keyed by
 /// **file path** rather than URL, so it is read by item key, the
 /// canonicalUrl when known and the absolute path otherwise, rather than by

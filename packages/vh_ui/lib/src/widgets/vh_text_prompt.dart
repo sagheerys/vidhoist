@@ -12,7 +12,7 @@ import 'vh_route_motion.dart';
 /// the dialog's builder and never disposed it, five leaks across the two
 /// apps. Disposing after `await showDialog` **is not a fix**: the future
 /// completes at the pop while the closing animation is still rebuilding
-/// the field, which is exactly what produced the red screen in phase 8.
+/// the field, which is exactly what produced the red screen.
 /// The only correct owner of the controller is the widget that holds it,
 /// disposing it in `dispose` once it has actually left the tree.
 Future<String?> promptVhText(

@@ -40,7 +40,7 @@ const _evening = PcList(id: 'l1', name: 'Evening', count: 2, coverId: 'i1');
 
 /// The computer's page, kept short however much is there: its downloads
 /// fold into one line, its lists into another, and a clip is deleted there
-/// only where the owner allowed it, after asking.
+/// only where the user allowed it, after asking.
 void main() {
   final l = lookupVhLocalizations(const Locale('en'));
   late MemoryKeyValueStore store;
@@ -232,7 +232,7 @@ void main() {
       await settle(tester);
     }
 
-    testWidgets('**the guard**: not offered unless the owner allowed it', (
+    testWidgets('**the guard**: not offered unless the user allowed it', (
       tester,
     ) async {
       final api = FakeApi()..live = const [];

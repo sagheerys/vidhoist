@@ -12,11 +12,11 @@ String release({
   List<Map<String, Object?>>? assets,
 }) => json.encode({
   'tag_name': tag,
-  'name': 'Vidhoist Mobile $tag',
+  'name': 'Vidhoist $tag',
   'body': 'إصلاحات وتحسينات',
   'draft': draft,
   'prerelease': prerelease,
-  'html_url': 'https://github.com/sagheerys/vidhoist-mobile/releases/$tag',
+  'html_url': 'https://github.com/x/y/releases/$tag',
   'published_at': '2026-09-20T10:00:00Z',
   'assets':
       assets ??

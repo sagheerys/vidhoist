@@ -36,7 +36,7 @@ Map<String, Object?> _feed(List<String> ids, {String id = 'UC_some'}) => {
   ],
 };
 
-/// **Channels on the phone** (batch 10): followed from Settings, read
+/// **Channels on the phone**: followed from Settings, read
 /// through the phone's yt-dlp, what is new queued like a pasted link.
 void main() {
   late MemoryKeyValueStore store;
@@ -203,7 +203,7 @@ void main() {
     expect(
       find.textContaining('Episode a'),
       findsNothing,
-      reason: 'the owner wants the channel alone, not its videos',
+      reason: 'the user wants the channel alone, not its videos',
     );
   });
 

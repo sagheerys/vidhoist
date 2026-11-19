@@ -101,10 +101,10 @@ class VhAudioSlider extends StatelessWidget {
 }
 
 /// The line under the controls: **speed at one end and the queue at the
-/// other, as light marks** (mobile plan, page 02), and an app's extra
-/// between them. Two framed pills with their names written out ("Speed
-/// 1.0×", "Queue 12") were heavier than the transport above them; the
-/// names stay for screen readers.
+/// other, as light marks**, and an app's extra between them. Two framed
+/// pills with their names written out ("Speed 1.0×", "Queue 12") were
+/// heavier than the transport above them; the names stay for screen
+/// readers.
 class VhAudioSubControls extends StatelessWidget {
   const VhAudioSubControls({
     super.key,

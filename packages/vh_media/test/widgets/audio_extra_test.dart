@@ -85,9 +85,8 @@ void main() {
     expect(byVhIcon(VhIcons.transcript), findsNothing);
   });
 
-  // Mobile plan, page 02: two light marks at the ends of the line, not
-  // framed pills with their names written out. The names stay for a
-  // screen reader.
+  // Two light marks at the ends of the line, not framed pills with their
+  // names written out. The names stay for a screen reader.
   testWidgets('**the guard**: speed and queue are marks, their names read '
       'rather than written', (tester) async {
     final semantics = tester.ensureSemantics();

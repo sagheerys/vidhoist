@@ -28,7 +28,7 @@ void main() {
       strip(w.data ?? ''),
   ];
 
-  testWidgets('says it is reading, then the owner\'s 4K AV1 clip as it is', (
+  testWidgets('says it is reading, then a 4K AV1 clip as it is', (
     tester,
   ) async {
     final answer = Completer<MediaQuality?>();

@@ -100,7 +100,7 @@ class AccountsFields extends ConsumerWidget {
 }
 
 /// The warning that sits before any sign-in: yt-dlp's own guide says an
-/// account used with it can be restricted, so the owner should learn it
+/// account used with it can be restricted, so the user should learn it
 /// here rather than from a locked account.
 class AccountRiskNote extends StatelessWidget {
   const AccountRiskNote({required this.text, super.key});
@@ -149,8 +149,8 @@ class _SiteRow extends StatelessWidget {
       state: signedIn ? l10n.accountSignedIn : l10n.accountSignedOut,
       action: signedIn
           ? TextButton(onPressed: onSignOut, child: Text(l10n.accountSignOut))
-          // **The soft accent, not the filled one** (design round
-          // 2026-11-11): the theme paints every FilledButton, tonal
+          // **The soft accent, not the filled one**: the theme paints every
+          // FilledButton, tonal
           // included, in the full accent, so five sign-ins made five
           // coloured actions on one screen. Pale accent with its dark ink
           // keeps them buttons without competing.
@@ -169,8 +169,8 @@ class _SiteRow extends StatelessWidget {
 /// One site: its name and state beside the icon, and its one action at the
 /// end of the row; a sign-in and a site a cookies file brought look alike.
 ///
-/// **Beside the words when it fits, under them when it does not** (design
-/// round 2026-11-11): under every name, six buttons pushed Vimeo and "clear
+/// **Beside the words when it fits, under them when it does not**: under
+/// every name, six buttons pushed Vimeo and "clear
 /// all" below the fold on a common phone. [OverflowBar] keeps the old
 /// stacking as the fallback, so the largest text on the narrowest phone
 /// still fits.

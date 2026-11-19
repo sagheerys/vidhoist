@@ -120,7 +120,7 @@ class VhMediaCard extends StatelessWidget {
           onLongPress: onLongPress == null
               ? null
               : () {
-                  // Rule 6: entering selection mode deserves a confirming
+                  // Entering selection mode deserves a confirming
                   // pulse.
                   HapticFeedback.selectionClick();
                   onLongPress!();

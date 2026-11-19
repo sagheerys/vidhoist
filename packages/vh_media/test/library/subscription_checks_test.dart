@@ -2,10 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/library.dart';
 
-/// The owner's report, 2026-11-05: a clip downloaded from the phone was
-/// announced on the computer as news from a subscription, and the other way
-/// round. A clip came from a subscription only when a check whose count
-/// rose could have queued it.
+/// A clip downloaded from the phone was once announced on the computer as
+/// news from a subscription, and the other way round. A clip came from a
+/// subscription only when a check whose count rose could have queued it.
 void main() {
   final t0 = DateTime(2026, 11, 5, 12);
   DateTime at(int minutes) => t0.add(Duration(minutes: minutes));

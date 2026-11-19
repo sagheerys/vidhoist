@@ -2,7 +2,7 @@ part of 'vh_reels_player.dart';
 
 /// **Clip loading and playback commands** for the reels player.
 ///
-/// **A `part` file rather than its own library** (rule 4, the size limit):
+/// **A `part` file rather than its own library** (the file size limit):
 /// these functions work on private state (`_controller`, `_generation`,
 /// `_disposed`), and an extension in another library cannot reach private
 /// members. The screen itself keeps its lifecycle and its build, which are

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vidhoist_mobile/features/channels/channel_art.dart';
 
-/// **A channel's pictures kept on the phone** (owner, 2026-11-08: "they
-/// show only while online; keep them on the device, delete them on
-/// unfollow, bring them back on a new follow").
+/// **A channel's pictures kept on the phone**: they showed only while
+/// online, so they stay on the device, go on unfollow, and come back on a
+/// new follow.
 void main() {
   late Directory root;
   late List<Uri> fetched;

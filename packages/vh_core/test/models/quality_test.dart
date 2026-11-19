@@ -11,8 +11,8 @@ void main() {
       expect(Quality.q1080.applyRule(youtube), Quality.q1080);
     });
 
-    // The owner's decision of 2026-11-04: outside YouTube a height is sent as a
-    // ceiling, and the engine falls back to best when the site has none.
+    // Outside YouTube a height is sent as a ceiling, and the engine falls
+    // back to best when the site has none.
     test('360 is a height like the others, and none for sound alone', () {
       expect(Quality.q360.isNumeric, isTrue);
       expect(Quality.q360.applyRule(tiktok), Quality.q360);
@@ -28,8 +28,7 @@ void main() {
       expect(Quality.q480.applyRule(tiktok), Quality.q480);
     });
 
-    // The owner's decision of 2026-11-04: "best" on SoundCloud came without
-    // its cover, while "audio" embedded it.
+    // "best" on SoundCloud came without its cover, while "audio" embedded it.
     test('**the guard**: an audio-only platform always gets audio, so its '
         'cover comes with it', () {
       expect(Quality.best.applyRule(soundcloud), Quality.audio);

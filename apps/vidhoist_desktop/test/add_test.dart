@@ -166,16 +166,16 @@ void main() {
     expect(sent.isBatchMember, isFalse);
   });
 
-  // The owner's decision of 2026-11-04: a height is a ceiling on every video
-  // site, and the engine falls back to best where the site has none.
+  // A height is a ceiling on every video site, and the engine falls back to
+  // best where the site has none.
   testWidgets('sound alone offers no heights', (tester) async {
     await open(tester);
     await openDialog(tester, 'https://soundcloud.com/artist/track');
     expect(find.text('Up to 1080p'), findsNothing);
   });
 
-  // The owner's decision of 2026-11-04: "best" on SoundCloud came as a video
-  // download without its cover; audio embeds it.
+  // "best" on SoundCloud came as a video download without its cover; audio
+  // embeds it.
   testWidgets('**the guard**: a SoundCloud track is sent as audio', (
     tester,
   ) async {

@@ -8,8 +8,8 @@ import 'vh_video_open.dart';
 import 'reels_overlay.dart';
 
 /// The layers of the reels stage: the picture, and the information layer
-/// over it. Split out of `mt_reels_player.dart` for the size limit (rule
-/// 4).
+/// over it. Split out of `vh_reels_player.dart` to keep that file within
+/// the size limit.
 
 class ReelsVideoLayer extends StatelessWidget {
   const ReelsVideoLayer({
@@ -167,11 +167,10 @@ class ReelsOverlayLayer extends StatelessWidget {
                 ),
               ),
             ),
-            // **Above the progress bar, not on it** (emulator screenshot
-            // 2026-09-02): once the bar became permanently visible, the
-            // orange line ran straight through the middle of the clip
-            // title. 64 clears the bar's 48-point touch strip, both above
-            // the bottom safe inset, plus breathing room.
+            // **Above the progress bar, not on it**: once the bar became
+            // permanently visible, the orange line ran straight through the
+            // middle of the clip title. 64 clears the bar's 48-point touch
+            // strip, both above the bottom safe inset, plus breathing room.
             PositionedDirectional(
               start: 74,
               end: VhSpace.lg,

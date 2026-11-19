@@ -15,7 +15,7 @@ import 'local_item.dart';
 
 final libraryActionsProvider = Provider((ref) => LibraryActions(ref));
 
-/// Actions on a local library item (rule 5, simplified): the file on the
+/// Actions on a local library item: the file on the
 /// phone is everything, so there are no remote actions.
 class LibraryActions {
   LibraryActions(this._ref);
@@ -65,10 +65,9 @@ class LibraryActions {
     await _ref.read(keptCoverIndexProvider).removeKeysAndFiles([
       for (final item in items) item.key,
     ]);
-    // **And the saved playlists** (field report 2026-09-04): every index
-    // was
-    // pruned except the playlists, so a dead entry stayed and played
-    // something else when tapped.
+    // **And the saved playlists**: every index was pruned except the
+    // playlists, so a dead entry stayed and played something else when
+    // tapped.
     await _ref.read(playlistsStoreProvider).removeFromAll([
       for (final item in items) ...[item.key, item.path, ?item.canonicalUrl],
     ]);

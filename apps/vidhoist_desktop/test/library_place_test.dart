@@ -21,7 +21,7 @@ List<LibraryItem> _clips(int n) => [
     ),
 ];
 
-/// Two of the owner's notes of 2026-11-05: back from a clip the library
+/// Two faults this guards against: back from a clip the library
 /// opened at its top instead of where it was left, and in the smallest
 /// window the menu's last line (Delete) sat below the edge.
 void main() {

@@ -79,7 +79,7 @@ void main() {
               '[Errno 11001] getaddrinfo failed>':
           YtDlpErrorKind.network,
       'ERROR: [generic] x: Read timed out.': YtDlpErrorKind.network,
-      // The phone with no internet, as an owner's screenshot showed it.
+      // A phone with no internet, as a real phone reported it.
       'ERROR: [youtube:tab] @x/videos: Unable to download API page: '
               '[Errno 7] No address associated with host':
           YtDlpErrorKind.network,

@@ -19,10 +19,9 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'device_matrix.dart';
 
-/// **The settings home** (approved mock-up, 2026-10-14): three short
+/// **The settings home**: three short
 /// groups whose rows show each setting as it stands, each opening its own
-/// page. On a tablet held sideways the same rows open in two panes
-/// (approved 2026-10-10).
+/// page. On a tablet held sideways the same rows open in two panes.
 void main() {
   Widget host({
     PhoneSettings settings = const PhoneSettings(),
@@ -226,7 +225,7 @@ void main() {
     }
   });
 
-  // Field report 2026-11-01: an empty strip past the last card, kept for a
+  // Against an empty strip past the last card, kept for a
   // mini player and an add button that never show on this tab.
   testWidgets('**the guard**: the home ends just past its last card', (
     tester,

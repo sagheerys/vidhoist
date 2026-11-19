@@ -74,10 +74,9 @@ class _SelectionFrameState extends ConsumerState<SelectionFrame> {
     return false;
   }
 
-  /// The copy keys with no clip in focus (the owner's report, 2026-11-05:
-  /// with the mouse they did nothing). They take the one clip chosen, else
-  /// the one under the mouse; never several at once, which says so instead
-  /// of copying the lot.
+  /// The copy keys with no clip in focus, since with the mouse they used to
+  /// do nothing. They take the one clip chosen, else the one under the
+  /// mouse; never several at once, which says so instead of copying the lot.
   bool _copy(ClipCopy copy, BuildContext? focused) {
     // A clip with focus answers its own keys.
     if (focused?.findAncestorWidgetOfExactType<ClipKeyArea>() != null) {

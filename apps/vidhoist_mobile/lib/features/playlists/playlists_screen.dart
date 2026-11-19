@@ -71,7 +71,7 @@ class PlaylistsScreen extends ConsumerWidget {
     );
   }
 
-  /// Tapping a smart playlist plays it in full (rule 7, step 1).
+  /// Tapping a smart playlist plays it in full.
   Future<void> _playSmart(
     BuildContext context,
     WidgetRef ref,

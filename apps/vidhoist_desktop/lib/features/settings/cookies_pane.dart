@@ -120,7 +120,7 @@ class _CookiesPaneState extends ConsumerState<CookiesPane> {
         ),
         const SizedBox(height: VhSpace.sm),
         // yt-dlp's own guide warns that an account used with it can be
-        // restricted; the owner should read that before handing one over.
+        // restricted; the user should read that before handing one over.
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

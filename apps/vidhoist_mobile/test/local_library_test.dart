@@ -146,8 +146,7 @@ void main() {
       );
     });
 
-    test('**the guard**: video leaves the shorts to their own chip '
-        "(owner's choice, 2026-11-05)", () {
+    test('**the guard**: video leaves the shorts to their own chip', () {
       expect(
         buildLocalLibraryView(
           items,

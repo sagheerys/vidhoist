@@ -1,8 +1,7 @@
 /// The computer's addresses and what each is: Windows lists one per network
 /// adapter, and programs add their own (VirtualBox, WSL, Hyper-V…). Shown
-/// flat, six addresses read as a puzzle (owner's report, 2026-11-09); the
-/// computer sorts them, and tells a paired phone, which lets the owner pick
-/// the home network or Tailscale (owner's choice, 2026-11-10).
+/// flat, six addresses read as a puzzle; the computer sorts them, and tells
+/// a paired phone, which lets the user pick the home network or Tailscale.
 library;
 
 enum PcAddressKind {

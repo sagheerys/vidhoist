@@ -11,7 +11,7 @@ import 'pc_view_cache.dart';
 /// The link to the paired computer, or null when there is none.
 final pcClientProvider = Provider<PcLinkApi?>((ref) {
   // Only what the connection needs: the routes the computer reports change
-  // without a new client, a route the owner picks makes one.
+  // without a new client, a route the user picks makes one.
   final link = ref.watch(
     pcPairingProvider.select(
       (p) => p == null ? null : (p.host, p.port, p.fingerprint, p.secret),
@@ -151,7 +151,7 @@ class PcViewNotifier extends Notifier<PcView> {
     return const PcView();
   }
 
-  /// Keeps the computer's addresses for the owner's choice of route.
+  /// Keeps the computer's addresses for the user's choice of route.
   void _learn(PcStatus status) {
     final pairing = ref.read(pcPairingProvider);
     if (pairing == null || status.addresses.isEmpty) return;
@@ -256,7 +256,7 @@ class PcViewNotifier extends Notifier<PcView> {
   /// **The computer did not answer where it was.** On the home network the
   /// router may have given it a new address: the network is asked, and an
   /// answer with the computer's proof moves the link there. The route stays
-  /// the owner's (the home network, never switched to Tailscale), only its
+  /// the user's (the home network, never switched to Tailscale), only its
   /// address follows; the certificate pin still decides who is reached.
   /// True when it moved.
   Future<bool> _findAgain(PcLinkException e) async {

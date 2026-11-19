@@ -124,8 +124,8 @@ void main() {
       expect(find.byType(VhBottomBar), findsOneWidget);
     });
 
-    // The owner's 8-inch tablet (2026-10-10): 800x1280 pixels at 216 dpi,
-    // and the app's window as measured on it, above the three-button bar.
+    // A real 8-inch tablet: 800x1280 pixels at 216 dpi, and the app's
+    // window as measured on it, above the three-button bar.
     testWidgets('an 8-inch tablet of 593 points gets the rail on its side', (
       tester,
     ) async {

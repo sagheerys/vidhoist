@@ -21,14 +21,14 @@ String pcRouteName(VhLocalizations l10n, PcPairing pairing, String host) {
 }
 
 /// Tailscale is known but another route is in use: away from home, the
-/// owner's way back to the computer.
+/// user's way back to the computer.
 bool pcTailscaleUnused(PcPairing pairing) => pairing.routes.any(
   (r) => r.kind == PcAddressKind.tailscale && r.address != pairing.host,
 );
 
-/// **Settings › Computer › Connect through**: the owner picks the route,
+/// **Settings › Computer › Connect through**: the user picks the route,
 /// the home network or Tailscale away from home; the phone never switches
-/// on its own (owner's choice, 2026-11-10). The adapters other programs
+/// on its own. The adapters other programs
 /// add on the computer are left out, unless one is the route in use.
 class PcRoutePicker extends ConsumerWidget {
   const PcRoutePicker({super.key, required this.pairing});

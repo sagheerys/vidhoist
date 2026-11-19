@@ -8,8 +8,8 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/vh_media.dart' show VhPictureInPicture;
 import 'package:vh_ui/vh_ui.dart';
 
-/// **Guard: picture in picture is off until turned on** (mobile plan,
-/// stage 16/F). Its switch in the playback settings is kept, and the
+/// **Guard: picture in picture is off until turned on.** Its switch in
+/// the playback settings is kept, and the
 /// player hears of it.
 void main() {
   tearDown(VhPictureInPicture.instance.reset);

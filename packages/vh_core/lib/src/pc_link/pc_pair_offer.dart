@@ -4,7 +4,8 @@ import 'pc_link_wire.dart';
 /// reached at, the port, the code, and **its certificate's fingerprint**.
 /// Read through the camera, the fingerprint is pinned before the phone
 /// connects at all, so nothing on the network can stand in for the
-/// computer; the owner still allows the phone on the computer's screen.
+/// computer; the person at the computer still allows the phone on its
+/// screen.
 ///
 /// `vidhoist://pair?v=1&h=192.168.1.24,100.101.102.103&p=47321&c=123456&f=<hex>`
 class PcPairOffer {

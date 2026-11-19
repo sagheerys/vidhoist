@@ -20,9 +20,9 @@ void main() {
 
   test('**the guard**: by day the cards stand on a ground a step below '
       'them', () {
-    // White cards on a white ground read as one glaring sheet (owner,
-    // 2026-11-06). A soft stone ground, as grouped lists do, lifts the cards
-    // by their own lightness; too dark a ground goes grey and dull.
+    // White cards on a white ground read as one glaring sheet. A soft stone
+    // ground, as grouped lists do, lifts the cards by their own lightness;
+    // too dark a ground goes grey and dull.
     for (final variant in VhVariant.values) {
       final p = VhPalette.of(variant, Brightness.light);
       final step = p.card.computeLuminance() - p.bg.computeLuminance();

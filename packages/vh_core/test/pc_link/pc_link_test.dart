@@ -128,8 +128,8 @@ void main() {
     await window.dispose();
   });
 
-  /// Pairs as the owner would: the code from the screen, the owner allowing
-  /// the request once its four digits match the phone's.
+  /// Pairs as a person would: the code from the screen, the person at the
+  /// computer allowing the request once its four digits match the phone's.
   Future<PcPairing> pairPhone({String? code, bool allow = true}) async {
     final shown = window.open();
     String? phoneCheck;
@@ -447,7 +447,7 @@ void main() {
       expect(window.devices, isEmpty);
     });
 
-    test('when the owner says no', () async {
+    test('when the person at the computer says no', () async {
       await expectLater(
         pairPhone(allow: false),
         throwsA(

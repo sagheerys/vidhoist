@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 
 /// Opens the camera on the computer's pairing QR code and answers with what
-/// it read, or null when the owner backed out. Android's own scanner screen
+/// it read, or null when the user backed out. Android's own scanner screen
 /// (zxing, open source), behind the media channel; replaced in tests.
 typedef PcScanner = Future<String?> Function(String prompt);
 

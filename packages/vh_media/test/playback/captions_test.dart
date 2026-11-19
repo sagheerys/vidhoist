@@ -12,9 +12,9 @@ import 'fake_video_platform.dart';
 
 import '../icon_finder.dart';
 
-/// **Subtitles over the video (owner's request 2026-10-14)**: a sentence
-/// that stays put, the spoken word lit along it, above the controls when
-/// they show, and a CC button that hides them.
+/// **Subtitles over the video**: a sentence that stays put, the spoken
+/// word lit along it, above the controls when they show, and a CC button
+/// that hides them.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -123,8 +123,7 @@ void main() {
       ),
     );
 
-    // Owner's choice 2026-10-15: in the shorts the sentence is the switch,
-    // and only there.
+    // In the shorts the sentence is the switch, and only there.
     group('the sentence as the language switch', () {
       VhCaptions bilingual(ValueNotifier<String?> language) => VhCaptions(
         lines: [line(1000, 4000, 'مرحبا')],
@@ -281,8 +280,8 @@ void main() {
       expect(rect.bottom, lessThanOrEqualTo(wide.height - 80));
     });
 
-    // Owner's request 2026-10-14: the dark box behind the words can go,
-    // and the letters then carry an edge of their own.
+    // The dark box behind the words can go, and the letters then carry an
+    // edge of their own.
     testWidgets('dark, light, or no background, with an edge when none', (
       tester,
     ) async {
@@ -432,8 +431,7 @@ void main() {
       await leave(tester, session);
     });
 
-    // Owner's request 2026-10-14: a switch between the clip's languages,
-    // beside CC.
+    // A switch between the clip's languages, beside CC.
     testWidgets('the language switch walks the clip\'s languages', (
       tester,
     ) async {
@@ -494,8 +492,8 @@ void main() {
       await leave(tester, hidden);
     });
 
-    // Batch 6b: the size, the background and the transcript are a long
-    // press away on the phone; a tap still only shows and hides.
+    // The size, the background and the transcript are a long press away on
+    // the phone; a tap still only shows and hides.
     testWidgets('a long press opens the options; a tap only toggles', (
       tester,
     ) async {

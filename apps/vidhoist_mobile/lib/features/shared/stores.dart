@@ -3,8 +3,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A [KeyValueStore] over SharedPreferences: the only access to storage
-/// (rule 3, with every read-modify-write going through PrefsMutex at the
-/// call sites).
+/// (every read-modify-write goes through PrefsMutex at the call sites).
 class SharedPrefsKeyValueStore implements KeyValueStore {
   SharedPrefsKeyValueStore(this._prefs);
 

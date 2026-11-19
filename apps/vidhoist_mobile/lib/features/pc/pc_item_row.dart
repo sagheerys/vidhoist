@@ -26,7 +26,7 @@ final pcOnPhoneProvider = Provider<Set<String>>(
 
 /// A clip in the computer's library. A tap plays it from the computer, as
 /// a clip of the phone's own plays; its menu copies it to the phone, or,
-/// where the owner allowed it, puts it in the computer's Recycle Bin.
+/// where the user allowed it, puts it in the computer's Recycle Bin.
 class PcItemRow extends ConsumerWidget {
   const PcItemRow({super.key, required this.item, required this.items});
 
@@ -77,7 +77,7 @@ class PcItemRow extends ConsumerWidget {
   }) async {
     final l10n = context.vhl;
     final copying = ref.read(pcCopiesProvider).containsKey(item.id);
-    // Offered only where the owner allowed it on the computer, which asks
+    // Offered only where the user allowed it on the computer, which asks
     // again before it deletes.
     final canDelete = ref.read(pcViewProvider).status?.canDelete ?? false;
     final danger = VhThemeX.of(context).palette.err;

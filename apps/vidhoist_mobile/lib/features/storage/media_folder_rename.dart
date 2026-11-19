@@ -4,11 +4,11 @@ import 'package:vh_core/vh_core.dart';
 
 import '../downloads_library/local_item.dart';
 
-/// **`Download/Vidhoist` becomes `Download/VidHoist`** (owner's request,
-/// 2026-11-09), in two parts that each stand alone.
+/// **`Download/Vidhoist` becomes `Download/VidHoist`**, in two parts that
+/// each stand alone.
 ///
 /// [renameMediaFolder] tries the rename on disk; Android may refuse it
-/// ("Operation not permitted" on the owner's phone, whose folder holds an
+/// ("Operation not permitted" on a real phone, whose folder holds an
 /// earlier install's backups). [findMediaDir] then reads the spelling the
 /// disk really has, which the app uses for good: Android opens either
 /// spelling but lists files only under the real one. [rewriteStoredPaths]

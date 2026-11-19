@@ -17,7 +17,7 @@ import 'package:vidhoist_desktop/features/clip/clip_actions.dart';
 import 'support/shell_harness.dart';
 
 /// What a paired phone may do to this computer's clips: see its saved
-/// lists, and delete one clip **only where the owner allowed it, and only
+/// lists, and delete one clip **only where the user allowed it, and only
 /// to the Recycle Bin**.
 void main() {
   const url = 'https://youtu.be/aaaaaaaaaaa';
@@ -65,7 +65,7 @@ void main() {
   Future<LibraryItem> clip() async =>
       (await c.read(libraryItemsProvider.future)).single;
 
-  test('**the guard**: off until the owner turns it on, and then '
+  test('**the guard**: off until the user turns it on, and then '
       'only to the Recycle Bin', () async {
     final id = pcItemId(await clip());
     expect(host.status().canDelete, isFalse);
@@ -81,8 +81,8 @@ void main() {
     expect(await c.read(libraryItemsProvider.future), isEmpty);
   });
 
-  test('a drive with no Recycle Bin: the phone deletes nothing, the owner '
-      'here still can', () async {
+  test('a drive with no Recycle Bin: the phone deletes nothing, the person '
+      'at the computer still can', () async {
     await c.read(pcLinkDeleteProvider.notifier).set(true);
     answer = Recycled.noBin;
     final item = await clip();

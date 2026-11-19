@@ -21,7 +21,7 @@ class MergedTranscripts extends ImportOutcome {
 /// settings, not only what a phone shares), chosen or dropped: it is
 /// restored, after the person says so, rather than merged. Merged, it
 /// brought back the playlists alone, pointing at clips the library no
-/// longer listed (owner's report 2026-11-12).
+/// longer listed.
 class ComputerBackup extends ImportOutcome {
   const ComputerBackup(this.contents);
   final String contents;

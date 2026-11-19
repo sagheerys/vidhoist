@@ -40,8 +40,8 @@ dependencies:
   # Declaring a dangerous permission does not grant it: on a phone where the
   # app had never been given media access, the first library scan threw
   # `PathAccessException ... Permission denied, errno = 13` on the Download
-  # folder, and nothing ever asked the user (field report, Galaxy S22 Ultra
-  # in a fresh profile, 2026-09-16).
+  # folder, and nothing ever asked the user (Galaxy S22 Ultra in a fresh
+  # profile, 2026-09-16).
   permission_handler: ^13.0.2
   share_plus: ^10.1.2
   shared_preferences: ^2.3.3
@@ -76,7 +76,7 @@ flutter_launcher_icons:
   adaptive_icon_foreground: assets/icons/icon_foreground.png
   # **No inset of the generator's own.** Its default wraps both layers in a
   # 16% inset, which shrinks them to 68% after the kit has already placed
-  # the mark inside the launcher's safe circle: on the owner's phone the V
+  # the mark inside the launcher's safe circle: on a real phone the V
   # came out at 48% of the icon's width instead of the 64% it is drawn for.
   adaptive_icon_foreground_inset: 0
   # Android 13+ themed icons. Without this layer the system draws the

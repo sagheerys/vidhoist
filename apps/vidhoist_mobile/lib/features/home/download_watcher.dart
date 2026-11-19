@@ -29,8 +29,8 @@ final downloadWatcherProvider = Provider<void>((ref) {
   /// **The fingerprint of the last notification posted per task**: a
   /// duplicate filter.
   ///
-  /// Field report 2026-09-04: "the counter in the notifications does not
-  /// move even though it moves in the app". [handle] walks **every** task
+  /// The counter in the notification froze while the one in the app moved.
+  /// [handle] walks **every** task
   /// on every broadcast, so seven parallel tasks meant seven posts for
   /// every change in any one of them, thousands of calls a minute on the
   /// platform channel. Android throttles excessive posting from a single
@@ -103,12 +103,12 @@ final downloadWatcherProvider = Provider<void>((ref) {
       final id = idOf(task);
       final wifiWait = ref.read(wifiPausedProvider).contains(task.id);
       switch (task.phase) {
-        // **Field report 2026-09-02:** a phase with no notification made
+        // A phase with no notification made
         // the app look idle, so every phase announces itself, in the
         // engine's own words. A phase with no known percentage gets an
         // indeterminate bar rather than a bar frozen at zero; the
         // percentage is in the text too, since a bar alone cannot be read
-        // as a number (field report 2026-09-03).
+        // as a number.
         case TaskPhase.queued ||
             TaskPhase.preparing ||
             TaskPhase.downloading ||
@@ -146,8 +146,7 @@ final downloadWatcherProvider = Provider<void>((ref) {
             title: texts.downloadCompleteTitle,
             body: task.title ?? task.effectiveUrl,
             channelName: texts.downloadComplete,
-            // A notification tap highlights the item in the library (§1 of
-            // the app flow).
+            // A notification tap highlights the item in the library.
             payload: task.canonicalUrl ?? task.localPath,
           );
         case TaskPhase.failed:

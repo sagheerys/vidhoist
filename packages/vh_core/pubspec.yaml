@@ -1,5 +1,5 @@
 name: vh_core
-description: "The core: Vidhoist API client, models, download engine, storage, backup, logging — pure Dart, no Flutter."
+description: "The core: models, download engine, storage, backup, logging — pure Dart, no Flutter."
 version: 0.1.0
 publish_to: none
 resolution: workspace

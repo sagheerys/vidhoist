@@ -31,7 +31,7 @@
 #define AppExe "vidhoist_desktop.exe"
 ; Created by the runner while the app is open (windows/runner/main.cpp).
 #define RunningMutex "Vidhoist.Running"
-; The firewall rule the app adds when the owner lets a phone in
+; The firewall rule the app adds when the user lets a phone in
 ; (lib/data/firewall_data.dart); the installer adds none, having no
 ; administrator rights.
 #define FirewallRule "VidHoist phone link"

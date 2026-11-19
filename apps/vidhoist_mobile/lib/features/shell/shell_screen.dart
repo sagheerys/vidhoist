@@ -180,7 +180,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     super.dispose();
   }
 
-  /// An external share opens `/` and starts rule 2 (several links are
+  /// An external share opens `/` and starts the add flow (several links are
   /// asked about once, then started together).
   Future<void> _onSharedUrls(List<String> shared) async {
     if (!mounted || shared.isEmpty) return;
@@ -189,8 +189,8 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     final logger = ref.read(loggerProvider);
     void note(String step) => unawaited(logger.log(step, tag: 'share'));
     final started = DateTime.now();
-    // **The decision is made on the final URL, not the shared one** (field
-    // report 2026-09-08): SoundCloud's share button gives
+    // **The decision is made on the final URL, not the shared one**:
+    // SoundCloud's share button gives
     // `on.soundcloud.com/…` with no `/sets/`, so an album counted as a
     // single clip and all twenty downloaded with no selection screen. A
     // link that is not short costs no wait.
@@ -275,16 +275,16 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
       );
     }
 
-    // **The button is always mounted, never `null`** (field report
-    // 2026-09-05: "the appearing animation is strange"). Swapping the
+    // **The button is always mounted, never `null`**: its appearing
+    // animation looked strange. Swapping the
     // floating action button slot wakes `Scaffold`'s default animator,
     // which
     // rotates **on appearance only**, in the words of the Flutter source.
     // `noAnimation` below silences it, and `visible` hides it with our own
     // fade.
     ref.watch(downloadWatcherProvider);
-    // **The button is always mounted, never `null`** (field report
-    // 2026-09-05: "the appearing animation is strange"). Swapping the
+    // **The button is always mounted, never `null`**: its appearing
+    // animation looked strange. Swapping the
     // floating action button slot wakes `Scaffold`'s default animator,
     // which
     // rotates **on appearance only**, in the words of the Flutter source.
@@ -340,8 +340,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
               FloatingActionButtonAnimator.noAnimation,
           floatingActionButton: VhHiddenUnderRoutes(
             // It hides under any sheet or dialog: it used to cover the "about
-            // this clip" link and crowd the bottom sheets' actions (field
-            // report 2026-09-02).
+            // this clip" link and crowd the bottom sheets' actions.
             visible: branch != ShellBranch.settings,
             child: VhFab(
               label: clipboardUrl == null
@@ -353,7 +352,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
           ),
           // The mini player is a permanent bar **above** the bottom bar, inside
           // the same slot so Scaffold accounts for its height and lifts the add
-          // button over it (log §4).
+          // button over it.
           bottomAccessories: [
             // **The clipboard bar**: changing the floating button's label
             // alone was a faint signal, the link itself was never visible,

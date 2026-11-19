@@ -11,7 +11,7 @@ Future<bool> readSendToPc(KeyValueStore store) async =>
     await store.getBool(pcSendToPcKey) ?? false;
 
 /// The choice saved at the last start; main reads it before the first
-/// frame, so a link shared into a closed app goes where the owner last
+/// frame, so a link shared into a closed app goes where the user last
 /// sent one.
 final initialSendToPcProvider = Provider<bool>((ref) => false);
 

@@ -20,9 +20,9 @@ class MemoryPcDeviceStore implements PcDeviceStore {
       this.devices = [...devices];
 }
 
-/// A phone that typed the right code and now waits for the owner to allow
-/// it on the computer's screen, where [check] is shown beside [name] for
-/// comparison with the phone's.
+/// A phone that typed the right code and now waits for the person at the
+/// computer to allow it on its screen, where [check] is shown beside [name]
+/// for comparison with the phone's.
 class PcPairingRequest {
   PcPairingRequest({required this.name, required this.check});
 
@@ -46,7 +46,7 @@ class PcPairingRequest {
 enum PcPairRefusal { closed, wrongCode, denied }
 
 /// The pairing window and the list of paired phones. The window opens only
-/// when the owner asks for a code on the computer, shuts after
+/// when the user asks for a code on the computer, shuts after
 /// [PcLink.pairWindow] or [PcLink.maxAttempts] wrong codes or one success,
 /// and nothing can pair while it is shut.
 class PcPairingWindow {
@@ -74,7 +74,7 @@ class PcPairingWindow {
 
   List<PcDevice> get devices => List.unmodifiable(_devices);
 
-  /// Asks for the owner's answer; the computer's screen listens.
+  /// Asks for the user's answer; the computer's screen listens.
   Stream<PcPairingRequest> get requests => _requests.stream;
 
   /// The window or the devices changed.
@@ -101,7 +101,7 @@ class PcPairingWindow {
     _changes.add(null);
   }
 
-  /// A phone's attempt: the device and its secret once the owner allows
+  /// A phone's attempt: the device and its secret once the user allows
   /// it, or why not.
   Future<({PcDevice? device, String? secret, PcPairRefusal? refusal})> attempt({
     required String code,

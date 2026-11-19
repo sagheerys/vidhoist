@@ -7,9 +7,9 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../playback/fake_player_port.dart';
 
-/// **Guard: the players' own motion from the mobile plan.** The mini
-/// player vanished in a frame on the settings tab, the play mode's dot
-/// jumped on and off, and full screen slid in as any page did.
+/// **Guard: the players' own motion.** The mini player vanished in a frame
+/// on the settings tab, the play mode's dot jumped on and off, and full
+/// screen slid in as any page did.
 void main() {
   late MemoryKeyValueStore store;
   late VhAudioHandler handler;

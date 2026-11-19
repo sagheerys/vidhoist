@@ -36,7 +36,7 @@ class AudioSessionSnapshot {
   };
 }
 
-/// The `audio_state` store (§5.1): written periodically and on every item
+/// The `audio_state` store: written periodically and on every item
 /// change, and read at startup to revive the mini player without
 /// autoplaying.
 class AudioStateStore {

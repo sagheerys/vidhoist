@@ -24,8 +24,8 @@ class ReelsScreen extends ConsumerStatefulWidget {
 }
 
 class _ReelsScreenState extends ConsumerState<ReelsScreen> {
-  /// **Captured once while this screen is alive** (a field defect,
-  /// 2026-09-03). The child player calls [_setLive] from its own
+  /// **Captured once while this screen is alive.** The child player calls
+  /// [_setLive] from its own
   /// `dispose()`, and the tree is **deactivated** by then: `ref.read`
   /// throws there, and the throw used to abort the rest of `dispose()`,
   /// leaving a clip playing with no owner.
@@ -91,13 +91,13 @@ class _ReelsScreenState extends ConsumerState<ReelsScreen> {
       onLive: _setLive,
       subtitleBuilder: (context, item) => vhMetaLine([
         platformOfKey(item.canonicalUrl).label,
-        // **Belonging under the title** (field report 2026-09-04): which
+        // **Belonging under the title**: which
         // playlist. The information was in the store and appeared in no
         // player.
         membership[item.canonicalUrl]?.line(l10n),
       ]),
       isFavorite: (item) => _libraryItemOf(item)?.favorite ?? false,
-      // **No heart in the rail** (field report 2026-09-04): the "add to…"
+      // **No heart in the rail**: the "add to…"
       // button below covers favourites and playlists together. A double tap
       // on the clip stays the favourite shortcut, through
       // [onDoubleTapFavorite].

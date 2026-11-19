@@ -20,8 +20,8 @@ void main() {
   );
 
   test('**the guard**: warmth, not the sparkle, on every app', () {
-    // The phones took the Windows app's touch in the mobile plan of
-    // 2026-11-01: a press warms the control and fades, with no particles.
+    // The phones take the Windows app's touch: a press warms the control
+    // and fades, with no particles.
     final phone = vhTheme(VhVariant.desktop, Brightness.light);
     expect(phone.splashFactory, NoSplash.splashFactory);
     expect(

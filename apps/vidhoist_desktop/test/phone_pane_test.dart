@@ -63,8 +63,9 @@ const _addresses = [
   ),
 ];
 
-/// Settings › Phone: off until turned on; a code to pair; the owner
-/// allowing the phone after comparing four digits; the phones listed.
+/// Settings › Phone: off until turned on; a code to pair; the person at the
+/// computer allowing the phone after comparing four digits; the phones
+/// listed.
 void main() {
   final l = lookupVhLocalizations(const Locale('en'));
   final certificate = PcCertificate.generate();
@@ -154,7 +155,7 @@ void main() {
     expect(await store.getBool(pcLinkDeleteKey), isTrue);
   });
 
-  testWidgets('a code shows, then the owner allows the phone by its digits', (
+  testWidgets('a code shows, then the user allows the phone by its digits', (
     tester,
   ) async {
     await turnOn(tester);

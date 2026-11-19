@@ -63,15 +63,14 @@ class PcPairingNotifier extends Notifier<PcPairing?> {
   }
 
   /// The computer's addresses as it last gave them. The route in use stays
-  /// the owner's to change, never switched behind their back (owner's
-  /// choice, 2026-11-10).
+  /// the user's to change, never switched behind their back.
   Future<void> learnRoutes(List<PcAddress> routes) async {
     if (state case final pairing?) {
       await _keep(pairing.copyWith(routes: routes));
     }
   }
 
-  /// The owner's route: the home network, or Tailscale away from home.
+  /// The user's route: the home network, or Tailscale away from home.
   Future<void> useRoute(String host) async {
     if (state case final pairing?) await _keep(pairing.copyWith(host: host));
   }

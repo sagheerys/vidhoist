@@ -27,7 +27,7 @@ class ClipPreview {
   final Duration? duration;
 }
 
-/// The add sheet's preview, from each platform's **public oEmbed** (§4),
+/// The add sheet's preview, from each platform's **public oEmbed**,
 /// fetched on the device through the isolated external client, so no
 /// credentials travel to a third party.
 ///

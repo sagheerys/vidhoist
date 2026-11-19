@@ -2,13 +2,13 @@
 
 - **Date:** 2026-11-04
 - **Status:** accepted
-- **Owner:** Yasir Sagheer
+- **Maintainer:** [@sagheerys](https://github.com/sagheerys)
 
 ## Context
 
 The fork needed a name and look of its own, close enough to the parent that
 the design system transfers untouched, distinct enough that nobody mistakes
-one for the other. The owner asked for an English name that says "video", a
+one for the other. The maintainer asked for an English name that says "video", a
 blue or red accent, and a white ground by day with a black one by night.
 
 Short English words in this category are crowded: "Haul", "Pluck", "Stash"
@@ -30,7 +30,7 @@ search, npm, PyPI and the `.com`/`.app`/`.io` domains.
 3. **Grounds:** white `#FFFFFF` by day, black `#000000` by night, with lifted
    cards (`#121212`) so hairlines still read. The espresso ink `#2B211B` is
    kept so the white does not go cold.
-   **Amended 2026-11-06 (owner):** white cards on a white ground glared and
+   **Amended 2026-11-06:** white cards on a white ground glared and
    the cards had only a hairline to stand on. The day ground is now a soft
    stone `#F2F1EE` under white `#FFFFFF` cards, the way grouped lists lift
    their rows; `palette_ground_test` holds the step between them.
@@ -55,15 +55,14 @@ search, npm, PyPI and the `.com`/`.app`/`.io` domains.
   warns. `identity_test.dart` holds the runner's ProductName to the display
   name.
 - The availability check is a snapshot of 2026-11-04 and is not a trademark
-  search. Before the public release, the owner registers at least
+  search. Before the public release, the maintainer registers at least
   `vidhoist.app` and rechecks the stores.
 
 ## Amendment 2026-11-11: the mark is a folded ribbon
 
-Point 5 no longer holds. The owner asked for a mark of the app's own, with
-the hint "a V mixed with downloading", and chose from three boards
-(`docs/design/mockups-2026-11-11-logo`, `-logo-ribbon`, `-logo-outline`):
-first the folded film ribbon out of seven concepts, then its polished cut,
+Point 5 no longer holds. The maintainer asked for a mark of the app's own,
+with the hint "a V mixed with downloading", and chose from three boards of
+mockups: first the folded film ribbon out of seven concepts, then its polished cut,
 then the cut with a clear gap along the fold instead of an outline.
 
 The mark is a strip of film folded into the letter V. The front arm carries
@@ -79,18 +78,18 @@ it joins the recheck this ADR already asks for before the public release.
 
 ## Amendment 2026-11-09: the phone's folder is `Download/VidHoist`
 
-The owner asked for the folder to be spelled as the app is shown. The app
-was not public yet, so only the owner's phone held data. Android's shared
+The maintainer asked for the folder to be spelled as the app is shown. The
+app was not public yet, so only test phones held data. Android's shared
 storage ignores letter case when it opens a folder, but **lists a
 folder's files only under the spelling on disk**: the first build scanned
-`VidHoist` while the owner's phone still said `Vidhoist`, and the library
+`VidHoist` while a test phone still said `Vidhoist`, and the library
 showed no downloads at all, files untouched. At every start the phone app
 tries the rename through a spare name, then reads the spelling the disk
 really has and uses it (`phoneMediaDir`, settled before runApp), and
 rewrites any saved path to that spelling, at start and after every
 restore, since the library keys favourites, titles, covers and each
 clip's link by the file's path (`media_folder_rename.dart`). Android
-refused the rename on the owner's phone ("Operation not permitted": the
+refused the rename on that phone ("Operation not permitted": the
 folder holds an earlier install's files), so it stays `Vidhoist` there
 until renamed in a file manager, which the next start then follows. A memory card, when one is
 chosen in Settings › Downloads, gets a folder of the same name. Windows

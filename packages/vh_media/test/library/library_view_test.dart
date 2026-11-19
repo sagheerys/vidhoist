@@ -53,7 +53,7 @@ void main() {
     });
 
     test('**the guard**: video leaves the shorts to their own chip, so '
-        'every clip is under one type (owner\'s choice, 2026-11-05)', () {
+        'every clip is under one type', () {
       final reel = LibraryItem(
         canonicalUrl: 'https://youtu.be/ccccccccccc',
         title: 'Reel',
@@ -215,7 +215,7 @@ void main() {
     test('fromOfflineOnly takes the title from the filename', () {
       final item = LibraryItem.fromOfflineOnly(
         'https://youtu.be/ccccccccccc',
-        '/storage/emulated/0/Download/Vidhoist_Super/درس التجويد_120000.mp4',
+        '/storage/emulated/0/Download/VidHoist/درس التجويد_120000.mp4',
       );
       expect(item.title, 'درس التجويد_120000');
       expect(item.isAudio, isFalse);

@@ -25,9 +25,9 @@ class BackupFile {
 ///    name meant a corrupt copy erased the good one before it with no way
 ///    back. And it bit from another direction too: Android 11+ records an
 ///    **owner** for every file in `Download/`, so a reinstalled app cannot
-///    overwrite a file an earlier install created, which is the `errno 13`
-///    seen in a screenshot. A new name every time makes the conflict
-///    structurally impossible.
+///    overwrite a file an earlier install created: it fails with
+///    `errno 13`. A new name every time makes the conflict structurally
+///    impossible.
 ///
 /// 2. **Atomic writes**: `.tmp` then rename. An interruption
 ///    mid-write, a killed app or a dead battery, never leaves half a file

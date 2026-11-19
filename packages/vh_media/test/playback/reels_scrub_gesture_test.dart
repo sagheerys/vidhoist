@@ -27,8 +27,8 @@ void main() {
   const width = 411.0;
   const height = 914.0;
 
-  /// A three-button navigation bar, the case the owner's gesture phone never
-  /// shows.
+  /// A three-button navigation bar, the case a phone with gesture
+  /// navigation never shows.
   const inset = 48.0;
 
   Widget host() => MaterialApp(
@@ -90,7 +90,11 @@ void main() {
     ) async {
       await load(tester);
       await tapAndWait(tester, point);
-      expect(platform.playing, hasLength(1), reason: 'the owner report');
+      expect(
+        platform.playing,
+        hasLength(1),
+        reason: 'a touch on the bar must not pause',
+      );
       await finish(tester);
     });
   }

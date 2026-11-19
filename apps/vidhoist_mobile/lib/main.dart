@@ -28,8 +28,8 @@ import 'features/player/square_art.dart';
 /// player, runApp.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // **On a phone the app is portrait and only the player rotates**
-  // (decision 2026-09-05); `VhRotationScope` releases this lock while the
+  // **On a phone the app is portrait and only the player rotates**;
+  // `VhRotationScope` releases this lock while the
   // video player is open. A tablet is left free.
   VhOrientation.start();
   initVhL10n();
@@ -39,13 +39,13 @@ Future<void> main() async {
   const secrets = SecureSecretStore();
   final initialSettings = await PhoneSettings.load(store);
 
-  // One lock for all storage (rule 3), passed to everyone rather than
+  // One lock for all storage, passed to everyone rather than
   // created twice. It was created above, before the seeding.
   final logsDir = await getApplicationSupportDirectory();
   final logger = VhLogger(filePath: '${logsDir.path}/logs/vidhoist_mobile.log');
   logEveryError(logger);
 
-  // One lock for all storage (rule 3), passed to everyone rather than
+  // One lock for all storage, passed to everyone rather than
   // created twice.
   final mutex = PrefsMutex();
 
@@ -103,7 +103,7 @@ Future<void> main() async {
       // next item timed out and the session stopped itself a minute after
       // the call.
       //
-      // The cost, accepted by the owner: the notification stays while
+      // The cost, accepted on purpose: the notification stays while
       // paused (dismissible on Android 13+, sticky below it) and the wake
       // lock is held — which is why a paused session now stops itself after
       // [VhAudioHandler.pausedAutoStop].

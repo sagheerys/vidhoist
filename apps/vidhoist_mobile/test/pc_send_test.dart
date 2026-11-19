@@ -73,7 +73,7 @@ const _tracks = [
   PlaylistTrack(url: 'https://www.youtube.com/watch?v=c', title: 'Three'),
 ];
 
-/// Every link from the phone goes where the owner last sent one: the add
+/// Every link from the phone goes where the user last sent one: the add
 /// sheet, the batch screen, a quick download; and a download on the
 /// computer is followed while the app is in front.
 void main() {

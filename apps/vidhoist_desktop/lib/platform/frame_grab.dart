@@ -17,9 +17,9 @@ import '../data/covers/cover_shrink.dart';
 /// already ships**: a bare engine, not a `Player`, with no window, no
 /// sound, no media keys and nothing shown, made for one frame and destroyed.
 ///
-/// Measured on the owner's library: 8 of 8 videos in a fifth of a second,
-/// about 100 KB each; the engine holds about 200 MB for that moment. It runs on its own isolate, since
-/// libmpv's event wait blocks.
+/// Measured on a real library: 8 of 8 videos in a fifth of a second,
+/// about 100 KB each; the engine holds about 200 MB for that moment. It
+/// runs on its own isolate, since libmpv's event wait blocks.
 ///
 /// Safe by construction: [url] is the clip's own file and [headers] what
 /// reading it needs, the same pair the player already plays it with. The engine reads no config file and loads

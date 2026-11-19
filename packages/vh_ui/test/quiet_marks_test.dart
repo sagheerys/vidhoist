@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **The small marks the audit of 2026-10-30 found** (mobile plan): the
-/// platform letters on every phone row, and words written in Title Case,
-/// with exclamation marks and long dashes.
+/// **The small marks the audit of 2026-10-30 found**: the platform letters
+/// on every phone row, and words written in Title Case, with exclamation
+/// marks and long dashes.
 void main() {
   Widget host(Widget child, {bool desktop = false}) => MaterialApp(
     localizationsDelegates: VhLocalizations.localizationsDelegates,
@@ -63,7 +63,7 @@ void main() {
   test('**the guard**: English labels are in sentence case', () {
     // Names and acronyms keep their capitals.
     const proper = {
-      'Vidhoist',
+      'VidHoist',
       'Ember',
       'Super',
       'Lite',

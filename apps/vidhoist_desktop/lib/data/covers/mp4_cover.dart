@@ -8,8 +8,8 @@ typedef RangeReader = Future<Uint8List> Function(int start, int length);
 /// **only the boxes that hold it**, never the whole file.
 ///
 /// Where it lives: `moov` > `udta` > `meta` > `ilst` > `covr` > `data`, the
-/// iTunes layout yt-dlp writes when it embeds a thumbnail. Measured on the
-/// owner's library: every audio download carries one, near the start of
+/// iTunes layout yt-dlp writes when it embeds a thumbnail. Measured on a
+/// real library: every audio download carries one, near the start of
 /// the file, so a quarter of a megabyte is read for each.
 ///
 /// The `moov` box sits at the start of a file written for streaming, or

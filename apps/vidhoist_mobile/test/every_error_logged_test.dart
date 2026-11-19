@@ -18,7 +18,7 @@ class _Lines extends VhLogger {
   }) async => lines.add(message);
 }
 
-/// Owner's request 2026-10-15: every error that shows, and every error
+/// Every error that shows, and every error
 /// nobody caught, is in the diagnostic log.
 void main() {
   testWidgets('error snack bars and framework errors reach the log', (

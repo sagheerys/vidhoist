@@ -23,10 +23,9 @@ LibraryItem _clip(String id, {Duration? duration, bool here = true}) =>
       timestamp: DateTime(2026, 11, 1),
     );
 
-/// **Every clip's length in the library** (owner's request 2026-11-04): the
-/// history holds none, so a clip never played on this computer showed no
-/// length. Its header is read in the background, as the phone's enricher
-/// does.
+/// **Every clip's length in the library**: the history holds none, so a
+/// clip never played on this computer showed no length. Its header is read
+/// in the background, as the phone's enricher does.
 void main() {
   setUpAll(() => _root = Directory.systemTemp.createTempSync('ember_shape_'));
   tearDownAll(() => _root.deleteSync(recursive: true));

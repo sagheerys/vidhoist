@@ -28,7 +28,7 @@ class WindowsFirewall implements FirewallPort {
 
   @override
   Future<bool> allow() async {
-    // Windows asks the owner (UAC) before the elevated PowerShell starts;
+    // Windows asks the user (UAC) before the elevated PowerShell starts;
     // a "No" there ends Start-Process with an error, and nothing changes.
     final elevated =
         "Start-Process powershell.exe -Verb RunAs -Wait -WindowStyle Hidden "

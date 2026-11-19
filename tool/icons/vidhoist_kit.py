@@ -5,9 +5,7 @@ The mark: a strip of film folded into the letter V. The front arm carries
 four perforations down its outer edge; the back arm is the second colour and
 stops a hair short of the front one, so the fold reads as a clear gap. On
 Windows it sits on an espresso tile; on Android the tile is the accent.
-(Chosen by the owner on 2026-11-11 from the boards in
-docs/design/mockups-2026-11-11-logo*; it replaced the window with the
-download arrow.)
+(It replaced the window with the download arrow; see ADR 0002.)
 
 Writes:
   apps/vidhoist_mobile/assets/icons/icon.png, icon_foreground.png,
@@ -125,8 +123,8 @@ def _placed(art, scale, drop=0.0, about=128.0):
     return f'<g transform="translate(128 {about + drop:.1f}) scale({scale}) translate(-128 -{about:.1f})">{art}</g>'
 
 
-# **How large the ribbon sits** (owner's device round 2026-11-11: drawn at
-# its bare grid size it looked "very small" on the phone). A V carries its
+# **How large the ribbon sits** (drawn at its bare grid size it looked
+# "very small" on the phone). A V carries its
 # weight in its top half, so it is also lowered a little: centred by its
 # box it floats high and reads smaller still.
 ON_TILE, ON_TILE_SMALL, TILE_DROP = 1.2, 1.28, 6
@@ -209,7 +207,7 @@ def _ico(images, path):
 # **This holds only with `adaptive_icon_foreground_inset: 0`** in the phone
 # app's pubspec. flutter_launcher_icons wraps the layers in a 16% inset by
 # default, which shrinks them to 68%: the first two cuts came out at 36%
-# and 48% of the icon's width on the owner's phone, "very small".
+# and 48% of the icon's width on a real phone, "very small".
 ADAPTIVE_SHARE, ADAPTIVE_DROP = 0.70, 10
 
 

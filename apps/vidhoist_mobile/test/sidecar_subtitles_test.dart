@@ -76,7 +76,7 @@ void main() {
     expect(File(other).existsSync(), isTrue);
   });
 
-  // Found on the owner's phone 2026-11-07: a clip spoken in Arabic comes
+  // Found on a real phone 2026-11-07: a clip spoken in Arabic comes
   // with `ar` and `ar-orig`, byte for byte the same, and the switch offered
   // "AR" twice.
   test(
