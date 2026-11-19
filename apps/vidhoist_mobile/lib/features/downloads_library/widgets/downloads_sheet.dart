@@ -131,9 +131,11 @@ class _DownloadsSheetState extends ConsumerState<_DownloadsSheet> {
                   }
                 },
               ),
+            // Wrapping, not a row: two buttons in a longer language at a
+            // large text size did not fit one line.
             if (error)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              Wrap(
+                alignment: WrapAlignment.end,
                 children: [
                   // A site that wants a sign-in gets the page that does it,
                   // beside the retry that will work once it is done.

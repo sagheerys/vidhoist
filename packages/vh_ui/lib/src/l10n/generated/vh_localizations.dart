@@ -6,7 +6,17 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'vh_localizations_ar.dart';
+import 'vh_localizations_de.dart';
 import 'vh_localizations_en.dart';
+import 'vh_localizations_es.dart';
+import 'vh_localizations_fa.dart';
+import 'vh_localizations_fr.dart';
+import 'vh_localizations_hi.dart';
+import 'vh_localizations_id.dart';
+import 'vh_localizations_pt.dart';
+import 'vh_localizations_ru.dart';
+import 'vh_localizations_tr.dart';
+import 'vh_localizations_ur.dart';
 
 // ignore_for_file: type=lint
 
@@ -95,7 +105,17 @@ abstract class VhLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('ar'),
+    Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('fa'),
+    Locale('fr'),
+    Locale('hi'),
+    Locale('id'),
+    Locale('pt'),
+    Locale('ru'),
+    Locale('tr'),
+    Locale('ur'),
   ];
 
   /// No description provided for @about.
@@ -5850,8 +5870,20 @@ class _VhLocalizationsDelegate extends LocalizationsDelegate<VhLocalizations> {
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['ar', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'ar',
+    'de',
+    'en',
+    'es',
+    'fa',
+    'fr',
+    'hi',
+    'id',
+    'pt',
+    'ru',
+    'tr',
+    'ur',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_VhLocalizationsDelegate old) => false;
@@ -5862,8 +5894,28 @@ VhLocalizations lookupVhLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'ar':
       return VhLocalizationsAr();
+    case 'de':
+      return VhLocalizationsDe();
     case 'en':
       return VhLocalizationsEn();
+    case 'es':
+      return VhLocalizationsEs();
+    case 'fa':
+      return VhLocalizationsFa();
+    case 'fr':
+      return VhLocalizationsFr();
+    case 'hi':
+      return VhLocalizationsHi();
+    case 'id':
+      return VhLocalizationsId();
+    case 'pt':
+      return VhLocalizationsPt();
+    case 'ru':
+      return VhLocalizationsRu();
+    case 'tr':
+      return VhLocalizationsTr();
+    case 'ur':
+      return VhLocalizationsUr();
   }
 
   throw FlutterError(

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shortcut_paste_short">लिंक पेस्ट करें</string>
+    <string name="shortcut_paste_long">लिंक पेस्ट करें और डाउनलोड करें</string>
+    <string name="shortcut_shorts_short">Shorts</string>
+    <string name="shortcut_shorts_long">Shorts खोलें</string>
+    <string name="shortcut_audio_short">ऑडियो</string>
+    <string name="shortcut_audio_long">ऑडियो लाइब्रेरी खोलें</string>
+    <string name="engine_channel">चल रहे डाउनलोड</string>
+</resources>

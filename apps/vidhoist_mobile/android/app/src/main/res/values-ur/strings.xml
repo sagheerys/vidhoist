@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shortcut_paste_short">لنک چسپاں کریں</string>
+    <string name="shortcut_paste_long">لنک چسپاں کریں اور ڈاؤن لوڈ کریں</string>
+    <string name="shortcut_shorts_short">شارٹس</string>
+    <string name="shortcut_shorts_long">شارٹس کھولیں</string>
+    <string name="shortcut_audio_short">آڈیو</string>
+    <string name="shortcut_audio_long">آڈیو لائبریری کھولیں</string>
+    <string name="engine_channel">جاری ڈاؤن لوڈز</string>
+</resources>

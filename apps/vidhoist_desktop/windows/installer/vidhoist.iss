@@ -111,6 +111,14 @@ OutputBaseFilename=Vidhoist-{#AppVersion}-windows-x64-setup
 ; preface in each language, then the GNU GPL v3 as it stands.
 Name: "english"; MessagesFile: "compiler:Default.isl"; LicenseFile: "license_en.rtf"
 Name: "arabic"; MessagesFile: "compiler:Languages\Arabic.isl"; LicenseFile: "license_ar.rtf"
+; The languages Inno Setup ships a translation of. Persian, Indonesian,
+; Hindi and Urdu install in English; the app itself speaks them.
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"; LicenseFile: "license_es.rtf"
+Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"; LicenseFile: "license_pt.rtf"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl"; LicenseFile: "license_fr.rtf"
+Name: "german"; MessagesFile: "compiler:Languages\German.isl"; LicenseFile: "license_de.rtf"
+Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"; LicenseFile: "license_tr.rtf"
+Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"; LicenseFile: "license_ru.rtf"
 
 [Messages]
 english.WelcomeLabel2=This will install [name/ver] on your computer.%n%n[name] is free, open-source software by {#Developer} that downloads video and audio to this computer with yt-dlp.%n%nIt is recommended that you close all other applications before continuing.
@@ -134,6 +142,13 @@ arabic.FinishedHeadingLabel=اكتمل تثبيت [name]
 arabic.FinishedLabelNoIcons=ثُبِّت [name] على هذا الكمبيوتر.
 arabic.FinishedLabel=ثُبِّت [name] على هذا الكمبيوتر، ويمكنك فتحه من اختصاراته.
 arabic.ClickFinish=انقر «إنهاء» لإغلاق التثبيت.
+; The welcome names the developer in every language, as in English.
+spanish.WelcomeLabel2=Se instalará [name/ver] en este equipo.%n%n[name] es software libre y de código abierto de {#Developer} que descarga vídeo y audio en este equipo con yt-dlp.%n%nSe recomienda cerrar las demás aplicaciones antes de continuar.
+brazilianportuguese.WelcomeLabel2=O [name/ver] será instalado neste computador.%n%nO [name] é um software livre e de código aberto de {#Developer} que baixa vídeo e áudio neste computador com o yt-dlp.%n%nRecomenda-se fechar os outros aplicativos antes de continuar.
+french.WelcomeLabel2=[name/ver] va être installé sur cet ordinateur.%n%n[name] est un logiciel libre et open source de {#Developer} qui télécharge des vidéos et de l’audio sur cet ordinateur avec yt-dlp.%n%nIl est recommandé de fermer les autres applications avant de continuer.
+german.WelcomeLabel2=[name/ver] wird auf diesem Computer installiert.%n%n[name] ist freie Open-Source-Software von {#Developer}, die Videos und Audio mit yt-dlp auf diesen Computer herunterlädt.%n%nEs wird empfohlen, alle anderen Anwendungen zu schließen, bevor du fortfährst.
+turkish.WelcomeLabel2=[name/ver] bu bilgisayara kurulacak.%n%n[name], {#Developer} tarafından geliştirilen, yt-dlp ile bu bilgisayara video ve ses indiren özgür ve açık kaynaklı bir yazılımdır.%n%nDevam etmeden önce diğer uygulamaları kapatmanız önerilir.
+russian.WelcomeLabel2=На этот компьютер будет установлена программа [name/ver].%n%n[name] — свободная программа с открытым исходным кодом от {#Developer}, которая скачивает видео и аудио на этот компьютер с помощью yt-dlp.%n%nПеред продолжением рекомендуется закрыть все другие приложения.
 
 [CustomMessages]
 english.AboutLink=About the developer and the project: github.com/sagheerys/vidhoist
@@ -142,6 +157,24 @@ english.AppRunning={#AppName} is still running. Close it, including from its ico
 arabic.AppRunning=ما زال {#AppName} يعمل. أغلقه، ومن أيقونته بجانب الساعة أيضاً، ثم انقر «موافق».
 english.DeleteData=Also delete what {#AppName} keeps on this computer: the library list, followed channels, tags, playlists, settings and saved transcripts?%n%nYour downloaded files and the backups in the Backups folder beside them stay, so a reinstall can restore everything.
 arabic.DeleteData=هل تحذف أيضاً ما يحفظه {#AppName} على هذا الكمبيوتر: قائمة المكتبة والقنوات المتابَعة والوسوم والقوائم والإعدادات والنصوص المحفوظة؟%n%nتبقى ملفاتك المنزَّلة والنسخ الاحتياطية في مجلد Backups بجانبها، فيستعيد التثبيت التالي كل شيء.
+spanish.AboutLink=Sobre el desarrollador y el proyecto: github.com/sagheerys/vidhoist
+spanish.AppRunning={#AppName} sigue en ejecución. Ciérralo, también desde su icono junto al reloj, y pulsa Aceptar.
+spanish.DeleteData=¿Eliminar también lo que {#AppName} guarda en este equipo: la lista de la biblioteca, los canales seguidos, las etiquetas, las listas de reproducción, los ajustes y las transcripciones guardadas?%n%nTus archivos descargados y las copias de seguridad de la carpeta Backups junto a ellos se conservan, para que una reinstalación pueda restaurarlo todo.
+brazilianportuguese.AboutLink=Sobre o desenvolvedor e o projeto: github.com/sagheerys/vidhoist
+brazilianportuguese.AppRunning=O {#AppName} ainda está em execução. Feche-o, inclusive pelo ícone ao lado do relógio, e clique em OK.
+brazilianportuguese.DeleteData=Excluir também o que o {#AppName} guarda neste computador: a lista da biblioteca, os canais seguidos, as tags, as playlists, as configurações e as transcrições salvas?%n%nSeus arquivos baixados e os backups na pasta Backups ao lado deles são mantidos, para que uma reinstalação possa restaurar tudo.
+french.AboutLink=À propos du développeur et du projet : github.com/sagheerys/vidhoist
+french.AppRunning={#AppName} est toujours en cours d’exécution. Fermez-le, y compris depuis son icône près de l’horloge, puis cliquez sur OK.
+french.DeleteData=Supprimer aussi ce que {#AppName} conserve sur cet ordinateur : la liste de la bibliothèque, les chaînes suivies, les étiquettes, les playlists, les réglages et les transcriptions enregistrées ?%n%nVos fichiers téléchargés et les sauvegardes du dossier Backups à côté d’eux sont conservés, pour qu’une réinstallation puisse tout restaurer.
+german.AboutLink=Über den Entwickler und das Projekt: github.com/sagheerys/vidhoist
+german.AppRunning={#AppName} läuft noch. Schließe es, auch über sein Symbol neben der Uhr, und klicke dann auf OK.
+german.DeleteData=Auch löschen, was {#AppName} auf diesem Computer speichert: die Bibliotheksliste, gefolgte Kanäle, Tags, Playlists, Einstellungen und gespeicherte Transkripte?%n%nDeine heruntergeladenen Dateien und die Sicherungen im Ordner Backups daneben bleiben erhalten, sodass eine Neuinstallation alles wiederherstellen kann.
+turkish.AboutLink=Geliştirici ve proje hakkında: github.com/sagheerys/vidhoist
+turkish.AppRunning={#AppName} hâlâ çalışıyor. Saatin yanındaki simgesinden de kapatın, ardından Tamam düğmesine tıklayın.
+turkish.DeleteData={#AppName} uygulamasının bu bilgisayarda sakladıkları da silinsin mi: kitaplık listesi, takip edilen kanallar, etiketler, oynatma listeleri, ayarlar ve kaydedilen dökümler?%n%nİndirdiğiniz dosyalar ve yanlarındaki Backups klasöründeki yedekler korunur; böylece yeniden kurulum her şeyi geri yükleyebilir.
+russian.AboutLink=О разработчике и проекте: github.com/sagheerys/vidhoist
+russian.AppRunning={#AppName} всё ещё работает. Закройте его, в том числе через значок рядом с часами, и нажмите OK.
+russian.DeleteData=Удалить также то, что {#AppName} хранит на этом компьютере: список библиотеки, отслеживаемые каналы, теги, плейлисты, настройки и сохранённые расшифровки?%n%nСкачанные файлы и резервные копии в папке Backups рядом с ними сохранятся, поэтому при повторной установке всё можно восстановить.
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked

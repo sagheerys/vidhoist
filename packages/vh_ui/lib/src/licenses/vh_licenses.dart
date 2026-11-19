@@ -61,6 +61,13 @@ const _shared = [
     'Copyright 2019-2022 Google LLC. The heading font of both apps.',
   ),
   VhLicenseNotice(
+    ['Noto Sans', 'Noto Naskh Arabic', 'Noto Sans Devanagari'],
+    'OFL-1.1',
+    'Copyright 2022 The Noto Project Authors. The fonts of the languages '
+        'Tajawal lacks letters of: Turkish and Russian, Persian and Urdu, '
+        'and Hindi.',
+  ),
+  VhLicenseNotice(
     ['Material Symbols'],
     'Apache-2.0',
     'Copyright Google LLC. The pause and download icon shapes.',

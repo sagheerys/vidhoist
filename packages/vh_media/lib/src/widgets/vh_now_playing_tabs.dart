@@ -153,11 +153,17 @@ class VhPanelTab extends StatelessWidget {
               children: [
                 VhIcon(icon, size: 15, color: fg),
                 const SizedBox(width: VhSpace.xxs),
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: fg,
-                    fontWeight: selected ? FontWeight.w700 : null,
+                // Ellipsized rather than spilled: a long label (German at a
+                // large text size) overflowed a narrow panel.
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      color: fg,
+                      fontWeight: selected ? FontWeight.w700 : null,
+                    ),
                   ),
                 ),
               ],

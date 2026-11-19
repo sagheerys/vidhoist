@@ -44,9 +44,8 @@ class VhFab extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = VhThemeX.of(context).palette;
     final duration = vhMotionDuration(context, VhMotion.tap);
-    final labelStyle = TextStyle(
-      fontFamily: VhType.body,
-      package: VhType.package,
+    // The theme's text font, which follows the language.
+    final labelStyle = Theme.of(context).textTheme.labelLarge!.copyWith(
       fontSize: 13.5,
       fontWeight: FontWeight.w700,
       color: p.onAccent,

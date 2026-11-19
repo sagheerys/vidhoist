@@ -93,11 +93,28 @@ plausible explanation turned out to be wrong under measurement.
 
 ## Translations
 
-The fastest useful contribution. Copy `packages/vh_ui/lib/src/l10n/app_en.arb`
-to `app_<code>.arb`, translate the values (keep the keys and any `{placeholders}`
-exactly), add one line to
-`packages/vh_ui/lib/src/l10n/language_names.dart` with the language's name in
-its own language, then run `cd packages/vh_ui && flutter gen-l10n`.
+The fastest useful contribution. VidHoist speaks twelve languages; all
+but English and Arabic are first translations, so a native speaker's
+corrections to an existing `app_<code>.arb` are as welcome as a new language.
+
+To add a language, copy `packages/vh_ui/lib/src/l10n/app_en.arb` to
+`app_<code>.arb`, translate the values (keep the keys, any `{placeholders}`
+and the ICU `plural`/`select` structure exactly), then:
+
+- add the language's name, in its own language, to
+  `packages/vh_ui/lib/src/l10n/language_names.dart`;
+- register its relative times in `initVhL10n` (`l10n.dart`), if the
+  `timeago` package has them;
+- if Tajawal lacks letters it needs, give it a Noto face in
+  `VhType.bodyFor`/`displayFor` (`tokens.dart`);
+- add it to `apps/vidhoist_mobile/android/app/src/main/res/xml/locales_config.xml`
+  and translate `res/values/strings.xml` into `res/values-<code>/`;
+- add it to the installer if Inno Setup ships a translation for it
+  (`[Languages]` in `vidhoist.iss`, and its preface in
+  `tool/make_installer_license.py`);
+- run `cd packages/vh_ui && flutter gen-l10n`.
+
+Tests fail when any of these is missed.
 
 The settings screen builds its list from `supportedLocales`, so there is no
 screen to edit. A translation that misses some keys will be caught by the parity

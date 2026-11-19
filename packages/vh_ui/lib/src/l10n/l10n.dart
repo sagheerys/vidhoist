@@ -6,10 +6,22 @@ import 'generated/vh_localizations.dart';
 
 export 'generated/vh_localizations.dart';
 
-/// Registers the relative-time locales; Arabic is registered explicitly.
+/// Registers the relative-time messages of every language the app speaks;
+/// the package knows only English until told, and an unregistered
+/// language read "about a month ago" in English.
 void initVhL10n() {
   timeago.setLocaleMessages('ar', timeago.ArMessages());
   timeago.setLocaleMessages('ar_short', timeago.ArShortMessages());
+  timeago.setLocaleMessages('de', timeago.DeMessages());
+  timeago.setLocaleMessages('es', timeago.EsMessages());
+  timeago.setLocaleMessages('fa', timeago.FaMessages());
+  timeago.setLocaleMessages('fr', timeago.FrMessages());
+  timeago.setLocaleMessages('hi', timeago.HiMessages());
+  timeago.setLocaleMessages('id', timeago.IdMessages());
+  timeago.setLocaleMessages('pt', timeago.PtBrMessages());
+  timeago.setLocaleMessages('ru', timeago.RuMessages());
+  timeago.setLocaleMessages('tr', timeago.TrMessages());
+  timeago.setLocaleMessages('ur', timeago.UrMessages());
 }
 
 /// Shorthand access: `context.vhl.libraryTitle`.

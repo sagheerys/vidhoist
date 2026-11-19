@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shortcut_paste_short">Pegar enlace</string>
+    <string name="shortcut_paste_long">Pegar un enlace y descargar</string>
+    <string name="shortcut_shorts_short">Shorts</string>
+    <string name="shortcut_shorts_long">Abrir Shorts</string>
+    <string name="shortcut_audio_short">Audio</string>
+    <string name="shortcut_audio_long">Abrir la biblioteca de audio</string>
+    <string name="engine_channel">Descargas en curso</string>
+</resources>

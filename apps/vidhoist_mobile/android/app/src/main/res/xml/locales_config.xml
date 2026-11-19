@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The languages VidHoist speaks: Android 13 lists them in the app's
+     own language setting. Kept with the arb files in packages/vh_ui;
+     locale_config_test compares the two. -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en"/>
+    <locale android:name="ar"/>
+    <locale android:name="de"/>
+    <locale android:name="es"/>
+    <locale android:name="fa"/>
+    <locale android:name="fr"/>
+    <locale android:name="hi"/>
+    <locale android:name="id"/>
+    <locale android:name="pt-BR"/>
+    <locale android:name="ru"/>
+    <locale android:name="tr"/>
+    <locale android:name="ur"/>
+</locale-config>

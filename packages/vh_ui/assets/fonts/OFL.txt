@@ -1,7 +1,9 @@
 Tajawal: (c) 2017 by Boutros International.
 Noto Kufi Arabic: Copyright 2019-2022 Google LLC.
+Noto Sans, Noto Naskh Arabic, Noto Sans Devanagari: Copyright 2022 The Noto
+Project Authors (https://github.com/notofonts).
 
-Both fonts are licensed under the SIL Open Font License, Version 1.1.
+These fonts are licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
 https://openfontlicense.org
 

@@ -51,6 +51,11 @@ void main() {
   testWidgets('every supported language has a row, with System above them', (
     tester,
   ) async {
+    // Tall enough for all twelve: the list is lazy, and rows past the
+    // screen are not built to be found.
+    tester.view.physicalSize = const Size(400, 1400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     await pump(tester, null);
 
     // **The real guard**: the list is read from `supportedLocales` rather

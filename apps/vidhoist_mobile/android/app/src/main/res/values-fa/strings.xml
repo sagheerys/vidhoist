@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shortcut_paste_short">چسباندن پیوند</string>
+    <string name="shortcut_paste_long">چسباندن پیوند و دانلود</string>
+    <string name="shortcut_shorts_short">ویدیوهای کوتاه</string>
+    <string name="shortcut_shorts_long">باز کردن ویدیوهای کوتاه</string>
+    <string name="shortcut_audio_short">صوت</string>
+    <string name="shortcut_audio_long">باز کردن کتابخانهٔ صوتی</string>
+    <string name="engine_channel">دانلودهای در حال انجام</string>
+</resources>

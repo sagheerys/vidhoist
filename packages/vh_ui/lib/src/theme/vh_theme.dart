@@ -18,6 +18,7 @@ ThemeData vhTheme(
   VhTypeScale type = VhTypeScale.mobile,
   VhCorners corners = VhCorners.mobile,
   double hairline = 1,
+  String language = 'en',
 }) {
   final p = VhPalette.of(variant, brightness);
   final isDark = brightness == Brightness.dark;
@@ -80,16 +81,18 @@ ThemeData vhTheme(
   );
 
   TextStyle display(double size, FontWeight weight) => TextStyle(
-    fontFamily: VhType.display,
+    fontFamily: VhType.displayFor(language),
     package: VhType.package,
+    fontFamilyFallback: VhType.fallback,
     fontWeight: weight,
     fontSize: size,
     color: p.ink,
     height: 1.4,
   );
   TextStyle body(double size, FontWeight weight, {Color? color}) => TextStyle(
-    fontFamily: VhType.body,
+    fontFamily: VhType.bodyFor(language),
     package: VhType.package,
+    fontFamilyFallback: VhType.fallback,
     fontWeight: weight,
     fontSize: size,
     color: color ?? p.ink,
@@ -101,7 +104,11 @@ ThemeData vhTheme(
     brightness: brightness,
     colorScheme: scheme,
     scaffoldBackgroundColor: p.bg,
-    fontFamily: 'packages/${VhType.package}/${VhType.body}',
+    fontFamily: 'packages/${VhType.package}/${VhType.bodyFor(language)}',
+    fontFamilyFallback: [
+      for (final family in VhType.fallback)
+        'packages/${VhType.package}/$family',
+    ],
     // "Warmth" instead of the sparkle: a press fills with the soft accent
     // and fades, with no ripple of particles across the control.
     splashFactory: NoSplash.splashFactory,
