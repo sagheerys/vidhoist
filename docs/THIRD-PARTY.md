@@ -8,9 +8,11 @@ under Settings › About › Open-source licenses.
 ## Where the source is
 
 The source of every GPL and LGPL program below, at the version shipped, is
-attached to each [GitHub release](https://github.com/sagheerys/vidhoist/releases)
-beside the APK and the installer. Maintainers fetch those files with
-`tool/fetch-third-party-sources.ps1` before publishing a release.
+on this repository's [releases page](https://github.com/sagheerys/vidhoist/releases),
+in a release of its own beside each app release: "Third-party sources for
+VidHoist 1.1.0" for 1.1.0, linked from that release's notes. Keeping them
+apart leaves the app release with only what installs. Maintainers fetch
+those files with `tool/fetch-third-party-sources.ps1` before publishing.
 
 The libraries inside the Android engine's FFmpeg and Python are built by the
 [Termux](https://github.com/termux/termux-packages) project's recipes, and

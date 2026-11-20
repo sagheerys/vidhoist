@@ -1,8 +1,9 @@
 # Fetches the source of every GPL and LGPL program the two apps ship, at the
-# versions they ship, so each GitHub release can carry it beside the APK and
-# the installer. Releasing binaries under those licences means offering
+# versions they ship, for the "Third-party sources" release published beside
+# each app release. Releasing binaries under those licences means offering
 # their source from the same place; a link to someone else's server can
-# break, a file attached to the release cannot.
+# break, a file attached to a release here cannot. A release of their own
+# keeps the app release down to the files people install.
 #
 #   powershell -File tool/fetch-third-party-sources.ps1
 #
@@ -47,4 +48,4 @@ foreach ($source in $sources) {
   $hash = (Get-FileHash $target -Algorithm SHA256).Hash
   Write-Host "$($source.File)  $hash"
 }
-Write-Host "Attach every file in $out to the release."
+Write-Host "Attach every file in $out to the Third-party sources release."
