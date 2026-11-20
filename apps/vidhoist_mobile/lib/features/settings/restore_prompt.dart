@@ -30,7 +30,7 @@ Future<void> maybeOfferAutoRestore(BuildContext context, WidgetRef ref) async {
   }
 
   final backup = ref.read(autoBackupProvider);
-  // **The newest copy from the rotation** (decision 2026-09-04): it used to
+  // **The newest copy from the rotation**: it used to
   // be a single copy in a fixed file, and it could be **orphaned**, because
   // its key died with the reinstall. The copies are plain text now, so none
   // can be orphaned, and dated, so an older one can be reached from the

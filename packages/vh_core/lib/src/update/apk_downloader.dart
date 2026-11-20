@@ -60,10 +60,11 @@ class ApkDownloader {
   ///
   /// [expectedSize] comes from the release data: a mismatch means a
   /// truncated file, from a network drop that ends the stream without an
-  /// error. [sha256], when the release gives one, must match the bytes
-  /// received: the file is installed (run, on Windows) as it is, and one
-  /// altered between GitHub and here keeps its signature and its size.
-  /// `null` skips the check, for a release that lists no hash.
+  /// error. [sha256] must match the bytes received: the file is installed
+  /// (run, on Windows) as it is, and one altered between GitHub and here
+  /// keeps its signature and its size. **A release that lists no hash is
+  /// refused** before a byte is fetched: skipping the check then would let
+  /// anyone who can change a release's files run their own installer.
   Future<String> download({
     required String url,
     required String savePath,
@@ -72,6 +73,9 @@ class ApkDownloader {
     void Function(double progress)? onProgress,
     DownloadCancelToken? cancel,
   }) async {
+    if (sha256 == null) {
+      throw const UpdateDownloadException('no checksum in the release');
+    }
     final partPath = '$savePath.part';
     final part = File(partPath);
     if (part.existsSync()) await part.delete();
@@ -131,7 +135,7 @@ class ApkDownloader {
       if (expectedSize > 0 && received != expectedSize) {
         throw const UpdateDownloadException('size mismatch');
       }
-      if (sha256 != null && _hex(digest) != sha256.toLowerCase()) {
+      if (_hex(digest) != sha256.toLowerCase()) {
         throw const UpdateDownloadException('checksum mismatch');
       }
       final target = File(savePath);

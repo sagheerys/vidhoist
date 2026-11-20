@@ -40,7 +40,7 @@ class VhGalleryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'معرض VidHoist — ${x.variant == VhVariant.phone ? 'phone' : 'desktop'}',
+          'VidHoist gallery — ${x.variant == VhVariant.phone ? 'phone' : 'desktop'}',
         ),
         actions: [
           IconButton(

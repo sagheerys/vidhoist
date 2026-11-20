@@ -238,6 +238,18 @@ void main() {
     expect(await client.cover('i1'), isNull);
   });
 
+  test('**the guard**: a cover that is not a picture is never served, '
+      'whatever path the library row holds', () async {
+    final dir = await Directory.systemTemp.createTemp('vh_cover');
+    addTearDown(() => dir.delete(recursive: true));
+    final client = PcLinkClient(await pairPhone());
+    addTearDown(client.close);
+    for (final name in ['secrets.txt', 'notes', 'key.pem', 'c.jpg.exe']) {
+      host.coverFile = File('${dir.path}/$name')..writeAsBytesSync([1, 2]);
+      expect(await client.cover('i0'), isNull, reason: name);
+    }
+  });
+
   test('the server refuses links that are not web links', () async {
     final client = PcLinkClient(await pairPhone());
     addTearDown(client.close);
@@ -354,6 +366,34 @@ void main() {
         );
         expect((code, body), (401, ''));
         expect(host.deleted, isEmpty);
+      },
+    );
+
+    test(
+      '**the guard**: a refused request that never ends its body is '
+      'answered and closed, not read for as long as it keeps sending',
+      () async {
+        final socket = await SecureSocket.connect(
+          '127.0.0.1',
+          port,
+          onBadCertificate: (_) => true,
+        );
+        addTearDown(socket.destroy);
+        final answer = StringBuffer();
+        final closed = socket
+            .cast<List<int>>()
+            .transform(utf8.decoder)
+            .forEach(answer.write);
+        socket.write(
+          'POST ${PcLink.downloadsPath} HTTP/1.1\r\n'
+          'Host: 127.0.0.1\r\n'
+          'Transfer-Encoding: chunked\r\n\r\n'
+          '5\r\nhello\r\n',
+        );
+        await socket.flush();
+        // The body's last chunk is never sent.
+        await closed.timeout(const Duration(seconds: 5));
+        expect(answer.toString(), startsWith('HTTP/1.1 404'));
       },
     );
 

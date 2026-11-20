@@ -163,7 +163,7 @@ ThemeData vhTheme(
       backgroundColor: Colors.transparent,
       selectedColor: p.ink,
       side: BorderSide(color: p.line2, width: hairline),
-      // **Label colour follows the state** (full review 2026-09-02): a
+      // **Label colour follows the state**: a
       // selected chip is painted with `p.ink` as its background and its
       // label was `p.ink2`, dark ink on dark ink, so **a selected tag could
       // not be read**. Screens that passed their own `labelStyle` were
@@ -280,7 +280,7 @@ ThemeData vhTheme(
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: p.card,
       surfaceTintColor: Colors.transparent,
-      // **One drag handle for all eighteen sheets** (review 2026-09-02: not
+      // **One drag handle for all eighteen sheets** (not
       // a single sheet had one). Setting it in the theme rather than in
       // each sheet is what stops the nineteenth sheet from being built
       // without one, which is exactly how an interface starts to look

@@ -15,14 +15,6 @@ class DownloadNotifications {
   static const progressChannelId = 'com.yasir.vidhoist.progress';
   static const resultChannelId = 'com.yasir.vidhoist.result';
 
-  /// The ids 1.0.0 created its channels under. Deleted at startup, or
-  /// Android's notification settings would list every kind twice.
-  static const retiredChannelIds = [
-    'com.yasir.vidhoistlite.progress',
-    'com.yasir.vidhoistlite.result',
-    'com.yasir.vidhoistlite.audio',
-  ];
-
   final FlutterLocalNotificationsPlugin _plugin;
 
   /// What a progress notification carries, so its buttons know their task.
@@ -55,13 +47,6 @@ class DownloadNotifications {
         onOpenItem?.call(payload);
       },
     );
-    final android = _plugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
-    for (final id in retiredChannelIds) {
-      await android?.deleteNotificationChannel(channelId: id);
-    }
   }
 
   /// Android 13+ requires an explicit permission; a refusal fails nothing.

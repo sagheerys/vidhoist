@@ -1,0 +1,51 @@
+name: Project page
+
+# The page is built from the repository itself (tool/site/make_site.py):
+# the screenshots, the icon, the fonts and the icons. It is rebuilt when any
+# of them changes.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tool/site/**'
+      - 'docs/screenshots/**'
+      - 'packages/vh_ui/lib/src/icons/vh_icons.dart'
+      - 'apps/vidhoist_mobile/assets/icons/icon.png'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+# One deployment at a time; a newer push replaces one still waiting.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Build the page
+        run: python3 tool/site/make_site.py
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: build/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Only this job may publish, and only to Pages.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

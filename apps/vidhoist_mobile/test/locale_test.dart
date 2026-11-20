@@ -6,7 +6,7 @@ import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **The "follow the system language" guard (decision 2026-09-06): a door
+/// **The "follow the system language" guard: a door
 /// that opens.**
 ///
 /// `locale: null` in `app.dart` did follow the phone's language, but the

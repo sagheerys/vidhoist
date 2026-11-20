@@ -92,8 +92,7 @@ class VhDownloadProgressCard extends StatelessWidget {
           ),
           const SizedBox(width: VhSpace.md - 1),
           Expanded(
-            // **The bar and the number glide to each new reading** (field
-            // report 2026-10-15) instead of jumping to it, so a figure
+            // **The bar and the number glide to each new reading** instead of jumping to it, so a figure
             // that arrives in steps still reads as a count.
             child: TweenAnimationBuilder<double>(
               tween: Tween(

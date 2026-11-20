@@ -10,7 +10,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'fake_player_port.dart';
 
-/// Three small touches from the design review of 2026-09-25: a next button
+/// Three small touches from a design review: a next button
 /// on the mini player, a close mark in place of the notification's stop
 /// square, and a second notification line when a clip has no artist.
 void main() {

@@ -69,7 +69,7 @@ class VhVideoIconButton extends StatelessWidget {
   }
 }
 
-/// The speed button in **the player chrome** (review 2026-09-02).
+/// The speed button in **the player chrome**.
 ///
 /// **Correcting an initial mistaken note:** the first reading was that
 /// speed had no entry point at all, when in fact it has a chip in the video

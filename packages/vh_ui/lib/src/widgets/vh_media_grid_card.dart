@@ -16,7 +16,7 @@ import 'vh_platform_chip.dart';
 ///
 /// - **Grid**, the default: two columns, so a row shows twice what the
 /// list shows and scanning video visually is far quicker.
-/// - **Cards** ([feed], requested 2026-09-08, the YouTube pattern): one
+/// - **Cards** ([feed], the YouTube pattern): one
 /// column with a wide cover and larger text, for unhurried browsing.
 ///
 /// **The two modes share the cover on purpose**: duration, favourite and

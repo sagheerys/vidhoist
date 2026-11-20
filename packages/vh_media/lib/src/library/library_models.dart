@@ -183,8 +183,7 @@ enum LibraryViewMode {
   /// Two columns with a 16:9 cover, for quick visual scanning.
   grid,
 
-  /// **One column with a wide cover** (asked 2026-09-08, the YouTube
-  /// pattern): the largest cover possible for the fewest items — for
+  /// **One column with a wide cover** (the YouTube pattern): the largest cover possible for the fewest items — for
   /// unhurried browsing, not for searching.
   cards,
 }

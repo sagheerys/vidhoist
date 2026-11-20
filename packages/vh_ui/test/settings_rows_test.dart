@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-/// **The settings home's rows** (approved mock-up, 2026-10-14): the value
+/// **The settings home's rows**: the value
 /// under the title, a chevron where a page is pushed, and the open
 /// section lit on the tablet's list, where nothing is pushed.
 void main() {

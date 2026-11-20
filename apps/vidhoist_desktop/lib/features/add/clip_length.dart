@@ -21,7 +21,7 @@ const lengthWait = Duration(seconds: 20);
 
 /// Whether the length of [link] is read as soon as the add screen holds
 /// it, before a stretch is asked for, so the times are held to it from the
-/// first one typed (asked 2026-11-18). The download starts from that same
+/// first one typed. The download starts from that same
 /// probe, so a link downloaded whole costs nothing more. A playlist is not
 /// one video; a short link waits to be followed, or for a stretch.
 bool readsLength(String link, bool clipOn) =>

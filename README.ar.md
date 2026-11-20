@@ -9,7 +9,7 @@
 </p>
 
 <p align="center" dir="rtl">
-  <a href="README.md">English</a> · <strong>العربية</strong>
+  <a href="https://sagheerys.github.io/vidhoist/ar/">صفحة المشروع</a> · <a href="README.md">English</a> · <strong>العربية</strong>
 </p>
 
 <div align="center">
@@ -180,6 +180,13 @@ yt-dlp داخل التطبيق.** الصق الرابط أو شاركه، واخ
 </details>
 
 ## لقطات
+
+**تنزيل من أوله إلى آخره**: رابط يُلصق، وجودة تُختار، والمقطع في المكتبة بعد
+لحظات:
+
+<p align="center">
+  <img src="docs/screenshots/download-ar.gif" width="360" alt="رابط يُلصق في VidHoist، واختيار «حتى 1080p»، والتنزيل يملأ بطاقته، ثم المقطع في أعلى المكتبة">
+</p>
 
 **المشغّلات والكمبيوتر**: مشغّل الموسيقى نهاراً، ومكتبة الكمبيوتر المقترن على
 الجوال، ومقطع ليلاً، واللغات الاثنتا عشرة:

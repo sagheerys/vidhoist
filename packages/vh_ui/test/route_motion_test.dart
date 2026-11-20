@@ -9,7 +9,7 @@ import 'package:vh_ui/vh_ui.dart';
 ///
 /// They ran at Flutter's defaults (a sheet 250/200, a dialog fading 150
 /// both ways, a notice 250, a page 300 with the one beneath standing
-/// still). The plan gives each its own: a sheet 320 up and 200 down, a
+/// still). The design gives each its own: a sheet 320 up and 200 down, a
 /// dialog growing from 0.96 in 240 and gone in 160, a notice out in 160,
 /// a page in 240 and back in 200 with the page beneath stepping back, and
 /// Android's back swipe followed under the finger.

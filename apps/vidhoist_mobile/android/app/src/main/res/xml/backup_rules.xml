@@ -2,18 +2,19 @@
 <!--
   Android's automatic backup, Android 11 and below: `fullBackupContent`.
 
-  **A latent defect.** The manifest never mentioned `allowBackup`, and the
-  default is **on**. So Google was copying every `SharedPreferences` file to
-  the user's account — **including the secure-storage file**,
-  `FlutterSecureStorage.xml`. Its contents are encrypted with a key that
-  lives in **this device's** Keystore and does not travel with it, so the
-  file arrives on the new phone without its key and reading a secret (the
-  server password) throws on first launch instead of returning "nothing".
+  Backup is on by default, so Google copies the app's files to the user's
+  account unless told otherwise. Three things stay behind:
 
-  The exclusion below fixes that: ordinary data is backed up, secrets are
-  not. Losing them is intended — the user re-enters the password once, and
-  it never enters our own backups either (ENGINE.md, Storage).
+  * `FlutterSecureStorage.xml`: encrypted with a key that lives in this
+    device's Keystore and does not travel, so on a new phone the file
+    arrives without its key and reading a secret throws instead of
+    returning nothing.
+  * `cookies.txt` and the WebView's own store (`app_webview/`): the
+    sign-ins to sites. They stay on this phone, where yt-dlp reads them,
+    and are sent nowhere else, a cloud backup included.
 -->
 <full-backup-content>
     <exclude domain="sharedpref" path="FlutterSecureStorage.xml"/>
+    <exclude domain="file" path="cookies.txt"/>
+    <exclude domain="root" path="app_webview/"/>
 </full-backup-content>

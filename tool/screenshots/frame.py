@@ -65,7 +65,12 @@ def status_bar(draw, width, ink, time='10:24'):
 
 def phone(name):
     """The shot in a phone body, transparent around it."""
-    screen = shot(name).copy()
+    return phone_of(shot(name))
+
+
+def phone_of(image):
+    """[image], a phone screen, in the phone body."""
+    screen = image.convert('RGB').copy()
     w, h = screen.size
     draw = ImageDraw.Draw(screen)
     top_dark = is_dark(screen, (0, 0, w, STATUS_H))

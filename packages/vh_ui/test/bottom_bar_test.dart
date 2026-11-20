@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 /// **Guard: the bar's pill travels, and the sections fade into each
 /// other.** Material's bar grew a new pill under each destination and the
-/// shell cut from one section to the next in a single frame; the plan has
+/// shell cut from one section to the next in a single frame; the design has
 /// one pill sliding in 240 and the sections crossing in 160 each way.
 void main() {
   const items = [

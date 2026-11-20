@@ -76,8 +76,8 @@ class VhPalette {
   /// Is this a night palette? Only the mini player reads it today.
   final bool night;
 
-  /// **The mini player is inverted by day and consistent by night**
-  /// (decision 2026-09-05, after seeing it on a device).
+  /// **The mini player is inverted by day and consistent by night**,
+  /// chosen after seeing it on a device.
   ///
   /// It used to be inverted in both: an elegant dark bar under a light
   /// interface by day, and a **bright pale bar** under a black screen by
@@ -94,8 +94,7 @@ class VhPalette {
   static const Color serverCardBg = Color(0xFF211E1B);
   static const Color serverCardInk = Color(0xFFF0EBE4);
 
-  // Always-dark constants. Full review 2026-09-02 found these hard-coded in
-  // the screens, against the rule that every colour comes from tokens, no
+  // Always-dark constants. They were once hard-coded in the screens, against the rule that every colour comes from tokens, no
   // literals.
 
   /// The far end of the charcoal playlist-card gradient, lighter than

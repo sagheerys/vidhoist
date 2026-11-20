@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// The words Android shows before Flutter starts: the launcher shortcuts and
 /// the engine's notification. They are held to the app's own wording
 /// (packages/vh_ui/test/wording_test.dart): one verb for downloading, one
-/// name for shorts, and VidHoist with a capital H (asked 2026-11-18).
+/// name for shorts, and VidHoist with a capital H.
 void main() {
   const main = 'android/app/src/main';
 

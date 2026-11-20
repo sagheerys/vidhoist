@@ -95,9 +95,15 @@ void main() {
     return c;
   }
 
+  /// The hash GitHub records for what [served] holds now: a release always
+  /// carries one, and one without it is refused before any download.
+  String digestOfServed() => 'sha256:${sha256.convert(served)}';
+
   test('**the guard**: a newer version is downloaded as the installer and '
       'started, never the phone app\'s APK', () async {
-    final c = containerFor(latest('0.2.0', setupUrl()));
+    final c = containerFor(
+      latest('0.2.0', setupUrl(), digest: digestOfServed()),
+    );
     final update = c.read(updateProvider.notifier);
     await update.checkNow();
     expect(c.read(updateProvider).phase, UpdatePhase.available);
@@ -141,7 +147,10 @@ void main() {
 
   test('what is not an installer is never started', () async {
     served = utf8.encode('<html>sign in</html>');
-    final c = containerFor(latest('0.2.0', setupUrl(), size: 0));
+    // Its hash matches: the page is refused for what it is.
+    final c = containerFor(
+      latest('0.2.0', setupUrl(), size: 0, digest: digestOfServed()),
+    );
     final update = c.read(updateProvider.notifier);
     await update.checkNow();
     await update.install();
@@ -151,7 +160,10 @@ void main() {
 
   test('an installer Windows would not start says so', () async {
     launches = false;
-    final c = containerFor(latest('0.2.0', setupUrl()));
+    // The file is the release's, so what fails is the start alone.
+    final c = containerFor(
+      latest('0.2.0', setupUrl(), digest: digestOfServed()),
+    );
     final update = c.read(updateProvider.notifier);
     await update.checkNow();
     await update.install();

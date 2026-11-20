@@ -51,7 +51,7 @@ void main() {
     /// with every deletion.
     group('removeKeysAndFiles', () {
       late Directory dir;
-      setUp(() => dir = Directory.systemTemp.createTempSync('mtf_art_'));
+      setUp(() => dir = Directory.systemTemp.createTempSync('vh_art_'));
       tearDown(() {
         if (dir.existsSync()) dir.deleteSync(recursive: true);
       });

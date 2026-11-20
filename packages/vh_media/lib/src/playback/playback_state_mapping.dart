@@ -40,7 +40,7 @@ List<MediaControl> vhMediaControls({
   vhCloseControl(labels),
 ];
 
-/// **Stop, drawn as a close mark** (design review 2026-09-25): the square
+/// **Stop, drawn as a close mark**: the square
 /// stop icon looked out of place among music players, while the button
 /// itself is needed, because a paused session keeps its notification. Same
 /// action, another icon; the drawable ships in each app's resources.

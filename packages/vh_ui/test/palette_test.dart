@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **The mini player guard** (decision 2026-09-05): inversion is a
+/// **The mini player guard**: inversion is a
 /// daylight idea, a dark bar under a cream interface. At night it became a
 /// bright pale bar under a black screen, a glare in a dark room.
 void main() {

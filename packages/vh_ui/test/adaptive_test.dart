@@ -178,7 +178,7 @@ void main() {
         lessThan(tester.getRect(find.byType(VhBottomBar)).top),
       );
 
-      // The approved mock-up (2026-10-10): the mini player spans the
+      // As designed: the mini player spans the
       // content beside the rail, not a centred column of the screen.
       await pump(tester, const Size(1280, 800), accessories: const [mini]);
       final wide = tester.getRect(find.byKey(const Key('mini')));

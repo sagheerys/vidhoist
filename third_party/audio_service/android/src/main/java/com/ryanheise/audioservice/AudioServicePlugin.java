@@ -143,7 +143,7 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
         bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
     }
 
-    /** Vidhoist patch: the live handler interface, or null with no engine attached. */
+    /** VidHoist patch: the live handler interface, or null with no engine attached. */
     static AudioService.ServiceListener currentListener() {
         return audioHandlerInterface;
     }

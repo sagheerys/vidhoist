@@ -92,8 +92,10 @@ void main() {
         .where((file) => file.isNotEmpty && !file.startsWith('third_party/'));
     final naming = <String>[
       for (final file in documents)
+        // Spelt in two halves, so this file does not name it either.
         if (RegExp(
-          'vidhoist',
+          'me'
+          'tube',
           caseSensitive: false,
         ).hasMatch(File(path(file)).readAsStringSync()))
           file,
@@ -143,7 +145,8 @@ void main() {
       'is a photo of a phone', () {
     final made = RegExp(
       r'/((phone|windows|tablet)-[a-z]+-(ar|en)-(day|night)\.png'
-      r'|(hero|more|tablet|desktop|desktop-night)-(ar|en)\.jpg)$',
+      r'|(hero|more|tablet|desktop|desktop-night)-(ar|en)\.jpg'
+      r'|download-(ar|en)\.gif)$',
     );
     for (final readme in ['README.md', 'README.ar.md']) {
       final text = File(path(readme)).readAsStringSync();

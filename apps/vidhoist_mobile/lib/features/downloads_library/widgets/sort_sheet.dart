@@ -40,9 +40,8 @@ class _SortSheet extends ConsumerWidget {
 
     return SingleChildScrollView(
       child: Padding(
-        // The last option used to fall under the three navigation buttons
-        // (field
-        // report 2026-09-04); a sheet always reaches the screen edge.
+        // The last option used to fall under the three navigation buttons;
+        // a sheet always reaches the screen edge.
         padding: EdgeInsets.fromLTRB(
           VhSpace.xl,
           VhSpace.lg,

@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 
-/// **The language picker screen** (requested 2026-09-08).
+/// **The language picker screen**.
 ///
 /// The choice used to be a segmented button with three segments, and
 /// `SegmentedButton` divides the width by the number of options: three fit

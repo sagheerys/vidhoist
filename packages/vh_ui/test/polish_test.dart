@@ -4,7 +4,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import 'icon_finder.dart';
 
-/// **Polish guards** (requested 2026-09-04). Motion is glimpsed, not
+/// **Polish guards**. Motion is glimpsed, not
 /// watched: durations come from `VhMotion`, and none of it runs when the
 /// system asks to reduce motion.
 void main() {

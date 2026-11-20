@@ -147,7 +147,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             ),
             const SizedBox(height: VhSpace.lg),
             // **The copies are shown rather than hidden behind a button**
-            // (review 2026-09-05): two thirds of the screen was empty and the
+            //: two thirds of the screen was empty and the
             // only useful information, when each copy was made and how large
             // it is, sat behind a sheet with nothing to hint at it.
             VhSectionHeader(title: l10n.restoreData),

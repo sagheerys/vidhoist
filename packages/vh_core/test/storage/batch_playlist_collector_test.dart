@@ -1,7 +1,7 @@
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
-/// **Asked 2026-09-02:** "when I download a course from YouTube, are they
+/// "when I download a course from YouTube, are they
 /// grouped together?" The answer was no: `isBatchMember` only ordered the
 /// queue.
 void main() {

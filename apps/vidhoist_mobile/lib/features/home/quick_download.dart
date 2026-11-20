@@ -39,9 +39,8 @@ String qualityLabel(VhLocalizations l10n, Quality quality) => switch (quality) {
 /// meaning of "quick". Instead there is an action in the snack bar that
 /// cancels the task and opens the sheet with the same URL.
 ///
-/// **The setting is gated here rather than at the call site** (field
-/// report 2026-09-04: "quick download is always on even though I turned it
-/// off"). The condition used to be written into the share path alone,
+/// **The setting is gated here rather than at the call site**: quick
+/// download looked always on even when turned off. The condition used to be written into the share path alone,
 /// while the floating add button and the launcher shortcut downloaded
 /// immediately without asking, so the setting looked to have no effect.
 /// Gating inside the function makes forgetting it impossible.

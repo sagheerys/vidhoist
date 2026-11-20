@@ -4,7 +4,7 @@ import 'package:vidhoist_mobile/features/playlists/widgets/playlist_cards.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **Requested 2026-09-08**: a playlist cover was always two cells, so a
+/// a playlist cover was always two cells, so a
 /// playlist of twenty items was represented by two covers. Now it goes up
 /// to four, **and the progression is deliberate**: one fills the cover, and
 /// three means one large and two small, rather than a grid with an empty

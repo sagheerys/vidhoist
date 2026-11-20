@@ -21,7 +21,7 @@ import 'device_matrix.dart';
 import 'fake_audio_port.dart';
 
 /// The library's search finding what was **said** in a clip, from the
-/// subtitle files its download wrote (asked 2026-11-19: the phone showed a
+/// subtitle files its download wrote (the phone showed a
 /// clip's transcript under the player and could not search it).
 void main() {
   const vtt = '''

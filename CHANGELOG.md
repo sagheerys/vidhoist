@@ -6,8 +6,12 @@ All notable changes to VidHoist. The format follows
 
 ## [Unreleased]
 
-The first public release of VidHoist, for Android and Windows, in English
-and Arabic. Everything here is new.
+## [1.1.0] - 2026-11-20
+
+The first public release of VidHoist, for Android and Windows, in twelve
+languages: English, Arabic, Spanish, Portuguese (Brazil), French, German,
+Turkish, Russian, Indonesian, Persian, Urdu and Hindi, each following the
+device's language unless another is chosen. Everything here is new.
 
 ### Downloading
 - yt-dlp built into the app: Python, yt-dlp and ffmpeg inside the Android
@@ -60,7 +64,8 @@ and Arabic. Everything here is new.
   or SRT) and the listening room.
 - Following channels, on Windows and on the phone: each new video downloads
   by itself at the quality, in the folder and through the title filter
-  chosen.
+  chosen. The phone can also check while it is closed, about every six
+  hours, and say what is new.
 - A small video window, dragging a clip out to Explorer, another player,
   the tray, starting with Windows, the Recycle Bin for deleted clips, and
   keyboard shortcuts throughout.
@@ -70,6 +75,8 @@ and Arabic. Everything here is new.
 - Plain JSON backups with no secret, the last seven kept beside the
   downloads; a phone's backup restores on Windows and the other way round.
 - Self-update from this repository's releases, installed only when the file
-  matches the SHA-256 GitHub records for it.
+  matches the SHA-256 GitHub records for it, and refused when there is none.
+- Site sign-ins stay on the phone: Android's cloud backup and transfer to a
+  new phone leave them out.
 - A diagnostic log scrubbed of links, paths, addresses and credentials
   before it is shared.

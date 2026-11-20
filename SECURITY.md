@@ -35,7 +35,9 @@ small and worth naming:
   installer. Anything that gets a different file installed is a real issue.
 - **Download on the computer.** When it is turned on, the Windows app listens
   for the paired phone over HTTPS with its own certificate, pinned on the
-  phone; every request without a paired phone's key gets an empty 404. To
+  phone. A request without a paired phone's key gets an empty 404, and
+  one that names a phone but fails its key gets 401, so a phone that was
+  unpaired knows to pair again. To
   play a clip from the computer, the phone opens a proxy on 127.0.0.1 with a
   random token per run. Anything that reaches the computer without pairing,
   or the proxy from another app, is a real issue.

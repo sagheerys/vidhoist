@@ -135,8 +135,7 @@ class _ReelsProgressBarState extends State<ReelsProgressBar> {
                     // reach inside them: LinearProgressIndicator reads the
                     // ambient direction to paint, so with only the Row
                     // pinned the line still filled from the right in
-                    // Arabic while the drag counted from the left (field
-                    // report 2026-09-25).
+                    // Arabic while the drag counted from the left.
                     return Directionality(
                       textDirection: TextDirection.ltr,
                       child: Row(

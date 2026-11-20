@@ -14,8 +14,8 @@ Future<void> landOnLibrary(StatefulNavigationShell shell) async {
   await WidgetsBinding.instance.endOfFrame;
 }
 
-/// **Whether a shared link is followed before anything shows** (field
-/// report 2026-11-17: TikTok's sheet came seconds late). Following a short
+/// **Whether a shared link is followed before anything shows**: TikTok's
+/// sheet once came seconds late. Following a short
 /// link costs up to five seconds; the sheet follows it itself once open.
 /// Waiting is worth it only when the link may be a playlist, or when it
 /// downloads at once with no sheet, under the address it will be filed by.

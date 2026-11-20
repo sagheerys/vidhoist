@@ -11,7 +11,7 @@ import 'device_matrix.dart';
 
 import 'icon_finder.dart';
 
-/// **Requested 2026-09-08**: the choice was a `SegmentedButton` with three
+/// the choice was a `SegmentedButton` with three
 /// segments, and it divides the width by their number, so three fit 360dp
 /// **and six break**, while the declared plan is to support the common
 /// languages.

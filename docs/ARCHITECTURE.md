@@ -45,7 +45,7 @@ and no package imports an app.
 | `vh_core` | `DownloadBackend` (implemented by each app), `LocalDownloadEngine`, `LocalHistoryStore`, `LocalPendingStore`, the models, storage, backup, sync, URL tools, self-update, the link to the computer (`pc_link`: protocol, certificate, server, pinned client) | **Pure Dart. No Flutter import.** Tested with `dart test` |
 | `vh_media` | Audio handler, video playback, playback stores, the library model | Plays files on the device |
 | `vh_ui` | Design tokens, themes, shared widgets, localisation | Knows no engine and no app |
-| `vh_transcripts` | Subtitle parsing, Arabic-aware search, the transcript store, `YtDlpSource` for clips already in the library | **Pure Dart** |
+| `vh_transcripts` | Subtitle parsing, Arabic-aware search, the transcript store | **Pure Dart** |
 | `apps/*` | Screens, routing, dependency injection, the platform's way of running yt-dlp | May depend on the packages above |
 
 Three consequences worth remembering:
@@ -53,8 +53,8 @@ Three consequences worth remembering:
 - **One reading of yt-dlp.** A command line is built by `CommandBuilder`,
   and what comes back is parsed by `vh_ytdlp` alone. The apps only start
   the process and hand its lines to `readDownloadRun` (in `vh_core`, which
-  uses `vh_ytdlp`'s parsers). A download and the transcript backfill
-  classify an error the same way (`ErrorClassifier`).
+  uses `vh_ytdlp`'s parsers), and every failure is classified in one place
+  (`ErrorClassifier`).
 - **No hard-coded UI strings.** Every user-visible string lives in
   `packages/vh_ui/lib/src/l10n/app_en.arb` and `app_ar.arb`, and both
   files change in the same commit. A parity test enforces it.

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <strong>English</strong> · <a href="README.ar.md">العربية</a>
+  <a href="https://sagheerys.github.io/vidhoist/">Project page</a> · <strong>English</strong> · <a href="README.ar.md">العربية</a>
 </p>
 
 <div align="center">
@@ -196,6 +196,13 @@ secured: [docs/PC-LINK.md](docs/PC-LINK.md).
 </details>
 
 ## Screenshots
+
+**A download, start to finish** — a link pasted, a quality picked, and the
+clip in the library a moment later:
+
+<p align="center">
+  <img src="docs/screenshots/download-en.gif" width="360" alt="A link pasted into VidHoist, Up to 1080p picked, the download filling its card, and the clip arriving at the top of the library">
+</p>
 
 **The players and the computer** — the music player by day, the paired
 computer's library on the phone, a video at night, and the twelve languages:

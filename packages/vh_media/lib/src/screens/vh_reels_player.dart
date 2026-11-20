@@ -52,7 +52,7 @@ class VhReelsPlayer extends StatefulWidget {
   final bool Function(PlaylistItem item)? isFavorite;
 
   /// **The heart button in the side column.** `null` means it is not shown
-  /// at all. Requested 2026-09-04: the "add to…" button covers it.
+  /// at all. The "add to…" button covers it.
   final void Function(PlaylistItem item)? onToggleFavorite;
 
   /// **The double tap** stays the favourite shortcut even when the heart is
@@ -106,7 +106,7 @@ class _VhReelsPlayerState extends State<VhReelsPlayer> {
   /// voice.
   int _generation = 0;
 
-  /// **The chrome hides after a moment** (requested 2026-09-02). One rule
+  /// **The chrome hides after a moment**. One rule
   /// with no hidden modes: any touch shows the chrome **and toggles
   /// playback**, then it hides after [_chromeLinger] if the clip is still
   /// running. Pausing pins it: someone who paused wants to read and act,

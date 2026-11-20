@@ -77,7 +77,7 @@ void main() {
     expect(to.text, '16:52');
   });
 
-  // Asked 2026-11-17: held at the end, the number just stopped, saying
+  // Held at the end, the number just stopped, saying
   // nothing.
   testWidgets('**the guard**: an arrow pressed at the end shakes the time '
       'and reddens it for a moment', (tester) async {
@@ -137,7 +137,7 @@ void main() {
     expect(to.text, '11:00');
   });
 
-  // Asked 2026-11-18: the end stepped up from nothing read 1:00, and the
+  // The end stepped up from nothing read 1:00, and the
   // empty start was then refused at Start.
   testWidgets('**the guard**: the end stepped with no start starts the '
       'stretch at 0:00', (tester) async {
@@ -175,7 +175,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
   });
 
-  // Asked 2026-11-18: before the length came, any time could be typed,
+  // Before the length came, any time could be typed,
   // and the limit only held from then on.
   group('the length arriving after the times were typed', () {
     Future<
