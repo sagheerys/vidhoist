@@ -136,13 +136,18 @@ void main() {
   });
 
   /// The old screenshots were taken on a phone and showed other people's
-  /// videos; the new ones are made by the apps' tests. A picture the pages
-  /// name and the folder lacks shows as a broken image on GitHub.
+  /// videos; the new ones are made by the apps' tests and framed by
+  /// `tool/screenshots/frame.py`. A picture the pages name and the folder
+  /// lacks shows as a broken image on GitHub.
   test('every picture the READMEs show is in the repository, and none '
       'is a photo of a phone', () {
+    final made = RegExp(
+      r'/((phone|windows)-[a-z]+-(ar|en)-(day|night)\.png'
+      r'|(hero|more|desktop|desktop-night)-(ar|en)\.jpg)$',
+    );
     for (final readme in ['README.md', 'README.ar.md']) {
       final text = File(path(readme)).readAsStringSync();
-      final shown = RegExp(r'src="(docs/screenshots/[^"]+)"')
+      final shown = RegExp(r'(?:src="|\]\()(docs/screenshots/[^")]+)')
           .allMatches(text)
           .map((m) => m.group(1)!)
           .toList();
@@ -151,8 +156,8 @@ void main() {
         expect(File(path(picture)).existsSync(), isTrue, reason: picture);
         expect(
           picture,
-          matches(RegExp(r'/(phone|windows)-[a-z]+-(ar|en)-(day|night)\.png$')),
-          reason: '$picture is not one the screenshot tests make',
+          matches(made),
+          reason: '$picture is not one the screenshot tools make',
         );
       }
     }

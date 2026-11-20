@@ -24,6 +24,14 @@ yt-dlp داخل التطبيق.** الصق الرابط أو شاركه، واخ
 باثنتي عشرة لغة، من اليمين إلى اليسار أولاً، نهاراً وليلاً. برنامج حر
 برخصة GPL.
 
+<p align="center">
+  <img src="docs/screenshots/hero-ar.jpg" alt="VidHoist على أندرويد: المكتبة، ومقطع يعمل، ومشغّل الموسيقى ليلاً بنصّه، والقنوات المتابَعة">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/desktop-ar.jpg" alt="VidHoist على ويندوز: مقطع يعمل ونصّه بجانبه، والمكتبة شبكةً من الأغلفة">
+</p>
+
 | | **VidHoist لأندرويد** | **VidHoist لويندوز** |
 |---|---|---|
 | يعمل على | أندرويد 7.0 فما فوق، جوالات وأجهزة لوحية | ويندوز 10 و11 (64-بت) |
@@ -142,26 +150,25 @@ yt-dlp داخل التطبيق.** الصق الرابط أو شاركه، واخ
 
 ## لقطات
 
-على أندرويد:
+<details>
+<summary><strong>شاشات أخرى</strong>: المشغّلات، والمكتبة ليلاً، واللغات الاثنتا عشرة، وويندوز ليلاً</summary>
+<br>
 
-<p>
-  <img src="docs/screenshots/phone-library-ar-day.png" width="200" alt="المكتبة نهاراً">
-  <img src="docs/screenshots/phone-channels-ar-night.png" width="200" alt="القنوات المتابَعة والفحص والتطبيق مغلق، ليلاً">
-  <img src="docs/screenshots/phone-library-en-night.png" width="200" alt="المكتبة بالإنجليزية ليلاً">
-  <img src="docs/screenshots/phone-languages-ar-day.png" width="200" alt="اثنتا عشرة لغة">
-</p>
+**المشغّلات والمكتبة ليلاً**: مشغّل الموسيقى نهاراً، ومقطع ليلاً، والمكتبة
+ليلاً، واللغات الاثنتا عشرة:
 
-على ويندوز:
+![مشغّل الموسيقى نهاراً، ومقطع ليلاً، والمكتبة ليلاً، وقائمة اللغات](docs/screenshots/more-ar.jpg)
 
-<p>
-  <img src="docs/screenshots/windows-library-ar-day.png" width="420" alt="المكتبة على ويندوز نهاراً">
-  <img src="docs/screenshots/windows-clip-ar-night.png" width="420" alt="مقطع ونصّه، ليلاً">
-</p>
+**ويندوز ليلاً**: مقطع ونصّه، ومشغّل الموسيقى:
 
-كل شاشة باللغتين نهاراً وليلاً في [docs/screenshots](docs/screenshots). ترسمها
-ودجات التطبيقين نفسها بمقاطع وأغلفة مصنوعة لها، فلا تظهر فيها مقاطع أحد؛
-والأمر `VH_SHOTS=1 flutter test test/screenshots` في أي من التطبيقين يعيد
-صنعها.
+![VidHoist على ويندوز ليلاً: مقطع ونصّه، ومشغّل الموسيقى](docs/screenshots/desktop-night-ar.jpg)
+
+</details>
+
+كل شاشة وحدها، باللغتين ونهاراً وليلاً، في [docs/screenshots](docs/screenshots).
+المقاطع والقنوات والأغلفة فيها مصنوعة لهذا الغرض، فلا تظهر فيها مقاطع أحد.
+ترسمها ودجات التطبيقين نفسها: `VH_SHOTS=1 flutter test test/screenshots` في
+أي من التطبيقين، ثم `python tool/screenshots/frame.py` للإطارات.
 
 ## التنزيل
 
