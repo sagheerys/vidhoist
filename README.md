@@ -336,7 +336,7 @@ keep their own licences.
 The programs each app carries (FFmpeg, Python, yt-dlp, libmpv and others),
 their licences and their sources are listed in
 [docs/THIRD-PARTY.md](docs/THIRD-PARTY.md); the source of every GPL and LGPL
-one is attached to each release.
+one is in a "Third-party sources" release beside each app release.
 
 VidHoist is not affiliated with yt-dlp or with any site. Download only what
 you have the right to, and respect the terms of the sites you use.
