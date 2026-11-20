@@ -172,6 +172,9 @@ h1 em {
 .file-kind { color: var(--accent); font-weight: 500; font-size: 14px; }
 .file-note { color: var(--ink2); font-size: 14px; margin-top: 6px; }
 .signed { color: var(--ink3); font-size: 14px; margin-top: 24px; }
+/* The badge is Obtainium's own, kept as they draw it. */
+.also { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-top: 24px; color: var(--ink2); font-size: 15px; }
+.also img { width: 194px; }
 
 /* The foot */
 .foot { border-top: 1px solid var(--line); padding: 40px 0 56px; }

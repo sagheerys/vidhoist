@@ -234,6 +234,11 @@ From the [latest release](https://github.com/sagheerys/vidhoist/releases/latest)
 | `Vidhoist-<version>-android-armeabi-v7a.apk` | older 32-bit devices |
 | `Vidhoist-<version>-windows-x64-setup.exe` | Windows 10 and 11 |
 
+On Android, [Obtainium](https://obtainium.imranr.dev) can also follow the
+releases here and install each new one:
+
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/sagheerys/vidhoist"><img src="docs/badges/obtainium.png" width="200" alt="Get it on Obtainium"></a>
+
 Both apps check for a new release and offer it in place; nothing else is
 needed to stay up to date. The APKs are signed with VidHoist's own key,
 whose SHA-256 certificate fingerprint is

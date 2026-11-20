@@ -217,6 +217,11 @@ yt-dlp داخل التطبيق.** الصق الرابط أو شاركه، واخ
 | `Vidhoist-<version>-android-armeabi-v7a.apk` | الأجهزة القديمة بنظام 32-بت |
 | `Vidhoist-<version>-windows-x64-setup.exe` | ويندوز 10 و11 |
 
+وعلى أندرويد يستطيع [Obtainium](https://obtainium.imranr.dev) أيضاً أن يتابع
+الإصدارات هنا ويثبّت كل جديد منها:
+
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/sagheerys/vidhoist"><img src="docs/badges/obtainium.png" width="200" alt="احصل عليه عبر Obtainium"></a>
+
 يفحص التطبيقان الإصدار الجديد ويعرضانه في مكانهما، فلا تحتاج شيئاً آخر
 لتبقى محدَّثاً. ملفات APK موقّعة بمفتاح VidHoist الخاص، وبصمة شهادته
 SHA-256 هي:
