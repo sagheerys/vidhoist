@@ -61,7 +61,7 @@ dependencies:
   # smtc_windows ships Rust bindings generated with 2.11.1 and refuses any
   # other runtime at start-up; pub would otherwise pick the newest.
   flutter_rust_bridge: 2.11.1
-  window_manager: 0.5.2
+  window_manager: 0.7.0
   screen_retriever: 0.2.2
   # Both drag directions: desktop_drop cannot share the window's single OLE
   # drop registration with this package, so it is not used at all.
