@@ -205,11 +205,16 @@ class VhReelsInfo extends StatelessWidget {
         ),
         if (subtitle != null && subtitle!.isNotEmpty) ...[
           const SizedBox(height: VhSpace.xxs),
-          Text(
-            subtitle!,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: text.labelSmall!.copyWith(color: ink.withValues(alpha: 0.7)),
+          // Faded whole, over a picture no opaque grey can match: in a
+          // translucent ink its joined Arabic letters knotted.
+          Opacity(
+            opacity: 0.7,
+            child: Text(
+              subtitle!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: text.labelSmall!.copyWith(color: ink),
+            ),
           ),
         ],
       ],

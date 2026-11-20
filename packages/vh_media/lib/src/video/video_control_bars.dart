@@ -81,12 +81,17 @@ class VhVideoTopBar extends StatelessWidget {
                 ),
               ),
               if (subtitleParts.isNotEmpty)
-                Text(
-                  subtitleParts.join(' · '),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: text.labelSmall!.copyWith(
-                    color: VhPalette.serverCardInk.withValues(alpha: 0.45),
+                // Faded whole, over a picture no opaque grey can match: in
+                // a translucent ink its joined Arabic letters knotted.
+                Opacity(
+                  opacity: 0.45,
+                  child: Text(
+                    subtitleParts.join(' · '),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: text.labelSmall!.copyWith(
+                      color: VhPalette.serverCardInk,
+                    ),
                   ),
                 ),
             ],

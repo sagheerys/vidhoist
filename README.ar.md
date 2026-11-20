@@ -142,12 +142,26 @@ yt-dlp داخل التطبيق.** الصق الرابط أو شاركه، واخ
 
 ## لقطات
 
+على أندرويد:
+
 <p>
-  <img src="docs/screenshots/android-subtitles-ar.png" width="200" alt="حجم الترجمة وخلفيتها">
-  <img src="docs/screenshots/android-transcript-ar-dark.png" width="200" alt="نص المقطع ليلاً">
-  <img src="docs/screenshots/android-add.png" width="200" alt="إضافة رابط واختيار الجودة">
-  <img src="docs/screenshots/android-transcript.png" width="200" alt="نص المقطع تحت المشغّل">
+  <img src="docs/screenshots/phone-library-ar-day.png" width="200" alt="المكتبة نهاراً">
+  <img src="docs/screenshots/phone-channels-ar-night.png" width="200" alt="القنوات المتابَعة والفحص والتطبيق مغلق، ليلاً">
+  <img src="docs/screenshots/phone-library-en-night.png" width="200" alt="المكتبة بالإنجليزية ليلاً">
+  <img src="docs/screenshots/phone-languages-ar-day.png" width="200" alt="اثنتا عشرة لغة">
 </p>
+
+على ويندوز:
+
+<p>
+  <img src="docs/screenshots/windows-library-ar-day.png" width="420" alt="المكتبة على ويندوز نهاراً">
+  <img src="docs/screenshots/windows-clip-ar-night.png" width="420" alt="مقطع ونصّه، ليلاً">
+</p>
+
+كل شاشة باللغتين نهاراً وليلاً في [docs/screenshots](docs/screenshots). ترسمها
+ودجات التطبيقين نفسها بمقاطع وأغلفة مصنوعة لها، فلا تظهر فيها مقاطع أحد؛
+والأمر `VH_SHOTS=1 flutter test test/screenshots` في أي من التطبيقين يعيد
+صنعها.
 
 ## التنزيل
 

@@ -150,12 +150,27 @@ secured: [docs/PC-LINK.md](docs/PC-LINK.md).
 
 ## Screenshots
 
+On Android:
+
 <p>
-  <img src="docs/screenshots/android-add.png" width="200" alt="Adding a link: pick a quality and start">
-  <img src="docs/screenshots/android-transcript.png" width="200" alt="The transcript under the player, the line being said lit">
-  <img src="docs/screenshots/android-subtitles-ar.png" width="200" alt="Subtitle size and background, in Arabic">
-  <img src="docs/screenshots/android-transcript-ar-dark.png" width="200" alt="The transcript at night, in Arabic">
+  <img src="docs/screenshots/phone-library-en-day.png" width="200" alt="The library, by day">
+  <img src="docs/screenshots/phone-channels-en-night.png" width="200" alt="Followed channels and the check while the app is closed, at night">
+  <img src="docs/screenshots/phone-library-ar-night.png" width="200" alt="The library in Arabic, at night">
+  <img src="docs/screenshots/phone-languages-en-day.png" width="200" alt="Twelve languages">
 </p>
+
+On Windows:
+
+<p>
+  <img src="docs/screenshots/windows-library-en-day.png" width="420" alt="The library on Windows, by day">
+  <img src="docs/screenshots/windows-clip-en-night.png" width="420" alt="A clip with its transcript, at night">
+</p>
+
+Every screen in both languages, by day and by night, is in
+[docs/screenshots](docs/screenshots). They are drawn by the apps' own
+widgets with sample clips and covers made for them, so they show nobody's
+videos; `VH_SHOTS=1 flutter test test/screenshots` in either app makes them
+again.
 
 ## Download
 

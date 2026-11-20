@@ -21,7 +21,7 @@ class VhChapterLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final at = vhChapterAt(chapters, position);
     if (at == null) return const SizedBox.shrink();
-    final ink = VhPalette.serverCardInk.withValues(alpha: 0.85);
+    const ink = VhPalette.serverCardInk;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(VhRadius.field),
@@ -30,28 +30,33 @@ class VhChapterLabel extends StatelessWidget {
           horizontal: VhSpace.xs,
           vertical: VhSpace.xxs,
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: Text(
-                vhMetaLine([
-                  context.vhl.chapterNumber(at + 1),
-                  chapters[at].opening,
-                ]),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelSmall!
-                    .copyWith(color: ink),
+        // Faded whole, over a picture no opaque grey can match: in a
+        // translucent ink its joined Arabic letters knotted.
+        child: Opacity(
+          opacity: 0.85,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(
+                  vhMetaLine([
+                    context.vhl.chapterNumber(at + 1),
+                    chapters[at].opening,
+                  ]),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelSmall!
+                      .copyWith(color: ink),
+                ),
               ),
-            ),
-            VhIcon(
-              VhIcons.forward,
-              matchTextDirection: true,
-              size: 16,
-              color: ink,
-            ),
-          ],
+              const VhIcon(
+                VhIcons.forward,
+                matchTextDirection: true,
+                size: 16,
+                color: ink,
+              ),
+            ],
+          ),
         ),
       ),
     );

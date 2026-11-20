@@ -210,6 +210,9 @@ ThemeData vhTheme(
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: p.ink,
+        // Not Material's ink at .38: a translucent label knots where its
+        // Arabic letters join.
+        disabledForegroundColor: p.ink3,
         textStyle: body(13.5, FontWeight.w700),
       ),
     ),
