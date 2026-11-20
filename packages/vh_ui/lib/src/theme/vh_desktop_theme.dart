@@ -153,6 +153,8 @@ ThemeData vhDesktopTheme(
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: p.ink,
+        // Opaque, as on the phone.
+        disabledForegroundColor: p.ink3,
         textStyle: base.textTheme.labelLarge,
       ),
     ),

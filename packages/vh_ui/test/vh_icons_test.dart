@@ -176,7 +176,10 @@ void main() {
     expect(tester.getSize(find.byType(SvgPicture)), const Size(20, 20));
   });
 
-  testWidgets("a disabled button's dimmed icon theme dims the glyph", (
+  /// **The guard**: dimmed through its colour, each stroke was painted
+  /// alone and the ink laid twice where two met, bright knots by night.
+  /// The glyph is drawn opaque and dimmed whole.
+  testWidgets("a disabled button's dimmed icon theme dims the whole glyph", (
     tester,
   ) async {
     late BuildContext ctx;
@@ -193,7 +196,28 @@ void main() {
         ),
       ),
     );
-    expect(const VhIcon(VhIcons.close).svgIn(ctx), contains('#11223380'));
+    final svg = const VhIcon(VhIcons.close).svgIn(ctx);
+    expect(svg, contains('#112233'));
+    expect(svg, isNot(contains('#11223380')));
+    final dim = tester.widget<Opacity>(
+      find
+          .ancestor(of: find.byType(SvgPicture), matching: find.byType(Opacity))
+          .first,
+    );
+    expect(dim.opacity, closeTo(0.5, 0.01));
+  });
+
+  testWidgets('**the guard**: a translucent colour is laid on the whole '
+      'glyph, not on each stroke', (tester) async {
+    await tester.pumpWidget(
+      framed(const VhIcon(VhIcons.bug, color: Color(0x80F0EBE4))),
+    );
+    final dim = tester.widget<Opacity>(
+      find
+          .ancestor(of: find.byType(SvgPicture), matching: find.byType(Opacity))
+          .first,
+    );
+    expect(dim.opacity, closeTo(0.5, 0.01));
   });
 
   testWidgets("**the guard**: in Arabic a phone turns what Material's glyphs "

@@ -85,7 +85,10 @@ class VhPalette {
   /// so at night it follows the card instead.
   Color get miniBg => night ? card : ink;
   Color get miniInk => night ? ink : bg;
-  Color get miniInkMuted => (night ? ink : bg).withValues(alpha: 0.55);
+
+  /// Opaque over the bar, for the reason [ink2] is.
+  Color get miniInkMuted =>
+      Color.alphaBlend((night ? ink : bg).withValues(alpha: 0.55), miniBg);
 
   /// A charcoal that stays dark in both themes, for what sits over video.
   static const Color serverCardBg = Color(0xFF211E1B);
@@ -127,8 +130,13 @@ class VhPalette {
     // The quiet inks carry words, so each reads at 4.5:1 or more on every
     // ground (palette_contrast_test); ink2 rose with ink3 to stay a step
     // above it.
-    ink2: Color(0xC72B211B), // rgba(43,33,27,.78)
-    ink3: Color(0xA62B211B), // rgba(43,33,27,.65)
+    //
+    // **Opaque, as the ink at .78 and .67 over the ground would look.** At
+    // those alphas, every stroke of an icon and every joined Arabic letter
+    // was painted on its own, so where two met the ink was laid twice and
+    // showed as a brighter or darker knot.
+    ink2: Color(0xFF574F49),
+    ink3: Color(0xFF6D6661),
     line: Color(0x1F2B211B), // rgba(43,33,27,.12)
     line2: Color(0x332B211B), // rgba(43,33,27,.20)
     accent: Color(0xFF2457D6),
@@ -157,8 +165,11 @@ class VhPalette {
     card: Color(0xFF121212),
     cardAlt: Color(0xFF1C1C1C),
     ink: Color(0xFFF0EBE4),
-    ink2: Color(0xA8F0EBE4), // rgba(.66)
-    ink3: Color(0x80F0EBE4), // rgba(.50), 4.5:1 on every ground
+    // Opaque, as by day: the ink at .66 and .56 over black. The faintest
+    // rose from .50 so that, no longer lightening with a card under it, it
+    // still reads at 4.5:1 on the lightest ground.
+    ink2: Color(0xFF9E9B96),
+    ink3: Color(0xFF868480),
     line: Color(0x1FF0EBE4), // rgba(.12)
     line2: Color(0x2EF0EBE4), // rgba(.18)
     accent: Color(0xFF7FA3FF),

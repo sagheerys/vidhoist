@@ -30,6 +30,26 @@ void main() {
     }
   }
 
+  /// **The guard**: a translucent ink is painted stroke by stroke and glyph
+  /// by glyph, so it was laid twice wherever two met: bright knots on an
+  /// icon's joints and on joined Arabic letters, by night above all.
+  for (final brightness in Brightness.values) {
+    test('the inks that draw words and icons are opaque '
+        '(${brightness.name})', () {
+      final p = VhPalette.of(VhVariant.phone, brightness);
+      for (final MapEntry(key: name, value: ink) in {
+        'ink': p.ink,
+        'ink2': p.ink2,
+        'ink3': p.ink3,
+        'miniInk': p.miniInk,
+        'miniInkMuted': p.miniInkMuted,
+        'accentInk': p.accentInk,
+      }.entries) {
+        expect(ink.a, 1.0, reason: '$name is translucent');
+      }
+    });
+  }
+
   test('one palette for both apps', () {
     for (final brightness in Brightness.values) {
       expect(

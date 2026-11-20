@@ -59,15 +59,22 @@ class VhIcon extends StatelessWidget {
         : '#$rgb${alpha.toRadixString(16).padLeft(2, '0')}';
   }
 
-  /// The SVG as it is drawn here: the ink from [color] or the icon theme,
-  /// the ember from the palette.
+  /// The ink from [color] or the icon theme, with a theme's opacity (a
+  /// disabled button's) on top, as `Icon` dims.
+  Color _inkIn(BuildContext context) {
+    final theme = IconTheme.of(context);
+    final ink = color ?? theme.color ?? const Color(0xFF000000);
+    final opacity = theme.opacity ?? 1;
+    return opacity < 1 ? ink.withValues(alpha: ink.a * opacity) : ink;
+  }
+
+  /// The SVG as it is drawn here: the ink **opaque**, and the ember from
+  /// the palette. A translucent ink is laid on the whole glyph instead, by
+  /// [build]: each stroke painted in it alone laid it twice where two
+  /// strokes meet, and a bug's legs showed as bright knots on its body.
   @visibleForTesting
   String svgIn(BuildContext context) {
-    final theme = IconTheme.of(context);
-    var ink = color ?? theme.color ?? const Color(0xFF000000);
-    // A theme's opacity (a disabled button's) dims the glyph, as `Icon` does.
-    final opacity = theme.opacity ?? 1;
-    if (opacity < 1) ink = ink.withValues(alpha: ink.a * opacity);
+    final ink = _inkIn(context).withValues(alpha: 1);
     // Outside the app's theme (a bare widget in a test) the ember takes the
     // ink, as Material's glyph draws without a theme.
     final ember =
@@ -79,6 +86,8 @@ class VhIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final side = size ?? IconTheme.of(context).size ?? 24;
     Widget glyph = SvgPicture.string(svgIn(context), width: side, height: side);
+    final fade = _inkIn(context).a;
+    if (fade < 1) glyph = Opacity(opacity: fade, child: glyph);
     if (shadows case final shadows? when shadows.isNotEmpty) {
       glyph = Stack(
         clipBehavior: Clip.none,
