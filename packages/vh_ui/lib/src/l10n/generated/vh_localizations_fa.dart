@@ -180,7 +180,37 @@ class VhLocalizationsFa extends VhLocalizations {
       'هر چیزی که به خاطر قطع شبکه ناموفق شد، با برگشتن شبکه خودبه‌خود دوباره امتحان می‌شود. آنچه سایت رد کرده دوباره امتحان نمی‌شود: تکرار بی‌تغییر آن فقط دوباره ناموفق می‌شود.';
 
   @override
+  String get backgroundChecks => 'بررسی وقتی برنامه بسته است';
+
+  @override
+  String get backgroundChecksHelp =>
+      'تقریباً هر شش ساعت، وقتی شبکه هست و باتری کم نیست. فقط موارد تازه را خبر می‌دهد؛ ویدیوها وقتی VidHoist را باز کنید دانلود می‌شوند.';
+
+  @override
   String get backgroundDownload => 'در حال دانلود فایل‌ها در پس‌زمینه…';
+
+  @override
+  String backgroundLastRun(String when) {
+    return 'آخرین بررسی در حالت بسته: $when';
+  }
+
+  @override
+  String get backgroundNotRunYet =>
+      'هنوز بررسی‌ای در حالت بسته انجام نشده: زمانش را اندروید انتخاب می‌کند.';
+
+  @override
+  String get backgroundOfferBody =>
+      'VidHoist می‌تواند تقریباً هر شش ساعت کانال‌هایتان را ببیند و موارد تازه را خبر دهد. تا برنامه را باز نکنید چیزی دانلود نمی‌شود.';
+
+  @override
+  String get backgroundOfferNo => 'اکنون نه';
+
+  @override
+  String get backgroundOfferTitle =>
+      'می‌خواهید وقتی VidHoist بسته است از ویدیوهای تازه باخبر شوید؟';
+
+  @override
+  String get backgroundOfferYes => 'روشن کردن';
 
   @override
   String get backupNote =>
@@ -2128,6 +2158,22 @@ class VhLocalizationsFa extends VhLocalizations {
   String get newTagHint => 'برچسب جدید';
 
   @override
+  String newVideosBody(String channels) {
+    return '$channels. وقتی VidHoist را باز کنید دانلود می‌شوند.';
+  }
+
+  @override
+  String newVideosNotice(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ویدیوی تازه',
+      one: '$count ویدیوی تازه',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get next => 'بعدی';
 
   @override
@@ -2167,6 +2213,12 @@ class VhLocalizationsFa extends VhLocalizations {
 
   @override
   String get noServerTitle => 'موتور دانلود آماده نیست';
+
+  @override
+  String get noticeChannelNewVideos => 'ویدیوهای تازه';
+
+  @override
+  String get noticeChannelUpdates => 'به‌روزرسانی‌ها';
 
   @override
   String get noVideosFound => 'کتابخانه‌ی شما خالی است';
@@ -3284,6 +3336,9 @@ class VhLocalizationsFa extends VhLocalizations {
 
   @override
   String get unpinPlaylist => 'برداشتن سنجاق';
+
+  @override
+  String get updateNoticeBody => 'برای نصب، VidHoist را باز کنید.';
 
   @override
   String get upNext => 'بعدی';

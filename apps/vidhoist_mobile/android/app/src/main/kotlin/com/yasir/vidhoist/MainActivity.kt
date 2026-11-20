@@ -18,6 +18,18 @@ import io.flutter.plugin.common.MethodChannel
  * here directly, with no external dependency and no build risk.
  */
 class MainActivity : AudioServiceActivity() {
+    // In sight, the app's own check runs and the scheduler's has nothing
+    // to do.
+    override fun onStart() {
+        super.onStart()
+        BackgroundCheck.inSight = true
+    }
+
+    override fun onStop() {
+        BackgroundCheck.inSight = false
+        super.onStop()
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         PictureInPicture.register(this, flutterEngine.dartExecutor.binaryMessenger)
@@ -27,6 +39,7 @@ class MainActivity : AudioServiceActivity() {
         CookieJar.register(flutterEngine.dartExecutor.binaryMessenger)
         SignInPopups.register(this, flutterEngine)
         YtDlpBridge.register(applicationContext, flutterEngine)
+        BackgroundCheck.registerApp(applicationContext, flutterEngine)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "vidhoist_mobile/media",

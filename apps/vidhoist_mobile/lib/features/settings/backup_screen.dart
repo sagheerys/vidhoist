@@ -8,10 +8,7 @@ import 'package:vh_ui/vh_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../di.dart';
-import '../downloads_library/library_providers.dart';
-import '../playlists/playlists_providers.dart';
 import '../shared/error_report.dart';
-import '../storage/media_folder_rename.dart';
 import 'auto_backup.dart';
 import 'restore_from_file.dart';
 import 'widgets/backup_picker.dart';
@@ -95,20 +92,8 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
     VhLocalizations l10n,
     ImportResult result,
   ) async {
-    await _refreshEverything();
+    await refreshAfterRestore(ref);
     return '${l10n.restoreSuccess} · ${result.keysRestored}';
-  }
-
-  /// Everything the backup may have changed is reloaded.
-  Future<void> _refreshEverything() async {
-    // A picked file may predate the folder's `VidHoist` spelling.
-    await rewriteStoredPaths(
-      ref.read(keyValueStoreProvider),
-      ref.read(prefsMutexProvider),
-    );
-    await ref.read(settingsProvider.notifier).reloadFromStore();
-    ref.invalidate(localMediaProvider);
-    ref.invalidate(playlistsProvider);
   }
 
   @override

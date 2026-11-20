@@ -178,7 +178,15 @@
   "autoRestoreSuccess": "استُعيدت البيانات من النسخة الاحتياطية بنجاح",
   "autoRetry": "إعادة المحاولة عند عودة الشبكة",
   "autoRetryHelp": "إذا فشل تنزيل بسبب انقطاع الشبكة أعاده التطبيق تلقائياً حين تعود. أما ما رفضه الموقع فلا يُعاد، لأن تكراره دون تغيير سيفشل مجدداً.",
+  "backgroundChecks": "الفحص والتطبيق مغلق",
+  "backgroundChecksHelp": "كل ست ساعات تقريباً، حين تتوفر الشبكة ولا تكون البطارية منخفضة. يخبرك بالجديد فقط، والمقاطع تُنزَّل حين تفتح VidHoist.",
   "backgroundDownload": "جارٍ تنزيل الملفات في الخلفية…",
+  "backgroundLastRun": "آخر فحص والتطبيق مغلق: {when}",
+  "backgroundNotRunYet": "لم يجرِ فحص والتطبيق مغلق بعد: أندرويد يختار وقته.",
+  "backgroundOfferBody": "يستطيع VidHoist أن يفحص قنواتك كل ست ساعات تقريباً ويخبرك بالجديد. لا يُنزَّل شيء حتى تفتح التطبيق.",
+  "backgroundOfferNo": "ليس الآن",
+  "backgroundOfferTitle": "أتريد أن تعرف بالمقاطع الجديدة والتطبيق مغلق؟",
+  "backgroundOfferYes": "تفعيل",
   "backupNote": "تشمل النسخة المكتبة والقوائم والوسوم والقنوات المتابَعة والإعدادات. أما تسجيلات الدخول والنصوص فتُحفظ منفصلة، ولا تشمل النسخة ملفات الوسائط نفسها.",
   "backupSettings": "نسخ جميع البيانات احتياطياً",
   "backupSettingsSubtitle": "سبع نسخ مؤرَّخة تتجدد وحدها، استعِد أيّاً منها أو صدّر نسخة لمشاركتها",
@@ -737,6 +745,8 @@
   "newFolderHint": "مثال: Ai/دروس",
   "newPlaylistAction": "قائمة جديدة",
   "newTagHint": "وسم جديد",
+  "newVideosBody": "{channels}. تُنزَّل حين تفتح VidHoist.",
+  "newVideosNotice": "{count, plural, =1{مقطع جديد} =2{مقطعان جديدان} few{{count} مقاطع جديدة} many{{count} مقطعاً جديداً} other{{count} مقطع جديد}}",
   "next": "التالي",
   "noBackupsYet": "لا توجد نسخ بعد",
   "noDownloads": "لا توجد تنزيلات",
@@ -750,6 +760,8 @@
   "noResults": "لا نتائج",
   "noResultsMessage": "لا توجد عناصر مطابقة لبحثك.",
   "noServerTitle": "محرك التنزيل غير جاهز",
+  "noticeChannelNewVideos": "المقاطع الجديدة",
+  "noticeChannelUpdates": "التحديثات",
   "noVideosFound": "مكتبتك فارغة",
   "noWarranty": "يُقدَّم كما هو، بلا أي ضمان.",
   "notAffiliated": "لا صلة للتطبيق بمشروع yt-dlp ولا بأي موقع، ولا يحظى بتأييدها.",
@@ -1044,7 +1056,13 @@
   "totalDuration": "الإجمالي: {duration}",
   "transcript": "النص",
   "transcriptSaidMore": "{count, plural, =1{قيلت مرة أخرى} =2{قيلت مرتين أخريين} few{قيلت {count} مرات أخرى} many{قيلت {count} مرة أخرى} other{قيلت {count} مرة أخرى}}",
-  "@transcriptSaidMore": {"placeholders": {"count": {"type": "int"}}},
+  "@transcriptSaidMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "transcriptsClips": "{count, plural, =0{لا مقاطع بعد} =1{مقطع واحد} =2{مقطعان} few{{count} مقاطع} many{{count} مقطعاً} other{{count} مقطع}}",
   "transcriptsDeleteAll": "حذف الكل",
   "transcriptsDeleteTitle": "حذف كل النصوص؟",
@@ -1057,6 +1075,7 @@
   "unfollowConfirmBody": "سينسى VidHoist المقاطع التي سبق أن رآها من هذه القناة. فإن تابعتها لاحقاً عُدَّ كل ما عليها حينها مُشاهَداً، ولن يُنزَّل ما فاتك. أما الإيقاف المؤقت فيحفظ هذا السجل.",
   "unlockTouch": "فك القفل",
   "unpinPlaylist": "إلغاء التثبيت",
+  "updateNoticeBody": "افتح VidHoist لتثبيته.",
   "upNext": "التالي",
   "upNextIn": "التالي في «{name}»",
   "updateAllowInstallBody": "يطلب أندرويد إذنك قبل أن يثبّت التطبيق تحديثاته بنفسه. امنحه مرة واحدة من إعدادات النظام، ثم عد واضغط «تثبيت».",

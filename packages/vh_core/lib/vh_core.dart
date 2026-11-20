@@ -12,6 +12,7 @@ export 'src/backup/backup_errors.dart';
 export 'src/backup/backup_merge.dart';
 export 'src/backup/backup_rotation.dart';
 export 'src/backup/backup_service.dart';
+export 'src/channels/channel_peek.dart';
 export 'src/channels/channel_record.dart';
 export 'src/channels/channel_source.dart';
 export 'src/channels/channel_ticker.dart';

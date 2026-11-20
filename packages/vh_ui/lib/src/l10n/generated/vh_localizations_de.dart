@@ -180,8 +180,38 @@ class VhLocalizationsDe extends VhLocalizations {
       'Was wegen eines Netzausfalls fehlgeschlagen ist, wird automatisch wiederholt, sobald das Netz zurück ist. Was eine Seite abgelehnt hat, wird nicht wiederholt: Unverändert noch einmal versucht, scheitert es nur wieder.';
 
   @override
+  String get backgroundChecks => 'Prüfen, wenn die App geschlossen ist';
+
+  @override
+  String get backgroundChecksHelp =>
+      'Etwa alle sechs Stunden, wenn ein Netz da ist und der Akku nicht schwach ist. Du erfährst nur, was neu ist; die Videos werden geladen, wenn du VidHoist öffnest.';
+
+  @override
   String get backgroundDownload =>
       'Dateien werden im Hintergrund heruntergeladen…';
+
+  @override
+  String backgroundLastRun(String when) {
+    return 'Letzte Prüfung bei geschlossener App: $when';
+  }
+
+  @override
+  String get backgroundNotRunYet =>
+      'Noch keine Prüfung bei geschlossener App: Android wählt den Zeitpunkt.';
+
+  @override
+  String get backgroundOfferBody =>
+      'VidHoist kann etwa alle sechs Stunden in deine Kanäle schauen und dir sagen, was neu ist. Geladen wird erst, wenn du die App öffnest.';
+
+  @override
+  String get backgroundOfferNo => 'Nicht jetzt';
+
+  @override
+  String get backgroundOfferTitle =>
+      'Über neue Videos informiert werden, wenn VidHoist geschlossen ist?';
+
+  @override
+  String get backgroundOfferYes => 'Einschalten';
 
   @override
   String get backupNote =>
@@ -2136,6 +2166,22 @@ class VhLocalizationsDe extends VhLocalizations {
   String get newTagHint => 'Neuer Tag';
 
   @override
+  String newVideosBody(String channels) {
+    return '$channels. Sie werden geladen, wenn du VidHoist öffnest.';
+  }
+
+  @override
+  String newVideosNotice(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count neue Videos',
+      one: '1 neues Video',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get next => 'Weiter';
 
   @override
@@ -2175,6 +2221,12 @@ class VhLocalizationsDe extends VhLocalizations {
 
   @override
   String get noServerTitle => 'Die Download-Engine ist nicht bereit';
+
+  @override
+  String get noticeChannelNewVideos => 'Neue Videos';
+
+  @override
+  String get noticeChannelUpdates => 'Updates';
 
   @override
   String get noVideosFound => 'Deine Bibliothek ist leer';
@@ -3299,6 +3351,9 @@ class VhLocalizationsDe extends VhLocalizations {
 
   @override
   String get unpinPlaylist => 'Lösen';
+
+  @override
+  String get updateNoticeBody => 'Öffne VidHoist, um es zu installieren.';
 
   @override
   String get upNext => 'Als Nächstes';

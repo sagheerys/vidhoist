@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_ui/vh_ui.dart';
 
+import '../background/background_tile.dart';
 import '../shared/error_text.dart';
 import 'channel_card.dart';
 import 'channels_state.dart';
@@ -69,7 +70,10 @@ class _ChannelsScreenState extends ConsumerState<ChannelsScreen> {
             top: VhSpace.xs,
             bottom: vhFabClearance(context),
           ),
-          children: [for (final sub in subs) ChannelCard(sub: sub)],
+          children: [
+            const BackgroundChecksTile(),
+            for (final sub in subs) ChannelCard(sub: sub),
+          ],
         ),
       );
     }

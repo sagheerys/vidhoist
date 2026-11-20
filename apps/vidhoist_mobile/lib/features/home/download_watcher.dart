@@ -6,6 +6,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
+import '../background/background_notices.dart';
 import '../downloads_library/library_providers.dart';
 import '../downloads_library/widgets/task_card_parts.dart';
 import '../shared/error_text.dart';
@@ -213,6 +214,9 @@ Future<void> initDownloadNotifications(WidgetRef ref) async {
       },
     );
     await notifications.requestPermission();
+    // What a check while closed told of: the app's own check is about to
+    // download it.
+    await notifications.cancel(BackgroundNotices.newsId);
   } on Object catch (e) {
     // The logging itself is defensive: the logger may not be injected in a
     // test environment.

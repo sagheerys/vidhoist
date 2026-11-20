@@ -4,6 +4,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
+import '../background/background_tile.dart';
 import '../home/quick_download.dart';
 import '../shared/choice_chip_row.dart';
 import '../shared/error_text.dart';
@@ -12,16 +13,23 @@ import 'channels_state.dart';
 
 /// Follows a channel, or with [editing] changes how often it is read, the
 /// quality of what it downloads from now on, and its title filter.
+/// A new follow, once the sheet has closed, may offer the check while the
+/// app is closed.
 Future<void> showFollowSheet(
   BuildContext context, {
   ChannelSubscription? editing,
-}) => showVhSheet<void>(
-  context: context,
-  isScrollControlled: true,
-  useSafeArea: true,
-  showDragHandle: true,
-  builder: (_) => _FollowSheet(editing: editing),
-);
+}) async {
+  final followed = await showVhSheet<bool>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    showDragHandle: true,
+    builder: (_) => _FollowSheet(editing: editing),
+  );
+  if (followed == true && context.mounted) {
+    await offerBackgroundChecks(context);
+  }
+}
 
 const _qualities = [
   Quality.best,
@@ -97,7 +105,7 @@ class _FollowSheetState extends ConsumerState<_FollowSheet> {
         message = l10n.subscriptionAdded(vhName(name ?? url));
       }
       if (!mounted) return;
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(!_isEdit);
       showVhNotice(context, message: message, kind: VhNoticeKind.done);
     } on Object catch (e) {
       if (!mounted) return;

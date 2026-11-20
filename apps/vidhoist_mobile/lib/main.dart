@@ -15,6 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'di.dart';
 import 'features/accounts/accounts_state.dart';
+import 'features/background/background_main.dart';
+import 'features/background/background_state.dart';
 import 'features/downloads_library/local_item.dart';
 import 'features/storage/media_folder_rename.dart';
 import 'features/storage/phone_volumes.dart';
@@ -129,6 +131,10 @@ Future<void> main() async {
     );
   }
 
+  // While the app is alive out of sight, the scheduler's check runs here
+  // rather than in a second engine.
+  const BackgroundScheduler().answerRuns();
+
   runApp(
     ProviderScope(
       overrides: [
@@ -151,3 +157,8 @@ Future<void> main() async {
     ),
   );
 }
+
+/// **The channel check while the app is closed**, in the engine Android's
+/// scheduler starts for it (`BackgroundCheck.kt` names this function).
+@pragma('vm:entry-point')
+Future<void> backgroundCheck() => runBackgroundCheck();

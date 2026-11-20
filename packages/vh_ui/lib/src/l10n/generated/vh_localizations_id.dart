@@ -181,7 +181,37 @@ class VhLocalizationsId extends VhLocalizations {
       'Apa pun yang gagal karena jaringan terputus akan dicoba lagi secara otomatis saat jaringan kembali. Yang ditolak situs tidak dicoba lagi: mengulanginya tanpa perubahan hanya akan gagal lagi.';
 
   @override
+  String get backgroundChecks => 'Periksa saat aplikasi tertutup';
+
+  @override
+  String get backgroundChecksHelp =>
+      'Kira-kira setiap enam jam, saat ada jaringan dan baterai tidak lemah. Hanya memberi tahu yang baru; video diunduh saat Anda membuka VidHoist.';
+
+  @override
   String get backgroundDownload => 'Mengunduh file di latar belakang…';
+
+  @override
+  String backgroundLastRun(String when) {
+    return 'Pemeriksaan terakhir saat tertutup: $when';
+  }
+
+  @override
+  String get backgroundNotRunYet =>
+      'Belum ada pemeriksaan saat tertutup: Android yang memilih waktunya.';
+
+  @override
+  String get backgroundOfferBody =>
+      'VidHoist dapat melihat saluran Anda kira-kira setiap enam jam dan memberi tahu yang baru. Tidak ada yang diunduh sampai Anda membuka aplikasi.';
+
+  @override
+  String get backgroundOfferNo => 'Nanti saja';
+
+  @override
+  String get backgroundOfferTitle =>
+      'Ingin tahu video baru saat VidHoist tertutup?';
+
+  @override
+  String get backgroundOfferYes => 'Aktifkan';
 
   @override
   String get backupNote =>
@@ -2129,6 +2159,21 @@ class VhLocalizationsId extends VhLocalizations {
   String get newTagHint => 'Tag baru';
 
   @override
+  String newVideosBody(String channels) {
+    return '$channels. Diunduh saat Anda membuka VidHoist.';
+  }
+
+  @override
+  String newVideosNotice(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count video baru',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get next => 'Berikutnya';
 
   @override
@@ -2169,6 +2214,12 @@ class VhLocalizationsId extends VhLocalizations {
 
   @override
   String get noServerTitle => 'Mesin unduh belum siap';
+
+  @override
+  String get noticeChannelNewVideos => 'Video baru';
+
+  @override
+  String get noticeChannelUpdates => 'Pembaruan';
 
   @override
   String get noVideosFound => 'Pustaka Anda kosong';
@@ -3287,6 +3338,9 @@ class VhLocalizationsId extends VhLocalizations {
 
   @override
   String get unpinPlaylist => 'Lepas sematan';
+
+  @override
+  String get updateNoticeBody => 'Buka VidHoist untuk memasangnya.';
 
   @override
   String get upNext => 'Berikutnya';

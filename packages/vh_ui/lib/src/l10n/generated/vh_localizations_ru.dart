@@ -182,7 +182,37 @@ class VhLocalizationsRu extends VhLocalizations {
       'Всё, что не скачалось из-за пропажи сети, повторяется само, когда она вернётся. То, от чего отказался сайт, не повторяется: повтор без изменений снова закончится ошибкой.';
 
   @override
+  String get backgroundChecks => 'Проверять, когда приложение закрыто';
+
+  @override
+  String get backgroundChecksHelp =>
+      'Примерно раз в шесть часов, когда есть сеть и заряд не низкий. Только сообщает о новом; видео скачиваются, когда вы открываете VidHoist.';
+
+  @override
   String get backgroundDownload => 'Скачивание файлов в фоне…';
+
+  @override
+  String backgroundLastRun(String when) {
+    return 'Последняя проверка при закрытом приложении: $when';
+  }
+
+  @override
+  String get backgroundNotRunYet =>
+      'Проверок при закрытом приложении ещё не было: время выбирает Android.';
+
+  @override
+  String get backgroundOfferBody =>
+      'VidHoist может примерно раз в шесть часов заглядывать в ваши каналы и сообщать о новом. Ничего не скачивается, пока вы не откроете приложение.';
+
+  @override
+  String get backgroundOfferNo => 'Не сейчас';
+
+  @override
+  String get backgroundOfferTitle =>
+      'Сообщать о новых видео, когда VidHoist закрыт?';
+
+  @override
+  String get backgroundOfferYes => 'Включить';
 
   @override
   String get backupNote =>
@@ -2153,6 +2183,24 @@ class VhLocalizationsRu extends VhLocalizations {
   String get newTagHint => 'Новая метка';
 
   @override
+  String newVideosBody(String channels) {
+    return '$channels. Они скачаются, когда вы откроете VidHoist.';
+  }
+
+  @override
+  String newVideosNotice(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count нового видео',
+      many: '$count новых видео',
+      few: '$count новых видео',
+      one: '$count новое видео',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get next => 'Далее';
 
   @override
@@ -2192,6 +2240,12 @@ class VhLocalizationsRu extends VhLocalizations {
 
   @override
   String get noServerTitle => 'Движок загрузки не готов';
+
+  @override
+  String get noticeChannelNewVideos => 'Новые видео';
+
+  @override
+  String get noticeChannelUpdates => 'Обновления';
 
   @override
   String get noVideosFound => 'Ваша медиатека пуста';
@@ -3334,6 +3388,9 @@ class VhLocalizationsRu extends VhLocalizations {
 
   @override
   String get unpinPlaylist => 'Открепить';
+
+  @override
+  String get updateNoticeBody => 'Откройте VidHoist, чтобы установить.';
 
   @override
   String get upNext => 'Далее';

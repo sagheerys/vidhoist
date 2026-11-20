@@ -6,10 +6,11 @@ import 'local_channels.dart';
 /// runs: a while after it starts, for what came while it was closed, then
 /// every [every] for the channels whose interval has run out.
 ///
-/// Nothing runs while the app is closed (decided 2026-11-07): no task in
-/// the system's scheduler, no yt-dlp behind its owner's back. Missing a
-/// check costs nothing, since the clips stay on the channel and the next
-/// check finds them.
+/// Nothing downloads while the app is closed. On the phone the user may
+/// turn on a check made then by Android's scheduler, which only reads, with
+/// [ChannelPeek], and tells what is new; this ticker downloads it once the
+/// app runs. Missing a check costs nothing, since the clips stay on the
+/// channel and the next check finds them.
 class ChannelTicker {
   ChannelTicker({
     required this.source,

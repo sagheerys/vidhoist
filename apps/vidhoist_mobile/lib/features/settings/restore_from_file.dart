@@ -9,6 +9,8 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
+import '../background/background_state.dart';
+import '../channels/channels_state.dart';
 import '../downloads_library/library_providers.dart';
 import '../downloads_library/local_item.dart';
 import '../playlists/playlists_providers.dart';
@@ -90,9 +92,14 @@ Future<void> maybeOfferPickedRestore(
   }
 }
 
-/// Everything a restore may have changed, reloaded. A copy written before
-/// the folder became `VidHoist` brings the old spelling back, so the paths
-/// are fixed again first.
+/// Everything a restore may have changed, reloaded; every way of restoring
+/// ends here. A copy written before the folder became `VidHoist` brings
+/// the old spelling back, so the paths are fixed again first.
+///
+/// The channels' source is made anew, not only their list: it keeps the
+/// channels it read in memory, so the page went on showing the channels of
+/// before the restore, and its next change wrote them over the restored
+/// ones.
 Future<void> refreshAfterRestore(WidgetRef ref) async {
   await rewriteStoredPaths(
     ref.read(keyValueStoreProvider),
@@ -101,4 +108,6 @@ Future<void> refreshAfterRestore(WidgetRef ref) async {
   await ref.read(settingsProvider.notifier).reloadFromStore();
   ref.invalidate(localMediaProvider);
   ref.invalidate(playlistsProvider);
+  ref.invalidate(channelSourceProvider);
+  ref.invalidate(backgroundChecksProvider);
 }
