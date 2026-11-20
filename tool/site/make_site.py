@@ -21,6 +21,9 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 OUT = os.path.join(ROOT, 'build', 'site')
 REPO = 'https://github.com/sagheerys/vidhoist'
 RELEASES = REPO + '/releases/latest'
+# Opens Obtainium on a phone that has it, with this repository filled in.
+OBTAINIUM = ('https://apps.obtainium.imranr.dev/redirect'
+             '?r=obtainium://add/' + REPO)
 PAGE = 'https://sagheerys.github.io/vidhoist/'
 
 SHOTS = [
@@ -142,6 +145,9 @@ WORDS = {
         ],
         'get': 'Latest release',
         'signed': 'The APKs are signed with VidHoist\'s own key. SHA-256:',
+        'obtainium': ('On Android, Obtainium can also follow the releases '
+                      'here and install each new one.'),
+        'obtainium_alt': 'Get it on Obtainium',
         'source': 'Source code',
         'license': ('Free software under the GPL-3.0. VidHoist stands on '
                     'yt-dlp and FFmpeg, and is not affiliated with them or '
@@ -233,6 +239,9 @@ WORDS = {
         ],
         'get': 'آخر إصدار',
         'signed': 'ملفات APK موقّعة بمفتاح VidHoist الخاص. بصمة SHA-256:',
+        'obtainium': ('وعلى أندرويد يستطيع Obtainium أيضاً أن يتابع الإصدارات '
+                      'هنا ويثبّت كل جديد منها.'),
+        'obtainium_alt': 'احصل عليه عبر Obtainium',
         'source': 'الكود المصدري',
         'license': ('برنامج حر برخصة GPL-3.0. يقوم VidHoist على yt-dlp '
                     'وFFmpeg، ولا صلة له بهما ولا بأي موقع. نزّل فقط ما يحق '
@@ -367,6 +376,10 @@ def page(lang):
     <div class="files">
 {files}
     </div>
+    <div class="also">
+      <p>{e(w['obtainium'])}</p>
+      <a href="{e(OBTAINIUM)}"><img src="{a}img/obtainium.png" width="194" height="75" alt="{e(w['obtainium_alt'])}"></a>
+    </div>
     <p class="signed">{e(w['signed'])} <code dir="ltr">{FINGERPRINT}</code></p>
   </div>
 </section>
@@ -403,6 +416,8 @@ def main():
                         os.path.join(assets, 'img'))
         shutil.copy(os.path.join(shots, f'download-{lang}.gif'),
                     os.path.join(assets, 'img'))
+    shutil.copy(os.path.join(ROOT, 'docs', 'badges', 'obtainium.png'),
+                os.path.join(assets, 'img'))
     fonts = os.path.join(ROOT, 'packages', 'vh_ui', 'assets', 'fonts')
     for font in FONTS + ['OFL.txt']:
         shutil.copy(os.path.join(fonts, font), os.path.join(assets, 'fonts'))
