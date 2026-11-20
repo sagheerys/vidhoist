@@ -141,14 +141,27 @@ def kitchen():
     return img
 
 
-def music_square():
-    img = abstract(5, [(40, 30, 90), (220, 90, 120), (255, 180, 80), (90, 200, 220)])
-    img = img.crop(((W - H) // 2, 0, (W + H) // 2, H))
+def music_square(side=1080):
+    """Square and large: the players show it big, where a small one's thin
+    rings turned to steps."""
+    img = gradient((40, 30, 90), (220, 90, 120), size=(side, side))
+    layer = Image.new('RGBA', (side, side))
+    draw = ImageDraw.Draw(layer)
+    rnd = random.Random(5)
+    for _ in range(7):
+        r = rnd.randrange(side // 5, side // 2)
+        x, y = rnd.randrange(side), rnd.randrange(side)
+        c = [(255, 180, 80), (90, 200, 220), (220, 90, 120)][rnd.randrange(3)]
+        draw.ellipse((x - r, y - r, x + r, y + r), fill=c + (150,))
+    layer = layer.filter(ImageFilter.GaussianBlur(side // 12))
+    img.paste(layer, (0, 0), layer)
     draw = ImageDraw.Draw(img)
-    cx, cy = H // 2, H // 2
-    for r in range(120, 20, -12):
-        draw.ellipse((cx - r, cy - r, cx + r, cy + r), outline=(255, 255, 255), width=1)
-    draw.ellipse((cx - 18, cy - 18, cx + 18, cy + 18), fill=(255, 255, 255))
+    c = side // 2
+    for r in range(side // 3, side // 16, -side // 30):
+        draw.ellipse((c - r, c - r, c + r, c + r), outline=(255, 255, 255),
+                     width=max(2, side // 360))
+    dot = side // 20
+    draw.ellipse((c - dot, c - dot, c + dot, c + dot), fill=(255, 255, 255))
     return img
 
 

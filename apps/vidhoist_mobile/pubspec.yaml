@@ -57,6 +57,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
+  # The screenshots' video player shows a still picture in place of a film.
+  video_player_platform_interface: ^6.9.0
 
 flutter:
   uses-material-design: true

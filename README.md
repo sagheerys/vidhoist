@@ -20,6 +20,14 @@ site. For Android phones and tablets and for Windows, in twelve
 languages, right-to-left first, by day and by night. Free software under the
 GPL.
 
+<p align="center">
+  <img src="docs/screenshots/hero-en.jpg" alt="VidHoist on Android: the library, a video playing, the music player at night with its transcript, and the followed channels">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/desktop-en.jpg" alt="VidHoist on Windows: a video playing with its transcript beside it, and the library as a grid of covers">
+</p>
+
 | | **VidHoist for Android** | **VidHoist for Windows** |
 |---|---|---|
 | Runs on | Android 7.0 and later, phones and tablets | Windows 10 and 11 (x64) |
@@ -150,27 +158,26 @@ secured: [docs/PC-LINK.md](docs/PC-LINK.md).
 
 ## Screenshots
 
-On Android:
+<details>
+<summary><strong>More screens</strong>: the players, the library at night, twelve languages, Windows at night</summary>
+<br>
 
-<p>
-  <img src="docs/screenshots/phone-library-en-day.png" width="200" alt="The library, by day">
-  <img src="docs/screenshots/phone-channels-en-night.png" width="200" alt="Followed channels and the check while the app is closed, at night">
-  <img src="docs/screenshots/phone-library-ar-night.png" width="200" alt="The library in Arabic, at night">
-  <img src="docs/screenshots/phone-languages-en-day.png" width="200" alt="Twelve languages">
-</p>
+**The players and the library at night** — the music player by day, a
+video at night, the library at night, and the twelve languages:
 
-On Windows:
+![The music player by day, a video at night, the library at night, and the language list](docs/screenshots/more-en.jpg)
 
-<p>
-  <img src="docs/screenshots/windows-library-en-day.png" width="420" alt="The library on Windows, by day">
-  <img src="docs/screenshots/windows-clip-en-night.png" width="420" alt="A clip with its transcript, at night">
-</p>
+**Windows at night** — a video with its transcript, and the music player:
 
-Every screen in both languages, by day and by night, is in
-[docs/screenshots](docs/screenshots). They are drawn by the apps' own
-widgets with sample clips and covers made for them, so they show nobody's
-videos; `VH_SHOTS=1 flutter test test/screenshots` in either app makes them
-again.
+![VidHoist on Windows at night: a video with its transcript, and the music player](docs/screenshots/desktop-night-en.jpg)
+
+</details>
+
+Every screen, one by one, in both languages and by day and by night, is in
+[docs/screenshots](docs/screenshots). The clips, channels and covers in them
+are made up for the purpose, so they show nobody's videos. The apps' own
+widgets draw them: `VH_SHOTS=1 flutter test test/screenshots` in either app,
+then `python tool/screenshots/frame.py` for the frames.
 
 ## Download
 

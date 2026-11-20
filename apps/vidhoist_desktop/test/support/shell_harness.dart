@@ -150,7 +150,12 @@ class ShellHarness {
     this.overrides = const [],
     this.withEngine = false,
     this.night = false,
+    this.picture,
   });
+
+  /// What draws the video instead of [video]'s dark box: the screenshots'
+  /// still.
+  final VideoSurface? picture;
 
   /// The engine stands by, as in the app itself; off, there is none, as
   /// when yt-dlp could not be found.
@@ -207,7 +212,7 @@ class ShellHarness {
       ),
       if (library case final items?)
         libraryItemsProvider.overrideWith((ref) async => items),
-      videoSurfaceProvider.overrideWithValue(video),
+      videoSurfaceProvider.overrideWithValue(picture ?? video),
       downloadEngineProvider.overrideWith((ref) => withEngine ? engine : null),
       if (night)
         initialAppearanceProvider.overrideWithValue((

@@ -10,12 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/library.dart';
+import 'package:vh_media/vh_media.dart' show MediaQuality;
 import 'package:vh_transcripts/vh_transcripts.dart';
 import 'package:vh_ui/shots.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_desktop/data/engine_data.dart';
 import 'package:vidhoist_desktop/platform/engine_locator.dart';
 import 'package:vidhoist_desktop/router.dart';
+import 'package:vidhoist_desktop/shell/video_surface.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 
 import '../support/shell_harness.dart';
@@ -131,6 +133,7 @@ void main() {
           night: night,
           overrides: _engineReady(),
           transcripts: {clip.canonicalUrl: said(clip.canonicalUrl, arabic)},
+          picture: _Still('$covers/mountains.jpg'),
         );
         await shoot(
           tester,
@@ -141,6 +144,29 @@ void main() {
           // The transcript beside it is the playing clip's.
           before: () =>
               h.player.showPlaying([toPlaylistItem(clip)], playing: false),
+        );
+      });
+
+      testWidgets('audio $tag', skip: !enabled, (tester) async {
+        final items = library(arabic);
+        final song = items.firstWhere((i) => i.isAudio);
+        final h = ShellHarness(
+          library: items,
+          withEngine: true,
+          night: night,
+          overrides: _engineReady(),
+          transcripts: {song.canonicalUrl: said(song.canonicalUrl, arabic)},
+        );
+        await shoot(
+          tester,
+          h,
+          'windows-audio-$tag',
+          route: DesktopRoutes.item(song.canonicalUrl),
+          arabic: arabic,
+          before: () => h.player.showPlaying([
+            toPlaylistItem(song),
+            toPlaylistItem(items[1]),
+          ], playing: true),
         );
       });
 
@@ -220,3 +246,25 @@ const _englishLines = [
   'And there is the first light, touching the clouds below us.',
   'Next time we walk down to the old stone villages.',
 ];
+
+/// A still in place of the film, which a test cannot decode.
+class _Still implements VideoSurface {
+  _Still(this.path);
+
+  final String path;
+
+  @override
+  Widget build(BuildContext context) =>
+      Image.file(File(path), fit: BoxFit.cover);
+
+  @override
+  Future<void> setAudioOnly(bool on) async {}
+
+  @override
+  final ValueNotifier<Size?> pictureSize = ValueNotifier(
+    const Size(1920, 1080),
+  );
+
+  @override
+  Future<MediaQuality?> quality() async => null;
+}

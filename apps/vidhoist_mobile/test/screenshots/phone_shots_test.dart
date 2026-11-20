@@ -49,6 +49,9 @@ void main() {
     debugDisableShadows = false;
     tester.view.physicalSize = const Size(720, 1600);
     tester.view.devicePixelRatio = 2;
+    // A phone's status bar and gesture bar, which the frame draws over.
+    tester.view.padding = const FakeViewPadding(top: 56, bottom: 36);
+    tester.view.viewPadding = const FakeViewPadding(top: 56, bottom: 36);
     addTearDown(tester.view.reset);
   }
 
