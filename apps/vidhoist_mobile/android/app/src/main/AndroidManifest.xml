@@ -91,6 +91,13 @@
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation"/>
+        <!-- The same screen, its bottom line kept above the gesture bar
+             (QrCaptureActivity.kt); the one the app opens. -->
+        <activity
+            android:name=".QrCaptureActivity"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/zxing_CaptureTheme"
+            android:exported="false"/>
         <!-- The download engine's own foreground service (EngineService.kt):
              it outlives the Flutter engine, so a download goes on with the
              app swiped away. -->

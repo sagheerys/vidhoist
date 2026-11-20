@@ -34,4 +34,42 @@ void main() {
       expect(tester.takeException(), isNull, reason: 'at $width');
     }
   });
+
+  /// **The guard**: the place you are in shows its icon filled, as the
+  /// phone's bar does; the others keep their outlines.
+  testWidgets('a chosen place fills its icon, an unchosen one does not', (
+    tester,
+  ) async {
+    Future<void> line({required bool selected}) => tester.pumpWidget(
+      VhDesktopApp(
+        child: MaterialApp(
+          theme: vhDesktopTheme(VhVariant.desktop, Brightness.light),
+          home: Scaffold(
+            body: SizedBox(
+              width: 240,
+              child: SidebarItem(
+                icon: VhIcons.library,
+                selectedIcon: VhIcons.libraryFill,
+                label: 'Library',
+                narrow: false,
+                selected: selected,
+                onTap: () {},
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    Finder glyph(VhIconData icon) =>
+        find.byWidgetPredicate((w) => w is VhIcon && w.icon == icon);
+
+    await line(selected: false);
+    await tester.pumpAndSettle();
+    expect(glyph(VhIcons.library), findsOneWidget);
+    expect(glyph(VhIcons.libraryFill), findsNothing);
+    await line(selected: true);
+    await tester.pumpAndSettle();
+    expect(glyph(VhIcons.libraryFill), findsOneWidget);
+    expect(glyph(VhIcons.library), findsNothing);
+  });
 }

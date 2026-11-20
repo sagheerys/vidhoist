@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/settings/appearance_pane.dart';
+import 'package:vidhoist_desktop/features/settings/simple_panes.dart';
 import 'package:vidhoist_desktop/features/settings/appearance_preview.dart';
 import 'package:vidhoist_desktop/features/settings/language_choice.dart';
 import 'package:vidhoist_desktop/data/appearance_data.dart';
@@ -321,5 +322,42 @@ void main() {
     await settle(tester);
     expect(find.text('Install and restart'), findsNothing);
     expect(await h.store.getString(UpdatePrefs.skippedVersionKey), '0.2.0');
+  });
+
+  /// **The guard**: a row's buttons sit at its end, inside it. The
+  /// folder's pair and "Delete all" sat under their rows, on the rule,
+  /// apart from what they act on.
+  for (final (route, label) in [
+    ('/settings/folders', 'Change…'),
+    ('/settings/transcripts', 'Delete all'),
+  ]) {
+    testWidgets('$route: "$label" is on its own line, not under it', (
+      tester,
+    ) async {
+      await open(tester, route);
+      expect(
+        find.descendant(
+          of: find.byType(SettingLine),
+          matching: find.widgetWithText(VhRowButton, label),
+        ),
+        findsOneWidget,
+      );
+    });
+  }
+
+  test("a path reads left to right, an Arabic sentence keeps the page's "
+      'direction', () {
+    expect(
+      SettingLine.valueDirection(r'C:\Users\me\Downloads'),
+      TextDirection.ltr,
+    );
+    expect(
+      SettingLine.valueDirection('https://example.com'),
+      TextDirection.ltr,
+    );
+    expect(
+      SettingLine.valueDirection('yt-dlp غير موجود على هذا الكمبيوتر.'),
+      isNull,
+    );
   });
 }

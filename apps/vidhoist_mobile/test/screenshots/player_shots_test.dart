@@ -5,12 +5,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/vh_media.dart';
-import 'package:vh_ui/shots.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
 import 'package:vidhoist_mobile/di.dart';
@@ -22,56 +20,14 @@ import 'package:vidhoist_mobile/features/player/sidecar_subtitles.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 
 import '../fake_audio_port.dart';
+import 'shot_kit.dart';
 
 /// **The phone's players for the project's pages**: the music player with
 /// what is said under it, and the video player with a still in place of
 /// the film, which a test cannot decode. As `phone_shots_test.dart`, run
 /// only with `VH_SHOTS=1`.
 void main() {
-  final enabled = Platform.environment['VH_SHOTS'] != null;
-  final root = Directory.current.parent.parent.path;
-  final covers = '$root/tool/screenshots/covers';
-  final out = '$root/docs/screenshots';
-
-  setUpAll(() async {
-    if (!enabled) return;
-    await loadVhFonts('$root/packages/vh_ui/assets/fonts');
-    initVhL10n();
-  });
-
-  void phone(WidgetTester tester) {
-    debugDisableShadows = false;
-    tester.view.physicalSize = const Size(720, 1600);
-    tester.view.devicePixelRatio = 2;
-    // A phone's status bar and gesture bar, which the frame draws over.
-    tester.view.padding = const FakeViewPadding(top: 56, bottom: 36);
-    tester.view.viewPadding = const FakeViewPadding(top: 56, bottom: 36);
-    addTearDown(tester.view.reset);
-  }
-
-  /// [still] waits a fixed while: the video's controls keep a clock
-  /// running, so the screen never settles.
-  Future<void> settle(WidgetTester tester, {bool still = true}) async {
-    for (var i = 0; i < 12; i++) {
-      await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 250)),
-      );
-      await tester.pump(const Duration(milliseconds: 100));
-    }
-    if (still) await tester.pumpAndSettle();
-  }
-
-  Future<void> save(WidgetTester tester, String name) async {
-    final boundary = tester.renderObject<RenderRepaintBoundary>(
-      find.byKey(const ValueKey('shot')),
-    );
-    await tester.runAsync(() => saveVhShot(boundary, '$out/$name.png'));
-    debugDisableShadows = true;
-    // The players' timers end with the screen, before the test checks
-    // that none is left.
-    await tester.pumpWidget(const SizedBox());
-    await tester.pump(const Duration(seconds: 2));
-  }
+  setUpAll(loadShotFonts);
 
   Widget framed(
     ProviderContainer c,
@@ -81,17 +37,13 @@ void main() {
   ) => UncontrolledProviderScope(
     container: c,
     child: RepaintBoundary(
-      key: const ValueKey('shot'),
+      key: shotKey,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: locale,
         localizationsDelegates: VhLocalizations.localizationsDelegates,
         supportedLocales: VhLocalizations.supportedLocales,
-        theme: vhTheme(
-          VhVariant.phone,
-          brightness,
-          language: locale.languageCode,
-        ),
+        theme: shotTheme(locale, brightness),
         home: home,
       ),
     ),
@@ -102,15 +54,15 @@ void main() {
       final arabic = lang == 'ar';
       final tag = '$lang-${brightness == Brightness.dark ? 'night' : 'day'}';
 
-      testWidgets('audio $tag', skip: !enabled, (tester) async {
-        phone(tester);
+      testWidgets('audio $tag', skip: !shotsEnabled, (tester) async {
+        useShotDevice(tester);
         final port = FakeAudioPort();
         final handler = fakeAudioHandler(port);
         final song = PlaylistItem(
           canonicalUrl: 'https://vimeo.com/900004',
           title: arabic ? 'ألحان المساء' : 'Evening tunes',
           uploader: arabic ? 'رحّالة' : 'The Wanderer',
-          artworkUrl: '$covers/music.jpg',
+          artworkUrl: '$shotCovers/music.jpg',
           localPath: '/media/evening.m4a',
           isAudio: true,
           duration: const Duration(minutes: 4, seconds: 31),
@@ -118,7 +70,7 @@ void main() {
         final next = PlaylistItem(
           canonicalUrl: 'https://vimeo.com/900001',
           title: arabic ? 'إبحار هادئ' : 'A quiet sail',
-          artworkUrl: '$covers/sea.jpg',
+          artworkUrl: '$shotCovers/sea.jpg',
           localPath: '/media/sail.m4a',
           isAudio: true,
         );
@@ -145,16 +97,16 @@ void main() {
         await tester.pumpWidget(
           framed(c, Locale(lang), brightness, const AudioScreen()),
         );
-        await settle(tester);
+        await settleShot(tester);
         port.emit(const Duration(seconds: 71));
         await tester.pumpAndSettle();
-        await save(tester, 'phone-audio-$tag');
+        await saveShot(tester, 'phone-audio-$tag');
         await tester.runAsync(handler.dispose);
       });
 
-      testWidgets('video $tag', skip: !enabled, (tester) async {
-        phone(tester);
-        VideoPlayerPlatform.instance = _StillVideo('$covers/mountains.jpg');
+      testWidgets('video $tag', skip: !shotsEnabled, (tester) async {
+        useShotDevice(tester);
+        VideoPlayerPlatform.instance = _StillVideo('$shotCovers/mountains.jpg');
         final handler = fakeAudioHandler(FakeAudioPort());
         final clip = PlaylistItem(
           canonicalUrl: 'https://vimeo.com/900000',
@@ -162,7 +114,7 @@ void main() {
               ? 'رحلة إلى جبال السروات في موسم الضباب'
               : 'Into the misty mountains at dawn',
           uploader: arabic ? 'عدسة الجنوب' : 'Southern Lens',
-          artworkUrl: '$covers/mountains.jpg',
+          artworkUrl: '$shotCovers/mountains.jpg',
           localPath: '/media/mountains.mp4',
           duration: const Duration(minutes: 14, seconds: 7),
         );
@@ -194,8 +146,8 @@ void main() {
         await tester.pumpWidget(
           framed(c, Locale(lang), brightness, const PlayerScreen()),
         );
-        await settle(tester, still: false);
-        await save(tester, 'phone-video-$tag');
+        await settleShot(tester, still: false);
+        await saveShot(tester, 'phone-video-$tag');
         // The session's clock stops with its provider, which goes with
         // the container: before the test checks that no timer is left.
         c.dispose();

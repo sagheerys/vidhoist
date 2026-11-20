@@ -101,10 +101,15 @@ List<Widget> pcLibrarySlivers(
     else ...[
       if (browse.failed)
         SliverToBoxAdapter(child: note(l10n.pcErrUnreachable, color: p.err)),
-      SliverList.builder(
-        itemCount: browse.items.length,
-        itemBuilder: (context, i) =>
-            PcItemRow(item: browse.items[i], items: browse.items),
+      // The page's margin, as the phone's own library keeps it: without
+      // it the covers met the screen's edge.
+      SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: VhSpace.pagePad),
+        sliver: SliverList.builder(
+          itemCount: browse.items.length,
+          itemBuilder: (context, i) =>
+              PcItemRow(item: browse.items[i], items: browse.items),
+        ),
       ),
       if (browse.loadingMore)
         const SliverToBoxAdapter(

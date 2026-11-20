@@ -30,25 +30,26 @@ List<VhNavItem> shellNavItems(
 }) => [
   for (final branch in tabs)
     switch (branch) {
+      // Each tab an outline, filled where you are.
       ShellBranch.library => VhNavItem(
-        icon: VhIcons.download,
+        icon: VhIcons.downloadOutline,
         selectedIcon: VhIcons.download,
         label: l10n.navMyDownloads,
       ),
       ShellBranch.playlists => VhNavItem(
         icon: VhIcons.queue,
-        selectedIcon: VhIcons.queue,
+        selectedIcon: VhIcons.queueFill,
         label: l10n.navPlaylists,
       ),
       ShellBranch.pc => VhNavItem(
         icon: VhIcons.monitor,
-        selectedIcon: VhIcons.monitor,
+        selectedIcon: VhIcons.monitorFill,
         label: l10n.pcTab,
         badge: pcRunning,
       ),
       _ => VhNavItem(
         icon: VhIcons.settings,
-        selectedIcon: VhIcons.settings,
+        selectedIcon: VhIcons.settingsFill,
         label: l10n.navSettings,
         dot: updatePending == null
             ? null

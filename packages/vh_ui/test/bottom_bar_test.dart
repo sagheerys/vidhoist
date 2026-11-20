@@ -114,4 +114,88 @@ void main() {
     await tester.pumpWidget(bar(120));
     expect(find.text('99+'), findsOneWidget);
   });
+
+  /// **The guard**: the chosen tab's outline fills, and it pulses as it
+  /// does; a tab left goes back to its outline.
+  group('outline to filled', () {
+    const filled = [
+      VhNavItem(
+        icon: VhIcons.downloadOutline,
+        selectedIcon: VhIcons.download,
+        label: 'أ',
+      ),
+      VhNavItem(
+        icon: VhIcons.queue,
+        selectedIcon: VhIcons.queueFill,
+        label: 'ب',
+      ),
+    ];
+
+    Widget bar(int index, {bool still = false}) => MaterialApp(
+      theme: vhTheme(VhVariant.phone, Brightness.light),
+      home: MediaQuery(
+        data: MediaQueryData(disableAnimations: still),
+        child: Scaffold(
+          bottomNavigationBar: VhBottomBar(
+            items: filled,
+            selectedIndex: index,
+            onSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+
+    Finder glyph(VhIconData icon) =>
+        find.byWidgetPredicate((w) => w is VhIcon && w.icon == icon);
+
+    double pulseOf(WidgetTester tester, int tab) => tester
+        .widget<ScaleTransition>(
+          find
+              .descendant(
+                of: find.byType(VhChosenPulse).at(tab),
+                matching: find.byType(ScaleTransition),
+              )
+              .first,
+        )
+        .scale
+        .value;
+
+    testWidgets('the chosen tab is filled, the others outlines', (
+      tester,
+    ) async {
+      await tester.pumpWidget(bar(0));
+      await tester.pumpAndSettle();
+      expect(glyph(VhIcons.download), findsOneWidget);
+      expect(glyph(VhIcons.queue), findsOneWidget);
+      expect(glyph(VhIcons.downloadOutline), findsNothing);
+
+      await tester.pumpWidget(bar(1));
+      await tester.pumpAndSettle();
+      expect(glyph(VhIcons.queueFill), findsOneWidget);
+      expect(glyph(VhIcons.downloadOutline), findsOneWidget);
+    });
+
+    testWidgets('the newly chosen icon pulses, then rests at its size', (
+      tester,
+    ) async {
+      await tester.pumpWidget(bar(0));
+      await tester.pumpAndSettle();
+      expect(pulseOf(tester, 1), 1.0);
+      await tester.pumpWidget(bar(1));
+      await tester.pump(const Duration(milliseconds: 40));
+      expect(pulseOf(tester, 1), isNot(1.0));
+      await tester.pumpAndSettle();
+      expect(pulseOf(tester, 1), 1.0);
+    });
+
+    testWidgets('with animations removed it fills without a pulse', (
+      tester,
+    ) async {
+      await tester.pumpWidget(bar(0, still: true));
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(bar(1, still: true));
+      await tester.pump(const Duration(milliseconds: 40));
+      expect(pulseOf(tester, 1), 1.0);
+    });
+  });
 }

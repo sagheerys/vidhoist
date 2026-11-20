@@ -104,6 +104,28 @@ void main() {
     expect(flip(), findsNothing);
   });
 
+  testWidgets('**the guard**: a filled icon turns in Arabic as its outline '
+      'does, so a tab does not flip when it is chosen', (tester) async {
+    Finder flip() => find.descendant(
+      of: find.byType(VhIcon),
+      matching: find.byType(Transform),
+    );
+    final byName = {for (final i in VhIcons.all) i.name: i};
+    final twins = [
+      for (final i in VhIcons.all)
+        if (i.name.endsWith('_fill') &&
+            byName.containsKey(i.name.replaceAll('_fill', '')))
+          (byName[i.name.replaceAll('_fill', '')]!, i),
+    ];
+    expect(twins.map((t) => t.$2), contains(VhIcons.queueFill));
+    for (final (outline, filled) in twins) {
+      await tester.pumpWidget(framed(VhIcon(outline), dir: TextDirection.rtl));
+      final turns = flip().evaluate().length;
+      await tester.pumpWidget(framed(VhIcon(filled), dir: TextDirection.rtl));
+      expect(flip().evaluate().length, turns, reason: filled.name);
+    }
+  });
+
   testWidgets('a shadow draws a blurred copy beneath the icon', (tester) async {
     await tester.pumpWidget(
       framed(

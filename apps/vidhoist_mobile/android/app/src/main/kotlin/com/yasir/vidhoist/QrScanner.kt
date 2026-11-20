@@ -30,6 +30,8 @@ object QrScanner {
             // Follows the phone, held upright, rather than the library's
             // landscape default (see the activity in the manifest).
             .setOrientationLocked(false)
+            // Its line kept clear of the gesture bar.
+            .setCaptureActivity(QrCaptureActivity::class.java)
             .createScanIntent(activity)
         activity.startActivityForResult(intent, REQUEST)
     }

@@ -116,9 +116,13 @@ class _BackupPaneState extends ConsumerState<BackupPane> {
           builder: (context, snap) {
             final files = snap.data ?? const [];
             if (snap.connectionState == ConnectionState.done && files.isEmpty) {
-              return Text(
-                l.desktopBackupsNone,
-                style: text.bodySmall?.copyWith(color: p.ink3),
+              // Clear of the rule above, as a line's own words are.
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: VhSpace.md),
+                child: Text(
+                  l.desktopBackupsNone,
+                  style: text.bodySmall?.copyWith(color: p.ink3),
+                ),
               );
             }
             return Column(

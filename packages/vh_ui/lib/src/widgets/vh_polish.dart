@@ -159,3 +159,87 @@ Widget vhSheetPageTransition(
     child: child,
   );
 }
+
+/// **The chosen place's icon gives a short pulse** as it fills: a little
+/// smaller, a little larger, then still, in under a quarter of a second.
+/// It says "you are here now" where the fill alone changed in a frame.
+///
+/// It plays when [active] turns on, and on its first frame too when
+/// [onMount] (the rail builds the chosen icon afresh each time). The
+/// system's "remove animations" leaves the icon still.
+class VhChosenPulse extends StatefulWidget {
+  const VhChosenPulse({
+    super.key,
+    required this.active,
+    required this.child,
+    this.onMount = false,
+  });
+
+  final bool active;
+  final bool onMount;
+  final Widget child;
+
+  /// The whole pulse; long enough to be seen, short enough not to wait on.
+  static const duration = Duration(milliseconds: 240);
+
+  @override
+  State<VhChosenPulse> createState() => _VhChosenPulseState();
+}
+
+class _VhChosenPulseState extends State<VhChosenPulse>
+    with SingleTickerProviderStateMixin {
+  late final _controller = AnimationController(
+    vsync: this,
+    duration: VhChosenPulse.duration,
+    value: 1,
+  );
+
+  late final Animation<double> _scale = TweenSequence([
+    TweenSequenceItem(
+      tween: Tween(
+        begin: 0.82,
+        end: 1.1,
+      ).chain(CurveTween(curve: VhMotion.entrance)),
+      weight: 60,
+    ),
+    TweenSequenceItem(
+      tween: Tween(
+        begin: 1.1,
+        end: 1.0,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      weight: 40,
+    ),
+  ]).animate(_controller);
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.active && widget.onMount) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _play());
+    }
+  }
+
+  @override
+  void didUpdateWidget(VhChosenPulse old) {
+    super.didUpdateWidget(old);
+    if (widget.active && !old.active) _play();
+  }
+
+  void _play() {
+    if (!mounted ||
+        vhMotionDuration(context, VhChosenPulse.duration) == Duration.zero) {
+      return;
+    }
+    _controller.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      ScaleTransition(scale: _scale, child: widget.child);
+}

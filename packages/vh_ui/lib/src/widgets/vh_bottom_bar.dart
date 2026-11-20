@@ -131,13 +131,17 @@ class _Destination extends StatelessWidget {
                 SizedBox(
                   height: VhBottomBar.pill.height,
                   child: Center(
-                    child: vhNavBadge(
-                      context,
-                      item,
-                      VhIconSwap(
-                        icon: selected ? item.selectedIcon : item.icon,
-                        color: icon?.color,
-                        size: icon?.size,
+                    // The outline fills as it is chosen, with a pulse.
+                    child: VhChosenPulse(
+                      active: selected,
+                      child: vhNavBadge(
+                        context,
+                        item,
+                        VhIconSwap(
+                          icon: selected ? item.selectedIcon : item.icon,
+                          color: icon?.color,
+                          size: icon?.size,
+                        ),
                       ),
                     ),
                   ),
