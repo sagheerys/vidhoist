@@ -248,13 +248,7 @@ void main() {
       of: find.byType(VhIcon),
       matching: find.byType(Transform),
     );
-    for (final icon in [
-      VhIcons.external,
-      VhIcons.transcript,
-      VhIcons.queue,
-      VhIcons.queueAdd,
-      VhIcons.help,
-    ]) {
+    for (final icon in [VhIcons.external, VhIcons.transcript, VhIcons.help]) {
       await tester.pumpWidget(framed(VhIcon(icon), dir: TextDirection.rtl));
       expect(flip(), findsOneWidget, reason: icon.name);
       await tester.pumpWidget(
@@ -266,5 +260,17 @@ void main() {
       framed(const VhIcon(VhIcons.share), dir: TextDirection.rtl),
     );
     expect(flip(), findsNothing);
+  });
+
+  testWidgets('**the guard**: the musical note keeps its shape in Arabic, '
+      'its stem never turned to the wrong side', (tester) async {
+    Finder flip() => find.descendant(
+      of: find.byType(VhIcon),
+      matching: find.byType(Transform),
+    );
+    for (final icon in [VhIcons.queue, VhIcons.queueFill, VhIcons.queueAdd]) {
+      await tester.pumpWidget(framed(VhIcon(icon), dir: TextDirection.rtl));
+      expect(flip(), findsNothing, reason: icon.name);
+    }
   });
 }
