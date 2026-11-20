@@ -412,11 +412,59 @@ abstract class VhLocalizations {
   /// **'Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.'**
   String get autoRetryHelp;
 
+  /// No description provided for @backgroundChecks.
+  ///
+  /// In en, this message translates to:
+  /// **'Check while closed'**
+  String get backgroundChecks;
+
+  /// No description provided for @backgroundChecksHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'About every six hours, when there is a network and the battery is not low. It only tells you what is new; the clips download when you open VidHoist.'**
+  String get backgroundChecksHelp;
+
   /// No description provided for @backgroundDownload.
   ///
   /// In en, this message translates to:
   /// **'Downloading files in the background…'**
   String get backgroundDownload;
+
+  /// No description provided for @backgroundLastRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Last check while closed: {when}'**
+  String backgroundLastRun(String when);
+
+  /// No description provided for @backgroundNotRunYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No check while closed yet: Android chooses when.'**
+  String get backgroundNotRunYet;
+
+  /// No description provided for @backgroundOfferBody.
+  ///
+  /// In en, this message translates to:
+  /// **'VidHoist can look at your channels about every six hours and tell you what is new. Nothing downloads until you open the app.'**
+  String get backgroundOfferBody;
+
+  /// No description provided for @backgroundOfferNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get backgroundOfferNo;
+
+  /// No description provided for @backgroundOfferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hear about new videos while VidHoist is closed?'**
+  String get backgroundOfferTitle;
+
+  /// No description provided for @backgroundOfferYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get backgroundOfferYes;
 
   /// No description provided for @backupNote.
   ///
@@ -3682,6 +3730,18 @@ abstract class VhLocalizations {
   /// **'New tag'**
   String get newTagHint;
 
+  /// No description provided for @newVideosBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{channels}. They download when you open VidHoist.'**
+  String newVideosBody(String channels);
+
+  /// No description provided for @newVideosNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 new video} other{{count} new videos}}'**
+  String newVideosNotice(int count);
+
   /// No description provided for @next.
   ///
   /// In en, this message translates to:
@@ -3759,6 +3819,18 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'The download engine is not ready'**
   String get noServerTitle;
+
+  /// No description provided for @noticeChannelNewVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'New videos'**
+  String get noticeChannelNewVideos;
+
+  /// No description provided for @noticeChannelUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get noticeChannelUpdates;
 
   /// No description provided for @noVideosFound.
   ///
@@ -5595,6 +5667,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Unpin'**
   String get unpinPlaylist;
+
+  /// No description provided for @updateNoticeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open VidHoist to install it.'**
+  String get updateNoticeBody;
 
   /// No description provided for @upNext.
   ///

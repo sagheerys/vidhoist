@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vh_core/vh_core.dart';
 
 import '../../di.dart';
+import '../background/background_state.dart';
 import '../settings/auto_backup.dart';
 import 'channel_art.dart';
 
@@ -44,6 +45,8 @@ final channelTickerProvider = Provider<void>((ref) {
     ),
   )..start();
   ref.onDispose(ticker.stop);
+  // Read at start, which makes the schedule again if it is on.
+  ref.read(backgroundChecksProvider);
 });
 
 /// The intervals offered, in minutes: nothing under half an hour, since a

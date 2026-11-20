@@ -13,6 +13,13 @@
       }
     }
   },
+  "@backgroundLastRun": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "@channelFollowers": {
     "placeholders": {
       "count": {
@@ -255,6 +262,20 @@
       }
     }
   },
+  "@newVideosBody": {
+    "placeholders": {
+      "channels": {
+        "type": "String"
+      }
+    }
+  },
+  "@newVideosNotice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@pcDeleteBody": {
     "placeholders": {
       "title": {
@@ -332,7 +353,13 @@
       }
     }
   },
-  "@pcLinkOtherAddresses": {"placeholders": {"count": {"type": "int"}}},
+  "@pcLinkOtherAddresses": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@pcLinkPairedAt": {
     "placeholders": {
       "time": {
@@ -340,7 +367,13 @@
       }
     }
   },
-  "@pcCopying": {"placeholders": {"percent": {"type": "int"}}},
+  "@pcCopying": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "@pcOutboxTitle": {
     "placeholders": {
       "count": {
@@ -375,7 +408,13 @@
       }
     }
   },
-  "@pcVia": {"placeholders": {"route": {"type": "String"}}},
+  "@pcVia": {
+    "placeholders": {
+      "route": {
+        "type": "String"
+      }
+    }
+  },
   "@pcLinkPhones": {
     "placeholders": {
       "count": {
@@ -592,7 +631,15 @@
   "autoRestoreSuccess": "Data restored from the backup.",
   "autoRetry": "Retry when the network returns",
   "autoRetryHelp": "Anything that failed because the network dropped is retried on its own when it returns. What a site refused is not retried: repeating it unchanged just fails again.",
+  "backgroundChecks": "Check while closed",
+  "backgroundChecksHelp": "About every six hours, when there is a network and the battery is not low. It only tells you what is new; the clips download when you open VidHoist.",
   "backgroundDownload": "Downloading files in the background…",
+  "backgroundLastRun": "Last check while closed: {when}",
+  "backgroundNotRunYet": "No check while closed yet: Android chooses when.",
+  "backgroundOfferBody": "VidHoist can look at your channels about every six hours and tell you what is new. Nothing downloads until you open the app.",
+  "backgroundOfferNo": "Not now",
+  "backgroundOfferTitle": "Hear about new videos while VidHoist is closed?",
+  "backgroundOfferYes": "Turn on",
   "backupNote": "Includes the library, playlists, tags, followed channels and settings. Sign-ins and transcripts are kept apart, and the media files themselves are not included.",
   "backupSettings": "Back up all data",
   "backupSettingsSubtitle": "Seven dated copies that refresh themselves. Restore any of them, or export one to share",
@@ -694,7 +741,13 @@
   "deletedTitle": "Deleted: {title}",
   "deselectAll": "Deselect all",
   "desktopAddLinks": "{count, plural, =0{Nothing to add} =1{Add 1 link} other{Add {count} links}}",
-  "@desktopAddLinks": {"placeholders": {"count": {"type": "int"}}},
+  "@desktopAddLinks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopBack": "Back",
   "desktopBackUpNow": "Back up now",
   "desktopBackupHint": "This computer keeps its last seven backups, at least an hour apart, in Downloads\\VidHoist\\Backups, where they outlast an uninstall.",
@@ -743,7 +796,13 @@
   "desktopCopyQuote": "Copy with time and link",
   "desktopDefaultQualityHint": "What each add starts with; you can still change it for each link.",
   "desktopDeleteSelectedConfirm": "{count, plural, =1{Delete 1 clip? Its file on this computer is deleted.} other{Delete {count} clips? Their files on this computer are deleted.}}",
-  "@desktopDeleteSelectedConfirm": {"placeholders": {"count": {"type": "int"}}},
+  "@desktopDeleteSelectedConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopDesktopSection": "Windows",
   "desktopDiscover": "Discover VidHoist",
   "desktopDiscoverAddLink": "Paste or drop a link",
@@ -812,7 +871,13 @@
   "desktopExportPhone": "For the phone (VidHoist import)",
   "desktopExportSrt": "Subtitles (SRT)",
   "desktopExported": "Saved {name}",
-  "@desktopExported": {"placeholders": {"name": {"type": "String"}}},
+  "@desktopExported": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "desktopFileReadyToPaste": "Ready to paste: {name} · {size}",
   "@desktopFileReadyToPaste": {
     "placeholders": {
@@ -829,9 +894,23 @@
   "desktopForward": "Forward",
   "desktopGlobalShortcut": "Play and pause from any app",
   "desktopGlobalShortcutHint": "{keys} plays and pauses while the window is behind other apps.",
-  "@desktopGlobalShortcutHint": {"placeholders": {"keys": {"type": "String", "example": "Ctrl+Alt+Space"}}},
+  "@desktopGlobalShortcutHint": {
+    "placeholders": {
+      "keys": {
+        "type": "String",
+        "example": "Ctrl+Alt+Space"
+      }
+    }
+  },
   "desktopGlobalShortcutTaken": "Another app already uses {keys}.",
-  "@desktopGlobalShortcutTaken": {"placeholders": {"keys": {"type": "String", "example": "Ctrl+Alt+Space"}}},
+  "@desktopGlobalShortcutTaken": {
+    "placeholders": {
+      "keys": {
+        "type": "String",
+        "example": "Ctrl+Alt+Space"
+      }
+    }
+  },
   "desktopHidePanel": "Hide side panel",
   "desktopHintShortcuts": "Press ? for the keyboard shortcuts. Space plays and pauses; the arrow keys seek.",
   "desktopHintShortcutsAction": "Shortcuts",
@@ -843,12 +922,36 @@
   "desktopImportFromPhone": "Import a backup or transcripts…",
   "desktopImportHint": "A backup or transcripts file from VidHoist, chosen here or dropped on the window. A phone's is added to what is here; a backup of this computer is restored whole, after asking.",
   "desktopImportedBackup": "Added from the phone. Tags: {tagged} · lists: {lists} · resume points: {positions}",
-  "@desktopImportedBackup": {"placeholders": {"tagged": {"type": "int"}, "lists": {"type": "int"}, "positions": {"type": "int"}}},
+  "@desktopImportedBackup": {
+    "placeholders": {
+      "tagged": {
+        "type": "int"
+      },
+      "lists": {
+        "type": "int"
+      },
+      "positions": {
+        "type": "int"
+      }
+    }
+  },
   "desktopImportedNothing": "Nothing new: this computer already had all of it.",
   "desktopImportedTranscripts": "Transcripts added: {count}",
-  "@desktopImportedTranscripts": {"placeholders": {"count": {"type": "int"}}},
+  "@desktopImportedTranscripts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopInLibrary": "{count, plural, =1{1 in your library} other{{count} in your library}}",
-  "@desktopInLibrary": {"placeholders": {"count": {"type": "int"}}},
+  "@desktopInLibrary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopKeepAwake": "Keep the computer awake while downloading",
   "desktopKeepAwakeHint": "So a link sent from the phone, or a long playlist, finishes instead of stopping when Windows goes to sleep. The screen still turns off as usual.",
   "desktopKeyAddLink": "Add the link you copied",
@@ -867,7 +970,13 @@
   "desktopKeyZoomReset": "Interface at its usual size",
   "desktopLanguageSystemHint": "Follows the language of Windows.",
   "desktopLastArrival": "Last arrival {when}",
-  "@desktopLastArrival": {"placeholders": {"when": {"type": "String"}}},
+  "@desktopLastArrival": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "desktopLess": "Less",
   "desktopLibraryLoading": "Loading the library…",
   "desktopLinkCopied": "Link copied",
@@ -877,9 +986,24 @@
   "desktopLinkReady": "Ready",
   "desktopLinkUnsupported": "A site this app doesn't know",
   "desktopLinksDropped": "Only the first {limit} links are taken; {count} more were left out.",
-  "@desktopLinksDropped": {"placeholders": {"count": {"type": "int"}, "limit": {"type": "int"}}},
+  "@desktopLinksDropped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
   "desktopLinksFound": "{count, plural, =1{1 link} other{{count} links}}",
-  "@desktopLinksFound": {"placeholders": {"count": {"type": "int"}}},
+  "@desktopLinksFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopListeningClose": "Close the listening room",
   "desktopListeningRoom": "Listening room",
   "desktopLogsCopied": "Log copied, without links or addresses",
@@ -899,7 +1023,13 @@
   "desktopNoTranscriptTitle": "No transcript for this clip",
   "desktopNotABackup": "This file is not a VidHoist backup or transcripts file.",
   "desktopNotWatched": "{count, plural, =1{1 not watched} other{{count} not watched}}",
-  "@desktopNotWatched": {"placeholders": {"count": {"type": "int"}}},
+  "@desktopNotWatched": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopNothingPlaying": "Nothing playing",
   "desktopNothingPlayingHint": "Play a clip and its transcript, what comes next and its details appear here.",
   "desktopNotifyArrivalsHint": "A Windows notice when new clips from the channels you follow are downloaded.",
@@ -913,26 +1043,62 @@
   "desktopPaletteCommands": "Commands",
   "desktopPaletteHint": "Search titles and what was said, or type > for commands",
   "desktopPaletteList": "List: {name}",
-  "@desktopPaletteList": {"placeholders": {"name": {"type": "String"}}},
+  "@desktopPaletteList": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "desktopPaletteMove": "to move",
   "desktopPaletteOpen": "to open",
   "desktopPaletteSaid": "Said inside clips",
   "desktopPaletteSave": "Save this search",
   "desktopPaletteSettings": "Settings: {section}",
-  "@desktopPaletteSettings": {"placeholders": {"section": {"type": "String"}}},
+  "@desktopPaletteSettings": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  },
   "desktopPaletteTitles": "Titles",
   "desktopPinned": "Pinned",
   "desktopPlayNext": "Play next",
   "desktopPlaysNext": "Plays next, after this one",
   "desktopQueueEnd": "Nothing comes after this one",
   "desktopQuote": "“{text}”\n— {title}, {time}\n{link}",
-  "@desktopQuote": {"placeholders": {"text": {"type": "String"}, "title": {"type": "String"}, "time": {"type": "String"}, "link": {"type": "String"}}},
+  "@desktopQuote": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "link": {
+        "type": "String"
+      }
+    }
+  },
   "desktopQuoteCopied": "Copied with its time and link",
   "desktopReadingBack": "Back to the clip",
   "desktopReadingCloseFind": "Close the search",
   "desktopReadingFind": "Find in the text",
   "desktopReadingFound": "{at} of {count}",
-  "@desktopReadingFound": {"placeholders": {"at": {"type": "int"}, "count": {"type": "int"}}},
+  "@desktopReadingFound": {
+    "placeholders": {
+      "at": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopReadingHint": "Click a sentence to hear it from there · Ctrl+F finds a word · select to copy with its time",
   "desktopReadingNextMatch": "Next match",
   "desktopReadingPreviousMatch": "Previous match",
@@ -941,31 +1107,70 @@
   "desktopRecoverLibraryAction": "Look in the folder",
   "desktopRecoverLibraryHint": "After a reinstall: puts back in the library the clips that are in the downloads folder but no longer listed. The files are not touched.",
   "desktopRecovered": "Put back in the library: {count}",
-  "@desktopRecovered": {"placeholders": {"count": {"type": "int"}}},
+  "@desktopRecovered": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopRecoveredNothing": "Nothing to add: every clip in the folder is in the library.",
   "desktopRecoveredSome": "Put back in the library: {count}. Left out, their link unknown: {left}",
-  "@desktopRecoveredSome": {"placeholders": {"count": {"type": "int"}, "left": {"type": "int"}}},
+  "@desktopRecoveredSome": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "left": {
+        "type": "int"
+      }
+    }
+  },
   "desktopRemoveFromList": "Remove from the list",
   "desktopRestore": "Restore",
   "desktopRestoreBody": "This computer's library, followed channels, tags, lists and settings become what the backup holds. The downloaded files are not touched.",
   "desktopRestoreOfferBody": "Downloads\\VidHoist\\Backups holds a backup of this computer: its library, followed channels, playlists, tags, settings and saved transcripts. The newest was made {when}. Your downloaded files are not touched either way.",
-  "@desktopRestoreOfferBody": {"placeholders": {"when": {"type": "String"}}},
+  "@desktopRestoreOfferBody": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "desktopRestoreOfferTitle": "Restore your backup?",
   "desktopRestoreTitle": "Restore this backup?",
   "desktopRestored": "Backup restored",
   "desktopRevealAfterDownload": "Show in Explorer when done",
   "desktopRevealAfterDownloadHint": "When a file downloaded to this computer is done, its folder opens with the file chosen.",
   "desktopSavedIn": "Saved in {folder}",
-  "@desktopSavedIn": {"placeholders": {"folder": {"type": "String"}}},
+  "@desktopSavedIn": {
+    "placeholders": {
+      "folder": {
+        "type": "String"
+      }
+    }
+  },
   "desktopSavedSearchDelete": "Delete the saved search “{name}”? Nothing in the library changes.",
-  "@desktopSavedSearchDelete": {"placeholders": {"name": {"type": "String"}}},
+  "@desktopSavedSearchDelete": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "desktopSavedSearchName": "Search name",
   "desktopSearch": "Search",
   "desktopSearchHint": "Search titles and what was said…",
   "desktopSearchSaved": "Saved in the sidebar",
   "desktopSeekBar": "Position in the clip",
   "desktopSelectedCount": "{count, plural, =1{1 selected} other{{count} selected}}",
-  "@desktopSelectedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@desktopSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopSetupChooseFile": "Choose a file…",
   "desktopShortcutsApp": "App",
   "desktopShortcutsClip": "On a chosen clip",
@@ -1018,7 +1223,22 @@
   "desktopTrayQuit": "Quit",
   "desktopUiSize": "Interface size",
   "desktopUiSizeHint": "{bigger} and {smaller} change it from anywhere, and {reset} returns to 100%.",
-  "@desktopUiSizeHint": {"placeholders": {"bigger": {"type": "String", "example": "Ctrl+="}, "smaller": {"type": "String", "example": "Ctrl+−"}, "reset": {"type": "String", "example": "Ctrl+0"}}},
+  "@desktopUiSizeHint": {
+    "placeholders": {
+      "bigger": {
+        "type": "String",
+        "example": "Ctrl+="
+      },
+      "smaller": {
+        "type": "String",
+        "example": "Ctrl+−"
+      },
+      "reset": {
+        "type": "String",
+        "example": "Ctrl+0"
+      }
+    }
+  },
   "desktopUiSizeTooLarge": "Too large for this screen",
   "desktopUpdateInstall": "Install and restart",
   "desktopUpdateRestartHint": "VidHoist closes, installs the update and opens again. Your settings and library stay as they are.",
@@ -1026,7 +1246,13 @@
   "desktopViewTable": "Table",
   "desktopVolume": "Volume",
   "desktopVolumeLevel": "Volume {percent}%",
-  "@desktopVolumeLevel": {"placeholders": {"percent": {"type": "int"}}},
+  "@desktopVolumeLevel": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "desktopWelcomeFetchNow": "Fetch them now",
   "desktopWelcomeHelpers": "ffmpeg (joins picture and sound) and Deno (needed by YouTube) come down by themselves at the first download, about 160 MB. You can fetch them now instead.",
   "desktopWelcomeMessage": "Paste a link from YouTube or another site, and VidHoist downloads it to this computer with yt-dlp.",
@@ -1200,6 +1426,8 @@
   "newFolderHint": "e.g. Ai/Lessons",
   "newPlaylistAction": "New playlist",
   "newTagHint": "New tag",
+  "newVideosBody": "{channels}. They download when you open VidHoist.",
+  "newVideosNotice": "{count, plural, =1{1 new video} other{{count} new videos}}",
   "next": "Next",
   "noBackupsYet": "No backups yet",
   "noDownloads": "No downloads",
@@ -1213,6 +1441,8 @@
   "noResults": "No results",
   "noResultsMessage": "No items match your search.",
   "noServerTitle": "The download engine is not ready",
+  "noticeChannelNewVideos": "New videos",
+  "noticeChannelUpdates": "Updates",
   "noVideosFound": "Your library is empty",
   "noWarranty": "Provided as is, without any warranty.",
   "notAffiliated": "Not affiliated with yt-dlp or with any site, and not endorsed by them.",
@@ -1379,7 +1609,13 @@
   "queueItemsCount": "{count, plural, =0{No items} =1{1 item} other{{count} items}}",
   "queueLabel": "Queue",
   "queuePosition": "Number {position} in line",
-  "@queuePosition": {"placeholders": {"position": {"type": "int"}}},
+  "@queuePosition": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
   "queued": "Queued",
   "queuedSection": "Waiting",
   "quickDownload": "Quick download",
@@ -1515,7 +1751,13 @@
   "totalDuration": "Total: {duration}",
   "transcript": "Transcript",
   "transcriptSaidMore": "{count, plural, =1{Said once more} other{Said {count} more times}}",
-  "@transcriptSaidMore": {"placeholders": {"count": {"type": "int"}}},
+  "@transcriptSaidMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "transcriptsClips": "{count, plural, =0{No clips yet} =1{1 clip} other{{count} clips}}",
   "transcriptsDeleteAll": "Delete all",
   "transcriptsDeleteTitle": "Delete every transcript?",
@@ -1528,6 +1770,7 @@
   "unfollowConfirmBody": "VidHoist forgets which videos it has already seen on this channel. If you follow it again later, everything on it by then counts as seen, and what you missed is not filled in. Pausing keeps that memory.",
   "unlockTouch": "Unlock",
   "unpinPlaylist": "Unpin",
+  "updateNoticeBody": "Open VidHoist to install it.",
   "upNext": "Up next",
   "upNextIn": "Up next in «{name}»",
   "updateAllowInstallBody": "Android needs your permission before the app can install its own updates. Grant it once in system settings, then tap Install again.",

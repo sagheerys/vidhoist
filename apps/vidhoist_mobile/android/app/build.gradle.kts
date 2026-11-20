@@ -86,6 +86,9 @@ dependencies {
     // The computer's pairing QR code (QrScanner): zxing, Apache 2.0, no
     // Google Play services.
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    // The channel check while the app is closed (BackgroundCheck): Android's
+    // own scheduler, which batches it with other apps' work.
+    implementation("androidx.work:work-runtime-ktx:2.10.1")
 }
 
 kotlin {

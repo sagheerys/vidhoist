@@ -252,8 +252,12 @@ class DesktopBackups {
     return LibraryRecoveryResult(added: added, unknown: unknown);
   }
 
+  /// The channels' source is made anew, not only their list: it keeps the
+  /// channels it read in memory, and showed and wrote back those of before
+  /// the restore.
   void _refresh() {
     _ref
+      ..invalidate(channelSourceProvider)
       ..invalidate(localLibraryProvider)
       ..invalidate(libraryItemsProvider)
       ..invalidate(playlistsProvider)
