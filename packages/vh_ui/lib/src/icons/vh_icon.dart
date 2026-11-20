@@ -35,16 +35,14 @@ class VhIcon extends StatelessWidget {
 
   /// **On a phone these turn in Arabic by themselves**, as the Material
   /// glyphs they replaced did: the arrow out of a box, lines of text, the
-  /// queue, adding to it, the question mark. Without it the phone's Arabic
-  /// screens pointed the English way where they never had. The Windows app
-  /// mirrors at its call sites instead, so it is left as it is.
-  static const _readsAlong = {
-    'external',
-    'transcript',
-    'queue',
-    'queue_add',
-    'help',
-  };
+  /// question mark. Without it the phone's Arabic screens pointed the
+  /// English way where they never had. The Windows app mirrors at its call
+  /// sites instead, so it is left as it is.
+  ///
+  /// The queue and adding to it are left out: a musical note does not read
+  /// along a line, and turned, its stem stood on the wrong side of the head,
+  /// a note drawn backwards. Both keep one shape in every language.
+  static const _readsAlong = {'external', 'transcript', 'help'};
 
   /// Drawn beneath the icon, blurred, as `Icon` draws its glyph's shadows:
   /// what keeps an icon legible over a cover of unknown colour.
