@@ -139,7 +139,7 @@ void main() {
     test(
       'the probe creates the folder rather than calling it missing',
       () async {
-        final base = Directory.systemTemp.createTempSync('mtf_probe');
+        final base = Directory.systemTemp.createTempSync('vh_probe');
         addTearDown(() => base.deleteSync(recursive: true));
         final target = '${base.path}${Platform.pathSeparator}Vidhoist';
 

@@ -7,7 +7,7 @@ import 'package:vidhoist_mobile/features/downloads_library/library_providers.dar
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vh_core/vh_core.dart';
 
-/// The guard for the fourth view mode (requested 2026-09-08).
+/// The guard for the fourth view mode.
 void main() {
   late MemoryKeyValueStore store;
 

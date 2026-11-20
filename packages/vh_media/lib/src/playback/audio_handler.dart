@@ -227,8 +227,7 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
     //
     // **They stay in the class** and are not moved to a `part` file: an
     // extension does not override the original method, so `audio_service`
-    // would have called `BaseAudioHandler`'s version instead. A correctness
-    // bug found in the full review 2026-09-02.
+    // would have called `BaseAudioHandler`'s version instead.
     if (_isStale(generation)) return false;
     _queue = PlaybackQueue(
       items: snapshot.items,
@@ -244,8 +243,7 @@ class VhAudioHandler extends BaseAudioHandler with SeekHandler {
   //
   // **They stay in the class** and are not moved to a `part` file: an
   // extension does not override the original method, so `audio_service`
-  // would have called `BaseAudioHandler`'s version instead. A correctness
-  // bug found in the full review 2026-09-02.
+  // would have called `BaseAudioHandler`'s version instead.
 
   @override
   Future<void> play() async {

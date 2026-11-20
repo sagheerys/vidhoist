@@ -210,15 +210,14 @@ class VhVideoBottomBar extends StatelessWidget {
       children: [
         Text(
           // Isolated left to right: in an Arabic line the pair read
-          // "3:02 / 1:20", the length before the position (field
-          // report 2026-10-04).
+          // "3:02 / 1:20", the length before the position.
           vhLtrRun(
             '${vhFormatDuration(session.position)} / '
             '${vhFormatDuration(session.duration ?? Duration.zero)}',
           ),
           // A counter live on every frame. Without fixed-width digits
           // the text stretches and shrinks and the whole line dances
-          // (review 2026-09-02).
+          //.
           style: text.labelSmall!.copyWith(color: inkMuted).tabular,
         ),
         Expanded(

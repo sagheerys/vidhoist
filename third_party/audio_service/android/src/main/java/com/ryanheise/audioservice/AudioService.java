@@ -111,7 +111,7 @@ public class AudioService extends MediaBrowserServiceCompat {
     }
 
     /**
-     * Vidhoist patch: onDestroy() clears the listener, and only the plugin sets
+     * VidHoist patch: onDestroy() clears the listener, and only the plugin sets
      * it again, when a Flutter engine attaches. A service destroyed and
      * recreated while the engine lives therefore dropped every media command:
      * the session still showed the app's state, but pause, play and the other

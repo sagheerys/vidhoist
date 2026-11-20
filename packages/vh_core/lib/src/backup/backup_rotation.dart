@@ -16,7 +16,7 @@ class BackupFile {
   final int sizeBytes;
 }
 
-/// **The rotating backup store** (requested 2026-09-04: "several copies, up
+/// **The rotating backup store** ("several copies, up
 /// to seven automatically, deleting the oldest").
 ///
 /// Four decisions, each one caused by a real failure:
@@ -38,7 +38,7 @@ class BackupFile {
 ///    changes, and yesterday's copy is evicted by today's duplicates.
 ///
 /// 4. **A minimum spacing between slots** ([minSpacing]), added after
-///    a device review (2026-09-05): all seven copies on a phone sat between
+///    trying it on a device: all seven copies on a phone sat between
 ///    00:39 and 00:45, **six minutes covering the entire backup history**.
 ///    The limit of seven was working perfectly, but every playlist or tag
 ///    change requests a backup, and a batch download from YouTube is a

@@ -31,7 +31,7 @@ enum LoginSite {
     alsoNeeded: ['ct0'],
   ),
   vimeo('Vimeo', 'https://vimeo.com/log_in', ['https://vimeo.com/'], 'vimeo'),
-  // Asked 2026-11-18: Reddit refuses some posts to a visitor, and a
+  // Reddit refuses some posts to a visitor, and a
   // SoundCloud account reaches what a visitor cannot; yt-dlp reads these
   // two cookies for each.
   reddit('Reddit', 'https://www.reddit.com/login/', [

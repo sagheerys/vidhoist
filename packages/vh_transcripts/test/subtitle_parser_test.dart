@@ -71,8 +71,8 @@ a thousand hours in
   });
 
   test('a large file read on another thread reads the same', () async {
-    // The library backfill read every clip's subtitles on the thread that
-    // draws the app.
+    // The search over what was said reads every clip's subtitles; on the
+    // thread that draws the app each one was a stutter.
     final srt = StringBuffer();
     String t(int x) =>
         '00:${(x ~/ 60 % 60).toString().padLeft(2, '0')}:'

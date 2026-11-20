@@ -9,7 +9,7 @@ import 'package:vh_core/vh_core.dart';
 import 'package:vh_media/vh_media.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **Guards from a device review on 2026-09-05**: two visual flaws seen on
+/// **Guards from a device review**: two visual flaws seen on
 /// the device, each with a root in a single line.
 void main() {
   Widget host(Widget child, {List<Override> overrides = const []}) =>

@@ -203,7 +203,7 @@ class _Bar extends StatelessWidget {
                               label: l10n.play,
                             ),
                             // The second thing people do from the bar while
-                            // a list plays (design review 2026-09-25).
+                            // a list plays.
                             if (handler.items.length > 1)
                               IconButton(
                                 onPressed: handler.skipToNext,

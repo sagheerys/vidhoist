@@ -4,8 +4,7 @@ import 'package:vh_media/vh_media.dart';
 
 import 'fake_player_port.dart';
 
-/// **Two holes found by the pre-release review of 2026-09-19**, in the
-/// paused auto-stop shipped the same day. (The third, a load failure
+/// **Two holes found in the paused auto-stop** before it was released. (The third, a load failure
 /// counted twice, lives in the port: see `just_audio_port_test.dart`.)
 ///
 /// 1. The timer armed on a **restored** session nobody had tapped yet, and

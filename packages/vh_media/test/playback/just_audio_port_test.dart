@@ -5,7 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:vh_media/vh_media.dart';
 
 /// **A load failure reaches Dart twice, and the port reports it once**
-/// (pre-release review 2026-09-19).
+///.
 ///
 /// just_audio's platform side sends one failure to the pending
 /// `setAudioSource` call **and** to the event channel, in that order. The

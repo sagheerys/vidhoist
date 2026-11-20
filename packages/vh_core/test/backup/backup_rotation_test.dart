@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:vh_core/vh_core.dart';
 import 'package:test/test.dart';
 
-/// **Guards for the rotating store** (requested 2026-09-04: "seven copies
+/// **Guards for the rotating store** ("seven copies
 /// automatically, deleting the oldest"), and each one documents a defect
 /// rather than a preference.
 void main() {
@@ -11,7 +11,7 @@ void main() {
   late BackupRotation rotation;
 
   setUp(() async {
-    temp = await Directory.systemTemp.createTemp('mtf_rotation_');
+    temp = await Directory.systemTemp.createTemp('vh_rotation_');
     // **Spacing is disabled here on purpose**: these guards test the limit,
     // the atomicity and the prefix, and their timestamps are minutes apart.
     // Spacing has its own guards below.

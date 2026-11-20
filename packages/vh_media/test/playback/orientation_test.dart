@@ -10,7 +10,7 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 
 import 'fake_video_platform.dart';
 
-/// **Rotation guards (decision 2026-09-05)**: the app is portrait and only
+/// **Rotation guards**: the app is portrait and only
 /// the player rotates, and a tilt opens full screen and closes it.
 ///
 /// The original defect: full screen's `dispose` locked `portraitUp`

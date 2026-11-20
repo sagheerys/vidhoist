@@ -100,7 +100,7 @@ class _Cover extends StatelessWidget {
   final String pinnedLabel;
   final VoidCallback onPlay;
 
-  /// **A mosaic that adapts to the count** (requested 2026-09-08): it was
+  /// **A mosaic that adapts to the count**: it was
   /// always two cells, so a playlist of twenty items was represented by two
   /// covers. Now it goes up to four, and the progression is deliberate:
   /// **three means one large and two small** rather than a grid with an

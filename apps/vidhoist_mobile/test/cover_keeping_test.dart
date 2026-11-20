@@ -24,7 +24,7 @@ void main() {
   final frame = Uint8List.fromList([0xFF, 0xD8, 0xFF, 2]);
 
   late Directory temp;
-  setUp(() => temp = Directory.systemTemp.createTempSync('mtf_lite_covers'));
+  setUp(() => temp = Directory.systemTemp.createTempSync('vh_lite_covers'));
   tearDown(() => temp.deleteSync(recursive: true));
 
   LocalItem clip(String url, String cover) {

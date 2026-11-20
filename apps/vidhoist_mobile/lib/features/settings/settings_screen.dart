@@ -7,7 +7,7 @@ import '../update/update_pending_row.dart';
 import 'settings_hub.dart';
 import 'settings_sections.dart';
 
-/// **The settings home** (approved mock-up, 2026-10-14): three short groups whose rows show each setting as it stands, each
+/// **The settings home**: three short groups whose rows show each setting as it stands, each
 /// opening its own page. It used to be one long page that grew with every
 /// feature. On a tablet held sideways the same rows open in two panes
 /// ([SettingsHub]).

@@ -127,7 +127,7 @@ void main() {
       return h;
     }
 
-    // Asked 2026-11-18: before the length came, any time could be typed.
+    // Before the length came, any time could be typed.
     testWidgets('**the guard**: the length is read once the link stops '
         'changing, before a part is asked for', (tester) async {
       final h = await dialog(tester);

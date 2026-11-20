@@ -9,7 +9,7 @@ import 'package:vh_ui/vh_ui.dart';
 import '../../di.dart';
 import 'error_text.dart';
 
-/// **Every error shown is also written down** (requested 2026-09-06).
+/// **Every error shown is also written down**.
 ///
 /// The diagnostic log was a download log rather than an error log: forty
 /// places in this app show an error message and not one of them reached

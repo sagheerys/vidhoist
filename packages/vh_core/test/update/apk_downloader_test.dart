@@ -39,6 +39,15 @@ void main() {
   String url() => 'http://127.0.0.1:${server.port}/update.apk';
   File part() => File('$savePath.part');
 
+  String sha256Of(Uint8List bytes) => [
+    for (final b in SHA256Digest().process(bytes))
+      b.toRadixString(16).padLeft(2, '0'),
+  ].join();
+
+  /// A hash for a test about something else: the reason it fails is then
+  /// that something, never a missing hash.
+  final anyHash = 'a' * 64;
+
   test('it downloads, renames, and reports progress', () async {
     final body = fakeApk(40000);
     handler = (r) async {
@@ -51,6 +60,7 @@ void main() {
       url: url(),
       savePath: savePath,
       expectedSize: body.length,
+      sha256: sha256Of(body),
       onProgress: seen.add,
     );
 
@@ -61,11 +71,6 @@ void main() {
     // an update is ready.
     expect(part().existsSync(), isFalse);
   });
-
-  String sha256Of(Uint8List bytes) => [
-    for (final b in SHA256Digest().process(bytes))
-      b.toRadixString(16).padLeft(2, '0'),
-  ].join();
 
   test(
     "**the guard**: a file whose hash is not the release's is refused",
@@ -120,11 +125,38 @@ void main() {
     handler = (r) async => r.response.write('<html>Not Found</html>');
 
     await expectLater(
-      ApkDownloader().download(url: url(), savePath: savePath),
-      throwsA(isA<UpdateDownloadException>()),
+      ApkDownloader().download(url: url(), savePath: savePath, sha256: anyHash),
+      throwsA(
+        isA<UpdateDownloadException>().having(
+          (e) => e.reason,
+          'reason',
+          'not the expected file',
+        ),
+      ),
     );
     expect(File(savePath).existsSync(), isFalse);
     expect(part().existsSync(), isFalse);
+  });
+
+  test('**the guard**: a release that lists no hash is refused before a '
+      'byte is fetched', () async {
+    var asked = false;
+    handler = (r) async {
+      asked = true;
+      r.response.add(fakeApk(4000));
+    };
+    await expectLater(
+      ApkDownloader().download(url: url(), savePath: savePath),
+      throwsA(
+        isA<UpdateDownloadException>().having(
+          (e) => e.reason,
+          'reason',
+          'no checksum in the release',
+        ),
+      ),
+    );
+    expect(asked, isFalse);
+    expect(File(savePath).existsSync(), isFalse);
   });
 
   test('**the guard**: the Windows installer must start as a program, and '
@@ -132,12 +164,25 @@ void main() {
     final exe = Uint8List(4000)..setAll(0, ApkDownloader.exeMagic);
     handler = (r) async => r.response.add(exe);
     final windows = ApkDownloader(magic: ApkDownloader.exeMagic);
-    expect(await windows.download(url: url(), savePath: savePath), savePath);
+    expect(
+      await windows.download(
+        url: url(),
+        savePath: savePath,
+        sha256: sha256Of(exe),
+      ),
+      savePath,
+    );
 
     handler = (r) async => r.response.add(fakeApk(4000));
     await expectLater(
-      windows.download(url: url(), savePath: savePath),
-      throwsA(isA<UpdateDownloadException>()),
+      windows.download(url: url(), savePath: savePath, sha256: anyHash),
+      throwsA(
+        isA<UpdateDownloadException>().having(
+          (e) => e.reason,
+          'reason',
+          'not the expected file',
+        ),
+      ),
     );
     expect(part().existsSync(), isFalse);
   });
@@ -151,8 +196,15 @@ void main() {
         url: url(),
         savePath: savePath,
         expectedSize: 5000,
+        sha256: sha256Of(body),
       ),
-      throwsA(isA<UpdateDownloadException>()),
+      throwsA(
+        isA<UpdateDownloadException>().having(
+          (e) => e.reason,
+          'reason',
+          'size mismatch',
+        ),
+      ),
     );
     expect(File(savePath).existsSync(), isFalse);
   });
@@ -161,7 +213,7 @@ void main() {
     handler = (r) async => r.response.statusCode = HttpStatus.notFound;
 
     await expectLater(
-      ApkDownloader().download(url: url(), savePath: savePath),
+      ApkDownloader().download(url: url(), savePath: savePath, sha256: anyHash),
       throwsA(isA<UpdateDownloadException>()),
     );
     expect(part().existsSync(), isFalse);
@@ -183,6 +235,7 @@ void main() {
       ApkDownloader().download(
         url: url(),
         savePath: savePath,
+        sha256: anyHash,
         onProgress: (p) {
           if (p > 0.2) token.cancel();
         },

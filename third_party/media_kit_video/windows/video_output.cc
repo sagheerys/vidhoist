@@ -175,7 +175,7 @@ void VideoOutput::Render() {
     }
     // S/W
     if (pixel_buffer_ != nullptr) {
-      // Vidhoist patch: a texture not added yet is drawn on the next frame.
+      // VidHoist patch: a texture not added yet is drawn on the next frame.
       auto texture = pixel_buffer_textures_.find(texture_id_);
       if (texture == pixel_buffer_textures_.end()) {
         return;
@@ -256,7 +256,7 @@ void VideoOutput::CheckAndResize() {
     current_height = surface_manager_->height();
   }
   if (pixel_buffer_ != nullptr) {
-    // Vidhoist patch: the same gap; the size is checked again next frame.
+    // VidHoist patch: the same gap; the size is checked again next frame.
     auto texture = pixel_buffer_textures_.find(texture_id_);
     if (texture == pixel_buffer_textures_.end()) {
       return;
@@ -322,7 +322,7 @@ void VideoOutput::Resize(int64_t required_width, int64_t required_height) {
         std::make_unique<flutter::TextureVariant>(flutter::GpuSurfaceTexture(
             kFlutterDesktopGpuSurfaceTypeDxgiSharedHandle, [&](auto, auto) {
               std::lock_guard<std::mutex> lock(textures_mutex_);
-              // Vidhoist patch: Resize stores the new id before the texture
+              // VidHoist patch: Resize stores the new id before the texture
               // is added, so a frame asked for in between found no entry
               // and `at` threw inside the engine's noexcept call, which
               // ends the process. No entry yet means no frame this time.
@@ -357,7 +357,7 @@ void VideoOutput::Resize(int64_t required_width, int64_t required_height) {
     auto texture_variant = std::make_unique<flutter::TextureVariant>(
         flutter::PixelBufferTexture([&](auto, auto) {
           std::lock_guard<std::mutex> lock(textures_mutex_);
-          // Vidhoist patch: the same gap as the H/W callback above.
+          // VidHoist patch: the same gap as the H/W callback above.
           auto texture = pixel_buffer_textures_.find(texture_id_);
           if (texture_id_ && texture != pixel_buffer_textures_.end()) {
             return texture->second.get();

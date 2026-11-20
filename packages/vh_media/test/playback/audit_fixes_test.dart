@@ -9,7 +9,7 @@ import 'fake_video_platform.dart';
 
 import '../icon_finder.dart';
 
-/// **Guards from a device review on 2026-09-05**: each one is about a flaw
+/// **Guards from a device review**: each one is about a flaw
 /// seen on the device rather than an imagined possibility.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

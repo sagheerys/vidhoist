@@ -7,7 +7,7 @@ void main() {
   late Directory tempDir;
   late VhLogger logger;
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('mtf_logger_');
+    tempDir = await Directory.systemTemp.createTemp('vh_logger_');
     logger = VhLogger(
       filePath: '${tempDir.path}${Platform.pathSeparator}log.txt',
       maxLines: 5,

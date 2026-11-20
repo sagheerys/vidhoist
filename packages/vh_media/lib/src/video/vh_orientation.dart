@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vh_ui/vh_ui.dart' show VhBreakpoint;
 
-/// **The orientation policy (decision 2026-09-05): the app is portrait and
+/// **The orientation policy: the app is portrait and
 /// only the player rotates**, which is what YouTube itself does on a
 /// phone.
 ///

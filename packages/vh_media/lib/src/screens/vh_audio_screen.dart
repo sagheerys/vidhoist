@@ -44,8 +44,8 @@ class VhAudioScreen extends StatelessWidget {
   final VhArtworkBuilder? cover;
   final VoidCallback? onShowPlaylist;
 
-  /// **Clip details**, which replaced the queue button in the header (field
-  /// report 2026-09-05): the queue already has its visible button at the
+  /// **Clip details**, which replaced the queue button in the header: the
+  /// queue already has its visible button at the
   /// bottom of the screen, and a second one at the top repeats it without
   /// adding anything.
   final VoidCallback? onDetails;

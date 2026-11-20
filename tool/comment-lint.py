@@ -17,8 +17,8 @@ This fails (exit 1) when a comment in apps/ or packages/:
   * says where a reason came from instead of the reason: "owner's report
     2026-11-12", "field report", "screenshot 2026-09-02". The reason is
     what a reader needs; a date may stay when it dates a measured fact.
-  * names Vidhoist. VidHoist is a project of its own; nothing in it speaks
-    of where its first lines came from.
+  * names the project VidHoist's first lines came from. VidHoist is a
+    project of its own; nothing in it speaks of where it began.
   * says TODO / FIXME / XXX / HACK without an issue number (#123) or a
     link, so a note-to-self cannot outlive the person who wrote it.
   * is code that was switched off rather than deleted. Git keeps history;
@@ -54,7 +54,10 @@ PROVENANCE = re.compile(
     r"(?i)\bowner'?s? (?:report|decision|request|choice|note|pick)"
     r"|\(owner\b|\bfield (?:report|defect)"
     r"|\bscreenshot,? 20\d\d|reported with a screenshot"
-    r"|vidhoist"
+    r"|\b(?:asked|requested|request|decision|decided|review|reviewed|report"
+    r"|approved(?: mock-?up)?|mock-?up|feedback)\b[^.\n]{0,24}?20\d\d-\d\d"
+    r"|\bthe plan\b"
+    r"|me" r"tube"
 )
 # A line of Dart that was switched off: a statement, a declaration, or a
 # lone brace -- not a sentence that happens to end in a colon.

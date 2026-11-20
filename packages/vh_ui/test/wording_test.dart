@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// that mentions one (or reassures that there is none) only confuses
 /// someone who never expected one. And one thing gets one word in Arabic:
 /// one verb for downloading, one name each for the computer, the phone,
-/// the QR code and a filter (asked 2026-11-18). The banned spellings are
+/// the QR code and a filter. The banned spellings are
 /// in the patterns below.
 void main() {
   Map<String, String> strings(String lang) {
@@ -31,11 +31,24 @@ void main() {
     expect(
       offending(
         strings('en'),
-        RegExp(r'\bservers?\b|Vidhoist', caseSensitive: false),
+        RegExp(
+          r'\bservers?\b|Me'
+          'Tube',
+          caseSensitive: false,
+        ),
       ),
       isEmpty,
     );
-    expect(offending(strings('ar'), RegExp(r'سيرفر|خادم|Vidhoist')), isEmpty);
+    expect(
+      offending(
+        strings('ar'),
+        RegExp(
+          'سيرفر|خادم|Me'
+          'Tube',
+        ),
+      ),
+      isEmpty,
+    );
   });
 
   test('**the guard**: the Arabic strings use one word for each thing', () {

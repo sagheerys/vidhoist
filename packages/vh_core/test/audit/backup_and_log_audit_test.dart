@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 /// log names no file and no user.
 void main() {
   test('a backup with nothing changed does not take a second slot', () async {
-    final dir = await Directory.systemTemp.createTemp('mtf_audit_rot');
+    final dir = await Directory.systemTemp.createTemp('vh_audit_rot');
     addTearDown(() => dir.delete(recursive: true));
     final store = MemoryKeyValueStore();
     await store.setString('server_url', 'https://nas.example');
@@ -30,12 +30,12 @@ void main() {
   test('a shared log keeps no file title, user folder or cookie', () {
     final out = VhLogger.sanitizeForShare(
       '/storage/emulated/0/Download/My secret clip.mp4 | '
-      r"path = 'C:\Users\Yasir\Videos\Private one.mp4' "
+      r"path = 'C:\Users\Someone\Videos\Private one.mp4' "
       'Cookie: SID=abc123; CF_Authorization=eyJxyz',
     );
     for (final leak in [
       'secret clip',
-      'Yasir',
+      'Someone',
       'Private one',
       'SID=abc123',
       'eyJxyz',

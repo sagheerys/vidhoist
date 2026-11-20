@@ -71,7 +71,15 @@ void main() {
 
     expect(find.text(vhLtrRun('sagheerys/vidhoist')), findsOneWidget);
     expect(find.text(vhLtrRun('vidhoist/issues')), findsOneWidget);
-    expect(find.text('Vidhoist'), findsNothing);
+    expect(
+      find.textContaining(
+        RegExp(
+          'Me'
+          'Tube',
+        ),
+      ),
+      findsNothing,
+    );
     expect(find.text('yt-dlp'), findsOneWidget);
   });
 

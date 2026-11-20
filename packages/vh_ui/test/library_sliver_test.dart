@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_ui/vh_ui.dart';
 
-/// **The library's modes on a tablet (approved mock-up, 2026-10-10)**:
+/// **The library's modes on a tablet**:
 /// cards and compact rows gain columns, the list becomes a table, and a
 /// phone keeps exactly the single column it had.
 void main() {

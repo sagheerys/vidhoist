@@ -4,7 +4,7 @@ import 'package:vh_media/src/widgets/vh_drag_to_dismiss.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 /// **The guard for "dragging down returns the audio screen to the mini
-/// player"** (requested 2026-09-04). A short drag returns to place; a long
+/// player"**. A short drag returns to place; a long
 /// one or a fling closes.
 void main() {
   Future<void> pumpPage(WidgetTester tester) async {

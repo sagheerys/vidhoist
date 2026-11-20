@@ -86,7 +86,7 @@ class ClipTimeField extends StatefulWidget {
 class _ClipTimeFieldState extends State<ClipTimeField>
     with SingleTickerProviderStateMixin {
   /// **An arrow pressed at the edge shakes the time and reddens it**
-  /// (asked 2026-11-17): held at the video's end the number simply stopped
+  ///: held at the video's end the number simply stopped
   /// changing, and nothing said why.
   late final _bump = AnimationController(vsync: this, duration: _bumpTime);
 

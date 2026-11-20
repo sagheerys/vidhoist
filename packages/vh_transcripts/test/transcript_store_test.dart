@@ -9,7 +9,7 @@ void main() {
   late TranscriptStore store;
 
   setUp(() {
-    temp = Directory.systemTemp.createTempSync('mtf_transcripts');
+    temp = Directory.systemTemp.createTempSync('vh_transcripts');
     store = TranscriptStore(Directory('${temp.path}/transcripts'));
   });
   tearDown(() => temp.deleteSync(recursive: true));

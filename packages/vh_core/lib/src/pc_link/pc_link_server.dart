@@ -303,16 +303,20 @@ class PcLinkServer {
 
   Future<void> _cover(String id, HttpResponse response) async {
     final file = await host.cover(id);
-    if (file == null || !await file.exists()) {
+    // **Only a picture.** A library row's cover is a path, and a restored
+    // backup can carry any path: without this a crafted row would have the
+    // computer serve whatever file it names.
+    final type = switch (file?.path.split('.').last.toLowerCase()) {
+      'jpg' || 'jpeg' => ContentType('image', 'jpeg'),
+      'png' => ContentType('image', 'png'),
+      'webp' => ContentType('image', 'webp'),
+      _ => null,
+    };
+    if (file == null || type == null || !await file.exists()) {
       response.statusCode = HttpStatus.notFound;
       return;
     }
-    final ext = file.path.split('.').last.toLowerCase();
-    response.headers.contentType = switch (ext) {
-      'png' => ContentType('image', 'png'),
-      'webp' => ContentType('image', 'webp'),
-      _ => ContentType('image', 'jpeg'),
-    };
+    response.headers.contentType = type;
     await response.addStream(file.openRead());
   }
 

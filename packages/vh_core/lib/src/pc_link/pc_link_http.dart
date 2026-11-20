@@ -72,7 +72,27 @@ Future<Map<String, Object?>?> pcReadJsonRequest(HttpRequest request) async {
   }
 }
 
+/// Discards what is left of a refused request, whose status is already
+/// set. A body larger than any request the link makes, or one of no stated
+/// length, is not read at all: the answer goes out and the connection is
+/// cut, so nobody on the network can keep the computer reading for as long
+/// as they keep sending. Dart's server would otherwise read it to its end
+/// before closing, however the response is marked.
 Future<void> pcDrain(HttpRequest request) async {
+  final length = request.contentLength;
+  if (length > PcLink.maxBody || (length < 0 && request.method != 'GET')) {
+    final response = request.response
+      ..persistentConnection = false
+      ..contentLength = 0;
+    try {
+      final socket = await response.detachSocket();
+      await socket.flush();
+      socket.destroy();
+    } on Object {
+      // The other end went away first.
+    }
+    return;
+  }
   try {
     await request.drain<void>();
   } on Object {

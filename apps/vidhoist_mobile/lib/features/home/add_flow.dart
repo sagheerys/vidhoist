@@ -280,8 +280,8 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
     }
     Navigator.pop(context, true);
 
-    // **The decision is made on the final URL, not the entered one** (field
-    // report 2026-09-08): `on.soundcloud.com/…` is an album with no
+    // **The decision is made on the final URL, not the entered one**:
+    // `on.soundcloud.com/…` is an album with no
     // `/sets/`, so it counted as a single clip and all twenty downloaded
     // with no selection screen. For links that are not short,
     // `needsResolution` returns false immediately, so there is no delay at
