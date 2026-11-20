@@ -56,20 +56,18 @@ class TranscriptsPane extends ConsumerWidget {
           ),
         ),
         const CaptionStyleChoices(),
+        // The button on the line of what it deletes, at its end, as on
+        // every other line: under it, it sat alone on the rule.
         SettingLine(
           title: l.transcriptsClips(summary?.$1 ?? 0),
           value: summary == null || none ? null : vhFormatSize(summary.$2),
-        ),
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: VhRowButton(
+          trailing: VhRowButton(
             label: l.transcriptsDeleteAll,
             danger: true,
             icon: VhIcons.trash,
             onPressed: none ? null : () => unawaited(_deleteAll(context, ref)),
           ),
         ),
-        const SizedBox(height: VhSpace.md),
         SettingLine(
           title: l.desktopTranscriptsMove,
           hint: l.desktopTranscriptsMoveHint,

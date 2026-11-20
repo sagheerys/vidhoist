@@ -230,6 +230,34 @@ abstract final class VhIcons {
     'monitor',
     r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M9 20h6"/><path d="M12 16v4"/></svg>''',
   );
+  static const downloadOutline = VhIconData(
+    'download_outline',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10.5"/><path d="M7.5 10l4.5 4.5 4.5-4.5"/><path d="M5 19.5h14"/></svg>''',
+  );
+  static const queueFill = VhIconData(
+    'queue_fill',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="2.2"><path d="M17 17V4h4"/><path d="M13 5H3"/><path d="M3 9h10"/><path d="M9 13H3"/></g><circle fill="{ink}" stroke="none" cx="14" cy="17" r="3.6"/></svg>''',
+  );
+  static const monitorFill = VhIconData(
+    'monitor_fill',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect fill="{ink}" stroke="none" x="2.8" y="3.8" width="18.4" height="12.9" rx="2.4"/><path d="M9 20h6"/><path d="M12 16.5v3.5"/></svg>''',
+  );
+  static const settingsFill = VhIconData(
+    'settings_fill',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path fill="{ink}" stroke="none" fill-rule="evenodd" d="M10.01 6.23L10.40 3.75A8.4 8.4 0 0 1 13.60 3.75L13.99 6.23A6.1 6.1 0 0 1 16.00 7.40L16.00 7.40L18.34 6.49A8.4 8.4 0 0 1 19.94 9.27L17.99 10.84A6.1 6.1 0 0 1 17.99 13.16L17.99 13.16L19.94 14.73A8.4 8.4 0 0 1 18.34 17.51L16.00 16.60A6.1 6.1 0 0 1 13.99 17.77L13.99 17.77L13.60 20.25A8.4 8.4 0 0 1 10.40 20.25L10.01 17.77A6.1 6.1 0 0 1 8.00 16.60L8.00 16.60L5.66 17.51A8.4 8.4 0 0 1 4.06 14.73L6.01 13.16A6.1 6.1 0 0 1 6.01 10.84L6.01 10.84L4.06 9.27A8.4 8.4 0 0 1 5.66 6.49L8.00 7.40A6.1 6.1 0 0 1 10.01 6.23z M14.6 12a2.6 2.6 0 1 1-5.2 0a2.6 2.6 0 1 1 5.2 0z"/></svg>''',
+  );
+  static const libraryFill = VhIconData(
+    'library_fill',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path fill="{ink}" stroke="none" fill-rule="evenodd" d="M6.5 4h11a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-11a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zM7.6 8a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM7.6 12a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM7.6 16a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM18.4 8a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM18.4 12a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM18.4 16a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM10.2 9v6l5-3z"/></svg>''',
+  );
+  static const searchFill = VhIconData(
+    'search_fill',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle fill="{ink}" stroke="none" cx="10.5" cy="10.5" r="7"/><path stroke-width="2.6" d="M15.8 15.8l4 4"/></svg>''',
+  );
+  static const subscriptionsFill = VhIconData(
+    'subscriptions_fill',
+    r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="2.6"><path d="M5 4.8a14.2 14.2 0 0 1 14.2 14.2"/><path d="M5 10.4a8.6 8.6 0 0 1 8.6 8.6"/></g><circle fill="{ember}" stroke="none" cx="6.2" cy="17.8" r="2.1"/></svg>''',
+  );
   static const appearance = VhIconData(
     'appearance',
     r'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{ink}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path fill="{ink}" stroke="none" d="M12 4a8 8 0 0 1 0 16z"/></svg>''',
@@ -477,6 +505,13 @@ abstract final class VhIcons {
     subscriptions,
     playback,
     monitor,
+    downloadOutline,
+    queueFill,
+    monitorFill,
+    settingsFill,
+    libraryFill,
+    searchFill,
+    subscriptionsFill,
     appearance,
     backup,
     info,

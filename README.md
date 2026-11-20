@@ -159,13 +159,18 @@ secured: [docs/PC-LINK.md](docs/PC-LINK.md).
 ## Screenshots
 
 <details>
-<summary><strong>More screens</strong>: the players, the library at night, twelve languages, Windows at night</summary>
+<summary><strong>More screens</strong>: the players, the computer from the phone, twelve languages, tablets, Windows at night</summary>
 <br>
 
-**The players and the library at night** — the music player by day, a
-video at night, the library at night, and the twelve languages:
+**The players and the computer** — the music player by day, the paired
+computer's library on the phone, a video at night, and the twelve languages:
 
-![The music player by day, a video at night, the library at night, and the language list](docs/screenshots/more-en.jpg)
+![The music player by day, the computer's library on the phone, a video at night, and the language list](docs/screenshots/more-en.jpg)
+
+**On a tablet** — held sideways, the library with the "Now playing" panel
+beside it; upright, at night, the library with the rail:
+
+![VidHoist on a tablet: the library beside the Now playing panel, and the library upright at night](docs/screenshots/tablet-en.jpg)
 
 **Windows at night** — a video with its transcript, and the music player:
 

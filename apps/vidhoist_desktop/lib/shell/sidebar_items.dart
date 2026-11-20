@@ -89,7 +89,12 @@ class SidebarItem extends StatelessWidget {
     this.trailing,
     this.onMenu,
     this.dot,
+    this.selectedIcon,
   });
+
+  /// The icon filled, shown while the place is chosen: the outline the
+  /// rest of the time, as the phone's bar does.
+  final VhIconData? selectedIcon;
 
   /// A right click, at where it landed; null when the place has no menu.
   final ValueChanged<Offset>? onMenu;
@@ -120,7 +125,13 @@ class SidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = VhThemeX.of(context).palette;
     final ink = selected ? p.ink : p.ink2;
-    final icon = VhIcon(this.icon, size: VhDensity.desktop.icon, color: ink);
+    // The fill comes in softly, without the phone's pulse: a click needs
+    // less telling than a thumb.
+    final icon = VhIconSwap(
+      icon: selected ? selectedIcon ?? this.icon : this.icon,
+      size: VhDensity.desktop.icon,
+      color: ink,
+    );
     // On the icon, so it shows in the narrow sidebar too.
     final glyph = dot == null
         ? icon

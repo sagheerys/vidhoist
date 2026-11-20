@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/vh_theme.dart';
 import '../tokens/tokens.dart';
+import 'vh_polish.dart';
 import 'vh_desktop_app.dart';
 import 'vh_bottom_bar.dart';
 
@@ -291,9 +292,13 @@ class VhAdaptiveScaffold extends StatelessWidget {
           icon: Builder(
             builder: (context) => vhNavBadge(context, item, VhIcon(item.icon)),
           ),
+          // Built afresh each time it is chosen, so it pulses as it comes.
           selectedIcon: Builder(
-            builder: (context) =>
-                vhNavBadge(context, item, VhIcon(item.selectedIcon)),
+            builder: (context) => VhChosenPulse(
+              active: true,
+              onMount: true,
+              child: vhNavBadge(context, item, VhIcon(item.selectedIcon)),
+            ),
           ),
           label: Text(item.label),
           padding: const EdgeInsets.symmetric(vertical: VhSpace.xs),

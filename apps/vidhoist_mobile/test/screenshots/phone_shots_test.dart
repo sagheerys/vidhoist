@@ -4,11 +4,10 @@ library;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
-import 'package:vh_ui/shots.dart';
+import 'package:vh_media/vh_media.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:vidhoist_mobile/di.dart';
 import 'package:vidhoist_mobile/features/background/background_state.dart';
@@ -19,10 +18,14 @@ import 'package:vidhoist_mobile/features/downloads_library/library_providers.dar
 import 'package:vidhoist_mobile/features/downloads_library/library_screen.dart';
 import 'package:vidhoist_mobile/features/downloads_library/local_item.dart';
 import 'package:vidhoist_mobile/features/downloads_library/media_access.dart';
+import 'package:vidhoist_mobile/features/player/playback_providers.dart';
 import 'package:vidhoist_mobile/features/settings/auto_backup.dart';
 import 'package:vidhoist_mobile/features/settings/language_screen.dart';
 import 'package:vidhoist_mobile/features/settings/settings_state.dart';
 import 'package:vidhoist_mobile/features/shell/shell_tabs.dart';
+
+import '../fake_audio_port.dart';
+import 'shot_kit.dart';
 
 /// **The phone's screenshots for the project's pages**, made from the app's
 /// own widgets with its own fonts and covers drawn for the purpose
@@ -31,49 +34,7 @@ import 'package:vidhoist_mobile/features/shell/shell_tabs.dart';
 /// Not part of the test run: `VH_SHOTS=1 flutter test test/screenshots`
 /// writes them to `docs/screenshots/`.
 void main() {
-  final enabled = Platform.environment['VH_SHOTS'] != null;
-  final root = Directory.current.parent.parent.path;
-  final covers = '$root/tool/screenshots/covers';
-  final out = '$root/docs/screenshots';
-
-  setUpAll(() async {
-    if (!enabled) return;
-    await loadVhFonts('$root/packages/vh_ui/assets/fonts');
-    // The relative times in each language, as the app's main sets them.
-    initVhL10n();
-  });
-
-  /// A phone of 360 by 800 points, saved at twice that, with real
-  /// shadows: tests draw each as a black outline unless told otherwise.
-  void phone(WidgetTester tester) {
-    debugDisableShadows = false;
-    tester.view.physicalSize = const Size(720, 1600);
-    tester.view.devicePixelRatio = 2;
-    // A phone's status bar and gesture bar, which the frame draws over.
-    tester.view.padding = const FakeViewPadding(top: 56, bottom: 36);
-    tester.view.viewPadding = const FakeViewPadding(top: 56, bottom: 36);
-    addTearDown(tester.view.reset);
-  }
-
-  Future<void> settle(WidgetTester tester) async {
-    // Covers are files: read and decoded outside the test's clock.
-    for (var i = 0; i < 12; i++) {
-      await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 250)),
-      );
-      await tester.pump(const Duration(milliseconds: 100));
-    }
-    await tester.pumpAndSettle();
-  }
-
-  Future<void> save(WidgetTester tester, String name) async {
-    final boundary = tester.renderObject<RenderRepaintBoundary>(
-      find.byKey(const ValueKey('shot')),
-    );
-    await tester.runAsync(() => saveVhShot(boundary, '$out/$name.png'));
-    // Back to the tests' own setting, which the framework checks at the end.
-    debugDisableShadows = true;
-  }
+  setUpAll(loadShotFonts);
 
   Widget framed(
     ProviderContainer c,
@@ -83,40 +44,17 @@ void main() {
   ) => UncontrolledProviderScope(
     container: c,
     child: RepaintBoundary(
-      key: const ValueKey('shot'),
+      key: shotKey,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: locale,
         localizationsDelegates: VhLocalizations.localizationsDelegates,
         supportedLocales: VhLocalizations.supportedLocales,
-        theme: vhTheme(
-          VhVariant.phone,
-          brightness,
-          language: locale.languageCode,
-        ),
+        theme: shotTheme(locale, brightness),
         home: home,
       ),
     ),
   );
-
-  List<LocalItem> library(bool arabic) {
-    final clips = arabic ? _arabicClips : _englishClips;
-    return [
-      for (final (i, (title, cover, minutes, audio)) in clips.indexed)
-        LocalItem(
-          key: 'https://www.example.com/clip$i',
-          canonicalUrl: 'https://www.example.com/clip$i',
-          path:
-              '/storage/emulated/0/Download/VidHoist/clip$i.'
-              '${audio ? 'm4a' : 'mp4'}',
-          title: title,
-          sizeBytes: (minutes * 9.5 * 1000000).round(),
-          modified: DateTime.now().subtract(Duration(hours: 3 + i * 9)),
-          thumbnail: '$covers/$cover.jpg',
-          duration: Duration(minutes: minutes, seconds: 7 + i * 6),
-        ),
-    ];
-  }
 
   ProviderContainer container(List<Override> more, {KeyValueStore? store}) {
     final c = ProviderContainer(
@@ -132,53 +70,67 @@ void main() {
     return c;
   }
 
+  /// The library in the app's own frame: its bar, its add button.
+  Future<ProviderContainer> library(bool arabic) async {
+    final store = MemoryKeyValueStore();
+    await store.setString('library_view_mode', LibraryViewMode.grid.name);
+    return container(store: store, [
+      mediaAccessGateProvider.overrideWithValue(
+        MediaAccessGate(
+          probe: () async => true,
+          isGranted: (_) async => true,
+          ask: (_) async => true,
+        ),
+      ),
+      localMediaProvider.overrideWith((ref) async => shotLibrary(arabic)),
+    ]);
+  }
+
+  /// [playing] puts the "now playing" panel beside it, where there is room.
+  Widget libraryFrame({VhAudioHandler? playing}) => Consumer(
+    builder: (context, ref, _) => VhAdaptiveScaffold(
+      items: shellNavItems(context.vhl, shellTabs(paired: false)),
+      selectedIndex: 0,
+      onSelected: (_) {},
+      body: const LibraryScreen(),
+      endPane: playing == null
+          ? null
+          : VhNowPlayingPanel(
+              handler: playing,
+              artwork: artworkBuilderFor(ref),
+              cover: coverBuilderFor(ref),
+              showSourceChip: false,
+              onOpen: () {},
+              onCollapse: () {},
+            ),
+      floatingActionButton: VhFab(
+        label: context.vhl.addLinkFab,
+        onPressed: () {},
+      ),
+    ),
+  );
+
   for (final lang in ['ar', 'en']) {
     for (final brightness in Brightness.values) {
+      final arabic = lang == 'ar';
       final tag = '$lang-${brightness == Brightness.dark ? 'night' : 'day'}';
 
-      testWidgets('library $tag', skip: !enabled, (tester) async {
-        phone(tester);
-        final store = MemoryKeyValueStore();
-        await store.setString('library_view_mode', LibraryViewMode.grid.name);
-        final c = container(store: store, [
-          mediaAccessGateProvider.overrideWithValue(
-            MediaAccessGate(
-              probe: () async => true,
-              isGranted: (_) async => true,
-              ask: (_) async => true,
-            ),
-          ),
-          localMediaProvider.overrideWith((ref) async => library(lang == 'ar')),
-        ]);
+      testWidgets('library $tag', skip: !shotsEnabled, (tester) async {
+        useShotDevice(tester);
+        final c = await tester.runAsync(() => library(arabic));
         await tester.pumpWidget(
-          framed(
-            c,
-            Locale(lang),
-            brightness,
-            Builder(
-              builder: (context) => VhAdaptiveScaffold(
-                items: shellNavItems(context.vhl, shellTabs(paired: false)),
-                selectedIndex: 0,
-                onSelected: (_) {},
-                body: const LibraryScreen(),
-                floatingActionButton: VhFab(
-                  label: context.vhl.addLinkFab,
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
+          framed(c!, Locale(lang), brightness, libraryFrame()),
         );
-        await settle(tester);
-        await save(tester, 'phone-library-$tag');
+        await settleShot(tester);
+        await saveShot(tester, 'phone-library-$tag');
       });
 
-      testWidgets('channels $tag', skip: !enabled, (tester) async {
-        phone(tester);
+      testWidgets('channels $tag', skip: !shotsEnabled, (tester) async {
+        useShotDevice(tester);
         final store = MemoryKeyValueStore();
         await store.setBool(backgroundChecksKey, true);
         final backend = FakeBackend();
-        final names = lang == 'ar' ? _arabicChannels : _englishChannels;
+        final names = arabic ? shotArabicChannels : shotEnglishChannels;
         for (final (i, name) in names.indexed) {
           backend.listings['https://www.youtube.com/@ch$i/videos'] = {
             '_type': 'playlist',
@@ -190,28 +142,21 @@ void main() {
             ],
           };
         }
-        final c = ProviderContainer(
-          overrides: [
-            keyValueStoreProvider.overrideWithValue(store),
-            secretStoreProvider.overrideWithValue(MemorySecretStore()),
-            prefsMutexProvider.overrideWithValue(PrefsMutex()),
-            initialSettingsProvider.overrideWithValue(const PhoneSettings()),
-            loggerProvider.overrideWithValue(
-              VhLogger(filePath: '${Directory.systemTemp.path}/vh_shots.log'),
+        final c = container(store: store, [
+          loggerProvider.overrideWithValue(
+            VhLogger(filePath: '${Directory.systemTemp.path}/vh_shots.log'),
+          ),
+          downloadBackendProvider.overrideWithValue(backend),
+          downloadEngineProvider.overrideWithValue(null),
+          autoBackupProvider.overrideWithValue(_Backups()),
+          channelArtProvider.overrideWithValue(_Art()),
+          backgroundSchedulerProvider.overrideWithValue(_Scheduler()),
+          backgroundStatusProvider.overrideWith(
+            (ref) async => BackgroundStatus(
+              lastRun: DateTime.now().subtract(const Duration(hours: 2)),
             ),
-            downloadBackendProvider.overrideWithValue(backend),
-            downloadEngineProvider.overrideWithValue(null),
-            autoBackupProvider.overrideWithValue(_Backups()),
-            channelArtProvider.overrideWithValue(_Art()),
-            backgroundSchedulerProvider.overrideWithValue(_Scheduler()),
-            backgroundStatusProvider.overrideWith(
-              (ref) async => BackgroundStatus(
-                lastRun: DateTime.now().subtract(const Duration(hours: 2)),
-              ),
-            ),
-          ],
-        );
-        addTearDown(c.dispose);
+          ),
+        ]);
         final source = LocalChannelSource(
           store: store,
           backend: backend,
@@ -229,47 +174,66 @@ void main() {
         await tester.pumpWidget(
           framed(c, Locale(lang), brightness, const ChannelsScreen()),
         );
-        await settle(tester);
-        await save(tester, 'phone-channels-$tag');
+        await settleShot(tester);
+        await saveShot(tester, 'phone-channels-$tag');
       });
 
-      testWidgets('languages $tag', skip: !enabled, (tester) async {
-        phone(tester);
+      testWidgets('languages $tag', skip: !shotsEnabled, (tester) async {
+        useShotDevice(tester);
         final c = container(const []);
         await tester.pumpWidget(
           framed(c, Locale(lang), brightness, const LanguageScreen()),
         );
-        await settle(tester);
-        await save(tester, 'phone-languages-$tag');
+        await settleShot(tester);
+        await saveShot(tester, 'phone-languages-$tag');
       });
+
+      // A tablet held sideways and upright: the rail in place of the bar.
+      for (final (shape, size) in [
+        ('wide', const Size(1280, 800)),
+        ('tall', const Size(800, 1280)),
+      ]) {
+        testWidgets('tablet $shape $tag', skip: !shotsEnabled, (tester) async {
+          useShotDevice(tester, size: size);
+          final c = await tester.runAsync(() => library(arabic));
+          // Sideways, a song plays in the panel beside the library.
+          final port = FakeAudioPort();
+          final handler = fakeAudioHandler(port);
+          final song = shotLibrary(arabic)[4];
+          await tester.runAsync(() async {
+            await handler.playItems([
+              PlaylistItem(
+                canonicalUrl: song.key,
+                title: song.title,
+                uploader: (arabic
+                    ? shotArabicChannels
+                    : shotEnglishChannels)[2],
+                artworkUrl: song.thumbnail,
+                localPath: song.path,
+                isAudio: true,
+                duration: song.duration,
+              ),
+            ], startIndex: 0);
+            await handler.pause();
+          });
+          await tester.pumpWidget(
+            framed(
+              c!,
+              Locale(lang),
+              brightness,
+              libraryFrame(playing: shape == 'wide' ? handler : null),
+            ),
+          );
+          await settleShot(tester);
+          port.emit(const Duration(seconds: 71));
+          await tester.pumpAndSettle();
+          await saveShot(tester, 'tablet-$shape-$tag');
+          await tester.runAsync(handler.dispose);
+        });
+      }
     }
   }
 }
-
-const _arabicClips = [
-  ('رحلة إلى جبال السروات في موسم الضباب', 'mountains', 14, false),
-  ('إبحار هادئ على ساحل البحر الأحمر', 'sea', 9, false),
-  ('المدينة في الليل: جولة بين الأبراج', 'city', 22, false),
-  ('طبق الخضار المشوي في عشر دقائق', 'kitchen', 6, false),
-  ('ألحان المساء', 'music', 4, true),
-  ('كثبان الربع الخالي عند الغروب', 'desert', 18, false),
-  ('غابات الشمال: نزهة طويلة', 'forest', 31, false),
-  ('ألوان الشفق القطبي', 'aurora', 3, false),
-];
-
-const _englishClips = [
-  ('Into the misty mountains at dawn', 'mountains', 14, false),
-  ('A quiet sail along the coast', 'sea', 9, false),
-  ('The city at night: a walk between towers', 'city', 22, false),
-  ('Roasted vegetables in ten minutes', 'kitchen', 6, false),
-  ('Evening tunes', 'music', 4, true),
-  ('Dunes of the Empty Quarter at sunset', 'desert', 18, false),
-  ('Northern forests: a long hike', 'forest', 31, false),
-  ('Colours of the aurora', 'aurora', 3, false),
-];
-
-const _arabicChannels = ['عدسة الجنوب', 'مطبخ البيت', 'رحّالة'];
-const _englishChannels = ['Southern Lens', 'Home Kitchen', 'The Wanderer'];
 
 class _Scheduler implements BackgroundScheduler {
   @override

@@ -142,8 +142,8 @@ void main() {
   test('every picture the READMEs show is in the repository, and none '
       'is a photo of a phone', () {
     final made = RegExp(
-      r'/((phone|windows)-[a-z]+-(ar|en)-(day|night)\.png'
-      r'|(hero|more|desktop|desktop-night)-(ar|en)\.jpg)$',
+      r'/((phone|windows|tablet)-[a-z]+-(ar|en)-(day|night)\.png'
+      r'|(hero|more|tablet|desktop|desktop-night)-(ar|en)\.jpg)$',
     );
     for (final readme in ['README.md', 'README.ar.md']) {
       final text = File(path(readme)).readAsStringSync();

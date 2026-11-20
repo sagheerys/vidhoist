@@ -83,6 +83,22 @@ def phone(name):
     return body
 
 
+def tablet(name):
+    """The shot in a tablet body: the phone's, with a wider edge."""
+    screen = shot(name).copy()
+    w, h = screen.size
+    draw = ImageDraw.Draw(screen)
+    top_dark = is_dark(screen, (0, 0, w, STATUS_H))
+    status_bar(draw, w, (245, 242, 238) if top_dark else (43, 33, 27))
+    edge, radius = 26, 44
+    outer = (w + edge * 2, h + edge * 2)
+    body = Image.new('RGBA', outer, (0, 0, 0, 0))
+    plate = Image.new('RGBA', outer, BODY + (255,))
+    body.paste(plate, (0, 0), rounded_mask(outer, radius + edge))
+    body.paste(screen, (edge, edge), rounded_mask((w, h), radius))
+    return body
+
+
 def window(name):
     """The shot in a window with rounded corners and a hairline."""
     img = shot(name)
@@ -130,6 +146,15 @@ def phones(names, out):
     compose(pieces, 90, [0, 80, 0, 80][:len(pieces)], 110, out, 2000)
 
 
+def tablets(names, out):
+    """Side by side at one height, the wide one first."""
+    pieces = [tablet(n) for n in names]
+    height = max(p.height for p in pieces)
+    pieces = [p.resize((round(p.width * height / p.height), height), Image.LANCZOS)
+              for p in pieces]
+    compose(pieces, 90, [0] * len(pieces), 100, out, 2200)
+
+
 def windows(names, out):
     pieces = [window(n) for n in names]
     compose(pieces, 80, [0] * len(pieces), 90, out, 2200)
@@ -140,9 +165,11 @@ if __name__ == '__main__':
         phones([f'phone-library-{lang}-day', f'phone-video-{lang}-day',
                 f'phone-audio-{lang}-night', f'phone-channels-{lang}-day'],
                f'hero-{lang}.jpg')
-        phones([f'phone-audio-{lang}-day', f'phone-video-{lang}-night',
-                f'phone-library-{lang}-night', f'phone-languages-{lang}-day'],
+        phones([f'phone-audio-{lang}-day', f'phone-pc-{lang}-day',
+                f'phone-video-{lang}-night', f'phone-languages-{lang}-day'],
                f'more-{lang}.jpg')
+        tablets([f'tablet-wide-{lang}-day', f'tablet-tall-{lang}-night'],
+                f'tablet-{lang}.jpg')
         windows([f'windows-clip-{lang}-day', f'windows-library-{lang}-day'],
                 f'desktop-{lang}.jpg')
         windows([f'windows-clip-{lang}-night', f'windows-audio-{lang}-night'],

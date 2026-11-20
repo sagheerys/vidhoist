@@ -9,6 +9,7 @@ Three shapes are borrowed: pause and download from Material Rounded
 (Apache 2.0), and queue from Tabler's playlist (MIT, redrawn at our stroke).
 """
 import math
+import re
 
 STROKE = 'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"'
 
@@ -37,6 +38,13 @@ def _gear(teeth, r_out, r_in, half_out, half_in, dot):
         nx, ny = xy(*pts[(i + 1) % teeth][0])
         d.append(f"A{r_in} {r_in} 0 0 1 {nx:.2f} {ny:.2f}")
     return f'<path d="{"".join(d)}z"/><circle class="e" cx="12" cy="12" r="{dot}"/>'
+
+
+def _gear_solid(teeth, r_out, r_in, half_out, half_in, hole):
+    """The same gear filled, its centre cut out: the chosen settings tab."""
+    d = re.search(r'd="([^"]+)"', _gear(teeth, r_out, r_in, half_out, half_in, 0)).group(1)
+    return (f'<path class="f" fill-rule="evenodd" d="{d} '
+            f'M{12 + hole} 12a{hole} {hole} 0 1 1-{2 * hole} 0a{hole} {hole} 0 1 1 {2 * hole} 0z"/>')
 
 
 def _knob():
@@ -146,6 +154,23 @@ ICONS = {
     "subscriptions": '<path d="M5 4.8a14.2 14.2 0 0 1 14.2 14.2"/><path d="M5 10.4a8.6 8.6 0 0 1 8.6 8.6"/><circle class="e" cx="6.2" cy="17.8" r="1.6"/>',
     "playback": '<circle cx="12" cy="12" r="8.4"/><path d="M10.2 9v6l4.8-3z"/>',
     "monitor": '<rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M9 20h6"/><path d="M12 16v4"/>',
+    # The places' chosen faces: each outline filled, so the place you are in
+    # reads at a glance (the phone's bar and rail, the Windows sidebar).
+    "download_outline": '<path d="M12 4v10.5"/><path d="M7.5 10l4.5 4.5 4.5-4.5"/><path d="M5 19.5h14"/>',
+    "queue_fill": '<g stroke-width="2.2"><path d="M17 17V4h4"/><path d="M13 5H3"/><path d="M3 9h10"/>'
+                  '<path d="M9 13H3"/></g><circle class="f" cx="14" cy="17" r="3.6"/>',
+    "monitor_fill": '<rect class="f" x="2.8" y="3.8" width="18.4" height="12.9" rx="2.4"/>'
+                    '<path d="M9 20h6"/><path d="M12 16.5v3.5"/>',
+    "settings_fill": _gear_solid(6, 8.4, 6.1, 11, 19, 2.6),
+    "library_fill": '<path class="f" fill-rule="evenodd" d="M6.5 4h11a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-11'
+                    'a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z'
+                    'M7.6 8a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM7.6 12a1 1 0 1 1-2 0a1 1 0 1 1 2 0z'
+                    'M7.6 16a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM18.4 8a1 1 0 1 1-2 0a1 1 0 1 1 2 0z'
+                    'M18.4 12a1 1 0 1 1-2 0a1 1 0 1 1 2 0zM18.4 16a1 1 0 1 1-2 0a1 1 0 1 1 2 0z'
+                    'M10.2 9v6l5-3z"/>',
+    "search_fill": '<circle class="f" cx="10.5" cy="10.5" r="7"/><path stroke-width="2.6" d="M15.8 15.8l4 4"/>',
+    "subscriptions_fill": '<g stroke-width="2.6"><path d="M5 4.8a14.2 14.2 0 0 1 14.2 14.2"/>'
+                          '<path d="M5 10.4a8.6 8.6 0 0 1 8.6 8.6"/></g><circle class="e" cx="6.2" cy="17.8" r="2.1"/>',
     "appearance": '<circle cx="12" cy="12" r="8"/><path class="f" d="M12 4a8 8 0 0 1 0 16z"/>',
     "backup": '<path d="M7.6 18.4a4 4 0 0 1-.6-7.95A5.5 5.5 0 0 1 17.6 9.7a4.4 4.4 0 0 1-1 8.7z"/><path d="M12 16.2v-5"/><path d="M9.8 13.2L12 11l2.2 2.2"/>',
     "info": '<circle cx="12" cy="12" r="8.4"/><path d="M12 11v5.4"/><circle class="f" cx="12" cy="7.9" r="1.05"/>',

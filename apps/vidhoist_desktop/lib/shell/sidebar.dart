@@ -96,14 +96,20 @@ class DesktopSidebar extends StatelessWidget {
   Widget _places(BuildContext context, bool narrow) {
     final l = context.vhl;
     final onPinned = pinned.any((list) => list.id == currentList);
-    Widget item(DesktopPlace place, VhIconData icon, String label, String to) =>
-        SidebarItem(
-          icon: icon,
-          label: label,
-          narrow: narrow,
-          selected: current == place && !onPinned,
-          onTap: () => onGo(to),
-        );
+    Widget item(
+      DesktopPlace place,
+      VhIconData icon,
+      VhIconData filled,
+      String label,
+      String to,
+    ) => SidebarItem(
+      icon: icon,
+      selectedIcon: filled,
+      label: label,
+      narrow: narrow,
+      selected: current == place && !onPinned,
+      onTap: () => onGo(to),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -118,18 +124,21 @@ class DesktopSidebar extends StatelessWidget {
               item(
                 DesktopPlace.library,
                 VhIcons.library,
+                VhIcons.libraryFill,
                 l.navLibrary,
                 DesktopRoutes.library,
               ),
               item(
                 DesktopPlace.favorites,
                 VhIcons.favorite,
+                VhIcons.favoriteOn,
                 l.favorites,
                 DesktopRoutes.favorites,
               ),
               item(
                 DesktopPlace.search,
                 VhIcons.search,
+                VhIcons.searchFill,
                 l.desktopSearch,
                 DesktopRoutes.search,
               ),
@@ -150,6 +159,7 @@ class DesktopSidebar extends StatelessWidget {
               item(
                 DesktopPlace.playlists,
                 VhIcons.queue,
+                VhIcons.queueFill,
                 l.navPlaylists,
                 DesktopRoutes.playlists,
               ),
@@ -157,6 +167,7 @@ class DesktopSidebar extends StatelessWidget {
                 SidebarItem(
                   key: ValueKey('pinned-${list.id}'),
                   icon: VhIcons.queue,
+                  selectedIcon: VhIcons.queueFill,
                   label: list.name,
                   narrow: narrow,
                   indent: true,
@@ -166,6 +177,7 @@ class DesktopSidebar extends StatelessWidget {
               item(
                 DesktopPlace.channels,
                 VhIcons.subscriptions,
+                VhIcons.subscriptionsFill,
                 l.desktopChannels,
                 DesktopRoutes.channels,
               ),
@@ -197,6 +209,7 @@ class DesktopSidebar extends StatelessWidget {
             final release = ref.watch(updateProvider).release;
             return SidebarItem(
               icon: VhIcons.settings,
+              selectedIcon: VhIcons.settingsFill,
               label: l.navSettings,
               narrow: narrow,
               selected: current == DesktopPlace.settings && !onPinned,

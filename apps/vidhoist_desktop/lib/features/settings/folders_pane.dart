@@ -29,9 +29,12 @@ class FoldersPane extends ConsumerWidget {
     }
 
     // Apart enough to read as two buttons: at the narrow gap the pair read
-    // as one phrase ("Change… Open in Explorer").
+    // as one phrase ("Change… Open in Explorer"). Inside the folder's line,
+    // under its words: below it they sat on its rule, apart from the folder
+    // they act on, and at its end they stood one over the other.
     Widget actions(String? path, Future<void> Function(String) set) => Wrap(
       spacing: VhSpace.xl,
+      runSpacing: VhSpace.xs,
       children: [
         VhRowButton(
           label: l.desktopChangeFolder,
@@ -51,8 +54,8 @@ class FoldersPane extends ConsumerWidget {
           title: l.desktopDownloadFolder,
           value: download ?? l.desktopFolderUnavailable,
           hint: l.desktopDownloadFolderHint,
+          below: actions(download, notifier.setDownload),
         ),
-        actions(download, notifier.setDownload),
         SwitchLine(
           title: l.desktopRevealAfterDownload,
           hint: l.desktopRevealAfterDownloadHint,

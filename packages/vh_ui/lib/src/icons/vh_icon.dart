@@ -111,9 +111,15 @@ class VhIcon extends StatelessWidget {
         ],
       );
     }
+    // A filled twin turns as its outline does: the queue's tab swaps one for
+    // the other when chosen, and only one of them turning flipped the note
+    // across the tab at the tap.
+    final outline = icon.name.endsWith('_fill')
+        ? icon.name.substring(0, icon.name.length - '_fill'.length)
+        : icon.name;
     final turns =
         matchTextDirection ||
-        (_readsAlong.contains(icon.name) && !VhDesktopApp.isDesktop(context));
+        (_readsAlong.contains(outline) && !VhDesktopApp.isDesktop(context));
     if (turns && Directionality.maybeOf(context) == TextDirection.rtl) {
       glyph = Transform.flip(flipX: true, child: glyph);
     }

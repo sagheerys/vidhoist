@@ -26,7 +26,12 @@ class SettingLine extends StatelessWidget {
     this.hint,
     this.value,
     this.trailing,
+    this.below,
   });
+
+  /// Under the words, inside the line and above its rule: for actions too
+  /// many for its end, such as a folder's "Change…" and "Open".
+  final Widget? below;
 
   final String title;
   final String? hint;
@@ -37,6 +42,17 @@ class SettingLine extends StatelessWidget {
 
   /// The most of the line the control may take; the name has the rest.
   static const double controlShare = 0.45;
+
+  /// A path or an address reads left to right in any language; a sentence
+  /// in Arabic, Persian or Urdu keeps the page's direction. Forced left to
+  /// right, the engine's "yt-dlp is not on this computer" in Arabic began
+  /// with its English word and put its full stops at the wrong ends.
+  static TextDirection? valueDirection(String value) =>
+      _rightToLeft.hasMatch(value) ? null : TextDirection.ltr;
+
+  static final _rightToLeft = RegExp(
+    r'[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +80,7 @@ class SettingLine extends StatelessWidget {
                     if (value case final value?)
                       Text(
                         value,
-                        textDirection: TextDirection.ltr,
+                        textDirection: valueDirection(value),
                         style: text.bodySmall?.copyWith(color: p.ink2),
                       ),
                     if (hint case final hint?)
@@ -72,6 +88,10 @@ class SettingLine extends StatelessWidget {
                         hint,
                         style: text.labelSmall?.copyWith(color: p.ink3),
                       ),
+                    if (below case final below?) ...[
+                      const SizedBox(height: VhSpace.sm),
+                      below,
+                    ],
                   ],
                 ),
               ),
