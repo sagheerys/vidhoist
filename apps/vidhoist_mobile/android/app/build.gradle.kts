@@ -88,7 +88,7 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     // The channel check while the app is closed (BackgroundCheck): Android's
     // own scheduler, which batches it with other apps' work.
-    implementation("androidx.work:work-runtime-ktx:2.10.1")
+    implementation("androidx.work:work-runtime-ktx:2.12.0")
 }
 
 kotlin {
