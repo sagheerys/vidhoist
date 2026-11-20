@@ -162,4 +162,25 @@ void main() {
       }
     }
   });
+
+  /// The pages open with the app's own icon, the launcher's file rather
+  /// than a copy, so a redrawn icon shows there too; a path that moved
+  /// would show as a broken image at the very top.
+  test('both READMEs open with the app\'s icon, and every picture they '
+      'name is in the repository', () {
+    const icon = 'apps/vidhoist_mobile/assets/icons/icon.png';
+    for (final readme in ['README.md', 'README.ar.md']) {
+      final text = File(path(readme)).readAsStringSync();
+      final pictures = RegExp(r'<img src="([^"]+)"')
+          .allMatches(text)
+          .map((m) => m.group(1)!)
+          .toList();
+      expect(pictures.first, icon, reason: readme);
+      for (final picture in pictures) {
+        expect(File(path(picture)).existsSync(), isTrue, reason: picture);
+      }
+      // Above the first heading: the icon comes before the name.
+      expect(text.indexOf(icon), lessThan(text.indexOf('VidHoist</h1>')));
+    }
+  });
 }

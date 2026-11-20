@@ -1,6 +1,18 @@
-# VidHoist
+<p align="center">
+  <img src="apps/vidhoist_mobile/assets/icons/icon.png" width="120" alt="VidHoist's icon: a blue V whose left stroke is a strip of film">
+</p>
 
-**English** · [العربية](README.ar.md)
+<h1 align="center">VidHoist</h1>
+
+<p align="center">
+  <strong>Video and audio from the web, kept on your phone and your computer, and searchable by what was said.</strong>
+</p>
+
+<p align="center">
+  <strong>English</strong> · <a href="README.ar.md">العربية</a>
+</p>
+
+<div align="center">
 
 [![CI](https://github.com/sagheerys/vidhoist/actions/workflows/ci.yml/badge.svg)](https://github.com/sagheerys/vidhoist/actions/workflows/ci.yml)
 [![Windows](https://github.com/sagheerys/vidhoist/actions/workflows/windows.yml/badge.svg)](https://github.com/sagheerys/vidhoist/actions/workflows/windows.yml)
@@ -9,6 +21,8 @@
 [![Platform](https://img.shields.io/badge/platform-Android%20%C2%B7%20Windows-3DDC84.svg)](#requirements)
 [![Flutter](https://img.shields.io/badge/Flutter-3.47-02569B.svg)](https://flutter.dev)
 [![Languages](https://img.shields.io/badge/languages-12-7FA3FF.svg)](#translations)
+
+</div>
 
 **Download video and audio from the web, straight to your phone or your
 computer, with yt-dlp built into the app.** Paste or share a link, pick a
@@ -27,6 +41,28 @@ GPL.
 <p align="center">
   <img src="docs/screenshots/desktop-en.jpg" alt="VidHoist on Windows: a video playing with its transcript beside it, and the library as a grid of covers">
 </p>
+
+## At a glance
+
+- **Search by what was said.** The library finds a clip by any word spoken
+  in it, lights the word in each moment, and plays from that second.
+- **Any site yt-dlp knows**, at the quality you choose, or the sound alone,
+  or only a part of the video, with its subtitles in the languages you pick.
+- **Players made for reading along.** Video with subtitles and its
+  transcript under it, music that keeps playing in the background, shorts in
+  a reels player, picture in picture.
+- **Download on the computer from the phone.** Pair once by QR code; the
+  phone sends links to Windows, watches them download, and plays the
+  computer's library.
+- **Follow channels.** Windows downloads each new video by itself; the phone
+  checks while it is closed, about every six hours, and tells you what is
+  new.
+- **Twelve languages, right-to-left first**, by day and by night, on
+  phones, tablets and Windows.
+- **Private by design.** No account, no server, no ads, no tracking.
+  Backups move between the phone and the computer.
+- **Looks after itself.** The engine updates and repairs itself, and the
+  apps update from this repository's releases.
 
 | | **VidHoist for Android** | **VidHoist for Windows** |
 |---|---|---|
@@ -129,7 +165,10 @@ secured: [docs/PC-LINK.md](docs/PC-LINK.md).
 - **Follow a channel**: each new video downloads by itself at the quality,
   in the folder and through the title filter chosen for it, while the app
   is open or in the tray; a check missed while it was closed is made soon
-  after it opens. The phone follows channels too.
+  after it opens. The phone follows channels too, and can check them while
+  it is closed, about every six hours on a network and a battery that is
+  not low: it tells you what is new, and the clips download when you open
+  VidHoist.
 - A small window for the video, **drag a clip out** to Explorer as its
   file, open it in another player, keep the sound playing in the tray,
   start with Windows, and keyboard shortcuts throughout.
@@ -158,10 +197,6 @@ secured: [docs/PC-LINK.md](docs/PC-LINK.md).
 
 ## Screenshots
 
-<details>
-<summary><strong>More screens</strong>: the players, the computer from the phone, twelve languages, tablets, Windows at night</summary>
-<br>
-
 **The players and the computer** — the music player by day, the paired
 computer's library on the phone, a video at night, and the twelve languages:
 
@@ -175,8 +210,6 @@ beside it; upright, at night, the library with the rail:
 **Windows at night** — a video with its transcript, and the music player:
 
 ![VidHoist on Windows at night: a video with its transcript, and the music player](docs/screenshots/desktop-night-en.jpg)
-
-</details>
 
 Every screen, one by one, in both languages and by day and by night, is in
 [docs/screenshots](docs/screenshots). The clips, channels and covers in them
