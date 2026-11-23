@@ -6,7 +6,22 @@ All notable changes to VidHoist. The format follows
 
 ## [Unreleased]
 
+### Added
+- Android: a + in a playlist opens the library to choose clips from, with
+  search and the type; what the playlist holds is marked, the rest is
+  added in the order ticked, with an undo.
+- Android: the mini player in Settings, as a small tab at the edge where
+  lines start; a tap opens the usual bar, which folds back after a few
+  seconds. It hides while the keyboard is open.
+- Both apps: the update sheet and "what's new" in the reader's language.
+  A release may carry `release-notes.json` with each app's notes in every
+  language; without it the release page is shown as before.
+
 ### Fixed
+- Android: a tap on "download complete" only lit the clip. It now closes
+  what is open above the tabs, shows the library, undoes a search or a
+  filter that hides the clip, and scrolls to it; a tap that started the
+  app is no longer lost, and a clip deleted since says so.
 - Android: a clip the app could play but not delete ("Cannot delete file
   ... No such file or directory"). Android forgets that a download belongs
   to the app once the app's data is cleared or the app is installed again,
