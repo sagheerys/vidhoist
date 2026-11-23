@@ -2047,6 +2047,11 @@ class VhLocalizationsAr extends VhLocalizations {
   String get mediaAccessTitle => 'اسمح بالوصول إلى الوسائط';
 
   @override
+  String miniPlayerTab(String title) {
+    return 'المشغل: $title. انقر لإظهار التحكم';
+  }
+
+  @override
   String get mobileChannelsEmptyBody =>
       'تابِع قناة، فيُنزَّل كل مقطع جديد تنشره تلقائياً ما دام VidHoist مفتوحاً أو في الخلفية، وما نُشر وهو مغلق يُنزَّل حين تفتحه. أما ما نُشر قبل المتابعة فلا يُنزَّل.';
 

@@ -557,6 +557,7 @@
   "mediaAccessMessage": "Seus downloads ficam na pasta Download do celular, e o Android precisa da sua permissão para o app poder listá-los.",
   "mediaAccessOpenSettings": "Abrir configurações",
   "mediaAccessTitle": "Permita o acesso à sua mídia",
+  "miniPlayerTab": "Player: {title}. Toque para ver os controles",
   "mobileChannelsEmptyBody": "Siga um canal e cada vídeo novo é baixado sozinho enquanto o VidHoist está aberto ou em segundo plano; o que chegou enquanto estava fechado é baixado quando ele abre. O que já está no canal não é baixado.",
   "mobileChannelsHint": "Vídeos novos dos canais que você segue, baixados sozinhos",
   "mobileEngineIpv4": "Conectar por IPv4",

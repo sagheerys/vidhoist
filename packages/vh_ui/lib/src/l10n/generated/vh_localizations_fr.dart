@@ -2025,6 +2025,11 @@ class VhLocalizationsFr extends VhLocalizations {
   String get mediaAccessTitle => 'Autoriser l\'accès à vos médias';
 
   @override
+  String miniPlayerTab(String title) {
+    return 'Lecteur : $title. Touchez pour les commandes';
+  }
+
+  @override
   String get mobileChannelsEmptyBody =>
       'Suivez une chaîne et chaque nouvelle vidéo se télécharge toute seule tant que VidHoist est ouvert ou en arrière-plan ; ce qui est arrivé pendant qu\'il était fermé se télécharge à son ouverture. Ce qui est déjà sur la chaîne n\'est pas téléchargé.';
 

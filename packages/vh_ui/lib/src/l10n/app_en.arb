@@ -255,6 +255,13 @@
       }
     }
   },
+  "@miniPlayerTab": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "@mobileEngineLastUpdate": {
     "placeholders": {
       "when": {
@@ -1395,6 +1402,7 @@
   "mediaAccessMessage": "Your downloads are kept in the phone's Download folder, and Android needs your permission before the app can list them.",
   "mediaAccessOpenSettings": "Open settings",
   "mediaAccessTitle": "Allow access to your media",
+  "miniPlayerTab": "Player: {title}. Tap for the controls",
   "mobileChannelsEmptyBody": "Follow a channel and each new video downloads by itself while VidHoist is open or in the background; what came while it was closed downloads when it opens. What is already on the channel is not downloaded.",
   "mobileChannelsHint": "New videos from channels you follow, downloaded by themselves",
   "mobileEngineIpv4": "Connect over IPv4",

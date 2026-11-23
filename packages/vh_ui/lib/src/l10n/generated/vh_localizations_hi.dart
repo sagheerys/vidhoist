@@ -2009,6 +2009,11 @@ class VhLocalizationsHi extends VhLocalizations {
   String get mediaAccessTitle => 'अपने मीडिया तक पहुँच दें';
 
   @override
+  String miniPlayerTab(String title) {
+    return 'प्लेयर: $title. नियंत्रण के लिए टैप करें';
+  }
+
+  @override
   String get mobileChannelsEmptyBody =>
       'किसी चैनल को फ़ॉलो करें और VidHoist खुला या बैकग्राउंड में होने पर हर नया वीडियो अपने-आप डाउनलोड होगा; ऐप बंद रहने के दौरान जो आया, वह ऐप खुलने पर डाउनलोड होगा। चैनल पर पहले से मौजूद वीडियो डाउनलोड नहीं होते।';
 

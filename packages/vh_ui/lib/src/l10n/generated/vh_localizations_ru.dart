@@ -2035,6 +2035,11 @@ class VhLocalizationsRu extends VhLocalizations {
   String get mediaAccessTitle => 'Разрешите доступ к медиафайлам';
 
   @override
+  String miniPlayerTab(String title) {
+    return 'Плеер: $title. Нажмите, чтобы открыть управление';
+  }
+
+  @override
   String get mobileChannelsEmptyBody =>
       'Подпишитесь на канал, и каждое новое видео будет скачиваться само, пока VidHoist открыт или работает в фоне; то, что вышло, пока приложение было закрыто, скачается при открытии. То, что уже есть на канале, не скачивается.';
 

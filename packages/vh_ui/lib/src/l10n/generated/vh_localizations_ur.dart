@@ -2011,6 +2011,11 @@ class VhLocalizationsUr extends VhLocalizations {
   String get mediaAccessTitle => 'اپنے میڈیا تک رسائی کی اجازت دیں';
 
   @override
+  String miniPlayerTab(String title) {
+    return 'پلیئر: $title۔ کنٹرول کے لیے ٹیپ کریں';
+  }
+
+  @override
   String get mobileChannelsEmptyBody =>
       'کسی چینل کو فالو کریں اور ہر نئی ویڈیو خود بخود ڈاؤن لوڈ ہو جائے گی جب تک VidHoist کھلی ہو یا پس منظر میں ہو؛ جو کچھ اس کے بند ہونے کے دوران آیا وہ کھلنے پر ڈاؤن لوڈ ہو گا۔ چینل پر پہلے سے موجود چیزیں ڈاؤن لوڈ نہیں ہوتیں۔';
 

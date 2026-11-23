@@ -557,6 +557,7 @@
   "mediaAccessMessage": "Deine Downloads liegen im Download-Ordner des Handys, und Android braucht deine Erlaubnis, bevor die App sie auflisten kann.",
   "mediaAccessOpenSettings": "Einstellungen öffnen",
   "mediaAccessTitle": "Zugriff auf deine Medien erlauben",
+  "miniPlayerTab": "Player: {title}. Tippen für die Steuerung",
   "mobileChannelsEmptyBody": "Folge einem Kanal, und jedes neue Video lädt sich von selbst herunter, solange VidHoist offen ist oder im Hintergrund läuft; was kam, während es geschlossen war, wird beim Öffnen heruntergeladen. Was schon auf dem Kanal ist, wird nicht heruntergeladen.",
   "mobileChannelsHint": "Neue Videos von Kanälen, denen du folgst, von selbst heruntergeladen",
   "mobileEngineIpv4": "Über IPv4 verbinden",

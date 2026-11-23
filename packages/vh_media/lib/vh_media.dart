@@ -49,6 +49,7 @@ export 'src/widgets/vh_chapters.dart';
 export 'src/widgets/vh_drag_to_dismiss.dart';
 export 'src/widgets/vh_extra_button.dart';
 export 'src/widgets/vh_mini_player.dart';
+export 'src/widgets/vh_mini_player_tab.dart';
 export 'src/widgets/vh_now_playing_tabs.dart';
 export 'src/widgets/vh_player_controls_row.dart';
 export 'src/widgets/vh_progress_slider.dart';

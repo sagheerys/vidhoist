@@ -67,7 +67,7 @@ class VhMiniPlayer extends StatelessWidget {
             : Padding(
                 key: const ValueKey('mt-mini-bar'),
                 padding: margin,
-                child: _Bar(
+                child: VhMiniPlayerBar(
                   handler: handler,
                   onOpen: onOpen,
                   onExpand: onExpand,
@@ -82,8 +82,11 @@ class VhMiniPlayer extends StatelessWidget {
   );
 }
 
-class _Bar extends StatelessWidget {
-  const _Bar({
+/// The bar itself, also what the edge tab ([VhMiniPlayerTab]) opens
+/// into, so the player looks and works the same wherever it shows.
+class VhMiniPlayerBar extends StatelessWidget {
+  const VhMiniPlayerBar({
+    super.key,
     required this.handler,
     required this.onOpen,
     this.onExpand,
