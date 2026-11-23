@@ -10,9 +10,6 @@ All notable changes to VidHoist. The format follows
 - Android: a + in a playlist opens the library to choose clips from, with
   search and the type; what the playlist holds is marked, the rest is
   added in the order ticked, with an undo.
-- Android: the mini player in Settings, as a small tab at the edge where
-  lines start; a tap opens the usual bar, which folds back after a few
-  seconds. It hides while the keyboard is open.
 - Both apps: the update sheet and "what's new" in the reader's language.
   A release may carry `release-notes.json` with each app's notes in every
   language; without it the release page is shown as before.
