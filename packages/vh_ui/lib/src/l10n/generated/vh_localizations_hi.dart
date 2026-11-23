@@ -497,6 +497,10 @@ class VhLocalizationsHi extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'नहीं मिटा: इस फ़ाइल को मिटाने के लिए Android को आपकी अनुमति चाहिए, उस डायलॉग में जो वह दिखाता है।';
+
+  @override
   String get deleteSelected => 'चुने हुए मिटाएँ';
 
   @override

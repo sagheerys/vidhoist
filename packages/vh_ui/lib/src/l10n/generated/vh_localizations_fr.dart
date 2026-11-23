@@ -501,6 +501,10 @@ class VhLocalizationsFr extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'Non supprimé : Android a besoin de votre autorisation pour supprimer ce fichier, dans la fenêtre qu\'il affiche.';
+
+  @override
   String get deleteSelected => 'Supprimer la sélection';
 
   @override

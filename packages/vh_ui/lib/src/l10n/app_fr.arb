@@ -136,6 +136,7 @@
   "delete": "Supprimer",
   "deleteMultipleConfirm": "{count, plural, =1{Supprimer 1 clip ?\n\nSon fichier sera retiré de votre appareil.} other{Supprimer {count} clips ?\n\nLeurs fichiers seront retirés de votre appareil.}}",
   "deletePlaylistConfirm": "Supprimer « {name} » ?",
+  "deleteRefused": "Non supprimé : Android a besoin de votre autorisation pour supprimer ce fichier, dans la fenêtre qu'il affiche.",
   "deleteSelected": "Supprimer la sélection",
   "deleteTag": "Supprimer le tag",
   "deleteTagConfirm": "Retirer le tag « {tag} » de tous les éléments ? Les clips eux-mêmes ne sont pas supprimés.",

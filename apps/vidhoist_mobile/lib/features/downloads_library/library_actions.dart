@@ -12,6 +12,7 @@ import '../settings/auto_backup.dart';
 import 'download_wiring.dart';
 import 'library_providers.dart';
 import 'local_item.dart';
+import 'media_remover.dart';
 
 final libraryActionsProvider = Provider((ref) => LibraryActions(ref));
 
@@ -34,16 +35,28 @@ class LibraryActions {
 
   /// Deletes the files for good, cleans the indexes, and rescans the
   /// gallery so no trace of the deleted file is left in MediaStore.
+  ///
+  /// Files Android will not let the app delete by path (see
+  /// [MediaRemover]) are put to the user in one system dialog. A clip
+  /// still on the phone afterwards keeps everything the library knows
+  /// about it, and the call ends in [DeleteRefusedException] so the
+  /// screen does not announce a deletion that did not happen.
   Future<int> deleteFiles(List<LocalItem> items) async {
-    var deleted = 0;
+    final remover = _ref.read(mediaRemoverProvider);
+    final refused = <String>[];
     for (final item in items) {
-      final file = File(item.path);
-      if (await file.exists()) {
-        await file.delete();
-        deleted++;
+      // The subtitles fetched with a clip are of no use without it.
+      final files = [File(item.path), ...sidecarSubtitleFiles(item.path)];
+      for (final file in files) {
+        if (!await remover.delete(file)) refused.add(file.path);
       }
-      // The subtitles fetched with it are of no use without it.
-      await deleteSidecarSubtitles(item.path);
+    }
+    if (refused.isNotEmpty) await remover.askSystem(refused);
+    final gone = [
+      for (final item in items)
+        if (!await File(item.path).exists()) item,
+    ];
+    for (final item in gone) {
       final url = item.canonicalUrl;
       if (url != null) await _ref.read(offlineIndexProvider).removeKey(url);
       await _ref.read(titleIndexProvider).removeKey(item.key);
@@ -60,21 +73,27 @@ class LibraryActions {
     // entry, in one pass, because the check "is another key using it?"
     // needs the whole picture.
     await _ref.read(artworkIndexProvider).removeKeysAndFiles([
-      for (final item in items) item.key,
+      for (final item in gone) item.key,
     ]);
     await _ref.read(keptCoverIndexProvider).removeKeysAndFiles([
-      for (final item in items) item.key,
+      for (final item in gone) item.key,
     ]);
     // **And the saved playlists**: every index was pruned except the
     // playlists, so a dead entry stayed and played something else when
     // tapped.
     await _ref.read(playlistsStoreProvider).removeFromAll([
-      for (final item in items) ...[item.key, item.path, ?item.canonicalUrl],
+      for (final item in gone) ...[item.key, item.path, ?item.canonicalUrl],
     ]);
     _ref.read(playlistsRevisionProvider.notifier).state++;
     _ref.invalidate(localMediaProvider);
     await _ref.read(autoBackupProvider).requestBackup();
-    return deleted;
+    if (gone.length < items.length) {
+      throw DeleteRefusedException(
+        deleted: gone.length,
+        left: items.length - gone.length,
+      );
+    }
+    return gone.length;
   }
 
   /// Shares the file itself: nothing is downloaded, since everything here

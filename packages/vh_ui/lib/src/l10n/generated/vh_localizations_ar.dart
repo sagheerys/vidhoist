@@ -521,6 +521,10 @@ class VhLocalizationsAr extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'لم يُحذف: أندرويد يحتاج إذنك لحذف هذا الملف، في النافذة التي يعرضها.';
+
+  @override
   String get deleteSelected => 'حذف المحدد';
 
   @override

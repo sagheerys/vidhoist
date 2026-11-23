@@ -497,6 +497,10 @@ class VhLocalizationsTr extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'Silinmedi: Android bu dosyayı silmek için, gösterdiği pencerede izninizi istiyor.';
+
+  @override
   String get deleteSelected => 'Seçilenleri sil';
 
   @override

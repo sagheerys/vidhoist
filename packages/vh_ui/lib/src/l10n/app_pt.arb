@@ -136,6 +136,7 @@
   "delete": "Excluir",
   "deleteMultipleConfirm": "{count, plural, =1{Excluir 1 clipe?\n\nO arquivo dele é removido do seu aparelho.} other{Excluir {count} clipes?\n\nOs arquivos deles são removidos do seu aparelho.}}",
   "deletePlaylistConfirm": "Excluir \"{name}\"?",
+  "deleteRefused": "Não excluído: o Android precisa da sua permissão para excluir este arquivo, na caixa que ele mostra.",
   "deleteSelected": "Excluir selecionados",
   "deleteTag": "Excluir tag",
   "deleteTagConfirm": "Remover a tag \"{tag}\" de todos os itens? Os clipes em si não são excluídos.",

@@ -934,6 +934,12 @@ abstract class VhLocalizations {
   /// **'Delete \"{name}\"?'**
   String deletePlaylistConfirm(Object name);
 
+  /// No description provided for @deleteRefused.
+  ///
+  /// In en, this message translates to:
+  /// **'Not deleted: Android needs your permission to delete this file, in the dialog it shows.'**
+  String get deleteRefused;
+
   /// No description provided for @deleteSelected.
   ///
   /// In en, this message translates to:

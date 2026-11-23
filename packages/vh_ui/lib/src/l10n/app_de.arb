@@ -136,6 +136,7 @@
   "delete": "Löschen",
   "deleteMultipleConfirm": "{count, plural, =1{1 Clip löschen?\n\nSeine Datei wird von deinem Gerät entfernt.} other{{count} Clips löschen?\n\nIhre Dateien werden von deinem Gerät entfernt.}}",
   "deletePlaylistConfirm": "„{name}“ löschen?",
+  "deleteRefused": "Nicht gelöscht: Android braucht deine Erlaubnis, um diese Datei zu löschen, im Dialog, den es anzeigt.",
   "deleteSelected": "Auswahl löschen",
   "deleteTag": "Tag löschen",
   "deleteTagConfirm": "Den Tag „{tag}“ von allen Elementen entfernen? Die Clips selbst werden nicht gelöscht.",

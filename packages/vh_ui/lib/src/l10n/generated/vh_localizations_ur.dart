@@ -497,6 +497,10 @@ class VhLocalizationsUr extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'حذف نہیں ہوا: اینڈرائیڈ کو اس فائل کو حذف کرنے کے لیے آپ کی اجازت درکار ہے، اس ڈائیلاگ میں جو وہ دکھاتا ہے۔';
+
+  @override
   String get deleteSelected => 'منتخب حذف کریں';
 
   @override

@@ -136,6 +136,7 @@
   "delete": "Hapus",
   "deleteMultipleConfirm": "{count, plural, =1{Hapus 1 klip?\n\nFilenya dihapus dari perangkat Anda.} other{Hapus {count} klip?\n\nFile-filenya dihapus dari perangkat Anda.}}",
   "deletePlaylistConfirm": "Hapus \"{name}\"?",
+  "deleteRefused": "Tidak dihapus: Android memerlukan izin Anda untuk menghapus file ini, di dialog yang ditampilkannya.",
   "deleteSelected": "Hapus yang dipilih",
   "deleteTag": "Hapus tag",
   "deleteTagConfirm": "Hapus tag \"{tag}\" dari semua item? Klipnya sendiri tidak dihapus.",

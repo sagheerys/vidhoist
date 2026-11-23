@@ -6,6 +6,17 @@ All notable changes to VidHoist. The format follows
 
 ## [Unreleased]
 
+### Fixed
+- Android: a clip the app could play but not delete ("Cannot delete file
+  ... No such file or directory"). Android forgets that a download belongs
+  to the app once the app's data is cleared or the app is installed again,
+  and then refuses its deletes; such clips are now deleted through
+  Android's own confirmation dialog.
+- Covers from Facebook, Instagram and TikTok that went blank after a few
+  days: their addresses expire, and are now replaced by a frame of the
+  clip's own file. A run of expired covers no longer stops the others from
+  being kept on the device, so covers show without a connection.
+
 ## [1.1.0] - 2026-11-20
 
 The first public release of VidHoist, for Android and Windows, in twelve

@@ -136,6 +136,7 @@
   "delete": "Sil",
   "deleteMultipleConfirm": "{count, plural, =1{1 klip silinsin mi?\n\nDosyası cihazınızdan kaldırılır.} other{{count} klip silinsin mi?\n\nDosyaları cihazınızdan kaldırılır.}}",
   "deletePlaylistConfirm": "\"{name}\" silinsin mi?",
+  "deleteRefused": "Silinmedi: Android bu dosyayı silmek için, gösterdiği pencerede izninizi istiyor.",
   "deleteSelected": "Seçilenleri sil",
   "deleteTag": "Etiketi sil",
   "deleteTagConfirm": "\"{tag}\" etiketi tüm öğelerden silinsin mi? Kliplerin kendisi silinmez.",

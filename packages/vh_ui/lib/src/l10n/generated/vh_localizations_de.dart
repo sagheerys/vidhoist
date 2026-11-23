@@ -499,6 +499,10 @@ class VhLocalizationsDe extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'Nicht gelöscht: Android braucht deine Erlaubnis, um diese Datei zu löschen, im Dialog, den es anzeigt.';
+
+  @override
   String get deleteSelected => 'Auswahl löschen';
 
   @override

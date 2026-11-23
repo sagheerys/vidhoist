@@ -732,6 +732,7 @@
   "delete": "Delete",
   "deleteMultipleConfirm": "{count, plural, =1{Delete 1 clip?\n\nIts file is removed from your device.} other{Delete {count} clips?\n\nTheir files are removed from your device.}}",
   "deletePlaylistConfirm": "Delete \"{name}\"?",
+  "deleteRefused": "Not deleted: Android needs your permission to delete this file, in the dialog it shows.",
   "deleteSelected": "Delete selected",
   "deleteTag": "Delete tag",
   "deleteTagConfirm": "Delete the tag \"{tag}\" from all items? The clips themselves are not deleted.",

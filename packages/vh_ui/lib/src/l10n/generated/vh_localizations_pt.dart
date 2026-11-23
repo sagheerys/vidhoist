@@ -497,6 +497,10 @@ class VhLocalizationsPt extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'Não excluído: o Android precisa da sua permissão para excluir este arquivo, na caixa que ele mostra.';
+
+  @override
   String get deleteSelected => 'Excluir selecionados';
 
   @override

@@ -1,6 +1,8 @@
 import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
+import '../downloads_library/media_remover.dart';
+
 /// Turns the core's classified exceptions into translated text.
 /// **The only place** errors are translated; there are no scattered error
 /// strings.
@@ -19,6 +21,8 @@ String errorText(VhLocalizations l10n, Object error) => switch (error) {
   ),
   ClipPastEndException() => l10n.errClipPastEndUnknown,
   CancelledException() => l10n.cancel,
+  // Clips Android kept: its dialog was declined, or it offered none.
+  DeleteRefusedException() => l10n.deleteRefused,
   _ => l10n.errorGeneric(error.toString()),
 };
 

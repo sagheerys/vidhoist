@@ -18,13 +18,27 @@ CoverFetcher cachedCoverFetcher(
     final got = await cache.downloadFile(url, authHeaders: headersFor(url));
     return FetchedCover.found(await got.file.readAsBytes());
   } on HttpExceptionWithStatus catch (e) {
-    return e.statusCode == HttpStatus.notFound ||
-            e.statusCode == HttpStatus.gone
+    return _goneStatuses.contains(e.statusCode)
         ? const FetchedCover.gone()
         : const FetchedCover.failed();
   } on Object {
     return const FetchedCover.failed();
   }
+};
+
+/// The answers that mean the address will never give the picture again.
+///
+/// **A refusal is one of them.** Facebook, Instagram and TikTok sign their
+/// cover addresses for a few days and answer 403 once the signature has
+/// run out. Read as "try again later", such a cover was asked for at every
+/// launch and never replaced by a frame of the clip's own file; and a run
+/// of them looked like the network being down, which ended the round
+/// before it reached the covers that could still be kept.
+const _goneStatuses = {
+  HttpStatus.notFound,
+  HttpStatus.gone,
+  HttpStatus.unauthorized,
+  HttpStatus.forbidden,
 };
 
 /// [cachedCoverFetcher] over the cache the cards use when they name none

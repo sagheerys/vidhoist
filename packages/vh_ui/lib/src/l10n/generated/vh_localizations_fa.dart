@@ -497,6 +497,10 @@ class VhLocalizationsFa extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'حذف نشد: اندروید برای حذف این فایل به اجازه‌ی شما نیاز دارد، در پنجره‌ای که نشان می‌دهد.';
+
+  @override
   String get deleteSelected => 'حذف موارد انتخاب‌شده';
 
   @override

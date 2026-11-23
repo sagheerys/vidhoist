@@ -498,6 +498,10 @@ class VhLocalizationsId extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'Tidak dihapus: Android memerlukan izin Anda untuk menghapus file ini, di dialog yang ditampilkannya.';
+
+  @override
   String get deleteSelected => 'Hapus yang dipilih';
 
   @override

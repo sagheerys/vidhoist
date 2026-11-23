@@ -59,6 +59,13 @@ class MainActivity : AudioServiceActivity() {
                         ) { _, uri -> runOnUiThread { result.success(uri?.toString()) } }
                     }
                 }
+                // Downloads Android no longer lets the app delete by path
+                // (see MediaDelete): the system asks the user, then deletes.
+                "requestDelete" -> MediaDelete.start(
+                    this,
+                    call.argument<List<String>>("paths") ?: emptyList(),
+                    result,
+                )
                 // Probing local files (duration, dimensions, cover) on a
                 // background thread: a couple of hundred files means seconds
                 // of decoding, and freezing the UI thread for that is not
@@ -153,11 +160,11 @@ class MainActivity : AudioServiceActivity() {
     private val probeExecutor: java.util.concurrent.ExecutorService =
         java.util.concurrent.Executors.newSingleThreadExecutor()
 
-    @Deprecated("The scanner answers through startActivityForResult")
+    @Deprecated("The scanner and the delete dialog answer through startActivityForResult")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (!QrScanner.onResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
+        if (QrScanner.onResult(requestCode, resultCode, data)) return
+        if (MediaDelete.onResult(requestCode, resultCode)) return
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onDestroy() {

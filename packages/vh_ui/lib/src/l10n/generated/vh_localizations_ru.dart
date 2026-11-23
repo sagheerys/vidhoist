@@ -501,6 +501,10 @@ class VhLocalizationsRu extends VhLocalizations {
   }
 
   @override
+  String get deleteRefused =>
+      'Не удалено: Android нужно ваше разрешение на удаление этого файла — в окне, которое он показывает.';
+
+  @override
   String get deleteSelected => 'Удалить выбранное';
 
   @override
