@@ -342,31 +342,7 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
           ),
           selectedIndex: tabs.contains(branch) ? tabs.indexOf(branch) : 0,
           onSelected: (i) => widget.navigationShell.goBranch(tabs[i]),
-          // **Settings has no room for the mini player's bar**, so it
-          // folds into a tab at the edge where lines start; it hides while
-          // the keyboard is open, read here because the page below is not
-          // told of the keyboard.
-          body: Stack(
-            children: [
-              widget.navigationShell,
-              PositionedDirectional(
-                start: 0,
-                bottom: VhSpace.lg,
-                // Under a sheet or dialog it steps aside, as the add button
-                // does; leaving settings, it slides out by itself.
-                child: VhHiddenUnderRoutes(
-                  child: VhMiniPlayerTab(
-                    handler: handler,
-                    visible:
-                        branch == ShellBranch.settings &&
-                        MediaQuery.viewInsetsOf(context).bottom == 0,
-                    artwork: coverBuilderFor(ref),
-                    onOpen: () => GoRouter.of(context).push('/audio'),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          body: widget.navigationShell,
           floatingActionButtonAnimator:
               FloatingActionButtonAnimator.noAnimation,
           floatingActionButton: VhHiddenUnderRoutes(

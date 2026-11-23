@@ -557,7 +557,6 @@
   "mediaAccessMessage": "Vos téléchargements sont conservés dans le dossier Download du téléphone, et Android a besoin de votre autorisation pour que l'appli puisse les lister.",
   "mediaAccessOpenSettings": "Ouvrir les paramètres",
   "mediaAccessTitle": "Autoriser l'accès à vos médias",
-  "miniPlayerTab": "Lecteur : {title}. Touchez pour les commandes",
   "mobileChannelsEmptyBody": "Suivez une chaîne et chaque nouvelle vidéo se télécharge toute seule tant que VidHoist est ouvert ou en arrière-plan ; ce qui est arrivé pendant qu'il était fermé se télécharge à son ouverture. Ce qui est déjà sur la chaîne n'est pas téléchargé.",
   "mobileChannelsHint": "Les nouvelles vidéos des chaînes que vous suivez, téléchargées toutes seules",
   "mobileEngineIpv4": "Se connecter en IPv4",

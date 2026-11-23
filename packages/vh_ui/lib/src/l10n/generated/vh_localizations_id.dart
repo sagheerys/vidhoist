@@ -2013,11 +2013,6 @@ class VhLocalizationsId extends VhLocalizations {
   String get mediaAccessTitle => 'Izinkan akses ke media Anda';
 
   @override
-  String miniPlayerTab(String title) {
-    return 'Pemutar: $title. Ketuk untuk kontrol';
-  }
-
-  @override
   String get mobileChannelsEmptyBody =>
       'Ikuti saluran dan setiap video baru akan terunduh sendiri saat VidHoist terbuka atau di latar belakang; yang muncul saat aplikasi tertutup akan diunduh saat dibuka. Video yang sudah ada di saluran tidak diunduh.';
 

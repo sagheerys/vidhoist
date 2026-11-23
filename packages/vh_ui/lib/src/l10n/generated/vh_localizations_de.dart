@@ -2017,11 +2017,6 @@ class VhLocalizationsDe extends VhLocalizations {
   String get mediaAccessTitle => 'Zugriff auf deine Medien erlauben';
 
   @override
-  String miniPlayerTab(String title) {
-    return 'Player: $title. Tippen für die Steuerung';
-  }
-
-  @override
   String get mobileChannelsEmptyBody =>
       'Folge einem Kanal, und jedes neue Video lädt sich von selbst herunter, solange VidHoist offen ist oder im Hintergrund läuft; was kam, während es geschlossen war, wird beim Öffnen heruntergeladen. Was schon auf dem Kanal ist, wird nicht heruntergeladen.';
 

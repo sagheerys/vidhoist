@@ -3460,12 +3460,6 @@ abstract class VhLocalizations {
   /// **'Allow access to your media'**
   String get mediaAccessTitle;
 
-  /// No description provided for @miniPlayerTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Player: {title}. Tap for the controls'**
-  String miniPlayerTab(String title);
-
   /// No description provided for @mobileChannelsEmptyBody.
   ///
   /// In en, this message translates to:

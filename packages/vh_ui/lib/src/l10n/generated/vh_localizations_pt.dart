@@ -2013,11 +2013,6 @@ class VhLocalizationsPt extends VhLocalizations {
   String get mediaAccessTitle => 'Permita o acesso à sua mídia';
 
   @override
-  String miniPlayerTab(String title) {
-    return 'Player: $title. Toque para ver os controles';
-  }
-
-  @override
   String get mobileChannelsEmptyBody =>
       'Siga um canal e cada vídeo novo é baixado sozinho enquanto o VidHoist está aberto ou em segundo plano; o que chegou enquanto estava fechado é baixado quando ele abre. O que já está no canal não é baixado.';
 

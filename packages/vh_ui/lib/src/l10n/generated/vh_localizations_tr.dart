@@ -2013,11 +2013,6 @@ class VhLocalizationsTr extends VhLocalizations {
   String get mediaAccessTitle => 'Medyanıza erişim izni verin';
 
   @override
-  String miniPlayerTab(String title) {
-    return 'Oynatıcı: $title. Kontroller için dokunun';
-  }
-
-  @override
   String get mobileChannelsEmptyBody =>
       'Bir kanalı takip edin; VidHoist açıkken ya da arka plandayken her yeni video kendiliğinden iner, kapalıyken gelenler ise uygulama açılınca iner. Kanalda zaten olanlar indirilmez.';
 

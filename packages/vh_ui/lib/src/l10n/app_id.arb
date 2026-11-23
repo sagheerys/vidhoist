@@ -557,7 +557,6 @@
   "mediaAccessMessage": "Unduhan Anda disimpan di folder Download ponsel, dan Android memerlukan izin Anda sebelum aplikasi dapat menampilkannya.",
   "mediaAccessOpenSettings": "Buka pengaturan",
   "mediaAccessTitle": "Izinkan akses ke media Anda",
-  "miniPlayerTab": "Pemutar: {title}. Ketuk untuk kontrol",
   "mobileChannelsEmptyBody": "Ikuti saluran dan setiap video baru akan terunduh sendiri saat VidHoist terbuka atau di latar belakang; yang muncul saat aplikasi tertutup akan diunduh saat dibuka. Video yang sudah ada di saluran tidak diunduh.",
   "mobileChannelsHint": "Video baru dari saluran yang Anda ikuti, terunduh dengan sendirinya",
   "mobileEngineIpv4": "Hubungkan lewat IPv4",
