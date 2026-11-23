@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../urls/url_kit.dart';
 import 'app_version.dart';
+import 'release_note_translations.dart';
 
 /// A release published on GitHub, as read from `releases/latest`.
 class UpdateRelease {
@@ -12,6 +13,8 @@ class UpdateRelease {
     required this.apkSize,
     this.sha256,
     this.notes = '',
+    this.notesUrl,
+    this.translations = const {},
     this.pageUrl = '',
     this.publishedAt,
   });
@@ -33,6 +36,29 @@ class UpdateRelease {
 
   /// The release notes, raw Markdown as written.
   final String notes;
+
+  /// Where the release keeps its notes in every language
+  /// ([vhNotesAssetName]), or `null` for a release without the file.
+  final String? notesUrl;
+
+  /// This app's notes by language code, once read from [notesUrl]; empty
+  /// until then, or when the file could not be read.
+  final Map<String, String> translations;
+
+  /// The same release with its notes file read.
+  UpdateRelease withTranslations(Map<String, String> translations) =>
+      UpdateRelease(
+        version: version,
+        tag: tag,
+        apkUrl: apkUrl,
+        apkSize: apkSize,
+        sha256: sha256,
+        notes: notes,
+        notesUrl: notesUrl,
+        translations: translations,
+        pageUrl: pageUrl,
+        publishedAt: publishedAt,
+      );
 
   /// The release page, a manual fallback when installing inside the app is
   /// not possible.
@@ -93,6 +119,7 @@ class UpdateRelease {
     final marker = assetMarker.toLowerCase();
     final ending = extension.toLowerCase();
     final matching = <_Asset>[];
+    String? notesUrl;
     for (final asset in assets) {
       if (asset is! Map<String, dynamic>) continue;
       final name = asset['name'];
@@ -103,6 +130,10 @@ class UpdateRelease {
       final link = UrlKit.webUri(url);
       if (link == null || !trusted(link)) continue;
       final lower = name.toLowerCase();
+      if (lower == vhNotesAssetName) {
+        notesUrl = url;
+        continue;
+      }
       // **Matching on both the marker and the extension**: one release
       // carries every app's file, so without the marker a phone could
       // install another app's APK; and without the extension it could be handed
@@ -127,6 +158,7 @@ class UpdateRelease {
       apkSize: chosen.size,
       sha256: chosen.sha256,
       notes: decoded['body'] is String ? decoded['body'] as String : '',
+      notesUrl: notesUrl,
       pageUrl: switch (UrlKit.webUri(decoded['html_url']?.toString())) {
         final page? when fromGitHub(page) => page.toString(),
         _ => '',

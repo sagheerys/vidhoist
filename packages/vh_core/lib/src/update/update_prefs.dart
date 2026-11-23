@@ -85,10 +85,37 @@ class UpdatePrefs {
     }
   }
 
-  Future<void> saveNotes(String version, String notes) => mutex.run(
+  /// The saved notes file's translations, when they are [version]'s;
+  /// empty otherwise.
+  Future<Map<String, String>> savedTranslationsOf(String version) async {
+    final raw = await store.getString(notesKey);
+    if (raw == null) return const {};
+    try {
+      final decoded = json.decode(raw);
+      if (decoded is! Map || decoded['version'] != version) return const {};
+      final translations = decoded['translations'];
+      if (translations is! Map) return const {};
+      return {
+        for (final MapEntry(:key, :value) in translations.entries)
+          if (key is String && value is String) key: value,
+      };
+    } on FormatException {
+      return const {};
+    }
+  }
+
+  Future<void> saveNotes(
+    String version,
+    String notes, {
+    Map<String, String> translations = const {},
+  }) => mutex.run(
     () => store.setString(
       notesKey,
-      json.encode({'version': version, 'notes': notes}),
+      json.encode({
+        'version': version,
+        'notes': notes,
+        if (translations.isNotEmpty) 'translations': translations,
+      }),
     ),
   );
 }

@@ -62,6 +62,7 @@ void main() {
     String? body,
     Object? failWith,
     ApkDownloader? downloader,
+    String? notesFile,
   }) {
     final c = ProviderContainer(
       overrides: [
@@ -75,8 +76,12 @@ void main() {
         updateCheckerProvider.overrideWithValue(
           UpdateChecker(
             assetMarker: 'vidhoist',
-            fetch: (_) async {
+            notesApp: 'phone',
+            fetch: (uri) async {
               if (failWith != null) throw failWith;
+              if (uri.path.endsWith(vhNotesAssetName)) {
+                return notesFile ?? (throw Exception('404'));
+              }
               return body ?? releaseJson();
             },
           ),
@@ -414,6 +419,37 @@ void main() {
       expect(find.text(l10n.updateLater), findsOneWidget);
       expect(find.text(l10n.updateSkipVersion), findsOneWidget);
     });
+
+    testWidgets(
+      "**the guard**: what is new is in the reader's language, not the "
+      'English page with its table of files',
+      (tester) async {
+        final release = json.decode(releaseJson()) as Map<String, dynamic>;
+        release['body'] = '| File | For |\n|---|---|\n| a.apk | phones |';
+        (release['assets'] as List).add({
+          'name': vhNotesAssetName,
+          'browser_download_url':
+              'https://github.com/x/y/releases/download/v1/$vhNotesAssetName',
+        });
+        final c = container(
+          body: json.encode(release),
+          notesFile: json.encode({
+            'phone': {'en': 'Deleting works again.', 'ar': 'الحذف يعمل.'},
+          }),
+        );
+        await c.read(updateControllerProvider.notifier).checkSilently();
+        await tester.pumpWidget(sheetHost(c));
+        await tester.pumpAndSettle();
+
+        expect(find.text('الحذف يعمل.'), findsOneWidget);
+        expect(find.textContaining('a.apk'), findsNothing);
+        // Kept for "what's new" after the install, without a network.
+        expect(
+          await c.read(updatePrefsProvider).savedTranslationsOf('9.9.9'),
+          containsPair('ar', 'الحذف يعمل.'),
+        );
+      },
+    );
 
     testWidgets(
       '**the guard**: skipping from the sheet writes the preference',

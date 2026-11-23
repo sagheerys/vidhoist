@@ -63,10 +63,10 @@ Future<void> showWhatsNewNow(BuildContext context, WidgetRef ref) async {
 Future<void> showWhatsNewDialog(BuildContext context, WhatsNew notes) {
   final l = context.vhl;
   final p = VhThemeX.of(context).palette;
-  final arabic = Localizations.localeOf(context).languageCode == 'ar';
-  final body = vhReleaseNotesFor(
-    notes.notes,
-    arabic: arabic,
+  final body = vhReleaseNotesIn(
+    Localizations.localeOf(context).languageCode,
+    body: notes.notes,
+    translations: notes.translations,
     app: 'windows',
   ).trim();
   return showDesktopDialog<void>(

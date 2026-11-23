@@ -104,11 +104,15 @@ Future<void> showWhatsNewNow(BuildContext context, WidgetRef ref) async {
 }
 
 void _show(BuildContext context, WhatsNew notes) {
-  final arabic = Localizations.localeOf(context).languageCode == 'ar';
   showVhWhatsNewSheet(
     context,
     version: notes.version,
-    notes: vhReleaseNotesFor(notes.notes, arabic: arabic, app: 'phone'),
+    notes: vhReleaseNotesIn(
+      Localizations.localeOf(context).languageCode,
+      body: notes.notes,
+      translations: notes.translations,
+      app: 'phone',
+    ),
     onOpenPage: () => openWebLink(notes.pageUrl),
   );
 }

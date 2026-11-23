@@ -8,6 +8,7 @@ class WhatsNew {
     required this.version,
     required this.notes,
     required this.pageUrl,
+    this.translations = const {},
   });
 
   final String version;
@@ -15,6 +16,10 @@ class WhatsNew {
   /// The release notes as written, or empty when neither a saved copy nor
   /// the network had them; the sheet then offers the release page alone.
   final String notes;
+
+  /// This app's notes by language code, from the release's notes file;
+  /// empty for a release without one.
+  final Map<String, String> translations;
   final String pageUrl;
 }
 
@@ -60,12 +65,19 @@ class WhatsNewService {
     if (parsed == null) return null;
     final name = parsed.toString();
     final saved = await prefs.savedNotes();
-    final notes = saved != null && AppVersion.tryParse(saved.$1) == parsed
-        ? saved.$2
-        : await checker.notesFor(name);
+    if (saved != null && AppVersion.tryParse(saved.$1) == parsed) {
+      return WhatsNew(
+        version: name,
+        notes: saved.$2,
+        translations: await prefs.savedTranslationsOf(saved.$1),
+        pageUrl: checker.pageUrlOf(name),
+      );
+    }
+    final fetched = await checker.releaseNotesFor(name);
     return WhatsNew(
       version: name,
-      notes: notes ?? '',
+      notes: fetched?.notes ?? '',
+      translations: fetched?.translations ?? const {},
       pageUrl: checker.pageUrlOf(name),
     );
   }

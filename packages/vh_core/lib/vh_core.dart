@@ -71,6 +71,7 @@ export 'src/storage/title_index.dart';
 export 'src/storage/url_keyed_index.dart';
 export 'src/update/apk_downloader.dart';
 export 'src/update/app_version.dart';
+export 'src/update/release_note_translations.dart';
 export 'src/update/release_notes.dart';
 export 'src/update/update_checker.dart';
 export 'src/update/update_prefs.dart';

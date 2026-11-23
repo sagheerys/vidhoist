@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import '../constants/vh_constants.dart';
 import '../resolvers/http_fetch.dart';
+import '../urls/url_kit.dart';
 import 'app_version.dart';
+import 'release_note_translations.dart';
 import 'update_release.dart';
 
 /// Checking for updates through GitHub Releases.
@@ -21,7 +23,12 @@ class UpdateChecker {
     this.repo = VhConstants.updateRepo,
     this.trustedAsset = UpdateRelease.fromGitHub,
     this.abis = const [],
+    this.notesApp,
   });
+
+  /// Which app's part of the notes file to read: `phone` or `windows`.
+  /// Without it the notes file is not fetched at all.
+  final String? notesApp;
 
   /// The phone's ABIs, most preferred first (`Build.SUPPORTED_ABIS`), so a
   /// release split per ABI hands it the file built for it; empty takes the
@@ -55,7 +62,14 @@ class UpdateChecker {
   /// The notes of the release tagged for [version], or `null` on any
   /// failure. For "what's new" after an update the app did not download
   /// itself, from a browser or another device.
-  Future<String?> notesFor(String version) async {
+  Future<String?> notesFor(String version) async =>
+      (await releaseNotesFor(version))?.notes;
+
+  /// The page's notes of the release tagged for [version] and this app's
+  /// notes file, or `null` when the page could not be read.
+  Future<({String notes, Map<String, String> translations})?> releaseNotesFor(
+    String version,
+  ) async {
     try {
       final body = await fetch(
         Uri.parse('https://api.github.com/repos/$repo/releases/tags/v$version'),
@@ -63,10 +77,42 @@ class UpdateChecker {
       final decoded = json.decode(body);
       if (decoded is! Map<String, dynamic>) return null;
       final notes = decoded['body'];
-      return notes is String && notes.trim().isNotEmpty ? notes : null;
+      if (notes is! String || notes.trim().isEmpty) return null;
+      return (
+        notes: notes,
+        translations: await translationsAt(_notesUrlIn(decoded['assets'])),
+      );
     } catch (_) {
       return null;
     }
+  }
+
+  /// This app's part of the notes file at [url]; empty on any failure, so
+  /// the release page stands in.
+  Future<Map<String, String>> translationsAt(String? url) async {
+    final app = notesApp;
+    final link = UrlKit.webUri(url);
+    if (app == null || link == null || !trustedAsset(link)) return const {};
+    try {
+      final body = await fetch(link);
+      if (body.length > vhNotesAssetCeiling) return const {};
+      return vhParseNoteTranslations(body, app);
+    } catch (_) {
+      return const {};
+    }
+  }
+
+  String? _notesUrlIn(Object? assets) {
+    if (assets is! List) return null;
+    for (final asset in assets) {
+      if (asset is Map<String, dynamic> &&
+          asset['name'] is String &&
+          (asset['name'] as String).toLowerCase() == vhNotesAssetName &&
+          asset['browser_download_url'] is String) {
+        return asset['browser_download_url'] as String;
+      }
+    }
+    return null;
   }
 
   /// Fail-safe: swallows every error and returns `null`. **For the
@@ -118,7 +164,10 @@ class UpdateChecker {
 
     final skipped = AppVersion.tryParse(skippedVersion);
     if (skipped != null && release.version <= skipped) return null;
-    return release;
+    // Read only for a release worth offering: the notes are shown in the
+    // reader's language in the update sheet, and kept for "what's new".
+    if (release.notesUrl == null) return release;
+    return release.withTranslations(await translationsAt(release.notesUrl));
   }
 
   /// Is the automatic check due? Prevents a request at every launch.

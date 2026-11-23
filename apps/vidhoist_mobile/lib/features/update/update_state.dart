@@ -108,6 +108,7 @@ final updateCheckerProvider = Provider(
     fetch: ioHttpGetString,
     assetMarker: 'vidhoist',
     abis: ref.watch(deviceAbisProvider),
+    notesApp: 'phone',
   ),
 );
 
@@ -171,7 +172,11 @@ class UpdateNotifier extends Notifier<UpdateState> {
   /// it without a network.
   Future<void> _keepNotes(UpdateRelease release) => ref
       .read(updatePrefsProvider)
-      .saveNotes(release.version.toString(), release.notes);
+      .saveNotes(
+        release.version.toString(),
+        release.notes,
+        translations: release.translations,
+      );
 
   Future<String> _currentVersion() async =>
       (await PackageInfo.fromPlatform()).version;

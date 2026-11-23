@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vh_core/vh_core.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import 'update_state.dart';
@@ -32,6 +33,15 @@ class UpdateSheet extends ConsumerWidget {
     if (release == null) return const SizedBox.shrink();
 
     final version = release.version.toString();
+    // **In the reader's language**: the release page is written for
+    // visitors, in English with an Arabic half, and carries the table of
+    // files and the certificate's fingerprint, which mean nothing here.
+    final notes = vhReleaseNotesIn(
+      Localizations.localeOf(context).languageCode,
+      body: release.notes,
+      translations: release.translations,
+      app: 'phone',
+    ).trim();
     // While it downloads, the percent is the one number: the title names
     // the version and the notes step aside, so the two figures never
     // compete.
@@ -98,7 +108,7 @@ class UpdateSheet extends ConsumerWidget {
                           style: text.bodySmall!.copyWith(color: p.ink3),
                         ),
                     ],
-                    if (!downloading && release.notes.trim().isNotEmpty) ...[
+                    if (!downloading && notes.isNotEmpty) ...[
                       const SizedBox(height: VhSpace.lg),
                       VhSectionHeader(title: l10n.updateWhatsNew),
                       const SizedBox(height: VhSpace.xs),
@@ -107,7 +117,7 @@ class UpdateSheet extends ConsumerWidget {
                       // stars and dashes in the one place the app asks to
                       // be trusted with an install.
                       VhMarkdownText(
-                        source: release.notes.trim(),
+                        source: notes,
                         style: text.bodySmall!.copyWith(color: p.ink2),
                       ),
                     ],

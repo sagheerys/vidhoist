@@ -128,9 +128,10 @@ class _Release extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final update = ref.read(updateProvider.notifier);
     final size = release.sizeMb;
-    final notes = vhReleaseNotesFor(
-      release.notes,
-      arabic: Localizations.localeOf(context).languageCode == 'ar',
+    final notes = vhReleaseNotesIn(
+      Localizations.localeOf(context).languageCode,
+      body: release.notes,
+      translations: release.translations,
       app: 'windows',
     ).trim();
     final downloading = state.phase == UpdatePhase.downloading;
