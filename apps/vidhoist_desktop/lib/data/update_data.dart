@@ -222,12 +222,11 @@ class UpdateNotifier extends Notifier<UpdateState> {
   }
 
   /// "What's new" after the update shows these notes without a network.
-  Future<void> _keepNotes(UpdateRelease release) =>
-      _prefs.saveNotes(
-        release.version.toString(),
-        release.notes,
-        translations: release.translations,
-      );
+  Future<void> _keepNotes(UpdateRelease release) => _prefs.saveNotes(
+    release.version.toString(),
+    release.notes,
+    translations: release.translations,
+  );
 
   /// Downloads the installer, then starts it; the app closes and the
   /// installer opens it again, updated.

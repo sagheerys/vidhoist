@@ -72,8 +72,7 @@ class PlaylistDetailsScreen extends ConsumerWidget {
                   title: l10n.emptyPlaylist,
                   message: l10n.emptyPlaylistMessage,
                   actionLabel: l10n.playlistAddClips,
-                  onAction: () =>
-                      context.push('/playlist-add/${playlist.id}'),
+                  onAction: () => context.push('/playlist-add/${playlist.id}'),
                 )
               : Column(
                   children: [

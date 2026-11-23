@@ -11,17 +11,17 @@ import 'package:vh_ui/vh_ui.dart';
 void main() {
   final folder = Directory('../../docs/release-notes');
   final languages = {
-    for (final locale in VhLocalizations.supportedLocales)
-      locale.languageCode,
+    for (final locale in VhLocalizations.supportedLocales) locale.languageCode,
   };
 
   test('the folder is there', () => expect(folder.existsSync(), isTrue));
 
-  for (final file in folder.existsSync()
-      ? folder.listSync().whereType<File>().where(
-          (f) => f.path.endsWith('.json'),
-        )
-      : const <File>[]) {
+  for (final file
+      in folder.existsSync()
+          ? folder.listSync().whereType<File>().where(
+              (f) => f.path.endsWith('.json'),
+            )
+          : const <File>[]) {
     final name = file.uri.pathSegments.last;
     test('$name has both apps in all ${languages.length} languages', () {
       expect(

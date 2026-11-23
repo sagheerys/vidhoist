@@ -68,8 +68,7 @@ void main() {
                 builder: (_) => const Scaffold(body: Text('playlist')),
               ),
               MaterialPageRoute<void>(
-                builder: (_) =>
-                    PlaylistAddClipsScreen(playlistId: playlist.id),
+                builder: (_) => PlaylistAddClipsScreen(playlistId: playlist.id),
               ),
             ],
           ),
