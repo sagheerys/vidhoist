@@ -31,6 +31,7 @@ import '../transcripts/said_index.dart';
 import '../update/update_sheet.dart';
 import '../update/update_state.dart';
 import '../update/whats_new_prompt.dart';
+import 'keyboard_trace.dart';
 import 'share_landing.dart';
 import 'shared_links.dart';
 import 'shell_tabs.dart';
@@ -123,6 +124,22 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
       // A download running on the computer is followed from the start.
       if (mounted) unawaited(ref.read(pcViewProvider.notifier).glance());
     });
+  }
+
+  late final _keyboard = KeyboardTrace(
+    (line) => unawaited(ref.read(loggerProvider).log(line, tag: 'ui')),
+  );
+
+  /// The keyboard coming up is written to the diagnostic log with the
+  /// screen in front, so one that rises unasked can be traced.
+  @override
+  void didChangeMetrics() {
+    if (!mounted) return;
+    final matches = GoRouter.of(context).routerDelegate.currentConfiguration;
+    _keyboard.metricsChanged(
+      context,
+      matches.isEmpty ? '/' : matches.last.matchedLocation,
+    );
   }
 
   @override

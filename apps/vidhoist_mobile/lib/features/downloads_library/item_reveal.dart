@@ -28,6 +28,11 @@ final itemRevealProvider = StateProvider<ItemReveal?>((ref) => null);
 /// other tabs keep where they were. Music goes on playing under the mini
 /// player; a video keeps its position, saved as it closes.
 void openLibraryForReveal(GoRouter router) {
+  // **No text field keeps the focus across the move.** A field left
+  // focused (the library's search, a sheet's link) is what Android looks
+  // for when the app comes back to the front, to raise the keyboard
+  // again; the user tapped a notification to see a clip, not to type.
+  FocusManager.instance.primaryFocus?.unfocus();
   router.routerDelegate.navigatorKey.currentState?.popUntil(
     (route) => route.settings is Page,
   );
