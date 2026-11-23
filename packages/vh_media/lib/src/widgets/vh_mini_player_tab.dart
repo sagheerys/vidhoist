@@ -219,11 +219,7 @@ class _Handle extends StatelessWidget {
                 borderRadius: const BorderRadiusDirectional.horizontal(
                   end: Radius.circular(VhRadius.thumb + 4),
                 ).resolve(Directionality.of(context)),
-                // A hairline, not the bar's shadow: that one is drawn in
-                // the ink's colour, which is light at night, and around a
-                // strip this small it spread a white glow over the row
-                // beside it.
-                border: Border.all(color: p.line),
+                boxShadow: VhShadow.mini(p),
               ),
               child: StreamBuilder<PlaybackState>(
                 stream: handler.playbackState,
