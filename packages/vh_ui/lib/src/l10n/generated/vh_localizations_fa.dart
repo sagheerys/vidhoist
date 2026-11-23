@@ -2238,6 +2238,9 @@ class VhLocalizationsFa extends VhLocalizations {
   String get nothingHereYet => 'هنوز اینجا چیزی نیست';
 
   @override
+  String get notificationClipGone => 'این کلیپ دیگر روی گوشی نیست.';
+
+  @override
   String get nowPlaying => 'در حال پخش';
 
   @override

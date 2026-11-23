@@ -3862,6 +3862,12 @@ abstract class VhLocalizations {
   /// **'Nothing here yet'**
   String get nothingHereYet;
 
+  /// No description provided for @notificationClipGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This clip is no longer on the phone.'**
+  String get notificationClipGone;
+
   /// No description provided for @nowPlaying.
   ///
   /// In en, this message translates to:

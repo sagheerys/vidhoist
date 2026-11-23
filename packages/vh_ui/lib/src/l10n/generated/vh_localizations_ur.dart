@@ -2238,6 +2238,9 @@ class VhLocalizationsUr extends VhLocalizations {
   String get nothingHereYet => 'ابھی یہاں کچھ نہیں';
 
   @override
+  String get notificationClipGone => 'یہ کلپ اب فون پر نہیں ہے۔';
+
+  @override
   String get nowPlaying => 'اب چل رہا ہے';
 
   @override

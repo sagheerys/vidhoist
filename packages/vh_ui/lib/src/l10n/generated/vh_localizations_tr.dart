@@ -2240,6 +2240,9 @@ class VhLocalizationsTr extends VhLocalizations {
   String get nothingHereYet => 'Burada henüz bir şey yok';
 
   @override
+  String get notificationClipGone => 'Bu klip artık telefonda değil.';
+
+  @override
   String get nowPlaying => 'Şimdi çalıyor';
 
   @override

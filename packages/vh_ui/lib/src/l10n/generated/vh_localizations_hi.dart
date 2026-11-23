@@ -2237,6 +2237,9 @@ class VhLocalizationsHi extends VhLocalizations {
   String get nothingHereYet => 'अभी यहाँ कुछ नहीं';
 
   @override
+  String get notificationClipGone => 'यह क्लिप अब फ़ोन पर नहीं है।';
+
+  @override
   String get nowPlaying => 'अभी चल रहा है';
 
   @override

@@ -13,6 +13,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../downloads_library/cover_keeping.dart';
+import '../downloads_library/item_reveal.dart';
 import '../downloads_library/library_enricher.dart';
 import '../downloads_library/library_providers.dart';
 import '../downloads_library/pending_recovery.dart';
@@ -304,6 +305,11 @@ class _ShellScreenState extends ConsumerState<ShellScreen>
     ref.watch(saidIndexingProvider);
     listenPcDone(ref, context);
     _watchEnrichment();
+    // A tap on a "download complete" notification brings the library to
+    // the front, wherever the user was; the library then finds the item.
+    ref.listen<ItemReveal?>(itemRevealProvider, (_, next) {
+      if (next != null) openLibraryForReveal(GoRouter.of(context));
+    });
 
     final handler = ref.watch(audioHandlerProvider);
     final roomForPanel = VhAdaptiveScaffold.hasEndPane(context);

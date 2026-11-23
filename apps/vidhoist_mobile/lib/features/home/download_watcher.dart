@@ -7,6 +7,7 @@ import 'package:vh_ui/vh_ui.dart';
 
 import '../../di.dart';
 import '../background/background_notices.dart';
+import '../downloads_library/item_reveal.dart';
 import '../downloads_library/library_providers.dart';
 import '../downloads_library/widgets/task_card_parts.dart';
 import '../shared/error_text.dart';
@@ -206,7 +207,7 @@ Future<void> initDownloadNotifications(WidgetRef ref) async {
   try {
     await notifications.init(
       onOpenItem: (key) =>
-          ref.read(highlightedItemProvider.notifier).state = key,
+          ref.read(itemRevealProvider.notifier).state = ItemReveal(key),
       onTaskAction: (action, taskId) {
         final engine = ref.read(downloadEngineProvider);
         if (action == 'pause') engine?.pause(taskId);

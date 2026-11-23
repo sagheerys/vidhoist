@@ -2239,6 +2239,9 @@ class VhLocalizationsId extends VhLocalizations {
   String get nothingHereYet => 'Belum ada apa-apa di sini';
 
   @override
+  String get notificationClipGone => 'Klip ini sudah tidak ada di ponsel.';
+
+  @override
   String get nowPlaying => 'Sedang diputar';
 
   @override

@@ -21,12 +21,25 @@ class DownloadNotifications {
   static const _taskPrefix = 'task:';
 
   /// Called once at startup. [onOpenItem] carries the completed item's key
-  /// for the app to highlight; [onTaskAction] a button pressed on a
-  /// download's notification, with its task.
+  /// for the app to show; [onTaskAction] a button pressed on a download's
+  /// notification, with its task.
   Future<void> init({
     void Function(String itemKey)? onOpenItem,
     void Function(String action, String taskId)? onTaskAction,
   }) async {
+    void answer(NotificationResponse response) {
+      final payload = response.payload;
+      if (payload == null || payload.isEmpty) return;
+      if (payload.startsWith(_taskPrefix)) {
+        final action = response.actionId;
+        if (action != null) {
+          onTaskAction?.call(action, payload.substring(_taskPrefix.length));
+        }
+        return;
+      }
+      onOpenItem?.call(payload);
+    }
+
     await _plugin.initialize(
       settings: const InitializationSettings(
         // The status bar draws this icon from its alpha alone: a white
@@ -34,19 +47,16 @@ class DownloadNotifications {
         // icon.
         android: AndroidInitializationSettings('@drawable/ic_stat_vidhoist'),
       ),
-      onDidReceiveNotificationResponse: (response) {
-        final payload = response.payload;
-        if (payload == null || payload.isEmpty) return;
-        if (payload.startsWith(_taskPrefix)) {
-          final action = response.actionId;
-          if (action != null) {
-            onTaskAction?.call(action, payload.substring(_taskPrefix.length));
-          }
-          return;
-        }
-        onOpenItem?.call(payload);
-      },
+      onDidReceiveNotificationResponse: answer,
     );
+    // **A tap that started the app** never reaches the callback above,
+    // which only hears taps while the app runs: the app used to open on
+    // its first screen as if the notification had not been tapped.
+    final launch = await _plugin.getNotificationAppLaunchDetails();
+    final response = launch?.notificationResponse;
+    if ((launch?.didNotificationLaunchApp ?? false) && response != null) {
+      answer(response);
+    }
   }
 
   /// Android 13+ requires an explicit permission; a refusal fails nothing.

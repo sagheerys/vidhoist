@@ -2266,6 +2266,9 @@ class VhLocalizationsRu extends VhLocalizations {
   String get nothingHereYet => 'Здесь пока пусто';
 
   @override
+  String get notificationClipGone => 'Этого клипа больше нет на телефоне.';
+
+  @override
   String get nowPlaying => 'Сейчас играет';
 
   @override

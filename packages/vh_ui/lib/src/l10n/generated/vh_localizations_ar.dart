@@ -2274,6 +2274,9 @@ class VhLocalizationsAr extends VhLocalizations {
   String get nothingHereYet => 'لا يوجد شيء بعد';
 
   @override
+  String get notificationClipGone => 'هذا المقطع لم يعد على الجوال.';
+
+  @override
   String get nowPlaying => 'قيد التشغيل';
 
   @override

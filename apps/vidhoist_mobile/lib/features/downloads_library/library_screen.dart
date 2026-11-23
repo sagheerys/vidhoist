@@ -12,6 +12,7 @@ import '../shared/error_text.dart';
 import '../player/playback_providers.dart';
 import '../storage/phone_volumes.dart';
 import '../transcripts/said_results.dart';
+import 'item_reveal.dart';
 import 'library_providers.dart';
 import 'local_item.dart';
 import 'media_access.dart';
@@ -42,6 +43,13 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   /// The search field is open in the bar's place.
   bool _searchOpen = false;
 
+  final _scroll = ScrollController();
+
+  /// The item a notification tap asked for, and the key its card carries
+  /// so the list can scroll to it once it is built.
+  String? _revealing;
+  final _revealTarget = GlobalKey();
+
   void _clearHighlight() {
     _highlightTimer?.cancel();
     _highlightTimer = null;
@@ -63,7 +71,58 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   @override
   void dispose() {
     _highlightTimer?.cancel();
+    _scroll.dispose();
     super.dispose();
+  }
+
+  /// A tap on a "download complete" notification: the item is found, made
+  /// part of the list if a search or a filter hid it, scrolled to, and lit.
+  Future<void> _reveal(ItemReveal request) async {
+    ref.read(itemRevealProvider.notifier).state = null;
+    final messenger = ScaffoldMessenger.of(context);
+    final gone = context.vhl.notificationClipGone;
+    List<LocalItem> all;
+    try {
+      all = await ref.read(localMediaProvider.future);
+      // Tapped the moment it finished: the folder may not be read again
+      // yet, so once more before calling it gone.
+      if (!all.any((item) => item.key == request.key)) {
+        ref.invalidate(localMediaProvider);
+        all = await ref.read(localMediaProvider.future);
+      }
+    } on Object {
+      return; // the library shows its own error
+    }
+    if (!mounted) return;
+    if (_searchOpen) setState(() => _searchOpen = false);
+    final found = showInLibrary(
+      ref.read(libraryViewProvider.notifier),
+      ref.read(libraryViewProvider),
+      all,
+      request.key,
+    );
+    if (!found) {
+      showVhSnackOn(messenger, gone);
+      return;
+    }
+    setState(() => _revealing = request.key);
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return;
+    final visible = ref.read(visibleLibraryProvider).valueOrNull ?? const [];
+    final index = visible.indexWhere((item) => item.key == request.key);
+    if (index >= 0) {
+      await scrollToItem(
+        _scroll,
+        _revealTarget,
+        index: index,
+        count: visible.length,
+      );
+    }
+    if (!mounted) return;
+    // Lit afresh, for its full time, even if its arrival lit it already.
+    final highlight = ref.read(highlightedItemProvider.notifier);
+    highlight.state = null;
+    highlight.state = request.key;
   }
 
   @override
@@ -75,6 +134,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       _highlightTimer = Timer(highlightDuration, () {
         if (mounted) _clearHighlight();
       });
+    });
+    ref.listen<ItemReveal?>(itemRevealProvider, (_, next) {
+      if (next != null) unawaited(_reveal(next));
     });
     final options = ref.watch(libraryViewProvider);
     final active = ref.watch(activeTasksProvider);
@@ -158,6 +220,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     // A search that matches no title may still match what was said.
     final said = ref.watch(saidResultsProvider).isNotEmpty;
     return CustomScrollView(
+      controller: _scroll,
       slivers: [
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: VhSpace.pagePad),
@@ -311,10 +374,15 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 
   /// The card reads the mode from the options itself; it is not passed
   /// twice.
-  Widget _itemCard(LocalItem item, VhMediaColumns? columns) => LibraryItemCard(
-    item: item,
-    columns: columns,
-    onPlay: () => _play(item),
-    onClearHighlight: _clearHighlight,
-  );
+  Widget _itemCard(LocalItem item, VhMediaColumns? columns) {
+    final card = LibraryItemCard(
+      item: item,
+      columns: columns,
+      onPlay: () => _play(item),
+      onClearHighlight: _clearHighlight,
+    );
+    return item.key == _revealing
+        ? KeyedSubtree(key: _revealTarget, child: card)
+        : card;
+  }
 }
