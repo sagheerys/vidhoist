@@ -2811,6 +2811,19 @@ class VhLocalizationsRu extends VhLocalizations {
   String get playlist => 'Плейлист';
 
   @override
+  String get playlistAddClips => 'Добавить клипы';
+
+  @override
+  String playlistAddClipsTo(String name) {
+    return 'Добавить в «$name»';
+  }
+
+  @override
+  String playlistAddCount(int count) {
+    return 'Добавить ($count)';
+  }
+
+  @override
   String get playlistCreated => 'Плейлист создан';
 
   @override

@@ -2816,6 +2816,19 @@ class VhLocalizationsAr extends VhLocalizations {
   String get playlist => 'قائمة التشغيل';
 
   @override
+  String get playlistAddClips => 'أضف مقاطع';
+
+  @override
+  String playlistAddClipsTo(String name) {
+    return 'إضافة إلى «$name»';
+  }
+
+  @override
+  String playlistAddCount(int count) {
+    return 'إضافة ($count)';
+  }
+
+  @override
   String get playlistCreated => 'أُنشئت القائمة';
 
   @override

@@ -2785,6 +2785,19 @@ class VhLocalizationsDe extends VhLocalizations {
   String get playlist => 'Playlist';
 
   @override
+  String get playlistAddClips => 'Clips hinzufügen';
+
+  @override
+  String playlistAddClipsTo(String name) {
+    return 'Zu „$name“ hinzufügen';
+  }
+
+  @override
+  String playlistAddCount(int count) {
+    return 'Hinzufügen ($count)';
+  }
+
+  @override
   String get playlistCreated => 'Playlist erstellt';
 
   @override

@@ -2771,6 +2771,19 @@ class VhLocalizationsFa extends VhLocalizations {
   String get playlist => 'پلی‌لیست';
 
   @override
+  String get playlistAddClips => 'افزودن کلیپ';
+
+  @override
+  String playlistAddClipsTo(String name) {
+    return 'افزودن به «$name»';
+  }
+
+  @override
+  String playlistAddCount(int count) {
+    return 'افزودن ($count)';
+  }
+
+  @override
   String get playlistCreated => 'پلی‌لیست ساخته شد';
 
   @override

@@ -2772,6 +2772,19 @@ class VhLocalizationsUr extends VhLocalizations {
   String get playlist => 'پلے لسٹ';
 
   @override
+  String get playlistAddClips => 'کلپ شامل کریں';
+
+  @override
+  String playlistAddClipsTo(String name) {
+    return '“$name” میں شامل کریں';
+  }
+
+  @override
+  String playlistAddCount(int count) {
+    return 'شامل کریں ($count)';
+  }
+
+  @override
   String get playlistCreated => 'پلے لسٹ بن گئی';
 
   @override

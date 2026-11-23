@@ -4702,6 +4702,24 @@ abstract class VhLocalizations {
   /// **'Playlist'**
   String get playlist;
 
+  /// No description provided for @playlistAddClips.
+  ///
+  /// In en, this message translates to:
+  /// **'Add clips'**
+  String get playlistAddClips;
+
+  /// No description provided for @playlistAddClipsTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to “{name}”'**
+  String playlistAddClipsTo(String name);
+
+  /// No description provided for @playlistAddCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add ({count})'**
+  String playlistAddCount(int count);
+
   /// No description provided for @playlistCreated.
   ///
   /// In en, this message translates to:

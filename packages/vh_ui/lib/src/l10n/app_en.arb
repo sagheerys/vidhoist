@@ -460,6 +460,20 @@
       }
     }
   },
+  "@playlistAddClipsTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@playlistAddCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@playlistOf": {
     "placeholders": {
       "current": {
@@ -1588,6 +1602,9 @@
   "playerError": "Couldn't play this file",
   "playingFromDevice": "Playing from your device",
   "playlist": "Playlist",
+  "playlistAddClips": "Add clips",
+  "playlistAddClipsTo": "Add to “{name}”",
+  "playlistAddCount": "Add ({count})",
   "playlistCreated": "Playlist created",
   "playlistDeleted": "Playlist deleted",
   "playlistDetails": "Playlist details",

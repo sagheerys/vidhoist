@@ -42,6 +42,11 @@ class PlaylistDetailsScreen extends ConsumerWidget {
         title: Text(playlist.name),
         actions: [
           IconButton(
+            tooltip: l10n.playlistAddClips,
+            onPressed: () => context.push('/playlist-add/${playlist.id}'),
+            icon: const VhIcon(VhIcons.plus),
+          ),
+          IconButton(
             tooltip: l10n.rename,
             onPressed: () => showPlaylistActionsSheet(context, ref, playlist),
             icon: const VhIcon(VhIcons.moreVert),
@@ -66,6 +71,9 @@ class PlaylistDetailsScreen extends ConsumerWidget {
               ? VhEmptyState(
                   title: l10n.emptyPlaylist,
                   message: l10n.emptyPlaylistMessage,
+                  actionLabel: l10n.playlistAddClips,
+                  onAction: () =>
+                      context.push('/playlist-add/${playlist.id}'),
                 )
               : Column(
                   children: [

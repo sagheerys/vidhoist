@@ -15,6 +15,7 @@ import 'features/downloads_library/library_screen.dart';
 import 'features/engine/welcome_screen.dart';
 import 'features/player/player_screen.dart';
 import 'features/player/reels_screen.dart';
+import 'features/playlists/playlist_add_clips_screen.dart';
 import 'features/playlists/playlist_details_screen.dart';
 import 'features/playlists/playlists_screen.dart';
 import 'features/settings/settings_page.dart';
@@ -127,6 +128,13 @@ final router = GoRouter(
       path: '/batch',
       builder: (_, state) =>
           BatchScreen(playlistUrl: (state.extra ?? '').toString()),
+    ),
+    // Above the tabs, not inside the playlist's: its own add button would
+    // otherwise sit between the mini player and the add-link button.
+    GoRoute(
+      path: '/playlist-add/:id',
+      builder: (_, state) =>
+          PlaylistAddClipsScreen(playlistId: state.pathParameters['id']!),
     ),
     GoRoute(path: '/player', builder: (_, _) => const PlayerScreen()),
     GoRoute(path: '/reels', builder: (_, _) => const ReelsScreen()),

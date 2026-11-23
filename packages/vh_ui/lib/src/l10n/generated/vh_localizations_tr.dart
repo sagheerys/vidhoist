@@ -2775,6 +2775,19 @@ class VhLocalizationsTr extends VhLocalizations {
   String get playlist => 'Oynatma listesi';
 
   @override
+  String get playlistAddClips => 'Klip ekle';
+
+  @override
+  String playlistAddClipsTo(String name) {
+    return '“$name” listesine ekle';
+  }
+
+  @override
+  String playlistAddCount(int count) {
+    return 'Ekle ($count)';
+  }
+
+  @override
   String get playlistCreated => 'Oynatma listesi oluşturuldu';
 
   @override
