@@ -13,12 +13,12 @@ import 'playlists_providers.dart';
 
 /// Choosing clips from the library to add to one playlist, from inside it.
 ///
-/// **The other way round was the only way**: a clip was added from the
-/// library, one item or one selection at a time, so filling a playlist
-/// meant leaving it, finding each clip, and coming back. Here the library
-/// comes to the playlist: search, a type, tick, add. What the playlist
-/// already holds is shown ticked and cannot be added twice; the rest is
-/// added in the order it was ticked.
+/// **Before this screen, clips could only be added from the library**, one
+/// item or one selection at a time, so filling a playlist meant leaving it,
+/// finding each clip, and coming back. Here the library opens inside the
+/// playlist: search, pick a type, tick, add. What the playlist already
+/// holds is shown ticked and cannot be added twice; the rest is added in
+/// the order it was ticked.
 class PlaylistAddClipsScreen extends ConsumerStatefulWidget {
   const PlaylistAddClipsScreen({super.key, required this.playlistId});
 
@@ -159,8 +159,8 @@ class _PlaylistAddClipsScreenState
           ],
         ),
       ),
-      // Pinned under the list, out of the way of the keyboard's typing:
-      // it rides above the keyboard rather than under it.
+      // Pinned below the list and lifted above the keyboard, so the add
+      // button stays reachable while a search is being typed.
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: EdgeInsets.fromLTRB(

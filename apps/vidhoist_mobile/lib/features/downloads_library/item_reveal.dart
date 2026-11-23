@@ -9,8 +9,9 @@ import 'local_item.dart';
 /// "download complete" notification.
 ///
 /// **Not the same as the highlight.** A download that completes while the
-/// user is elsewhere only lights its item for when they come back; a tap
-/// on its notification is the user asking to see it, so the app goes there.
+/// user is elsewhere only highlights its item, for when they come back; a
+/// tap on its notification is the user asking to see it, so the app goes
+/// there.
 /// Each tap is a new request, even for the same item twice.
 class ItemReveal {
   ItemReveal(this.key);

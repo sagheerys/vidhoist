@@ -129,8 +129,9 @@ final router = GoRouter(
       builder: (_, state) =>
           BatchScreen(playlistUrl: (state.extra ?? '').toString()),
     ),
-    // Above the tabs, not inside the playlist's: its own add button would
-    // otherwise sit between the mini player and the add-link button.
+    // Opened over the whole shell, not inside the playlists tab: inside it,
+    // the screen's own add button would sit between the mini player and
+    // the shell's add-link button.
     GoRoute(
       path: '/playlist-add/:id',
       builder: (_, state) =>

@@ -119,7 +119,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       );
     }
     if (!mounted) return;
-    // Lit afresh, for its full time, even if its arrival lit it already.
+    // Highlighted again for the full highlight time, even if the download
+    // finishing highlighted it a moment ago.
     final highlight = ref.read(highlightedItemProvider.notifier);
     highlight.state = null;
     highlight.state = request.key;
