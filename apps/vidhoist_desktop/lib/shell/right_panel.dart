@@ -11,8 +11,13 @@ import 'panel/panel_tabs.dart';
 /// The panel's three faces.
 enum PanelTab { transcript, upNext, details }
 
-/// The side panel: the transcript following playback, what comes next,
-/// and the clip's details.
+/// The side panel: a clip's transcript and details, and what comes next.
+///
+/// **On a clip's page it is about that clip**, playing or not: the page
+/// of one clip used to stand beside another's transcript, the one in the
+/// player, and its own words could be read only by playing it. Everywhere
+/// else it follows the player, as before. What comes next is always the
+/// player's queue.
 class DesktopRightPanel extends StatelessWidget {
   const DesktopRightPanel({
     super.key,
@@ -20,6 +25,7 @@ class DesktopRightPanel extends StatelessWidget {
     required this.onTab,
     required this.state,
     required this.player,
+    this.page,
   });
 
   final PanelTab tab;
@@ -27,11 +33,17 @@ class DesktopRightPanel extends StatelessWidget {
   final VhPlayerState state;
   final VhPlayer player;
 
+  /// The clip whose page is open, or null off a clip's page.
+  final PlaylistItem? page;
+
   @override
   Widget build(BuildContext context) {
     final p = VhThemeX.of(context).palette;
     final l = context.vhl;
     final current = state.current;
+    final subject = page ?? current;
+    final playing =
+        subject != null && subject.canonicalUrl == current?.canonicalUrl;
     return Container(
       width: DesktopShellSize.panel,
       decoration: BoxDecoration(
@@ -57,7 +69,7 @@ class DesktopRightPanel extends StatelessWidget {
             onChoose: onTab,
           ),
           const SizedBox(height: VhSpace.lg),
-          if (current == null)
+          if (subject == null)
             Expanded(
               child: Center(
                 child: SingleChildScrollView(
@@ -69,25 +81,13 @@ class DesktopRightPanel extends StatelessWidget {
               ),
             )
           else ...[
-            Builder(
-              builder: (context) {
-                // Its own direction, the interface's side: a Latin title
-                // in the Arabic panel sat on the far side otherwise.
-                final (direction, align) = vhForeignLine(
-                  context,
-                  current.title,
-                );
-                return Text(
-                  current.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textDirection: direction,
-                  textAlign: align,
-                  style: Theme.of(context).textTheme.titleSmall,
-                );
-              },
-            ),
-            const SizedBox(height: VhSpace.md),
+            // The title names the clip only where the page does not: on a
+            // clip's page it was said there already, a third time with the
+            // player bar's.
+            if (page == null) ...[
+              _Title(title: subject.title),
+              const SizedBox(height: VhSpace.md),
+            ],
             Expanded(
               // One face gives way to the next with a short cross-fade and a
               // rise of a few points, not a cut.
@@ -109,11 +109,15 @@ class DesktopRightPanel extends StatelessWidget {
                   key: ValueKey(tab),
                   child: switch (tab) {
                     PanelTab.transcript => TranscriptView(
-                      item: current,
+                      item: subject,
                       player: player,
+                      follows: playing,
                     ),
                     PanelTab.upNext => QueueView(state: state, player: player),
-                    PanelTab.details => DetailsView(item: current),
+                    PanelTab.details => DetailsView(
+                      item: subject,
+                      playing: playing,
+                    ),
                   },
                 ),
               ),
@@ -121,6 +125,27 @@ class DesktopRightPanel extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    // Its own direction, the interface's side: a Latin title in the Arabic
+    // panel sat on the far side otherwise.
+    final (direction, align) = vhForeignLine(context, title);
+    return Text(
+      title,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      textDirection: direction,
+      textAlign: align,
+      style: Theme.of(context).textTheme.titleSmall,
     );
   }
 }

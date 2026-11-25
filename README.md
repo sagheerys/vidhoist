@@ -21,6 +21,7 @@
 [![Platform](https://img.shields.io/badge/platform-Android%20%C2%B7%20Windows-3DDC84.svg)](#requirements)
 [![Flutter](https://img.shields.io/badge/Flutter-3.47-02569B.svg)](https://flutter.dev)
 [![Languages](https://img.shields.io/badge/languages-12-7FA3FF.svg)](#translations)
+[![Telegram](https://img.shields.io/badge/Telegram-%40vidhoist-26A5E4.svg?logo=telegram)](https://t.me/vidhoist)
 
 </div>
 
@@ -318,6 +319,13 @@ to correct a language or add one is in
 - [docs/adr/](docs/adr/): the decisions that are not changed lightly.
 - [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) ·
   [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · [CHANGELOG.md](CHANGELOG.md)
+
+## Community
+
+News and releases are posted on the Telegram channel
+[t.me/vidhoist](https://t.me/vidhoist), in English and Arabic. Problems and
+ideas belong in [GitHub issues](https://github.com/sagheerys/vidhoist/issues),
+where they are tracked and answered.
 
 ## Credits
 

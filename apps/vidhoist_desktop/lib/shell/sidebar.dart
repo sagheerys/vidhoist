@@ -31,8 +31,10 @@ class DesktopSidebar extends StatelessWidget {
     this.onSavedSearchMenu,
   });
 
-  /// The saved searches, under "Search", each opening the palette on its
-  /// query.
+  /// The saved searches, each opening the palette on its query. There is
+  /// no "Search" place above them: the title bar's search box and Ctrl+K
+  /// are the search, and a third door to the same palette only made the
+  /// sidebar longer.
   final List<SavedSearch> searches;
   final ValueChanged<SavedSearch>? onSavedSearch;
   final void Function(SavedSearch search, Offset at)? onSavedSearchMenu;
@@ -135,20 +137,12 @@ class DesktopSidebar extends StatelessWidget {
                 l.favorites,
                 DesktopRoutes.favorites,
               ),
-              item(
-                DesktopPlace.search,
-                VhIcons.search,
-                VhIcons.searchFill,
-                l.desktopSearch,
-                DesktopRoutes.search,
-              ),
               for (final search in searches)
                 SidebarItem(
                   key: ValueKey('search-${search.id}'),
                   icon: VhIcons.search,
                   label: search.name,
                   narrow: narrow,
-                  indent: true,
                   selected: false,
                   onTap: () => onSavedSearch?.call(search),
                   onMenu: onSavedSearchMenu == null

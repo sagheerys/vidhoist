@@ -421,6 +421,9 @@ class VhLocalizationsRu extends VhLocalizations {
   String get columnAdded => 'Добавлено';
 
   @override
+  String get columnChannel => 'Канал';
+
+  @override
   String get columnLength => 'Длина';
 
   @override
@@ -853,10 +856,6 @@ class VhLocalizationsRu extends VhLocalizations {
   String get desktopDropLinks => 'Отпустите, чтобы добавить';
 
   @override
-  String get desktopEmptyLibraryLocal =>
-      'Добавьте ссылку, и клип появится здесь, когда скачается.';
-
-  @override
   String get desktopEmptyLibraryMessage =>
       'Добавьте ссылку, и клип появится здесь, когда скачается.';
 
@@ -967,6 +966,19 @@ class VhLocalizationsRu extends VhLocalizations {
   String desktopFileReadyToPaste(String name, String size) {
     return 'Готово к вставке: $name · $size';
   }
+
+  @override
+  String get desktopFirstLinkKeys => 'в любом месте окна делает то же самое';
+
+  @override
+  String get desktopFirstLinkNote =>
+      'С YouTube или любого другого сайта. Клип появится здесь, как только начнётся загрузка.';
+
+  @override
+  String get desktopFirstLinkPaste => 'Вставить';
+
+  @override
+  String get desktopFirstLinkTitle => 'Вставьте первую ссылку';
 
   @override
   String get desktopFolderUnavailable => 'Нет доступной папки';
@@ -1114,6 +1126,11 @@ class VhLocalizationsRu extends VhLocalizations {
 
   @override
   String get desktopLess => 'Меньше';
+
+  @override
+  String desktopLibraryDownloading(int count) {
+    return 'загружается: $count';
+  }
 
   @override
   String get desktopLibraryLoading => 'Загрузка медиатеки…';
@@ -1278,10 +1295,16 @@ class VhLocalizationsRu extends VhLocalizations {
   String get desktopPaletteOpen => 'открыть';
 
   @override
+  String get desktopPaletteRecent => 'Недавно воспроизведённые';
+
+  @override
   String get desktopPaletteSaid => 'Сказано в клипах';
 
   @override
   String get desktopPaletteSave => 'Сохранить этот поиск';
+
+  @override
+  String get desktopPaletteSaved => 'Сохранённые поиски';
 
   @override
   String desktopPaletteSettings(String section) {
@@ -1552,6 +1575,10 @@ class VhLocalizationsRu extends VhLocalizations {
   @override
   String get desktopTranscriptHint =>
       'Следует за воспроизведением · щёлкните строку для перехода';
+
+  @override
+  String get desktopTranscriptHintPage =>
+      'Расшифровка этого клипа · щёлкните строку, чтобы воспроизвести с неё';
 
   @override
   String get desktopTranscriptsDeleteBody =>
@@ -3183,6 +3210,25 @@ class VhLocalizationsRu extends VhLocalizations {
 
   @override
   String get sourceCode => 'Исходный код';
+
+  @override
+  String get starAskBody =>
+      'Бесплатно и с открытым кодом, без рекламы и без аккаунта. Звезда на GitHub помогает другим его найти.';
+
+  @override
+  String get starAskIdeas => 'Предложить идею или сообщить о проблеме';
+
+  @override
+  String get starAskLater => 'Может быть, позже';
+
+  @override
+  String get starAskNever => 'Больше не показывать';
+
+  @override
+  String get starAskStar => 'Поставить звезду на GitHub';
+
+  @override
+  String get starAskTitle => 'Нравится VidHoist?';
 
   @override
   String get startDownload => 'Начать загрузку';

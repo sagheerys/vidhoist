@@ -144,8 +144,10 @@ class VhMediaRow extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: VhSpace.lg),
-                Expanded(
-                  child: ExcludeSemantics(
+                _titleCell(
+                  context,
+                  columns,
+                  ExcludeSemantics(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -153,7 +155,10 @@ class VhMediaRow extends StatelessWidget {
                           title,
                           textDirection: titleDirection,
                           textAlign: titleAlign,
-                          maxLines: 1,
+                          // Held to its column on a wide table, a long
+                          // title takes a second line rather than an
+                          // ellipsis.
+                          maxLines: columns.channel ? 2 : 1,
                           overflow: TextOverflow.ellipsis,
                           style: text.bodyMedium!.copyWith(
                             fontWeight: FontWeight.w700,
@@ -176,7 +181,7 @@ class VhMediaRow extends StatelessWidget {
                               const SizedBox(width: VhSpace.xxs),
                             ],
                             if (subtitle case final subtitle?
-                                when subtitle.isNotEmpty)
+                                when subtitle.isNotEmpty && !columns.channel)
                               Flexible(
                                 child: Text(
                                   subtitle,
@@ -206,6 +211,14 @@ class VhMediaRow extends StatelessWidget {
                 ..._cells(
                   context,
                   columns,
+                  channel: ExcludeSemantics(
+                    child: Text(
+                      subtitle ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: figure,
+                    ),
+                  ),
                   length: ExcludeSemantics(child: _figure(duration, figure)),
                   size: ExcludeSemantics(child: _figure(size, figure)),
                   added: ExcludeSemantics(

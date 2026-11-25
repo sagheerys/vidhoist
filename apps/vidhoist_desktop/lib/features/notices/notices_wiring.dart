@@ -16,6 +16,7 @@ import '../../di.dart';
 import '../../router.dart';
 import '../../shell/error_text.dart';
 import '../../shell/hints_wiring.dart';
+import '../star/star_ask_corner.dart';
 
 /// **Windows notifications** for what ends while the window is away: a
 /// download done or failed. In front, the downloads panel says it already,
@@ -53,6 +54,9 @@ class _NoticesWiringState extends ConsumerState<NoticesWiring> {
       ..addAll({for (final task in tasks) task.id: task.phase});
     for (final task in ended) {
       unawaited(_show(_forTask(task)));
+      if (task.phase == TaskPhase.completed) {
+        unawaited(countFinishedDownload(ref));
+      }
       if (task.phase == TaskPhase.completed &&
           ref.read(revealAfterDownloadProvider)) {
         if (task.localPath case final path?) {

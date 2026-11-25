@@ -15,6 +15,7 @@ class AboutScreen extends StatelessWidget {
 
   static const String _github = 'https://github.com/sagheerys';
   static const String _x = 'https://x.com/Sagheer700';
+  static const String _telegram = 'https://t.me/vidhoist';
   static const String _repo = 'https://github.com/sagheerys/vidhoist';
   static const String _issues = '$_repo/issues';
   static const String _ytdlp = 'https://github.com/yt-dlp/yt-dlp';
@@ -86,6 +87,12 @@ class AboutScreen extends StatelessWidget {
               title: 'X',
               subtitle: 'x.com/Sagheer700',
               url: _x,
+            ),
+            _LinkTile(
+              icon: VhIcons.send,
+              title: 'Telegram',
+              subtitle: 't.me/vidhoist',
+              url: _telegram,
             ),
             _LinkTile(
               icon: VhIcons.bug,

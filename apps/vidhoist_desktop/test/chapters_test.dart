@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vidhoist_desktop/features/clip/clip_chapters.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vh_media/library.dart';
@@ -65,7 +66,12 @@ void main() {
         'click plays the clip from there', (tester) async {
       final h = await open(tester, minutes: 20);
       expect(find.text('Chapters'), findsOneWidget);
-      final second = find.text('Line said at second 160 of the talk.');
+      // In the chapters; the panel beside holds the same line, since it
+      // shows this page's clip.
+      final second = find.descendant(
+        of: find.byType(ClipChapters),
+        matching: find.text('Line said at second 160 of the talk.'),
+      );
       await tester.ensureVisible(second);
       await tester.tap(second);
       await tester.pumpAndSettle();

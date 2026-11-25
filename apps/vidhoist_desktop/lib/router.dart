@@ -55,6 +55,16 @@ abstract final class DesktopRoutes {
   static String channel(String id) => '$channels/${Uri.encodeComponent(id)}';
 }
 
+/// The canonical URL of the clip whose page [location] is; null on any
+/// other place. A path segment comes back decoded, slashes and all.
+String? clipPageUrl(Uri location) => switch (location.pathSegments) {
+  ['item', final url] => url,
+  _ => null,
+};
+
+/// Whether [location] is a clip's reading room.
+bool isReadingRoom(Uri location) => location.pathSegments.firstOrNull == 'read';
+
 /// The places the sidebar can show as current.
 enum DesktopPlace {
   library,

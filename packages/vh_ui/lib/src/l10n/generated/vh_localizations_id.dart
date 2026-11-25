@@ -420,6 +420,9 @@ class VhLocalizationsId extends VhLocalizations {
   String get columnAdded => 'Ditambahkan';
 
   @override
+  String get columnChannel => 'Saluran';
+
+  @override
   String get columnLength => 'Durasi';
 
   @override
@@ -846,10 +849,6 @@ class VhLocalizationsId extends VhLocalizations {
   String get desktopDropLinks => 'Jatuhkan untuk menambah';
 
   @override
-  String get desktopEmptyLibraryLocal =>
-      'Tambahkan tautan, dan klip akan muncul di sini setelah diunduh.';
-
-  @override
   String get desktopEmptyLibraryMessage =>
       'Tambahkan tautan, dan klip akan muncul di sini setelah diunduh.';
 
@@ -959,6 +958,20 @@ class VhLocalizationsId extends VhLocalizations {
   String desktopFileReadyToPaste(String name, String size) {
     return 'Siap ditempel: $name · $size';
   }
+
+  @override
+  String get desktopFirstLinkKeys =>
+      'di mana saja di jendela melakukan hal yang sama';
+
+  @override
+  String get desktopFirstLinkNote =>
+      'Dari YouTube atau situs lain. Klip muncul di sini begitu unduhannya dimulai.';
+
+  @override
+  String get desktopFirstLinkPaste => 'Tempel';
+
+  @override
+  String get desktopFirstLinkTitle => 'Tempel tautan pertama Anda';
 
   @override
   String get desktopFolderUnavailable => 'Tidak ada folder yang tersedia';
@@ -1102,6 +1115,11 @@ class VhLocalizationsId extends VhLocalizations {
 
   @override
   String get desktopLess => 'Lebih sedikit';
+
+  @override
+  String desktopLibraryDownloading(int count) {
+    return '$count sedang diunduh';
+  }
 
   @override
   String get desktopLibraryLoading => 'Memuat pustaka…';
@@ -1263,10 +1281,16 @@ class VhLocalizationsId extends VhLocalizations {
   String get desktopPaletteOpen => 'untuk membuka';
 
   @override
+  String get desktopPaletteRecent => 'Baru diputar';
+
+  @override
   String get desktopPaletteSaid => 'Diucapkan di dalam klip';
 
   @override
   String get desktopPaletteSave => 'Simpan pencarian ini';
+
+  @override
+  String get desktopPaletteSaved => 'Pencarian tersimpan';
 
   @override
   String desktopPaletteSettings(String section) {
@@ -1533,6 +1557,10 @@ class VhLocalizationsId extends VhLocalizations {
   @override
   String get desktopTranscriptHint =>
       'Mengikuti pemutaran · klik baris untuk melompat';
+
+  @override
+  String get desktopTranscriptHintPage =>
+      'Transkrip klip ini · klik baris untuk memutar dari sana';
 
   @override
   String get desktopTranscriptsDeleteBody =>
@@ -3137,6 +3165,25 @@ class VhLocalizationsId extends VhLocalizations {
 
   @override
   String get sourceCode => 'Kode sumber';
+
+  @override
+  String get starAskBody =>
+      'Gratis dan sumber terbuka, tanpa iklan dan tanpa akun. Bintang di GitHub membantu orang lain menemukannya.';
+
+  @override
+  String get starAskIdeas => 'Usulkan ide atau laporkan masalah';
+
+  @override
+  String get starAskLater => 'Mungkin nanti';
+
+  @override
+  String get starAskNever => 'Jangan tampilkan lagi';
+
+  @override
+  String get starAskStar => 'Beri bintang di GitHub';
+
+  @override
+  String get starAskTitle => 'Suka dengan VidHoist?';
 
   @override
   String get startDownload => 'Mulai unduh';

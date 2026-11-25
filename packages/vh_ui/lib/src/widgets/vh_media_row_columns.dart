@@ -7,43 +7,83 @@ class VhMediaColumns {
     this.size = false,
     this.added = false,
     this.location = false,
+    this.channel = false,
   });
 
   final bool size;
   final bool added;
   final bool location;
 
+  /// **A wide table gives the channel its own column**, after the title,
+  /// and holds the title to [titleMax]: a title column that took all the
+  /// rest left a long empty stretch between a short title and its figures.
+  /// What the held title leaves goes before the actions, which keep the
+  /// row's far edge.
+  final bool channel;
+
   static const double thumbWidth = 112;
   static const double thumbHeight = 63;
 
-  // Text columns are measured at a text scale of 1 and grow with the
-  // user's font, so a large font drops a column instead of clipping it.
+  // Text columns, and the title's limits, are measured at a text scale of
+  // 1 and grow with the user's font, so a large font drops a column
+  // instead of clipping the title.
   static const double _length = 56;
   static const double _size = 72;
   static const double _added = 112;
   static const double _location = 96;
+  static const double _channel = 160;
   static const double _actions = 88;
   static const double _titleMin = 220;
+  static const double _titleMax = 520;
 
   static double _gap(int count) => VhSpace.lg * count;
 
+  /// The padding at each end of a row and of the header.
+  static const double _padding = VhSpace.xs * 2;
+
+  /// How wide the title may grow, for [scaler]'s text.
+  static double titleMax(TextScaler scaler) => scaler.scale(_titleMax);
+
   /// The columns that fit [width], dropping the least useful first: the
-  /// date, then the size. Null when even the title would be squeezed below
-  /// a readable width; the caller then keeps the phone's row.
+  /// source (the site, also in the clip's details), then the date, then
+  /// the size. Null when even the title would be squeezed below a readable
+  /// width; the caller then keeps the phone's row.
   static VhMediaColumns? forWidth(
     double width,
     TextScaler scaler, {
     required bool location,
   }) {
     double s(double w) => scaler.scale(w);
+    final least = s(_titleMin);
     var used = thumbWidth + s(_length) + _actions + _gap(3);
-    if (location) used += s(_location) + _gap(1);
-    if (width - used < _titleMin) return null;
-    final size = width - used - s(_size) - _gap(1) >= _titleMin;
+    if (width - used < least) return null;
+    bool fits(double column) => width - used - s(column) - _gap(1) >= least;
+    final size = fits(_size);
     if (size) used += s(_size) + _gap(1);
-    final added = size && width - used - s(_added) - _gap(1) >= _titleMin;
-    return VhMediaColumns(size: size, added: added, location: location);
+    final added = size && fits(_added);
+    if (added) used += s(_added) + _gap(1);
+    final source = location && added && fits(_location);
+    if (source) used += s(_location) + _gap(1);
+    // A held title leaves no slack to take the row's own padding, which
+    // the title's whole-row cell otherwise absorbs.
+    final channel =
+        added &&
+        width - used - s(_channel) - _gap(1) - _padding >= s(_titleMax);
+    return VhMediaColumns(
+      size: size,
+      added: added,
+      location: source,
+      channel: channel,
+    );
   }
+}
+
+/// The title's cell: the rest of the row, or no more than
+/// [VhMediaColumns.titleMax] on a table wide enough for the channel.
+Widget _titleCell(BuildContext context, VhMediaColumns columns, Widget child) {
+  if (!columns.channel) return Expanded(child: child);
+  final most = VhMediaColumns.titleMax(MediaQuery.textScalerOf(context));
+  return SizedBox(width: most, child: child);
 }
 
 /// The cells after the title, shared by the header and the rows so the two
@@ -51,6 +91,7 @@ class VhMediaColumns {
 List<Widget> _cells(
   BuildContext context,
   VhMediaColumns columns, {
+  required Widget channel,
   required Widget length,
   required Widget size,
   required Widget added,
@@ -63,10 +104,12 @@ List<Widget> _cells(
     child: SizedBox(width: scaler.scale(width), child: child),
   );
   return [
+    if (columns.channel) cell(VhMediaColumns._channel, channel),
     cell(VhMediaColumns._length, length),
     if (columns.size) cell(VhMediaColumns._size, size),
     if (columns.added) cell(VhMediaColumns._added, added),
     if (columns.location) cell(VhMediaColumns._location, location),
+    if (columns.channel) const Spacer(),
     Padding(
       padding: const EdgeInsetsDirectional.only(start: VhSpace.lg),
       child: SizedBox(width: VhMediaColumns._actions, child: actions),
@@ -174,8 +217,10 @@ class VhMediaRowHeader extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: VhMediaColumns.thumbWidth + VhSpace.lg),
-          Expanded(
-            child: Align(
+          _titleCell(
+            context,
+            columns,
+            Align(
               alignment: AlignmentDirectional.centerStart,
               child: sortable(VhTableColumn.title, label(l10n.titleLabel)),
             ),
@@ -183,6 +228,7 @@ class VhMediaRowHeader extends StatelessWidget {
           ..._cells(
             context,
             columns,
+            channel: label(l10n.columnChannel),
             length: label(l10n.columnLength, align: TextAlign.end),
             size: sortable(
               VhTableColumn.size,

@@ -420,6 +420,9 @@ class VhLocalizationsDe extends VhLocalizations {
   String get columnAdded => 'Hinzugefügt';
 
   @override
+  String get columnChannel => 'Kanal';
+
+  @override
   String get columnLength => 'Länge';
 
   @override
@@ -849,10 +852,6 @@ class VhLocalizationsDe extends VhLocalizations {
   String get desktopDropLinks => 'Zum Hinzufügen ablegen';
 
   @override
-  String get desktopEmptyLibraryLocal =>
-      'Füge einen Link hinzu, und der Clip erscheint hier, sobald er heruntergeladen ist.';
-
-  @override
   String get desktopEmptyLibraryMessage =>
       'Füge einen Link hinzu, und der Clip erscheint hier, sobald er heruntergeladen ist.';
 
@@ -963,6 +962,19 @@ class VhLocalizationsDe extends VhLocalizations {
   String desktopFileReadyToPaste(String name, String size) {
     return 'Bereit zum Einfügen: $name · $size';
   }
+
+  @override
+  String get desktopFirstLinkKeys => 'irgendwo im Fenster tut dasselbe';
+
+  @override
+  String get desktopFirstLinkNote =>
+      'Von YouTube oder einer anderen Seite. Der Clip erscheint hier, sobald sein Download beginnt.';
+
+  @override
+  String get desktopFirstLinkPaste => 'Einfügen';
+
+  @override
+  String get desktopFirstLinkTitle => 'Füge deinen ersten Link ein';
 
   @override
   String get desktopFolderUnavailable => 'Kein Ordner verfügbar';
@@ -1105,6 +1117,11 @@ class VhLocalizationsDe extends VhLocalizations {
 
   @override
   String get desktopLess => 'Weniger';
+
+  @override
+  String desktopLibraryDownloading(int count) {
+    return '$count im Download';
+  }
 
   @override
   String get desktopLibraryLoading => 'Bibliothek wird geladen…';
@@ -1266,10 +1283,16 @@ class VhLocalizationsDe extends VhLocalizations {
   String get desktopPaletteOpen => 'zum Öffnen';
 
   @override
+  String get desktopPaletteRecent => 'Zuletzt abgespielt';
+
+  @override
   String get desktopPaletteSaid => 'In Clips gesagt';
 
   @override
   String get desktopPaletteSave => 'Diese Suche speichern';
+
+  @override
+  String get desktopPaletteSaved => 'Gespeicherte Suchen';
 
   @override
   String desktopPaletteSettings(String section) {
@@ -1535,6 +1558,10 @@ class VhLocalizationsDe extends VhLocalizations {
   @override
   String get desktopTranscriptHint =>
       'Folgt der Wiedergabe · klick eine Zeile an, um hinzuspringen';
+
+  @override
+  String get desktopTranscriptHintPage =>
+      'Transkript dieses Clips · klick eine Zeile an, um ab dort abzuspielen';
 
   @override
   String get desktopTranscriptsDeleteBody =>
@@ -3151,6 +3178,25 @@ class VhLocalizationsDe extends VhLocalizations {
 
   @override
   String get sourceCode => 'Quellcode';
+
+  @override
+  String get starAskBody =>
+      'Kostenlos und quelloffen, ohne Werbung und ohne Konto. Ein Stern auf GitHub hilft anderen, es zu finden.';
+
+  @override
+  String get starAskIdeas => 'Eine Idee vorschlagen oder ein Problem melden';
+
+  @override
+  String get starAskLater => 'Vielleicht später';
+
+  @override
+  String get starAskNever => 'Nicht mehr anzeigen';
+
+  @override
+  String get starAskStar => 'Auf GitHub einen Stern geben';
+
+  @override
+  String get starAskTitle => 'Gefällt dir VidHoist?';
 
   @override
   String get startDownload => 'Download starten';

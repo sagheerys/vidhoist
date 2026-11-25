@@ -153,6 +153,17 @@ void main() {
   // Cookies are kept on this computer: their guards are in
   // cookies_local_test.dart.
 
+  testWidgets("About links to the project's Telegram channel", (tester) async {
+    await open(tester, to: '/settings/about');
+    expect(
+      find.descendant(
+        of: find.byType(AboutPane),
+        matching: find.text('t.me/vidhoist'),
+      ),
+      findsOneWidget,
+    );
+  });
+
   group("what's new", () {
     testWidgets('About shows the version and its notes on request', (
       tester,

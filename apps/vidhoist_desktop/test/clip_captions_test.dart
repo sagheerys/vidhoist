@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,7 @@ import 'package:vidhoist_desktop/data/subtitles_data.dart';
 import 'package:vidhoist_desktop/data/transcripts_data.dart';
 import 'package:vidhoist_desktop/di.dart';
 import 'package:vidhoist_desktop/features/clip/clip_stage.dart';
+import 'package:vidhoist_desktop/features/clip/video_controls.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vh_core/vh_core.dart';
@@ -42,6 +44,23 @@ final _said = Transcript(
 );
 
 void main() {
+  /// Brings the picture's controls up, as the pointer over it does: they
+  /// wait for it, paused or playing. One mouse per test, nudged each time.
+  TestGesture? mouse;
+  setUp(() => mouse = null);
+  Future<void> wake(WidgetTester tester) async {
+    final at = tester.getCenter(find.byType(ClipVideoControls));
+    if (mouse == null) {
+      final added = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      addTearDown(added.removePointer);
+      await added.addPointer(location: at);
+      mouse = added;
+    }
+    await mouse!.moveTo(at + const Offset(4, 4));
+    await mouse!.moveTo(at);
+    await tester.pumpAndSettle();
+  }
+
   Future<ShellHarness> watching(WidgetTester tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final h = ShellHarness(
@@ -68,10 +87,12 @@ void main() {
     final h = await watching(tester);
     expect(find.byType(VhCaptionsLayer), findsOneWidget);
     expect(onPicture(), findsNothing);
+    await wake(tester);
     await tester.tap(find.bySemanticsLabel('Show subtitles'));
     await tester.pumpAndSettle();
     expect(onPicture(), findsOneWidget);
     expect(await h.store.getBool(DesktopSubtitles.key), isTrue);
+    await wake(tester);
     await tester.tap(find.bySemanticsLabel('Hide subtitles'));
     await tester.pumpAndSettle();
     expect(onPicture(), findsNothing);
@@ -116,6 +137,7 @@ void main() {
     GoRouter.of(tester.element(find.byType(DesktopSidebar)))
         .go(DesktopRoutes.item(_url));
     await tester.pumpAndSettle();
+    await wake(tester);
     await tester.tap(find.bySemanticsLabel('Show subtitles'));
     await tester.pumpAndSettle();
     return h;
@@ -132,6 +154,7 @@ void main() {
   ) async {
     final h = await twoLanguages(tester);
     expect(said('The pool keeps the pool warm.'), findsOneWidget);
+    await wake(tester);
     await tester.tap(find.text('EN'));
     await tester.pumpAndSettle();
     expect(said('المسبح يدفئ المسبح.'), findsOneWidget);
@@ -142,11 +165,13 @@ void main() {
   testWidgets('**the guard**: the size and the background are chosen on the '
       'picture too, and kept', (tester) async {
     final h = await twoLanguages(tester);
+    await wake(tester);
     await tester.tap(find.bySemanticsLabel('Subtitle options'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Text size · Large'));
     await tester.pumpAndSettle();
     expect(await h.store.getInt(DesktopSubtitles.sizeKey), 2);
+    await wake(tester);
     await tester.tap(find.bySemanticsLabel('Subtitle options'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Background · None'));

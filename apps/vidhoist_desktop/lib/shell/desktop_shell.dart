@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vh_media/library.dart';
 import 'package:vh_media/vh_media.dart';
 import 'package:vh_ui/vh_ui.dart';
 
@@ -83,6 +84,17 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
   /// Whether the panel stands beside the content; folded while idle.
   late final PanelFold _fold;
 
+  /// The panel opened by hand in the reading room, where it is folded:
+  /// the article is the transcript, and the panel showed it a second time
+  /// beside it. Let go on any move, so each visit starts folded.
+  bool _readingPanel = false;
+
+  @override
+  void didUpdateWidget(DesktopShell old) {
+    super.didUpdateWidget(old);
+    if (old.location != widget.location) _readingPanel = false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -108,7 +120,9 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
   }
 
   void _togglePanel(ShellArrangement arranged, ShellLayout layout) {
-    if (arranged.panelBeside) {
+    if (arranged.panelBeside && isReadingRoom(widget.location)) {
+      setState(() => _readingPanel = !_readingPanel);
+    } else if (arranged.panelBeside) {
       _fold.toggle(
         layout,
         ref.read(shellLayoutProvider.notifier).setPanelHidden,
@@ -123,6 +137,7 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
     setState(() {
       _tab = tab;
       _fold.open();
+      if (isReadingRoom(widget.location)) _readingPanel = true;
       if (!arranged.panelBeside) _overlayOpen = true;
     });
     if (arranged.panelBeside) {
@@ -227,8 +242,8 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
     );
   }
 
-  /// The palette is the search: Ctrl+K, the search box and the sidebar's
-  /// Search all open it, and a saved search opens it on its query.
+  /// The palette is the search: Ctrl+K and the search box open it, and a
+  /// saved search opens it on its query.
   void _openPalette([String initial = '']) => unawaited(
     openPalette(
       context,

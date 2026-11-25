@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vh_core/vh_core.dart' show DownloadTask;
 import 'package:vh_media/library.dart';
 import 'package:vh_media/vh_media.dart';
 import 'package:vh_ui/vh_ui.dart';
@@ -12,15 +13,29 @@ import '../../data/library_data.dart';
 import '../../di.dart';
 import '../../router.dart';
 import '../add/add_dialog.dart';
+import '../add/add_entry.dart';
 import '../clip/clip_state.dart';
+import 'first_link.dart';
+import '../star/star_ask_corner.dart';
 import 'library_chips.dart';
 import 'library_heading.dart';
 import 'library_skeleton.dart';
 import 'library_item_view.dart';
 import 'library_scroll.dart';
 import 'library_state.dart';
+import 'pending_clip.dart';
 import 'selection.dart';
 import 'selection_bar.dart';
+
+/// No filter narrows the list: only then do clips on their way stand in
+/// it, since nothing is known yet of their kind, site or tags.
+bool _unfiltered(LibraryViewOptions o) =>
+    o.type == MediaTypeFilter.all &&
+    o.platform == null &&
+    o.channel == null &&
+    o.folder == null &&
+    o.tags.isEmpty &&
+    o.excludedTags.isEmpty;
 
 /// The library: the whole unified library, or the favourites, with the
 /// filters in view and three layouts.
@@ -51,41 +66,57 @@ class LibraryPage extends ConsumerWidget {
       LibraryScope.favorites => all.where((i) => i.favorite).length,
       _ => all.length,
     };
+    final pending = scope == LibraryScope.all && _unfiltered(options)
+        ? ref.watch(pendingClipsProvider)
+        : const <DownloadTask>[];
+    final counts = vhMetaLine([
+      if (all.isNotEmpty) l.transcriptsClips(held),
+      if (pending.isNotEmpty) l.desktopLibraryDownloading(pending.length),
+    ]);
 
-    return SelectionFrame(
-      items: visible.valueOrNull ?? const [],
-      child: LibraryScroll(
-        place: libraryPlaceKey(scope, options),
-        builder: (controller) => CustomScrollView(
-          controller: controller,
-          slivers: [
-            PinnedHeaderSliver(
-              child: PinnedLibraryHeading(
-                child: LibraryHeading(
-                  title: title,
-                  counts: all.isEmpty ? null : l.transcriptsClips(held),
-                  mode: options.mode,
-                  onMode: (m) => unawaited(
-                    ref.read(libraryViewProvider.notifier).setMode(m),
-                  ),
-                  sort: options.sort,
-                  onSort: (s) => unawaited(
-                    ref.read(libraryViewProvider.notifier).setSort(s),
+    return StarAskCorner(
+      child: SelectionFrame(
+        items: visible.valueOrNull ?? const [],
+        child: LibraryScroll(
+          place: libraryPlaceKey(scope, options),
+          builder: (controller) => CustomScrollView(
+            controller: controller,
+            slivers: [
+              PinnedHeaderSliver(
+                child: PinnedLibraryHeading(
+                  child: LibraryHeading(
+                    title: title,
+                    counts: counts.isEmpty ? null : counts,
+                    tools: all.isNotEmpty,
+                    layouts: all.isNotEmpty || pending.isNotEmpty,
+                    mode: options.mode,
+                    onMode: (m) => unawaited(
+                      ref.read(libraryViewProvider.notifier).setMode(m),
+                    ),
+                    sort: options.sort,
+                    onSort: (s) => unawaited(
+                      ref.read(libraryViewProvider.notifier).setSort(s),
+                    ),
                   ),
                 ),
               ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                VhSpace.xl,
-                VhSpace.xs,
-                VhSpace.xl,
-                VhSpace.md,
-              ),
-              sliver: SliverList.list(children: [LibraryChips(scope: scope)]),
-            ),
-            ..._content(context, ref, visible, all, held),
-          ],
+              // Filters for a library that holds nothing yet would filter
+              // nothing.
+              if (all.isNotEmpty)
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(
+                    VhSpace.xl,
+                    VhSpace.xs,
+                    VhSpace.xl,
+                    VhSpace.md,
+                  ),
+                  sliver: SliverList.list(
+                    children: [LibraryChips(scope: scope)],
+                  ),
+                ),
+              ..._content(context, ref, visible, all, held, pending),
+            ],
+          ),
         ),
       ),
     );
@@ -97,6 +128,7 @@ class LibraryPage extends ConsumerWidget {
     AsyncValue<List<LibraryItem>> visible,
     List<LibraryItem> all,
     int held,
+    List<DownloadTask> pending,
   ) {
     final l = context.vhl;
     // A plain box that scrolls with the page, not a fill: a filling sliver
@@ -123,16 +155,18 @@ class LibraryPage extends ConsumerWidget {
       }
       return [fill(const LibrarySkeleton())];
     }
-    if (items.isEmpty) {
+    if (items.isEmpty && pending.isEmpty) {
       return [
         fill(
           all.isEmpty
-              ? VhEmptyFrame(
-                  title: l.noVideosFound,
-                  message: l.desktopEmptyLibraryLocal,
-                  actionLabel: l.addLinkFab,
-                  actionIcon: VhIcons.addlink,
-                  onAction: () => unawaited(openAddDialog(context)),
+              ? FirstLink(
+                  // What the clipboard holds, as the sidebar's button does.
+                  onAdd: () async {
+                    final text = await clipboardLinks();
+                    if (context.mounted) {
+                      unawaited(openAddDialog(context, text: text));
+                    }
+                  },
                 )
               // Nothing here yet is not a filter that hides too much.
               : held == 0 && scope == LibraryScope.favorites
@@ -160,17 +194,19 @@ class LibraryPage extends ConsumerWidget {
           VhSpace.xl,
           VhSpace.xl,
         ),
-        sliver: _Items(items: items),
+        sliver: _Items(items: items, pending: pending),
       ),
     ];
   }
 }
 
-/// The items, in the chosen layout, marking the one in the player.
+/// The items, in the chosen layout, marking the one in the player; the
+/// clips on their way lead, since they are the newest.
 class _Items extends ConsumerWidget {
-  const _Items({required this.items});
+  const _Items({required this.items, required this.pending});
 
   final List<LibraryItem> items;
+  final List<DownloadTask> pending;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -207,8 +243,17 @@ class _Items extends ConsumerWidget {
             },
             showLocation: true,
             sort: tableSortFor(options.sort, (s) => unawaited(view.setSort(s))),
-            itemCount: items.length,
-            itemBuilder: (context, index, columns) {
+            itemCount: pending.length + items.length,
+            itemBuilder: (context, at, columns) {
+              if (at < pending.length) {
+                return PendingClipView(
+                  key: ValueKey(pending[at].id),
+                  task: pending[at],
+                  mode: options.mode,
+                  columns: columns,
+                );
+              }
+              final index = at - pending.length;
               final item = items[index];
               final isCurrent = item.canonicalUrl == current;
               return LibraryItemView(

@@ -22,6 +22,7 @@ class AboutPane extends ConsumerWidget {
 
   static const _github = 'https://github.com/sagheerys';
   static const _x = 'https://x.com/Sagheer700';
+  static const _telegram = 'https://t.me/vidhoist';
   static const _repo = 'https://github.com/sagheerys/vidhoist';
   static const _ytdlp = 'https://github.com/yt-dlp/yt-dlp';
 
@@ -84,6 +85,7 @@ class AboutPane extends ConsumerWidget {
         heading(l.developer),
         link(l.developerName, 'github.com/sagheerys', _github),
         link('X', 'x.com/Sagheer700', _x),
+        link('Telegram', 't.me/vidhoist', _telegram),
         link(l.reportBug, 'vidhoist/issues', '$_repo/issues'),
         heading(l.sourceCode),
         link(l.sourceCode, 'sagheerys/vidhoist', _repo),

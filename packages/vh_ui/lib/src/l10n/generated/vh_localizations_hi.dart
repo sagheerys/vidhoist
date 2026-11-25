@@ -418,6 +418,9 @@ class VhLocalizationsHi extends VhLocalizations {
   String get columnAdded => 'जोड़ा गया';
 
   @override
+  String get columnChannel => 'चैनल';
+
+  @override
   String get columnLength => 'लंबाई';
 
   @override
@@ -845,10 +848,6 @@ class VhLocalizationsHi extends VhLocalizations {
   String get desktopDropLinks => 'जोड़ने के लिए छोड़ें';
 
   @override
-  String get desktopEmptyLibraryLocal =>
-      'लिंक जोड़ें, और डाउनलोड होते ही क्लिप यहाँ दिखेगी।';
-
-  @override
   String get desktopEmptyLibraryMessage =>
       'लिंक जोड़ें, और डाउनलोड होते ही क्लिप यहाँ दिखेगी।';
 
@@ -959,6 +958,19 @@ class VhLocalizationsHi extends VhLocalizations {
   String desktopFileReadyToPaste(String name, String size) {
     return 'पेस्ट के लिए तैयार: $name · $size';
   }
+
+  @override
+  String get desktopFirstLinkKeys => 'विंडो में कहीं भी यही करता है';
+
+  @override
+  String get desktopFirstLinkNote =>
+      'YouTube या किसी दूसरी साइट से। डाउनलोड शुरू होते ही क्लिप यहाँ दिखेगी।';
+
+  @override
+  String get desktopFirstLinkPaste => 'पेस्ट';
+
+  @override
+  String get desktopFirstLinkTitle => 'अपना पहला लिंक पेस्ट करें';
 
   @override
   String get desktopFolderUnavailable => 'कोई फ़ोल्डर उपलब्ध नहीं';
@@ -1101,6 +1113,11 @@ class VhLocalizationsHi extends VhLocalizations {
 
   @override
   String get desktopLess => 'कम';
+
+  @override
+  String desktopLibraryDownloading(int count) {
+    return '$count डाउनलोड हो रहे हैं';
+  }
 
   @override
   String get desktopLibraryLoading => 'लाइब्रेरी लोड हो रही है…';
@@ -1261,10 +1278,16 @@ class VhLocalizationsHi extends VhLocalizations {
   String get desktopPaletteOpen => 'खोलने के लिए';
 
   @override
+  String get desktopPaletteRecent => 'हाल में चलाए गए';
+
+  @override
   String get desktopPaletteSaid => 'क्लिप के अंदर कहा गया';
 
   @override
   String get desktopPaletteSave => 'यह खोज सेव करें';
+
+  @override
+  String get desktopPaletteSaved => 'सेव की गई खोजें';
 
   @override
   String desktopPaletteSettings(String section) {
@@ -1530,6 +1553,10 @@ class VhLocalizationsHi extends VhLocalizations {
   @override
   String get desktopTranscriptHint =>
       'प्लेबैक के साथ चलती है · किसी लाइन पर क्लिक करके वहाँ जाएँ';
+
+  @override
+  String get desktopTranscriptHintPage =>
+      'इस क्लिप की ट्रांसक्रिप्ट · वहीं से चलाने के लिए किसी लाइन पर क्लिक करें';
 
   @override
   String get desktopTranscriptsDeleteBody =>
@@ -3134,6 +3161,25 @@ class VhLocalizationsHi extends VhLocalizations {
 
   @override
   String get sourceCode => 'सोर्स कोड';
+
+  @override
+  String get starAskBody =>
+      'मुफ़्त और ओपन सोर्स, बिना विज्ञापन और बिना खाते के। GitHub पर एक स्टार दूसरों को इसे ढूँढने में मदद करता है।';
+
+  @override
+  String get starAskIdeas => 'कोई सुझाव दें या समस्या बताएँ';
+
+  @override
+  String get starAskLater => 'शायद बाद में';
+
+  @override
+  String get starAskNever => 'फिर से न दिखाएँ';
+
+  @override
+  String get starAskStar => 'GitHub पर स्टार दें';
+
+  @override
+  String get starAskTitle => 'क्या VidHoist पसंद आया?';
 
   @override
   String get startDownload => 'डाउनलोड शुरू करें';

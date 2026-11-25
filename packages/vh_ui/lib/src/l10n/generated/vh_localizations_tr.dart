@@ -419,6 +419,9 @@ class VhLocalizationsTr extends VhLocalizations {
   String get columnAdded => 'Eklenme';
 
   @override
+  String get columnChannel => 'Kanal';
+
+  @override
   String get columnLength => 'Süre';
 
   @override
@@ -846,10 +849,6 @@ class VhLocalizationsTr extends VhLocalizations {
   String get desktopDropLinks => 'Eklemek için bırakın';
 
   @override
-  String get desktopEmptyLibraryLocal =>
-      'Bir bağlantı ekleyin; klip indirildiğinde burada görünür.';
-
-  @override
   String get desktopEmptyLibraryMessage =>
       'Bir bağlantı ekleyin; klip indirildiğinde burada görünür.';
 
@@ -959,6 +958,20 @@ class VhLocalizationsTr extends VhLocalizations {
   String desktopFileReadyToPaste(String name, String size) {
     return 'Yapıştırmaya hazır: $name · $size';
   }
+
+  @override
+  String get desktopFirstLinkKeys =>
+      'pencerenin herhangi bir yerinde aynı işi yapar';
+
+  @override
+  String get desktopFirstLinkNote =>
+      'YouTube\'dan veya başka bir siteden. Klip, indirmesi başlar başlamaz burada görünür.';
+
+  @override
+  String get desktopFirstLinkPaste => 'Yapıştır';
+
+  @override
+  String get desktopFirstLinkTitle => 'İlk bağlantınızı yapıştırın';
 
   @override
   String get desktopFolderUnavailable => 'Kullanılabilir klasör yok';
@@ -1102,6 +1115,11 @@ class VhLocalizationsTr extends VhLocalizations {
 
   @override
   String get desktopLess => 'Daha az';
+
+  @override
+  String desktopLibraryDownloading(int count) {
+    return '$count indiriliyor';
+  }
 
   @override
   String get desktopLibraryLoading => 'Kitaplık yükleniyor…';
@@ -1264,10 +1282,16 @@ class VhLocalizationsTr extends VhLocalizations {
   String get desktopPaletteOpen => 'aç';
 
   @override
+  String get desktopPaletteRecent => 'Son oynatılanlar';
+
+  @override
   String get desktopPaletteSaid => 'Kliplerde söylenenler';
 
   @override
   String get desktopPaletteSave => 'Bu aramayı kaydet';
+
+  @override
+  String get desktopPaletteSaved => 'Kayıtlı aramalar';
 
   @override
   String desktopPaletteSettings(String section) {
@@ -1533,6 +1557,10 @@ class VhLocalizationsTr extends VhLocalizations {
   @override
   String get desktopTranscriptHint =>
       'Oynatmayı izler · atlamak için bir satıra tıklayın';
+
+  @override
+  String get desktopTranscriptHintPage =>
+      'Bu klibin transkripti · oradan oynatmak için bir satıra tıklayın';
 
   @override
   String get desktopTranscriptsDeleteBody =>
@@ -3141,6 +3169,25 @@ class VhLocalizationsTr extends VhLocalizations {
 
   @override
   String get sourceCode => 'Kaynak kodu';
+
+  @override
+  String get starAskBody =>
+      'Ücretsiz ve açık kaynak; reklam yok, hesap yok. GitHub\'da bir yıldız, başkalarının onu bulmasına yardım eder.';
+
+  @override
+  String get starAskIdeas => 'Bir fikir öner veya sorun bildir';
+
+  @override
+  String get starAskLater => 'Belki sonra';
+
+  @override
+  String get starAskNever => 'Bir daha gösterme';
+
+  @override
+  String get starAskStar => 'GitHub\'da yıldız ver';
+
+  @override
+  String get starAskTitle => 'VidHoist\'u beğendin mi?';
 
   @override
   String get startDownload => 'İndirmeyi başlat';

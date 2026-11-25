@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -208,5 +209,46 @@ void main() {
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       semantics.dispose();
     });
+  });
+
+  testWidgets('**the guard**: with a large font the figures stay whole, the '
+      'bar gives way, and every bar starts at the same place', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1000, 400);
+    addTearDown(tester.view.reset);
+    const rows = <StatsBar>[
+      (label: 'Southern Lens', measure: 462, value: '3 clips · 462.1 MB'),
+      (label: 'Home Kitchen', measure: 145, value: '3 clips · 145.0 MB'),
+      (label: 'Ro', measure: 462, value: '3 clips · 462.1 MB'),
+    ];
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: vhTheme(VhVariant.desktop, Brightness.light),
+        home: MediaQuery(
+          data: const MediaQueryData(textScaler: TextScaler.linear(1.3)),
+          child: Scaffold(
+            // The test font's letters are wider than the app's: this is the
+            // room half a 1280 window's page gives the app's own font.
+            body: Align(
+              alignment: Alignment.topLeft,
+              child: SizedBox(width: 800, child: StatsBars(rows: rows)),
+            ),
+          ),
+        ),
+      ),
+    );
+    for (final row in rows) {
+      final value = find.text(row.value).first;
+      expect(
+        tester.renderObject<RenderParagraph>(value).didExceedMaxLines,
+        isFalse,
+        reason: row.value,
+      );
+    }
+    final names = {
+      for (final row in rows) tester.getSize(find.text(row.label)).width,
+    };
+    // One column for the names, so every bar starts at the same place.
+    expect(names, hasLength(1));
   });
 }

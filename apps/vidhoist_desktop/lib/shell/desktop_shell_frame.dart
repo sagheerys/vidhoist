@@ -17,22 +17,30 @@ extension _Frame on _DesktopShellState {
         final arranged = arrangeShell(box.maxWidth, layout);
         final place = placeOf(widget.location);
         final folder = ref.watch(libraryViewProvider).folder;
+        final library = ref.watch(libraryItemsProvider).valueOrNull ?? const [];
+        final pageUrl = clipPageUrl(widget.location);
         final panelShown =
             !theater &&
-            (arranged.panelBeside
-                ? _fold.shown(layout, clipPage: place == DesktopPlace.item)
-                : _overlayOpen);
+            (!arranged.panelBeside
+                ? _overlayOpen
+                : isReadingRoom(widget.location)
+                ? _readingPanel
+                : _fold.shown(layout, clipPage: place == DesktopPlace.item));
         final panel = inRegion(
           DesktopRegion.panel,
           StreamBuilder<VhPlayerState>(
             stream: player.states,
             initialData: player.state,
-            builder: (context, snap) => DesktopRightPanel(
-              tab: _tab,
-              onTab: (tab) => _pickTab(tab),
-              state: snap.data ?? player.state,
-              player: player,
-            ),
+            builder: (context, snap) {
+              final state = snap.data ?? player.state;
+              return DesktopRightPanel(
+                tab: _tab,
+                onTab: (tab) => _pickTab(tab),
+                state: state,
+                player: player,
+                page: _pageClip(pageUrl, state, library),
+              );
+            },
           ),
         );
         return regionsInOrder(
@@ -78,11 +86,7 @@ extension _Frame on _DesktopShellState {
                           current: place,
                           pinned: ref.watch(pinnedPlaylistsProvider),
                           currentList: _openList(widget.location),
-                          folders: sidebarFolders(
-                            ref.watch(libraryItemsProvider).valueOrNull ??
-                                const [],
-                            folder,
-                          ),
+                          folders: sidebarFolders(library, folder),
                           currentFolder: place == DesktopPlace.library
                               ? folder
                               : null,
@@ -96,9 +100,7 @@ extension _Frame on _DesktopShellState {
                             );
                             router.go(DesktopRoutes.library);
                           },
-                          onGo: (to) => to == DesktopRoutes.search
-                              ? _openPalette()
-                              : router.go(to),
+                          onGo: (to) => router.go(to),
                           searches:
                               ref.watch(savedSearchesProvider).valueOrNull ??
                               const [],
@@ -141,5 +143,21 @@ extension _Frame on _DesktopShellState {
         );
       },
     );
+  }
+
+  /// The clip whose page is open, for the panel to be about: the playing
+  /// one when it is that clip, else the library's; null off a clip's page,
+  /// or for a page of something the library no longer holds.
+  PlaylistItem? _pageClip(
+    String? url,
+    VhPlayerState state,
+    List<LibraryItem> library,
+  ) {
+    if (url == null) return null;
+    if (state.current case final current? when current.canonicalUrl == url) {
+      return current;
+    }
+    final entry = library.where((i) => i.canonicalUrl == url).firstOrNull;
+    return entry == null ? null : toPlaylistItem(entry);
   }
 }

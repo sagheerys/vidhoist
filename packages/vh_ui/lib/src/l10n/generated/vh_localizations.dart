@@ -808,6 +808,12 @@ abstract class VhLocalizations {
   /// **'Added'**
   String get columnAdded;
 
+  /// No description provided for @columnChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel'**
+  String get columnChannel;
+
   /// No description provided for @columnLength.
   ///
   /// In en, this message translates to:
@@ -1510,12 +1516,6 @@ abstract class VhLocalizations {
   /// **'Drop to add'**
   String get desktopDropLinks;
 
-  /// No description provided for @desktopEmptyLibraryLocal.
-  ///
-  /// In en, this message translates to:
-  /// **'Add a link, and the clip appears here once it is downloaded.'**
-  String get desktopEmptyLibraryLocal;
-
   /// No description provided for @desktopEmptyLibraryMessage.
   ///
   /// In en, this message translates to:
@@ -1695,6 +1695,30 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Ready to paste: {name} · {size}'**
   String desktopFileReadyToPaste(String name, String size);
+
+  /// No description provided for @desktopFirstLinkKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'anywhere in the window does the same'**
+  String get desktopFirstLinkKeys;
+
+  /// No description provided for @desktopFirstLinkNote.
+  ///
+  /// In en, this message translates to:
+  /// **'From YouTube or any other site. The clip shows here as soon as its download starts.'**
+  String get desktopFirstLinkNote;
+
+  /// No description provided for @desktopFirstLinkPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste'**
+  String get desktopFirstLinkPaste;
+
+  /// No description provided for @desktopFirstLinkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste your first link'**
+  String get desktopFirstLinkTitle;
 
   /// No description provided for @desktopFolderUnavailable.
   ///
@@ -1929,6 +1953,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Less'**
   String get desktopLess;
+
+  /// No description provided for @desktopLibraryDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} downloading'**
+  String desktopLibraryDownloading(int count);
 
   /// No description provided for @desktopLibraryLoading.
   ///
@@ -2188,6 +2218,12 @@ abstract class VhLocalizations {
   /// **'to open'**
   String get desktopPaletteOpen;
 
+  /// No description provided for @desktopPaletteRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently played'**
+  String get desktopPaletteRecent;
+
   /// No description provided for @desktopPaletteSaid.
   ///
   /// In en, this message translates to:
@@ -2199,6 +2235,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Save this search'**
   String get desktopPaletteSave;
+
+  /// No description provided for @desktopPaletteSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved searches'**
+  String get desktopPaletteSaved;
 
   /// No description provided for @desktopPaletteSettings.
   ///
@@ -2643,6 +2685,12 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Follows playback · click a line to jump'**
   String get desktopTranscriptHint;
+
+  /// No description provided for @desktopTranscriptHintPage.
+  ///
+  /// In en, this message translates to:
+  /// **'This clip\'s transcript · click a line to play from it'**
+  String get desktopTranscriptHintPage;
 
   /// No description provided for @desktopTranscriptsDeleteBody.
   ///
@@ -5331,6 +5379,42 @@ abstract class VhLocalizations {
   /// In en, this message translates to:
   /// **'Source code'**
   String get sourceCode;
+
+  /// No description provided for @starAskBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Free and open source, with no ads and no account. A star on GitHub helps others find it.'**
+  String get starAskBody;
+
+  /// No description provided for @starAskIdeas.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest an idea or report a problem'**
+  String get starAskIdeas;
+
+  /// No description provided for @starAskLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe later'**
+  String get starAskLater;
+
+  /// No description provided for @starAskNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t show this again'**
+  String get starAskNever;
+
+  /// No description provided for @starAskStar.
+  ///
+  /// In en, this message translates to:
+  /// **'Star it on GitHub'**
+  String get starAskStar;
+
+  /// No description provided for @starAskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying VidHoist?'**
+  String get starAskTitle;
 
   /// No description provided for @startDownload.
   ///

@@ -24,6 +24,7 @@ export 'src/download/engine_refresh.dart';
 export 'src/download/partial_sweeper.dart';
 export 'src/download/local_download_engine.dart';
 export 'src/download/local_filename.dart';
+export 'src/feedback/star_ask.dart';
 export 'src/download/local_pending.dart';
 export 'src/folders/folder_choice.dart';
 export 'src/logging/vh_logger.dart';

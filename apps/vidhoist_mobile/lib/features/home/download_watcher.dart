@@ -11,6 +11,7 @@ import '../downloads_library/item_reveal.dart';
 import '../downloads_library/library_providers.dart';
 import '../downloads_library/widgets/task_card_parts.dart';
 import '../shared/error_text.dart';
+import '../star/star_ask_prompt.dart';
 import 'network_gate.dart';
 import 'notifications.dart';
 
@@ -133,6 +134,7 @@ final downloadWatcherProvider = Provider<void>((ref) {
         case TaskPhase.completed:
           lastShown.remove(id);
           if (!notified.add(task.id)) break;
+          unawaited(countFinishedDownload(ref));
           // **The peak moment**: the item arrives in the library with one
           // highlight that fades. Completion is the happiest moment in the
           // app and it used to pass with no celebration at all. It uses the

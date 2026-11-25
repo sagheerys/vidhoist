@@ -199,16 +199,27 @@ void main() {
     expect(topOf('Blue Hour'), lessThan(topOf('Amber Skies')));
   });
 
-  testWidgets('**the guard**: the layouts and the figures are glyphs, '
-      'named under the mouse', (tester) async {
+  testWidgets('**the guard**: the layouts are glyphs named under the mouse; '
+      'the figures and the order are written', (tester) async {
     ShellHarness.useWindow(tester, const Size(1440, 900));
     final h = ShellHarness(library: [_clip], withEngine: true);
     await tester.pumpWidget(h.app());
     await tester.pumpAndSettle();
-    for (final name in ['Grid', 'Table', 'Compact', 'Statistics']) {
+    for (final name in ['Grid', 'Table', 'Compact']) {
       expect(find.text(name), findsNothing, reason: name);
       expect(find.bySemanticsLabel(name), findsOneWidget, reason: name);
     }
+    // A bare glyph between the order and the layouts read as a fourth
+    // layout; written beside the count, it is what it is.
+    expect(find.text('Statistics'), findsOneWidget);
+    expect(find.text('Sort by: Newest', findRichText: true), findsOneWidget);
+    final count = tester.getRect(find.textContaining('1 clip'));
+    final figures = tester.getRect(find.text('Statistics'));
+    final grid = tester.getRect(find.bySemanticsLabel('Grid'));
+    expect(
+      (figures.center.dx - count.center.dx).abs(),
+      lessThan((figures.center.dx - grid.center.dx).abs()),
+    );
   });
 
   testWidgets('**the guard**: a notice on the computer is a corner card '

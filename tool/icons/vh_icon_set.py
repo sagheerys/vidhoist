@@ -65,6 +65,10 @@ ICONS = {
     "favorite": '<path pathLength="100" stroke-dasharray="33 8 59 0" '
                 'd="M12 19.6s-7.4-4.4-7.4-9.7A4 4 0 0 1 12 7.6a4 4 0 0 1 7.4 2.3c0 5.3-7.4 9.7-7.4 9.7z"/>',
     "favorite_on": '<path class="f" d="M12 19.6s-7.4-4.4-7.4-9.7A4 4 0 0 1 12 7.6a4 4 0 0 1 7.4 2.3c0 5.3-7.4 9.7-7.4 9.7z"/>',
+    # A star for GitHub, with the heart's gap at the same place on its edge.
+    "star": '<path pathLength="100" stroke-dasharray="30 7 63 0" '
+            'd="M12 4.1L14.29 9.54 20.18 10.04 15.71 13.91 17.05 19.66 12 16.6 '
+            '6.95 19.66 8.29 13.91 3.82 10.04 9.71 9.54z"/>',
     "offline": '<rect x="6.8" y="3.4" width="10.4" height="17.2" rx="2.6"/><path d="M12 7.6v6"/>'
                '<path d="M9.6 11.4L12 13.8l2.4-2.4"/><path d="M11 17.4h2"/>',
     "search": '<circle cx="10.5" cy="10.5" r="6.2" pathLength="100" stroke-dasharray="80 20" stroke-dashoffset="-97.5"/>'
@@ -212,6 +216,8 @@ ICONS = {
     "person": '<circle cx="12" cy="8.4" r="3.6"/><path d="M5.2 19.8a6.8 6.8 0 0 1 13.6 0"/>',
     # A handle on a social site, which an envelope did not say.
     "at": '<circle cx="12" cy="12" r="3.3"/><path d="M15.3 9v4.4a2.3 2.3 0 0 0 4.6 0V12a7.9 7.9 0 1 0-3.2 6.4"/>',
+    # A paper plane: the channel where the project's news is sent.
+    "send": '<path d="M20.4 3.6L3.6 10.2l6.8 3.4 3.4 6.8z"/><path d="M10.4 13.6l4.4-4.4"/>',
     "bug": '<rect x="7.4" y="7.8" width="9.2" height="11.6" rx="4.6"/><path d="M12 11.4v8"/><path d="M9.4 5.2l1.2 2.2"/>'
            '<path d="M14.6 5.2l-1.2 2.2"/><path d="M7.4 12.6h-3"/><path d="M16.6 12.6h3"/><path d="M7.6 16.6L5 18.2"/><path d="M16.4 16.6l2.6 1.6"/>',
     "phone": '<rect x="6.8" y="3.4" width="10.4" height="17.2" rx="2.6"/><path d="M11 17.4h2"/>',

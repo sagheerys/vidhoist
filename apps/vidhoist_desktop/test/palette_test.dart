@@ -360,5 +360,75 @@ void main() {
       expect(renamed, findsNothing);
       expect(await h.store.getString(SavedSearches.key), '[]');
     });
+
+    group('before a word is typed', () {
+      /// As the player leaves it: the time each clip's position was last
+      /// written, in epoch milliseconds.
+      Future<void> played(ShellHarness h, String url, DateTime at) =>
+          h.store.setInt('playback_stamp_$url', at.millisecondsSinceEpoch);
+
+      testWidgets('**the guard**: it offers the searches kept and the clips '
+          'played last, the latest first, and no command until `>`', (
+        tester,
+      ) async {
+        final h = await open(tester);
+        await played(h, 'https://youtu.be/aaaaaaaaaaa', DateTime(2026, 11, 1));
+        await played(h, 'https://youtu.be/ccccccccccc', DateTime(2026, 11, 3));
+        await h.store.setString(
+          SavedSearches.key,
+          '[{"id":"s1","name":"Backups","query":"snapshots"}]',
+        );
+        container(tester).invalidate(savedSearchesProvider);
+        await ctrlK(tester);
+        expect(find.text('Saved searches'), findsOneWidget);
+        expect(inRow<CommandRow>('Backups'), findsOneWidget);
+        expect(find.text('Recently played'), findsOneWidget);
+        double y(String title) => tester.getTopLeft(inRow<TitleRow>(title)).dy;
+        expect(
+          y('Pool layouts compared'),
+          lessThan(y('أساسيات الإنشاء في الحديقة')),
+        );
+        expect(inRow<TitleRow>('Snapshots are not backups'), findsNothing);
+        // Thirteen settings sections and every place used to fill it.
+        expect(inRow<CommandRow>('Playlists'), findsNothing);
+
+        await tester.enterText(find.byType(TextField).last, '>');
+        await tester.pumpAndSettle();
+        expect(inRow<CommandRow>('Playlists'), findsOneWidget);
+      });
+
+      testWidgets('a search kept is asked again in place, without closing', (
+        tester,
+      ) async {
+        final h = await open(tester);
+        await h.store.setString(
+          SavedSearches.key,
+          '[{"id":"s1","name":"Backups","query":"pool"}]',
+        );
+        container(tester).invalidate(savedSearchesProvider);
+        await ctrlK(tester);
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+        await tester.pumpAndSettle();
+        // Still open, its field holding the query and the list its results.
+        expect(hint(), findsOneWidget);
+        expect(
+          tester
+              .widget<TextField>(find.byType(TextField).last)
+              .controller!
+              .text,
+          'pool',
+        );
+        expect(inRow<TitleRow>('Pool layouts compared'), findsOneWidget);
+      });
+
+      testWidgets('with nothing kept or played, the commands stay', (
+        tester,
+      ) async {
+        await open(tester);
+        await ctrlK(tester);
+        expect(inRow<CommandRow>('Playlists'), findsOneWidget);
+        expect(find.text('Recently played'), findsNothing);
+      });
+    });
   });
 }

@@ -22,6 +22,7 @@ import 'features/settings/settings_page.dart';
 import 'features/settings/settings_screen.dart';
 import 'features/settings/settings_sections.dart';
 import 'features/shell/shell_screen.dart';
+import 'features/star/star_ask_prompt.dart';
 
 /// The single route table. No direct Navigator.push.
 final router = GoRouter(
@@ -48,7 +49,10 @@ final router = GoRouter(
       branches: [
         StatefulShellBranch(
           routes: [
-            GoRoute(path: '/', builder: (_, _) => const LibraryScreen()),
+            GoRoute(
+              path: '/',
+              builder: (_, _) => const StarAskPrompt(child: LibraryScreen()),
+            ),
           ],
         ),
         StatefulShellBranch(

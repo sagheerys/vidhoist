@@ -122,6 +122,7 @@ void main() {
         .icon;
     // An envelope stood for X, and a folder for the source code.
     expect(iconOf('x.com/Sagheer700'), VhIcons.at);
+    expect(iconOf('t.me/vidhoist'), VhIcons.send);
     expect(iconOf('github.com/sagheerys'), VhIcons.person);
     expect(iconOf('sagheerys/vidhoist'), VhIcons.code);
   });

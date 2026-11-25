@@ -725,6 +725,7 @@
   "clipboardLinkReady": "Paste link",
   "closePlayer": "Close player",
   "columnAdded": "Added",
+  "columnChannel": "Channel",
   "columnLength": "Length",
   "compactView": "Compact view",
   "compatiblePlayback": "Best playback compatibility",
@@ -856,7 +857,6 @@
   "desktopDownloadsRunning": "Under way",
   "desktopDragToReorder": "Drag to reorder",
   "desktopDropLinks": "Drop to add",
-  "desktopEmptyLibraryLocal": "Add a link, and the clip appears here once it is downloaded.",
   "desktopEmptyLibraryMessage": "Add a link, and the clip appears here once it is downloaded.",
   "desktopEngine": "Engine",
   "desktopEngineDenoHint": "Answers YouTube's check, so every quality it offers can be downloaded",
@@ -904,6 +904,10 @@
       }
     }
   },
+  "desktopFirstLinkKeys": "anywhere in the window does the same",
+  "desktopFirstLinkNote": "From YouTube or any other site. The clip shows here as soon as its download starts.",
+  "desktopFirstLinkPaste": "Paste",
+  "desktopFirstLinkTitle": "Paste your first link",
   "desktopFolderUnavailable": "No folder available",
   "desktopFolders": "Folders",
   "desktopForward": "Forward",
@@ -993,6 +997,14 @@
     }
   },
   "desktopLess": "Less",
+  "desktopLibraryDownloading": "{count} downloading",
+  "@desktopLibraryDownloading": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "desktopLibraryLoading": "Loading the library…",
   "desktopLinkCopied": "Link copied",
   "desktopLinkDuplicate": "Repeated above",
@@ -1067,8 +1079,10 @@
   },
   "desktopPaletteMove": "to move",
   "desktopPaletteOpen": "to open",
+  "desktopPaletteRecent": "Recently played",
   "desktopPaletteSaid": "Said inside clips",
   "desktopPaletteSave": "Save this search",
+  "desktopPaletteSaved": "Saved searches",
   "desktopPaletteSettings": "Settings: {section}",
   "@desktopPaletteSettings": {
     "placeholders": {
@@ -1228,6 +1242,7 @@
   "desktopTheater": "Theater",
   "desktopTranscriptFirst": "Fetch its transcript first",
   "desktopTranscriptHint": "Follows playback · click a line to jump",
+  "desktopTranscriptHintPage": "This clip's transcript · click a line to play from it",
   "desktopTranscriptsDeleteBody": "They are removed from this computer and from its backup. Only a file you exported can bring them back.",
   "desktopTranscriptsHelp": "VidHoist keeps the words said in each YouTube clip you add, so a search (Ctrl+K) also finds what was said inside your clips, not only their titles. They stay on this computer.",
   "desktopTranscriptsMove": "To or from a phone",
@@ -1714,6 +1729,12 @@
   "sortedByLastPlayed": "By last played",
   "source": "Source",
   "sourceCode": "Source code",
+  "starAskBody": "Free and open source, with no ads and no account. A star on GitHub helps others find it.",
+  "starAskIdeas": "Suggest an idea or report a problem",
+  "starAskLater": "Maybe later",
+  "starAskNever": "Don't show this again",
+  "starAskStar": "Star it on GitHub",
+  "starAskTitle": "Enjoying VidHoist?",
   "startDownload": "Start download",
   "status": "Status",
   "storageCardMissing": "The card is not in, so downloads go to the phone",

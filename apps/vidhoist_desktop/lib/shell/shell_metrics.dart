@@ -27,6 +27,10 @@ abstract final class DesktopShellSize {
   /// A small dialog: a list to tick, a field.
   static const double smallDialog = 360;
 
+  /// The star question's card in the library's corner: wide enough for its
+  /// two links on one line each.
+  static const double starCard = 384;
+
   /// A dialog of several fields: following a channel.
   static const double formDialog = 440;
 

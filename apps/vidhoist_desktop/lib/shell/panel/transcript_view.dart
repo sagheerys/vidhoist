@@ -25,13 +25,24 @@ final panelFindProvider = Provider<ValueNotifier<VoidCallback?>>((ref) {
 VoidCallback? findHere(WidgetRef ref) =>
     ref.read(readingFindProvider).value ?? ref.read(panelFindProvider).value;
 
-/// The playing clip's transcript, lighting the line being said and keeping
-/// it in view; a click on a line plays from there.
+/// A clip's transcript; a click on a line plays from there. The playing
+/// clip's lights the line being said and keeps it in view.
+///
+/// A clip that is not playing (its page is open while another plays) is
+/// read as it is, nothing lit, and a click starts it at that line.
 class TranscriptView extends ConsumerWidget {
-  const TranscriptView({super.key, required this.item, required this.player});
+  const TranscriptView({
+    super.key,
+    required this.item,
+    required this.player,
+    this.follows = true,
+  });
 
   final PlaylistItem item;
   final VhPlayer player;
+
+  /// [item] is the clip in the player.
+  final bool follows;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,9 +50,18 @@ class TranscriptView extends ConsumerWidget {
     final transcript = ref.watch(transcriptForProvider(item.canonicalUrl));
     return switch (transcript) {
       AsyncData(value: final t?) when !t.isEmpty => _Lines(
-        key: ValueKey(item.canonicalUrl),
+        key: ValueKey((item.canonicalUrl, follows)),
         segments: t.segments,
         player: player,
+        follows: follows,
+        hint: follows ? l.desktopTranscriptHint : l.desktopTranscriptHintPage,
+        onLine: follows
+            ? player.seek
+            : (start) async {
+                await player.setLooping(false);
+                await player.playItems([item]);
+                await player.seek(start);
+              },
         findHook: ref.read(panelFindProvider),
       ),
       AsyncLoading() => const Center(child: VhSpinner()),
@@ -62,11 +82,21 @@ class _Lines extends StatefulWidget {
     super.key,
     required this.segments,
     required this.player,
+    required this.follows,
+    required this.hint,
+    required this.onLine,
     required this.findHook,
   });
 
   final List<TranscriptSegment> segments;
   final VhPlayer player;
+
+  /// Lights and follows the line being said: the clip is the one playing.
+  final bool follows;
+
+  /// What a click does here, said above the lines.
+  final String hint;
+  final Future<void> Function(Duration start) onLine;
   final ValueNotifier<VoidCallback?> findHook;
 
   @override
@@ -93,8 +123,10 @@ class _LinesState extends State<_Lines> {
   @override
   void initState() {
     super.initState();
-    _show(widget.player.position);
-    _positions = widget.player.positionStream.listen(_show);
+    if (widget.follows) {
+      _show(widget.player.position);
+      _positions = widget.player.positionStream.listen(_show);
+    }
     widget.findHook.value = _openFind;
   }
 
@@ -198,7 +230,7 @@ class _LinesState extends State<_Lines> {
             constraints: BoxConstraints(maxHeight: box.maxHeight / 3),
             child: ClipRect(
               child: Text(
-                context.vhl.desktopTranscriptHint,
+                widget.hint,
                 style: text.labelSmall?.copyWith(color: p.ink3),
               ),
             ),
@@ -232,7 +264,7 @@ class _LinesState extends State<_Lines> {
                         chosen: chosen?.line == i
                             ? (chosen!.start, chosen.end)
                             : null,
-                        onTap: () => unawaited(widget.player.seek(line.start)),
+                        onTap: () => unawaited(widget.onLine(line.start)),
                       ),
                   ],
                 ),

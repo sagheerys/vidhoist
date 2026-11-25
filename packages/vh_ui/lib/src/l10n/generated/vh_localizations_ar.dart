@@ -441,6 +441,9 @@ class VhLocalizationsAr extends VhLocalizations {
   String get columnAdded => 'تاريخ الإضافة';
 
   @override
+  String get columnChannel => 'القناة';
+
+  @override
   String get columnLength => 'المدة';
 
   @override
@@ -871,10 +874,6 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopDropLinks => 'أفلِته لإضافته';
 
   @override
-  String get desktopEmptyLibraryLocal =>
-      'أضف رابطاً، فيظهر المقطع هنا حين يكتمل تنزيله.';
-
-  @override
   String get desktopEmptyLibraryMessage =>
       'أضِف رابطاً فيظهر المقطع هنا بعد تنزيله.';
 
@@ -982,6 +981,19 @@ class VhLocalizationsAr extends VhLocalizations {
   String desktopFileReadyToPaste(String name, String size) {
     return 'جاهز للصق: $name · $size';
   }
+
+  @override
+  String get desktopFirstLinkKeys => 'في أي مكان من النافذة يفعل الشيء نفسه';
+
+  @override
+  String get desktopFirstLinkNote =>
+      'من يوتيوب أو أي موقع آخر. يظهر المقطع هنا لحظة بدء تنزيله.';
+
+  @override
+  String get desktopFirstLinkPaste => 'لصق';
+
+  @override
+  String get desktopFirstLinkTitle => 'الصق أول رابط';
 
   @override
   String get desktopFolderUnavailable => 'لا مجلد متاح';
@@ -1127,6 +1139,11 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopLess => 'أقل';
+
+  @override
+  String desktopLibraryDownloading(int count) {
+    return '$count قيد التنزيل';
+  }
 
   @override
   String get desktopLibraryLoading => 'تُحمَّل المكتبة…';
@@ -1292,10 +1309,16 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopPaletteOpen => 'للفتح';
 
   @override
+  String get desktopPaletteRecent => 'آخر ما شُغِّل';
+
+  @override
   String get desktopPaletteSaid => 'قيل داخل المقاطع';
 
   @override
   String get desktopPaletteSave => 'احفظ هذا البحث';
+
+  @override
+  String get desktopPaletteSaved => 'بحوث محفوظة';
 
   @override
   String desktopPaletteSettings(String section) {
@@ -1566,6 +1589,10 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get desktopTranscriptHint => 'يتبع التشغيل · انقر سطراً ليُشغَّل منه';
+
+  @override
+  String get desktopTranscriptHintPage =>
+      'نص هذا المقطع · انقر سطراً ليُشغَّل منه';
 
   @override
   String get desktopTranscriptsDeleteBody =>
@@ -3188,6 +3215,25 @@ class VhLocalizationsAr extends VhLocalizations {
 
   @override
   String get sourceCode => 'الشيفرة المصدرية';
+
+  @override
+  String get starAskBody =>
+      'مجاني ومفتوح المصدر، بلا إعلانات ولا حساب. نجمة على GitHub تساعد غيرك على أن يجده.';
+
+  @override
+  String get starAskIdeas => 'اقترح فكرة أو أبلغ عن مشكلة';
+
+  @override
+  String get starAskLater => 'ربما لاحقاً';
+
+  @override
+  String get starAskNever => 'لا تُظهره مجدداً';
+
+  @override
+  String get starAskStar => 'ضع نجمة على GitHub';
+
+  @override
+  String get starAskTitle => 'هل أعجبك VidHoist؟';
 
   @override
   String get startDownload => 'ابدأ التنزيل';

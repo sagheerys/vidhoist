@@ -19,15 +19,22 @@ class PaletteCommand {
 /// A clip whose words were said: its best moment, and how many there are.
 typedef SaidMatch = ({LibraryItem item, TranscriptHit hit, int total});
 
+/// A search the user kept: its name, and the query it runs again.
+typedef PaletteSaved = ({String name, String query});
+
 /// What the palette shows for one query.
 class PaletteResults {
   const PaletteResults({
+    this.saved = const [],
     this.commands = const [],
     this.titles = const [],
     this.said = const [],
     this.canSave = false,
+    this.recent = false,
   });
 
+  /// The searches kept, offered before a word is typed.
+  final List<PaletteSaved> saved;
   final List<PaletteCommand> commands;
   final List<LibraryItem> titles;
   final List<SaidMatch> said;
@@ -36,8 +43,15 @@ class PaletteResults {
   /// and not one already saved.
   final bool canSave;
 
+  /// [titles] are the clips played last, not titles that match.
+  final bool recent;
+
   bool get isEmpty =>
-      commands.isEmpty && titles.isEmpty && said.isEmpty && !canSave;
+      saved.isEmpty &&
+      commands.isEmpty &&
+      titles.isEmpty &&
+      said.isEmpty &&
+      !canSave;
 }
 
 /// What starts a query that only runs commands.
@@ -51,6 +65,12 @@ const paletteCommandsBeside = 4;
 /// **The palette's ranking**: titles and what was said for a query, the
 /// commands whose names fit it, and nothing but commands after `>`.
 ///
+/// **Before a word is typed** it offers what the user comes back to: the
+/// searches kept and the clips [recent]ly played. It used to list every
+/// command there, thirteen of them settings sections, though the field
+/// itself says commands are after `>`. With nothing kept or played yet
+/// (a first start) the commands stay, so it is never blank.
+///
 /// Every comparison goes through [SearchText.fold], so a word typed
 /// without a hamza or vowel marks finds a title written with them, the
 /// same way the transcripts are searched.
@@ -60,9 +80,16 @@ PaletteResults paletteResults({
   required List<PaletteCommand> commands,
   TranscriptIndex? index,
   Set<String> savedQueries = const {},
+  List<PaletteSaved> saved = const [],
+  List<LibraryItem> recent = const [],
 }) {
   final trimmed = query.trim();
-  if (trimmed.isEmpty) return PaletteResults(commands: commands);
+  if (trimmed.isEmpty) {
+    if (saved.isEmpty && recent.isEmpty) {
+      return PaletteResults(commands: commands);
+    }
+    return PaletteResults(saved: saved, titles: recent, recent: true);
+  }
   if (trimmed.startsWith(paletteCommandMark)) {
     final rest = trimmed.substring(paletteCommandMark.length);
     return PaletteResults(commands: _fitting(commands, rest));

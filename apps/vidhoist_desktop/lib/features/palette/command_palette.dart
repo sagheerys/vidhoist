@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vh_media/library.dart';
 import 'package:vh_ui/vh_ui.dart';
 
 import '../../data/library_data.dart';
+import '../../data/recent_played.dart';
 import '../../data/saved_searches.dart';
 import '../../data/transcripts_data.dart';
-import '../../di.dart';
-import '../../router.dart';
 import '../../shell/focus_regions.dart';
+import 'palette_acts.dart';
 import 'palette_grow.dart';
 import 'palette_model.dart';
 import 'palette_rows.dart';
@@ -47,21 +46,6 @@ Future<void> showCommandPalette(
       paletteTransition(context, animation, from, child),
 );
 
-/// Plays [item] from [start], the moment the words were said, and opens
-/// its page when it has a picture.
-Future<void> playFromMoment(
-  WidgetRef ref,
-  GoRouter router,
-  LibraryItem item,
-  Duration start,
-) async {
-  final player = ref.read(playerProvider);
-  await player.setLooping(false);
-  await player.playItems([toPlaylistItem(item)]);
-  await player.seek(start);
-  if (!item.isAudio) router.go(DesktopRoutes.item(item.canonicalUrl));
-}
-
 class _Palette extends ConsumerStatefulWidget {
   const _Palette({required this.commands, required this.initial});
 
@@ -85,9 +69,8 @@ class _PaletteState extends ConsumerState<_Palette> {
   final _spoken = <int, String>{};
   var _selected = 0;
 
-  /// Rows before this open a page (titles, then lines said), entered once
-  /// the palette is fully gone: any sooner, the closing route takes focus.
-  var _pages = 0;
+  /// The page a row opened, entered once the palette is fully gone: any
+  /// sooner, the closing route takes focus.
   FocusNode? _enter;
 
   @override
@@ -100,27 +83,37 @@ class _PaletteState extends ConsumerState<_Palette> {
 
   PaletteResults _results() {
     final saved = ref.watch(savedSearchesProvider).valueOrNull ?? const [];
+    final recent = ref.watch(recentlyPlayedProvider);
+    // Nothing for the moment the clips played are being read: the
+    // commands shown for that moment flickered into the clips.
+    if (_query.text.trim().isEmpty && recent.isLoading) {
+      return const PaletteResults();
+    }
     return paletteResults(
       query: _query.text,
       items: ref.watch(libraryItemsProvider).valueOrNull ?? const [],
       commands: widget.commands,
       index: ref.watch(transcriptIndexProvider).valueOrNull,
       savedQueries: {for (final s in saved) s.query},
+      saved: [for (final s in saved) (name: s.name, query: s.query)],
+      recent: recent.valueOrNull ?? const [],
     );
   }
 
-  /// Every row Enter can open, in the order they are drawn.
-  List<VoidCallback> _actions(PaletteResults r) {
-    final router = GoRouter.of(context);
-    return [
-      for (final item in r.titles)
-        () => router.go(DesktopRoutes.item(item.canonicalUrl)),
-      for (final match in r.said)
-        () =>
-            unawaited(playFromMoment(ref, router, match.item, match.hit.start)),
-      for (final command in r.commands) command.run,
-      if (r.canSave) _save,
-    ];
+  List<PaletteAct> _actions(PaletteResults r) => paletteActs(
+    r,
+    ref: ref,
+    router: GoRouter.of(context),
+    ask: _ask,
+    save: _save,
+  );
+
+  /// A saved search asked again, here: its results replace the list.
+  void _ask(String query) {
+    _query
+      ..text = query
+      ..selection = TextSelection.collapsed(offset: query.length);
+    setState(() => _selected = 0);
   }
 
   void _save() {
@@ -129,11 +122,12 @@ class _PaletteState extends ConsumerState<_Palette> {
     showVhNotice(context, message: context.vhl.desktopSearchSaved);
   }
 
-  void _run(List<VoidCallback> actions, int index) {
-    if (index < _pages) _enter = ref.read(contentFocusProvider);
-    final action = actions[index];
+  void _run(List<PaletteAct> actions, int index) {
+    final act = actions[index];
+    if (act.stays) return act.run();
+    if (act.page) _enter = ref.read(contentFocusProvider);
     Navigator.of(context).pop();
-    action();
+    act.run();
   }
 
   void _move(int by, int count) {
@@ -162,7 +156,6 @@ class _PaletteState extends ConsumerState<_Palette> {
     final p = VhThemeX.of(context).palette;
     final results = _results();
     final actions = _actions(results);
-    _pages = results.titles.length + results.said.length;
     if (_selected >= actions.length) _selected = 0;
     var row = 0;
     Widget pick(String spoken, Widget Function(bool selected) build) {
@@ -227,14 +220,31 @@ class _PaletteState extends ConsumerState<_Palette> {
           ),
           Flexible(
             child: results.isEmpty
-                ? const PaletteEmpty()
+                ? (query.isEmpty
+                      ? const SizedBox.shrink()
+                      : const PaletteEmpty())
                 : ListView(
                     controller: _scroll,
                     shrinkWrap: true,
                     padding: const EdgeInsets.only(bottom: VhSpace.sm),
                     children: [
+                      if (results.saved.isNotEmpty)
+                        PaletteHeader(l.desktopPaletteSaved),
+                      for (final search in results.saved)
+                        pick(
+                          search.name,
+                          (on) => CommandRow(
+                            icon: VhIcons.search,
+                            label: search.name,
+                            selected: on,
+                          ),
+                        ),
                       if (results.titles.isNotEmpty)
-                        PaletteHeader(l.desktopPaletteTitles),
+                        PaletteHeader(
+                          results.recent
+                              ? l.desktopPaletteRecent
+                              : l.desktopPaletteTitles,
+                        ),
                       for (final item in results.titles)
                         pick(
                           TitleRow.spoken(l, item),

@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vidhoist_desktop/features/library/library_state.dart';
+import 'package:vidhoist_desktop/features/library/sort_button.dart';
 import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/pill.dart';
 import 'package:vidhoist_desktop/shell/sidebar.dart';
@@ -67,7 +69,25 @@ void main() {
     // Downloads run on this computer: a link is what fills it, with
     // nothing to set up first.
     expect(find.text('No server configured'), findsNothing);
-    expect(find.textContaining('once it is downloaded'), findsOneWidget);
+    expect(find.text('Paste your first link'), findsOneWidget);
+  });
+
+  testWidgets('**the guard**: in the smallest window, in Arabic, the order '
+      'is written whole beside the room left for it', (tester) async {
+    ShellHarness.useWindow(tester, const Size(960, 600));
+    ShellHarness.useArabic(tester);
+    final h = ShellHarness(library: _library, withEngine: true);
+    await tester.pumpWidget(h.app());
+    await tester.pumpAndSettle();
+    // As a third of the row, its first words were cut.
+    final order = find.descendant(
+      of: find.byType(SortButton),
+      matching: find.byType(RichText),
+    );
+    expect(
+      tester.renderObject<RenderParagraph>(order).didExceedMaxLines,
+      isFalse,
+    );
   });
 
   testWidgets('the library opens in the grid, newest first', (tester) async {

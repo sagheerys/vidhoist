@@ -132,6 +132,11 @@ class VhLibrarySliver extends StatelessWidget {
 /// The grid: as many columns as fit at 210 points at most, each cell
 /// exactly as tall as its card.
 ///
+/// **A wide library lets the cover grow to 280.** Held at 210, a maximized
+/// window on a large screen laid out eight to twelve small covers to a row
+/// and left most of the screen under them empty. Below 1300 points, which
+/// takes in every phone and tablet, nothing changes.
+///
 /// **The height is measured, not a ratio.** A fixed 1.02 ratio was tuned on
 /// a 411-point phone, where it fit a 16:9 cover, two title lines and a meta
 /// line. But the cover grows with the cell and the text with the font, not
@@ -145,14 +150,20 @@ class _VhGridSliver extends StatelessWidget {
   final VhLibraryItemBuilder itemBuilder;
 
   static const double _maxCell = 210;
+  static const double _maxWideCell = 280;
+  static const double _wideFrom = 1300;
   static const double _gap = VhSpace.md;
+
+  /// The widest a cell may be in a library [width] points across.
+  static double maxCellFor(double width) =>
+      width >= _wideFrom ? _maxWideCell : _maxCell;
 
   @override
   Widget build(BuildContext context) => SliverLayoutBuilder(
     builder: (context, constraints) {
       final width = constraints.crossAxisExtent;
       // The same column count as Flutter's max-extent grid.
-      final columns = math.max(1, (width / (_maxCell + _gap)).ceil());
+      final columns = math.max(1, (width / (maxCellFor(width) + _gap)).ceil());
       final cell = (width - _gap * (columns - 1)) / columns;
       return SliverGrid.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

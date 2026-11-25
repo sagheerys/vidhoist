@@ -170,13 +170,16 @@ void main() {
       expect(current(), place, reason: label);
     }
 
-    // Search is not a place: it opens the palette over the current one.
-    await tester.tap(
+    // **The guard**: search has one door, the title bar's box (and
+    // Ctrl+K). A sidebar entry opened the same palette a third way.
+    expect(
       find.descendant(
         of: find.byType(DesktopSidebar),
         matching: find.text('Search'),
       ),
+      findsNothing,
     );
+    await tester.tap(find.text('Search titles and what was said…'));
     await tester.pumpAndSettle();
     expect(
       find.text('Search titles and what was said, or type > for commands'),

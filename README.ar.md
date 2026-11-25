@@ -21,6 +21,7 @@
 [![Platform](https://img.shields.io/badge/platform-Android%20%C2%B7%20Windows-3DDC84.svg)](#المتطلبات)
 [![Flutter](https://img.shields.io/badge/Flutter-3.47-02569B.svg)](https://flutter.dev)
 [![Languages](https://img.shields.io/badge/languages-12-7FA3FF.svg)](#الترجمة)
+[![Telegram](https://img.shields.io/badge/Telegram-%40vidhoist-26A5E4.svg?logo=telegram)](https://t.me/vidhoist)
 
 </div>
 
@@ -318,6 +319,13 @@ python tool/comment-lint.py
   [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · [CHANGELOG.md](CHANGELOG.md)
 
 الوثائق بالإنجليزية، والبلاغات تُقبل بالعربية أو بالإنجليزية.
+
+## التواصل
+
+الأخبار والإصدارات تُنشر في قناة تيليجرام
+[t.me/vidhoist](https://t.me/vidhoist)، بالإنجليزية والعربية. أما المشكلات
+والأفكار فمكانها [بلاغات GitHub](https://github.com/sagheerys/vidhoist/issues)،
+حيث تُتابَع ويُرَدّ عليها.
 
 ## شكر
 

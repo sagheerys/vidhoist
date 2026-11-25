@@ -150,17 +150,39 @@ void main() {
     });
   });
 
+  group('the grid', () {
+    double cell(WidgetTester tester) =>
+        tester.getSize(find.byKey(const Key('item-0'))).width;
+
+    testWidgets('a tablet keeps covers of 210 at most', (tester) async {
+      await pump(tester, VhLibraryLayout.grid, library: 1155);
+      expect(cell(tester), lessThanOrEqualTo(210));
+    });
+
+    testWidgets('**the guard**: a wide library lets the cover grow to 280', (
+      tester,
+    ) async {
+      // A maximized 1920 window: eight covers of 185 to a row before.
+      await pump(
+        tester,
+        VhLibraryLayout.grid,
+        window: const Size(1920, 1080),
+        library: 1632,
+      );
+      expect(cell(tester), inInclusiveRange(240, 280));
+      expect(perRow(tester), 6);
+    });
+  });
+
   group('the list as a table', () {
     VhMediaColumns columns(WidgetTester tester) =>
         tester.widget<VhMediaRowHeader>(find.byType(VhMediaRowHeader)).columns;
 
-    testWidgets('beside the panel: length, size and source, no date', (
-      tester,
-    ) async {
+    testWidgets('beside the panel: length, size and date; the source, '
+        'which the details also give, goes first', (tester) async {
       await pump(tester, VhLibraryLayout.list, library: 754);
       final c = columns(tester);
-      expect((c.size, c.added, c.location), (true, false, true));
-      expect(find.text(vhName('#homelab')), findsNothing);
+      expect((c.size, c.added, c.location), (true, true, false));
     });
 
     testWidgets('the full width adds the date and the tags', (tester) async {
@@ -170,7 +192,7 @@ void main() {
       expect(find.text(vhName('#homelab')), findsWidgets);
     });
 
-    testWidgets('upright drops the size first', (tester) async {
+    testWidgets('upright drops the source, then the date', (tester) async {
       await pump(
         tester,
         VhLibraryLayout.list,
@@ -178,7 +200,67 @@ void main() {
         library: 675,
       );
       final c = columns(tester);
-      expect((c.size, c.added), (false, false));
+      expect((c.size, c.added, c.location), (true, false, false));
+    });
+
+    testWidgets('**the guard**: a large font drops the source before the '
+        'title is cut', (tester) async {
+      // A 1280 window less the sidebar, text at 130%: the title was cut to
+      // about 250 points while the source column stayed.
+      await pump(tester, VhLibraryLayout.list, library: 1000, scale: 1.3);
+      final c = columns(tester);
+      expect((c.size, c.added, c.location), (true, true, false));
+      // The title's column: about 266 points before, the source kept.
+      final title = find.text(
+        'Homelab Hour — Ep. 12: Backups that actually restore',
+      );
+      expect(tester.getSize(title.first).width, greaterThan(380));
+    });
+
+    testWidgets('**the guard**: a wide table gives the channel a column, '
+        'holds the title to its width, and keeps the heart at the edge', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        VhLibraryLayout.list,
+        window: const Size(1920, 1080),
+        library: 1632,
+      );
+      final c = columns(tester);
+      expect((c.channel, c.location), (true, true));
+      final l10n = tester.element(find.byType(VhMediaRowHeader)).vhl;
+      expect(find.text(l10n.columnChannel), findsOneWidget);
+      final row = tester.getRect(find.byKey(const Key('item-0')));
+      final heading = tester.getRect(find.text(l10n.titleLabel));
+      final channel = tester.getRect(find.text(l10n.columnChannel));
+      // The channel's column follows a title no wider than its limit,
+      // instead of the far side of a long empty stretch.
+      expect(
+        channel.left - heading.left,
+        lessThan(VhMediaColumns.titleMax(TextScaler.noScaling) + 40),
+      );
+      // The channel is in its column, not under the title too.
+      expect(
+        find.text('Homelab Hour'),
+        findsNWidgets(find.byType(VhMediaRow).evaluate().length),
+      );
+      // The row's buttons keep its far edge; the room the title leaves is
+      // before them.
+      final last = tester.getRect(
+        find
+            .descendant(
+              of: find.byKey(const Key('item-0')),
+              matching: find.byType(IconButton),
+            )
+            .last,
+      );
+      expect(row.right - last.right, lessThan(VhSpace.lg));
+    });
+
+    testWidgets('a narrower table has no channel column', (tester) async {
+      await pump(tester, VhLibraryLayout.list, library: 1155);
+      expect(columns(tester).channel, isFalse);
     });
 
     testWidgets('the phone app has no source column', (tester) async {

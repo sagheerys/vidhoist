@@ -17,7 +17,12 @@ import 'clip_state.dart';
 /// The controls over a playing picture: the seek bar with its times, the
 /// speed, theater and full screen. They show while the pointer moves over
 /// the picture and fade a moment after it rests, the pointer with them,
-/// so nothing covers what is watched; paused, they stay.
+/// so nothing covers what is watched.
+///
+/// **Paused, they fade the same way.** Kept on screen while paused, a
+/// still frame carried a second seek bar, a second time and a second speed
+/// above the player bar's own; the pointer brings them back. In full
+/// screen they stay while paused: there they are the only transport.
 ///
 /// The player bar keeps every one of these too: this is the same player
 /// within reach of the picture. **In full screen the bar is gone** and
@@ -73,12 +78,17 @@ class _ClipVideoControlsState extends ConsumerState<ClipVideoControls> {
   }
 
   @override
-  Widget build(BuildContext context) => StreamBuilder<VhPlayerState>(
+  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
+    valueListenable: ref.watch(windowControlsProvider).fullScreen,
+    builder: (context, full, _) => _layered(full),
+  );
+
+  Widget _layered(bool full) => StreamBuilder<VhPlayerState>(
     stream: _player.states,
     initialData: _player.state,
     builder: (context, snap) {
       final state = snap.data ?? _player.state;
-      final shown = _awake || !state.playing;
+      final shown = _awake || (full && !state.playing);
       return MouseRegion(
         onEnter: (_) => _wake(),
         onHover: (_) => _wake(),

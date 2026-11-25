@@ -74,7 +74,13 @@ class _PinnedLibraryHeadingState extends State<PinnedLibraryHeading> {
   }
 }
 
-/// The title and its counts, then the sort, the figures and the layouts.
+/// The title and its counts with the figures beside them, then the order
+/// written out and the three layouts in one frame.
+///
+/// **Nothing here is a bare glyph that has to be hovered to be read.** Five
+/// icons side by side (order, figures, three layouts) read as five
+/// layouts: the figures sat between the order and the layouts. The figures
+/// now stand by the count they break down, and the order says which it is.
 class LibraryHeading extends StatelessWidget {
   const LibraryHeading({
     super.key,
@@ -84,6 +90,8 @@ class LibraryHeading extends StatelessWidget {
     required this.onMode,
     required this.sort,
     required this.onSort,
+    this.tools = true,
+    this.layouts = true,
   });
 
   final String title;
@@ -93,57 +101,142 @@ class LibraryHeading extends StatelessWidget {
   final LibrarySort sort;
   final ValueChanged<LibrarySort> onSort;
 
+  /// The library holds clips: the figures and the order have something to
+  /// work on.
+  final bool tools;
+
+  /// There is something to lay out, clips or clips on their way; an empty
+  /// library offers no choice of how to show nothing.
+  final bool layouts;
+
   @override
   Widget build(BuildContext context) {
     final p = VhThemeX.of(context).palette;
     final text = Theme.of(context).textTheme;
-    final l = context.vhl;
     // The title and its counts wrap under each other when the window or
-    // the font leaves no room; the layout choice keeps its place.
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Wrap(
-            spacing: VhSpace.md,
-            crossAxisAlignment: WrapCrossAlignment.end,
-            children: [
-              Text(title, style: text.headlineSmall),
-              if (counts case final line?) ...[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: VhSpace.xxs),
+    // the font leaves no room; the order and the layouts keep their place.
+    return LayoutBuilder(
+      builder: (context, constraints) => Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Wrap(
+              spacing: VhSpace.md,
+              crossAxisAlignment: WrapCrossAlignment.end,
+              children: [
+                Text(title, style: text.headlineSmall),
+                if (counts case final line?)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: VhSpace.xxs),
+                    child: Text(
+                      line,
+                      style: text.bodySmall?.copyWith(color: p.ink3),
+                    ),
+                  ),
+                if (tools) const _FiguresLink(),
+              ],
+            ),
+          ),
+          // At its own width, and shortened only past two fifths of the
+          // row: as a flexible share it was cut ("Sort b…") in a narrow
+          // window with room to spare beside it.
+          if (tools) ...[
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: constraints.maxWidth * .4),
+              child: SortButton(sort: sort, onSort: onSort),
+            ),
+            const SizedBox(width: VhSpace.sm),
+          ],
+          if (layouts) _Layouts(mode: mode, onMode: onMode),
+        ],
+      ),
+    );
+  }
+}
+
+/// The figures, named, beside the count they break down: a page of their
+/// own.
+class _FiguresLink extends StatelessWidget {
+  const _FiguresLink();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: VhSpace.xxs / 2),
+      child: Semantics(
+        button: true,
+        label: l.desktopStatsLink,
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: () => GoRouter.of(context).go(DesktopRoutes.stats),
+          borderRadius: BorderRadius.circular(VhCorners.desktop.chip),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: VhSpace.xxs,
+              vertical: VhSpace.xxs / 2,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                VhIcon(VhIcons.stats, size: VhSpace.md, color: p.ink3),
+                const SizedBox(width: VhSpace.xxs),
+                // Shortened, not spilled, where the heading is squeezed.
+                Flexible(
                   child: Text(
-                    line,
-                    style: text.bodySmall?.copyWith(color: p.ink3),
+                    l.desktopStatsLink,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelMedium
+                        ?.copyWith(color: p.ink2),
                   ),
                 ),
               ],
-            ],
+            ),
           ),
         ),
-        // The figures behind the counts, a page of their own; then the
-        // layouts, each a glyph with its name under the mouse.
-        if (counts != null) ...[
-          SortButton(sort: sort, onSort: onSort),
-          DesktopPlayerControl(
-            icon: VhIcons.stats,
-            label: l.desktopStatsLink,
-            onTap: () => GoRouter.of(context).go(DesktopRoutes.stats),
-          ),
-          const SizedBox(width: VhSpace.sm),
+      ),
+    );
+  }
+}
+
+/// The three layouts as one choice, in one hairline frame: three loose
+/// glyphs beside the order read as three more buttons of the same kind.
+class _Layouts extends StatelessWidget {
+  const _Layouts({required this.mode, required this.onMode});
+
+  final LibraryViewMode mode;
+  final ValueChanged<LibraryViewMode> onMode;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = VhThemeX.of(context).palette;
+    final l = context.vhl;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: p.line2,
+          width: VhThemeX.of(context).hairline,
+        ),
+        borderRadius: BorderRadius.circular(VhCorners.desktop.field),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final (m, icon, label) in [
+            (LibraryViewMode.grid, VhIcons.grid, l.viewGrid),
+            (LibraryViewMode.list, VhIcons.table, l.desktopViewTable),
+            (LibraryViewMode.compact, VhIcons.list, l.desktopViewCompact),
+          ])
+            DesktopPlayerControl(
+              icon: icon,
+              label: label,
+              selected: mode == m,
+              onTap: () => onMode(m),
+            ),
         ],
-        for (final (m, icon, label) in [
-          (LibraryViewMode.grid, VhIcons.grid, l.viewGrid),
-          (LibraryViewMode.list, VhIcons.table, l.desktopViewTable),
-          (LibraryViewMode.compact, VhIcons.list, l.desktopViewCompact),
-        ])
-          DesktopPlayerControl(
-            icon: icon,
-            label: label,
-            selected: mode == m,
-            onTap: () => onMode(m),
-          ),
-      ],
+      ),
     );
   }
 }

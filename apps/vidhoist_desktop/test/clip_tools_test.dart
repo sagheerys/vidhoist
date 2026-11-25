@@ -191,16 +191,37 @@ void main() {
         )
         .opacity;
 
-    testWidgets('paused, the picture keeps its controls; theater and full '
-        'screen work from them', (tester) async {
+    testWidgets('**the guard**: paused, the picture is clean until the '
+        'pointer comes; theater and full screen work from its controls', (
+      tester,
+    ) async {
       final h = await watch(tester);
-      expect(shown(tester), 1);
+      // Kept on a paused frame, they doubled the player bar's seek bar,
+      // time and speed.
+      expect(shown(tester), 0);
       final controls = find.byType(ClipVideoControls);
+      final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      addTearDown(mouse.removePointer);
+      await mouse.addPointer(location: Offset.zero);
+      Future<void> hover() async {
+        await mouse.moveTo(tester.getCenter(controls));
+        await mouse.moveTo(tester.getCenter(controls) + const Offset(4, 4));
+        await tester.pumpAndSettle();
+      }
+
+      await hover();
+      expect(shown(tester), 1);
+      await tester.pump(ClipVideoControls.linger);
+      await tester.pumpAndSettle();
+      expect(shown(tester), 0);
+
+      await hover();
       await tester.tap(
         find.descendant(of: controls, matching: _control('Theater')),
       );
       await tester.pumpAndSettle();
       expect(containerOf(tester).read(theaterProvider), isTrue);
+      await hover();
       await tester.tap(
         find.descendant(of: controls, matching: _control('Fullscreen')),
       );

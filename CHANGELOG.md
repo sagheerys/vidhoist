@@ -13,8 +13,49 @@ All notable changes to VidHoist. The format follows
 - Both apps: the update sheet and "what's new" in the reader's language.
   A release may carry `release-notes.json` with each app's notes in every
   language; without it the release page is shown as before.
+- Windows: a clip being downloaded stands in the library at once, first,
+  with its progress and what is happening to it; a click opens the
+  downloads.
+- Both apps: after the third download that finishes, the app asks once
+  whether it is liked, with a star on GitHub and a way to suggest an idea
+  or report a problem; "Maybe later" asks once more, twenty downloads and
+  thirty days on, and "Don't show this again" never. A sheet on the phone,
+  a small card in the library's corner on Windows. Nothing is sent: the
+  count stays on the device.
+- Both apps: About links to the project's Telegram channel, where releases
+  are announced.
+
+### Changed
+- Windows: an empty library asks for the first link in place, and shows
+  its filters and layouts only once it holds a clip.
+- Windows: on a clip's page the side panel shows that clip's transcript
+  and details even while another clip plays; a click on a line starts it
+  there. The reading room folds the panel, whose transcript the article
+  already is.
+- Windows: search has one way in, the title bar's box (or Ctrl+K); the
+  sidebar's Search entry is gone, and saved searches stay in the sidebar.
+  Before a word is typed the search offers the saved searches and the
+  clips played last; commands are after `>`.
+- Windows: the library's order is written out ("Sort by: Newest"), the
+  three layouts sit in one frame, and the statistics are named beside the
+  count.
+- Windows: the controls over a paused picture fade like those of a playing
+  one and come back with the pointer; in full screen they stay while
+  paused.
+- Windows: on a wide window the library's table gives the channel its own
+  column and holds the title to a readable width, the heart staying at the
+  row's edge; when room runs short the source column goes first, so a
+  large font no longer cuts the titles.
+- Windows: on a large screen the grid's covers grow with the window, six
+  to a row at 1920 instead of eight small ones.
+- Windows: with a large font the statistics keep their figures whole and
+  shorten the bar instead.
 
 ### Fixed
+- Windows: "Sort by" was cut in a narrow window in Arabic with room to
+  spare beside it.
+- Windows: a download still without its title showed its whole link in
+  the library; it is called by its site until the title comes.
 - Android: a tap on "download complete" only lit the clip. It now closes
   what is open above the tabs, shows the library, undoes a search or a
   filter that hides the clip, and scrolls to it; a tap that started the

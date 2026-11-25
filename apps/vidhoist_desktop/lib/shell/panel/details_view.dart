@@ -18,9 +18,15 @@ import '../video_surface.dart';
 /// the file really is (the history records "best", not what came), the
 /// date it arrived, where it is kept, and the lists and tags it is in.
 class DetailsView extends ConsumerWidget {
-  const DetailsView({super.key, required this.item});
+  const DetailsView({super.key, required this.item, this.playing = true});
 
   final PlaylistItem item;
+
+  /// [item] is the clip in the player, whose picture and sound can be
+  /// asked as they play; another clip has only what its file says.
+  final bool playing;
+
+  static Future<MediaQuality?> _unknown() async => null;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,12 +66,14 @@ class DetailsView extends ConsumerWidget {
           if (size != null) row(l.fileSize, vhFormatSize(size)),
           if (format != null) row(l.format, format),
           VhQualityRows(
-            key: ValueKey(url),
+            // Asked afresh once the clip starts: before, there was nothing
+            // playing to ask.
+            key: ValueKey((url, playing)),
             cacheKey: url,
             row: row,
             sizeBytes: size,
             duration: item.duration,
-            load: ref.read(videoSurfaceProvider).quality,
+            load: playing ? ref.read(videoSurfaceProvider).quality : _unknown,
           ),
           if (when != null) row(l.downloadDate, vhTimeAgo(context, when)),
           if (folder.isNotEmpty) row(l.folder, vhName(folder)),

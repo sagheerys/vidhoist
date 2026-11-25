@@ -419,6 +419,9 @@ class VhLocalizationsPt extends VhLocalizations {
   String get columnAdded => 'Adicionado';
 
   @override
+  String get columnChannel => 'Canal';
+
+  @override
   String get columnLength => 'Duração';
 
   @override
@@ -846,10 +849,6 @@ class VhLocalizationsPt extends VhLocalizations {
   String get desktopDropLinks => 'Solte para adicionar';
 
   @override
-  String get desktopEmptyLibraryLocal =>
-      'Adicione um link, e o clipe aparece aqui quando for baixado.';
-
-  @override
   String get desktopEmptyLibraryMessage =>
       'Adicione um link, e o clipe aparece aqui quando for baixado.';
 
@@ -959,6 +958,19 @@ class VhLocalizationsPt extends VhLocalizations {
   String desktopFileReadyToPaste(String name, String size) {
     return 'Pronto para colar: $name · $size';
   }
+
+  @override
+  String get desktopFirstLinkKeys => 'em qualquer lugar da janela faz o mesmo';
+
+  @override
+  String get desktopFirstLinkNote =>
+      'Do YouTube ou de qualquer outro site. O clipe aparece aqui assim que o download começa.';
+
+  @override
+  String get desktopFirstLinkPaste => 'Colar';
+
+  @override
+  String get desktopFirstLinkTitle => 'Cole seu primeiro link';
 
   @override
   String get desktopFolderUnavailable => 'Nenhuma pasta disponível';
@@ -1102,6 +1114,11 @@ class VhLocalizationsPt extends VhLocalizations {
 
   @override
   String get desktopLess => 'Menos';
+
+  @override
+  String desktopLibraryDownloading(int count) {
+    return '$count baixando';
+  }
 
   @override
   String get desktopLibraryLoading => 'Carregando a biblioteca…';
@@ -1262,10 +1279,16 @@ class VhLocalizationsPt extends VhLocalizations {
   String get desktopPaletteOpen => 'para abrir';
 
   @override
+  String get desktopPaletteRecent => 'Tocados recentemente';
+
+  @override
   String get desktopPaletteSaid => 'Dito dentro dos clipes';
 
   @override
   String get desktopPaletteSave => 'Salvar esta busca';
+
+  @override
+  String get desktopPaletteSaved => 'Buscas salvas';
 
   @override
   String desktopPaletteSettings(String section) {
@@ -1531,6 +1554,10 @@ class VhLocalizationsPt extends VhLocalizations {
   @override
   String get desktopTranscriptHint =>
       'Acompanha a reprodução · clique numa linha para pular';
+
+  @override
+  String get desktopTranscriptHintPage =>
+      'Transcrição deste clipe · clique numa linha para tocar a partir dela';
 
   @override
   String get desktopTranscriptsDeleteBody =>
@@ -3143,6 +3170,25 @@ class VhLocalizationsPt extends VhLocalizations {
 
   @override
   String get sourceCode => 'Código-fonte';
+
+  @override
+  String get starAskBody =>
+      'Gratuito e de código aberto, sem anúncios e sem conta. Uma estrela no GitHub ajuda outras pessoas a encontrá-lo.';
+
+  @override
+  String get starAskIdeas => 'Sugerir uma ideia ou relatar um problema';
+
+  @override
+  String get starAskLater => 'Talvez depois';
+
+  @override
+  String get starAskNever => 'Não mostrar novamente';
+
+  @override
+  String get starAskStar => 'Dar uma estrela no GitHub';
+
+  @override
+  String get starAskTitle => 'Está gostando do VidHoist?';
 
   @override
   String get startDownload => 'Iniciar download';

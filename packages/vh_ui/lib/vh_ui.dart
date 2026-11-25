@@ -58,6 +58,7 @@ export 'src/widgets/vh_settings_rows.dart';
 export 'src/widgets/vh_share_notice.dart';
 export 'src/widgets/vh_section_header.dart';
 export 'src/widgets/vh_snackbar.dart';
+export 'src/widgets/vh_star_ask.dart';
 export 'src/widgets/vh_system_bars.dart';
 export 'src/widgets/vh_text_prompt.dart';
 export 'src/widgets/vh_url_input_sheet.dart';

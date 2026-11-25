@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vidhoist_desktop/router.dart';
 import 'package:vidhoist_desktop/shell/panel/queue_view.dart';
+import 'package:vidhoist_desktop/shell/sidebar.dart';
 import 'package:vidhoist_desktop/shell/panel/transcript_view.dart';
 import 'package:vidhoist_desktop/shell/right_panel.dart';
 import 'package:vh_core/vh_core.dart';
@@ -190,6 +193,84 @@ void main() {
     await tester.pumpAndSettle();
     expect(copied, _url);
     expect(find.text('Link copied'), findsOneWidget);
+  });
+
+  group('on a clip\'s page', () {
+    final playing = LibraryItem(
+      canonicalUrl: 'https://youtu.be/bbbbbbbbbbb',
+      title: 'Amber Skies',
+      timestamp: DateTime(2026, 10, 21),
+    );
+    final shown = LibraryItem(
+      canonicalUrl: _url,
+      title: 'Homelab Hour - Ep. 12',
+      uploader: 'Homelab Hour',
+      timestamp: DateTime(2026, 10, 20),
+    );
+
+    Future<ShellHarness> page(WidgetTester tester, String route) async {
+      ShellHarness.useWindow(tester, const Size(1440, 900));
+      final h = ShellHarness(
+        library: [playing, shown],
+        transcripts: {_url: _transcript},
+      );
+      await tester.pumpWidget(h.app());
+      await tester.pumpAndSettle();
+      h.player.showPlaying([toPlaylistItem(playing)], playing: false);
+      GoRouter.of(tester.element(find.byType(DesktopSidebar))).go(route);
+      await tester.pumpAndSettle();
+      return h;
+    }
+
+    testWidgets('**the guard**: the panel is about the page\'s clip, not the '
+        'one playing; nothing is lit, and a line starts it there', (
+      tester,
+    ) async {
+      final h = await page(tester, DesktopRoutes.item(_url));
+      // It used to stand beside the playing clip's words.
+      expect(inPanel(find.textContaining('If the pool dies')), findsOneWidget);
+      expect(litLine(tester), isNull);
+      expect(
+        inPanel(
+          find.text("This clip's transcript · click a line to play from it"),
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(inPanel(find.textContaining('If the pool dies')));
+      await tester.pumpAndSettle();
+      expect(h.player.calls, ['loop false', 'playItems', 'seek']);
+      expect(h.player.played.single.canonicalUrl, _url);
+      expect(h.player.sought, const Duration(seconds: 20));
+    });
+
+    testWidgets('**the guard**: the page names its clip, so the panel does '
+        'not name it again', (tester) async {
+      await page(tester, DesktopRoutes.item(_url));
+      expect(inPanel(find.text('Homelab Hour - Ep. 12')), findsNothing);
+      // Off a clip's page it follows the player and names what plays.
+      GoRouter.of(tester.element(find.byType(DesktopSidebar)))
+          .go(DesktopRoutes.playlists);
+      await tester.pumpAndSettle();
+      expect(inPanel(find.text('Amber Skies')), findsOneWidget);
+    });
+
+    testWidgets('**the guard**: the reading room folds the panel, whose '
+        'transcript the article already is; its button opens it', (
+      tester,
+    ) async {
+      await page(tester, DesktopRoutes.reading(_url));
+      expect(find.byType(DesktopRightPanel), findsNothing);
+      await tester.tap(byLabel('Show side panel').first);
+      await tester.pumpAndSettle();
+      expect(find.byType(DesktopRightPanel), findsOneWidget);
+      // Left and come back to: folded again.
+      final router = GoRouter.of(tester.element(find.byType(DesktopSidebar)));
+      router.go(DesktopRoutes.library);
+      await tester.pumpAndSettle();
+      router.go(DesktopRoutes.reading(_url));
+      await tester.pumpAndSettle();
+      expect(find.byType(DesktopRightPanel), findsNothing);
+    });
   });
 
   testWidgets('**the guard**: the details say what the phone says: the '
