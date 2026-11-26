@@ -23,7 +23,7 @@ dependencies:
   # Covers are cached under the app's local data folder rather than the
   # system temp folder; these two name the cache's directory and index.
   file: ^7.0.1
-  flutter_cache_manager: ^3.4.1
+  flutter_cache_manager: ^3.5.0
   flutter_riverpod: ^2.6.1
   flutter_svg: 2.3.0
   # The app's secrets, encrypted for this Windows user (DPAPI); the
