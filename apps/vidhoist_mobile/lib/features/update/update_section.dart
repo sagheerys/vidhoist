@@ -46,7 +46,10 @@ class UpdateSection extends ConsumerWidget {
           ),
           trailing: state.phase == UpdatePhase.checking
               ? const VhSpinner(size: 18)
-              : VhIcon(hasUpdate ? VhIcons.forward : VhIcons.refresh),
+              : VhIcon(
+                  hasUpdate ? VhIcons.forward : VhIcons.refresh,
+                  matchTextDirection: hasUpdate,
+                ),
           onTap: state.busy
               ? null
               : () async {

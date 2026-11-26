@@ -1174,6 +1174,36 @@ abstract class VhLocalizations {
   /// **'Clear selection'**
   String get desktopClearSelection;
 
+  /// No description provided for @desktopCloseAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get desktopCloseAnyway;
+
+  /// No description provided for @desktopCloseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{If you close VidHoist now it stops, and picks up where it left off when you open it again.} other{If you close VidHoist now they stop, and pick up where they left off when you open it again.}}'**
+  String desktopCloseBody(int count);
+
+  /// No description provided for @desktopCloseKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep downloading'**
+  String get desktopCloseKeep;
+
+  /// No description provided for @desktopCloseMore.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{and 1 more} other{and {count} more}}'**
+  String desktopCloseMore(int count);
+
+  /// No description provided for @desktopCloseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{A download isn\'t finished} other{{count} downloads aren\'t finished}}'**
+  String desktopCloseTitle(int count);
+
   /// No description provided for @desktopCookiesBrowser.
   ///
   /// In en, this message translates to:

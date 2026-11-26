@@ -24,6 +24,10 @@ All notable changes to VidHoist. The format follows
   count stays on the device.
 - Both apps: About links to the project's Telegram channel, where releases
   are announced.
+- Windows: closing the app while downloads are going asks first, with the
+  clip and how far it has come; "Keep downloading" keeps it open. They go
+  on at the next start either way. Not asked when the close goes to the
+  tray or nothing is downloading.
 
 ### Changed
 - Windows: an empty library asks for the first link in place, and shows
@@ -52,6 +56,26 @@ All notable changes to VidHoist. The format follows
   shorten the bar instead.
 
 ### Fixed
+- Both apps: a cancelled download left its unfinished files in the
+  download folder. They are now deleted when it is cancelled (a paused one
+  keeps them, to go on later), and Windows also clears old ones at start,
+  as Android did.
+- Windows: a settings file cut short by a power cut or a crash stopped the
+  app from starting. The app now keeps a last good copy and puts it back,
+  keeping the damaged file aside.
+- Android: the notification permission was asked the moment the app
+  opened; it is now asked at the first download.
+- Android: back during a selection in the library left the app and lost
+  the selection; it now undoes the selection first.
+- Android: with three-button navigation the last row of four sheets (a
+  channel's actions, a computer clip's actions, the subtitle options, the
+  computer's downloads) sat under the buttons.
+- Android: in full screen held sideways, the top bar and the seek bar could
+  sit under a notch or a camera hole.
+- Arabic: the copied-link banner kept its wider margin on the wrong side,
+  and two arrows (back in full-screen video, the update row) pointed the
+  wrong way.
+- Windows: the app icon gains its 128-pixel size.
 - Windows: "Sort by" was cut in a narrow window in Arabic with room to
   spare beside it.
 - Windows: a download still without its title showed its whole link in

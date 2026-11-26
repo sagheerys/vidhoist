@@ -652,6 +652,49 @@ class VhLocalizationsRu extends VhLocalizations {
   String get desktopClearSelection => 'Снять выделение';
 
   @override
+  String get desktopCloseAnyway => 'Закрыть';
+
+  @override
+  String desktopCloseBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Если закрыть VidHoist сейчас, загрузки остановятся и продолжатся с того же места при следующем запуске.',
+      one: 'Если закрыть VidHoist сейчас, загрузка остановится и продолжится с того же места при следующем запуске.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get desktopCloseKeep => 'Продолжить загрузку';
+
+  @override
+  String desktopCloseMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'и ещё $count',
+      many: 'и ещё $count',
+      few: 'и ещё $count',
+      one: 'и ещё $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String desktopCloseTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count загрузки не завершены',
+      many: '$count загрузок не завершено',
+      few: '$count загрузки не завершены',
+      one: '$count загрузка не завершена',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get desktopCookiesBrowser => 'Из браузера';
 
   @override

@@ -84,8 +84,8 @@ class _PaletteState extends ConsumerState<_Palette> {
   PaletteResults _results() {
     final saved = ref.watch(savedSearchesProvider).valueOrNull ?? const [];
     final recent = ref.watch(recentlyPlayedProvider);
-    // Nothing for the moment the clips played are being read: the
-    // commands shown for that moment flickered into the clips.
+    // Show nothing while the recently played clips load: showing the
+    // commands meanwhile made the list flicker from one to the other.
     if (_query.text.trim().isEmpty && recent.isLoading) {
       return const PaletteResults();
     }

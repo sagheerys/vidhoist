@@ -13,6 +13,7 @@ import 'download_queue.dart';
 import 'early_probe.dart';
 import 'engine_refresh.dart';
 import 'local_pending.dart';
+import 'task_partials.dart';
 
 part 'local_download_engine_finish.dart';
 
@@ -25,7 +26,7 @@ typedef TaskFolder = String Function(DownloadTask task);
 /// Each task goes
 /// `queued → preparing → downloading → postprocessing → completed`, or
 /// ends `failed` or `cancelled`; [pause] keeps the partial file for
-/// [resume].
+/// [resume], and `cancel` deletes it once yt-dlp has stopped.
 ///
 /// Preparing probes the link once and the download starts from that probe
 /// (`docs/ENGINE.md`, finding 19): on a phone this halves YouTube's wait.
@@ -82,6 +83,7 @@ class LocalDownloadEngine {
   final _queue = DownloadQueue();
   final _tasks = <String, DownloadTask>{};
   final _running = <String>{};
+  final _runs = <String, Future<void>>{};
   final _probes = <String, ProbeResult>{};
   late final _early = EarlyProbe(backend.probe);
 
@@ -97,6 +99,15 @@ class LocalDownloadEngine {
   List<DownloadTask> get tasks => List.unmodifiable(_tasks.values);
   DownloadTask? taskById(String id) => _tasks[id];
   bool get hasActiveWork => _tasks.values.any((t) => !t.isFinished);
+
+  /// Whether [path] is a work file an unfinished task will continue from,
+  /// for a sweep of old partial files to leave alone.
+  bool continuesFrom(String path) => _tasks.values.any(
+    (t) =>
+        !t.isFinished &&
+        t.mediaId != null &&
+        isTaskPartial(path, t.mediaId!, clip: t.clip),
+  );
 
   /// Enqueues the first link found in [text].
   DownloadTask submit(
@@ -157,6 +168,8 @@ class LocalDownloadEngine {
     return saved.length;
   }
 
+  /// Ends [taskId] for good: nothing will continue its partial files, so
+  /// they are deleted, which a pause never does.
   void cancel(String taskId) => _stop(taskId, TaskPhase.cancelled);
 
   /// Stops [taskId] and keeps its partial file; [resume] continues it.
@@ -205,10 +218,16 @@ class LocalDownloadEngine {
     unawaited(
       why == TaskPhase.cancelled ? _unrecord(taskId) : _record(stopped),
     );
-    if (waiting) return;
+    final cancelled = why == TaskPhase.cancelled;
+    if (waiting) {
+      if (cancelled) unawaited(_dropPartials(stopped));
+      return;
+    }
     _stops[taskId] = why;
     _wake(taskId);
-    unawaited(backend.cancel(taskId));
+    final ending = backend.cancel(taskId);
+    unawaited(ending);
+    if (cancelled) unawaited(_dropPartials(stopped, stopping: ending));
   }
 
   void _pump() {
@@ -217,8 +236,9 @@ class LocalDownloadEngine {
       if (id == null) return;
       _running.add(id);
       unawaited(
-        _run(id).whenComplete(() {
+        _runs[id] = _run(id).whenComplete(() {
           _running.remove(id);
+          _runs.remove(id);
           _stops.remove(id);
           _pump();
         }),

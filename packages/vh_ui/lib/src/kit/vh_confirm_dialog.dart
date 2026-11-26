@@ -150,14 +150,27 @@ class VhConfirmDialog extends StatelessWidget {
   }
 }
 
-/// The clip a dialog acts on: its cover and its title, on a tinted strip.
+/// The clip a dialog acts on: its cover and its title, on a tinted strip;
+/// for one still arriving, how far it has come, and a [note] under it.
 class VhDialogClip extends StatelessWidget {
-  const VhDialogClip({super.key, required this.title, this.thumbnail});
+  const VhDialogClip({
+    super.key,
+    required this.title,
+    this.thumbnail,
+    this.progress,
+    this.note,
+  });
 
   final String title;
 
   /// Usually the clip's cover, sized by this strip.
   final Widget? thumbnail;
+
+  /// From 0 to 1 when known; a line under the title shows it.
+  final double? progress;
+
+  /// A second, quieter line, such as how many more there are.
+  final String? note;
 
   static const _thumb = Size(44, 28);
 
@@ -182,12 +195,35 @@ class VhDialogClip extends StatelessWidget {
           ),
           const SizedBox(width: VhSpace.sm),
           Expanded(
-            child: Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall!
-                  .copyWith(color: p.ink2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall!
+                      .copyWith(color: p.ink2),
+                ),
+                if (progress case final progress?) ...[
+                  const SizedBox(height: VhSpace.xxs),
+                  LinearProgressIndicator(
+                    value: progress,
+                    minHeight: 3,
+                    color: p.accent,
+                    backgroundColor: p.line,
+                    borderRadius: BorderRadius.circular(VhRadius.pill),
+                  ),
+                ],
+                if (note case final note?) ...[
+                  const SizedBox(height: VhSpace.xxs),
+                  Text(
+                    note,
+                    style: Theme.of(context).textTheme.labelSmall!
+                        .copyWith(color: p.ink3),
+                  ),
+                ],
+              ],
             ),
           ),
         ],

@@ -55,6 +55,27 @@
       }
     }
   },
+  "@desktopCloseBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@desktopCloseMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@desktopCloseTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@desktopCookiesKeptFor": {
     "placeholders": {
       "sites": {
@@ -793,6 +814,11 @@
   "desktopChooseClip": "Select",
   "desktopClearFilters": "Clear filters",
   "desktopClearSelection": "Clear selection",
+  "desktopCloseAnyway": "Close",
+  "desktopCloseBody": "{count, plural, =1{If you close VidHoist now it stops, and picks up where it left off when you open it again.} other{If you close VidHoist now they stop, and pick up where they left off when you open it again.}}",
+  "desktopCloseKeep": "Keep downloading",
+  "desktopCloseMore": "{count, plural, =1{and 1 more} other{and {count} more}}",
+  "desktopCloseTitle": "{count, plural, =1{A download isn't finished} other{{count} downloads aren't finished}}",
   "desktopCookiesBrowser": "From a browser",
   "desktopCookiesBrowserHint": "Read from the browser you are signed in with. If they cannot be read, close that browser and try again.",
   "desktopCookiesChoose": "Choose a file…",

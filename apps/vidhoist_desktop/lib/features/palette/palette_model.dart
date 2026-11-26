@@ -66,10 +66,10 @@ const paletteCommandsBeside = 4;
 /// commands whose names fit it, and nothing but commands after `>`.
 ///
 /// **Before a word is typed** it offers what the user comes back to: the
-/// searches kept and the clips [recent]ly played. It used to list every
-/// command there, thirteen of them settings sections, though the field
-/// itself says commands are after `>`. With nothing kept or played yet
-/// (a first start) the commands stay, so it is never blank.
+/// searches kept and the clips [recent]ly played. Commands are reached
+/// with `>`, as the field says; listing them all here would bury what the
+/// user comes for. With nothing kept or played yet (a first start) the
+/// commands are listed, so it is never blank.
 ///
 /// Every comparison goes through [SearchText.fold], so a word typed
 /// without a hamza or vowel marks finds a title written with them, the

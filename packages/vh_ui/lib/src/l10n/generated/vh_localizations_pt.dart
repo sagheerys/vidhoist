@@ -646,6 +646,45 @@ class VhLocalizationsPt extends VhLocalizations {
   String get desktopClearSelection => 'Limpar seleção';
 
   @override
+  String get desktopCloseAnyway => 'Fechar';
+
+  @override
+  String desktopCloseBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Se fechar o VidHoist agora, eles param e continuam de onde pararam quando o abrir de novo.',
+      one: 'Se fechar o VidHoist agora, ele para e continua de onde parou quando o abrir de novo.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get desktopCloseKeep => 'Continuar a baixar';
+
+  @override
+  String desktopCloseMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'e mais $count',
+      one: 'e mais 1',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String desktopCloseTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count downloads não terminaram',
+      one: 'Um download não terminou',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get desktopCookiesBrowser => 'De um navegador';
 
   @override

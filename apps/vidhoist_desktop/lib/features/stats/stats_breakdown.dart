@@ -12,11 +12,11 @@ typedef StatsBar = ({String label, int measure, String value});
 /// the reading; the bar only shows proportion, so the rows are a table to a
 /// screen reader too.
 ///
-/// **The bar gives way, not the figures.** In thirds, the figures were the
-/// first cut ("462.…") with a large font while the names kept more room
-/// than the longest of them. Now the names take the longest name, the
-/// figures their whole width, and the bar what is left, every bar starting
-/// at the same place.
+/// **The bar gives way, not the figures.** Split in fixed thirds, a large
+/// font cut the figures ("462.…") while the names kept room they did not
+/// need. So the names take the width of the longest name, the figures
+/// their whole width, and the bar what is left, every bar starting at the
+/// same place.
 class StatsBars extends StatelessWidget {
   const StatsBars({super.key, required this.rows});
 

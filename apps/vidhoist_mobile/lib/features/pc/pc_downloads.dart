@@ -99,7 +99,7 @@ class _PcDownloadsSheet extends ConsumerWidget {
       maxChildSize: 0.92,
       builder: (context, scroll) => ListView(
         controller: scroll,
-        padding: const EdgeInsets.only(bottom: VhSpace.xl),
+        padding: EdgeInsets.only(bottom: vhSheetBottomPad(context)),
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(

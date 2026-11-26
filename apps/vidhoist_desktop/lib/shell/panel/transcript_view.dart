@@ -25,8 +25,8 @@ final panelFindProvider = Provider<ValueNotifier<VoidCallback?>>((ref) {
 VoidCallback? findHere(WidgetRef ref) =>
     ref.read(readingFindProvider).value ?? ref.read(panelFindProvider).value;
 
-/// A clip's transcript; a click on a line plays from there. The playing
-/// clip's lights the line being said and keeps it in view.
+/// A clip's transcript; a click on a line plays from there. For the
+/// playing clip, the line being spoken is highlighted and kept in view.
 ///
 /// A clip that is not playing (its page is open while another plays) is
 /// read as it is, nothing lit, and a click starts it at that line.

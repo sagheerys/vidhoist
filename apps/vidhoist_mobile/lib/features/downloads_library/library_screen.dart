@@ -148,11 +148,17 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       ref.read(libraryViewProvider.notifier).setQuery('');
     }
 
-    // Back closes the search first, rather than leaving the app.
+    // Back undoes a selection, then closes the search, before it leaves
+    // the app: a selection lost by leaving takes the ticks made with it.
     return PopScope(
-      canPop: !searching,
+      canPop: !searching && !options.selecting,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) closeSearch();
+        if (didPop) return;
+        if (options.selecting) {
+          ref.read(libraryViewProvider.notifier).clearSelection();
+        } else {
+          closeSearch();
+        }
       },
       child: Scaffold(
         // Selecting swaps the bar with a short fade rather than a cut.

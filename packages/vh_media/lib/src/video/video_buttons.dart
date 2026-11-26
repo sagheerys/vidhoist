@@ -21,6 +21,7 @@ class VhVideoIconButton extends StatelessWidget {
     this.active = false,
     this.onLongPress,
     this.longPressHint,
+    this.matchTextDirection = false,
   });
 
   final VhIconData icon;
@@ -34,6 +35,10 @@ class VhVideoIconButton extends StatelessWidget {
   /// the same long press.
   final VoidCallback? onLongPress;
   final String? longPressHint;
+
+  /// For a glyph that points along the reading, such as back: it is
+  /// mirrored in right-to-left languages such as Arabic.
+  final bool matchTextDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +61,7 @@ class VhVideoIconButton extends StatelessWidget {
             icon: icon,
             size: size * 0.42,
             color: VhPalette.serverCardInk,
+            matchTextDirection: matchTextDirection,
           ),
         ),
       ),

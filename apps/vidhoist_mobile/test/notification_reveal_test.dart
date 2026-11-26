@@ -128,6 +128,24 @@ void main() {
     expect(onScreen(tester, 'Clip number 57'), isTrue);
   });
 
+  testWidgets('**the guard**: back undoes a selection and stays in the '
+      'library; the next back may leave', (tester) async {
+    await pumpLibrary(tester);
+    final view = container.read(libraryViewProvider.notifier);
+    view.toggleSelected(keyOf(1));
+    view.toggleSelected(keyOf(2));
+    await tester.pumpAndSettle();
+    final route = ModalRoute.of(tester.element(find.byType(LibraryScreen)))!;
+    expect(route.popDisposition, RoutePopDisposition.doNotPop);
+    // As Android's back does: the route is asked, and here refuses.
+    final left = await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(left, isTrue, reason: 'back was taken by the screen');
+    expect(container.read(libraryViewProvider).selecting, isFalse);
+    expect(find.byType(LibraryScreen), findsOneWidget);
+    expect(route.popDisposition, isNot(RoutePopDisposition.doNotPop));
+  });
+
   testWidgets('a clip deleted since says so instead of doing nothing', (
     tester,
   ) async {

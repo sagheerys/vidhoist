@@ -75,11 +75,11 @@ class _ChannelSheet extends ConsumerWidget {
         )
         .valueOrNull;
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
+      padding: EdgeInsets.fromLTRB(
         VhSpace.pagePad,
         0,
         VhSpace.pagePad,
-        VhSpace.lg,
+        vhSheetBottomPad(context, VhSpace.lg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

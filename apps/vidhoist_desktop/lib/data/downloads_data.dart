@@ -11,6 +11,7 @@ import 'engine_data.dart';
 import 'folders_data.dart';
 import 'library_data.dart';
 import 'lists_data.dart';
+import 'partials_sweep.dart';
 import 'sidecar_import.dart';
 
 /// The saved key of "fetch the transcript first", the phone's own, so a
@@ -96,12 +97,17 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
     onLog: (message) => _log(ref, message),
   );
   // Only once the download folder is known: restored before it, a task
-  // went to the default folder whatever folder had been chosen.
+  // went to the default folder whatever folder had been chosen. The sweep
+  // of old partial files comes after, so the restored tasks keep theirs.
   unawaited(
     ref
         .read(downloadFolderProvider.future)
         .then<void>((_) {}, onError: (Object _) {})
-        .then((_) => alive ? engine.restorePending() : null),
+        .then((_) async {
+          if (!alive) return;
+          await engine.restorePending();
+          if (alive) await _sweep(ref, engine);
+        }),
   );
   final dropped = engine.updates.listen((task) {
     if (task.phase == TaskPhase.failed || task.phase == TaskPhase.cancelled) {
@@ -115,6 +121,15 @@ final downloadEngineProvider = Provider<LocalDownloadEngine?>((ref) {
   });
   return engine;
 });
+
+/// The startup sweep, in the folder that was read: never in the stand-in
+/// used before it is known, which may not be the user's folder at all.
+Future<void> _sweep(Ref ref, LocalDownloadEngine engine) async {
+  final root = ref.read(downloadFolderProvider).valueOrNull;
+  if (root == null) return;
+  final count = await sweepOldPartials(root, engine);
+  if (count > 0) _log(ref, 'swept $count partials');
+}
 
 void _log(Ref ref, String message) {
   try {

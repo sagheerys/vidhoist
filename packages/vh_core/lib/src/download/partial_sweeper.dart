@@ -12,10 +12,12 @@ import 'dart:io';
 /// [isLeftover] names each kind.
 ///
 /// [olderThan] protects a download **happening right now** from being swept
-/// out from under it.
+/// out from under it, and [keep] the files of a download that will go on
+/// from them however old they are (a paused one, say).
 Future<int> sweepPartialFiles(
   String directoryPath, {
   Duration olderThan = const Duration(hours: 6),
+  bool Function(String path)? keep,
 }) async {
   final dir = Directory(directoryPath);
   final cutoff = DateTime.now().subtract(olderThan);
@@ -30,6 +32,7 @@ Future<int> sweepPartialFiles(
     await for (final entity in dir.list(followLinks: false)) {
       if (entity is! File) continue;
       if (!isLeftover(entity.path)) continue;
+      if (keep?.call(entity.path) ?? false) continue;
       try {
         final stat = await entity.stat();
         if (stat.modified.isAfter(cutoff)) continue;

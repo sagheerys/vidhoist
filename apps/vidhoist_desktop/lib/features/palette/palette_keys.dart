@@ -18,7 +18,7 @@ class PaletteKeys extends StatelessWidget {
       runSpacing: VhSpace.xxs,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        // The commands left the list before a word is typed; the key that
+        // Commands are not listed before a word is typed, so the key that
         // brings them is named here.
         for (final (key, what) in [
           ('↑ ↓', l.desktopPaletteMove),

@@ -10,7 +10,7 @@ import '../../di.dart';
 import '../../shell/open_web_link.dart';
 import '../../shell/shell_metrics.dart';
 
-/// When a star may be asked for, kept beside the settings.
+/// When a star may be asked for, kept in the same store as the settings.
 final starAskProvider = Provider<StarAsk>(
   (ref) => StarAsk(ref.watch(keyValueStoreProvider)),
 );
@@ -20,8 +20,8 @@ final starPageOpenerProvider = Provider<Future<void> Function(String url)>(
   (ref) => openWebLink,
 );
 
-/// Moves on each download that finishes, once it is counted, so that the
-/// library looks again at whether the question is due.
+/// Goes up by one after each finished download is counted, so the
+/// library checks again whether the question is due.
 final finishedCountedProvider = StateProvider<int>((ref) => 0);
 
 /// Counts a finished download for the star question.

@@ -122,7 +122,7 @@ class PcItemRow extends ConsumerWidget {
                 title: Text(l10n.pcDelete, style: TextStyle(color: danger)),
                 onTap: () => Navigator.of(sheet).pop(_Action.delete),
               ),
-            const SizedBox(height: VhSpace.md),
+            SizedBox(height: vhSheetBottomPad(sheet, VhSpace.md)),
           ],
         );
       },

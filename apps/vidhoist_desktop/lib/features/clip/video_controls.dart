@@ -19,10 +19,10 @@ import 'clip_state.dart';
 /// the picture and fade a moment after it rests, the pointer with them,
 /// so nothing covers what is watched.
 ///
-/// **Paused, they fade the same way.** Kept on screen while paused, a
-/// still frame carried a second seek bar, a second time and a second speed
-/// above the player bar's own; the pointer brings them back. In full
-/// screen they stay while paused: there they are the only transport.
+/// **Paused, they fade the same way.** Kept on screen, they would put a
+/// second seek bar, time and speed over a still frame, above the player
+/// bar's own; the pointer brings them back. In full screen they stay while
+/// paused: there they are the only transport.
 ///
 /// The player bar keeps every one of these too: this is the same player
 /// within reach of the picture. **In full screen the bar is gone** and

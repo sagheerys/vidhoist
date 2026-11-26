@@ -266,6 +266,25 @@ void main() {
       expect(names, ['vidhoist_2026-10-24_120000.json']);
       expect(folder, endsWith(r'\For the phone'));
     });
+
+    test('**the guard**: the export is written under a temporary name and '
+        'renamed, and what an interrupted one left is not left for the '
+        'phone', () async {
+      await c.read(tagsIndexProvider).toggleTag(_a, 'mine');
+      final base = await c.read(downloadFolderProvider.future);
+      final dir = Directory('$base\\For the phone')
+        ..createSync(recursive: true);
+      File('${dir.path}\\vidhoist_2026-10-23_100000.json.tmp')
+          .writeAsStringSync('{"vidhoist_backup":');
+      await c
+          .read(backupsProvider)
+          .exportForPhone(at: DateTime(2026, 10, 24, 12));
+      final names = dir.listSync().map((f) => f.uri.pathSegments.last);
+      expect(names, ['vidhoist_2026-10-24_120000.json']);
+      final text = File('${dir.path}\\vidhoist_2026-10-24_120000.json')
+          .readAsStringSync();
+      expect(BackupMerge.looksLikeBackup(text), isTrue);
+    });
   });
 
   group('where the backups live', () {

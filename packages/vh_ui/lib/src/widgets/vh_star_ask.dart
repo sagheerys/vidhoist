@@ -10,10 +10,10 @@ import '../tokens/tokens.dart';
 /// **The question for a star on GitHub**, put once a user has seen the app
 /// work: what the app is, a star, a place for ideas and problems, and two
 /// ways to say no. Each choice is its own callback; the app keeps the
-/// count, opens the pages and closes what holds this.
+/// count, opens the pages and dismisses the sheet or card.
 ///
 /// The phone shows it in a sheet, centred. The computer shows it as a
-/// small [card] in a corner, over nothing being used: set to the start,
+/// small [card] in a corner, over nothing being used: aligned to the start,
 /// with a cross that closes it as "later", and the two answers on a line.
 class VhStarAsk extends StatelessWidget {
   const VhStarAsk({
@@ -31,8 +31,8 @@ class VhStarAsk extends StatelessWidget {
   final VoidCallback onNever;
   final bool card;
 
-  // The sheet's answer is a pill as wide as eight steps, tall enough for a
-  // thumb; the card's sits at the computer's button height.
+  // The sheet's answer is a pill as wide as eight spacing units, tall
+  // enough for a thumb; the card's sits at the computer's button height.
   static const double _pillHeight = 46;
 
   @override

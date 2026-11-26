@@ -49,6 +49,7 @@ class DownloadTask {
     required this.quality,
     this.resolvedUrl,
     this.canonicalUrl,
+    this.mediaId,
     this.title,
     this.thumbnail,
     this.localPath,
@@ -74,6 +75,11 @@ class DownloadTask {
 
   /// yt-dlp's `webpage_url`. The **only** value valid for indexing.
   final String? canonicalUrl;
+
+  /// yt-dlp's `id` for the video, the `[id]` in the name of every file the
+  /// task writes. Kept with an unfinished task so a cancel can find its partial
+  /// files even after the app was restarted; null until the probe.
+  final String? mediaId;
 
   /// The title and artwork yt-dlp read. Used for the title and artwork
   /// indexes and the completion notification. **Neither is invented** when
@@ -135,6 +141,7 @@ class DownloadTask {
     Quality? quality,
     String? resolvedUrl,
     String? canonicalUrl,
+    String? mediaId,
     String? title,
     String? thumbnail,
     String? localPath,
@@ -150,6 +157,7 @@ class DownloadTask {
     quality: quality ?? this.quality,
     resolvedUrl: resolvedUrl ?? this.resolvedUrl,
     canonicalUrl: canonicalUrl ?? this.canonicalUrl,
+    mediaId: mediaId ?? this.mediaId,
     title: title ?? this.title,
     thumbnail: thumbnail ?? this.thumbnail,
     localPath: localPath ?? this.localPath,
@@ -195,6 +203,7 @@ extension DownloadTaskProbe on DownloadTask {
       title: clip == null || title == null ? title : '$title · ${clip.label}',
       thumbnail: info.thumbnail,
       canonicalUrl: clip == null || url == null ? url : clip.tagUrl(url),
+      mediaId: info.id,
       clip: clip,
     );
   }

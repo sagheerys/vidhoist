@@ -78,9 +78,9 @@ class _PinnedLibraryHeadingState extends State<PinnedLibraryHeading> {
 /// written out and the three layouts in one frame.
 ///
 /// **Nothing here is a bare glyph that has to be hovered to be read.** Five
-/// icons side by side (order, figures, three layouts) read as five
-/// layouts: the figures sat between the order and the layouts. The figures
-/// now stand by the count they break down, and the order says which it is.
+/// icons side by side (order, statistics, three layouts) read as five
+/// layouts, so the statistics link stands by the count it breaks down and
+/// the order names itself.
 class LibraryHeading extends StatelessWidget {
   const LibraryHeading({
     super.key,
@@ -154,8 +154,8 @@ class LibraryHeading extends StatelessWidget {
   }
 }
 
-/// The figures, named, beside the count they break down: a page of their
-/// own.
+/// A labelled link to the statistics page, next to the clip count it
+/// breaks down.
 class _FiguresLink extends StatelessWidget {
   const _FiguresLink();
 

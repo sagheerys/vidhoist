@@ -17,6 +17,10 @@ class _Notices extends DownloadNotifications {
   final showing = <int>{};
   final bodies = <String?>[];
   final actions = <List<String>>[];
+  var asked = 0;
+
+  @override
+  Future<void> requestPermission() async => asked++;
 
   @override
   Future<void> showProgress(
@@ -95,6 +99,21 @@ void main() {
     inputUrl: 'https://youtu.be/abc',
     quality: Quality.best,
   ).copyWith(phase: phase, progress: 0.42);
+
+  test('**the guard**: the notification permission is asked at the first '
+      'download, once, not when the app opens', () async {
+    final w = watch();
+    w.tasks.add(const []);
+    await pumpEventQueue();
+    expect(w.notices.asked, 0);
+    w.tasks.add([at(TaskPhase.queued)]);
+    await pumpEventQueue();
+    expect(w.notices.asked, 1);
+    w.tasks.add([at(TaskPhase.downloading)]);
+    w.tasks.add([at(TaskPhase.completed)]);
+    await pumpEventQueue();
+    expect(w.notices.asked, 1);
+  });
 
   test('the phone engine phases in its own words, with pause and '
       'resume', () async {

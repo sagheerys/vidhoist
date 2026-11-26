@@ -18,6 +18,7 @@ import 'data/backup_data.dart';
 import 'data/backup_folder.dart';
 import 'data/choices_data.dart';
 import 'data/clip_handover.dart';
+import 'data/close_guard.dart';
 import 'data/copied_links.dart';
 import 'data/covers/covers_data.dart';
 import 'data/folders_data.dart';
@@ -51,6 +52,7 @@ import 'platform/keep_awake_windows.dart';
 import 'platform/player_desktop.dart';
 import 'platform/run_note.dart';
 import 'platform/secret_store_windows.dart';
+import 'platform/prefs_guard.dart';
 import 'platform/prefs_store.dart';
 import 'platform/single_instance.dart';
 import 'platform/updater_windows.dart';
@@ -104,15 +106,18 @@ Future<void> main(List<String> args) async {
   forgetStaleMediaKitNote();
   MediaKit.ensureInitialized();
 
-  final prefs = await SharedPreferences.getInstance();
-  final store = SharedPrefsKeyValueStore(prefs);
-  final mutex = PrefsMutex();
   final local = await getApplicationCacheDirectory();
   final roaming = await getApplicationSupportDirectory();
   final logger = VhLogger(
     filePath: '${local.path}/logs/${DesktopIdentity.logFile}',
   );
   logEveryError(logger);
+  // Before SharedPreferences reads it: a broken settings file comes back
+  // from its last good copy rather than losing every setting.
+  await PrefsGuard(folder: roaming.path, logger: logger).guard();
+  final prefs = await SharedPreferences.getInstance();
+  final store = SharedPrefsKeyValueStore(prefs);
+  final mutex = PrefsMutex();
   final runNote = RunNote(folder: '${local.path}/logs', logger: logger);
   await runNote.begin();
 
@@ -132,6 +137,7 @@ Future<void> main(List<String> args) async {
   final wanted = await zooms.read();
   // Off until chosen: closing the window closes the app.
   var toTray = await store.getBool(CloseToTray.key) ?? false;
+  final closeGuard = CloseGuard();
   final window = await DesktopWindow.open(
     placements: WindowPlacementStore(store: store, mutex: mutex),
     beforeClose: () async {
@@ -139,6 +145,7 @@ Future<void> main(List<String> args) async {
       await player.persist();
     },
     hideOnClose: () => toTray,
+    guard: closeGuard,
     zoom: wanted,
     // Started with Windows, the app keeps out of the way.
     start: !args.contains(WindowsStartup.arg)
@@ -178,7 +185,7 @@ Future<void> main(List<String> args) async {
       quit: words.desktopTrayQuit,
     ),
     onOpen: () => unawaited(DesktopWindow.bringBack()),
-    onQuit: window.quit,
+    onQuit: window.close,
   );
   await tray.setOn(toTray);
   final taskbar = WindowsTaskbarSurface.saying(words);
@@ -226,6 +233,7 @@ Future<void> main(List<String> args) async {
           UiZoom(window.zoom, lowered: lowered),
         ),
         windowControlsProvider.overrideWithValue(controls),
+        closeGuardProvider.overrideWithValue(closeGuard),
         offerWelcomeProvider.overrideWithValue(true),
         offerWhatsNewProvider.overrideWithValue(true),
         initialAppearanceProvider.overrideWithValue(appearance),

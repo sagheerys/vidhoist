@@ -37,6 +37,7 @@ class LocalPendingStore {
       if (task.phase == TaskPhase.paused) 'paused': true,
       'title': ?task.title,
       'thumbnail': ?task.thumbnail,
+      'media': ?task.mediaId,
       'created': task.createdAt.millisecondsSinceEpoch,
     });
     await _write(records);
@@ -64,6 +65,7 @@ class LocalPendingStore {
           phase: r['paused'] == true ? TaskPhase.paused : TaskPhase.queued,
           title: r['title'] as String?,
           thumbnail: r['thumbnail'] as String?,
+          mediaId: r['media'] as String?,
           createdAt: r['created'] is int
               ? DateTime.fromMillisecondsSinceEpoch(r['created'] as int)
               : null,

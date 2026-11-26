@@ -167,7 +167,12 @@ Future<void> showCaptionOptions(
   useSafeArea: true,
   showDragHandle: true,
   builder: (sheet) => SingleChildScrollView(
-    padding: const EdgeInsets.fromLTRB(VhSpace.lg, 0, VhSpace.lg, VhSpace.lg),
+    padding: EdgeInsets.fromLTRB(
+      VhSpace.lg,
+      0,
+      VhSpace.lg,
+      vhSheetBottomPad(sheet, VhSpace.lg),
+    ),
     child: CaptionOptions(
       captions: captions,
       onTranscript: () {

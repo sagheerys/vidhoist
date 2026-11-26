@@ -262,7 +262,7 @@ def status_icon():
         f.write(xml)
 
 
-ICON_SIZES = [16, 20, 24, 32, 40, 48, 64, 256]
+ICON_SIZES = [16, 20, 24, 32, 40, 48, 64, 128, 256]
 TRAY_SIZES = [16, 20, 24, 32, 40, 48]
 
 

@@ -672,6 +672,52 @@ class VhLocalizationsAr extends VhLocalizations {
   String get desktopClearSelection => 'إلغاء التحديد';
 
   @override
+  String get desktopCloseAnyway => 'أغلق';
+
+  @override
+  String desktopCloseBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'إن أغلقت VidHoist الآن تتوقف، ثم تكمل من حيث توقفت حين تفتحه مرة أخرى.',
+      two: 'إن أغلقت VidHoist الآن يتوقفان، ثم يكملان من حيث توقفا حين تفتحه مرة أخرى.',
+      one: 'إن أغلقت VidHoist الآن يتوقف، ثم يكمل من حيث توقف حين تفتحه مرة أخرى.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get desktopCloseKeep => 'أكمل التنزيل';
+
+  @override
+  String desktopCloseMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ومعه $count تنزيل آخر',
+      many: 'ومعه $count تنزيلاً آخر',
+      few: 'ومعه $count تنزيلات أخرى',
+      two: 'ومعه تنزيلان آخران',
+      one: 'ومعه تنزيل آخر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String desktopCloseTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تنزيل لم ينتهِ',
+      many: '$count تنزيلاً لم ينتهِ',
+      few: '$count تنزيلات لم تنتهِ',
+      two: 'تنزيلان لم ينتهيا',
+      one: 'تنزيل لم ينتهِ',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get desktopCookiesBrowser => 'من المتصفح';
 
   @override

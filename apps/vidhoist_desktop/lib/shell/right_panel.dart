@@ -13,11 +13,10 @@ enum PanelTab { transcript, upNext, details }
 
 /// The side panel: a clip's transcript and details, and what comes next.
 ///
-/// **On a clip's page it is about that clip**, playing or not: the page
-/// of one clip used to stand beside another's transcript, the one in the
-/// player, and its own words could be read only by playing it. Everywhere
-/// else it follows the player, as before. What comes next is always the
-/// player's queue.
+/// **On a clip's page it is about that clip**, playing or not, so a clip's
+/// own words can be read without playing it and a page never stands
+/// beside another clip's transcript. Everywhere else it follows the
+/// player. What comes next is always the player's queue.
 class DesktopRightPanel extends StatelessWidget {
   const DesktopRightPanel({
     super.key,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vh_core/vh_core.dart';
+import 'package:vh_media/src/video/video_buttons.dart';
 import 'package:vh_media/vh_media.dart';
 import 'package:vh_ui/vh_ui.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
@@ -107,6 +108,34 @@ void main() {
     // The subtitle stays clear of the row while the controls show.
     final said = tester.getRect(find.textContaining('a line said').first);
     expect(said.bottom, lessThanOrEqualTo(row.top));
+    await leave(tester, session);
+  });
+
+  testWidgets('**the guard**: held sideways with a camera hole on the left, '
+      'the top bar and the seek bar stand clear of it', (tester) async {
+    // The cut-out the screen reports, in physical pixels at a ratio of 3.
+    tester.view.padding = const FakeViewPadding(left: 40 * 3);
+    final session = await show(
+      tester,
+      VhCaptions(lines: const [], shown: ValueNotifier(true)),
+    );
+    expect(tester.getRect(find.byType(VhVideoTopBar)).left, greaterThan(40));
+    expect(tester.getRect(find.byType(Slider)).left, greaterThan(40));
+    await leave(tester, session);
+  });
+
+  testWidgets("**the guard**: full screen's back arrow points the "
+      "reading's way, so it turns over in Arabic", (tester) async {
+    final session = await show(
+      tester,
+      VhCaptions(lines: const [], shown: ValueNotifier(true)),
+    );
+    final back = tester.widget<VhVideoIconButton>(
+      find.byWidgetPredicate(
+        (w) => w is VhVideoIconButton && w.icon == VhIcons.back,
+      ),
+    );
+    expect(back.matchTextDirection, isTrue);
     await leave(tester, session);
   });
 

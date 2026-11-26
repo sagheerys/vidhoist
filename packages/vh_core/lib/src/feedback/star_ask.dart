@@ -6,8 +6,8 @@ import '../storage/key_value_store.dart';
 ///
 /// "Maybe later" brings the question back once, after [_again] more
 /// finished downloads and [_wait] at least, so that someone who downloads
-/// a lot in a day is not asked twice in a week; a star, "Don't show this again" or a second showing
-/// ends it. Nothing leaves the device: the count is kept beside the
+/// a lot is not asked again within a month; a star, "Don't show this
+/// again" or the second showing ends it. Nothing leaves the device: the count is kept beside the
 /// settings and read only here.
 class StarAsk {
   StarAsk(this.store, {DateTime Function()? now}) : _now = now ?? DateTime.now;
@@ -33,7 +33,7 @@ class StarAsk {
   /// The repository's page, where the star is.
   static const String repoUrl = 'https://github.com/${VhConstants.updateRepo}';
 
-  /// Where an idea or a problem is written: GitHub's choice of form.
+  /// Where an idea or a problem is written: GitHub's issue-template chooser.
   static const String ideasUrl = '$repoUrl/issues/new/choose';
 
   /// Counts one more download that finished.

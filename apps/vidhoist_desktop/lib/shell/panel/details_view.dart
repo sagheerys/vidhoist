@@ -22,8 +22,9 @@ class DetailsView extends ConsumerWidget {
 
   final PlaylistItem item;
 
-  /// [item] is the clip in the player, whose picture and sound can be
-  /// asked as they play; another clip has only what its file says.
+  /// [item] is the clip in the player, whose video and audio tracks can be
+  /// queried from the player; for another clip only the file's metadata
+  /// is available.
   final bool playing;
 
   static Future<MediaQuality?> _unknown() async => null;

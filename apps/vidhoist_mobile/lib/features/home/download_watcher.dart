@@ -27,6 +27,7 @@ final downloadWatcherProvider = Provider<void>((ref) {
   final notifications = ref.watch(notificationsProvider);
   final logger = ref.watch(loggerProvider);
   var backgroundOn = false;
+  var permissionAsked = false;
   final notified = <String>{};
 
   /// **The fingerprint of the last notification posted per task**: a
@@ -101,6 +102,18 @@ final downloadWatcherProvider = Provider<void>((ref) {
   }
 
   Future<void> handle(List<DownloadTask> tasks) async {
+    // **Asked when there is something to tell, not at launch**: a request
+    // the moment the app opens, before anything has been downloaded, reads
+    // as a demand with no reason and is often refused for good. The first
+    // download is the moment its point is obvious.
+    if (!permissionAsked && tasks.any((t) => !t.isFinished)) {
+      permissionAsked = true;
+      try {
+        await notifications.requestPermission();
+      } on Object catch (e) {
+        unawaited(logger.error('permission failed', cause: e, tag: 'download'));
+      }
+    }
     final texts = l10n();
     for (final task in tasks) {
       final id = idOf(task);
@@ -216,7 +229,6 @@ Future<void> initDownloadNotifications(WidgetRef ref) async {
         if (action == 'resume') engine?.resume(taskId);
       },
     );
-    await notifications.requestPermission();
     // What a check while closed told of: the app's own check is about to
     // download it.
     await notifications.cancel(BackgroundNotices.newsId);

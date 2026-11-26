@@ -22,6 +22,7 @@ export 'src/download/download_choices.dart';
 export 'src/download/download_queue.dart';
 export 'src/download/engine_refresh.dart';
 export 'src/download/partial_sweeper.dart';
+export 'src/download/task_partials.dart';
 export 'src/download/local_download_engine.dart';
 export 'src/download/local_filename.dart';
 export 'src/feedback/star_ask.dart';

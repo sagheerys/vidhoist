@@ -48,9 +48,9 @@ String pendingName(DownloadTask task) {
 
 /// **A clip being downloaded stands in the library at once**, where it
 /// will stay: its cover held back, a line of its progress under it, and
-/// what is happening to it in place of its channel and age. Before, it was
-/// only in the downloads list behind a button, and the library said
-/// nothing until the file was whole.
+/// what is happening to it in place of its channel and age. So a download
+/// is seen in the library from its start, not only in the downloads list
+/// behind a button.
 ///
 /// It is drawn by the library's own cards, so it takes the same room in
 /// every layout. A click opens the downloads, where it can be paused,
@@ -83,7 +83,7 @@ class PendingClipView extends ConsumerWidget {
         : null;
     void open() => unawaited(showDownloadsPanel(context));
     Widget cover(double width, double height) =>
-        _HeldCover(task: task, width: width, height: height);
+        HeldCover(task: task, width: width, height: height);
 
     if (columns case final columns?) {
       return VhMediaRow(
@@ -118,8 +118,9 @@ class PendingClipView extends ConsumerWidget {
 /// The cover the preview found, faded while the file is not whole, with
 /// the progress along its foot: a filled line while the amount is known,
 /// the sliding strip while it is not, nothing while it waits or failed.
-class _HeldCover extends ConsumerWidget {
-  const _HeldCover({
+class HeldCover extends ConsumerWidget {
+  const HeldCover({
+    super.key,
     required this.task,
     required this.width,
     required this.height,

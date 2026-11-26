@@ -7,6 +7,7 @@ import 'package:vh_transcripts/vh_transcripts.dart';
 
 import '../di.dart';
 import '../identity.dart';
+import '../platform/atomic_file.dart';
 import 'backup_folder.dart';
 import 'backup_outcomes.dart';
 import 'channels_data.dart';
@@ -184,6 +185,10 @@ class DesktopBackups {
   /// Writes the two files a phone takes (this computer's tags, playlists
   /// and positions as a backup, and its transcripts) into
   /// `Downloads\Vidhoist\For the phone`, and returns that folder.
+  ///
+  /// Each is written whole under a temporary name and then renamed, so
+  /// the folder the user copies to the phone never holds a file cut short
+  /// by a crash; a temporary file left by an interrupted export is removed.
   Future<String?> exportForPhone({DateTime? at}) async {
     final base = await _ref.read(downloadFolderProvider.future);
     if (base == null) return null;
@@ -191,7 +196,9 @@ class DesktopBackups {
     final stamp = BackupRotation.stampOf(now);
     final dir = Directory('$base\\For the phone');
     await dir.create(recursive: true);
-    await File('${dir.path}\\vidhoist_$stamp.json').writeAsString(
+    await dropUnfinished(dir);
+    await writeAtomically(
+      '${dir.path}\\vidhoist_$stamp.json',
       await BackupMerge.exportShared(
         _ref.read(keyValueStoreProvider),
         now: now,
@@ -200,8 +207,10 @@ class DesktopBackups {
     if (_ref.read(transcriptStoreProvider) case final store?) {
       final all = await store.readAll().toList();
       if (all.isNotEmpty) {
-        await File('${dir.path}\\transcripts_$stamp.json')
-            .writeAsString(TranscriptBundle.encode(all));
+        await writeAtomically(
+          '${dir.path}\\transcripts_$stamp.json',
+          TranscriptBundle.encode(all),
+        );
       }
     }
     return dir.path;

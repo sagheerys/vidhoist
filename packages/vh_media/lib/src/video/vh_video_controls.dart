@@ -187,13 +187,28 @@ class _VhVideoControlsState extends State<VhVideoControls> {
     ),
   );
 
+  /// What the screen keeps for itself in full screen: a notch or a camera
+  /// hole, and the navigation buttons of a phone held sideways, which move
+  /// to its side. The picture may run under them; the buttons and the time
+  /// must not, or the back button sits under the camera.
+  EdgeInsetsDirectional get _cut {
+    if (!widget.fullscreen) return EdgeInsetsDirectional.zero;
+    final pad = MediaQuery.paddingOf(context);
+    final rtl = Directionality.of(context) == TextDirection.rtl;
+    return EdgeInsetsDirectional.only(
+      start: rtl ? pad.right : pad.left,
+      end: rtl ? pad.left : pad.right,
+      top: pad.top,
+    );
+  }
+
   Widget _controlsLayer() => Stack(
     children: [
       const Positioned.fill(child: _Scrim()),
       PositionedDirectional(
-        top: VhSpace.sm,
-        start: VhSpace.md,
-        end: VhSpace.md,
+        top: VhSpace.sm + _cut.top,
+        start: VhSpace.md + _cut.start,
+        end: VhSpace.md + _cut.end,
         child: VhVideoTopBar(
           session: widget.session,
           onBack: widget.onBack,
@@ -221,8 +236,8 @@ class _VhVideoControlsState extends State<VhVideoControls> {
         // Under the video the bar runs edge to edge, as the picture does;
         // full screen keeps a margin, so a phone's rounded corners do not
         // cut its ends.
-        start: widget.fullscreen ? VhSpace.md : 0,
-        end: widget.fullscreen ? VhSpace.md : 0,
+        start: widget.fullscreen ? VhSpace.md + _cut.start : 0,
+        end: widget.fullscreen ? VhSpace.md + _cut.end : 0,
         child: VhVideoBottomBar(
           rowInset: widget.fullscreen ? 0 : VhSpace.md,
           session: widget.session,

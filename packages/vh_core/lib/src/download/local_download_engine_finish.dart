@@ -61,6 +61,45 @@ extension _Finish on LocalDownloadEngine {
     );
   }
 
+  /// Deletes a cancelled task's work files once its download has ended:
+  /// deleted while yt-dlp still ran, a file would be written again, and on
+  /// Windows one still open cannot be deleted at all. Nothing is deleted
+  /// while another unfinished task fetches the same video, since the files
+  /// would then be that task's.
+  Future<void> _dropPartials(
+    DownloadTask task, {
+    Future<void>? stopping,
+  }) async {
+    final media = task.mediaId;
+    if (media == null) return;
+    final run = _runs[task.id];
+    bool sharedWith(DownloadTask t) =>
+        t.id != task.id &&
+        !t.isFinished &&
+        (t.mediaId == media || t.effectiveUrl == task.effectiveUrl);
+    try {
+      final folder = folderFor(task);
+      try {
+        await stopping;
+        await run?.timeout(const Duration(seconds: 10));
+      } on Object catch (e) {
+        // A stop that did not answer: the retries below wait for the files.
+        onLog?.call('stop of ${task.id} not confirmed: $e');
+      }
+      final removed = await removeTaskPartials(
+        folder,
+        media,
+        clip: task.clip,
+        stillWanted: () => !_tasks.values.any(sharedWith),
+      );
+      if (removed > 0) onLog?.call('removed $removed partials of ${task.id}');
+    } on Object catch (e) {
+      // Space left taken is never worth a crash; the startup sweep is the
+      // second chance.
+      onLog?.call('partials of ${task.id} kept: $e');
+    }
+  }
+
   bool _stopped(String id) => _disposed || _stops.containsKey(id);
 
   void _wake(String id) => _wakers.remove(id)?.complete();

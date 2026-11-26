@@ -43,7 +43,9 @@ class VhClipboardBanner extends StatelessWidget {
     return Material(
       color: p.accentSoft,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(
+        // The page's margin on the side the reading starts from: in Arabic
+        // the icon is on the right and needs it there.
+        padding: const EdgeInsetsDirectional.fromSTEB(
           VhSpace.pagePad,
           VhSpace.sm,
           VhSpace.sm,

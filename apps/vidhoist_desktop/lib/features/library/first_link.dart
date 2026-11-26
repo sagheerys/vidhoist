@@ -107,8 +107,8 @@ class FirstLink extends StatelessWidget {
   }
 }
 
-/// "Paste" at the field's end, in the accent's soft fill: part of the one
-/// button the field is, not a second one.
+/// "Paste" at the field's end, in the accent's soft fill. The whole field
+/// is a single button; this is styled as part of it, not a second target.
 class _PasteMark extends StatelessWidget {
   const _PasteMark({required this.label});
 

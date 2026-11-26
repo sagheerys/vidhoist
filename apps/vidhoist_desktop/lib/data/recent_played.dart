@@ -13,7 +13,7 @@ const recentlyPlayedShown = 5;
 /// its end too. A clip never played is not among them.
 ///
 /// Read afresh each time the palette opens and let go when it closes, so
-/// it is never a play behind.
+/// it always reflects the latest playback.
 final recentlyPlayedProvider = FutureProvider.autoDispose<List<LibraryItem>>((
   ref,
 ) async {

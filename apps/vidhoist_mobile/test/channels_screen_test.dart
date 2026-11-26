@@ -328,6 +328,33 @@ void main() {
     );
   });
 
+  testWidgets('**the guard**: its sheet ends above three-button '
+      'navigation, so "Unfollow" is not under the buttons', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(384, 823);
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.reset);
+    final c = container();
+    await tester.runAsync(() => followSome(c));
+    await tester.pumpWidget(app(c));
+    await tester.pumpAndSettle();
+    await tester.tap(find.textContaining('Some Channel'));
+    await tester.pumpAndSettle();
+    final scroll = tester.widget<SingleChildScrollView>(
+      find
+          .descendant(
+            of: find.byType(BottomSheet),
+            matching: find.byType(SingleChildScrollView),
+          )
+          .first,
+    );
+    expect(
+      scroll.padding!.resolve(TextDirection.ltr).bottom,
+      greaterThanOrEqualTo(48),
+    );
+  });
+
   testWidgets('its sheet: what it is set to, and unfollow apart', (
     tester,
   ) async {

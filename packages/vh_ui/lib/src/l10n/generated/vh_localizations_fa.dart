@@ -645,6 +645,45 @@ class VhLocalizationsFa extends VhLocalizations {
   String get desktopClearSelection => 'لغو انتخاب';
 
   @override
+  String get desktopCloseAnyway => 'بستن';
+
+  @override
+  String desktopCloseBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'اگر اکنون VidHoist را ببندید، متوقف می‌شوند و وقتی دوباره بازش کنید از همان‌جا ادامه می‌دهند.',
+      one: 'اگر اکنون VidHoist را ببندید، متوقف می‌شود و وقتی دوباره بازش کنید از همان‌جا ادامه می‌دهد.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get desktopCloseKeep => 'ادامهٔ دانلود';
+
+  @override
+  String desktopCloseMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'و $count مورد دیگر',
+      one: 'و ۱ مورد دیگر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String desktopCloseTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count دانلود تمام نشده',
+      one: 'یک دانلود تمام نشده',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get desktopCookiesBrowser => 'از مرورگر';
 
   @override

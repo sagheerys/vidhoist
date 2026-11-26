@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../data/close_guard.dart';
 import '../identity.dart';
 import '../shell/ui_zoom.dart';
 import 'window_placement.dart';
@@ -11,7 +12,12 @@ import 'window_placement.dart';
 /// The main window: opened where it was left, saved whenever it moves or
 /// resizes, and closed only after [beforeClose] has run.
 class DesktopWindow with WindowListener {
-  DesktopWindow._(this._placements, this._beforeClose, this._hideOnClose);
+  DesktopWindow._(
+    this._placements,
+    this._beforeClose,
+    this._hideOnClose,
+    this._guard,
+  );
 
   final WindowPlacementStore _placements;
   final Future<void> Function() _beforeClose;
@@ -19,6 +25,9 @@ class DesktopWindow with WindowListener {
   /// Asked as the window closes: true hides it to the tray and playing
   /// goes on; false closes the app.
   final bool Function() _hideOnClose;
+
+  /// Asked before the user's own close ends the app.
+  final CloseGuard _guard;
 
   /// The interface size the window opened at: the one asked for, or a
   /// smaller one when that does not fit the screen it opened on.
@@ -38,6 +47,7 @@ class DesktopWindow with WindowListener {
     required Future<void> Function() beforeClose,
     required double zoom,
     bool Function()? hideOnClose,
+    CloseGuard? guard,
     WindowStart start = WindowStart.shown,
   }) async {
     await windowManager.ensureInitialized();
@@ -45,6 +55,7 @@ class DesktopWindow with WindowListener {
       placements,
       beforeClose,
       hideOnClose ?? () => false,
+      guard ?? CloseGuard(),
     );
     final saved = await placements.read();
     final areas = [
@@ -140,6 +151,14 @@ class DesktopWindow with WindowListener {
       await windowManager.hide();
       return;
     }
+    await close();
+  }
+
+  /// **The user's close**: the window's cross, Alt+F4, the tray's "Quit".
+  /// The shell may keep the app open (a download still running); an update
+  /// that restarts the app calls [quit] directly and is never asked.
+  Future<void> close() async {
+    if (!await _guard.mayClose()) return;
     await quit();
   }
 

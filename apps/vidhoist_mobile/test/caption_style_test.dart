@@ -137,6 +137,48 @@ void main() {
     expect(transcript, 1);
   });
 
+  testWidgets('**the guard**: the sheet under a long press on CC ends '
+      'above three-button navigation, not under it', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(384, 823);
+    tester.view.padding = const FakeViewPadding(bottom: 48);
+    tester.view.viewPadding = const FakeViewPadding(bottom: 48);
+    addTearDown(tester.view.reset);
+    final container = await containerWith(tester, MemoryKeyValueStore());
+    const en = [
+      VhCaptionLine(
+        start: Duration.zero,
+        end: Duration(seconds: 2),
+        text: 'hello',
+      ),
+    ];
+    final captions = VhCaptions(lines: en, shown: ValueNotifier(true));
+    await tester.pumpWidget(
+      app(
+        container,
+        Builder(
+          builder: (context) => TextButton(
+            onPressed: () =>
+                showCaptionOptions(context, captions, onTranscript: () {}),
+            child: const Text('open'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    final scroll = tester.widget<SingleChildScrollView>(
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.byType(SingleChildScrollView),
+      ),
+    );
+    expect(
+      scroll.padding!.resolve(TextDirection.ltr).bottom,
+      greaterThanOrEqualTo(48),
+    );
+  });
+
   testWidgets('one language: no language choice', (tester) async {
     final container = await containerWith(tester, MemoryKeyValueStore());
     const en = [

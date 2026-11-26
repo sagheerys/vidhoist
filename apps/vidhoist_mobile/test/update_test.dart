@@ -307,6 +307,16 @@ void main() {
         // literal, or one app's colour leaks into the other.
         final title = tester.widget<Text>(find.text(l10n.updateAvailable));
         expect(title.style!.color, VhThemeX.of(context).palette.accent);
+        // **The guard**: its arrow points into the sheet, the reading's
+        // way, so in Arabic it turns over.
+        final arrow = tester.widget<VhIcon>(
+          find
+              .byWidgetPredicate(
+                (w) => w is VhIcon && w.icon == VhIcons.forward,
+              )
+              .first,
+        );
+        expect(arrow.matchTextDirection, isTrue);
       },
     );
 

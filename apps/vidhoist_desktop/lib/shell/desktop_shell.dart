@@ -29,6 +29,7 @@ import '../features/listening/listening_layer.dart';
 import '../features/listening/listening_room.dart';
 import '../features/library/library_state.dart';
 import '../features/notices/copied_links_wiring.dart';
+import '../features/downloads/close_ask.dart';
 import '../features/notices/notices_wiring.dart';
 import '../features/palette/palette_entry.dart';
 import '../features/palette/palette_grow.dart';
@@ -215,24 +216,27 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
             placeOf(widget.location) == DesktopPlace.item &&
             (player.state.current?.isShortForm ?? false),
         child: NoticesWiring(
-          child: OutsideLinks(
-            child: CopiedLinksWiring(
-              child: AddShortcut(
-                onLinks: _openAdd,
-                // The small card in place of the frame, the wirings above it
-                // still listening.
-                child: drop(
-                  ValueListenableBuilder<bool>(
-                    valueListenable: controls.mini,
-                    builder: (context, mini, _) => mini
-                        ? DesktopMiniWindow(
-                            player: player,
-                            controls: controls,
-                            onRestore: _toggleMini,
-                          )
-                        : scaffold,
+          child: CloseAskWiring(
+            child: OutsideLinks(
+              child: CopiedLinksWiring(
+                child: AddShortcut(
+                  onLinks: _openAdd,
+                  // In mini mode the small card replaces the frame; the
+                  // wrappers above stay mounted, so shortcuts and listeners
+                  // keep working.
+                  child: drop(
+                    ValueListenableBuilder<bool>(
+                      valueListenable: controls.mini,
+                      builder: (context, mini, _) => mini
+                          ? DesktopMiniWindow(
+                              player: player,
+                              controls: controls,
+                              onRestore: _toggleMini,
+                            )
+                          : scaffold,
+                    ),
+                    _onDrop,
                   ),
-                  _onDrop,
                 ),
               ),
             ),

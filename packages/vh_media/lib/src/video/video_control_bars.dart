@@ -63,6 +63,7 @@ class VhVideoTopBar extends StatelessWidget {
       children: [
         VhVideoIconButton(
           icon: fullscreen ? VhIcons.back : VhIcons.chevronDown,
+          matchTextDirection: fullscreen,
           onTap: onBack,
           tooltip: l10n.dismiss,
         ),
