@@ -28,7 +28,7 @@ dependencies:
   flutter_svg: 2.3.0
   # The app's secrets, encrypted for this Windows user (DPAPI); the
   # phone app's own range.
-  flutter_secure_storage: ^9.2.2
+  flutter_secure_storage: ^10.3.4
   go_router: ^16.2.0
   # The running version, for About and "what's new"; the phone app's range,
   # already in the shared resolution.
